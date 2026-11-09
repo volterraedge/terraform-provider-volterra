@@ -378,8 +378,48 @@ func (m *GCPManagedMode) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GCPManagedMode) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetGcpCredDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGcpCredDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPrivateConnectivityChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPrivateConnectivityChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GCPManagedMode) GetGcpCredDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetGcpCred()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_credentials.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_credentials.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "gcp_cred",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GCPManagedMode) GetGcpCredDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetGcpCred()
 	if vref == nil {
 		return nil, nil
@@ -447,6 +487,29 @@ func (m *GCPManagedMode) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo, 
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GCPManagedMode) GetPrivateConnectivityChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPrivateConnectivityChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPrivateConnectivityChoice().(type) {
+	case *GCPManagedMode_PrivateConnectivityDisabled:
+		return nil, nil
+	case *GCPManagedMode_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GCPManagedMode) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteType() == nil {
@@ -467,6 +530,37 @@ func (m *GCPManagedMode) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetMultipleInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetMultipleInterface().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "multiple_interface." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GCPManagedMode) GetSiteTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteType() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteType().(type) {
+	case *GCPManagedMode_SingleInterface:
+		drInfos, err := m.GetSingleInterface().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSingleInterface().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "single_interface." + dri.DRField
+		}
+		return drInfos, err
+	case *GCPManagedMode_MultipleInterface:
+		drInfos, err := m.GetMultipleInterface().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetMultipleInterface().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -813,6 +907,13 @@ func (m *GCPManagedNode) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetInterfaceListDRefInfo()
 }
+func (m *GCPManagedNode) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInterfaceListDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GCPManagedNode) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
@@ -824,6 +925,26 @@ func (m *GCPManagedNode) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInterfaceList() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("interface_list[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GCPManagedNode) GetInterfaceListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInterfaceList() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetInterfaceList() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInterfaceList() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1033,6 +1154,13 @@ func (m *GCPManagedNodeList) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNodeListDRefInfo()
 }
+func (m *GCPManagedNodeList) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNodeListDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GCPManagedNodeList) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
@@ -1044,6 +1172,26 @@ func (m *GCPManagedNodeList) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNodeList() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("node_list[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GCPManagedNodeList) GetNodeListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNodeList() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetNodeList() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodeList() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1202,6 +1350,13 @@ func (m *GCPMultipleInterface) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNodeListDRefInfo()
 }
+func (m *GCPMultipleInterface) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNodeListDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GCPMultipleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
@@ -1211,6 +1366,22 @@ func (m *GCPMultipleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetNodeList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "node_list." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GCPMultipleInterface) GetNodeListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNodeList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetNodeList().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1301,6 +1472,13 @@ func (m *GCPOrchestratedInterface) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNetworkOptionDRefInfo()
 }
+func (m *GCPOrchestratedInterface) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkOptionDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GCPOrchestratedInterface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, error) {
@@ -1310,6 +1488,22 @@ func (m *GCPOrchestratedInterface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, er
 	drInfos, err := m.GetNetworkOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "network_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GCPOrchestratedInterface) GetNetworkOptionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetNetworkOption().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1496,6 +1690,13 @@ func (m *GCPSingleInterface) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNodeListDRefInfo()
 }
+func (m *GCPSingleInterface) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNodeListDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GCPSingleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
@@ -1505,6 +1706,22 @@ func (m *GCPSingleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetNodeList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "node_list." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GCPSingleInterface) GetNodeListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNodeList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetNodeList().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

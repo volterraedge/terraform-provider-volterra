@@ -2939,6 +2939,13 @@ var APISwaggerJSON string = `{
                     "title": "Set Cookie",
                     "format": "boolean",
                     "x-displayname": "Ignore-Response-Cookie"
+                },
+                "serve_stale": {
+                    "type": "boolean",
+                    "description": " Serve a stale cached object during origin unreachability while asynchronously revalidating it with the origin server, when the requested object is already in cache.",
+                    "title": "Serve Stale",
+                    "format": "boolean",
+                    "x-displayname": "Serve Stale"
                 }
             }
         },

@@ -11,7 +11,7 @@ import (
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-	vs_profiles "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vs_profiles"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vs_profiles"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -36,11 +36,6 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // x-displayName: "Global Specification"
 // Shape of the virtual server specification
 type GlobalSpecType struct {
-	// State
-	//
-	// x-displayName: "State"
-	// State
-	State *schema.TMMStateType `protobuf:"bytes,1,opt,name=state,proto3" json:"state,omitempty"`
 	// Domains
 	//
 	// x-displayName: "Domains"
@@ -86,65 +81,10 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_Https
 	//	*GlobalSpecType_Http3
 	VirtualServerType isGlobalSpecType_VirtualServerType `protobuf_oneof:"virtual_server_type"`
-	// Statistics Profile
-	//
-	// x-displayName: "Statistics Profile"
-	// Specifies the statistics profile to use for this virtual server. Statistics profiles are useful when you want to use defined statistical counters to manipulate the data while processing traffic. Options are: None, and entries for each already defined statistics profile. The default is None.
-	//
-	// Types that are valid to be assigned to StatisticsProfileChoice:
-	//	*GlobalSpecType_StatisticsProfileNone
-	//	*GlobalSpecType_StatisticsProfile
-	StatisticsProfileChoice isGlobalSpecType_StatisticsProfileChoice `protobuf_oneof:"statistics_profile_choice"`
 	// Connection Limits
 	//
 	// x-displayName: "Connection Limit Options"
 	ConnectionLimitOptions *ConnectionLimitsType `protobuf:"bytes,12,opt,name=connection_limit_options,json=connectionLimitOptions,proto3" json:"connection_limit_options,omitempty"`
-	// Translation
-	//
-	// x-displayName: "Translation"
-	Translations *TranslationType `protobuf:"bytes,34,opt,name=translations,proto3" json:"translations,omitempty"`
-	// Clone Pool
-	//
-	// x-displayName: "Clone Pool"
-	ClonePoolOptions *ClonePoolType `protobuf:"bytes,41,opt,name=clone_pool_options,json=clonePoolOptions,proto3" json:"clone_pool_options,omitempty"`
-	// Auto Last Hop
-	//
-	// x-displayName: "Auto Last Hop"
-	// When enabled, allows the system to send return traffic to the MAC address that transmitted the request, even if the routing table points to a different network or interface. As a result, the system can send return traffic to clients even when there is no matching route. For example, if the system does not have a default route configured and the client is located on a remote network. This setting is also useful when the system is load balancing transparent devices that do not modify the source IP address of the packet. Without the last hop option enabled, the system could return connections to a different transparent node, resulting in asymmetric routing. You can configure this setting globally and on an object level. You set the global Auto Last Hop value on the System :: Configuration :: Local Traffic :: General screen. To configure this setting globally, retain the Default setting. When you configure Auto Last Hop with a value other than Default at the object level, its setting takes precedence over the global setting. This enables you to configure auto last hop on a per-virtual server basis. The default is Default, meaning that the system uses the global auto-lasthop setting to send back the request.
-	AutoLastHop *schema.TMMVirtualServerAutoLastHopType `protobuf:"bytes,49,opt,name=auto_last_hop,json=autoLastHop,proto3" json:"auto_last_hop,omitempty"`
-	// sse
-	//
-	// x-displayName: "SSE"
-	// Specifies whether the SSE profile is enabled. Default value is False.
-	Sse vs_profiles.TrueFalseChoice `protobuf:"varint,50,opt,name=sse,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"sse,omitempty"`
-	// json
-	//
-	// x-displayName: "JSON"
-	// Specifies whether the JSON profile is enabled. Default value is False.
-	Json vs_profiles.TrueFalseChoice `protobuf:"varint,51,opt,name=json,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"json,omitempty"`
-	// Last Hop Pool
-	//
-	// x-displayName: "Last Hop Pool"
-	// Directs reply traffic to the last hop router using the specified pool. Options are: None, and entries for each already defined pool.
-	//
-	// Types that are valid to be assigned to LastHopPoolChoice:
-	//	*GlobalSpecType_LastHopPoolNone
-	//	*GlobalSpecType_LastHopPool
-	LastHopPoolChoice isGlobalSpecType_LastHopPoolChoice `protobuf_oneof:"last_hop_pool_choice"`
-	// NAT64
-	//
-	// x-displayName: "NAT64"
-	// When enabled, allows the system to send return traffic to the MAC address that transmitted the request, even if the routing table points to a different network or interface. As a result, the system can send return traffic to clients even when there is no matching route. For example, if the system does not have a default route configured and the client is located on a remote network. This setting is also useful when the system is load balancing transparent devices that do not modify the source IP address of the packet. Without the last hop option enabled, the system could return connections to a different transparent node, resulting in asymmetric routing. You can configure this setting globally and on an object level. You set the global Auto Last Hop value on the System :: Configuration :: Local Traffic :: General screen. To configure this setting globally, retain the Default setting. When you configure Auto Last Hop with a value other than Default at the object level, its setting takes precedence over the global setting. This enables you to configure auto last hop on a per-virtual server basis. The default is Default, meaning that the system uses the global auto-lasthop setting to send back the request.
-	Nat64 *schema.TMMVirtualServerNAT64Type `protobuf:"bytes,56,opt,name=nat64,proto3" json:"nat64,omitempty"`
-	// Request Logging Profile
-	//
-	// x-displayName: "Request Logging Profile"
-	// Specifies the profile to use for logging requests and responses for the virtual server. Options are: None, and entries for each already defined profile.
-	//
-	// Types that are valid to be assigned to RequestLoggingProfileChoice:
-	//	*GlobalSpecType_RequestLoggingProfileNone
-	//	*GlobalSpecType_RequestLoggingProfile
-	RequestLoggingProfileChoice isGlobalSpecType_RequestLoggingProfileChoice `protobuf_oneof:"request_logging_profile_choice"`
 	// VS Score
 	//
 	// x-displayName: "VS Score"
@@ -170,6 +110,7 @@ type GlobalSpecType struct {
 	// Virtual Address
 	//
 	// x-displayName: "Virtual Addresses"
+	// x-required
 	// Specify the virtual address objects to be associated with this virtual server
 	VirtualAddresses []*views.ObjectRefType `protobuf:"bytes,13,rep,name=virtual_addresses,json=virtualAddresses,proto3" json:"virtual_addresses,omitempty"`
 	// iRules
@@ -177,24 +118,6 @@ type GlobalSpecType struct {
 	// x-displayName: "iRules"
 	// Specifies the iRules you want run on this virtual server. iRules help automate the intercepting, processing, and routing of application traffic.
 	Irules []*schema.ObjectRefType `protobuf:"bytes,14,rep,name=irules,proto3" json:"irules,omitempty"`
-	// Default Persistence Profile
-	//
-	// x-displayName: "Default Persistence Profile"
-	// Specifies the persistence profile you want the system to use as the default for this virtual server. Options are: None, and entries for each already defined persistence profile. The default is None.
-	//
-	// Types that are valid to be assigned to DefaultPersistenceProfileChoice:
-	//	*GlobalSpecType_DefaultPersistenceProfileNone
-	//	*GlobalSpecType_DefaultPersistenceProfile
-	DefaultPersistenceProfileChoice isGlobalSpecType_DefaultPersistenceProfileChoice `protobuf_oneof:"default_persistence_profile_choice"`
-	// Fallback Persistence Profile
-	//
-	// x-displayName: "Fallback Persistence Profile"
-	// Specifies the persistence profile you want the system to use if it cannot use the specified default persistence profile. Options are: None, and entries for each already defined persistence profile. The default is None.
-	//
-	// Types that are valid to be assigned to FallbackPersistenceProfileChoice:
-	//	*GlobalSpecType_FallbackPersistenceProfileNone
-	//	*GlobalSpecType_FallbackPersistenceProfile
-	FallbackPersistenceProfileChoice isGlobalSpecType_FallbackPersistenceProfileChoice `protobuf_oneof:"fallback_persistence_profile_choice"`
 	// Traffic Policy
 	//
 	// x-displayName: "Traffic Policy"
@@ -203,7 +126,8 @@ type GlobalSpecType struct {
 	// Per Session Access Policy
 	//
 	// x-displayName: "Per Session Access Policy"
-	// Specified an access policy that determines the authentication rules and access controls applied to user sessions for this virtual server
+	// x-required
+	// Specifies an access policy that determines the authentication rules and access controls applied to user sessions for this virtual server.
 	AccessProfile *views.ObjectRefType `protobuf:"bytes,71,opt,name=access_profile,json=accessProfile,proto3" json:"access_profile,omitempty"`
 	// view_internal
 	//
@@ -252,38 +176,8 @@ type isGlobalSpecType_VirtualServerType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
-type isGlobalSpecType_StatisticsProfileChoice interface {
-	isGlobalSpecType_StatisticsProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGlobalSpecType_LastHopPoolChoice interface {
-	isGlobalSpecType_LastHopPoolChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGlobalSpecType_RequestLoggingProfileChoice interface {
-	isGlobalSpecType_RequestLoggingProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
 type isGlobalSpecType_DefaultPoolChoice interface {
 	isGlobalSpecType_DefaultPoolChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGlobalSpecType_DefaultPersistenceProfileChoice interface {
-	isGlobalSpecType_DefaultPersistenceProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGlobalSpecType_FallbackPersistenceProfileChoice interface {
-	isGlobalSpecType_FallbackPersistenceProfileChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -301,62 +195,19 @@ type GlobalSpecType_Https struct {
 type GlobalSpecType_Http3 struct {
 	Http3 *HTTP3Services `protobuf:"bytes,25,opt,name=http3,proto3,oneof" json:"http3,omitempty"`
 }
-type GlobalSpecType_StatisticsProfileNone struct {
-	StatisticsProfileNone *schema.Empty `protobuf:"bytes,23,opt,name=statistics_profile_none,json=statisticsProfileNone,proto3,oneof" json:"statistics_profile_none,omitempty"`
-}
-type GlobalSpecType_StatisticsProfile struct {
-	StatisticsProfile *views.ObjectRefType `protobuf:"bytes,24,opt,name=statistics_profile,json=statisticsProfile,proto3,oneof" json:"statistics_profile,omitempty"`
-}
-type GlobalSpecType_LastHopPoolNone struct {
-	LastHopPoolNone *schema.Empty `protobuf:"bytes,54,opt,name=last_hop_pool_none,json=lastHopPoolNone,proto3,oneof" json:"last_hop_pool_none,omitempty"`
-}
-type GlobalSpecType_LastHopPool struct {
-	LastHopPool *views.ObjectRefType `protobuf:"bytes,55,opt,name=last_hop_pool,json=lastHopPool,proto3,oneof" json:"last_hop_pool,omitempty"`
-}
-type GlobalSpecType_RequestLoggingProfileNone struct {
-	RequestLoggingProfileNone *schema.Empty `protobuf:"bytes,60,opt,name=request_logging_profile_none,json=requestLoggingProfileNone,proto3,oneof" json:"request_logging_profile_none,omitempty"`
-}
-type GlobalSpecType_RequestLoggingProfile struct {
-	RequestLoggingProfile *views.ObjectRefType `protobuf:"bytes,61,opt,name=request_logging_profile,json=requestLoggingProfile,proto3,oneof" json:"request_logging_profile,omitempty"`
-}
 type GlobalSpecType_DefaultPoolNone struct {
 	DefaultPoolNone *schema.Empty `protobuf:"bytes,69,opt,name=default_pool_none,json=defaultPoolNone,proto3,oneof" json:"default_pool_none,omitempty"`
 }
 type GlobalSpecType_DefaultPool struct {
 	DefaultPool *views.ObjectRefType `protobuf:"bytes,70,opt,name=default_pool,json=defaultPool,proto3,oneof" json:"default_pool,omitempty"`
 }
-type GlobalSpecType_DefaultPersistenceProfileNone struct {
-	DefaultPersistenceProfileNone *schema.Empty `protobuf:"bytes,16,opt,name=default_persistence_profile_none,json=defaultPersistenceProfileNone,proto3,oneof" json:"default_persistence_profile_none,omitempty"`
-}
-type GlobalSpecType_DefaultPersistenceProfile struct {
-	DefaultPersistenceProfile *views.ObjectRefType `protobuf:"bytes,17,opt,name=default_persistence_profile,json=defaultPersistenceProfile,proto3,oneof" json:"default_persistence_profile,omitempty"`
-}
-type GlobalSpecType_FallbackPersistenceProfileNone struct {
-	FallbackPersistenceProfileNone *schema.Empty `protobuf:"bytes,19,opt,name=fallback_persistence_profile_none,json=fallbackPersistenceProfileNone,proto3,oneof" json:"fallback_persistence_profile_none,omitempty"`
-}
-type GlobalSpecType_FallbackPersistenceProfile struct {
-	FallbackPersistenceProfile *views.ObjectRefType `protobuf:"bytes,20,opt,name=fallback_persistence_profile,json=fallbackPersistenceProfile,proto3,oneof" json:"fallback_persistence_profile,omitempty"`
-}
 
-func (*GlobalSpecType_Managed) isGlobalSpecType_DomainChoice()                                  {}
-func (*GlobalSpecType_NotManaged) isGlobalSpecType_DomainChoice()                               {}
-func (*GlobalSpecType_Https) isGlobalSpecType_VirtualServerType()                               {}
-func (*GlobalSpecType_Http3) isGlobalSpecType_VirtualServerType()                               {}
-func (*GlobalSpecType_StatisticsProfileNone) isGlobalSpecType_StatisticsProfileChoice()         {}
-func (*GlobalSpecType_StatisticsProfile) isGlobalSpecType_StatisticsProfileChoice()             {}
-func (*GlobalSpecType_LastHopPoolNone) isGlobalSpecType_LastHopPoolChoice()                     {}
-func (*GlobalSpecType_LastHopPool) isGlobalSpecType_LastHopPoolChoice()                         {}
-func (*GlobalSpecType_RequestLoggingProfileNone) isGlobalSpecType_RequestLoggingProfileChoice() {}
-func (*GlobalSpecType_RequestLoggingProfile) isGlobalSpecType_RequestLoggingProfileChoice()     {}
-func (*GlobalSpecType_DefaultPoolNone) isGlobalSpecType_DefaultPoolChoice()                     {}
-func (*GlobalSpecType_DefaultPool) isGlobalSpecType_DefaultPoolChoice()                         {}
-func (*GlobalSpecType_DefaultPersistenceProfileNone) isGlobalSpecType_DefaultPersistenceProfileChoice() {
-}
-func (*GlobalSpecType_DefaultPersistenceProfile) isGlobalSpecType_DefaultPersistenceProfileChoice() {}
-func (*GlobalSpecType_FallbackPersistenceProfileNone) isGlobalSpecType_FallbackPersistenceProfileChoice() {
-}
-func (*GlobalSpecType_FallbackPersistenceProfile) isGlobalSpecType_FallbackPersistenceProfileChoice() {
-}
+func (*GlobalSpecType_Managed) isGlobalSpecType_DomainChoice()              {}
+func (*GlobalSpecType_NotManaged) isGlobalSpecType_DomainChoice()           {}
+func (*GlobalSpecType_Https) isGlobalSpecType_VirtualServerType()           {}
+func (*GlobalSpecType_Http3) isGlobalSpecType_VirtualServerType()           {}
+func (*GlobalSpecType_DefaultPoolNone) isGlobalSpecType_DefaultPoolChoice() {}
+func (*GlobalSpecType_DefaultPool) isGlobalSpecType_DefaultPoolChoice()     {}
 
 func (m *GlobalSpecType) GetDomainChoice() isGlobalSpecType_DomainChoice {
 	if m != nil {
@@ -370,46 +221,9 @@ func (m *GlobalSpecType) GetVirtualServerType() isGlobalSpecType_VirtualServerTy
 	}
 	return nil
 }
-func (m *GlobalSpecType) GetStatisticsProfileChoice() isGlobalSpecType_StatisticsProfileChoice {
-	if m != nil {
-		return m.StatisticsProfileChoice
-	}
-	return nil
-}
-func (m *GlobalSpecType) GetLastHopPoolChoice() isGlobalSpecType_LastHopPoolChoice {
-	if m != nil {
-		return m.LastHopPoolChoice
-	}
-	return nil
-}
-func (m *GlobalSpecType) GetRequestLoggingProfileChoice() isGlobalSpecType_RequestLoggingProfileChoice {
-	if m != nil {
-		return m.RequestLoggingProfileChoice
-	}
-	return nil
-}
 func (m *GlobalSpecType) GetDefaultPoolChoice() isGlobalSpecType_DefaultPoolChoice {
 	if m != nil {
 		return m.DefaultPoolChoice
-	}
-	return nil
-}
-func (m *GlobalSpecType) GetDefaultPersistenceProfileChoice() isGlobalSpecType_DefaultPersistenceProfileChoice {
-	if m != nil {
-		return m.DefaultPersistenceProfileChoice
-	}
-	return nil
-}
-func (m *GlobalSpecType) GetFallbackPersistenceProfileChoice() isGlobalSpecType_FallbackPersistenceProfileChoice {
-	if m != nil {
-		return m.FallbackPersistenceProfileChoice
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetState() *schema.TMMStateType {
-	if m != nil {
-		return m.State
 	}
 	return nil
 }
@@ -449,93 +263,9 @@ func (m *GlobalSpecType) GetHttp3() *HTTP3Services {
 	return nil
 }
 
-func (m *GlobalSpecType) GetStatisticsProfileNone() *schema.Empty {
-	if x, ok := m.GetStatisticsProfileChoice().(*GlobalSpecType_StatisticsProfileNone); ok {
-		return x.StatisticsProfileNone
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetStatisticsProfile() *views.ObjectRefType {
-	if x, ok := m.GetStatisticsProfileChoice().(*GlobalSpecType_StatisticsProfile); ok {
-		return x.StatisticsProfile
-	}
-	return nil
-}
-
 func (m *GlobalSpecType) GetConnectionLimitOptions() *ConnectionLimitsType {
 	if m != nil {
 		return m.ConnectionLimitOptions
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetTranslations() *TranslationType {
-	if m != nil {
-		return m.Translations
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetClonePoolOptions() *ClonePoolType {
-	if m != nil {
-		return m.ClonePoolOptions
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetAutoLastHop() *schema.TMMVirtualServerAutoLastHopType {
-	if m != nil {
-		return m.AutoLastHop
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetSse() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.Sse
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *GlobalSpecType) GetJson() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.Json
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *GlobalSpecType) GetLastHopPoolNone() *schema.Empty {
-	if x, ok := m.GetLastHopPoolChoice().(*GlobalSpecType_LastHopPoolNone); ok {
-		return x.LastHopPoolNone
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetLastHopPool() *views.ObjectRefType {
-	if x, ok := m.GetLastHopPoolChoice().(*GlobalSpecType_LastHopPool); ok {
-		return x.LastHopPool
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetNat64() *schema.TMMVirtualServerNAT64Type {
-	if m != nil {
-		return m.Nat64
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetRequestLoggingProfileNone() *schema.Empty {
-	if x, ok := m.GetRequestLoggingProfileChoice().(*GlobalSpecType_RequestLoggingProfileNone); ok {
-		return x.RequestLoggingProfileNone
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetRequestLoggingProfile() *views.ObjectRefType {
-	if x, ok := m.GetRequestLoggingProfileChoice().(*GlobalSpecType_RequestLoggingProfile); ok {
-		return x.RequestLoggingProfile
 	}
 	return nil
 }
@@ -582,34 +312,6 @@ func (m *GlobalSpecType) GetIrules() []*schema.ObjectRefType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetDefaultPersistenceProfileNone() *schema.Empty {
-	if x, ok := m.GetDefaultPersistenceProfileChoice().(*GlobalSpecType_DefaultPersistenceProfileNone); ok {
-		return x.DefaultPersistenceProfileNone
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetDefaultPersistenceProfile() *views.ObjectRefType {
-	if x, ok := m.GetDefaultPersistenceProfileChoice().(*GlobalSpecType_DefaultPersistenceProfile); ok {
-		return x.DefaultPersistenceProfile
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetFallbackPersistenceProfileNone() *schema.Empty {
-	if x, ok := m.GetFallbackPersistenceProfileChoice().(*GlobalSpecType_FallbackPersistenceProfileNone); ok {
-		return x.FallbackPersistenceProfileNone
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetFallbackPersistenceProfile() *views.ObjectRefType {
-	if x, ok := m.GetFallbackPersistenceProfileChoice().(*GlobalSpecType_FallbackPersistenceProfile); ok {
-		return x.FallbackPersistenceProfile
-	}
-	return nil
-}
-
 func (m *GlobalSpecType) GetTrafficPolicies() []*schema.ObjectRefType {
 	if m != nil {
 		return m.TrafficPolicies
@@ -638,18 +340,8 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_NotManaged)(nil),
 		(*GlobalSpecType_Https)(nil),
 		(*GlobalSpecType_Http3)(nil),
-		(*GlobalSpecType_StatisticsProfileNone)(nil),
-		(*GlobalSpecType_StatisticsProfile)(nil),
-		(*GlobalSpecType_LastHopPoolNone)(nil),
-		(*GlobalSpecType_LastHopPool)(nil),
-		(*GlobalSpecType_RequestLoggingProfileNone)(nil),
-		(*GlobalSpecType_RequestLoggingProfile)(nil),
 		(*GlobalSpecType_DefaultPoolNone)(nil),
 		(*GlobalSpecType_DefaultPool)(nil),
-		(*GlobalSpecType_DefaultPersistenceProfileNone)(nil),
-		(*GlobalSpecType_DefaultPersistenceProfile)(nil),
-		(*GlobalSpecType_FallbackPersistenceProfileNone)(nil),
-		(*GlobalSpecType_FallbackPersistenceProfile)(nil),
 	}
 }
 
@@ -657,9 +349,9 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 //
 // x-displayName: "TCP Services"
 type TCPServices struct {
-	// Services
+	// Service Ports
 	//
-	// x-displayName: "Services"
+	// x-displayName: "Service Ports"
 	Services []*ServiceType `protobuf:"bytes,1,rep,name=services,proto3" json:"services,omitempty"`
 	// Protocol Profile (Client)
 	//
@@ -769,9 +461,9 @@ func (*TCPServices) XXX_OneofWrappers() []interface{} {
 //
 // x-displayName: "UDP Services"
 type UDPServices struct {
-	// Services
+	// Service Ports
 	//
-	// x-displayName: "Services"
+	// x-displayName: "Service Ports"
 	Services []*ServiceType `protobuf:"bytes,1,rep,name=services,proto3" json:"services,omitempty"`
 	// Protocol Profile (Client)
 	//
@@ -881,9 +573,10 @@ func (*UDPServices) XXX_OneofWrappers() []interface{} {
 //
 // x-displayName: "HTTP/3 Services"
 type HTTP3Services struct {
-	// Services
+	// Service Ports
 	//
-	// x-displayName: "Services"
+	// x-displayName: "Service Ports"
+	// x-required
 	Services []*ServiceType `protobuf:"bytes,1,rep,name=services,proto3" json:"services,omitempty"`
 	// Protocol Profile (Client)
 	//
@@ -1062,9 +755,10 @@ func (*HTTP3Services) XXX_OneofWrappers() []interface{} {
 //
 // x-displayName: "HTTPServices"
 type HTTPServices struct {
-	// Services
+	// Service Ports
 	//
-	// x-displayName: "Services"
+	// x-displayName: "Service Ports"
+	// x-required
 	Services []*ServiceType `protobuf:"bytes,1,rep,name=services,proto3" json:"services,omitempty"`
 	// Protocol Profile (Client)
 	//
@@ -1078,29 +772,12 @@ type HTTPServices struct {
 	// x-required
 	// Specifies that the selected profile is a client-side HTTP profile. The list contains entries for each already defined client protocol profile.
 	HttpClientProfile *views.ObjectRefType `protobuf:"bytes,16,opt,name=http_client_profile,json=httpClientProfile,proto3" json:"http_client_profile,omitempty"`
-	// WebSocket Profile (Client)
-	//
-	// x-displayName: "WebSocket Profile (Client)"
-	// WebSocket Profile (Client)
-	//
-	// Types that are valid to be assigned to WebsocketClientProfileChoice:
-	//	*HTTPServices_WebsocketClientProfileNone
-	//	*HTTPServices_WebsocketClientProfile
-	WebsocketClientProfileChoice isHTTPServices_WebsocketClientProfileChoice `protobuf_oneof:"websocket_client_profile_choice"`
 	// Client SSL Profile
 	//
 	// x-displayName: "SSL Profile (Client)"
+	// x-required
 	// Specifies the SSL profile for managing client-side SSL traffic. The list contains entries for each already defined client-side SSL profile.
 	SslClientProfiles []*views.ObjectRefType `protobuf:"bytes,9,rep,name=ssl_client_profiles,json=sslClientProfiles,proto3" json:"ssl_client_profiles,omitempty"`
-	// HTTP/2 Profile (Client)
-	//
-	// x-displayName: "HTTP/2 Profile (Client)"
-	// Specifies that the selected profile is a client-side profile. The list contains entries for each already defined client protocol profile.
-	//
-	// Types that are valid to be assigned to Http2ClientProfileChoice:
-	//	*HTTPServices_Http2ClientProfileNone
-	//	*HTTPServices_Http2ClientProfile
-	Http2ClientProfileChoice isHTTPServices_Http2ClientProfileChoice `protobuf_oneof:"http2_client_profile_choice"`
 	// Server App type Selection
 	//
 	// x-displayName: "Server App type"
@@ -1109,33 +786,6 @@ type HTTPServices struct {
 	// Types that are valid to be assigned to ServerAppTypeChoice:
 	//	*HTTPServices_ServerAppTypeSameAsClient
 	ServerAppTypeChoice isHTTPServices_ServerAppTypeChoice `protobuf_oneof:"server_app_type_choice"`
-	// Stream Profile
-	//
-	// x-displayName: "Stream Profile"
-	// Specifies the stream profile for the system to use for this virtual server. Stream profiles are useful when you want to search and replace strings within a data stream, such as a TCP connection. Options are: None, and entries for each already defined stream profile. The default is None.
-	//
-	// Types that are valid to be assigned to StreamProfileChoice:
-	//	*HTTPServices_StreamProfileNone
-	//	*HTTPServices_StreamProfile
-	StreamProfileChoice isHTTPServices_StreamProfileChoice `protobuf_oneof:"stream_profile_choice"`
-	// FIX Profile
-	//
-	// x-displayName: "FIX Profile"
-	// Specifies the Financial Information eXchange (FIX) profile, designed for electronic trading between financial institutions. This profile determines how the virtual server manages any FIX packets/streams. Select any FIX profile from the list.
-	//
-	// Types that are valid to be assigned to FixProfileChoice:
-	//	*HTTPServices_FixProfileNone
-	//	*HTTPServices_FixProfile
-	FixProfileChoice isHTTPServices_FixProfileChoice `protobuf_oneof:"fix_profile_choice"`
-	// OCSP Profile
-	//
-	// x-displayName: "OCSP Profile"
-	// Specifies the OCSP profile to use for this virtual server. The list contains entries for each already defined OCSP profile.
-	//
-	// Types that are valid to be assigned to OcspProfileChoice:
-	//	*HTTPServices_OcspProfileNone
-	//	*HTTPServices_OcspProfile
-	OcspProfileChoice isHTTPServices_OcspProfileChoice `protobuf_oneof:"ocsp_profile_choice"`
 }
 
 func (m *HTTPServices) Reset()      { *m = HTTPServices{} }
@@ -1166,122 +816,22 @@ func (m *HTTPServices) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_HTTPServices proto.InternalMessageInfo
 
-type isHTTPServices_WebsocketClientProfileChoice interface {
-	isHTTPServices_WebsocketClientProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isHTTPServices_Http2ClientProfileChoice interface {
-	isHTTPServices_Http2ClientProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
 type isHTTPServices_ServerAppTypeChoice interface {
 	isHTTPServices_ServerAppTypeChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
-type isHTTPServices_StreamProfileChoice interface {
-	isHTTPServices_StreamProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isHTTPServices_FixProfileChoice interface {
-	isHTTPServices_FixProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isHTTPServices_OcspProfileChoice interface {
-	isHTTPServices_OcspProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
 
-type HTTPServices_WebsocketClientProfileNone struct {
-	WebsocketClientProfileNone *schema.Empty `protobuf:"bytes,7,opt,name=websocket_client_profile_none,json=websocketClientProfileNone,proto3,oneof" json:"websocket_client_profile_none,omitempty"`
-}
-type HTTPServices_WebsocketClientProfile struct {
-	WebsocketClientProfile *views.ObjectRefType `protobuf:"bytes,8,opt,name=websocket_client_profile,json=websocketClientProfile,proto3,oneof" json:"websocket_client_profile,omitempty"`
-}
-type HTTPServices_Http2ClientProfileNone struct {
-	Http2ClientProfileNone *schema.Empty `protobuf:"bytes,14,opt,name=http2_client_profile_none,json=http2ClientProfileNone,proto3,oneof" json:"http2_client_profile_none,omitempty"`
-}
-type HTTPServices_Http2ClientProfile struct {
-	Http2ClientProfile *views.ObjectRefType `protobuf:"bytes,15,opt,name=http2_client_profile,json=http2ClientProfile,proto3,oneof" json:"http2_client_profile,omitempty"`
-}
 type HTTPServices_ServerAppTypeSameAsClient struct {
 	ServerAppTypeSameAsClient *HTTPDefaultServerSelection `protobuf:"bytes,26,opt,name=server_app_type_same_as_client,json=serverAppTypeSameAsClient,proto3,oneof" json:"server_app_type_same_as_client,omitempty"`
 }
-type HTTPServices_StreamProfileNone struct {
-	StreamProfileNone *schema.Empty `protobuf:"bytes,11,opt,name=stream_profile_none,json=streamProfileNone,proto3,oneof" json:"stream_profile_none,omitempty"`
-}
-type HTTPServices_StreamProfile struct {
-	StreamProfile *views.ObjectRefType `protobuf:"bytes,12,opt,name=stream_profile,json=streamProfile,proto3,oneof" json:"stream_profile,omitempty"`
-}
-type HTTPServices_FixProfileNone struct {
-	FixProfileNone *schema.Empty `protobuf:"bytes,20,opt,name=fix_profile_none,json=fixProfileNone,proto3,oneof" json:"fix_profile_none,omitempty"`
-}
-type HTTPServices_FixProfile struct {
-	FixProfile *views.ObjectRefType `protobuf:"bytes,21,opt,name=fix_profile,json=fixProfile,proto3,oneof" json:"fix_profile,omitempty"`
-}
-type HTTPServices_OcspProfileNone struct {
-	OcspProfileNone *schema.Empty `protobuf:"bytes,23,opt,name=ocsp_profile_none,json=ocspProfileNone,proto3,oneof" json:"ocsp_profile_none,omitempty"`
-}
-type HTTPServices_OcspProfile struct {
-	OcspProfile *views.ObjectRefType `protobuf:"bytes,24,opt,name=ocsp_profile,json=ocspProfile,proto3,oneof" json:"ocsp_profile,omitempty"`
-}
 
-func (*HTTPServices_WebsocketClientProfileNone) isHTTPServices_WebsocketClientProfileChoice() {}
-func (*HTTPServices_WebsocketClientProfile) isHTTPServices_WebsocketClientProfileChoice()     {}
-func (*HTTPServices_Http2ClientProfileNone) isHTTPServices_Http2ClientProfileChoice()         {}
-func (*HTTPServices_Http2ClientProfile) isHTTPServices_Http2ClientProfileChoice()             {}
-func (*HTTPServices_ServerAppTypeSameAsClient) isHTTPServices_ServerAppTypeChoice()           {}
-func (*HTTPServices_StreamProfileNone) isHTTPServices_StreamProfileChoice()                   {}
-func (*HTTPServices_StreamProfile) isHTTPServices_StreamProfileChoice()                       {}
-func (*HTTPServices_FixProfileNone) isHTTPServices_FixProfileChoice()                         {}
-func (*HTTPServices_FixProfile) isHTTPServices_FixProfileChoice()                             {}
-func (*HTTPServices_OcspProfileNone) isHTTPServices_OcspProfileChoice()                       {}
-func (*HTTPServices_OcspProfile) isHTTPServices_OcspProfileChoice()                           {}
+func (*HTTPServices_ServerAppTypeSameAsClient) isHTTPServices_ServerAppTypeChoice() {}
 
-func (m *HTTPServices) GetWebsocketClientProfileChoice() isHTTPServices_WebsocketClientProfileChoice {
-	if m != nil {
-		return m.WebsocketClientProfileChoice
-	}
-	return nil
-}
-func (m *HTTPServices) GetHttp2ClientProfileChoice() isHTTPServices_Http2ClientProfileChoice {
-	if m != nil {
-		return m.Http2ClientProfileChoice
-	}
-	return nil
-}
 func (m *HTTPServices) GetServerAppTypeChoice() isHTTPServices_ServerAppTypeChoice {
 	if m != nil {
 		return m.ServerAppTypeChoice
-	}
-	return nil
-}
-func (m *HTTPServices) GetStreamProfileChoice() isHTTPServices_StreamProfileChoice {
-	if m != nil {
-		return m.StreamProfileChoice
-	}
-	return nil
-}
-func (m *HTTPServices) GetFixProfileChoice() isHTTPServices_FixProfileChoice {
-	if m != nil {
-		return m.FixProfileChoice
-	}
-	return nil
-}
-func (m *HTTPServices) GetOcspProfileChoice() isHTTPServices_OcspProfileChoice {
-	if m != nil {
-		return m.OcspProfileChoice
 	}
 	return nil
 }
@@ -1307,37 +857,9 @@ func (m *HTTPServices) GetHttpClientProfile() *views.ObjectRefType {
 	return nil
 }
 
-func (m *HTTPServices) GetWebsocketClientProfileNone() *schema.Empty {
-	if x, ok := m.GetWebsocketClientProfileChoice().(*HTTPServices_WebsocketClientProfileNone); ok {
-		return x.WebsocketClientProfileNone
-	}
-	return nil
-}
-
-func (m *HTTPServices) GetWebsocketClientProfile() *views.ObjectRefType {
-	if x, ok := m.GetWebsocketClientProfileChoice().(*HTTPServices_WebsocketClientProfile); ok {
-		return x.WebsocketClientProfile
-	}
-	return nil
-}
-
 func (m *HTTPServices) GetSslClientProfiles() []*views.ObjectRefType {
 	if m != nil {
 		return m.SslClientProfiles
-	}
-	return nil
-}
-
-func (m *HTTPServices) GetHttp2ClientProfileNone() *schema.Empty {
-	if x, ok := m.GetHttp2ClientProfileChoice().(*HTTPServices_Http2ClientProfileNone); ok {
-		return x.Http2ClientProfileNone
-	}
-	return nil
-}
-
-func (m *HTTPServices) GetHttp2ClientProfile() *views.ObjectRefType {
-	if x, ok := m.GetHttp2ClientProfileChoice().(*HTTPServices_Http2ClientProfile); ok {
-		return x.Http2ClientProfile
 	}
 	return nil
 }
@@ -1349,62 +871,10 @@ func (m *HTTPServices) GetServerAppTypeSameAsClient() *HTTPDefaultServerSelectio
 	return nil
 }
 
-func (m *HTTPServices) GetStreamProfileNone() *schema.Empty {
-	if x, ok := m.GetStreamProfileChoice().(*HTTPServices_StreamProfileNone); ok {
-		return x.StreamProfileNone
-	}
-	return nil
-}
-
-func (m *HTTPServices) GetStreamProfile() *views.ObjectRefType {
-	if x, ok := m.GetStreamProfileChoice().(*HTTPServices_StreamProfile); ok {
-		return x.StreamProfile
-	}
-	return nil
-}
-
-func (m *HTTPServices) GetFixProfileNone() *schema.Empty {
-	if x, ok := m.GetFixProfileChoice().(*HTTPServices_FixProfileNone); ok {
-		return x.FixProfileNone
-	}
-	return nil
-}
-
-func (m *HTTPServices) GetFixProfile() *views.ObjectRefType {
-	if x, ok := m.GetFixProfileChoice().(*HTTPServices_FixProfile); ok {
-		return x.FixProfile
-	}
-	return nil
-}
-
-func (m *HTTPServices) GetOcspProfileNone() *schema.Empty {
-	if x, ok := m.GetOcspProfileChoice().(*HTTPServices_OcspProfileNone); ok {
-		return x.OcspProfileNone
-	}
-	return nil
-}
-
-func (m *HTTPServices) GetOcspProfile() *views.ObjectRefType {
-	if x, ok := m.GetOcspProfileChoice().(*HTTPServices_OcspProfile); ok {
-		return x.OcspProfile
-	}
-	return nil
-}
-
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*HTTPServices) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*HTTPServices_WebsocketClientProfileNone)(nil),
-		(*HTTPServices_WebsocketClientProfile)(nil),
-		(*HTTPServices_Http2ClientProfileNone)(nil),
-		(*HTTPServices_Http2ClientProfile)(nil),
 		(*HTTPServices_ServerAppTypeSameAsClient)(nil),
-		(*HTTPServices_StreamProfileNone)(nil),
-		(*HTTPServices_StreamProfile)(nil),
-		(*HTTPServices_FixProfileNone)(nil),
-		(*HTTPServices_FixProfile)(nil),
-		(*HTTPServices_OcspProfileNone)(nil),
-		(*HTTPServices_OcspProfile)(nil),
 	}
 }
 
@@ -1638,25 +1108,6 @@ type HTTPDefaultServerSelection struct {
 	//	*HTTPDefaultServerSelection_HttpServerProfileSameAsClient
 	//	*HTTPDefaultServerSelection_HttpServerProfile
 	HttpServerProfileChoice isHTTPDefaultServerSelection_HttpServerProfileChoice `protobuf_oneof:"http_server_profile_choice"`
-	// WebSocket Profile (Server)
-	//
-	// x-displayName: "WebSocket Profile (Server)"
-	// WebSocket Profile (Server)
-	//
-	// Types that are valid to be assigned to WebsocketServerProfileChoice:
-	//	*HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient
-	//	*HTTPDefaultServerSelection_WebsocketServerProfile
-	WebsocketServerProfileChoice isHTTPDefaultServerSelection_WebsocketServerProfileChoice `protobuf_oneof:"websocket_server_profile_choice"`
-	// HTTP/2 Profile (Server)
-	//
-	// x-displayName: "HTTP/2 Profile (Server)"
-	// Specifies that the selected profile is a server-side profile. The list contains entries for each already defined client protocol profile.
-	//
-	// Types that are valid to be assigned to Http2ServerProfileChoice:
-	//	*HTTPDefaultServerSelection_Http2ServerProfileNone
-	//	*HTTPDefaultServerSelection_Http2ServerProfile
-	//	*HTTPDefaultServerSelection_Http2ServerProfileSameAsClient
-	Http2ServerProfileChoice isHTTPDefaultServerSelection_Http2ServerProfileChoice `protobuf_oneof:"http2_server_profile_choice"`
 	// SSL Profile (Server)
 	//
 	// x-displayName: "SSL Profile (Server)"
@@ -1704,18 +1155,6 @@ type isHTTPDefaultServerSelection_HttpServerProfileChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
-type isHTTPDefaultServerSelection_WebsocketServerProfileChoice interface {
-	isHTTPDefaultServerSelection_WebsocketServerProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isHTTPDefaultServerSelection_Http2ServerProfileChoice interface {
-	isHTTPDefaultServerSelection_Http2ServerProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
 
 type HTTPDefaultServerSelection_ProtocolServerProfileSameAsClient struct {
 	ProtocolServerProfileSameAsClient *schema.Empty `protobuf:"bytes,2,opt,name=protocol_server_profile_same_as_client,json=protocolServerProfileSameAsClient,proto3,oneof" json:"protocol_server_profile_same_as_client,omitempty"`
@@ -1729,21 +1168,6 @@ type HTTPDefaultServerSelection_HttpServerProfileSameAsClient struct {
 type HTTPDefaultServerSelection_HttpServerProfile struct {
 	HttpServerProfile *views.ObjectRefType `protobuf:"bytes,6,opt,name=http_server_profile,json=httpServerProfile,proto3,oneof" json:"http_server_profile,omitempty"`
 }
-type HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient struct {
-	WebsocketServerProfileSameAsClient *schema.Empty `protobuf:"bytes,8,opt,name=websocket_server_profile_same_as_client,json=websocketServerProfileSameAsClient,proto3,oneof" json:"websocket_server_profile_same_as_client,omitempty"`
-}
-type HTTPDefaultServerSelection_WebsocketServerProfile struct {
-	WebsocketServerProfile *views.ObjectRefType `protobuf:"bytes,9,opt,name=websocket_server_profile,json=websocketServerProfile,proto3,oneof" json:"websocket_server_profile,omitempty"`
-}
-type HTTPDefaultServerSelection_Http2ServerProfileNone struct {
-	Http2ServerProfileNone *schema.Empty `protobuf:"bytes,14,opt,name=http2_server_profile_none,json=http2ServerProfileNone,proto3,oneof" json:"http2_server_profile_none,omitempty"`
-}
-type HTTPDefaultServerSelection_Http2ServerProfile struct {
-	Http2ServerProfile *views.ObjectRefType `protobuf:"bytes,15,opt,name=http2_server_profile,json=http2ServerProfile,proto3,oneof" json:"http2_server_profile,omitempty"`
-}
-type HTTPDefaultServerSelection_Http2ServerProfileSameAsClient struct {
-	Http2ServerProfileSameAsClient *schema.Empty `protobuf:"bytes,27,opt,name=http2_server_profile_same_as_client,json=http2ServerProfileSameAsClient,proto3,oneof" json:"http2_server_profile_same_as_client,omitempty"`
-}
 
 func (*HTTPDefaultServerSelection_ProtocolServerProfileSameAsClient) isHTTPDefaultServerSelection_ProtocolServerProfileChoice() {
 }
@@ -1752,16 +1176,6 @@ func (*HTTPDefaultServerSelection_ProtocolServerProfile) isHTTPDefaultServerSele
 func (*HTTPDefaultServerSelection_HttpServerProfileSameAsClient) isHTTPDefaultServerSelection_HttpServerProfileChoice() {
 }
 func (*HTTPDefaultServerSelection_HttpServerProfile) isHTTPDefaultServerSelection_HttpServerProfileChoice() {
-}
-func (*HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient) isHTTPDefaultServerSelection_WebsocketServerProfileChoice() {
-}
-func (*HTTPDefaultServerSelection_WebsocketServerProfile) isHTTPDefaultServerSelection_WebsocketServerProfileChoice() {
-}
-func (*HTTPDefaultServerSelection_Http2ServerProfileNone) isHTTPDefaultServerSelection_Http2ServerProfileChoice() {
-}
-func (*HTTPDefaultServerSelection_Http2ServerProfile) isHTTPDefaultServerSelection_Http2ServerProfileChoice() {
-}
-func (*HTTPDefaultServerSelection_Http2ServerProfileSameAsClient) isHTTPDefaultServerSelection_Http2ServerProfileChoice() {
 }
 
 func (m *HTTPDefaultServerSelection) GetProtocolServerProfileChoice() isHTTPDefaultServerSelection_ProtocolServerProfileChoice {
@@ -1773,18 +1187,6 @@ func (m *HTTPDefaultServerSelection) GetProtocolServerProfileChoice() isHTTPDefa
 func (m *HTTPDefaultServerSelection) GetHttpServerProfileChoice() isHTTPDefaultServerSelection_HttpServerProfileChoice {
 	if m != nil {
 		return m.HttpServerProfileChoice
-	}
-	return nil
-}
-func (m *HTTPDefaultServerSelection) GetWebsocketServerProfileChoice() isHTTPDefaultServerSelection_WebsocketServerProfileChoice {
-	if m != nil {
-		return m.WebsocketServerProfileChoice
-	}
-	return nil
-}
-func (m *HTTPDefaultServerSelection) GetHttp2ServerProfileChoice() isHTTPDefaultServerSelection_Http2ServerProfileChoice {
-	if m != nil {
-		return m.Http2ServerProfileChoice
 	}
 	return nil
 }
@@ -1817,41 +1219,6 @@ func (m *HTTPDefaultServerSelection) GetHttpServerProfile() *views.ObjectRefType
 	return nil
 }
 
-func (m *HTTPDefaultServerSelection) GetWebsocketServerProfileSameAsClient() *schema.Empty {
-	if x, ok := m.GetWebsocketServerProfileChoice().(*HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient); ok {
-		return x.WebsocketServerProfileSameAsClient
-	}
-	return nil
-}
-
-func (m *HTTPDefaultServerSelection) GetWebsocketServerProfile() *views.ObjectRefType {
-	if x, ok := m.GetWebsocketServerProfileChoice().(*HTTPDefaultServerSelection_WebsocketServerProfile); ok {
-		return x.WebsocketServerProfile
-	}
-	return nil
-}
-
-func (m *HTTPDefaultServerSelection) GetHttp2ServerProfileNone() *schema.Empty {
-	if x, ok := m.GetHttp2ServerProfileChoice().(*HTTPDefaultServerSelection_Http2ServerProfileNone); ok {
-		return x.Http2ServerProfileNone
-	}
-	return nil
-}
-
-func (m *HTTPDefaultServerSelection) GetHttp2ServerProfile() *views.ObjectRefType {
-	if x, ok := m.GetHttp2ServerProfileChoice().(*HTTPDefaultServerSelection_Http2ServerProfile); ok {
-		return x.Http2ServerProfile
-	}
-	return nil
-}
-
-func (m *HTTPDefaultServerSelection) GetHttp2ServerProfileSameAsClient() *schema.Empty {
-	if x, ok := m.GetHttp2ServerProfileChoice().(*HTTPDefaultServerSelection_Http2ServerProfileSameAsClient); ok {
-		return x.Http2ServerProfileSameAsClient
-	}
-	return nil
-}
-
 func (m *HTTPDefaultServerSelection) GetSslServerProfiles() []*views.ObjectRefType {
 	if m != nil {
 		return m.SslServerProfiles
@@ -1866,11 +1233,6 @@ func (*HTTPDefaultServerSelection) XXX_OneofWrappers() []interface{} {
 		(*HTTPDefaultServerSelection_ProtocolServerProfile)(nil),
 		(*HTTPDefaultServerSelection_HttpServerProfileSameAsClient)(nil),
 		(*HTTPDefaultServerSelection_HttpServerProfile)(nil),
-		(*HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient)(nil),
-		(*HTTPDefaultServerSelection_WebsocketServerProfile)(nil),
-		(*HTTPDefaultServerSelection_Http2ServerProfileNone)(nil),
-		(*HTTPDefaultServerSelection_Http2ServerProfile)(nil),
-		(*HTTPDefaultServerSelection_Http2ServerProfileSameAsClient)(nil),
 	}
 }
 
@@ -2377,9 +1739,9 @@ func (*ClonePoolType) XXX_OneofWrappers() []interface{} {
 //
 // x-displayName: "Services"
 type Services struct {
-	// Services
+	// Service Ports
 	//
-	// x-displayName: "Services"
+	// x-displayName: "Service Ports"
 	Services []*ServiceType `protobuf:"bytes,1,rep,name=services,proto3" json:"services,omitempty"`
 }
 
@@ -2425,6 +1787,7 @@ type ServiceType struct {
 	// port_match
 	//
 	// x-displayName: "Port"
+	// x-required
 	// A specification of Port
 	//
 	// Types that are valid to be assigned to PortChoice:
@@ -2589,49 +1952,22 @@ func (m *ConnectionLimitsType) GetConnectionRateLimitMode() *schema.TMMVirtualSe
 // x-displayName: "Create Virtual Server"
 // Shape of the Virtual Server create specification
 type CreateSpecType struct {
-	State   *schema.TMMStateType `protobuf:"bytes,1,opt,name=state,proto3" json:"state,omitempty"`
-	Domains []string             `protobuf:"bytes,5,rep,name=domains,proto3" json:"domains,omitempty"`
+	Domains []string `protobuf:"bytes,5,rep,name=domains,proto3" json:"domains,omitempty"`
 	// Types that are valid to be assigned to VirtualServerType:
 	//	*CreateSpecType_Https
 	//	*CreateSpecType_Http3
-	VirtualServerType isCreateSpecType_VirtualServerType `protobuf_oneof:"virtual_server_type"`
-	// Types that are valid to be assigned to StatisticsProfileChoice:
-	//	*CreateSpecType_StatisticsProfileNone
-	//	*CreateSpecType_StatisticsProfile
-	StatisticsProfileChoice isCreateSpecType_StatisticsProfileChoice `protobuf_oneof:"statistics_profile_choice"`
-	ConnectionLimitOptions  *ConnectionLimitsType                    `protobuf:"bytes,12,opt,name=connection_limit_options,json=connectionLimitOptions,proto3" json:"connection_limit_options,omitempty"`
-	Translations            *TranslationType                         `protobuf:"bytes,34,opt,name=translations,proto3" json:"translations,omitempty"`
-	ClonePoolOptions        *ClonePoolType                           `protobuf:"bytes,41,opt,name=clone_pool_options,json=clonePoolOptions,proto3" json:"clone_pool_options,omitempty"`
-	AutoLastHop             *schema.TMMVirtualServerAutoLastHopType  `protobuf:"bytes,49,opt,name=auto_last_hop,json=autoLastHop,proto3" json:"auto_last_hop,omitempty"`
-	Sse                     vs_profiles.TrueFalseChoice              `protobuf:"varint,50,opt,name=sse,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"sse,omitempty"`
-	Json                    vs_profiles.TrueFalseChoice              `protobuf:"varint,51,opt,name=json,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"json,omitempty"`
-	// Types that are valid to be assigned to LastHopPoolChoice:
-	//	*CreateSpecType_LastHopPoolNone
-	//	*CreateSpecType_LastHopPool
-	LastHopPoolChoice isCreateSpecType_LastHopPoolChoice `protobuf_oneof:"last_hop_pool_choice"`
-	Nat64             *schema.TMMVirtualServerNAT64Type  `protobuf:"bytes,56,opt,name=nat64,proto3" json:"nat64,omitempty"`
-	// Types that are valid to be assigned to RequestLoggingProfileChoice:
-	//	*CreateSpecType_RequestLoggingProfileNone
-	//	*CreateSpecType_RequestLoggingProfile
-	RequestLoggingProfileChoice  isCreateSpecType_RequestLoggingProfileChoice `protobuf_oneof:"request_logging_profile_choice"`
-	VsScore                      uint32                                       `protobuf:"varint,62,opt,name=vs_score,json=vsScore,proto3" json:"vs_score,omitempty"`
-	ImmediateActionOnServiceDown *schema.TMMImmediateActionOnServiceDownType  `protobuf:"bytes,63,opt,name=immediate_action_on_service_down,json=immediateActionOnServiceDown,proto3" json:"immediate_action_on_service_down,omitempty"`
+	VirtualServerType            isCreateSpecType_VirtualServerType          `protobuf_oneof:"virtual_server_type"`
+	ConnectionLimitOptions       *ConnectionLimitsType                       `protobuf:"bytes,12,opt,name=connection_limit_options,json=connectionLimitOptions,proto3" json:"connection_limit_options,omitempty"`
+	VsScore                      uint32                                      `protobuf:"varint,62,opt,name=vs_score,json=vsScore,proto3" json:"vs_score,omitempty"`
+	ImmediateActionOnServiceDown *schema.TMMImmediateActionOnServiceDownType `protobuf:"bytes,63,opt,name=immediate_action_on_service_down,json=immediateActionOnServiceDown,proto3" json:"immediate_action_on_service_down,omitempty"`
 	// Types that are valid to be assigned to DefaultPoolChoice:
 	//	*CreateSpecType_DefaultPoolNone
 	//	*CreateSpecType_DefaultPool
 	DefaultPoolChoice isCreateSpecType_DefaultPoolChoice `protobuf_oneof:"default_pool_choice"`
 	VirtualAddresses  []*views.ObjectRefType             `protobuf:"bytes,13,rep,name=virtual_addresses,json=virtualAddresses,proto3" json:"virtual_addresses,omitempty"`
 	Irules            []*schema.ObjectRefType            `protobuf:"bytes,14,rep,name=irules,proto3" json:"irules,omitempty"`
-	// Types that are valid to be assigned to DefaultPersistenceProfileChoice:
-	//	*CreateSpecType_DefaultPersistenceProfileNone
-	//	*CreateSpecType_DefaultPersistenceProfile
-	DefaultPersistenceProfileChoice isCreateSpecType_DefaultPersistenceProfileChoice `protobuf_oneof:"default_persistence_profile_choice"`
-	// Types that are valid to be assigned to FallbackPersistenceProfileChoice:
-	//	*CreateSpecType_FallbackPersistenceProfileNone
-	//	*CreateSpecType_FallbackPersistenceProfile
-	FallbackPersistenceProfileChoice isCreateSpecType_FallbackPersistenceProfileChoice `protobuf_oneof:"fallback_persistence_profile_choice"`
-	TrafficPolicies                  []*schema.ObjectRefType                           `protobuf:"bytes,21,rep,name=traffic_policies,json=trafficPolicies,proto3" json:"traffic_policies,omitempty"`
-	AccessProfile                    *views.ObjectRefType                              `protobuf:"bytes,71,opt,name=access_profile,json=accessProfile,proto3" json:"access_profile,omitempty"`
+	TrafficPolicies   []*schema.ObjectRefType            `protobuf:"bytes,21,rep,name=traffic_policies,json=trafficPolicies,proto3" json:"traffic_policies,omitempty"`
+	AccessProfile     *views.ObjectRefType               `protobuf:"bytes,71,opt,name=access_profile,json=accessProfile,proto3" json:"access_profile,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -2668,38 +2004,8 @@ type isCreateSpecType_VirtualServerType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
-type isCreateSpecType_StatisticsProfileChoice interface {
-	isCreateSpecType_StatisticsProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isCreateSpecType_LastHopPoolChoice interface {
-	isCreateSpecType_LastHopPoolChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isCreateSpecType_RequestLoggingProfileChoice interface {
-	isCreateSpecType_RequestLoggingProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
 type isCreateSpecType_DefaultPoolChoice interface {
 	isCreateSpecType_DefaultPoolChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isCreateSpecType_DefaultPersistenceProfileChoice interface {
-	isCreateSpecType_DefaultPersistenceProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isCreateSpecType_FallbackPersistenceProfileChoice interface {
-	isCreateSpecType_FallbackPersistenceProfileChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -2711,60 +2017,17 @@ type CreateSpecType_Https struct {
 type CreateSpecType_Http3 struct {
 	Http3 *HTTP3Services `protobuf:"bytes,25,opt,name=http3,proto3,oneof" json:"http3,omitempty"`
 }
-type CreateSpecType_StatisticsProfileNone struct {
-	StatisticsProfileNone *schema.Empty `protobuf:"bytes,23,opt,name=statistics_profile_none,json=statisticsProfileNone,proto3,oneof" json:"statistics_profile_none,omitempty"`
-}
-type CreateSpecType_StatisticsProfile struct {
-	StatisticsProfile *views.ObjectRefType `protobuf:"bytes,24,opt,name=statistics_profile,json=statisticsProfile,proto3,oneof" json:"statistics_profile,omitempty"`
-}
-type CreateSpecType_LastHopPoolNone struct {
-	LastHopPoolNone *schema.Empty `protobuf:"bytes,54,opt,name=last_hop_pool_none,json=lastHopPoolNone,proto3,oneof" json:"last_hop_pool_none,omitempty"`
-}
-type CreateSpecType_LastHopPool struct {
-	LastHopPool *views.ObjectRefType `protobuf:"bytes,55,opt,name=last_hop_pool,json=lastHopPool,proto3,oneof" json:"last_hop_pool,omitempty"`
-}
-type CreateSpecType_RequestLoggingProfileNone struct {
-	RequestLoggingProfileNone *schema.Empty `protobuf:"bytes,60,opt,name=request_logging_profile_none,json=requestLoggingProfileNone,proto3,oneof" json:"request_logging_profile_none,omitempty"`
-}
-type CreateSpecType_RequestLoggingProfile struct {
-	RequestLoggingProfile *views.ObjectRefType `protobuf:"bytes,61,opt,name=request_logging_profile,json=requestLoggingProfile,proto3,oneof" json:"request_logging_profile,omitempty"`
-}
 type CreateSpecType_DefaultPoolNone struct {
 	DefaultPoolNone *schema.Empty `protobuf:"bytes,69,opt,name=default_pool_none,json=defaultPoolNone,proto3,oneof" json:"default_pool_none,omitempty"`
 }
 type CreateSpecType_DefaultPool struct {
 	DefaultPool *views.ObjectRefType `protobuf:"bytes,70,opt,name=default_pool,json=defaultPool,proto3,oneof" json:"default_pool,omitempty"`
 }
-type CreateSpecType_DefaultPersistenceProfileNone struct {
-	DefaultPersistenceProfileNone *schema.Empty `protobuf:"bytes,16,opt,name=default_persistence_profile_none,json=defaultPersistenceProfileNone,proto3,oneof" json:"default_persistence_profile_none,omitempty"`
-}
-type CreateSpecType_DefaultPersistenceProfile struct {
-	DefaultPersistenceProfile *views.ObjectRefType `protobuf:"bytes,17,opt,name=default_persistence_profile,json=defaultPersistenceProfile,proto3,oneof" json:"default_persistence_profile,omitempty"`
-}
-type CreateSpecType_FallbackPersistenceProfileNone struct {
-	FallbackPersistenceProfileNone *schema.Empty `protobuf:"bytes,19,opt,name=fallback_persistence_profile_none,json=fallbackPersistenceProfileNone,proto3,oneof" json:"fallback_persistence_profile_none,omitempty"`
-}
-type CreateSpecType_FallbackPersistenceProfile struct {
-	FallbackPersistenceProfile *views.ObjectRefType `protobuf:"bytes,20,opt,name=fallback_persistence_profile,json=fallbackPersistenceProfile,proto3,oneof" json:"fallback_persistence_profile,omitempty"`
-}
 
-func (*CreateSpecType_Https) isCreateSpecType_VirtualServerType()                               {}
-func (*CreateSpecType_Http3) isCreateSpecType_VirtualServerType()                               {}
-func (*CreateSpecType_StatisticsProfileNone) isCreateSpecType_StatisticsProfileChoice()         {}
-func (*CreateSpecType_StatisticsProfile) isCreateSpecType_StatisticsProfileChoice()             {}
-func (*CreateSpecType_LastHopPoolNone) isCreateSpecType_LastHopPoolChoice()                     {}
-func (*CreateSpecType_LastHopPool) isCreateSpecType_LastHopPoolChoice()                         {}
-func (*CreateSpecType_RequestLoggingProfileNone) isCreateSpecType_RequestLoggingProfileChoice() {}
-func (*CreateSpecType_RequestLoggingProfile) isCreateSpecType_RequestLoggingProfileChoice()     {}
-func (*CreateSpecType_DefaultPoolNone) isCreateSpecType_DefaultPoolChoice()                     {}
-func (*CreateSpecType_DefaultPool) isCreateSpecType_DefaultPoolChoice()                         {}
-func (*CreateSpecType_DefaultPersistenceProfileNone) isCreateSpecType_DefaultPersistenceProfileChoice() {
-}
-func (*CreateSpecType_DefaultPersistenceProfile) isCreateSpecType_DefaultPersistenceProfileChoice() {}
-func (*CreateSpecType_FallbackPersistenceProfileNone) isCreateSpecType_FallbackPersistenceProfileChoice() {
-}
-func (*CreateSpecType_FallbackPersistenceProfile) isCreateSpecType_FallbackPersistenceProfileChoice() {
-}
+func (*CreateSpecType_Https) isCreateSpecType_VirtualServerType()           {}
+func (*CreateSpecType_Http3) isCreateSpecType_VirtualServerType()           {}
+func (*CreateSpecType_DefaultPoolNone) isCreateSpecType_DefaultPoolChoice() {}
+func (*CreateSpecType_DefaultPool) isCreateSpecType_DefaultPoolChoice()     {}
 
 func (m *CreateSpecType) GetVirtualServerType() isCreateSpecType_VirtualServerType {
 	if m != nil {
@@ -2772,46 +2035,9 @@ func (m *CreateSpecType) GetVirtualServerType() isCreateSpecType_VirtualServerTy
 	}
 	return nil
 }
-func (m *CreateSpecType) GetStatisticsProfileChoice() isCreateSpecType_StatisticsProfileChoice {
-	if m != nil {
-		return m.StatisticsProfileChoice
-	}
-	return nil
-}
-func (m *CreateSpecType) GetLastHopPoolChoice() isCreateSpecType_LastHopPoolChoice {
-	if m != nil {
-		return m.LastHopPoolChoice
-	}
-	return nil
-}
-func (m *CreateSpecType) GetRequestLoggingProfileChoice() isCreateSpecType_RequestLoggingProfileChoice {
-	if m != nil {
-		return m.RequestLoggingProfileChoice
-	}
-	return nil
-}
 func (m *CreateSpecType) GetDefaultPoolChoice() isCreateSpecType_DefaultPoolChoice {
 	if m != nil {
 		return m.DefaultPoolChoice
-	}
-	return nil
-}
-func (m *CreateSpecType) GetDefaultPersistenceProfileChoice() isCreateSpecType_DefaultPersistenceProfileChoice {
-	if m != nil {
-		return m.DefaultPersistenceProfileChoice
-	}
-	return nil
-}
-func (m *CreateSpecType) GetFallbackPersistenceProfileChoice() isCreateSpecType_FallbackPersistenceProfileChoice {
-	if m != nil {
-		return m.FallbackPersistenceProfileChoice
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetState() *schema.TMMStateType {
-	if m != nil {
-		return m.State
 	}
 	return nil
 }
@@ -2837,93 +2063,9 @@ func (m *CreateSpecType) GetHttp3() *HTTP3Services {
 	return nil
 }
 
-func (m *CreateSpecType) GetStatisticsProfileNone() *schema.Empty {
-	if x, ok := m.GetStatisticsProfileChoice().(*CreateSpecType_StatisticsProfileNone); ok {
-		return x.StatisticsProfileNone
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetStatisticsProfile() *views.ObjectRefType {
-	if x, ok := m.GetStatisticsProfileChoice().(*CreateSpecType_StatisticsProfile); ok {
-		return x.StatisticsProfile
-	}
-	return nil
-}
-
 func (m *CreateSpecType) GetConnectionLimitOptions() *ConnectionLimitsType {
 	if m != nil {
 		return m.ConnectionLimitOptions
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetTranslations() *TranslationType {
-	if m != nil {
-		return m.Translations
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetClonePoolOptions() *ClonePoolType {
-	if m != nil {
-		return m.ClonePoolOptions
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetAutoLastHop() *schema.TMMVirtualServerAutoLastHopType {
-	if m != nil {
-		return m.AutoLastHop
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetSse() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.Sse
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *CreateSpecType) GetJson() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.Json
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *CreateSpecType) GetLastHopPoolNone() *schema.Empty {
-	if x, ok := m.GetLastHopPoolChoice().(*CreateSpecType_LastHopPoolNone); ok {
-		return x.LastHopPoolNone
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetLastHopPool() *views.ObjectRefType {
-	if x, ok := m.GetLastHopPoolChoice().(*CreateSpecType_LastHopPool); ok {
-		return x.LastHopPool
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetNat64() *schema.TMMVirtualServerNAT64Type {
-	if m != nil {
-		return m.Nat64
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetRequestLoggingProfileNone() *schema.Empty {
-	if x, ok := m.GetRequestLoggingProfileChoice().(*CreateSpecType_RequestLoggingProfileNone); ok {
-		return x.RequestLoggingProfileNone
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetRequestLoggingProfile() *views.ObjectRefType {
-	if x, ok := m.GetRequestLoggingProfileChoice().(*CreateSpecType_RequestLoggingProfile); ok {
-		return x.RequestLoggingProfile
 	}
 	return nil
 }
@@ -2970,34 +2112,6 @@ func (m *CreateSpecType) GetIrules() []*schema.ObjectRefType {
 	return nil
 }
 
-func (m *CreateSpecType) GetDefaultPersistenceProfileNone() *schema.Empty {
-	if x, ok := m.GetDefaultPersistenceProfileChoice().(*CreateSpecType_DefaultPersistenceProfileNone); ok {
-		return x.DefaultPersistenceProfileNone
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetDefaultPersistenceProfile() *views.ObjectRefType {
-	if x, ok := m.GetDefaultPersistenceProfileChoice().(*CreateSpecType_DefaultPersistenceProfile); ok {
-		return x.DefaultPersistenceProfile
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetFallbackPersistenceProfileNone() *schema.Empty {
-	if x, ok := m.GetFallbackPersistenceProfileChoice().(*CreateSpecType_FallbackPersistenceProfileNone); ok {
-		return x.FallbackPersistenceProfileNone
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetFallbackPersistenceProfile() *views.ObjectRefType {
-	if x, ok := m.GetFallbackPersistenceProfileChoice().(*CreateSpecType_FallbackPersistenceProfile); ok {
-		return x.FallbackPersistenceProfile
-	}
-	return nil
-}
-
 func (m *CreateSpecType) GetTrafficPolicies() []*schema.ObjectRefType {
 	if m != nil {
 		return m.TrafficPolicies
@@ -3017,18 +2131,8 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CreateSpecType_Https)(nil),
 		(*CreateSpecType_Http3)(nil),
-		(*CreateSpecType_StatisticsProfileNone)(nil),
-		(*CreateSpecType_StatisticsProfile)(nil),
-		(*CreateSpecType_LastHopPoolNone)(nil),
-		(*CreateSpecType_LastHopPool)(nil),
-		(*CreateSpecType_RequestLoggingProfileNone)(nil),
-		(*CreateSpecType_RequestLoggingProfile)(nil),
 		(*CreateSpecType_DefaultPoolNone)(nil),
 		(*CreateSpecType_DefaultPool)(nil),
-		(*CreateSpecType_DefaultPersistenceProfileNone)(nil),
-		(*CreateSpecType_DefaultPersistenceProfile)(nil),
-		(*CreateSpecType_FallbackPersistenceProfileNone)(nil),
-		(*CreateSpecType_FallbackPersistenceProfile)(nil),
 	}
 }
 
@@ -3037,49 +2141,22 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 // x-displayName: "Replace Virtual Server"
 // Shape of the Virtual Server create specification
 type ReplaceSpecType struct {
-	State   *schema.TMMStateType `protobuf:"bytes,1,opt,name=state,proto3" json:"state,omitempty"`
-	Domains []string             `protobuf:"bytes,5,rep,name=domains,proto3" json:"domains,omitempty"`
+	Domains []string `protobuf:"bytes,5,rep,name=domains,proto3" json:"domains,omitempty"`
 	// Types that are valid to be assigned to VirtualServerType:
 	//	*ReplaceSpecType_Https
 	//	*ReplaceSpecType_Http3
-	VirtualServerType isReplaceSpecType_VirtualServerType `protobuf_oneof:"virtual_server_type"`
-	// Types that are valid to be assigned to StatisticsProfileChoice:
-	//	*ReplaceSpecType_StatisticsProfileNone
-	//	*ReplaceSpecType_StatisticsProfile
-	StatisticsProfileChoice isReplaceSpecType_StatisticsProfileChoice `protobuf_oneof:"statistics_profile_choice"`
-	ConnectionLimitOptions  *ConnectionLimitsType                     `protobuf:"bytes,12,opt,name=connection_limit_options,json=connectionLimitOptions,proto3" json:"connection_limit_options,omitempty"`
-	Translations            *TranslationType                          `protobuf:"bytes,34,opt,name=translations,proto3" json:"translations,omitempty"`
-	ClonePoolOptions        *ClonePoolType                            `protobuf:"bytes,41,opt,name=clone_pool_options,json=clonePoolOptions,proto3" json:"clone_pool_options,omitempty"`
-	AutoLastHop             *schema.TMMVirtualServerAutoLastHopType   `protobuf:"bytes,49,opt,name=auto_last_hop,json=autoLastHop,proto3" json:"auto_last_hop,omitempty"`
-	Sse                     vs_profiles.TrueFalseChoice               `protobuf:"varint,50,opt,name=sse,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"sse,omitempty"`
-	Json                    vs_profiles.TrueFalseChoice               `protobuf:"varint,51,opt,name=json,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"json,omitempty"`
-	// Types that are valid to be assigned to LastHopPoolChoice:
-	//	*ReplaceSpecType_LastHopPoolNone
-	//	*ReplaceSpecType_LastHopPool
-	LastHopPoolChoice isReplaceSpecType_LastHopPoolChoice `protobuf_oneof:"last_hop_pool_choice"`
-	Nat64             *schema.TMMVirtualServerNAT64Type   `protobuf:"bytes,56,opt,name=nat64,proto3" json:"nat64,omitempty"`
-	// Types that are valid to be assigned to RequestLoggingProfileChoice:
-	//	*ReplaceSpecType_RequestLoggingProfileNone
-	//	*ReplaceSpecType_RequestLoggingProfile
-	RequestLoggingProfileChoice  isReplaceSpecType_RequestLoggingProfileChoice `protobuf_oneof:"request_logging_profile_choice"`
-	VsScore                      uint32                                        `protobuf:"varint,62,opt,name=vs_score,json=vsScore,proto3" json:"vs_score,omitempty"`
-	ImmediateActionOnServiceDown *schema.TMMImmediateActionOnServiceDownType   `protobuf:"bytes,63,opt,name=immediate_action_on_service_down,json=immediateActionOnServiceDown,proto3" json:"immediate_action_on_service_down,omitempty"`
+	VirtualServerType            isReplaceSpecType_VirtualServerType         `protobuf_oneof:"virtual_server_type"`
+	ConnectionLimitOptions       *ConnectionLimitsType                       `protobuf:"bytes,12,opt,name=connection_limit_options,json=connectionLimitOptions,proto3" json:"connection_limit_options,omitempty"`
+	VsScore                      uint32                                      `protobuf:"varint,62,opt,name=vs_score,json=vsScore,proto3" json:"vs_score,omitempty"`
+	ImmediateActionOnServiceDown *schema.TMMImmediateActionOnServiceDownType `protobuf:"bytes,63,opt,name=immediate_action_on_service_down,json=immediateActionOnServiceDown,proto3" json:"immediate_action_on_service_down,omitempty"`
 	// Types that are valid to be assigned to DefaultPoolChoice:
 	//	*ReplaceSpecType_DefaultPoolNone
 	//	*ReplaceSpecType_DefaultPool
 	DefaultPoolChoice isReplaceSpecType_DefaultPoolChoice `protobuf_oneof:"default_pool_choice"`
 	VirtualAddresses  []*views.ObjectRefType              `protobuf:"bytes,13,rep,name=virtual_addresses,json=virtualAddresses,proto3" json:"virtual_addresses,omitempty"`
 	Irules            []*schema.ObjectRefType             `protobuf:"bytes,14,rep,name=irules,proto3" json:"irules,omitempty"`
-	// Types that are valid to be assigned to DefaultPersistenceProfileChoice:
-	//	*ReplaceSpecType_DefaultPersistenceProfileNone
-	//	*ReplaceSpecType_DefaultPersistenceProfile
-	DefaultPersistenceProfileChoice isReplaceSpecType_DefaultPersistenceProfileChoice `protobuf_oneof:"default_persistence_profile_choice"`
-	// Types that are valid to be assigned to FallbackPersistenceProfileChoice:
-	//	*ReplaceSpecType_FallbackPersistenceProfileNone
-	//	*ReplaceSpecType_FallbackPersistenceProfile
-	FallbackPersistenceProfileChoice isReplaceSpecType_FallbackPersistenceProfileChoice `protobuf_oneof:"fallback_persistence_profile_choice"`
-	TrafficPolicies                  []*schema.ObjectRefType                            `protobuf:"bytes,21,rep,name=traffic_policies,json=trafficPolicies,proto3" json:"traffic_policies,omitempty"`
-	AccessProfile                    *views.ObjectRefType                               `protobuf:"bytes,71,opt,name=access_profile,json=accessProfile,proto3" json:"access_profile,omitempty"`
+	TrafficPolicies   []*schema.ObjectRefType             `protobuf:"bytes,21,rep,name=traffic_policies,json=trafficPolicies,proto3" json:"traffic_policies,omitempty"`
+	AccessProfile     *views.ObjectRefType                `protobuf:"bytes,71,opt,name=access_profile,json=accessProfile,proto3" json:"access_profile,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
@@ -3116,38 +2193,8 @@ type isReplaceSpecType_VirtualServerType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
-type isReplaceSpecType_StatisticsProfileChoice interface {
-	isReplaceSpecType_StatisticsProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isReplaceSpecType_LastHopPoolChoice interface {
-	isReplaceSpecType_LastHopPoolChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isReplaceSpecType_RequestLoggingProfileChoice interface {
-	isReplaceSpecType_RequestLoggingProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
 type isReplaceSpecType_DefaultPoolChoice interface {
 	isReplaceSpecType_DefaultPoolChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isReplaceSpecType_DefaultPersistenceProfileChoice interface {
-	isReplaceSpecType_DefaultPersistenceProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isReplaceSpecType_FallbackPersistenceProfileChoice interface {
-	isReplaceSpecType_FallbackPersistenceProfileChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -3159,61 +2206,17 @@ type ReplaceSpecType_Https struct {
 type ReplaceSpecType_Http3 struct {
 	Http3 *HTTP3Services `protobuf:"bytes,25,opt,name=http3,proto3,oneof" json:"http3,omitempty"`
 }
-type ReplaceSpecType_StatisticsProfileNone struct {
-	StatisticsProfileNone *schema.Empty `protobuf:"bytes,23,opt,name=statistics_profile_none,json=statisticsProfileNone,proto3,oneof" json:"statistics_profile_none,omitempty"`
-}
-type ReplaceSpecType_StatisticsProfile struct {
-	StatisticsProfile *views.ObjectRefType `protobuf:"bytes,24,opt,name=statistics_profile,json=statisticsProfile,proto3,oneof" json:"statistics_profile,omitempty"`
-}
-type ReplaceSpecType_LastHopPoolNone struct {
-	LastHopPoolNone *schema.Empty `protobuf:"bytes,54,opt,name=last_hop_pool_none,json=lastHopPoolNone,proto3,oneof" json:"last_hop_pool_none,omitempty"`
-}
-type ReplaceSpecType_LastHopPool struct {
-	LastHopPool *views.ObjectRefType `protobuf:"bytes,55,opt,name=last_hop_pool,json=lastHopPool,proto3,oneof" json:"last_hop_pool,omitempty"`
-}
-type ReplaceSpecType_RequestLoggingProfileNone struct {
-	RequestLoggingProfileNone *schema.Empty `protobuf:"bytes,60,opt,name=request_logging_profile_none,json=requestLoggingProfileNone,proto3,oneof" json:"request_logging_profile_none,omitempty"`
-}
-type ReplaceSpecType_RequestLoggingProfile struct {
-	RequestLoggingProfile *views.ObjectRefType `protobuf:"bytes,61,opt,name=request_logging_profile,json=requestLoggingProfile,proto3,oneof" json:"request_logging_profile,omitempty"`
-}
 type ReplaceSpecType_DefaultPoolNone struct {
 	DefaultPoolNone *schema.Empty `protobuf:"bytes,69,opt,name=default_pool_none,json=defaultPoolNone,proto3,oneof" json:"default_pool_none,omitempty"`
 }
 type ReplaceSpecType_DefaultPool struct {
 	DefaultPool *views.ObjectRefType `protobuf:"bytes,70,opt,name=default_pool,json=defaultPool,proto3,oneof" json:"default_pool,omitempty"`
 }
-type ReplaceSpecType_DefaultPersistenceProfileNone struct {
-	DefaultPersistenceProfileNone *schema.Empty `protobuf:"bytes,16,opt,name=default_persistence_profile_none,json=defaultPersistenceProfileNone,proto3,oneof" json:"default_persistence_profile_none,omitempty"`
-}
-type ReplaceSpecType_DefaultPersistenceProfile struct {
-	DefaultPersistenceProfile *views.ObjectRefType `protobuf:"bytes,17,opt,name=default_persistence_profile,json=defaultPersistenceProfile,proto3,oneof" json:"default_persistence_profile,omitempty"`
-}
-type ReplaceSpecType_FallbackPersistenceProfileNone struct {
-	FallbackPersistenceProfileNone *schema.Empty `protobuf:"bytes,19,opt,name=fallback_persistence_profile_none,json=fallbackPersistenceProfileNone,proto3,oneof" json:"fallback_persistence_profile_none,omitempty"`
-}
-type ReplaceSpecType_FallbackPersistenceProfile struct {
-	FallbackPersistenceProfile *views.ObjectRefType `protobuf:"bytes,20,opt,name=fallback_persistence_profile,json=fallbackPersistenceProfile,proto3,oneof" json:"fallback_persistence_profile,omitempty"`
-}
 
-func (*ReplaceSpecType_Https) isReplaceSpecType_VirtualServerType()                               {}
-func (*ReplaceSpecType_Http3) isReplaceSpecType_VirtualServerType()                               {}
-func (*ReplaceSpecType_StatisticsProfileNone) isReplaceSpecType_StatisticsProfileChoice()         {}
-func (*ReplaceSpecType_StatisticsProfile) isReplaceSpecType_StatisticsProfileChoice()             {}
-func (*ReplaceSpecType_LastHopPoolNone) isReplaceSpecType_LastHopPoolChoice()                     {}
-func (*ReplaceSpecType_LastHopPool) isReplaceSpecType_LastHopPoolChoice()                         {}
-func (*ReplaceSpecType_RequestLoggingProfileNone) isReplaceSpecType_RequestLoggingProfileChoice() {}
-func (*ReplaceSpecType_RequestLoggingProfile) isReplaceSpecType_RequestLoggingProfileChoice()     {}
-func (*ReplaceSpecType_DefaultPoolNone) isReplaceSpecType_DefaultPoolChoice()                     {}
-func (*ReplaceSpecType_DefaultPool) isReplaceSpecType_DefaultPoolChoice()                         {}
-func (*ReplaceSpecType_DefaultPersistenceProfileNone) isReplaceSpecType_DefaultPersistenceProfileChoice() {
-}
-func (*ReplaceSpecType_DefaultPersistenceProfile) isReplaceSpecType_DefaultPersistenceProfileChoice() {
-}
-func (*ReplaceSpecType_FallbackPersistenceProfileNone) isReplaceSpecType_FallbackPersistenceProfileChoice() {
-}
-func (*ReplaceSpecType_FallbackPersistenceProfile) isReplaceSpecType_FallbackPersistenceProfileChoice() {
-}
+func (*ReplaceSpecType_Https) isReplaceSpecType_VirtualServerType()           {}
+func (*ReplaceSpecType_Http3) isReplaceSpecType_VirtualServerType()           {}
+func (*ReplaceSpecType_DefaultPoolNone) isReplaceSpecType_DefaultPoolChoice() {}
+func (*ReplaceSpecType_DefaultPool) isReplaceSpecType_DefaultPoolChoice()     {}
 
 func (m *ReplaceSpecType) GetVirtualServerType() isReplaceSpecType_VirtualServerType {
 	if m != nil {
@@ -3221,46 +2224,9 @@ func (m *ReplaceSpecType) GetVirtualServerType() isReplaceSpecType_VirtualServer
 	}
 	return nil
 }
-func (m *ReplaceSpecType) GetStatisticsProfileChoice() isReplaceSpecType_StatisticsProfileChoice {
-	if m != nil {
-		return m.StatisticsProfileChoice
-	}
-	return nil
-}
-func (m *ReplaceSpecType) GetLastHopPoolChoice() isReplaceSpecType_LastHopPoolChoice {
-	if m != nil {
-		return m.LastHopPoolChoice
-	}
-	return nil
-}
-func (m *ReplaceSpecType) GetRequestLoggingProfileChoice() isReplaceSpecType_RequestLoggingProfileChoice {
-	if m != nil {
-		return m.RequestLoggingProfileChoice
-	}
-	return nil
-}
 func (m *ReplaceSpecType) GetDefaultPoolChoice() isReplaceSpecType_DefaultPoolChoice {
 	if m != nil {
 		return m.DefaultPoolChoice
-	}
-	return nil
-}
-func (m *ReplaceSpecType) GetDefaultPersistenceProfileChoice() isReplaceSpecType_DefaultPersistenceProfileChoice {
-	if m != nil {
-		return m.DefaultPersistenceProfileChoice
-	}
-	return nil
-}
-func (m *ReplaceSpecType) GetFallbackPersistenceProfileChoice() isReplaceSpecType_FallbackPersistenceProfileChoice {
-	if m != nil {
-		return m.FallbackPersistenceProfileChoice
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetState() *schema.TMMStateType {
-	if m != nil {
-		return m.State
 	}
 	return nil
 }
@@ -3286,93 +2252,9 @@ func (m *ReplaceSpecType) GetHttp3() *HTTP3Services {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetStatisticsProfileNone() *schema.Empty {
-	if x, ok := m.GetStatisticsProfileChoice().(*ReplaceSpecType_StatisticsProfileNone); ok {
-		return x.StatisticsProfileNone
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetStatisticsProfile() *views.ObjectRefType {
-	if x, ok := m.GetStatisticsProfileChoice().(*ReplaceSpecType_StatisticsProfile); ok {
-		return x.StatisticsProfile
-	}
-	return nil
-}
-
 func (m *ReplaceSpecType) GetConnectionLimitOptions() *ConnectionLimitsType {
 	if m != nil {
 		return m.ConnectionLimitOptions
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetTranslations() *TranslationType {
-	if m != nil {
-		return m.Translations
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetClonePoolOptions() *ClonePoolType {
-	if m != nil {
-		return m.ClonePoolOptions
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetAutoLastHop() *schema.TMMVirtualServerAutoLastHopType {
-	if m != nil {
-		return m.AutoLastHop
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetSse() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.Sse
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *ReplaceSpecType) GetJson() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.Json
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *ReplaceSpecType) GetLastHopPoolNone() *schema.Empty {
-	if x, ok := m.GetLastHopPoolChoice().(*ReplaceSpecType_LastHopPoolNone); ok {
-		return x.LastHopPoolNone
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetLastHopPool() *views.ObjectRefType {
-	if x, ok := m.GetLastHopPoolChoice().(*ReplaceSpecType_LastHopPool); ok {
-		return x.LastHopPool
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetNat64() *schema.TMMVirtualServerNAT64Type {
-	if m != nil {
-		return m.Nat64
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetRequestLoggingProfileNone() *schema.Empty {
-	if x, ok := m.GetRequestLoggingProfileChoice().(*ReplaceSpecType_RequestLoggingProfileNone); ok {
-		return x.RequestLoggingProfileNone
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetRequestLoggingProfile() *views.ObjectRefType {
-	if x, ok := m.GetRequestLoggingProfileChoice().(*ReplaceSpecType_RequestLoggingProfile); ok {
-		return x.RequestLoggingProfile
 	}
 	return nil
 }
@@ -3419,34 +2301,6 @@ func (m *ReplaceSpecType) GetIrules() []*schema.ObjectRefType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDefaultPersistenceProfileNone() *schema.Empty {
-	if x, ok := m.GetDefaultPersistenceProfileChoice().(*ReplaceSpecType_DefaultPersistenceProfileNone); ok {
-		return x.DefaultPersistenceProfileNone
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetDefaultPersistenceProfile() *views.ObjectRefType {
-	if x, ok := m.GetDefaultPersistenceProfileChoice().(*ReplaceSpecType_DefaultPersistenceProfile); ok {
-		return x.DefaultPersistenceProfile
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetFallbackPersistenceProfileNone() *schema.Empty {
-	if x, ok := m.GetFallbackPersistenceProfileChoice().(*ReplaceSpecType_FallbackPersistenceProfileNone); ok {
-		return x.FallbackPersistenceProfileNone
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetFallbackPersistenceProfile() *views.ObjectRefType {
-	if x, ok := m.GetFallbackPersistenceProfileChoice().(*ReplaceSpecType_FallbackPersistenceProfile); ok {
-		return x.FallbackPersistenceProfile
-	}
-	return nil
-}
-
 func (m *ReplaceSpecType) GetTrafficPolicies() []*schema.ObjectRefType {
 	if m != nil {
 		return m.TrafficPolicies
@@ -3466,18 +2320,8 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ReplaceSpecType_Https)(nil),
 		(*ReplaceSpecType_Http3)(nil),
-		(*ReplaceSpecType_StatisticsProfileNone)(nil),
-		(*ReplaceSpecType_StatisticsProfile)(nil),
-		(*ReplaceSpecType_LastHopPoolNone)(nil),
-		(*ReplaceSpecType_LastHopPool)(nil),
-		(*ReplaceSpecType_RequestLoggingProfileNone)(nil),
-		(*ReplaceSpecType_RequestLoggingProfile)(nil),
 		(*ReplaceSpecType_DefaultPoolNone)(nil),
 		(*ReplaceSpecType_DefaultPool)(nil),
-		(*ReplaceSpecType_DefaultPersistenceProfileNone)(nil),
-		(*ReplaceSpecType_DefaultPersistenceProfile)(nil),
-		(*ReplaceSpecType_FallbackPersistenceProfileNone)(nil),
-		(*ReplaceSpecType_FallbackPersistenceProfile)(nil),
 	}
 }
 
@@ -3491,26 +2335,8 @@ type GetSpecType struct {
 	// Types that are valid to be assigned to VirtualServerType:
 	//	*GetSpecType_Https
 	//	*GetSpecType_Http3
-	VirtualServerType isGetSpecType_VirtualServerType `protobuf_oneof:"virtual_server_type"`
-	// Types that are valid to be assigned to StatisticsProfileChoice:
-	//	*GetSpecType_StatisticsProfileNone
-	//	*GetSpecType_StatisticsProfile
-	StatisticsProfileChoice isGetSpecType_StatisticsProfileChoice   `protobuf_oneof:"statistics_profile_choice"`
-	ConnectionLimitOptions  *ConnectionLimitsType                   `protobuf:"bytes,12,opt,name=connection_limit_options,json=connectionLimitOptions,proto3" json:"connection_limit_options,omitempty"`
-	Translations            *TranslationType                        `protobuf:"bytes,34,opt,name=translations,proto3" json:"translations,omitempty"`
-	ClonePoolOptions        *ClonePoolType                          `protobuf:"bytes,41,opt,name=clone_pool_options,json=clonePoolOptions,proto3" json:"clone_pool_options,omitempty"`
-	AutoLastHop             *schema.TMMVirtualServerAutoLastHopType `protobuf:"bytes,49,opt,name=auto_last_hop,json=autoLastHop,proto3" json:"auto_last_hop,omitempty"`
-	Sse                     vs_profiles.TrueFalseChoice             `protobuf:"varint,50,opt,name=sse,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"sse,omitempty"`
-	Json                    vs_profiles.TrueFalseChoice             `protobuf:"varint,51,opt,name=json,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"json,omitempty"`
-	// Types that are valid to be assigned to LastHopPoolChoice:
-	//	*GetSpecType_LastHopPoolNone
-	//	*GetSpecType_LastHopPool
-	LastHopPoolChoice isGetSpecType_LastHopPoolChoice   `protobuf_oneof:"last_hop_pool_choice"`
-	Nat64             *schema.TMMVirtualServerNAT64Type `protobuf:"bytes,56,opt,name=nat64,proto3" json:"nat64,omitempty"`
-	// Types that are valid to be assigned to RequestLoggingProfileChoice:
-	//	*GetSpecType_RequestLoggingProfileNone
-	//	*GetSpecType_RequestLoggingProfile
-	RequestLoggingProfileChoice  isGetSpecType_RequestLoggingProfileChoice   `protobuf_oneof:"request_logging_profile_choice"`
+	VirtualServerType            isGetSpecType_VirtualServerType             `protobuf_oneof:"virtual_server_type"`
+	ConnectionLimitOptions       *ConnectionLimitsType                       `protobuf:"bytes,12,opt,name=connection_limit_options,json=connectionLimitOptions,proto3" json:"connection_limit_options,omitempty"`
 	VsScore                      uint32                                      `protobuf:"varint,62,opt,name=vs_score,json=vsScore,proto3" json:"vs_score,omitempty"`
 	ImmediateActionOnServiceDown *schema.TMMImmediateActionOnServiceDownType `protobuf:"bytes,63,opt,name=immediate_action_on_service_down,json=immediateActionOnServiceDown,proto3" json:"immediate_action_on_service_down,omitempty"`
 	// Types that are valid to be assigned to DefaultPoolChoice:
@@ -3519,16 +2345,8 @@ type GetSpecType struct {
 	DefaultPoolChoice isGetSpecType_DefaultPoolChoice `protobuf_oneof:"default_pool_choice"`
 	VirtualAddresses  []*views.ObjectRefType          `protobuf:"bytes,13,rep,name=virtual_addresses,json=virtualAddresses,proto3" json:"virtual_addresses,omitempty"`
 	Irules            []*schema.ObjectRefType         `protobuf:"bytes,14,rep,name=irules,proto3" json:"irules,omitempty"`
-	// Types that are valid to be assigned to DefaultPersistenceProfileChoice:
-	//	*GetSpecType_DefaultPersistenceProfileNone
-	//	*GetSpecType_DefaultPersistenceProfile
-	DefaultPersistenceProfileChoice isGetSpecType_DefaultPersistenceProfileChoice `protobuf_oneof:"default_persistence_profile_choice"`
-	// Types that are valid to be assigned to FallbackPersistenceProfileChoice:
-	//	*GetSpecType_FallbackPersistenceProfileNone
-	//	*GetSpecType_FallbackPersistenceProfile
-	FallbackPersistenceProfileChoice isGetSpecType_FallbackPersistenceProfileChoice `protobuf_oneof:"fallback_persistence_profile_choice"`
-	TrafficPolicies                  []*schema.ObjectRefType                        `protobuf:"bytes,21,rep,name=traffic_policies,json=trafficPolicies,proto3" json:"traffic_policies,omitempty"`
-	AccessProfile                    *views.ObjectRefType                           `protobuf:"bytes,71,opt,name=access_profile,json=accessProfile,proto3" json:"access_profile,omitempty"`
+	TrafficPolicies   []*schema.ObjectRefType         `protobuf:"bytes,21,rep,name=traffic_policies,json=trafficPolicies,proto3" json:"traffic_policies,omitempty"`
+	AccessProfile     *views.ObjectRefType            `protobuf:"bytes,71,opt,name=access_profile,json=accessProfile,proto3" json:"access_profile,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -3565,38 +2383,8 @@ type isGetSpecType_VirtualServerType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
-type isGetSpecType_StatisticsProfileChoice interface {
-	isGetSpecType_StatisticsProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGetSpecType_LastHopPoolChoice interface {
-	isGetSpecType_LastHopPoolChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGetSpecType_RequestLoggingProfileChoice interface {
-	isGetSpecType_RequestLoggingProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
 type isGetSpecType_DefaultPoolChoice interface {
 	isGetSpecType_DefaultPoolChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGetSpecType_DefaultPersistenceProfileChoice interface {
-	isGetSpecType_DefaultPersistenceProfileChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGetSpecType_FallbackPersistenceProfileChoice interface {
-	isGetSpecType_FallbackPersistenceProfileChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -3608,57 +2396,17 @@ type GetSpecType_Https struct {
 type GetSpecType_Http3 struct {
 	Http3 *HTTP3Services `protobuf:"bytes,25,opt,name=http3,proto3,oneof" json:"http3,omitempty"`
 }
-type GetSpecType_StatisticsProfileNone struct {
-	StatisticsProfileNone *schema.Empty `protobuf:"bytes,23,opt,name=statistics_profile_none,json=statisticsProfileNone,proto3,oneof" json:"statistics_profile_none,omitempty"`
-}
-type GetSpecType_StatisticsProfile struct {
-	StatisticsProfile *views.ObjectRefType `protobuf:"bytes,24,opt,name=statistics_profile,json=statisticsProfile,proto3,oneof" json:"statistics_profile,omitempty"`
-}
-type GetSpecType_LastHopPoolNone struct {
-	LastHopPoolNone *schema.Empty `protobuf:"bytes,54,opt,name=last_hop_pool_none,json=lastHopPoolNone,proto3,oneof" json:"last_hop_pool_none,omitempty"`
-}
-type GetSpecType_LastHopPool struct {
-	LastHopPool *views.ObjectRefType `protobuf:"bytes,55,opt,name=last_hop_pool,json=lastHopPool,proto3,oneof" json:"last_hop_pool,omitempty"`
-}
-type GetSpecType_RequestLoggingProfileNone struct {
-	RequestLoggingProfileNone *schema.Empty `protobuf:"bytes,60,opt,name=request_logging_profile_none,json=requestLoggingProfileNone,proto3,oneof" json:"request_logging_profile_none,omitempty"`
-}
-type GetSpecType_RequestLoggingProfile struct {
-	RequestLoggingProfile *views.ObjectRefType `protobuf:"bytes,61,opt,name=request_logging_profile,json=requestLoggingProfile,proto3,oneof" json:"request_logging_profile,omitempty"`
-}
 type GetSpecType_DefaultPoolNone struct {
 	DefaultPoolNone *schema.Empty `protobuf:"bytes,69,opt,name=default_pool_none,json=defaultPoolNone,proto3,oneof" json:"default_pool_none,omitempty"`
 }
 type GetSpecType_DefaultPool struct {
 	DefaultPool *views.ObjectRefType `protobuf:"bytes,70,opt,name=default_pool,json=defaultPool,proto3,oneof" json:"default_pool,omitempty"`
 }
-type GetSpecType_DefaultPersistenceProfileNone struct {
-	DefaultPersistenceProfileNone *schema.Empty `protobuf:"bytes,16,opt,name=default_persistence_profile_none,json=defaultPersistenceProfileNone,proto3,oneof" json:"default_persistence_profile_none,omitempty"`
-}
-type GetSpecType_DefaultPersistenceProfile struct {
-	DefaultPersistenceProfile *views.ObjectRefType `protobuf:"bytes,17,opt,name=default_persistence_profile,json=defaultPersistenceProfile,proto3,oneof" json:"default_persistence_profile,omitempty"`
-}
-type GetSpecType_FallbackPersistenceProfileNone struct {
-	FallbackPersistenceProfileNone *schema.Empty `protobuf:"bytes,19,opt,name=fallback_persistence_profile_none,json=fallbackPersistenceProfileNone,proto3,oneof" json:"fallback_persistence_profile_none,omitempty"`
-}
-type GetSpecType_FallbackPersistenceProfile struct {
-	FallbackPersistenceProfile *views.ObjectRefType `protobuf:"bytes,20,opt,name=fallback_persistence_profile,json=fallbackPersistenceProfile,proto3,oneof" json:"fallback_persistence_profile,omitempty"`
-}
 
-func (*GetSpecType_Https) isGetSpecType_VirtualServerType()                                         {}
-func (*GetSpecType_Http3) isGetSpecType_VirtualServerType()                                         {}
-func (*GetSpecType_StatisticsProfileNone) isGetSpecType_StatisticsProfileChoice()                   {}
-func (*GetSpecType_StatisticsProfile) isGetSpecType_StatisticsProfileChoice()                       {}
-func (*GetSpecType_LastHopPoolNone) isGetSpecType_LastHopPoolChoice()                               {}
-func (*GetSpecType_LastHopPool) isGetSpecType_LastHopPoolChoice()                                   {}
-func (*GetSpecType_RequestLoggingProfileNone) isGetSpecType_RequestLoggingProfileChoice()           {}
-func (*GetSpecType_RequestLoggingProfile) isGetSpecType_RequestLoggingProfileChoice()               {}
-func (*GetSpecType_DefaultPoolNone) isGetSpecType_DefaultPoolChoice()                               {}
-func (*GetSpecType_DefaultPool) isGetSpecType_DefaultPoolChoice()                                   {}
-func (*GetSpecType_DefaultPersistenceProfileNone) isGetSpecType_DefaultPersistenceProfileChoice()   {}
-func (*GetSpecType_DefaultPersistenceProfile) isGetSpecType_DefaultPersistenceProfileChoice()       {}
-func (*GetSpecType_FallbackPersistenceProfileNone) isGetSpecType_FallbackPersistenceProfileChoice() {}
-func (*GetSpecType_FallbackPersistenceProfile) isGetSpecType_FallbackPersistenceProfileChoice()     {}
+func (*GetSpecType_Https) isGetSpecType_VirtualServerType()           {}
+func (*GetSpecType_Http3) isGetSpecType_VirtualServerType()           {}
+func (*GetSpecType_DefaultPoolNone) isGetSpecType_DefaultPoolChoice() {}
+func (*GetSpecType_DefaultPool) isGetSpecType_DefaultPoolChoice()     {}
 
 func (m *GetSpecType) GetVirtualServerType() isGetSpecType_VirtualServerType {
 	if m != nil {
@@ -3666,39 +2414,9 @@ func (m *GetSpecType) GetVirtualServerType() isGetSpecType_VirtualServerType {
 	}
 	return nil
 }
-func (m *GetSpecType) GetStatisticsProfileChoice() isGetSpecType_StatisticsProfileChoice {
-	if m != nil {
-		return m.StatisticsProfileChoice
-	}
-	return nil
-}
-func (m *GetSpecType) GetLastHopPoolChoice() isGetSpecType_LastHopPoolChoice {
-	if m != nil {
-		return m.LastHopPoolChoice
-	}
-	return nil
-}
-func (m *GetSpecType) GetRequestLoggingProfileChoice() isGetSpecType_RequestLoggingProfileChoice {
-	if m != nil {
-		return m.RequestLoggingProfileChoice
-	}
-	return nil
-}
 func (m *GetSpecType) GetDefaultPoolChoice() isGetSpecType_DefaultPoolChoice {
 	if m != nil {
 		return m.DefaultPoolChoice
-	}
-	return nil
-}
-func (m *GetSpecType) GetDefaultPersistenceProfileChoice() isGetSpecType_DefaultPersistenceProfileChoice {
-	if m != nil {
-		return m.DefaultPersistenceProfileChoice
-	}
-	return nil
-}
-func (m *GetSpecType) GetFallbackPersistenceProfileChoice() isGetSpecType_FallbackPersistenceProfileChoice {
-	if m != nil {
-		return m.FallbackPersistenceProfileChoice
 	}
 	return nil
 }
@@ -3731,93 +2449,9 @@ func (m *GetSpecType) GetHttp3() *HTTP3Services {
 	return nil
 }
 
-func (m *GetSpecType) GetStatisticsProfileNone() *schema.Empty {
-	if x, ok := m.GetStatisticsProfileChoice().(*GetSpecType_StatisticsProfileNone); ok {
-		return x.StatisticsProfileNone
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetStatisticsProfile() *views.ObjectRefType {
-	if x, ok := m.GetStatisticsProfileChoice().(*GetSpecType_StatisticsProfile); ok {
-		return x.StatisticsProfile
-	}
-	return nil
-}
-
 func (m *GetSpecType) GetConnectionLimitOptions() *ConnectionLimitsType {
 	if m != nil {
 		return m.ConnectionLimitOptions
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetTranslations() *TranslationType {
-	if m != nil {
-		return m.Translations
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetClonePoolOptions() *ClonePoolType {
-	if m != nil {
-		return m.ClonePoolOptions
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetAutoLastHop() *schema.TMMVirtualServerAutoLastHopType {
-	if m != nil {
-		return m.AutoLastHop
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetSse() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.Sse
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *GetSpecType) GetJson() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.Json
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *GetSpecType) GetLastHopPoolNone() *schema.Empty {
-	if x, ok := m.GetLastHopPoolChoice().(*GetSpecType_LastHopPoolNone); ok {
-		return x.LastHopPoolNone
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetLastHopPool() *views.ObjectRefType {
-	if x, ok := m.GetLastHopPoolChoice().(*GetSpecType_LastHopPool); ok {
-		return x.LastHopPool
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetNat64() *schema.TMMVirtualServerNAT64Type {
-	if m != nil {
-		return m.Nat64
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetRequestLoggingProfileNone() *schema.Empty {
-	if x, ok := m.GetRequestLoggingProfileChoice().(*GetSpecType_RequestLoggingProfileNone); ok {
-		return x.RequestLoggingProfileNone
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetRequestLoggingProfile() *views.ObjectRefType {
-	if x, ok := m.GetRequestLoggingProfileChoice().(*GetSpecType_RequestLoggingProfile); ok {
-		return x.RequestLoggingProfile
 	}
 	return nil
 }
@@ -3864,34 +2498,6 @@ func (m *GetSpecType) GetIrules() []*schema.ObjectRefType {
 	return nil
 }
 
-func (m *GetSpecType) GetDefaultPersistenceProfileNone() *schema.Empty {
-	if x, ok := m.GetDefaultPersistenceProfileChoice().(*GetSpecType_DefaultPersistenceProfileNone); ok {
-		return x.DefaultPersistenceProfileNone
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetDefaultPersistenceProfile() *views.ObjectRefType {
-	if x, ok := m.GetDefaultPersistenceProfileChoice().(*GetSpecType_DefaultPersistenceProfile); ok {
-		return x.DefaultPersistenceProfile
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetFallbackPersistenceProfileNone() *schema.Empty {
-	if x, ok := m.GetFallbackPersistenceProfileChoice().(*GetSpecType_FallbackPersistenceProfileNone); ok {
-		return x.FallbackPersistenceProfileNone
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetFallbackPersistenceProfile() *views.ObjectRefType {
-	if x, ok := m.GetFallbackPersistenceProfileChoice().(*GetSpecType_FallbackPersistenceProfile); ok {
-		return x.FallbackPersistenceProfile
-	}
-	return nil
-}
-
 func (m *GetSpecType) GetTrafficPolicies() []*schema.ObjectRefType {
 	if m != nil {
 		return m.TrafficPolicies
@@ -3911,18 +2517,8 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GetSpecType_Https)(nil),
 		(*GetSpecType_Http3)(nil),
-		(*GetSpecType_StatisticsProfileNone)(nil),
-		(*GetSpecType_StatisticsProfile)(nil),
-		(*GetSpecType_LastHopPoolNone)(nil),
-		(*GetSpecType_LastHopPool)(nil),
-		(*GetSpecType_RequestLoggingProfileNone)(nil),
-		(*GetSpecType_RequestLoggingProfile)(nil),
 		(*GetSpecType_DefaultPoolNone)(nil),
 		(*GetSpecType_DefaultPool)(nil),
-		(*GetSpecType_DefaultPersistenceProfileNone)(nil),
-		(*GetSpecType_DefaultPersistenceProfile)(nil),
-		(*GetSpecType_FallbackPersistenceProfileNone)(nil),
-		(*GetSpecType_FallbackPersistenceProfile)(nil),
 	}
 }
 
@@ -3977,239 +2573,194 @@ func init() {
 }
 
 var fileDescriptor_c98b987b494647eb = []byte{
-	// 3703 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5c, 0x4f, 0x6c, 0xdb, 0x58,
-	0x7a, 0xd7, 0x93, 0x28, 0x4b, 0x7e, 0xb2, 0x64, 0x9a, 0xf2, 0x1f, 0xda, 0x4e, 0x34, 0x8e, 0x66,
-	0xbb, 0xf1, 0xcc, 0x32, 0xb2, 0x25, 0x59, 0xb2, 0x93, 0xcd, 0x26, 0x35, 0xed, 0x24, 0x1a, 0x21,
-	0xff, 0x96, 0x76, 0x3a, 0xe9, 0x20, 0xad, 0x4a, 0x53, 0xcf, 0x0e, 0x13, 0x59, 0xd4, 0x92, 0x94,
-	0x93, 0x2c, 0xea, 0x22, 0xc8, 0xb6, 0x40, 0x0b, 0x14, 0xc5, 0x22, 0x87, 0x9e, 0x7a, 0x68, 0x0f,
-	0x45, 0x0b, 0x9f, 0x0a, 0xf4, 0x36, 0xca, 0xc1, 0xe8, 0x69, 0xb1, 0x97, 0x1a, 0xe8, 0x65, 0x30,
-	0xa7, 0x8e, 0xd3, 0xa2, 0xd3, 0x9e, 0xe6, 0x58, 0x04, 0x28, 0xa6, 0xe0, 0x23, 0x29, 0x91, 0x14,
-	0x45, 0xd3, 0x8e, 0x93, 0x99, 0x76, 0x75, 0x33, 0xf5, 0xde, 0xf7, 0xfb, 0xde, 0x9f, 0xef, 0xfb,
-	0xde, 0xef, 0x91, 0xbf, 0x04, 0x66, 0x76, 0x90, 0x92, 0x11, 0xa5, 0x39, 0x45, 0x78, 0x88, 0xb6,
-	0xf9, 0xb9, 0x1d, 0x11, 0x3d, 0x51, 0xe6, 0x76, 0x44, 0x59, 0x6d, 0xf2, 0xb5, 0x8a, 0x82, 0xe4,
-	0x1d, 0x24, 0xcf, 0xa9, 0xcf, 0x1a, 0x48, 0xc9, 0x34, 0x64, 0x49, 0x95, 0xa8, 0xb4, 0xde, 0x3f,
-	0xa3, 0xf7, 0xcf, 0xe0, 0xfe, 0x19, 0x7b, 0xff, 0xa9, 0x0b, 0x5b, 0xa2, 0xfa, 0xb0, 0xb9, 0x91,
-	0x11, 0xa4, 0xed, 0xb9, 0x2d, 0x69, 0x4b, 0x9a, 0xc3, 0xa6, 0x1b, 0xcd, 0x4d, 0xfc, 0x84, 0x1f,
-	0xf0, 0x5f, 0x3a, 0xe4, 0xd4, 0x07, 0xf6, 0x21, 0x6c, 0x88, 0x5b, 0x62, 0xa3, 0x62, 0xf1, 0x39,
-	0x75, 0xce, 0xde, 0x41, 0xa8, 0x35, 0x15, 0xd5, 0x3e, 0xac, 0xa9, 0x69, 0x7b, 0x17, 0xa9, 0xa1,
-	0x8a, 0x52, 0xdd, 0x6c, 0x9c, 0xb4, 0x37, 0x5a, 0xed, 0xce, 0x38, 0xa6, 0xcf, 0xd7, 0xc4, 0x2a,
-	0xaf, 0x22, 0xa3, 0x75, 0xa6, 0x7b, 0x71, 0x2a, 0x76, 0xe8, 0x0f, 0xdc, 0x96, 0xcf, 0xea, 0xe0,
-	0xb7, 0x1c, 0x1d, 0x94, 0x4a, 0x43, 0x96, 0x36, 0xc5, 0x1a, 0xb2, 0x75, 0x4b, 0xff, 0xcd, 0x19,
-	0x98, 0xb8, 0x51, 0x93, 0x36, 0xf8, 0xda, 0x5a, 0x03, 0x09, 0xeb, 0xcf, 0x1a, 0x88, 0x5a, 0x84,
-	0x61, 0x45, 0xe5, 0x55, 0x44, 0x83, 0x19, 0x30, 0x1b, 0xcb, 0x4d, 0x67, 0xec, 0x2b, 0xbf, 0x7e,
-	0xeb, 0xd6, 0x9a, 0xd6, 0xac, 0xf5, 0x65, 0x89, 0x6f, 0x5a, 0x00, 0x70, 0x7a, 0x7f, 0x6a, 0x1d,
-	0x46, 0xb6, 0xf9, 0x3a, 0xbf, 0x85, 0xaa, 0x74, 0x08, 0x9b, 0x2e, 0x65, 0x8e, 0xde, 0xb4, 0xcc,
-	0xaa, 0xb4, 0xcd, 0x8b, 0x75, 0xe5, 0x96, 0x6e, 0xc9, 0x3e, 0xbb, 0x5e, 0xb8, 0xbf, 0x52, 0x0a,
-	0x70, 0x26, 0x14, 0xf5, 0x00, 0xc6, 0xea, 0x92, 0x5a, 0x31, 0x91, 0x09, 0x8c, 0x7c, 0xd1, 0x0f,
-	0xf2, 0x6d, 0x49, 0x35, 0x50, 0x0d, 0x1f, 0xda, 0x90, 0x4b, 0x01, 0x0e, 0xd6, 0xdb, 0x0d, 0x54,
-	0x15, 0x46, 0xaa, 0x7a, 0x23, 0x1d, 0x9e, 0x09, 0xcd, 0x0e, 0xb2, 0xe5, 0xcf, 0xff, 0x73, 0x3f,
-	0x04, 0x5f, 0x82, 0x48, 0x3a, 0x2c, 0x87, 0xe8, 0xe7, 0x41, 0xed, 0x71, 0xf0, 0x25, 0x18, 0x48,
-	0x13, 0x72, 0x90, 0x04, 0xd6, 0xc6, 0x3f, 0x0d, 0xe2, 0xc7, 0xf0, 0x4b, 0x10, 0x24, 0x67, 0xcc,
-	0xbf, 0xa2, 0xed, 0xdf, 0x68, 0xc0, 0x99, 0xd0, 0x54, 0x09, 0x86, 0x1f, 0xaa, 0x6a, 0x43, 0xa1,
-	0xa3, 0x78, 0xf4, 0xf3, 0x7e, 0x46, 0x5f, 0x5a, 0x5f, 0xbf, 0xbb, 0x86, 0xe4, 0x1d, 0x51, 0x40,
-	0x4a, 0x09, 0x70, 0x3a, 0x00, 0x75, 0x5f, 0x47, 0xca, 0xd3, 0x93, 0x18, 0x29, 0xeb, 0x17, 0x29,
-	0x6f, 0x42, 0xb1, 0xf1, 0xff, 0xda, 0x85, 0x55, 0xb4, 0x2d, 0x65, 0x19, 0x15, 0x29, 0xaa, 0x89,
-	0x9c, 0xa7, 0x6e, 0xc3, 0x09, 0x6d, 0x1b, 0x45, 0x45, 0x15, 0x85, 0x76, 0xb0, 0x54, 0xea, 0x52,
-	0x1d, 0xd1, 0x13, 0xd8, 0xd7, 0xa8, 0xc3, 0xd7, 0xb5, 0xed, 0x86, 0xfa, 0xac, 0x14, 0xe4, 0xc6,
-	0x3a, 0x66, 0x77, 0x75, 0xab, 0xdb, 0x52, 0x1d, 0x51, 0x8f, 0x20, 0xd5, 0x8d, 0x47, 0xd3, 0x18,
-	0x2a, 0xed, 0x3a, 0xec, 0x3b, 0x1b, 0x8f, 0x90, 0xa0, 0x72, 0x68, 0x13, 0x87, 0xd6, 0xd8, 0xde,
-	0xae, 0x0b, 0x40, 0x29, 0xc8, 0x8d, 0x74, 0xf9, 0xa3, 0x9e, 0x42, 0x5a, 0x90, 0xea, 0x75, 0x24,
-	0x68, 0x29, 0x52, 0xa9, 0x89, 0xdb, 0xa2, 0x6a, 0xe6, 0x0b, 0x3d, 0xe4, 0x3f, 0x14, 0x57, 0xda,
-	0x18, 0x37, 0x35, 0x08, 0x45, 0x0f, 0xf1, 0x7d, 0x2d, 0xc4, 0xc7, 0x05, 0x7b, 0xdb, 0x1d, 0x1d,
-	0x9d, 0xfa, 0x3d, 0x38, 0xa4, 0xca, 0x7c, 0x5d, 0xa9, 0xf1, 0xba, 0xb7, 0x34, 0xf6, 0x96, 0xf7,
-	0xe3, 0x6d, 0xbd, 0x63, 0x67, 0x71, 0x64, 0x83, 0xa3, 0x10, 0xa4, 0x84, 0x9a, 0x54, 0x47, 0x95,
-	0x86, 0x24, 0xd5, 0xda, 0x53, 0xfa, 0xc8, 0xff, 0xde, 0xaf, 0x68, 0xd6, 0x77, 0x25, 0xa9, 0x66,
-	0x71, 0x41, 0x0a, 0xe6, 0x8f, 0xe6, 0x2c, 0x1e, 0xc0, 0x38, 0xdf, 0x54, 0xa5, 0x4a, 0x8d, 0x57,
-	0xd4, 0xca, 0x43, 0xa9, 0x41, 0x67, 0xb1, 0x87, 0x4c, 0x77, 0xea, 0xff, 0x8e, 0x0e, 0xbf, 0x86,
-	0xd1, 0x97, 0x9b, 0xaa, 0x74, 0x93, 0x57, 0xd4, 0x92, 0xd4, 0xc0, 0xf0, 0x51, 0x0d, 0x1e, 0x57,
-	0x84, 0x18, 0xdf, 0x69, 0xa2, 0x6e, 0xc0, 0x90, 0xa2, 0x20, 0x3a, 0x37, 0x03, 0x66, 0x13, 0xb9,
-	0x8f, 0x9d, 0xa3, 0xee, 0x14, 0xa6, 0xcc, 0xba, 0xdc, 0x44, 0xd7, 0xf9, 0x9a, 0x82, 0x56, 0x1e,
-	0x4a, 0xa2, 0x80, 0xd8, 0xc1, 0x2f, 0x5b, 0x20, 0x7c, 0x7d, 0xf9, 0xe6, 0xda, 0x35, 0x4e, 0x43,
-	0xa0, 0x3e, 0x81, 0xc4, 0x23, 0x45, 0xaa, 0xd3, 0xf9, 0xb7, 0x41, 0xc2, 0x10, 0xd4, 0x0a, 0xa4,
-	0xcc, 0xc9, 0xea, 0x6b, 0x8b, 0x03, 0xbd, 0xe8, 0x11, 0xe8, 0x21, 0x6e, 0xb8, 0xa6, 0x4f, 0x48,
-	0x5b, 0x39, 0x1c, 0xe2, 0xf7, 0x61, 0xdc, 0x06, 0x42, 0x2f, 0xfa, 0x8e, 0xee, 0xc4, 0xde, 0x6e,
-	0x44, 0x1b, 0xb0, 0x24, 0xd5, 0x9e, 0xbf, 0x02, 0x81, 0x52, 0x88, 0x8b, 0x59, 0xd0, 0xb5, 0x82,
-	0x51, 0xe7, 0xd5, 0xe2, 0x02, 0xbd, 0x84, 0x11, 0x67, 0x8f, 0xd8, 0x88, 0xdb, 0xcb, 0xeb, 0xc5,
-	0x05, 0xc7, 0x16, 0xe8, 0x00, 0xd4, 0xa7, 0xf0, 0x8c, 0x8c, 0x7e, 0xd6, 0x44, 0x8a, 0x5a, 0xa9,
-	0x49, 0x5b, 0x5b, 0x62, 0x7d, 0xcb, 0x9e, 0xdb, 0x97, 0x3d, 0xa6, 0x4c, 0x70, 0x93, 0x86, 0xed,
-	0x4d, 0xdd, 0xd4, 0x9a, 0xdf, 0x4f, 0xe1, 0x44, 0x0f, 0x60, 0xfa, 0x27, 0xbe, 0x97, 0x61, 0x6a,
-	0x6f, 0xb7, 0x17, 0x4a, 0x89, 0xe0, 0xc6, 0x5c, 0xbd, 0x53, 0x79, 0x18, 0xdd, 0x51, 0x2a, 0x8a,
-	0x20, 0xc9, 0x88, 0xbe, 0x32, 0x03, 0x66, 0xe3, 0x2c, 0xad, 0xcd, 0xfa, 0xcb, 0x16, 0x00, 0xf3,
-	0xff, 0xdd, 0x02, 0x01, 0xad, 0x02, 0x0f, 0x7c, 0x4c, 0xd0, 0xfb, 0xff, 0xfc, 0x03, 0x2e, 0xb2,
-	0xa3, 0xac, 0x69, 0x1d, 0xa9, 0x3f, 0x06, 0x70, 0x46, 0xdc, 0xde, 0x46, 0x55, 0x91, 0x57, 0x51,
-	0x85, 0xd7, 0x2b, 0x85, 0x54, 0xc7, 0x79, 0x22, 0x0a, 0xa8, 0x52, 0x95, 0x9e, 0xd4, 0xe9, 0xab,
-	0x78, 0xe0, 0xb9, 0xee, 0xd5, 0xfe, 0xc4, 0xb4, 0x5c, 0xc6, 0x86, 0x77, 0xea, 0x46, 0x39, 0x5d,
-	0x95, 0x9e, 0xd4, 0x1d, 0xeb, 0x7e, 0x46, 0xf4, 0xe8, 0x4b, 0xb1, 0x70, 0xa4, 0x8a, 0x36, 0xf9,
-	0x66, 0x4d, 0xb5, 0x84, 0xdd, 0x35, 0x8f, 0x3d, 0x08, 0x73, 0xc3, 0x86, 0x41, 0x3b, 0xec, 0x3e,
-	0x85, 0x43, 0x56, 0x0c, 0xfa, 0xfa, 0x89, 0xa3, 0x2e, 0xcc, 0xc5, 0x2c, 0xe0, 0xd4, 0x16, 0x1c,
-	0x31, 0xcb, 0x07, 0x5f, 0xad, 0xca, 0x48, 0x51, 0x90, 0x42, 0xc7, 0x67, 0x42, 0x3e, 0xd1, 0xc7,
-	0xf7, 0x76, 0x87, 0x1d, 0xf6, 0x9a, 0x17, 0x8e, 0x34, 0x7e, 0x5c, 0x36, 0x31, 0x29, 0x16, 0x0e,
-	0x88, 0x72, 0xb3, 0x86, 0x14, 0x3a, 0x81, 0xd1, 0xcf, 0x38, 0xd0, 0xed, 0xb8, 0x43, 0x7b, 0xbb,
-	0x61, 0xdc, 0xfd, 0xf9, 0x2b, 0x00, 0x38, 0xc3, 0x92, 0xaa, 0xc0, 0x99, 0xf6, 0x2a, 0x20, 0x59,
-	0x11, 0x15, 0x15, 0xd5, 0x05, 0x64, 0x0f, 0x6e, 0xd2, 0x63, 0x61, 0x07, 0xb8, 0xb3, 0xe6, 0xdc,
-	0x3b, 0xe6, 0xd6, 0x00, 0xff, 0x43, 0x38, 0xed, 0xe1, 0x80, 0x1e, 0xf1, 0xbd, 0xea, 0xe3, 0x7b,
-	0xbb, 0x49, 0x17, 0x84, 0xd2, 0x00, 0x37, 0xd9, 0x73, 0x04, 0x14, 0x0f, 0xcf, 0x6d, 0xf2, 0xb5,
-	0xda, 0x06, 0x2f, 0x3c, 0xee, 0x3d, 0xbf, 0xa4, 0xc7, 0xfc, 0x22, 0x5c, 0xca, 0x04, 0xe8, 0x31,
-	0xc1, 0x3f, 0x82, 0x67, 0xbc, 0x5c, 0xd0, 0xa3, 0x6f, 0x3d, 0xc3, 0x08, 0x37, 0xd5, 0x7b, 0x0c,
-	0x54, 0x13, 0x92, 0xaa, 0xcc, 0x6f, 0x6e, 0x8a, 0x42, 0xa5, 0x21, 0xd5, 0x44, 0x41, 0x44, 0x0a,
-	0x3d, 0xe6, 0x23, 0x1e, 0x98, 0xbd, 0xdd, 0x84, 0xcd, 0xf0, 0x99, 0x8d, 0xd2, 0x68, 0x51, 0xd2,
-	0x21, 0x66, 0xdc, 0xb0, 0xd1, 0xf5, 0xae, 0xe1, 0x82, 0x7a, 0x00, 0x13, 0xbc, 0x20, 0x20, 0xa5,
-	0x43, 0x4a, 0x6e, 0xf8, 0x9e, 0xe8, 0xc8, 0xde, 0xae, 0xc3, 0x98, 0x8b, 0xeb, 0xcf, 0xe6, 0xa4,
-	0x3e, 0x83, 0x71, 0x4c, 0xd7, 0xc5, 0xba, 0x8a, 0xe4, 0x3a, 0x5f, 0xa3, 0xbf, 0x8e, 0xf8, 0x46,
-	0x27, 0xf7, 0x76, 0xed, 0xc6, 0xdc, 0x90, 0xf6, 0xf8, 0x89, 0xf1, 0x74, 0xe9, 0x2f, 0xc0, 0x3f,
-	0xb5, 0xc0, 0x9f, 0x01, 0x78, 0x09, 0xc6, 0x57, 0xa4, 0xfa, 0xa6, 0xb8, 0xd5, 0x94, 0x31, 0x4f,
-	0xa0, 0x3e, 0xca, 0x32, 0x05, 0x66, 0x91, 0xc9, 0xe5, 0x98, 0x6c, 0x8e, 0xc9, 0x2f, 0x30, 0x0b,
-	0x59, 0x66, 0xe1, 0x22, 0x53, 0x98, 0x67, 0x0a, 0x59, 0xa6, 0x90, 0x67, 0x0a, 0x45, 0xa6, 0x70,
-	0x91, 0x29, 0xe6, 0x98, 0x62, 0x1e, 0x8e, 0xc1, 0xe1, 0x65, 0x3c, 0xe0, 0x99, 0xf6, 0x82, 0x04,
-	0x17, 0xb3, 0x70, 0x02, 0x8e, 0x18, 0x27, 0xca, 0x4c, 0x27, 0x4d, 0x83, 0xd9, 0x3c, 0x9c, 0x86,
-	0x83, 0x1c, 0x52, 0xa4, 0xa6, 0x2c, 0x20, 0x85, 0x4a, 0x64, 0x17, 0x98, 0xe2, 0x12, 0x93, 0x2d,
-	0x30, 0xd9, 0x25, 0x26, 0x97, 0x65, 0x67, 0x61, 0x5c, 0xa7, 0xb8, 0x15, 0x01, 0x9f, 0xb3, 0xd4,
-	0xc4, 0x7e, 0x0b, 0x84, 0x0e, 0x5a, 0x20, 0x78, 0xd8, 0x02, 0xa1, 0x3c, 0xb3, 0xf0, 0xb5, 0x51,
-	0x15, 0xd9, 0x39, 0x98, 0xb4, 0x33, 0x13, 0x7c, 0xd1, 0xa2, 0xb4, 0xc2, 0x1d, 0x3d, 0x68, 0x81,
-	0xc8, 0x61, 0x0b, 0x10, 0x4b, 0x4c, 0xae, 0xa0, 0x19, 0xfc, 0xf5, 0x2b, 0x00, 0xd8, 0x1c, 0x9c,
-	0x74, 0xa1, 0xa3, 0x86, 0x9b, 0xb1, 0xfd, 0x16, 0x98, 0xf8, 0x55, 0x0b, 0x80, 0x83, 0x16, 0x18,
-	0x3f, 0x6c, 0x81, 0x70, 0x2e, 0xcf, 0xe4, 0x16, 0xd8, 0x0b, 0x70, 0xd4, 0x7e, 0xa8, 0x5b, 0xba,
-	0x17, 0x8d, 0xee, 0x05, 0xad, 0x7b, 0x61, 0x81, 0x29, 0x14, 0xd8, 0x45, 0x98, 0xea, 0x75, 0x34,
-	0x5a, 0x0c, 0x2f, 0x1b, 0x86, 0x3f, 0xd6, 0x0c, 0x8b, 0xf3, 0x4c, 0x51, 0x9b, 0x76, 0xd2, 0x56,
-	0xc4, 0x8d, 0xde, 0x23, 0xfb, 0x2d, 0x70, 0xed, 0xa0, 0x05, 0x56, 0x71, 0xcf, 0x8b, 0xcc, 0xe2,
-	0x3c, 0xbb, 0x08, 0xd3, 0x5e, 0x45, 0xca, 0x62, 0x48, 0x1e, 0xb4, 0xc0, 0xb0, 0x66, 0x98, 0x2d,
-	0x32, 0xd9, 0x45, 0x76, 0x09, 0x7e, 0xe8, 0x99, 0xfe, 0x16, 0xcb, 0xe4, 0x41, 0x0b, 0x50, 0xd8,
-	0xf2, 0x22, 0x93, 0x9b, 0x2f, 0x13, 0xd1, 0x20, 0x19, 0x2a, 0x13, 0xd1, 0x08, 0x19, 0x2d, 0x13,
-	0xd1, 0x41, 0x12, 0x96, 0x89, 0x28, 0x24, 0x63, 0x65, 0x22, 0x1a, 0x23, 0x87, 0xca, 0x44, 0x74,
-	0x9c, 0x9c, 0x28, 0x13, 0xd1, 0x02, 0x59, 0x2c, 0x13, 0xd1, 0x1f, 0x93, 0x97, 0xcb, 0x44, 0x74,
-	0x95, 0xbc, 0x56, 0x26, 0xa2, 0xc3, 0x24, 0x59, 0x26, 0xa2, 0x14, 0x99, 0xe4, 0x08, 0xed, 0x42,
-	0xc0, 0x85, 0x9a, 0xd5, 0x06, 0x17, 0x52, 0x85, 0x46, 0xfa, 0x97, 0x04, 0x8c, 0xad, 0xaf, 0xb4,
-	0x2f, 0x23, 0xd4, 0x06, 0x8c, 0x1a, 0xa7, 0xa6, 0x42, 0x03, 0x9c, 0xaf, 0x73, 0x7e, 0xa8, 0xa8,
-	0x61, 0xaf, 0x93, 0x7b, 0x7c, 0x46, 0xbf, 0x04, 0x21, 0xf2, 0xb9, 0xf5, 0xc2, 0xd4, 0xc6, 0xa5,
-	0x1e, 0xc1, 0x09, 0x7c, 0x41, 0x15, 0xb4, 0xe5, 0xad, 0x89, 0xa8, 0xae, 0xb6, 0xb3, 0x35, 0x78,
-	0x9c, 0xe3, 0x2e, 0xa6, 0x0a, 0x8d, 0x76, 0xaa, 0x8e, 0x99, 0x90, 0x2b, 0x18, 0xd1, 0x4c, 0xd9,
-	0x5d, 0x98, 0x54, 0x14, 0xa7, 0x1b, 0x85, 0x0e, 0xf9, 0x3e, 0xf8, 0x3e, 0xd2, 0xae, 0x2a, 0x5d,
-	0x08, 0xdd, 0x97, 0x43, 0x1a, 0x70, 0x23, 0x8a, 0x62, 0xf7, 0xae, 0x50, 0x2f, 0x00, 0x4c, 0x19,
-	0x39, 0xc1, 0x37, 0xf4, 0x17, 0x10, 0x15, 0x85, 0xdf, 0x46, 0x15, 0x5e, 0x31, 0x10, 0xe9, 0x30,
-	0x9e, 0xf2, 0x4f, 0x7c, 0xdd, 0x2a, 0x56, 0xee, 0xae, 0xea, 0x11, 0xa7, 0x53, 0xc3, 0x35, 0x54,
-	0xd3, 0xaf, 0x2d, 0xa5, 0x00, 0x37, 0xa9, 0xf7, 0x59, 0x6e, 0x60, 0xba, 0xbe, 0xc6, 0x6f, 0xa3,
-	0x65, 0x45, 0x1f, 0x0c, 0x7b, 0x1e, 0x8e, 0x3b, 0xc7, 0x60, 0x84, 0x58, 0x7c, 0xbf, 0x05, 0xc2,
-	0x07, 0x2d, 0x40, 0x1c, 0xb6, 0x00, 0x28, 0x94, 0x89, 0x28, 0x41, 0x86, 0x71, 0x48, 0xdc, 0x5b,
-	0xfd, 0x3f, 0x1a, 0x12, 0xcd, 0xea, 0x6f, 0x56, 0x48, 0xdc, 0x5b, 0x7d, 0x1f, 0x21, 0xf1, 0x2a,
-	0x02, 0xe3, 0xb6, 0x37, 0x0d, 0xfd, 0xa0, 0x38, 0xdd, 0xa0, 0x10, 0x60, 0x52, 0x2b, 0xcc, 0xce,
-	0x69, 0xfa, 0xa7, 0x17, 0xc3, 0x7b, 0xbb, 0x43, 0x18, 0xc1, 0x9c, 0xe7, 0x88, 0xf6, 0x64, 0x9f,
-	0xe3, 0x26, 0x1c, 0xc5, 0xaf, 0x83, 0x9c, 0x5e, 0xa2, 0xc7, 0x22, 0x31, 0x3a, 0x84, 0xe9, 0x86,
-	0xc2, 0x8f, 0x76, 0x3f, 0x77, 0x20, 0xfd, 0xb3, 0xa6, 0x28, 0x38, 0xdc, 0xe8, 0xac, 0x76, 0xc8,
-	0x83, 0xd5, 0x06, 0xb8, 0x31, 0xcd, 0xce, 0x06, 0x86, 0xc9, 0x2c, 0x82, 0x49, 0x17, 0x40, 0x3a,
-	0x7e, 0xac, 0xd5, 0xc1, 0x08, 0x26, 0x79, 0x0d, 0x70, 0x23, 0x5d, 0xae, 0xb4, 0x5b, 0xaf, 0x33,
-	0x29, 0x8c, 0x03, 0xde, 0xc8, 0xc8, 0xab, 0xbe, 0xdf, 0xc8, 0xf5, 0xc8, 0x49, 0xc0, 0x8d, 0xda,
-	0x72, 0xd2, 0xe8, 0xa6, 0x91, 0x0e, 0xeb, 0xf0, 0xac, 0x0c, 0x60, 0xe8, 0xa0, 0x05, 0x62, 0x98,
-	0x01, 0xe4, 0x98, 0x6c, 0xfe, 0x38, 0x89, 0xab, 0x53, 0x02, 0x2d, 0x7d, 0xff, 0x31, 0x01, 0x87,
-	0xac, 0xaf, 0x1c, 0xbf, 0xeb, 0xec, 0x0d, 0x9f, 0xf6, 0x29, 0xdf, 0x23, 0x7d, 0xc8, 0x53, 0x4d,
-	0x9f, 0xdf, 0x85, 0x67, 0x9f, 0xa0, 0x0d, 0x45, 0x12, 0x1e, 0x23, 0xd5, 0x35, 0xb6, 0x23, 0x9e,
-	0xb1, 0x3d, 0xd5, 0x36, 0xee, 0x0e, 0x70, 0x15, 0xd2, 0xbd, 0xa0, 0x8f, 0x91, 0x9d, 0xa3, 0x7b,
-	0xbb, 0x23, 0x1d, 0x98, 0x4e, 0xa8, 0x8f, 0xbb, 0x7b, 0xa6, 0xfe, 0x16, 0xb8, 0x17, 0xbd, 0x41,
-	0xdf, 0x45, 0xef, 0xa7, 0xae, 0x45, 0x6f, 0xef, 0x15, 0xf8, 0xc1, 0xa5, 0x34, 0x9c, 0x81, 0xb4,
-	0xd2, 0x40, 0x42, 0xc6, 0xed, 0x6e, 0x80, 0x69, 0xa8, 0xdf, 0xe2, 0xf8, 0x53, 0x38, 0xa9, 0x75,
-	0xcf, 0xb9, 0x2e, 0x7a, 0xc2, 0x63, 0xd1, 0x01, 0x37, 0x8e, 0x0d, 0xbb, 0x17, 0xfc, 0xa1, 0x5e,
-	0x0a, 0x9d, 0x90, 0xf4, 0xf0, 0xb1, 0x4b, 0x61, 0xae, 0xbd, 0xd0, 0x40, 0x2f, 0x86, 0x76, 0x6f,
-	0xd4, 0x2f, 0x8e, 0x3e, 0xee, 0xa7, 0xb0, 0xd3, 0x2b, 0x7e, 0x8b, 0x4b, 0x8f, 0xda, 0x12, 0xf4,
-	0x38, 0xef, 0xa9, 0xeb, 0x30, 0xa9, 0xa8, 0x32, 0xe2, 0xb7, 0xed, 0x8b, 0x17, 0xf3, 0x7c, 0x27,
-	0x3a, 0xa2, 0x9b, 0x58, 0xd7, 0xed, 0xf7, 0x61, 0xc2, 0x8e, 0x63, 0x14, 0x74, 0xbf, 0xf7, 0x6b,
-	0xbb, 0x71, 0x29, 0xc4, 0xc5, 0x6d, 0x3e, 0xa8, 0xdf, 0x86, 0xe4, 0xa6, 0xf8, 0xd4, 0x3e, 0xc8,
-	0x51, 0xcf, 0xb7, 0x98, 0x89, 0x4d, 0xf1, 0xa9, 0x75, 0x84, 0xf7, 0x60, 0xcc, 0x82, 0x40, 0x8f,
-	0x1d, 0xab, 0xd4, 0x58, 0x2c, 0x4b, 0x04, 0x07, 0x3b, 0xd0, 0x14, 0x0b, 0x47, 0x24, 0x41, 0x69,
-	0xf8, 0xff, 0x76, 0x12, 0xe6, 0x86, 0x35, 0x03, 0xeb, 0xd0, 0xee, 0xc3, 0x21, 0x2b, 0xc6, 0x31,
-	0xbe, 0x97, 0x68, 0xe5, 0xc9, 0x6a, 0x5a, 0x0a, 0x73, 0x31, 0x0b, 0x3a, 0x5b, 0x84, 0x1f, 0xf4,
-	0x2c, 0x4d, 0xc6, 0xf1, 0x90, 0xdc, 0x6f, 0x81, 0x88, 0x71, 0xdd, 0x1d, 0xd0, 0x6e, 0xf0, 0x8b,
-	0xcc, 0x12, 0x3b, 0x0f, 0xa7, 0x5d, 0x33, 0xcb, 0x72, 0xfe, 0x24, 0x0e, 0x5a, 0x20, 0x8e, 0xcf,
-	0x9f, 0x05, 0x26, 0x5b, 0x60, 0x67, 0x7b, 0x9e, 0x3f, 0x89, 0xfd, 0x16, 0x98, 0x3a, 0x68, 0x81,
-	0xc9, 0xc3, 0x16, 0x08, 0xe6, 0x8a, 0x6c, 0x06, 0x8e, 0x39, 0x42, 0xce, 0x72, 0xf1, 0x8e, 0x19,
-	0x23, 0x81, 0x18, 0x39, 0xcb, 0x64, 0x73, 0xec, 0x8f, 0x20, 0x65, 0xdd, 0x7a, 0x4b, 0xe7, 0x51,
-	0xa3, 0x73, 0x12, 0xbf, 0x0d, 0x98, 0x67, 0x72, 0x59, 0x96, 0x81, 0x49, 0xdb, 0x76, 0x78, 0xbe,
-	0x3b, 0x68, 0x5f, 0x9b, 0x43, 0x24, 0xa1, 0x9f, 0x88, 0x65, 0x22, 0x3a, 0x40, 0x46, 0xca, 0x44,
-	0x34, 0x4e, 0x26, 0xca, 0x44, 0x74, 0x92, 0x9c, 0x6a, 0x5f, 0xa4, 0x93, 0xe4, 0xa8, 0x7e, 0x91,
-	0x4e, 0xff, 0x79, 0x08, 0x4e, 0xf6, 0xa4, 0xd7, 0xd4, 0x7d, 0x78, 0x56, 0xa3, 0x95, 0xc6, 0x62,
-	0x98, 0xe3, 0x68, 0x2a, 0xc8, 0xcc, 0xea, 0xa0, 0xe7, 0x69, 0x30, 0xd9, 0xac, 0x36, 0x74, 0x48,
-	0x63, 0x0f, 0xef, 0x29, 0xc8, 0xc8, 0xd5, 0x0d, 0x48, 0x75, 0x23, 0x1b, 0x5f, 0x5d, 0x4f, 0xc0,
-	0x78, 0x4b, 0x01, 0x8e, 0x74, 0x3a, 0x33, 0xe9, 0xae, 0xdd, 0x87, 0x42, 0x13, 0xc7, 0xa6, 0xbb,
-	0x76, 0x84, 0x9e, 0x15, 0xdd, 0xe6, 0x5d, 0x61, 0x19, 0x38, 0xe9, 0xb2, 0x78, 0xc6, 0x26, 0x0e,
-	0xef, 0xb7, 0x40, 0xf0, 0xa0, 0x05, 0x80, 0x16, 0xa5, 0x39, 0x26, 0x5f, 0x26, 0xa2, 0x80, 0x0c,
-	0xe2, 0xed, 0xe8, 0x79, 0x01, 0xd6, 0xb6, 0x43, 0xe3, 0x09, 0x27, 0xde, 0x0e, 0x55, 0xf0, 0xd8,
-	0x8e, 0x6e, 0xe4, 0x63, 0x6e, 0x87, 0x85, 0xc2, 0x68, 0xdb, 0xe1, 0x74, 0xf6, 0x3d, 0xd8, 0x0e,
-	0x97, 0xc5, 0xf3, 0xde, 0x8e, 0x7f, 0x81, 0x70, 0xaa, 0xf7, 0x69, 0x44, 0x89, 0xf0, 0x87, 0x6d,
-	0xf6, 0xe7, 0xc0, 0x75, 0x9c, 0x7e, 0xde, 0x1b, 0x73, 0xce, 0x44, 0xb1, 0x0d, 0xd9, 0x76, 0xb6,
-	0xd5, 0x2c, 0x44, 0xf3, 0x14, 0x77, 0x69, 0xcc, 0xd5, 0x33, 0xc5, 0xc3, 0x34, 0x26, 0x8a, 0xde,
-	0x93, 0x0a, 0x7b, 0xb2, 0x92, 0xb3, 0x1a, 0x42, 0xef, 0x09, 0x21, 0x83, 0xcd, 0x3a, 0x26, 0x33,
-	0x70, 0x62, 0x36, 0x5b, 0x02, 0x3a, 0x9f, 0xb5, 0xcf, 0xe4, 0x31, 0x3c, 0xdf, 0x39, 0x34, 0xbc,
-	0xa7, 0x13, 0xf5, 0x14, 0x09, 0xa4, 0xdb, 0x30, 0xbd, 0xe7, 0x64, 0x63, 0xb8, 0x8e, 0x89, 0x0d,
-	0xbe, 0x25, 0xc3, 0x0d, 0x5a, 0x18, 0xae, 0x7d, 0x8a, 0x6d, 0xe6, 0xe8, 0x98, 0xde, 0x91, 0xcc,
-	0x31, 0x64, 0x30, 0x47, 0x1b, 0x9c, 0x9d, 0x39, 0x3a, 0x26, 0xf1, 0x36, 0xcc, 0x31, 0x64, 0x30,
-	0x47, 0xfb, 0xe0, 0x05, 0xf8, 0xa1, 0xeb, 0xe0, 0x1d, 0x7b, 0x33, 0xed, 0x39, 0x8d, 0x54, 0x37,
-	0xb0, 0x6d, 0x5f, 0xcc, 0x3b, 0x80, 0xb3, 0xf4, 0x90, 0xc7, 0xbe, 0x03, 0xd8, 0x11, 0xde, 0xfa,
-	0x0e, 0xe0, 0x28, 0x51, 0x59, 0x98, 0xea, 0x55, 0x4f, 0x7a, 0xd4, 0x29, 0xf6, 0x02, 0x9c, 0x72,
-	0xcb, 0x54, 0x4b, 0x77, 0xf3, 0xba, 0x1c, 0x2a, 0x30, 0x45, 0x3b, 0x87, 0x72, 0xb7, 0xd1, 0x38,
-	0x54, 0xd4, 0xa0, 0x17, 0x11, 0xcd, 0x6e, 0x89, 0xb9, 0xc8, 0xe6, 0x4d, 0x0e, 0xe5, 0x6e, 0x33,
-	0xba, 0xdf, 0x02, 0xd3, 0x06, 0x87, 0x8a, 0xe6, 0x16, 0x19, 0x4c, 0xa3, 0xf4, 0x1a, 0xda, 0xe6,
-	0x22, 0xfa, 0xeb, 0xfc, 0x38, 0x99, 0x48, 0xff, 0x4f, 0x08, 0x4e, 0x7b, 0xbc, 0x40, 0xa0, 0xfe,
-	0xc0, 0xf5, 0x30, 0x02, 0x27, 0xbe, 0x4f, 0x77, 0x1f, 0x45, 0xfe, 0xea, 0x5b, 0xc8, 0xb3, 0x68,
-	0x9f, 0xac, 0xbe, 0x11, 0x27, 0xaf, 0x6f, 0x01, 0xb7, 0xfa, 0xd6, 0xe3, 0x50, 0x0d, 0xbf, 0xa7,
-	0x43, 0xf5, 0xe8, 0xf0, 0xb3, 0x7e, 0x4c, 0xd3, 0x39, 0x6a, 0xfa, 0x17, 0x00, 0x8e, 0xba, 0x89,
-	0xe6, 0xa8, 0xc7, 0x1d, 0x2d, 0x9b, 0xfe, 0xc2, 0xc6, 0x97, 0x42, 0xc8, 0x26, 0x91, 0x63, 0x53,
-	0x3e, 0x25, 0x6d, 0xe9, 0x3f, 0x01, 0x30, 0x6e, 0x33, 0xa5, 0xc6, 0xe1, 0x40, 0x43, 0x46, 0x9b,
-	0xe2, 0x53, 0x1c, 0x6b, 0x83, 0x9c, 0xf1, 0x44, 0x3d, 0x80, 0xd1, 0x6a, 0x5d, 0xa9, 0xfc, 0x5c,
-	0xab, 0xa7, 0xfe, 0xdf, 0xc9, 0x9e, 0xdd, 0xdb, 0x6d, 0x9b, 0x7d, 0xfe, 0x0a, 0x24, 0xa2, 0x60,
-	0x16, 0xcc, 0x83, 0x4b, 0x03, 0x02, 0xfe, 0xf0, 0xc9, 0x45, 0xaa, 0x75, 0xe5, 0x33, 0xa9, 0x8e,
-	0xd2, 0xbb, 0x70, 0xcc, 0x55, 0xe7, 0x67, 0x55, 0xf6, 0x81, 0x77, 0xa6, 0xec, 0x4b, 0x7f, 0x1e,
-	0x84, 0xc3, 0x0e, 0x21, 0x17, 0x55, 0x83, 0x49, 0x43, 0xfe, 0x50, 0xb1, 0x88, 0xb9, 0x8c, 0x0c,
-	0x2c, 0x1c, 0xa5, 0xa9, 0xd2, 0x2d, 0xbb, 0xc4, 0x61, 0x58, 0x5b, 0x42, 0xf1, 0x5d, 0xad, 0x94,
-	0x00, 0xc9, 0x86, 0x24, 0xab, 0x36, 0x57, 0xc1, 0x5e, 0x3a, 0x16, 0x9b, 0xab, 0xbb, 0x92, 0xac,
-	0xba, 0xfb, 0x19, 0x6e, 0xd8, 0x9b, 0xa8, 0x75, 0x18, 0xd3, 0xbf, 0x01, 0x57, 0xb4, 0x16, 0x23,
-	0xb5, 0x2f, 0x1c, 0x81, 0xbf, 0x86, 0x2d, 0xb0, 0x97, 0x0e, 0x34, 0x54, 0xda, 0xbf, 0xa6, 0xff,
-	0x2e, 0x04, 0xe3, 0x36, 0x81, 0x9a, 0x76, 0xb7, 0xd7, 0xbf, 0xa8, 0xea, 0x77, 0xcd, 0x7a, 0x27,
-	0x66, 0x7a, 0xd5, 0x91, 0x84, 0xd6, 0x5f, 0x2f, 0x1a, 0xe6, 0xdd, 0xde, 0x82, 0x70, 0x3c, 0x76,
-	0x67, 0xd3, 0xc6, 0x04, 0x38, 0xd8, 0x81, 0x6e, 0x0f, 0xcc, 0xc8, 0x54, 0x3c, 0x30, 0x6f, 0x02,
-	0x87, 0x07, 0x66, 0xc8, 0xb3, 0xac, 0x03, 0xd3, 0x11, 0x8e, 0xc1, 0xd4, 0x9c, 0x03, 0x03, 0xfa,
-	0xc0, 0x74, 0x68, 0xf6, 0x47, 0x90, 0xb6, 0x28, 0x04, 0x8d, 0x75, 0xeb, 0x75, 0xdc, 0xd9, 0x3b,
-	0x1b, 0x73, 0xe9, 0x71, 0xd8, 0x59, 0xcf, 0x9f, 0x74, 0x1d, 0x46, 0xdf, 0xe7, 0x8b, 0xe1, 0xf4,
-	0x3e, 0x80, 0x31, 0x8b, 0x01, 0x75, 0x0e, 0x12, 0x38, 0xf0, 0x00, 0x96, 0x7b, 0xc5, 0x4c, 0x85,
-	0xd7, 0xb7, 0xdf, 0x86, 0x4a, 0x01, 0x0e, 0x37, 0x51, 0x57, 0xb5, 0xf5, 0x95, 0xd5, 0x8a, 0xcc,
-	0xd7, 0xb7, 0x90, 0x82, 0xa3, 0x66, 0x90, 0x3d, 0xa3, 0xf5, 0x24, 0xe4, 0x20, 0x3d, 0x63, 0xfc,
-	0xa1, 0x27, 0x7a, 0x58, 0x0e, 0xfd, 0x03, 0x00, 0xfa, 0x16, 0xcb, 0x2a, 0x87, 0x2d, 0x2e, 0x9d,
-	0xff, 0x75, 0x0b, 0x7c, 0x08, 0xcf, 0x41, 0x42, 0x8b, 0xcd, 0x8f, 0x27, 0xe1, 0x04, 0x1c, 0xd0,
-	0xbd, 0xc2, 0xb8, 0x0d, 0x9a, 0x4d, 0x19, 0x8f, 0x96, 0x85, 0xd3, 0x4e, 0xfb, 0x90, 0xb6, 0x70,
-	0x59, 0x26, 0xa7, 0xbf, 0x44, 0x48, 0xff, 0x55, 0x10, 0x8e, 0xba, 0x09, 0x4a, 0xa9, 0xab, 0x90,
-	0x74, 0x8a, 0x55, 0xf1, 0x6b, 0x9e, 0x38, 0x3b, 0xea, 0x2a, 0x61, 0x1b, 0x76, 0x48, 0x4f, 0xa9,
-	0x12, 0x1c, 0xb3, 0x00, 0xc8, 0xbc, 0x8a, 0x0c, 0x94, 0x49, 0x0f, 0x94, 0x64, 0xc7, 0x84, 0xe3,
-	0x55, 0xa4, 0x23, 0x3d, 0x83, 0x53, 0xae, 0x48, 0x95, 0x6d, 0xa9, 0x8a, 0x8c, 0x77, 0x8e, 0xc5,
-	0x23, 0xb2, 0x7c, 0xa5, 0x1b, 0xf7, 0x96, 0x54, 0x35, 0xd3, 0x7d, 0x42, 0x70, 0x6f, 0x4e, 0xff,
-	0xdb, 0x04, 0x4c, 0xac, 0xc8, 0x88, 0x57, 0x51, 0x5b, 0x78, 0x9e, 0xf5, 0x2f, 0x3c, 0x37, 0x25,
-	0xe7, 0xb4, 0x43, 0xbe, 0x7d, 0x8a, 0x92, 0xeb, 0xc0, 0x3b, 0x93, 0x5c, 0x07, 0xde, 0x52, 0x72,
-	0x0d, 0xde, 0xb3, 0xe4, 0x1a, 0xb8, 0x49, 0xae, 0xe5, 0x77, 0x27, 0xb9, 0xee, 0x29, 0xb6, 0xfe,
-	0xf4, 0xd4, 0xc4, 0xd6, 0x0e, 0x99, 0x75, 0xe5, 0x54, 0x65, 0xd6, 0x2e, 0x02, 0x6b, 0xee, 0x54,
-	0x04, 0xd6, 0x76, 0x59, 0xf5, 0xe5, 0x13, 0xca, 0xaa, 0x75, 0x2d, 0xf5, 0x95, 0x93, 0x6a, 0xa9,
-	0x4f, 0x2c, 0xa0, 0x0e, 0xbe, 0x53, 0x01, 0x75, 0xd0, 0x2e, 0xa0, 0xbe, 0x72, 0x42, 0x01, 0xf5,
-	0x69, 0xc8, 0xa6, 0x43, 0xdf, 0xa9, 0x6c, 0x3a, 0xd4, 0x4b, 0x36, 0x3d, 0xe9, 0x94, 0x4d, 0x77,
-	0xc4, 0xd1, 0x3f, 0x7f, 0x97, 0xda, 0xe8, 0xd3, 0x56, 0x44, 0x13, 0xdd, 0x8a, 0xe8, 0xb5, 0x13,
-	0x2b, 0xa2, 0x61, 0x27, 0x8c, 0x4a, 0x84, 0x5d, 0x0d, 0x2d, 0xbc, 0x9d, 0x1a, 0x9a, 0xea, 0x56,
-	0x43, 0xbb, 0x28, 0xa1, 0xaf, 0x1c, 0x4b, 0x09, 0x1d, 0x35, 0x95, 0xd0, 0xa7, 0xa6, 0x82, 0x0e,
-	0x7f, 0xe7, 0x2a, 0xe8, 0xf0, 0x3b, 0x55, 0x41, 0x0f, 0x7c, 0x0f, 0x54, 0xd0, 0x03, 0x9e, 0x2a,
-	0xe8, 0xad, 0x13, 0xaa, 0xa0, 0x53, 0xde, 0x2a, 0xe8, 0xf7, 0xac, 0x7b, 0xbe, 0x34, 0xf2, 0xeb,
-	0x2b, 0x8e, 0x7f, 0x48, 0xc8, 0x66, 0xdc, 0x35, 0xbf, 0x13, 0x2f, 0xde, 0x00, 0xb7, 0x06, 0xf6,
-	0x92, 0x97, 0xe4, 0xf7, 0xec, 0x8b, 0x37, 0xa0, 0x77, 0x33, 0x3b, 0xdf, 0x43, 0xfa, 0x4b, 0xbf,
-	0x78, 0x03, 0x5c, 0x5b, 0xd8, 0xd5, 0x23, 0xd5, 0xbf, 0xe9, 0x17, 0x6f, 0xc0, 0x11, 0x7d, 0xb4,
-	0x39, 0xba, 0x49, 0x81, 0xf1, 0x1c, 0x5d, 0x1a, 0xd8, 0x9b, 0xbe, 0x04, 0xc1, 0x3f, 0x7c, 0xf1,
-	0x06, 0xf8, 0xe8, 0xc7, 0xde, 0xf6, 0xa7, 0x12, 0x3e, 0xff, 0xe2, 0x0d, 0xf0, 0xd3, 0xf1, 0x1d,
-	0x68, 0x87, 0xff, 0x7d, 0x02, 0x0e, 0x73, 0xa8, 0x51, 0xe3, 0x85, 0x3e, 0xcf, 0xef, 0xf3, 0xfc,
-	0x3e, 0xcf, 0xef, 0xf3, 0xfc, 0x3e, 0xcf, 0xef, 0xf3, 0xfc, 0x3e, 0xcf, 0xef, 0xf3, 0xfc, 0x3e,
-	0xcf, 0xef, 0xf3, 0xfc, 0x3e, 0xcf, 0xff, 0xff, 0xc2, 0xf3, 0xff, 0x63, 0x02, 0xc6, 0x6e, 0x20,
-	0xb5, 0xcf, 0xf1, 0xfb, 0x1c, 0xbf, 0xcf, 0xf1, 0xfb, 0x1c, 0xbf, 0xcf, 0xf1, 0xfb, 0x1c, 0xbf,
-	0xcf, 0xf1, 0xfb, 0x1c, 0xbf, 0xcf, 0xf1, 0xfb, 0x1c, 0xbf, 0xcf, 0xf1, 0xbf, 0xc7, 0x1c, 0x9f,
-	0x21, 0x2f, 0x1c, 0x8f, 0xe9, 0xb3, 0x7f, 0x09, 0x0e, 0xbe, 0x4a, 0x05, 0xbe, 0xf8, 0x2a, 0x15,
-	0xf8, 0xe6, 0xab, 0x14, 0x78, 0x7e, 0x98, 0x02, 0x7f, 0x7f, 0x98, 0x02, 0xbf, 0x3a, 0x4c, 0x81,
-	0x83, 0xc3, 0x14, 0xf8, 0xe2, 0x30, 0x05, 0xfe, 0xf5, 0x30, 0x05, 0xbe, 0x3e, 0x4c, 0x05, 0xbe,
-	0x39, 0x4c, 0x81, 0x5f, 0xbe, 0x4e, 0x05, 0xf6, 0x5f, 0xa7, 0xc0, 0xc1, 0xeb, 0x54, 0xe0, 0x8b,
-	0xd7, 0xa9, 0xc0, 0x67, 0xf7, 0xb7, 0xa4, 0xc6, 0xe3, 0xad, 0xcc, 0x8e, 0x54, 0x53, 0x91, 0x2c,
-	0xf3, 0x99, 0xa6, 0x32, 0x87, 0xff, 0xd8, 0x94, 0xe4, 0xed, 0x0b, 0x0d, 0x59, 0xda, 0x11, 0xab,
-	0x48, 0xbe, 0x60, 0x36, 0xcf, 0x35, 0x36, 0xb6, 0xa4, 0x39, 0xf4, 0x54, 0x35, 0xfe, 0x1b, 0x4b,
-	0x8f, 0xff, 0x2d, 0x74, 0x63, 0x00, 0x8b, 0xbf, 0xf3, 0xff, 0x1b, 0x00, 0x00, 0xff, 0xff, 0xe7,
-	0x79, 0x46, 0x91, 0x5a, 0x54, 0x00, 0x00,
+	// 2985 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5b, 0x5d, 0x6c, 0xdb, 0xd6,
+	0xf5, 0xd7, 0x95, 0x28, 0x9b, 0xbe, 0x92, 0xec, 0x6b, 0xda, 0x8e, 0x69, 0xc7, 0x51, 0x1d, 0xb5,
+	0xff, 0x7f, 0xdd, 0x4e, 0xb1, 0x63, 0x3b, 0x76, 0xd2, 0xac, 0x4d, 0x16, 0xd9, 0x69, 0x55, 0x62,
+	0x69, 0x3c, 0xda, 0xd9, 0x82, 0xa2, 0x80, 0x46, 0x53, 0x57, 0x0a, 0x13, 0x8a, 0x64, 0x79, 0x29,
+	0x27, 0x29, 0x60, 0x20, 0x68, 0x37, 0x6c, 0x18, 0xf6, 0x50, 0xe4, 0x61, 0xd8, 0xc3, 0x1e, 0xf6,
+	0x32, 0x6c, 0xf0, 0xd3, 0x9e, 0xab, 0x3c, 0x18, 0x1b, 0x30, 0x0c, 0x7d, 0x99, 0x1f, 0x8b, 0xee,
+	0x65, 0x75, 0x80, 0x21, 0xdb, 0x53, 0x1f, 0x87, 0x01, 0x43, 0x07, 0x5e, 0x92, 0x32, 0x49, 0x51,
+	0x8a, 0xec, 0x7c, 0xa0, 0x43, 0xf5, 0x26, 0xf2, 0x9e, 0xf3, 0x3b, 0xf7, 0xe3, 0x9c, 0xf3, 0xbb,
+	0x97, 0xf7, 0x08, 0xce, 0x6e, 0x61, 0x32, 0xab, 0xe8, 0x73, 0x44, 0xbe, 0x81, 0x6b, 0xd2, 0xdc,
+	0x96, 0x82, 0x6f, 0x93, 0xb9, 0x2d, 0xc5, 0xb4, 0xea, 0x92, 0x5a, 0x22, 0xd8, 0xdc, 0xc2, 0xe6,
+	0x9c, 0x75, 0xd7, 0xc0, 0x64, 0xd6, 0x30, 0x75, 0x4b, 0xe7, 0x72, 0x8e, 0xfc, 0xac, 0x23, 0x3f,
+	0x4b, 0xe5, 0x67, 0x83, 0xf2, 0x93, 0xa7, 0xaa, 0x8a, 0x75, 0xa3, 0xbe, 0x39, 0x2b, 0xeb, 0xb5,
+	0xb9, 0xaa, 0x5e, 0xd5, 0xe7, 0xa8, 0xea, 0x66, 0xbd, 0x42, 0x9f, 0xe8, 0x03, 0xfd, 0xe5, 0x40,
+	0x4e, 0xbe, 0x10, 0xec, 0xc2, 0xa6, 0x52, 0x55, 0x8c, 0x92, 0xcf, 0xe6, 0xe4, 0xc9, 0xa0, 0x80,
+	0xac, 0xd6, 0x89, 0x15, 0xec, 0xd6, 0xe4, 0xf1, 0xa0, 0x88, 0x6e, 0x58, 0x8a, 0xae, 0x79, 0x8d,
+	0x13, 0xc1, 0x46, 0xbf, 0xde, 0x54, 0x68, 0xf8, 0x92, 0xaa, 0x94, 0x25, 0x0b, 0xbb, 0xad, 0xd3,
+	0xad, 0x93, 0x53, 0x0a, 0x42, 0xbf, 0x10, 0x35, 0x7d, 0x7e, 0x03, 0xff, 0x17, 0x12, 0x20, 0x25,
+	0xc3, 0xd4, 0x2b, 0x8a, 0x8a, 0x03, 0x62, 0xb9, 0x9f, 0x0c, 0xc3, 0xc1, 0xb7, 0x54, 0x7d, 0x53,
+	0x52, 0xd7, 0x0d, 0x2c, 0x6f, 0xdc, 0x35, 0x30, 0xb7, 0x01, 0xfb, 0x6b, 0x92, 0x26, 0x55, 0x71,
+	0x99, 0x4f, 0x4c, 0x83, 0x99, 0xd4, 0xc2, 0xb9, 0xd9, 0xc7, 0xcf, 0xfd, 0xec, 0xaa, 0x5e, 0x93,
+	0x14, 0x8d, 0x5c, 0x71, 0x34, 0x0b, 0x77, 0xdf, 0x5c, 0xba, 0xbe, 0x52, 0x8c, 0x89, 0x1e, 0x14,
+	0xf7, 0x1e, 0x4c, 0x69, 0xba, 0x55, 0xf2, 0x90, 0x19, 0x8a, 0xfc, 0x5a, 0x37, 0xc8, 0xef, 0xe8,
+	0x96, 0x8b, 0xea, 0xda, 0xb0, 0x7b, 0x59, 0x8c, 0x89, 0x50, 0x6b, 0x36, 0x70, 0x65, 0xd8, 0x5f,
+	0x76, 0x1a, 0xf9, 0xe4, 0x74, 0x62, 0x66, 0xa0, 0x20, 0x7c, 0xf2, 0x8f, 0xdd, 0x04, 0xbc, 0x0f,
+	0xfa, 0x73, 0x49, 0x33, 0xc1, 0xdf, 0x8b, 0xdb, 0x8f, 0x03, 0xf7, 0x41, 0x5f, 0x8e, 0x31, 0xe3,
+	0x08, 0xf8, 0x1b, 0x7f, 0x1a, 0xa7, 0x8f, 0xc9, 0xfb, 0x20, 0x8e, 0xa6, 0xbd, 0x5f, 0x6c, 0xf3,
+	0x1d, 0x0f, 0x44, 0x0f, 0x9a, 0x2b, 0xc2, 0xe4, 0x0d, 0xcb, 0x32, 0x08, 0xcf, 0xd2, 0xde, 0x9f,
+	0xee, 0xa6, 0xf7, 0xc5, 0x8d, 0x8d, 0xb5, 0x75, 0x6c, 0x6e, 0x29, 0x32, 0x26, 0x45, 0x20, 0x3a,
+	0x00, 0xdc, 0x75, 0x07, 0x69, 0x91, 0x9f, 0xa0, 0x48, 0xf3, 0xdd, 0x22, 0x2d, 0x7a, 0x50, 0x85,
+	0xcc, 0x3f, 0xb7, 0x61, 0x19, 0xd7, 0xf4, 0xf9, 0xbc, 0x85, 0x89, 0xe5, 0x21, 0x2f, 0x72, 0x77,
+	0x20, 0x2f, 0xeb, 0x9a, 0x86, 0x65, 0xdb, 0x5b, 0x4a, 0xaa, 0x52, 0x53, 0x2c, 0xcf, 0x75, 0xf8,
+	0x74, 0xf7, 0xcb, 0xb9, 0xd2, 0xc4, 0xf8, 0xae, 0x0d, 0x41, 0xe7, 0xbc, 0xc0, 0xec, 0x36, 0x00,
+	0x10, 0x8f, 0xc9, 0xc1, 0xb6, 0xab, 0x0e, 0x3a, 0xb7, 0x08, 0xd9, 0x2d, 0x52, 0x22, 0xb2, 0x6e,
+	0x62, 0xfe, 0xc2, 0x34, 0x98, 0xc9, 0x14, 0x78, 0x5b, 0xfe, 0xf3, 0x06, 0x00, 0xa7, 0xff, 0xd5,
+	0x00, 0x31, 0x7b, 0x46, 0xfb, 0x5e, 0x65, 0xf8, 0xdd, 0xbf, 0xbc, 0x24, 0xf6, 0x6f, 0x91, 0x75,
+	0x5b, 0x90, 0xfb, 0x11, 0x80, 0xd3, 0x4a, 0xad, 0x86, 0xcb, 0x8a, 0x64, 0xe1, 0x92, 0xe4, 0xf4,
+	0x5a, 0xd7, 0x68, 0x37, 0x14, 0x19, 0x97, 0xca, 0xfa, 0x6d, 0x8d, 0xbf, 0x48, 0xfb, 0xbd, 0x10,
+	0xea, 0xf7, 0xc6, 0x95, 0x2b, 0x6f, 0x7b, 0x9a, 0x97, 0xa8, 0xe2, 0x55, 0xcd, 0x9d, 0x9e, 0x55,
+	0xfd, 0xb6, 0x46, 0x7b, 0xcc, 0xda, 0x3d, 0xf8, 0xd2, 0xee, 0xf5, 0x94, 0xd2, 0x41, 0x96, 0x2b,
+	0xc0, 0xe1, 0x32, 0xae, 0x48, 0x75, 0xd5, 0x2a, 0x19, 0xba, 0xae, 0x96, 0x34, 0x5d, 0xc3, 0xfc,
+	0x65, 0x6a, 0x76, 0x34, 0x64, 0xf6, 0x72, 0xcd, 0xb0, 0xee, 0x16, 0xe3, 0xe2, 0x90, 0xab, 0xb0,
+	0xa6, 0xeb, 0xea, 0x3b, 0xba, 0x86, 0xb9, 0x1f, 0xc0, 0xb4, 0x1f, 0x83, 0x7f, 0x93, 0xaa, 0xe7,
+	0x22, 0x67, 0xfb, 0xea, 0xe6, 0x4d, 0x2c, 0x5b, 0x22, 0xae, 0xd0, 0x5e, 0x0e, 0xee, 0x6c, 0xf7,
+	0xdb, 0x01, 0xaa, 0xeb, 0xea, 0xbd, 0x07, 0x20, 0x56, 0x8c, 0x8b, 0x29, 0x1f, 0x38, 0x57, 0x85,
+	0xc3, 0xde, 0xea, 0x48, 0xe5, 0xb2, 0x89, 0x09, 0xc1, 0x84, 0xcf, 0x4c, 0x27, 0xba, 0x44, 0x3f,
+	0xb6, 0xb3, 0x3d, 0x14, 0xd2, 0xb7, 0xad, 0x88, 0xc8, 0x7d, 0x79, 0xc9, 0xc3, 0xe4, 0xde, 0x84,
+	0x7d, 0x8a, 0x59, 0x57, 0x31, 0xe1, 0x07, 0x29, 0xfa, 0x54, 0x08, 0x3d, 0x88, 0x8b, 0x76, 0xb6,
+	0x93, 0x54, 0xfc, 0x51, 0x03, 0x80, 0x7b, 0x0f, 0x00, 0x10, 0x5d, 0x6d, 0xae, 0x0e, 0x91, 0x65,
+	0x4a, 0x95, 0x8a, 0x22, 0x97, 0x0c, 0x5d, 0x55, 0x64, 0x05, 0x13, 0x7e, 0xac, 0x0b, 0xc4, 0xfc,
+	0xce, 0xf6, 0x60, 0x40, 0xf1, 0x6e, 0xc0, 0xc9, 0x6d, 0x1b, 0x07, 0xa1, 0x2a, 0x0e, 0xb9, 0xa2,
+	0x6b, 0xae, 0x09, 0xae, 0x02, 0x07, 0x25, 0x59, 0xc6, 0xa4, 0x99, 0xea, 0xf8, 0xb7, 0xba, 0x5e,
+	0x82, 0xe3, 0x3b, 0xdb, 0x21, 0x65, 0x6a, 0xe9, 0x67, 0x20, 0x8e, 0x80, 0x98, 0x71, 0x5a, 0xd6,
+	0x9c, 0x06, 0xee, 0x5d, 0x98, 0xa1, 0x19, 0x59, 0xd1, 0x2c, 0x6c, 0x6a, 0x92, 0xca, 0x3f, 0xea,
+	0xef, 0xda, 0x0e, 0xda, 0xd9, 0x0e, 0x2a, 0x8b, 0x69, 0xfb, 0xf1, 0x6d, 0xf7, 0xe9, 0xfc, 0xcd,
+	0x3f, 0x34, 0x40, 0x05, 0x9e, 0x80, 0x99, 0x15, 0x5d, 0xab, 0x28, 0xd5, 0xba, 0x29, 0xd9, 0xce,
+	0xca, 0xa5, 0x97, 0xf2, 0x67, 0xf3, 0xf3, 0x0b, 0xf9, 0xe5, 0x85, 0xfc, 0xf2, 0x22, 0x1c, 0x83,
+	0x43, 0x97, 0x68, 0x8f, 0xa6, 0x9b, 0x63, 0x8f, 0x9f, 0x9d, 0x87, 0xe3, 0x70, 0xf8, 0xfb, 0xce,
+	0x92, 0x4e, 0x1f, 0xac, 0x69, 0x7c, 0xde, 0x96, 0x1f, 0x10, 0x31, 0xd1, 0xeb, 0xa6, 0x8c, 0x09,
+	0xc7, 0xce, 0x9f, 0xc9, 0x2f, 0x9f, 0xcb, 0x2f, 0xcc, 0x17, 0x66, 0x60, 0xc6, 0xc9, 0x6c, 0x25,
+	0xf9, 0x86, 0xae, 0xc8, 0x98, 0x1b, 0xdf, 0x6d, 0x80, 0xc4, 0x5e, 0x03, 0xc4, 0xf7, 0x1b, 0x20,
+	0xb1, 0x98, 0x3f, 0xf3, 0xc8, 0x0d, 0x9e, 0xc2, 0x1c, 0x1c, 0x09, 0xe6, 0x07, 0x4a, 0x93, 0x9c,
+	0x1d, 0xdf, 0xec, 0x5e, 0x03, 0xf4, 0xef, 0x37, 0x00, 0x73, 0x2e, 0xbf, 0xb0, 0x64, 0x2b, 0xfc,
+	0xfa, 0x01, 0x00, 0x85, 0x19, 0x38, 0x12, 0x88, 0x27, 0xd7, 0xc0, 0xf0, 0x6e, 0x03, 0x5c, 0xde,
+	0x6b, 0x80, 0xd5, 0xfd, 0x06, 0x48, 0x2e, 0xbf, 0x96, 0x3f, 0x7b, 0x5a, 0x60, 0x58, 0x80, 0xe2,
+	0x02, 0xc3, 0xc6, 0x51, 0x42, 0x60, 0xd8, 0x7e, 0xc4, 0x0a, 0x0c, 0x3b, 0x80, 0xa0, 0xc0, 0xb0,
+	0x10, 0xa5, 0x04, 0x86, 0x4d, 0xa1, 0xb4, 0xc0, 0xb0, 0xc7, 0xd0, 0xb8, 0xc0, 0xb0, 0xe3, 0x88,
+	0x17, 0x18, 0x96, 0x47, 0x13, 0x02, 0xc3, 0xe6, 0xd0, 0x8b, 0x02, 0xc3, 0xbe, 0x82, 0x5e, 0x15,
+	0x18, 0x76, 0x1e, 0x2d, 0x08, 0x0c, 0xbb, 0x80, 0x16, 0x05, 0x86, 0x5d, 0x44, 0x67, 0x04, 0x86,
+	0x5d, 0x42, 0xcb, 0x02, 0xc3, 0x2e, 0xa3, 0xb3, 0x02, 0xc3, 0x9e, 0x45, 0xe7, 0x04, 0x86, 0x3d,
+	0x87, 0x5e, 0x13, 0x18, 0xf6, 0xdb, 0xe8, 0x75, 0x81, 0x61, 0x5f, 0x47, 0x6f, 0x08, 0x0c, 0xfb,
+	0x06, 0xba, 0x20, 0x30, 0xec, 0x2a, 0xba, 0x2c, 0x30, 0xec, 0x10, 0x42, 0x02, 0xc3, 0x22, 0x34,
+	0x2c, 0x30, 0xec, 0x30, 0xe2, 0x04, 0x86, 0xe5, 0xd0, 0x88, 0xc0, 0xb0, 0x23, 0x68, 0x54, 0x60,
+	0xd8, 0x51, 0x34, 0x26, 0x26, 0x89, 0x25, 0x59, 0x58, 0x64, 0xec, 0x2c, 0x2b, 0x26, 0xea, 0x65,
+	0x43, 0x4c, 0x58, 0xb2, 0x21, 0x8e, 0xdb, 0xaf, 0x15, 0x62, 0x29, 0x72, 0xd3, 0x71, 0x68, 0xf2,
+	0x10, 0xb9, 0xd6, 0x06, 0x31, 0x6d, 0x99, 0x92, 0x46, 0x54, 0xba, 0xa4, 0x44, 0xe4, 0x64, 0x55,
+	0xd7, 0xb0, 0x33, 0x3f, 0x6e, 0x86, 0x16, 0x33, 0x52, 0xdd, 0xd2, 0x4b, 0xaa, 0x44, 0xac, 0xd2,
+	0x0d, 0xdd, 0x10, 0x13, 0x84, 0x60, 0x91, 0xb9, 0x49, 0x74, 0x4d, 0xe4, 0xbc, 0x97, 0x07, 0x09,
+	0x4a, 0xcc, 0x04, 0xde, 0x89, 0x49, 0x4d, 0xb2, 0x96, 0xcf, 0x88, 0x53, 0x26, 0x7e, 0xbf, 0x8e,
+	0x89, 0x55, 0x52, 0xf5, 0x6a, 0x55, 0xd1, 0xaa, 0xc1, 0x7e, 0x8d, 0xb7, 0x69, 0x15, 0xa7, 0x9b,
+	0x0b, 0x86, 0x4d, 0xa2, 0x10, 0x0b, 0x6b, 0x32, 0x0e, 0xaa, 0x1e, 0xef, 0x20, 0x21, 0x9e, 0xac,
+	0x48, 0xaa, 0xba, 0x29, 0xc9, 0xb7, 0xda, 0xeb, 0x4f, 0x75, 0x12, 0xc9, 0x7d, 0xcc, 0xc0, 0xd4,
+	0xc6, 0x4a, 0x93, 0x2b, 0xb9, 0x4d, 0xc8, 0xba, 0x24, 0x40, 0x78, 0x40, 0x93, 0xc7, 0x5c, 0x37,
+	0xc4, 0xe5, 0xea, 0xd3, 0x60, 0x1b, 0xa3, 0x94, 0x73, 0x1f, 0x24, 0xd0, 0x3d, 0x3f, 0x9f, 0x37,
+	0x71, 0xb9, 0x9b, 0x70, 0x9c, 0x6e, 0x83, 0x64, 0xdb, 0x45, 0x55, 0x05, 0x6b, 0x56, 0x33, 0x75,
+	0xc4, 0x0f, 0x93, 0xbd, 0x53, 0x96, 0x6c, 0x34, 0x67, 0x62, 0xcc, 0x83, 0x5c, 0xa1, 0x88, 0x5e,
+	0xd6, 0xd8, 0x86, 0x23, 0x84, 0x84, 0xcd, 0x10, 0x3e, 0xd1, 0x75, 0x1e, 0x7f, 0x65, 0x67, 0x9b,
+	0x6b, 0x45, 0x68, 0xdd, 0xbb, 0xf0, 0x40, 0x1c, 0x26, 0x24, 0x68, 0x9d, 0x70, 0x1f, 0x02, 0x98,
+	0x75, 0x63, 0x57, 0x32, 0x9c, 0x6d, 0x6e, 0x89, 0x48, 0x35, 0x5c, 0x92, 0x88, 0x8b, 0xc8, 0x27,
+	0xe9, 0x90, 0xdf, 0xe8, 0x66, 0x96, 0x37, 0x56, 0xd6, 0x56, 0x1d, 0x67, 0x58, 0xa7, 0x2f, 0xd6,
+	0xb1, 0xea, 0xec, 0x08, 0x8a, 0x31, 0x71, 0xc2, 0x91, 0xb9, 0x64, 0x18, 0x76, 0xb7, 0xd7, 0xa5,
+	0x1a, 0xbe, 0x44, 0x9c, 0xce, 0x14, 0x5e, 0x86, 0xc7, 0xc2, 0x7d, 0x70, 0x33, 0x43, 0x66, 0xb7,
+	0x01, 0x92, 0x7b, 0x0d, 0xc0, 0xec, 0x37, 0x00, 0x58, 0x12, 0x18, 0x96, 0x41, 0x49, 0xea, 0x12,
+	0xd7, 0x56, 0xff, 0x47, 0x5d, 0xa2, 0x5e, 0xfe, 0x66, 0xb9, 0xc4, 0xb5, 0xd5, 0xe7, 0xe1, 0x12,
+	0x7f, 0xea, 0x87, 0x99, 0xc0, 0x46, 0x98, 0x53, 0x9f, 0xdc, 0x29, 0x5e, 0x88, 0x70, 0x0a, 0xf6,
+	0x1b, 0xef, 0x1e, 0x32, 0x1c, 0xb1, 0xc9, 0x2e, 0x3c, 0xcc, 0xee, 0xf7, 0x3a, 0x43, 0x3b, 0xdb,
+	0x69, 0x8a, 0xe0, 0x8d, 0x73, 0xd8, 0x7e, 0x0a, 0x8e, 0xb1, 0x02, 0x47, 0xe9, 0xb9, 0x25, 0x6c,
+	0x85, 0x3d, 0xd4, 0x8e, 0xca, 0x81, 0xf0, 0xcc, 0x70, 0xf4, 0x31, 0x68, 0xe7, 0x2a, 0xe4, 0xdf,
+	0xaf, 0x2b, 0x72, 0xc8, 0x8c, 0xb3, 0xcf, 0x4f, 0x77, 0xd8, 0xe7, 0xc7, 0xc4, 0x31, 0x5b, 0x2f,
+	0x00, 0x46, 0x77, 0xfb, 0x18, 0x8e, 0x44, 0x00, 0xf2, 0x99, 0x43, 0xcd, 0x0e, 0x45, 0x70, 0x55,
+	0x8b, 0x31, 0x71, 0xb8, 0xc5, 0x14, 0x77, 0x07, 0x8e, 0x87, 0xc3, 0xc3, 0x65, 0x61, 0x37, 0x36,
+	0x2f, 0x76, 0x7d, 0x74, 0x6c, 0x13, 0x9d, 0x40, 0x1c, 0x0d, 0x44, 0xa7, 0x2b, 0x66, 0x6f, 0xe1,
+	0xfc, 0xdd, 0xf3, 0x6f, 0xe1, 0xd2, 0x7b, 0x0d, 0x90, 0xb2, 0xb7, 0x70, 0xf3, 0x0b, 0xf9, 0xf9,
+	0xc5, 0xc3, 0x84, 0xb0, 0xb3, 0x9b, 0xb3, 0x03, 0xf9, 0xef, 0xfd, 0x30, 0xed, 0x3f, 0x1b, 0x7f,
+	0x7d, 0xe2, 0x38, 0xf9, 0xb4, 0x99, 0xbf, 0x4d, 0x20, 0xa1, 0xa7, 0x1a, 0x48, 0xbf, 0x01, 0xd1,
+	0xd9, 0x62, 0xa0, 0xeb, 0x6c, 0xf1, 0xbd, 0xc8, 0x6c, 0xb1, 0xf3, 0x00, 0xbc, 0x74, 0x3e, 0x07,
+	0xa7, 0x21, 0x4f, 0x0c, 0x2c, 0xcf, 0x46, 0x1d, 0x03, 0xe8, 0x9e, 0xb8, 0xdb, 0xac, 0xf2, 0xd1,
+	0xe3, 0x49, 0x67, 0x92, 0x4e, 0xcc, 0x85, 0x6e, 0x1d, 0xfb, 0x28, 0xac, 0x33, 0xd3, 0xd6, 0x65,
+	0x07, 0x77, 0x1b, 0x60, 0x72, 0xaf, 0x01, 0x26, 0xf6, 0x1b, 0x20, 0xbe, 0xb0, 0xdc, 0x3c, 0x99,
+	0x24, 0x10, 0xe3, 0x78, 0xae, 0xc0, 0xb0, 0x7d, 0xa8, 0xbf, 0x79, 0x56, 0x61, 0xd1, 0x80, 0xc0,
+	0xb0, 0x19, 0x34, 0x28, 0x30, 0xec, 0x20, 0x1a, 0x6a, 0x9e, 0x25, 0x26, 0xd0, 0x64, 0xe8, 0x0c,
+	0x93, 0x46, 0x19, 0xff, 0x89, 0x42, 0x60, 0xd8, 0x31, 0x74, 0xac, 0xf5, 0x6c, 0x23, 0x9e, 0xb8,
+	0x8d, 0x37, 0x89, 0x2e, 0xdf, 0xc2, 0x56, 0x54, 0xb6, 0x12, 0xf9, 0x76, 0xcd, 0xe2, 0x84, 0xbd,
+	0x0e, 0x0b, 0x91, 0x4a, 0xa3, 0x51, 0x4d, 0xe2, 0x08, 0xb1, 0x4c, 0x2c, 0xd5, 0x82, 0xa2, 0x83,
+	0xc1, 0x97, 0x22, 0xaa, 0x28, 0x77, 0x82, 0x12, 0x29, 0xdf, 0x1b, 0x71, 0x58, 0x97, 0x89, 0x11,
+	0x6c, 0x4f, 0xfb, 0x5f, 0xe5, 0x7e, 0x9e, 0x80, 0x13, 0x6d, 0xf7, 0x06, 0xdc, 0x75, 0x78, 0xc2,
+	0x66, 0x42, 0x77, 0x31, 0x3c, 0x98, 0x3a, 0xc1, 0x9e, 0x33, 0xc4, 0x3b, 0x26, 0xe7, 0x89, 0x7a,
+	0xd9, 0x70, 0x20, 0x5d, 0x07, 0xbb, 0x46, 0xb0, 0xb3, 0xc4, 0xdc, 0x26, 0xe4, 0x5a, 0x91, 0xdd,
+	0x2f, 0x9a, 0x47, 0x20, 0xe9, 0x62, 0x4c, 0x44, 0x61, 0x63, 0x1e, 0x43, 0x07, 0x6d, 0x10, 0x9e,
+	0x39, 0x34, 0x43, 0x07, 0x11, 0xda, 0xc6, 0x52, 0xc0, 0x3a, 0x29, 0xe4, 0xe1, 0x44, 0xc4, 0xe4,
+	0xb9, 0x8e, 0x3c, 0xb4, 0xdb, 0x00, 0xf1, 0xbd, 0x06, 0x00, 0xf6, 0x61, 0x7e, 0x21, 0xbf, 0xe8,
+	0x9c, 0xb4, 0xe9, 0x72, 0xb4, 0xdd, 0xbd, 0xdb, 0xcb, 0x61, 0x27, 0xb4, 0x23, 0x2f, 0x87, 0x25,
+	0x77, 0x58, 0x8e, 0x56, 0xe4, 0x43, 0x2e, 0x87, 0x2f, 0xd7, 0xda, 0xcb, 0x11, 0x36, 0xf6, 0x35,
+	0x58, 0x8e, 0x88, 0xc9, 0xeb, 0xbc, 0x1c, 0xbf, 0xec, 0x87, 0x93, 0xed, 0x93, 0x18, 0xa7, 0xc0,
+	0xff, 0x6f, 0xd2, 0x54, 0x08, 0x37, 0x94, 0x34, 0x3b, 0x2f, 0xcc, 0x49, 0x0f, 0x25, 0xd0, 0x65,
+	0x7f, 0x4a, 0xe4, 0x54, 0x1f, 0x23, 0x3e, 0xc5, 0x55, 0x1a, 0x8b, 0xb4, 0xcc, 0x49, 0x30, 0x47,
+	0x19, 0xad, 0xf3, 0xa0, 0x92, 0x1d, 0x06, 0x05, 0xc4, 0x13, 0x36, 0x42, 0xfb, 0x01, 0x61, 0x97,
+	0x76, 0x43, 0x83, 0xe9, 0x3b, 0x32, 0xed, 0x16, 0x81, 0x43, 0xbc, 0xc1, 0x91, 0x78, 0xc4, 0x1b,
+	0xf6, 0x3a, 0x74, 0x68, 0xe2, 0x0d, 0x22, 0x3c, 0x31, 0xf1, 0x86, 0xbc, 0x73, 0x1e, 0x66, 0xdb,
+	0xb9, 0x52, 0x1b, 0x17, 0x2d, 0x9c, 0x82, 0x93, 0x51, 0x8b, 0xe4, 0x13, 0xf7, 0x36, 0x77, 0x89,
+	0xa5, 0xfc, 0x72, 0xf3, 0x53, 0x9e, 0x43, 0x92, 0x7e, 0x7a, 0x74, 0x3e, 0xe8, 0xb5, 0x92, 0xe4,
+	0x71, 0x34, 0x25, 0xbe, 0x7c, 0xc0, 0x67, 0x1d, 0x9d, 0xc1, 0x4f, 0x7c, 0x41, 0x41, 0x8f, 0xf8,
+	0x42, 0xea, 0x7e, 0xe2, 0x0b, 0x29, 0xbc, 0x18, 0xa9, 0x10, 0xb4, 0x97, 0xfb, 0x4f, 0x02, 0x1e,
+	0xef, 0xb0, 0x71, 0xe6, 0x7e, 0x18, 0x99, 0xd1, 0xc0, 0x91, 0x77, 0x8f, 0xad, 0xf9, 0xac, 0xbb,
+	0x20, 0x49, 0x74, 0x8c, 0xfc, 0xa3, 0x05, 0x09, 0x73, 0xf4, 0x20, 0x89, 0x45, 0x05, 0x49, 0x9b,
+	0xcc, 0x9c, 0x7c, 0x4e, 0x99, 0xf9, 0xf1, 0x8e, 0xec, 0xff, 0xec, 0xed, 0xec, 0xf9, 0x72, 0x1f,
+	0x01, 0x38, 0x1a, 0x75, 0xab, 0xc9, 0xdd, 0x3a, 0xb8, 0x6c, 0x74, 0x0e, 0x2a, 0x5d, 0x5d, 0xdf,
+	0x05, 0xee, 0x30, 0x0b, 0xd9, 0x2e, 0xef, 0x1c, 0x73, 0x3f, 0x06, 0x30, 0x13, 0x50, 0xe5, 0x8e,
+	0xc1, 0x3e, 0xc3, 0xc4, 0x15, 0xe5, 0x0e, 0xf5, 0xb5, 0x01, 0xd1, 0x7d, 0xe2, 0xde, 0x83, 0x6c,
+	0x59, 0x23, 0xa5, 0x0f, 0xec, 0x23, 0x6d, 0xf7, 0xdf, 0x22, 0x4e, 0xec, 0x6c, 0x37, 0xd5, 0x3e,
+	0x79, 0x00, 0x06, 0x59, 0x30, 0x03, 0x4e, 0x83, 0xf3, 0x7d, 0x32, 0xbd, 0x7f, 0x10, 0xfb, 0xcb,
+	0x1a, 0x79, 0x57, 0xd7, 0x70, 0x6e, 0x1b, 0x8e, 0x45, 0x5e, 0xc4, 0xfa, 0xaf, 0x5e, 0xc1, 0x33,
+	0xbb, 0x7a, 0xcd, 0x7d, 0x12, 0x87, 0x43, 0x1b, 0x07, 0x5f, 0xcf, 0xa9, 0x65, 0x15, 0x8e, 0xb8,
+	0xf7, 0x59, 0x25, 0xdf, 0x87, 0x75, 0x37, 0x02, 0x97, 0x5a, 0x6f, 0x0b, 0xdd, 0xcb, 0x11, 0xc7,
+	0x37, 0xdc, 0x1b, 0x92, 0x10, 0x66, 0x81, 0xa1, 0x97, 0x85, 0x9c, 0xd4, 0xd2, 0xca, 0xc9, 0x10,
+	0x19, 0xba, 0x69, 0x05, 0x4c, 0xc5, 0xdb, 0x5d, 0x4c, 0x06, 0x4c, 0xad, 0xe9, 0xa6, 0x15, 0x6d,
+	0x67, 0xc8, 0x08, 0x36, 0x71, 0x1b, 0x30, 0xe5, 0xdc, 0xd3, 0x94, 0xec, 0x16, 0x37, 0xb4, 0x4f,
+	0x3d, 0x06, 0x7f, 0x9d, 0x6a, 0x50, 0x2b, 0x07, 0xd0, 0x90, 0x34, 0xdf, 0xe6, 0x7e, 0x9b, 0x80,
+	0x99, 0x15, 0x55, 0xd7, 0xf0, 0x9a, 0xae, 0xab, 0x74, 0xea, 0xbe, 0x63, 0x0f, 0xe6, 0xe0, 0xe8,
+	0xab, 0x1d, 0xf8, 0x4c, 0xbb, 0x3c, 0x32, 0x68, 0xcb, 0x3b, 0x49, 0x83, 0x7e, 0xff, 0xb8, 0x06,
+	0x53, 0x3e, 0x84, 0xc3, 0x6d, 0x11, 0x02, 0x97, 0x9d, 0x31, 0x11, 0x1e, 0x40, 0x37, 0x3b, 0xe6,
+	0x46, 0x2a, 0xed, 0x58, 0xe7, 0x5d, 0x00, 0xed, 0x98, 0x33, 0x11, 0x81, 0x8e, 0x39, 0x08, 0x87,
+	0xa0, 0xfb, 0x70, 0xc7, 0x80, 0xd3, 0x31, 0x07, 0xba, 0xf0, 0x2d, 0xc8, 0xfb, 0xee, 0x6b, 0xdc,
+	0x79, 0x6b, 0x47, 0x9c, 0x41, 0x61, 0x77, 0x2c, 0x5d, 0xd0, 0x66, 0x4e, 0x83, 0xec, 0xf3, 0xfc,
+	0xda, 0x9d, 0xfb, 0x23, 0x80, 0x29, 0x9f, 0x02, 0x37, 0x03, 0x19, 0xea, 0x78, 0x80, 0xde, 0xdf,
+	0x73, 0x9f, 0x37, 0x40, 0xe2, 0xcc, 0x99, 0x45, 0xef, 0xe6, 0xfe, 0xab, 0xaf, 0x12, 0xc5, 0x98,
+	0x48, 0x25, 0xb8, 0x8b, 0xf6, 0x34, 0x9b, 0x56, 0xc9, 0x94, 0xb4, 0x2a, 0x26, 0xd4, 0x79, 0x06,
+	0x0a, 0x53, 0xb6, 0x24, 0x63, 0xc6, 0xf9, 0x69, 0xf7, 0x87, 0x13, 0xef, 0x49, 0x33, 0xf1, 0x7b,
+	0x00, 0x9c, 0x95, 0x36, 0x2d, 0x91, 0x6a, 0x9c, 0x7f, 0xf9, 0xd3, 0x06, 0x78, 0x11, 0x9e, 0x84,
+	0x8c, 0xed, 0xa2, 0xaf, 0x4e, 0xc0, 0x71, 0xd8, 0xe7, 0x18, 0x87, 0x99, 0x00, 0x74, 0x61, 0xd2,
+	0x7d, 0x74, 0xe7, 0x2f, 0xb5, 0xd7, 0x00, 0x09, 0x7b, 0xee, 0xe6, 0xf3, 0x0b, 0xce, 0xb9, 0x3c,
+	0xf7, 0xab, 0x38, 0x1c, 0x8d, 0x2a, 0x58, 0xe0, 0x2e, 0x42, 0x14, 0x2e, 0x86, 0xe0, 0x79, 0x3a,
+	0xb4, 0xd1, 0xc8, 0xb2, 0x84, 0xa1, 0x50, 0x69, 0x03, 0x57, 0x84, 0x63, 0x3e, 0x00, 0x53, 0xb2,
+	0xb0, 0x8b, 0x32, 0xd1, 0x01, 0x65, 0xe4, 0x40, 0x45, 0x94, 0x2c, 0xec, 0x20, 0xdd, 0x85, 0x93,
+	0x91, 0x48, 0xa5, 0x9a, 0x5e, 0xc6, 0xee, 0x27, 0x8f, 0xe5, 0xc7, 0x04, 0xfa, 0x4a, 0x2b, 0xee,
+	0x15, 0xbd, 0xec, 0x45, 0xfc, 0xb8, 0x1c, 0xdd, 0x9c, 0xfb, 0x3c, 0x0d, 0x07, 0x57, 0x4c, 0x2c,
+	0x59, 0xb8, 0x59, 0xe3, 0xc3, 0x87, 0xea, 0x65, 0x9e, 0x62, 0x8d, 0x4b, 0xec, 0x99, 0xd5, 0xb8,
+	0xc4, 0xbc, 0x1a, 0x17, 0xf3, 0xd9, 0xd5, 0xb8, 0xb4, 0xad, 0x6e, 0x99, 0x08, 0x57, 0xb7, 0x1c,
+	0xd4, 0xb0, 0x7c, 0xf0, 0x2c, 0x4b, 0x58, 0x9e, 0x76, 0xe1, 0x0a, 0x68, 0x2d, 0x5c, 0x59, 0x3f,
+	0x72, 0xe1, 0x0a, 0x3c, 0x48, 0x99, 0x45, 0x10, 0x2c, 0x5a, 0x91, 0x9f, 0xac, 0x68, 0x85, 0x6b,
+	0x2d, 0x5a, 0x89, 0x28, 0x58, 0xb9, 0x70, 0xa8, 0x82, 0x15, 0xd6, 0x2b, 0x58, 0x69, 0x16, 0xaa,
+	0x54, 0x8f, 0x58, 0xa8, 0x92, 0xed, 0x5c, 0xa8, 0xd2, 0x5a, 0x9a, 0xf2, 0xde, 0x13, 0x94, 0xa6,
+	0x0c, 0xb7, 0x94, 0xa6, 0x84, 0x0a, 0x52, 0xce, 0x0f, 0x7f, 0x7a, 0x21, 0x54, 0xc4, 0x57, 0x98,
+	0x8d, 0xae, 0xd8, 0x18, 0xff, 0xf0, 0xdf, 0x20, 0xaa, 0xc1, 0x96, 0x8f, 0x2a, 0xd8, 0xa0, 0xf2,
+	0x11, 0x0d, 0xbd, 0xb2, 0x8d, 0x5e, 0xd9, 0x86, 0xf3, 0x79, 0xf7, 0xaf, 0x69, 0x38, 0x24, 0x62,
+	0x43, 0x95, 0xe4, 0x1e, 0xbb, 0xf4, 0xd8, 0xa5, 0xc7, 0x2e, 0x3d, 0x76, 0xe9, 0xb1, 0x4b, 0x8f,
+	0x5d, 0x9e, 0x16, 0xbb, 0x7c, 0x94, 0x81, 0xa9, 0xb7, 0xb0, 0xd5, 0x64, 0x96, 0x79, 0xe8, 0x4c,
+	0xb9, 0xfb, 0x91, 0xe7, 0x78, 0x6b, 0xc6, 0x5b, 0xb7, 0x9b, 0x69, 0x6a, 0x73, 0x24, 0x7b, 0x64,
+	0xd4, 0x23, 0xa3, 0x1e, 0x19, 0xf5, 0xc8, 0xe8, 0x49, 0xc8, 0xe8, 0x68, 0x34, 0x94, 0x47, 0xa7,
+	0x9e, 0x2b, 0x19, 0xf5, 0x58, 0xe8, 0x19, 0xb1, 0x50, 0xe1, 0x17, 0x60, 0xef, 0x8b, 0x6c, 0xec,
+	0xb3, 0x2f, 0xb2, 0xb1, 0x2f, 0xbf, 0xc8, 0x82, 0x7b, 0xfb, 0x59, 0xf0, 0xbb, 0xfd, 0x2c, 0xf8,
+	0xf3, 0x7e, 0x16, 0xec, 0xed, 0x67, 0xc1, 0x67, 0xfb, 0x59, 0xf0, 0xb7, 0xfd, 0x2c, 0x78, 0xb4,
+	0x9f, 0x8d, 0x7d, 0xb9, 0x9f, 0x05, 0x1f, 0x3f, 0xcc, 0xc6, 0x76, 0x1f, 0x66, 0xc1, 0xde, 0xc3,
+	0x6c, 0xec, 0xb3, 0x87, 0xd9, 0xd8, 0xbb, 0xd7, 0xab, 0xba, 0x71, 0xab, 0x3a, 0xbb, 0xa5, 0xab,
+	0x16, 0x36, 0x4d, 0x69, 0xb6, 0x4e, 0xe6, 0xe8, 0x8f, 0x8a, 0x6e, 0xd6, 0x4e, 0x19, 0xa6, 0xbe,
+	0xa5, 0x94, 0xb1, 0x79, 0xca, 0x6b, 0x9e, 0x33, 0x36, 0xab, 0xfa, 0x1c, 0xbe, 0x63, 0xb9, 0xff,
+	0xdc, 0xeb, 0xf0, 0x07, 0xc9, 0xcd, 0x3e, 0x7a, 0xa3, 0xbb, 0xf8, 0xdf, 0x00, 0x00, 0x00, 0xff,
+	0xff, 0x0d, 0xb2, 0x11, 0x72, 0x4d, 0x39, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -4229,9 +2780,6 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
-		return false
-	}
-	if !this.State.Equal(that1.State) {
 		return false
 	}
 	if that1.DomainChoice == nil {
@@ -4260,52 +2808,7 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if !this.VirtualServerType.Equal(that1.VirtualServerType) {
 		return false
 	}
-	if that1.StatisticsProfileChoice == nil {
-		if this.StatisticsProfileChoice != nil {
-			return false
-		}
-	} else if this.StatisticsProfileChoice == nil {
-		return false
-	} else if !this.StatisticsProfileChoice.Equal(that1.StatisticsProfileChoice) {
-		return false
-	}
 	if !this.ConnectionLimitOptions.Equal(that1.ConnectionLimitOptions) {
-		return false
-	}
-	if !this.Translations.Equal(that1.Translations) {
-		return false
-	}
-	if !this.ClonePoolOptions.Equal(that1.ClonePoolOptions) {
-		return false
-	}
-	if !this.AutoLastHop.Equal(that1.AutoLastHop) {
-		return false
-	}
-	if this.Sse != that1.Sse {
-		return false
-	}
-	if this.Json != that1.Json {
-		return false
-	}
-	if that1.LastHopPoolChoice == nil {
-		if this.LastHopPoolChoice != nil {
-			return false
-		}
-	} else if this.LastHopPoolChoice == nil {
-		return false
-	} else if !this.LastHopPoolChoice.Equal(that1.LastHopPoolChoice) {
-		return false
-	}
-	if !this.Nat64.Equal(that1.Nat64) {
-		return false
-	}
-	if that1.RequestLoggingProfileChoice == nil {
-		if this.RequestLoggingProfileChoice != nil {
-			return false
-		}
-	} else if this.RequestLoggingProfileChoice == nil {
-		return false
-	} else if !this.RequestLoggingProfileChoice.Equal(that1.RequestLoggingProfileChoice) {
 		return false
 	}
 	if this.VsScore != that1.VsScore {
@@ -4338,24 +2841,6 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		if !this.Irules[i].Equal(that1.Irules[i]) {
 			return false
 		}
-	}
-	if that1.DefaultPersistenceProfileChoice == nil {
-		if this.DefaultPersistenceProfileChoice != nil {
-			return false
-		}
-	} else if this.DefaultPersistenceProfileChoice == nil {
-		return false
-	} else if !this.DefaultPersistenceProfileChoice.Equal(that1.DefaultPersistenceProfileChoice) {
-		return false
-	}
-	if that1.FallbackPersistenceProfileChoice == nil {
-		if this.FallbackPersistenceProfileChoice != nil {
-			return false
-		}
-	} else if this.FallbackPersistenceProfileChoice == nil {
-		return false
-	} else if !this.FallbackPersistenceProfileChoice.Equal(that1.FallbackPersistenceProfileChoice) {
-		return false
 	}
 	if len(this.TrafficPolicies) != len(that1.TrafficPolicies) {
 		return false
@@ -4469,150 +2954,6 @@ func (this *GlobalSpecType_Http3) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GlobalSpecType_StatisticsProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_StatisticsProfileNone)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_StatisticsProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.StatisticsProfileNone.Equal(that1.StatisticsProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_StatisticsProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_StatisticsProfile)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_StatisticsProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.StatisticsProfile.Equal(that1.StatisticsProfile) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_LastHopPoolNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_LastHopPoolNone)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_LastHopPoolNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LastHopPoolNone.Equal(that1.LastHopPoolNone) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_LastHopPool) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_LastHopPool)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_LastHopPool)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LastHopPool.Equal(that1.LastHopPool) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_RequestLoggingProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_RequestLoggingProfileNone)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_RequestLoggingProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RequestLoggingProfileNone.Equal(that1.RequestLoggingProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_RequestLoggingProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_RequestLoggingProfile)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_RequestLoggingProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RequestLoggingProfile.Equal(that1.RequestLoggingProfile) {
-		return false
-	}
-	return true
-}
 func (this *GlobalSpecType_DefaultPoolNone) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4657,102 +2998,6 @@ func (this *GlobalSpecType_DefaultPool) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.DefaultPool.Equal(that1.DefaultPool) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_DefaultPersistenceProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_DefaultPersistenceProfileNone)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_DefaultPersistenceProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultPersistenceProfileNone.Equal(that1.DefaultPersistenceProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_DefaultPersistenceProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_DefaultPersistenceProfile)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_DefaultPersistenceProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultPersistenceProfile.Equal(that1.DefaultPersistenceProfile) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_FallbackPersistenceProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_FallbackPersistenceProfileNone)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_FallbackPersistenceProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FallbackPersistenceProfileNone.Equal(that1.FallbackPersistenceProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_FallbackPersistenceProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_FallbackPersistenceProfile)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_FallbackPersistenceProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FallbackPersistenceProfile.Equal(that1.FallbackPersistenceProfile) {
 		return false
 	}
 	return true
@@ -5072,15 +3317,6 @@ func (this *HTTPServices) Equal(that interface{}) bool {
 	if !this.HttpClientProfile.Equal(that1.HttpClientProfile) {
 		return false
 	}
-	if that1.WebsocketClientProfileChoice == nil {
-		if this.WebsocketClientProfileChoice != nil {
-			return false
-		}
-	} else if this.WebsocketClientProfileChoice == nil {
-		return false
-	} else if !this.WebsocketClientProfileChoice.Equal(that1.WebsocketClientProfileChoice) {
-		return false
-	}
 	if len(this.SslClientProfiles) != len(that1.SslClientProfiles) {
 		return false
 	}
@@ -5089,15 +3325,6 @@ func (this *HTTPServices) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if that1.Http2ClientProfileChoice == nil {
-		if this.Http2ClientProfileChoice != nil {
-			return false
-		}
-	} else if this.Http2ClientProfileChoice == nil {
-		return false
-	} else if !this.Http2ClientProfileChoice.Equal(that1.Http2ClientProfileChoice) {
-		return false
-	}
 	if that1.ServerAppTypeChoice == nil {
 		if this.ServerAppTypeChoice != nil {
 			return false
@@ -5105,129 +3332,6 @@ func (this *HTTPServices) Equal(that interface{}) bool {
 	} else if this.ServerAppTypeChoice == nil {
 		return false
 	} else if !this.ServerAppTypeChoice.Equal(that1.ServerAppTypeChoice) {
-		return false
-	}
-	if that1.StreamProfileChoice == nil {
-		if this.StreamProfileChoice != nil {
-			return false
-		}
-	} else if this.StreamProfileChoice == nil {
-		return false
-	} else if !this.StreamProfileChoice.Equal(that1.StreamProfileChoice) {
-		return false
-	}
-	if that1.FixProfileChoice == nil {
-		if this.FixProfileChoice != nil {
-			return false
-		}
-	} else if this.FixProfileChoice == nil {
-		return false
-	} else if !this.FixProfileChoice.Equal(that1.FixProfileChoice) {
-		return false
-	}
-	if that1.OcspProfileChoice == nil {
-		if this.OcspProfileChoice != nil {
-			return false
-		}
-	} else if this.OcspProfileChoice == nil {
-		return false
-	} else if !this.OcspProfileChoice.Equal(that1.OcspProfileChoice) {
-		return false
-	}
-	return true
-}
-func (this *HTTPServices_WebsocketClientProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPServices_WebsocketClientProfileNone)
-	if !ok {
-		that2, ok := that.(HTTPServices_WebsocketClientProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.WebsocketClientProfileNone.Equal(that1.WebsocketClientProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *HTTPServices_WebsocketClientProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPServices_WebsocketClientProfile)
-	if !ok {
-		that2, ok := that.(HTTPServices_WebsocketClientProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.WebsocketClientProfile.Equal(that1.WebsocketClientProfile) {
-		return false
-	}
-	return true
-}
-func (this *HTTPServices_Http2ClientProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPServices_Http2ClientProfileNone)
-	if !ok {
-		that2, ok := that.(HTTPServices_Http2ClientProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Http2ClientProfileNone.Equal(that1.Http2ClientProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *HTTPServices_Http2ClientProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPServices_Http2ClientProfile)
-	if !ok {
-		that2, ok := that.(HTTPServices_Http2ClientProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Http2ClientProfile.Equal(that1.Http2ClientProfile) {
 		return false
 	}
 	return true
@@ -5252,150 +3356,6 @@ func (this *HTTPServices_ServerAppTypeSameAsClient) Equal(that interface{}) bool
 		return false
 	}
 	if !this.ServerAppTypeSameAsClient.Equal(that1.ServerAppTypeSameAsClient) {
-		return false
-	}
-	return true
-}
-func (this *HTTPServices_StreamProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPServices_StreamProfileNone)
-	if !ok {
-		that2, ok := that.(HTTPServices_StreamProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.StreamProfileNone.Equal(that1.StreamProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *HTTPServices_StreamProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPServices_StreamProfile)
-	if !ok {
-		that2, ok := that.(HTTPServices_StreamProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.StreamProfile.Equal(that1.StreamProfile) {
-		return false
-	}
-	return true
-}
-func (this *HTTPServices_FixProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPServices_FixProfileNone)
-	if !ok {
-		that2, ok := that.(HTTPServices_FixProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FixProfileNone.Equal(that1.FixProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *HTTPServices_FixProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPServices_FixProfile)
-	if !ok {
-		that2, ok := that.(HTTPServices_FixProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FixProfile.Equal(that1.FixProfile) {
-		return false
-	}
-	return true
-}
-func (this *HTTPServices_OcspProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPServices_OcspProfileNone)
-	if !ok {
-		that2, ok := that.(HTTPServices_OcspProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OcspProfileNone.Equal(that1.OcspProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *HTTPServices_OcspProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPServices_OcspProfile)
-	if !ok {
-		that2, ok := that.(HTTPServices_OcspProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OcspProfile.Equal(that1.OcspProfile) {
 		return false
 	}
 	return true
@@ -5609,24 +3569,6 @@ func (this *HTTPDefaultServerSelection) Equal(that interface{}) bool {
 	} else if !this.HttpServerProfileChoice.Equal(that1.HttpServerProfileChoice) {
 		return false
 	}
-	if that1.WebsocketServerProfileChoice == nil {
-		if this.WebsocketServerProfileChoice != nil {
-			return false
-		}
-	} else if this.WebsocketServerProfileChoice == nil {
-		return false
-	} else if !this.WebsocketServerProfileChoice.Equal(that1.WebsocketServerProfileChoice) {
-		return false
-	}
-	if that1.Http2ServerProfileChoice == nil {
-		if this.Http2ServerProfileChoice != nil {
-			return false
-		}
-	} else if this.Http2ServerProfileChoice == nil {
-		return false
-	} else if !this.Http2ServerProfileChoice.Equal(that1.Http2ServerProfileChoice) {
-		return false
-	}
 	if len(this.SslServerProfiles) != len(that1.SslServerProfiles) {
 		return false
 	}
@@ -5729,126 +3671,6 @@ func (this *HTTPDefaultServerSelection_HttpServerProfile) Equal(that interface{}
 		return false
 	}
 	if !this.HttpServerProfile.Equal(that1.HttpServerProfile) {
-		return false
-	}
-	return true
-}
-func (this *HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient)
-	if !ok {
-		that2, ok := that.(HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.WebsocketServerProfileSameAsClient.Equal(that1.WebsocketServerProfileSameAsClient) {
-		return false
-	}
-	return true
-}
-func (this *HTTPDefaultServerSelection_WebsocketServerProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPDefaultServerSelection_WebsocketServerProfile)
-	if !ok {
-		that2, ok := that.(HTTPDefaultServerSelection_WebsocketServerProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.WebsocketServerProfile.Equal(that1.WebsocketServerProfile) {
-		return false
-	}
-	return true
-}
-func (this *HTTPDefaultServerSelection_Http2ServerProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPDefaultServerSelection_Http2ServerProfileNone)
-	if !ok {
-		that2, ok := that.(HTTPDefaultServerSelection_Http2ServerProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Http2ServerProfileNone.Equal(that1.Http2ServerProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *HTTPDefaultServerSelection_Http2ServerProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPDefaultServerSelection_Http2ServerProfile)
-	if !ok {
-		that2, ok := that.(HTTPDefaultServerSelection_Http2ServerProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Http2ServerProfile.Equal(that1.Http2ServerProfile) {
-		return false
-	}
-	return true
-}
-func (this *HTTPDefaultServerSelection_Http2ServerProfileSameAsClient) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HTTPDefaultServerSelection_Http2ServerProfileSameAsClient)
-	if !ok {
-		that2, ok := that.(HTTPDefaultServerSelection_Http2ServerProfileSameAsClient)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Http2ServerProfileSameAsClient.Equal(that1.Http2ServerProfileSameAsClient) {
 		return false
 	}
 	return true
@@ -6348,9 +4170,6 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.State.Equal(that1.State) {
-		return false
-	}
 	if len(this.Domains) != len(that1.Domains) {
 		return false
 	}
@@ -6368,52 +4187,7 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if !this.VirtualServerType.Equal(that1.VirtualServerType) {
 		return false
 	}
-	if that1.StatisticsProfileChoice == nil {
-		if this.StatisticsProfileChoice != nil {
-			return false
-		}
-	} else if this.StatisticsProfileChoice == nil {
-		return false
-	} else if !this.StatisticsProfileChoice.Equal(that1.StatisticsProfileChoice) {
-		return false
-	}
 	if !this.ConnectionLimitOptions.Equal(that1.ConnectionLimitOptions) {
-		return false
-	}
-	if !this.Translations.Equal(that1.Translations) {
-		return false
-	}
-	if !this.ClonePoolOptions.Equal(that1.ClonePoolOptions) {
-		return false
-	}
-	if !this.AutoLastHop.Equal(that1.AutoLastHop) {
-		return false
-	}
-	if this.Sse != that1.Sse {
-		return false
-	}
-	if this.Json != that1.Json {
-		return false
-	}
-	if that1.LastHopPoolChoice == nil {
-		if this.LastHopPoolChoice != nil {
-			return false
-		}
-	} else if this.LastHopPoolChoice == nil {
-		return false
-	} else if !this.LastHopPoolChoice.Equal(that1.LastHopPoolChoice) {
-		return false
-	}
-	if !this.Nat64.Equal(that1.Nat64) {
-		return false
-	}
-	if that1.RequestLoggingProfileChoice == nil {
-		if this.RequestLoggingProfileChoice != nil {
-			return false
-		}
-	} else if this.RequestLoggingProfileChoice == nil {
-		return false
-	} else if !this.RequestLoggingProfileChoice.Equal(that1.RequestLoggingProfileChoice) {
 		return false
 	}
 	if this.VsScore != that1.VsScore {
@@ -6446,24 +4220,6 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 		if !this.Irules[i].Equal(that1.Irules[i]) {
 			return false
 		}
-	}
-	if that1.DefaultPersistenceProfileChoice == nil {
-		if this.DefaultPersistenceProfileChoice != nil {
-			return false
-		}
-	} else if this.DefaultPersistenceProfileChoice == nil {
-		return false
-	} else if !this.DefaultPersistenceProfileChoice.Equal(that1.DefaultPersistenceProfileChoice) {
-		return false
-	}
-	if that1.FallbackPersistenceProfileChoice == nil {
-		if this.FallbackPersistenceProfileChoice != nil {
-			return false
-		}
-	} else if this.FallbackPersistenceProfileChoice == nil {
-		return false
-	} else if !this.FallbackPersistenceProfileChoice.Equal(that1.FallbackPersistenceProfileChoice) {
-		return false
 	}
 	if len(this.TrafficPolicies) != len(that1.TrafficPolicies) {
 		return false
@@ -6526,150 +4282,6 @@ func (this *CreateSpecType_Http3) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *CreateSpecType_StatisticsProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_StatisticsProfileNone)
-	if !ok {
-		that2, ok := that.(CreateSpecType_StatisticsProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.StatisticsProfileNone.Equal(that1.StatisticsProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_StatisticsProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_StatisticsProfile)
-	if !ok {
-		that2, ok := that.(CreateSpecType_StatisticsProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.StatisticsProfile.Equal(that1.StatisticsProfile) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_LastHopPoolNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_LastHopPoolNone)
-	if !ok {
-		that2, ok := that.(CreateSpecType_LastHopPoolNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LastHopPoolNone.Equal(that1.LastHopPoolNone) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_LastHopPool) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_LastHopPool)
-	if !ok {
-		that2, ok := that.(CreateSpecType_LastHopPool)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LastHopPool.Equal(that1.LastHopPool) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_RequestLoggingProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_RequestLoggingProfileNone)
-	if !ok {
-		that2, ok := that.(CreateSpecType_RequestLoggingProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RequestLoggingProfileNone.Equal(that1.RequestLoggingProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_RequestLoggingProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_RequestLoggingProfile)
-	if !ok {
-		that2, ok := that.(CreateSpecType_RequestLoggingProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RequestLoggingProfile.Equal(that1.RequestLoggingProfile) {
-		return false
-	}
-	return true
-}
 func (this *CreateSpecType_DefaultPoolNone) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6718,102 +4330,6 @@ func (this *CreateSpecType_DefaultPool) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *CreateSpecType_DefaultPersistenceProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_DefaultPersistenceProfileNone)
-	if !ok {
-		that2, ok := that.(CreateSpecType_DefaultPersistenceProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultPersistenceProfileNone.Equal(that1.DefaultPersistenceProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_DefaultPersistenceProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_DefaultPersistenceProfile)
-	if !ok {
-		that2, ok := that.(CreateSpecType_DefaultPersistenceProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultPersistenceProfile.Equal(that1.DefaultPersistenceProfile) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_FallbackPersistenceProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_FallbackPersistenceProfileNone)
-	if !ok {
-		that2, ok := that.(CreateSpecType_FallbackPersistenceProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FallbackPersistenceProfileNone.Equal(that1.FallbackPersistenceProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_FallbackPersistenceProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_FallbackPersistenceProfile)
-	if !ok {
-		that2, ok := that.(CreateSpecType_FallbackPersistenceProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FallbackPersistenceProfile.Equal(that1.FallbackPersistenceProfile) {
-		return false
-	}
-	return true
-}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6833,9 +4349,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.State.Equal(that1.State) {
-		return false
-	}
 	if len(this.Domains) != len(that1.Domains) {
 		return false
 	}
@@ -6853,52 +4366,7 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if !this.VirtualServerType.Equal(that1.VirtualServerType) {
 		return false
 	}
-	if that1.StatisticsProfileChoice == nil {
-		if this.StatisticsProfileChoice != nil {
-			return false
-		}
-	} else if this.StatisticsProfileChoice == nil {
-		return false
-	} else if !this.StatisticsProfileChoice.Equal(that1.StatisticsProfileChoice) {
-		return false
-	}
 	if !this.ConnectionLimitOptions.Equal(that1.ConnectionLimitOptions) {
-		return false
-	}
-	if !this.Translations.Equal(that1.Translations) {
-		return false
-	}
-	if !this.ClonePoolOptions.Equal(that1.ClonePoolOptions) {
-		return false
-	}
-	if !this.AutoLastHop.Equal(that1.AutoLastHop) {
-		return false
-	}
-	if this.Sse != that1.Sse {
-		return false
-	}
-	if this.Json != that1.Json {
-		return false
-	}
-	if that1.LastHopPoolChoice == nil {
-		if this.LastHopPoolChoice != nil {
-			return false
-		}
-	} else if this.LastHopPoolChoice == nil {
-		return false
-	} else if !this.LastHopPoolChoice.Equal(that1.LastHopPoolChoice) {
-		return false
-	}
-	if !this.Nat64.Equal(that1.Nat64) {
-		return false
-	}
-	if that1.RequestLoggingProfileChoice == nil {
-		if this.RequestLoggingProfileChoice != nil {
-			return false
-		}
-	} else if this.RequestLoggingProfileChoice == nil {
-		return false
-	} else if !this.RequestLoggingProfileChoice.Equal(that1.RequestLoggingProfileChoice) {
 		return false
 	}
 	if this.VsScore != that1.VsScore {
@@ -6931,24 +4399,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 		if !this.Irules[i].Equal(that1.Irules[i]) {
 			return false
 		}
-	}
-	if that1.DefaultPersistenceProfileChoice == nil {
-		if this.DefaultPersistenceProfileChoice != nil {
-			return false
-		}
-	} else if this.DefaultPersistenceProfileChoice == nil {
-		return false
-	} else if !this.DefaultPersistenceProfileChoice.Equal(that1.DefaultPersistenceProfileChoice) {
-		return false
-	}
-	if that1.FallbackPersistenceProfileChoice == nil {
-		if this.FallbackPersistenceProfileChoice != nil {
-			return false
-		}
-	} else if this.FallbackPersistenceProfileChoice == nil {
-		return false
-	} else if !this.FallbackPersistenceProfileChoice.Equal(that1.FallbackPersistenceProfileChoice) {
-		return false
 	}
 	if len(this.TrafficPolicies) != len(that1.TrafficPolicies) {
 		return false
@@ -7011,150 +4461,6 @@ func (this *ReplaceSpecType_Http3) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *ReplaceSpecType_StatisticsProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_StatisticsProfileNone)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_StatisticsProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.StatisticsProfileNone.Equal(that1.StatisticsProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_StatisticsProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_StatisticsProfile)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_StatisticsProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.StatisticsProfile.Equal(that1.StatisticsProfile) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_LastHopPoolNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_LastHopPoolNone)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_LastHopPoolNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LastHopPoolNone.Equal(that1.LastHopPoolNone) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_LastHopPool) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_LastHopPool)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_LastHopPool)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LastHopPool.Equal(that1.LastHopPool) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_RequestLoggingProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_RequestLoggingProfileNone)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_RequestLoggingProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RequestLoggingProfileNone.Equal(that1.RequestLoggingProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_RequestLoggingProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_RequestLoggingProfile)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_RequestLoggingProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RequestLoggingProfile.Equal(that1.RequestLoggingProfile) {
-		return false
-	}
-	return true
-}
 func (this *ReplaceSpecType_DefaultPoolNone) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -7203,102 +4509,6 @@ func (this *ReplaceSpecType_DefaultPool) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *ReplaceSpecType_DefaultPersistenceProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_DefaultPersistenceProfileNone)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_DefaultPersistenceProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultPersistenceProfileNone.Equal(that1.DefaultPersistenceProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_DefaultPersistenceProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_DefaultPersistenceProfile)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_DefaultPersistenceProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultPersistenceProfile.Equal(that1.DefaultPersistenceProfile) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_FallbackPersistenceProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_FallbackPersistenceProfileNone)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_FallbackPersistenceProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FallbackPersistenceProfileNone.Equal(that1.FallbackPersistenceProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_FallbackPersistenceProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_FallbackPersistenceProfile)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_FallbackPersistenceProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FallbackPersistenceProfile.Equal(that1.FallbackPersistenceProfile) {
-		return false
-	}
-	return true
-}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -7338,52 +4548,7 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if !this.VirtualServerType.Equal(that1.VirtualServerType) {
 		return false
 	}
-	if that1.StatisticsProfileChoice == nil {
-		if this.StatisticsProfileChoice != nil {
-			return false
-		}
-	} else if this.StatisticsProfileChoice == nil {
-		return false
-	} else if !this.StatisticsProfileChoice.Equal(that1.StatisticsProfileChoice) {
-		return false
-	}
 	if !this.ConnectionLimitOptions.Equal(that1.ConnectionLimitOptions) {
-		return false
-	}
-	if !this.Translations.Equal(that1.Translations) {
-		return false
-	}
-	if !this.ClonePoolOptions.Equal(that1.ClonePoolOptions) {
-		return false
-	}
-	if !this.AutoLastHop.Equal(that1.AutoLastHop) {
-		return false
-	}
-	if this.Sse != that1.Sse {
-		return false
-	}
-	if this.Json != that1.Json {
-		return false
-	}
-	if that1.LastHopPoolChoice == nil {
-		if this.LastHopPoolChoice != nil {
-			return false
-		}
-	} else if this.LastHopPoolChoice == nil {
-		return false
-	} else if !this.LastHopPoolChoice.Equal(that1.LastHopPoolChoice) {
-		return false
-	}
-	if !this.Nat64.Equal(that1.Nat64) {
-		return false
-	}
-	if that1.RequestLoggingProfileChoice == nil {
-		if this.RequestLoggingProfileChoice != nil {
-			return false
-		}
-	} else if this.RequestLoggingProfileChoice == nil {
-		return false
-	} else if !this.RequestLoggingProfileChoice.Equal(that1.RequestLoggingProfileChoice) {
 		return false
 	}
 	if this.VsScore != that1.VsScore {
@@ -7416,24 +4581,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		if !this.Irules[i].Equal(that1.Irules[i]) {
 			return false
 		}
-	}
-	if that1.DefaultPersistenceProfileChoice == nil {
-		if this.DefaultPersistenceProfileChoice != nil {
-			return false
-		}
-	} else if this.DefaultPersistenceProfileChoice == nil {
-		return false
-	} else if !this.DefaultPersistenceProfileChoice.Equal(that1.DefaultPersistenceProfileChoice) {
-		return false
-	}
-	if that1.FallbackPersistenceProfileChoice == nil {
-		if this.FallbackPersistenceProfileChoice != nil {
-			return false
-		}
-	} else if this.FallbackPersistenceProfileChoice == nil {
-		return false
-	} else if !this.FallbackPersistenceProfileChoice.Equal(that1.FallbackPersistenceProfileChoice) {
-		return false
 	}
 	if len(this.TrafficPolicies) != len(that1.TrafficPolicies) {
 		return false
@@ -7496,150 +4643,6 @@ func (this *GetSpecType_Http3) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GetSpecType_StatisticsProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_StatisticsProfileNone)
-	if !ok {
-		that2, ok := that.(GetSpecType_StatisticsProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.StatisticsProfileNone.Equal(that1.StatisticsProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_StatisticsProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_StatisticsProfile)
-	if !ok {
-		that2, ok := that.(GetSpecType_StatisticsProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.StatisticsProfile.Equal(that1.StatisticsProfile) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_LastHopPoolNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_LastHopPoolNone)
-	if !ok {
-		that2, ok := that.(GetSpecType_LastHopPoolNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LastHopPoolNone.Equal(that1.LastHopPoolNone) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_LastHopPool) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_LastHopPool)
-	if !ok {
-		that2, ok := that.(GetSpecType_LastHopPool)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LastHopPool.Equal(that1.LastHopPool) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_RequestLoggingProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_RequestLoggingProfileNone)
-	if !ok {
-		that2, ok := that.(GetSpecType_RequestLoggingProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RequestLoggingProfileNone.Equal(that1.RequestLoggingProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_RequestLoggingProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_RequestLoggingProfile)
-	if !ok {
-		that2, ok := that.(GetSpecType_RequestLoggingProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RequestLoggingProfile.Equal(that1.RequestLoggingProfile) {
-		return false
-	}
-	return true
-}
 func (this *GetSpecType_DefaultPoolNone) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -7688,111 +4691,12 @@ func (this *GetSpecType_DefaultPool) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GetSpecType_DefaultPersistenceProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_DefaultPersistenceProfileNone)
-	if !ok {
-		that2, ok := that.(GetSpecType_DefaultPersistenceProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultPersistenceProfileNone.Equal(that1.DefaultPersistenceProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_DefaultPersistenceProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_DefaultPersistenceProfile)
-	if !ok {
-		that2, ok := that.(GetSpecType_DefaultPersistenceProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultPersistenceProfile.Equal(that1.DefaultPersistenceProfile) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_FallbackPersistenceProfileNone) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_FallbackPersistenceProfileNone)
-	if !ok {
-		that2, ok := that.(GetSpecType_FallbackPersistenceProfileNone)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FallbackPersistenceProfileNone.Equal(that1.FallbackPersistenceProfileNone) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_FallbackPersistenceProfile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_FallbackPersistenceProfile)
-	if !ok {
-		that2, ok := that.(GetSpecType_FallbackPersistenceProfile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FallbackPersistenceProfile.Equal(that1.FallbackPersistenceProfile) {
-		return false
-	}
-	return true
-}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 36)
+	s := make([]string, 0, 19)
 	s = append(s, "&virtual_server.GlobalSpecType{")
-	if this.State != nil {
-		s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
-	}
 	if this.DomainChoice != nil {
 		s = append(s, "DomainChoice: "+fmt.Sprintf("%#v", this.DomainChoice)+",\n")
 	}
@@ -7800,31 +4704,8 @@ func (this *GlobalSpecType) GoString() string {
 	if this.VirtualServerType != nil {
 		s = append(s, "VirtualServerType: "+fmt.Sprintf("%#v", this.VirtualServerType)+",\n")
 	}
-	if this.StatisticsProfileChoice != nil {
-		s = append(s, "StatisticsProfileChoice: "+fmt.Sprintf("%#v", this.StatisticsProfileChoice)+",\n")
-	}
 	if this.ConnectionLimitOptions != nil {
 		s = append(s, "ConnectionLimitOptions: "+fmt.Sprintf("%#v", this.ConnectionLimitOptions)+",\n")
-	}
-	if this.Translations != nil {
-		s = append(s, "Translations: "+fmt.Sprintf("%#v", this.Translations)+",\n")
-	}
-	if this.ClonePoolOptions != nil {
-		s = append(s, "ClonePoolOptions: "+fmt.Sprintf("%#v", this.ClonePoolOptions)+",\n")
-	}
-	if this.AutoLastHop != nil {
-		s = append(s, "AutoLastHop: "+fmt.Sprintf("%#v", this.AutoLastHop)+",\n")
-	}
-	s = append(s, "Sse: "+fmt.Sprintf("%#v", this.Sse)+",\n")
-	s = append(s, "Json: "+fmt.Sprintf("%#v", this.Json)+",\n")
-	if this.LastHopPoolChoice != nil {
-		s = append(s, "LastHopPoolChoice: "+fmt.Sprintf("%#v", this.LastHopPoolChoice)+",\n")
-	}
-	if this.Nat64 != nil {
-		s = append(s, "Nat64: "+fmt.Sprintf("%#v", this.Nat64)+",\n")
-	}
-	if this.RequestLoggingProfileChoice != nil {
-		s = append(s, "RequestLoggingProfileChoice: "+fmt.Sprintf("%#v", this.RequestLoggingProfileChoice)+",\n")
 	}
 	s = append(s, "VsScore: "+fmt.Sprintf("%#v", this.VsScore)+",\n")
 	if this.ImmediateActionOnServiceDown != nil {
@@ -7838,12 +4719,6 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.Irules != nil {
 		s = append(s, "Irules: "+fmt.Sprintf("%#v", this.Irules)+",\n")
-	}
-	if this.DefaultPersistenceProfileChoice != nil {
-		s = append(s, "DefaultPersistenceProfileChoice: "+fmt.Sprintf("%#v", this.DefaultPersistenceProfileChoice)+",\n")
-	}
-	if this.FallbackPersistenceProfileChoice != nil {
-		s = append(s, "FallbackPersistenceProfileChoice: "+fmt.Sprintf("%#v", this.FallbackPersistenceProfileChoice)+",\n")
 	}
 	if this.TrafficPolicies != nil {
 		s = append(s, "TrafficPolicies: "+fmt.Sprintf("%#v", this.TrafficPolicies)+",\n")
@@ -7889,54 +4764,6 @@ func (this *GlobalSpecType_Http3) GoString() string {
 		`Http3:` + fmt.Sprintf("%#v", this.Http3) + `}`}, ", ")
 	return s
 }
-func (this *GlobalSpecType_StatisticsProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GlobalSpecType_StatisticsProfileNone{` +
-		`StatisticsProfileNone:` + fmt.Sprintf("%#v", this.StatisticsProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_StatisticsProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GlobalSpecType_StatisticsProfile{` +
-		`StatisticsProfile:` + fmt.Sprintf("%#v", this.StatisticsProfile) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_LastHopPoolNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GlobalSpecType_LastHopPoolNone{` +
-		`LastHopPoolNone:` + fmt.Sprintf("%#v", this.LastHopPoolNone) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_LastHopPool) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GlobalSpecType_LastHopPool{` +
-		`LastHopPool:` + fmt.Sprintf("%#v", this.LastHopPool) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_RequestLoggingProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GlobalSpecType_RequestLoggingProfileNone{` +
-		`RequestLoggingProfileNone:` + fmt.Sprintf("%#v", this.RequestLoggingProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_RequestLoggingProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GlobalSpecType_RequestLoggingProfile{` +
-		`RequestLoggingProfile:` + fmt.Sprintf("%#v", this.RequestLoggingProfile) + `}`}, ", ")
-	return s
-}
 func (this *GlobalSpecType_DefaultPoolNone) GoString() string {
 	if this == nil {
 		return "nil"
@@ -7951,38 +4778,6 @@ func (this *GlobalSpecType_DefaultPool) GoString() string {
 	}
 	s := strings.Join([]string{`&virtual_server.GlobalSpecType_DefaultPool{` +
 		`DefaultPool:` + fmt.Sprintf("%#v", this.DefaultPool) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_DefaultPersistenceProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GlobalSpecType_DefaultPersistenceProfileNone{` +
-		`DefaultPersistenceProfileNone:` + fmt.Sprintf("%#v", this.DefaultPersistenceProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_DefaultPersistenceProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GlobalSpecType_DefaultPersistenceProfile{` +
-		`DefaultPersistenceProfile:` + fmt.Sprintf("%#v", this.DefaultPersistenceProfile) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_FallbackPersistenceProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GlobalSpecType_FallbackPersistenceProfileNone{` +
-		`FallbackPersistenceProfileNone:` + fmt.Sprintf("%#v", this.FallbackPersistenceProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_FallbackPersistenceProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GlobalSpecType_FallbackPersistenceProfile{` +
-		`FallbackPersistenceProfile:` + fmt.Sprintf("%#v", this.FallbackPersistenceProfile) + `}`}, ", ")
 	return s
 }
 func (this *TCPServices) GoString() string {
@@ -8101,7 +4896,7 @@ func (this *HTTPServices) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 19)
+	s := make([]string, 0, 9)
 	s = append(s, "&virtual_server.HTTPServices{")
 	if this.Services != nil {
 		s = append(s, "Services: "+fmt.Sprintf("%#v", this.Services)+",\n")
@@ -8112,61 +4907,14 @@ func (this *HTTPServices) GoString() string {
 	if this.HttpClientProfile != nil {
 		s = append(s, "HttpClientProfile: "+fmt.Sprintf("%#v", this.HttpClientProfile)+",\n")
 	}
-	if this.WebsocketClientProfileChoice != nil {
-		s = append(s, "WebsocketClientProfileChoice: "+fmt.Sprintf("%#v", this.WebsocketClientProfileChoice)+",\n")
-	}
 	if this.SslClientProfiles != nil {
 		s = append(s, "SslClientProfiles: "+fmt.Sprintf("%#v", this.SslClientProfiles)+",\n")
-	}
-	if this.Http2ClientProfileChoice != nil {
-		s = append(s, "Http2ClientProfileChoice: "+fmt.Sprintf("%#v", this.Http2ClientProfileChoice)+",\n")
 	}
 	if this.ServerAppTypeChoice != nil {
 		s = append(s, "ServerAppTypeChoice: "+fmt.Sprintf("%#v", this.ServerAppTypeChoice)+",\n")
 	}
-	if this.StreamProfileChoice != nil {
-		s = append(s, "StreamProfileChoice: "+fmt.Sprintf("%#v", this.StreamProfileChoice)+",\n")
-	}
-	if this.FixProfileChoice != nil {
-		s = append(s, "FixProfileChoice: "+fmt.Sprintf("%#v", this.FixProfileChoice)+",\n")
-	}
-	if this.OcspProfileChoice != nil {
-		s = append(s, "OcspProfileChoice: "+fmt.Sprintf("%#v", this.OcspProfileChoice)+",\n")
-	}
 	s = append(s, "}")
 	return strings.Join(s, "")
-}
-func (this *HTTPServices_WebsocketClientProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPServices_WebsocketClientProfileNone{` +
-		`WebsocketClientProfileNone:` + fmt.Sprintf("%#v", this.WebsocketClientProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *HTTPServices_WebsocketClientProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPServices_WebsocketClientProfile{` +
-		`WebsocketClientProfile:` + fmt.Sprintf("%#v", this.WebsocketClientProfile) + `}`}, ", ")
-	return s
-}
-func (this *HTTPServices_Http2ClientProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPServices_Http2ClientProfileNone{` +
-		`Http2ClientProfileNone:` + fmt.Sprintf("%#v", this.Http2ClientProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *HTTPServices_Http2ClientProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPServices_Http2ClientProfile{` +
-		`Http2ClientProfile:` + fmt.Sprintf("%#v", this.Http2ClientProfile) + `}`}, ", ")
-	return s
 }
 func (this *HTTPServices_ServerAppTypeSameAsClient) GoString() string {
 	if this == nil {
@@ -8174,54 +4922,6 @@ func (this *HTTPServices_ServerAppTypeSameAsClient) GoString() string {
 	}
 	s := strings.Join([]string{`&virtual_server.HTTPServices_ServerAppTypeSameAsClient{` +
 		`ServerAppTypeSameAsClient:` + fmt.Sprintf("%#v", this.ServerAppTypeSameAsClient) + `}`}, ", ")
-	return s
-}
-func (this *HTTPServices_StreamProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPServices_StreamProfileNone{` +
-		`StreamProfileNone:` + fmt.Sprintf("%#v", this.StreamProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *HTTPServices_StreamProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPServices_StreamProfile{` +
-		`StreamProfile:` + fmt.Sprintf("%#v", this.StreamProfile) + `}`}, ", ")
-	return s
-}
-func (this *HTTPServices_FixProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPServices_FixProfileNone{` +
-		`FixProfileNone:` + fmt.Sprintf("%#v", this.FixProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *HTTPServices_FixProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPServices_FixProfile{` +
-		`FixProfile:` + fmt.Sprintf("%#v", this.FixProfile) + `}`}, ", ")
-	return s
-}
-func (this *HTTPServices_OcspProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPServices_OcspProfileNone{` +
-		`OcspProfileNone:` + fmt.Sprintf("%#v", this.OcspProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *HTTPServices_OcspProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPServices_OcspProfile{` +
-		`OcspProfile:` + fmt.Sprintf("%#v", this.OcspProfile) + `}`}, ", ")
 	return s
 }
 func (this *UDPDefaultServerSelection) GoString() string {
@@ -8290,19 +4990,13 @@ func (this *HTTPDefaultServerSelection) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 14)
+	s := make([]string, 0, 9)
 	s = append(s, "&virtual_server.HTTPDefaultServerSelection{")
 	if this.ProtocolServerProfileChoice != nil {
 		s = append(s, "ProtocolServerProfileChoice: "+fmt.Sprintf("%#v", this.ProtocolServerProfileChoice)+",\n")
 	}
 	if this.HttpServerProfileChoice != nil {
 		s = append(s, "HttpServerProfileChoice: "+fmt.Sprintf("%#v", this.HttpServerProfileChoice)+",\n")
-	}
-	if this.WebsocketServerProfileChoice != nil {
-		s = append(s, "WebsocketServerProfileChoice: "+fmt.Sprintf("%#v", this.WebsocketServerProfileChoice)+",\n")
-	}
-	if this.Http2ServerProfileChoice != nil {
-		s = append(s, "Http2ServerProfileChoice: "+fmt.Sprintf("%#v", this.Http2ServerProfileChoice)+",\n")
 	}
 	if this.SslServerProfiles != nil {
 		s = append(s, "SslServerProfiles: "+fmt.Sprintf("%#v", this.SslServerProfiles)+",\n")
@@ -8340,46 +5034,6 @@ func (this *HTTPDefaultServerSelection_HttpServerProfile) GoString() string {
 	}
 	s := strings.Join([]string{`&virtual_server.HTTPDefaultServerSelection_HttpServerProfile{` +
 		`HttpServerProfile:` + fmt.Sprintf("%#v", this.HttpServerProfile) + `}`}, ", ")
-	return s
-}
-func (this *HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient{` +
-		`WebsocketServerProfileSameAsClient:` + fmt.Sprintf("%#v", this.WebsocketServerProfileSameAsClient) + `}`}, ", ")
-	return s
-}
-func (this *HTTPDefaultServerSelection_WebsocketServerProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPDefaultServerSelection_WebsocketServerProfile{` +
-		`WebsocketServerProfile:` + fmt.Sprintf("%#v", this.WebsocketServerProfile) + `}`}, ", ")
-	return s
-}
-func (this *HTTPDefaultServerSelection_Http2ServerProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPDefaultServerSelection_Http2ServerProfileNone{` +
-		`Http2ServerProfileNone:` + fmt.Sprintf("%#v", this.Http2ServerProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *HTTPDefaultServerSelection_Http2ServerProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPDefaultServerSelection_Http2ServerProfile{` +
-		`Http2ServerProfile:` + fmt.Sprintf("%#v", this.Http2ServerProfile) + `}`}, ", ")
-	return s
-}
-func (this *HTTPDefaultServerSelection_Http2ServerProfileSameAsClient) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.HTTPDefaultServerSelection_Http2ServerProfileSameAsClient{` +
-		`Http2ServerProfileSameAsClient:` + fmt.Sprintf("%#v", this.Http2ServerProfileSameAsClient) + `}`}, ", ")
 	return s
 }
 func (this *HTTP3DefaultServerSelection) GoString() string {
@@ -8574,40 +5228,14 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 33)
+	s := make([]string, 0, 16)
 	s = append(s, "&virtual_server.CreateSpecType{")
-	if this.State != nil {
-		s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
-	}
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.VirtualServerType != nil {
 		s = append(s, "VirtualServerType: "+fmt.Sprintf("%#v", this.VirtualServerType)+",\n")
 	}
-	if this.StatisticsProfileChoice != nil {
-		s = append(s, "StatisticsProfileChoice: "+fmt.Sprintf("%#v", this.StatisticsProfileChoice)+",\n")
-	}
 	if this.ConnectionLimitOptions != nil {
 		s = append(s, "ConnectionLimitOptions: "+fmt.Sprintf("%#v", this.ConnectionLimitOptions)+",\n")
-	}
-	if this.Translations != nil {
-		s = append(s, "Translations: "+fmt.Sprintf("%#v", this.Translations)+",\n")
-	}
-	if this.ClonePoolOptions != nil {
-		s = append(s, "ClonePoolOptions: "+fmt.Sprintf("%#v", this.ClonePoolOptions)+",\n")
-	}
-	if this.AutoLastHop != nil {
-		s = append(s, "AutoLastHop: "+fmt.Sprintf("%#v", this.AutoLastHop)+",\n")
-	}
-	s = append(s, "Sse: "+fmt.Sprintf("%#v", this.Sse)+",\n")
-	s = append(s, "Json: "+fmt.Sprintf("%#v", this.Json)+",\n")
-	if this.LastHopPoolChoice != nil {
-		s = append(s, "LastHopPoolChoice: "+fmt.Sprintf("%#v", this.LastHopPoolChoice)+",\n")
-	}
-	if this.Nat64 != nil {
-		s = append(s, "Nat64: "+fmt.Sprintf("%#v", this.Nat64)+",\n")
-	}
-	if this.RequestLoggingProfileChoice != nil {
-		s = append(s, "RequestLoggingProfileChoice: "+fmt.Sprintf("%#v", this.RequestLoggingProfileChoice)+",\n")
 	}
 	s = append(s, "VsScore: "+fmt.Sprintf("%#v", this.VsScore)+",\n")
 	if this.ImmediateActionOnServiceDown != nil {
@@ -8621,12 +5249,6 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.Irules != nil {
 		s = append(s, "Irules: "+fmt.Sprintf("%#v", this.Irules)+",\n")
-	}
-	if this.DefaultPersistenceProfileChoice != nil {
-		s = append(s, "DefaultPersistenceProfileChoice: "+fmt.Sprintf("%#v", this.DefaultPersistenceProfileChoice)+",\n")
-	}
-	if this.FallbackPersistenceProfileChoice != nil {
-		s = append(s, "FallbackPersistenceProfileChoice: "+fmt.Sprintf("%#v", this.FallbackPersistenceProfileChoice)+",\n")
 	}
 	if this.TrafficPolicies != nil {
 		s = append(s, "TrafficPolicies: "+fmt.Sprintf("%#v", this.TrafficPolicies)+",\n")
@@ -8653,54 +5275,6 @@ func (this *CreateSpecType_Http3) GoString() string {
 		`Http3:` + fmt.Sprintf("%#v", this.Http3) + `}`}, ", ")
 	return s
 }
-func (this *CreateSpecType_StatisticsProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.CreateSpecType_StatisticsProfileNone{` +
-		`StatisticsProfileNone:` + fmt.Sprintf("%#v", this.StatisticsProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_StatisticsProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.CreateSpecType_StatisticsProfile{` +
-		`StatisticsProfile:` + fmt.Sprintf("%#v", this.StatisticsProfile) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_LastHopPoolNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.CreateSpecType_LastHopPoolNone{` +
-		`LastHopPoolNone:` + fmt.Sprintf("%#v", this.LastHopPoolNone) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_LastHopPool) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.CreateSpecType_LastHopPool{` +
-		`LastHopPool:` + fmt.Sprintf("%#v", this.LastHopPool) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_RequestLoggingProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.CreateSpecType_RequestLoggingProfileNone{` +
-		`RequestLoggingProfileNone:` + fmt.Sprintf("%#v", this.RequestLoggingProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_RequestLoggingProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.CreateSpecType_RequestLoggingProfile{` +
-		`RequestLoggingProfile:` + fmt.Sprintf("%#v", this.RequestLoggingProfile) + `}`}, ", ")
-	return s
-}
 func (this *CreateSpecType_DefaultPoolNone) GoString() string {
 	if this == nil {
 		return "nil"
@@ -8717,76 +5291,18 @@ func (this *CreateSpecType_DefaultPool) GoString() string {
 		`DefaultPool:` + fmt.Sprintf("%#v", this.DefaultPool) + `}`}, ", ")
 	return s
 }
-func (this *CreateSpecType_DefaultPersistenceProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.CreateSpecType_DefaultPersistenceProfileNone{` +
-		`DefaultPersistenceProfileNone:` + fmt.Sprintf("%#v", this.DefaultPersistenceProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_DefaultPersistenceProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.CreateSpecType_DefaultPersistenceProfile{` +
-		`DefaultPersistenceProfile:` + fmt.Sprintf("%#v", this.DefaultPersistenceProfile) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_FallbackPersistenceProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.CreateSpecType_FallbackPersistenceProfileNone{` +
-		`FallbackPersistenceProfileNone:` + fmt.Sprintf("%#v", this.FallbackPersistenceProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_FallbackPersistenceProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.CreateSpecType_FallbackPersistenceProfile{` +
-		`FallbackPersistenceProfile:` + fmt.Sprintf("%#v", this.FallbackPersistenceProfile) + `}`}, ", ")
-	return s
-}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 33)
+	s := make([]string, 0, 16)
 	s = append(s, "&virtual_server.ReplaceSpecType{")
-	if this.State != nil {
-		s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
-	}
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.VirtualServerType != nil {
 		s = append(s, "VirtualServerType: "+fmt.Sprintf("%#v", this.VirtualServerType)+",\n")
 	}
-	if this.StatisticsProfileChoice != nil {
-		s = append(s, "StatisticsProfileChoice: "+fmt.Sprintf("%#v", this.StatisticsProfileChoice)+",\n")
-	}
 	if this.ConnectionLimitOptions != nil {
 		s = append(s, "ConnectionLimitOptions: "+fmt.Sprintf("%#v", this.ConnectionLimitOptions)+",\n")
-	}
-	if this.Translations != nil {
-		s = append(s, "Translations: "+fmt.Sprintf("%#v", this.Translations)+",\n")
-	}
-	if this.ClonePoolOptions != nil {
-		s = append(s, "ClonePoolOptions: "+fmt.Sprintf("%#v", this.ClonePoolOptions)+",\n")
-	}
-	if this.AutoLastHop != nil {
-		s = append(s, "AutoLastHop: "+fmt.Sprintf("%#v", this.AutoLastHop)+",\n")
-	}
-	s = append(s, "Sse: "+fmt.Sprintf("%#v", this.Sse)+",\n")
-	s = append(s, "Json: "+fmt.Sprintf("%#v", this.Json)+",\n")
-	if this.LastHopPoolChoice != nil {
-		s = append(s, "LastHopPoolChoice: "+fmt.Sprintf("%#v", this.LastHopPoolChoice)+",\n")
-	}
-	if this.Nat64 != nil {
-		s = append(s, "Nat64: "+fmt.Sprintf("%#v", this.Nat64)+",\n")
-	}
-	if this.RequestLoggingProfileChoice != nil {
-		s = append(s, "RequestLoggingProfileChoice: "+fmt.Sprintf("%#v", this.RequestLoggingProfileChoice)+",\n")
 	}
 	s = append(s, "VsScore: "+fmt.Sprintf("%#v", this.VsScore)+",\n")
 	if this.ImmediateActionOnServiceDown != nil {
@@ -8800,12 +5316,6 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.Irules != nil {
 		s = append(s, "Irules: "+fmt.Sprintf("%#v", this.Irules)+",\n")
-	}
-	if this.DefaultPersistenceProfileChoice != nil {
-		s = append(s, "DefaultPersistenceProfileChoice: "+fmt.Sprintf("%#v", this.DefaultPersistenceProfileChoice)+",\n")
-	}
-	if this.FallbackPersistenceProfileChoice != nil {
-		s = append(s, "FallbackPersistenceProfileChoice: "+fmt.Sprintf("%#v", this.FallbackPersistenceProfileChoice)+",\n")
 	}
 	if this.TrafficPolicies != nil {
 		s = append(s, "TrafficPolicies: "+fmt.Sprintf("%#v", this.TrafficPolicies)+",\n")
@@ -8832,54 +5342,6 @@ func (this *ReplaceSpecType_Http3) GoString() string {
 		`Http3:` + fmt.Sprintf("%#v", this.Http3) + `}`}, ", ")
 	return s
 }
-func (this *ReplaceSpecType_StatisticsProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.ReplaceSpecType_StatisticsProfileNone{` +
-		`StatisticsProfileNone:` + fmt.Sprintf("%#v", this.StatisticsProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_StatisticsProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.ReplaceSpecType_StatisticsProfile{` +
-		`StatisticsProfile:` + fmt.Sprintf("%#v", this.StatisticsProfile) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_LastHopPoolNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.ReplaceSpecType_LastHopPoolNone{` +
-		`LastHopPoolNone:` + fmt.Sprintf("%#v", this.LastHopPoolNone) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_LastHopPool) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.ReplaceSpecType_LastHopPool{` +
-		`LastHopPool:` + fmt.Sprintf("%#v", this.LastHopPool) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_RequestLoggingProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.ReplaceSpecType_RequestLoggingProfileNone{` +
-		`RequestLoggingProfileNone:` + fmt.Sprintf("%#v", this.RequestLoggingProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_RequestLoggingProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.ReplaceSpecType_RequestLoggingProfile{` +
-		`RequestLoggingProfile:` + fmt.Sprintf("%#v", this.RequestLoggingProfile) + `}`}, ", ")
-	return s
-}
 func (this *ReplaceSpecType_DefaultPoolNone) GoString() string {
 	if this == nil {
 		return "nil"
@@ -8896,43 +5358,11 @@ func (this *ReplaceSpecType_DefaultPool) GoString() string {
 		`DefaultPool:` + fmt.Sprintf("%#v", this.DefaultPool) + `}`}, ", ")
 	return s
 }
-func (this *ReplaceSpecType_DefaultPersistenceProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.ReplaceSpecType_DefaultPersistenceProfileNone{` +
-		`DefaultPersistenceProfileNone:` + fmt.Sprintf("%#v", this.DefaultPersistenceProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_DefaultPersistenceProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.ReplaceSpecType_DefaultPersistenceProfile{` +
-		`DefaultPersistenceProfile:` + fmt.Sprintf("%#v", this.DefaultPersistenceProfile) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_FallbackPersistenceProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.ReplaceSpecType_FallbackPersistenceProfileNone{` +
-		`FallbackPersistenceProfileNone:` + fmt.Sprintf("%#v", this.FallbackPersistenceProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_FallbackPersistenceProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.ReplaceSpecType_FallbackPersistenceProfile{` +
-		`FallbackPersistenceProfile:` + fmt.Sprintf("%#v", this.FallbackPersistenceProfile) + `}`}, ", ")
-	return s
-}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 33)
+	s := make([]string, 0, 17)
 	s = append(s, "&virtual_server.GetSpecType{")
 	if this.State != nil {
 		s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
@@ -8941,31 +5371,8 @@ func (this *GetSpecType) GoString() string {
 	if this.VirtualServerType != nil {
 		s = append(s, "VirtualServerType: "+fmt.Sprintf("%#v", this.VirtualServerType)+",\n")
 	}
-	if this.StatisticsProfileChoice != nil {
-		s = append(s, "StatisticsProfileChoice: "+fmt.Sprintf("%#v", this.StatisticsProfileChoice)+",\n")
-	}
 	if this.ConnectionLimitOptions != nil {
 		s = append(s, "ConnectionLimitOptions: "+fmt.Sprintf("%#v", this.ConnectionLimitOptions)+",\n")
-	}
-	if this.Translations != nil {
-		s = append(s, "Translations: "+fmt.Sprintf("%#v", this.Translations)+",\n")
-	}
-	if this.ClonePoolOptions != nil {
-		s = append(s, "ClonePoolOptions: "+fmt.Sprintf("%#v", this.ClonePoolOptions)+",\n")
-	}
-	if this.AutoLastHop != nil {
-		s = append(s, "AutoLastHop: "+fmt.Sprintf("%#v", this.AutoLastHop)+",\n")
-	}
-	s = append(s, "Sse: "+fmt.Sprintf("%#v", this.Sse)+",\n")
-	s = append(s, "Json: "+fmt.Sprintf("%#v", this.Json)+",\n")
-	if this.LastHopPoolChoice != nil {
-		s = append(s, "LastHopPoolChoice: "+fmt.Sprintf("%#v", this.LastHopPoolChoice)+",\n")
-	}
-	if this.Nat64 != nil {
-		s = append(s, "Nat64: "+fmt.Sprintf("%#v", this.Nat64)+",\n")
-	}
-	if this.RequestLoggingProfileChoice != nil {
-		s = append(s, "RequestLoggingProfileChoice: "+fmt.Sprintf("%#v", this.RequestLoggingProfileChoice)+",\n")
 	}
 	s = append(s, "VsScore: "+fmt.Sprintf("%#v", this.VsScore)+",\n")
 	if this.ImmediateActionOnServiceDown != nil {
@@ -8979,12 +5386,6 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.Irules != nil {
 		s = append(s, "Irules: "+fmt.Sprintf("%#v", this.Irules)+",\n")
-	}
-	if this.DefaultPersistenceProfileChoice != nil {
-		s = append(s, "DefaultPersistenceProfileChoice: "+fmt.Sprintf("%#v", this.DefaultPersistenceProfileChoice)+",\n")
-	}
-	if this.FallbackPersistenceProfileChoice != nil {
-		s = append(s, "FallbackPersistenceProfileChoice: "+fmt.Sprintf("%#v", this.FallbackPersistenceProfileChoice)+",\n")
 	}
 	if this.TrafficPolicies != nil {
 		s = append(s, "TrafficPolicies: "+fmt.Sprintf("%#v", this.TrafficPolicies)+",\n")
@@ -9011,54 +5412,6 @@ func (this *GetSpecType_Http3) GoString() string {
 		`Http3:` + fmt.Sprintf("%#v", this.Http3) + `}`}, ", ")
 	return s
 }
-func (this *GetSpecType_StatisticsProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GetSpecType_StatisticsProfileNone{` +
-		`StatisticsProfileNone:` + fmt.Sprintf("%#v", this.StatisticsProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_StatisticsProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GetSpecType_StatisticsProfile{` +
-		`StatisticsProfile:` + fmt.Sprintf("%#v", this.StatisticsProfile) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_LastHopPoolNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GetSpecType_LastHopPoolNone{` +
-		`LastHopPoolNone:` + fmt.Sprintf("%#v", this.LastHopPoolNone) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_LastHopPool) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GetSpecType_LastHopPool{` +
-		`LastHopPool:` + fmt.Sprintf("%#v", this.LastHopPool) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_RequestLoggingProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GetSpecType_RequestLoggingProfileNone{` +
-		`RequestLoggingProfileNone:` + fmt.Sprintf("%#v", this.RequestLoggingProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_RequestLoggingProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GetSpecType_RequestLoggingProfile{` +
-		`RequestLoggingProfile:` + fmt.Sprintf("%#v", this.RequestLoggingProfile) + `}`}, ", ")
-	return s
-}
 func (this *GetSpecType_DefaultPoolNone) GoString() string {
 	if this == nil {
 		return "nil"
@@ -9073,38 +5426,6 @@ func (this *GetSpecType_DefaultPool) GoString() string {
 	}
 	s := strings.Join([]string{`&virtual_server.GetSpecType_DefaultPool{` +
 		`DefaultPool:` + fmt.Sprintf("%#v", this.DefaultPool) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_DefaultPersistenceProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GetSpecType_DefaultPersistenceProfileNone{` +
-		`DefaultPersistenceProfileNone:` + fmt.Sprintf("%#v", this.DefaultPersistenceProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_DefaultPersistenceProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GetSpecType_DefaultPersistenceProfile{` +
-		`DefaultPersistenceProfile:` + fmt.Sprintf("%#v", this.DefaultPersistenceProfile) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_FallbackPersistenceProfileNone) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GetSpecType_FallbackPersistenceProfileNone{` +
-		`FallbackPersistenceProfileNone:` + fmt.Sprintf("%#v", this.FallbackPersistenceProfileNone) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_FallbackPersistenceProfile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&virtual_server.GetSpecType_FallbackPersistenceProfile{` +
-		`FallbackPersistenceProfile:` + fmt.Sprintf("%#v", this.FallbackPersistenceProfile) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -9193,108 +5514,11 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xf0
 	}
-	if m.RequestLoggingProfileChoice != nil {
-		{
-			size := m.RequestLoggingProfileChoice.Size()
-			i -= size
-			if _, err := m.RequestLoggingProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Nat64 != nil {
-		{
-			size, err := m.Nat64.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xc2
-	}
-	if m.LastHopPoolChoice != nil {
-		{
-			size := m.LastHopPoolChoice.Size()
-			i -= size
-			if _, err := m.LastHopPoolChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Json != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Json))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x98
-	}
-	if m.Sse != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Sse))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x90
-	}
-	if m.AutoLastHop != nil {
-		{
-			size, err := m.AutoLastHop.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x8a
-	}
-	if m.ClonePoolOptions != nil {
-		{
-			size, err := m.ClonePoolOptions.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xca
-	}
-	if m.Translations != nil {
-		{
-			size, err := m.Translations.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0x92
-	}
 	if m.VirtualServerType != nil {
 		{
 			size := m.VirtualServerType.Size()
 			i -= size
 			if _, err := m.VirtualServerType.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.StatisticsProfileChoice != nil {
-		{
-			size := m.StatisticsProfileChoice.Size()
-			i -= size
-			if _, err := m.StatisticsProfileChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -9313,24 +5537,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x1
 			i--
 			dAtA[i] = 0xaa
-		}
-	}
-	if m.FallbackPersistenceProfileChoice != nil {
-		{
-			size := m.FallbackPersistenceProfileChoice.Size()
-			i -= size
-			if _, err := m.FallbackPersistenceProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.DefaultPersistenceProfileChoice != nil {
-		{
-			size := m.DefaultPersistenceProfileChoice.Size()
-			i -= size
-			if _, err := m.DefaultPersistenceProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
 		}
 	}
 	if len(m.Irules) > 0 {
@@ -9390,18 +5596,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
-	}
-	if m.State != nil {
-		{
-			size, err := m.State.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -9469,144 +5663,6 @@ func (m *GlobalSpecType_Https) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
-func (m *GlobalSpecType_DefaultPersistenceProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GlobalSpecType_DefaultPersistenceProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DefaultPersistenceProfileNone != nil {
-		{
-			size, err := m.DefaultPersistenceProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x82
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GlobalSpecType_DefaultPersistenceProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GlobalSpecType_DefaultPersistenceProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DefaultPersistenceProfile != nil {
-		{
-			size, err := m.DefaultPersistenceProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x8a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GlobalSpecType_FallbackPersistenceProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GlobalSpecType_FallbackPersistenceProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.FallbackPersistenceProfileNone != nil {
-		{
-			size, err := m.FallbackPersistenceProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x9a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GlobalSpecType_FallbackPersistenceProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GlobalSpecType_FallbackPersistenceProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.FallbackPersistenceProfile != nil {
-		{
-			size, err := m.FallbackPersistenceProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xa2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GlobalSpecType_StatisticsProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GlobalSpecType_StatisticsProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.StatisticsProfileNone != nil {
-		{
-			size, err := m.StatisticsProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xba
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GlobalSpecType_StatisticsProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GlobalSpecType_StatisticsProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.StatisticsProfile != nil {
-		{
-			size, err := m.StatisticsProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xc2
-	}
-	return len(dAtA) - i, nil
-}
 func (m *GlobalSpecType_Http3) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -9627,98 +5683,6 @@ func (m *GlobalSpecType_Http3) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0xca
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GlobalSpecType_LastHopPoolNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GlobalSpecType_LastHopPoolNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.LastHopPoolNone != nil {
-		{
-			size, err := m.LastHopPoolNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xb2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GlobalSpecType_LastHopPool) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GlobalSpecType_LastHopPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.LastHopPool != nil {
-		{
-			size, err := m.LastHopPool.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xba
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GlobalSpecType_RequestLoggingProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GlobalSpecType_RequestLoggingProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.RequestLoggingProfileNone != nil {
-		{
-			size, err := m.RequestLoggingProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xe2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GlobalSpecType_RequestLoggingProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GlobalSpecType_RequestLoggingProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.RequestLoggingProfile != nil {
-		{
-			size, err := m.RequestLoggingProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xea
 	}
 	return len(dAtA) - i, nil
 }
@@ -10151,24 +6115,6 @@ func (m *HTTPServices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
-	if m.OcspProfileChoice != nil {
-		{
-			size := m.OcspProfileChoice.Size()
-			i -= size
-			if _, err := m.OcspProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.FixProfileChoice != nil {
-		{
-			size := m.FixProfileChoice.Size()
-			i -= size
-			if _, err := m.FixProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if m.HttpClientProfile != nil {
 		{
 			size, err := m.HttpClientProfile.MarshalToSizedBuffer(dAtA[:i])
@@ -10183,24 +6129,6 @@ func (m *HTTPServices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x82
 	}
-	if m.Http2ClientProfileChoice != nil {
-		{
-			size := m.Http2ClientProfileChoice.Size()
-			i -= size
-			if _, err := m.Http2ClientProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.StreamProfileChoice != nil {
-		{
-			size := m.StreamProfileChoice.Size()
-			i -= size
-			if _, err := m.StreamProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if len(m.SslClientProfiles) > 0 {
 		for iNdEx := len(m.SslClientProfiles) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -10213,15 +6141,6 @@ func (m *HTTPServices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 			i--
 			dAtA[i] = 0x4a
-		}
-	}
-	if m.WebsocketClientProfileChoice != nil {
-		{
-			size := m.WebsocketClientProfileChoice.Size()
-			i -= size
-			if _, err := m.WebsocketClientProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
 		}
 	}
 	if m.ProtocolClientProfile != nil {
@@ -10253,224 +6172,6 @@ func (m *HTTPServices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *HTTPServices_WebsocketClientProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPServices_WebsocketClientProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.WebsocketClientProfileNone != nil {
-		{
-			size, err := m.WebsocketClientProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPServices_WebsocketClientProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPServices_WebsocketClientProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.WebsocketClientProfile != nil {
-		{
-			size, err := m.WebsocketClientProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x42
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPServices_StreamProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPServices_StreamProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.StreamProfileNone != nil {
-		{
-			size, err := m.StreamProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x5a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPServices_StreamProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPServices_StreamProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.StreamProfile != nil {
-		{
-			size, err := m.StreamProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x62
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPServices_Http2ClientProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPServices_Http2ClientProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Http2ClientProfileNone != nil {
-		{
-			size, err := m.Http2ClientProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x72
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPServices_Http2ClientProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPServices_Http2ClientProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Http2ClientProfile != nil {
-		{
-			size, err := m.Http2ClientProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x7a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPServices_FixProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPServices_FixProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.FixProfileNone != nil {
-		{
-			size, err := m.FixProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xa2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPServices_FixProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPServices_FixProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.FixProfile != nil {
-		{
-			size, err := m.FixProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xaa
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPServices_OcspProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPServices_OcspProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.OcspProfileNone != nil {
-		{
-			size, err := m.OcspProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xba
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPServices_OcspProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPServices_OcspProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.OcspProfile != nil {
-		{
-			size, err := m.OcspProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xc2
-	}
-	return len(dAtA) - i, nil
-}
 func (m *HTTPServices_ServerAppTypeSameAsClient) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -10690,15 +6391,6 @@ func (m *HTTPDefaultServerSelection) MarshalToSizedBuffer(dAtA []byte) (int, err
 	_ = i
 	var l int
 	_ = l
-	if m.Http2ServerProfileChoice != nil {
-		{
-			size := m.Http2ServerProfileChoice.Size()
-			i -= size
-			if _, err := m.Http2ServerProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if len(m.SslServerProfiles) > 0 {
 		for iNdEx := len(m.SslServerProfiles) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -10713,15 +6405,6 @@ func (m *HTTPDefaultServerSelection) MarshalToSizedBuffer(dAtA []byte) (int, err
 			dAtA[i] = 0x1
 			i--
 			dAtA[i] = 0x82
-		}
-	}
-	if m.WebsocketServerProfileChoice != nil {
-		{
-			size := m.WebsocketServerProfileChoice.Size()
-			i -= size
-			if _, err := m.WebsocketServerProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
 		}
 	}
 	if m.HttpServerProfileChoice != nil {
@@ -10826,113 +6509,6 @@ func (m *HTTPDefaultServerSelection_HttpServerProfile) MarshalToSizedBuffer(dAtA
 		}
 		i--
 		dAtA[i] = 0x32
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.WebsocketServerProfileSameAsClient != nil {
-		{
-			size, err := m.WebsocketServerProfileSameAsClient.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x42
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPDefaultServerSelection_WebsocketServerProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPDefaultServerSelection_WebsocketServerProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.WebsocketServerProfile != nil {
-		{
-			size, err := m.WebsocketServerProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x4a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPDefaultServerSelection_Http2ServerProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPDefaultServerSelection_Http2ServerProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Http2ServerProfileNone != nil {
-		{
-			size, err := m.Http2ServerProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x72
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPDefaultServerSelection_Http2ServerProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPDefaultServerSelection_Http2ServerProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Http2ServerProfile != nil {
-		{
-			size, err := m.Http2ServerProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x7a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *HTTPDefaultServerSelection_Http2ServerProfileSameAsClient) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPDefaultServerSelection_Http2ServerProfileSameAsClient) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Http2ServerProfileSameAsClient != nil {
-		{
-			size, err := m.Http2ServerProfileSameAsClient.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xda
 	}
 	return len(dAtA) - i, nil
 }
@@ -11541,108 +7117,11 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xf0
 	}
-	if m.RequestLoggingProfileChoice != nil {
-		{
-			size := m.RequestLoggingProfileChoice.Size()
-			i -= size
-			if _, err := m.RequestLoggingProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Nat64 != nil {
-		{
-			size, err := m.Nat64.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xc2
-	}
-	if m.LastHopPoolChoice != nil {
-		{
-			size := m.LastHopPoolChoice.Size()
-			i -= size
-			if _, err := m.LastHopPoolChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Json != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Json))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x98
-	}
-	if m.Sse != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Sse))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x90
-	}
-	if m.AutoLastHop != nil {
-		{
-			size, err := m.AutoLastHop.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x8a
-	}
-	if m.ClonePoolOptions != nil {
-		{
-			size, err := m.ClonePoolOptions.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xca
-	}
-	if m.Translations != nil {
-		{
-			size, err := m.Translations.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0x92
-	}
 	if m.VirtualServerType != nil {
 		{
 			size := m.VirtualServerType.Size()
 			i -= size
 			if _, err := m.VirtualServerType.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.StatisticsProfileChoice != nil {
-		{
-			size := m.StatisticsProfileChoice.Size()
-			i -= size
-			if _, err := m.StatisticsProfileChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -11661,24 +7140,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x1
 			i--
 			dAtA[i] = 0xaa
-		}
-	}
-	if m.FallbackPersistenceProfileChoice != nil {
-		{
-			size := m.FallbackPersistenceProfileChoice.Size()
-			i -= size
-			if _, err := m.FallbackPersistenceProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.DefaultPersistenceProfileChoice != nil {
-		{
-			size := m.DefaultPersistenceProfileChoice.Size()
-			i -= size
-			if _, err := m.DefaultPersistenceProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
 		}
 	}
 	if len(m.Irules) > 0 {
@@ -11730,18 +7191,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x2a
 		}
 	}
-	if m.State != nil {
-		{
-			size, err := m.State.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
 	return len(dAtA) - i, nil
 }
 
@@ -11766,144 +7215,6 @@ func (m *CreateSpecType_Https) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
-func (m *CreateSpecType_DefaultPersistenceProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CreateSpecType_DefaultPersistenceProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DefaultPersistenceProfileNone != nil {
-		{
-			size, err := m.DefaultPersistenceProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x82
-	}
-	return len(dAtA) - i, nil
-}
-func (m *CreateSpecType_DefaultPersistenceProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CreateSpecType_DefaultPersistenceProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DefaultPersistenceProfile != nil {
-		{
-			size, err := m.DefaultPersistenceProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x8a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *CreateSpecType_FallbackPersistenceProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CreateSpecType_FallbackPersistenceProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.FallbackPersistenceProfileNone != nil {
-		{
-			size, err := m.FallbackPersistenceProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x9a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *CreateSpecType_FallbackPersistenceProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CreateSpecType_FallbackPersistenceProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.FallbackPersistenceProfile != nil {
-		{
-			size, err := m.FallbackPersistenceProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xa2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *CreateSpecType_StatisticsProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CreateSpecType_StatisticsProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.StatisticsProfileNone != nil {
-		{
-			size, err := m.StatisticsProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xba
-	}
-	return len(dAtA) - i, nil
-}
-func (m *CreateSpecType_StatisticsProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CreateSpecType_StatisticsProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.StatisticsProfile != nil {
-		{
-			size, err := m.StatisticsProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xc2
-	}
-	return len(dAtA) - i, nil
-}
 func (m *CreateSpecType_Http3) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -11924,98 +7235,6 @@ func (m *CreateSpecType_Http3) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0xca
-	}
-	return len(dAtA) - i, nil
-}
-func (m *CreateSpecType_LastHopPoolNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CreateSpecType_LastHopPoolNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.LastHopPoolNone != nil {
-		{
-			size, err := m.LastHopPoolNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xb2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *CreateSpecType_LastHopPool) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CreateSpecType_LastHopPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.LastHopPool != nil {
-		{
-			size, err := m.LastHopPool.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xba
-	}
-	return len(dAtA) - i, nil
-}
-func (m *CreateSpecType_RequestLoggingProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CreateSpecType_RequestLoggingProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.RequestLoggingProfileNone != nil {
-		{
-			size, err := m.RequestLoggingProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xe2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *CreateSpecType_RequestLoggingProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CreateSpecType_RequestLoggingProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.RequestLoggingProfile != nil {
-		{
-			size, err := m.RequestLoggingProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xea
 	}
 	return len(dAtA) - i, nil
 }
@@ -12129,108 +7348,11 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xf0
 	}
-	if m.RequestLoggingProfileChoice != nil {
-		{
-			size := m.RequestLoggingProfileChoice.Size()
-			i -= size
-			if _, err := m.RequestLoggingProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Nat64 != nil {
-		{
-			size, err := m.Nat64.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xc2
-	}
-	if m.LastHopPoolChoice != nil {
-		{
-			size := m.LastHopPoolChoice.Size()
-			i -= size
-			if _, err := m.LastHopPoolChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Json != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Json))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x98
-	}
-	if m.Sse != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Sse))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x90
-	}
-	if m.AutoLastHop != nil {
-		{
-			size, err := m.AutoLastHop.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x8a
-	}
-	if m.ClonePoolOptions != nil {
-		{
-			size, err := m.ClonePoolOptions.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xca
-	}
-	if m.Translations != nil {
-		{
-			size, err := m.Translations.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0x92
-	}
 	if m.VirtualServerType != nil {
 		{
 			size := m.VirtualServerType.Size()
 			i -= size
 			if _, err := m.VirtualServerType.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.StatisticsProfileChoice != nil {
-		{
-			size := m.StatisticsProfileChoice.Size()
-			i -= size
-			if _, err := m.StatisticsProfileChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -12249,24 +7371,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x1
 			i--
 			dAtA[i] = 0xaa
-		}
-	}
-	if m.FallbackPersistenceProfileChoice != nil {
-		{
-			size := m.FallbackPersistenceProfileChoice.Size()
-			i -= size
-			if _, err := m.FallbackPersistenceProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.DefaultPersistenceProfileChoice != nil {
-		{
-			size := m.DefaultPersistenceProfileChoice.Size()
-			i -= size
-			if _, err := m.DefaultPersistenceProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
 		}
 	}
 	if len(m.Irules) > 0 {
@@ -12318,18 +7422,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x2a
 		}
 	}
-	if m.State != nil {
-		{
-			size, err := m.State.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
 	return len(dAtA) - i, nil
 }
 
@@ -12354,144 +7446,6 @@ func (m *ReplaceSpecType_Https) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
-func (m *ReplaceSpecType_DefaultPersistenceProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ReplaceSpecType_DefaultPersistenceProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DefaultPersistenceProfileNone != nil {
-		{
-			size, err := m.DefaultPersistenceProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x82
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ReplaceSpecType_DefaultPersistenceProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ReplaceSpecType_DefaultPersistenceProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DefaultPersistenceProfile != nil {
-		{
-			size, err := m.DefaultPersistenceProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x8a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ReplaceSpecType_FallbackPersistenceProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ReplaceSpecType_FallbackPersistenceProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.FallbackPersistenceProfileNone != nil {
-		{
-			size, err := m.FallbackPersistenceProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x9a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ReplaceSpecType_FallbackPersistenceProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ReplaceSpecType_FallbackPersistenceProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.FallbackPersistenceProfile != nil {
-		{
-			size, err := m.FallbackPersistenceProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xa2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ReplaceSpecType_StatisticsProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ReplaceSpecType_StatisticsProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.StatisticsProfileNone != nil {
-		{
-			size, err := m.StatisticsProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xba
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ReplaceSpecType_StatisticsProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ReplaceSpecType_StatisticsProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.StatisticsProfile != nil {
-		{
-			size, err := m.StatisticsProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xc2
-	}
-	return len(dAtA) - i, nil
-}
 func (m *ReplaceSpecType_Http3) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -12512,98 +7466,6 @@ func (m *ReplaceSpecType_Http3) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0xca
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ReplaceSpecType_LastHopPoolNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ReplaceSpecType_LastHopPoolNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.LastHopPoolNone != nil {
-		{
-			size, err := m.LastHopPoolNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xb2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ReplaceSpecType_LastHopPool) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ReplaceSpecType_LastHopPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.LastHopPool != nil {
-		{
-			size, err := m.LastHopPool.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xba
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ReplaceSpecType_RequestLoggingProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ReplaceSpecType_RequestLoggingProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.RequestLoggingProfileNone != nil {
-		{
-			size, err := m.RequestLoggingProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xe2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ReplaceSpecType_RequestLoggingProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ReplaceSpecType_RequestLoggingProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.RequestLoggingProfile != nil {
-		{
-			size, err := m.RequestLoggingProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xea
 	}
 	return len(dAtA) - i, nil
 }
@@ -12717,108 +7579,11 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xf0
 	}
-	if m.RequestLoggingProfileChoice != nil {
-		{
-			size := m.RequestLoggingProfileChoice.Size()
-			i -= size
-			if _, err := m.RequestLoggingProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Nat64 != nil {
-		{
-			size, err := m.Nat64.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xc2
-	}
-	if m.LastHopPoolChoice != nil {
-		{
-			size := m.LastHopPoolChoice.Size()
-			i -= size
-			if _, err := m.LastHopPoolChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Json != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Json))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x98
-	}
-	if m.Sse != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Sse))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x90
-	}
-	if m.AutoLastHop != nil {
-		{
-			size, err := m.AutoLastHop.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x8a
-	}
-	if m.ClonePoolOptions != nil {
-		{
-			size, err := m.ClonePoolOptions.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xca
-	}
-	if m.Translations != nil {
-		{
-			size, err := m.Translations.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0x92
-	}
 	if m.VirtualServerType != nil {
 		{
 			size := m.VirtualServerType.Size()
 			i -= size
 			if _, err := m.VirtualServerType.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.StatisticsProfileChoice != nil {
-		{
-			size := m.StatisticsProfileChoice.Size()
-			i -= size
-			if _, err := m.StatisticsProfileChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -12837,24 +7602,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x1
 			i--
 			dAtA[i] = 0xaa
-		}
-	}
-	if m.FallbackPersistenceProfileChoice != nil {
-		{
-			size := m.FallbackPersistenceProfileChoice.Size()
-			i -= size
-			if _, err := m.FallbackPersistenceProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.DefaultPersistenceProfileChoice != nil {
-		{
-			size := m.DefaultPersistenceProfileChoice.Size()
-			i -= size
-			if _, err := m.DefaultPersistenceProfileChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
 		}
 	}
 	if len(m.Irules) > 0 {
@@ -12942,144 +7689,6 @@ func (m *GetSpecType_Https) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
-func (m *GetSpecType_DefaultPersistenceProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetSpecType_DefaultPersistenceProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DefaultPersistenceProfileNone != nil {
-		{
-			size, err := m.DefaultPersistenceProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x82
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GetSpecType_DefaultPersistenceProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetSpecType_DefaultPersistenceProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DefaultPersistenceProfile != nil {
-		{
-			size, err := m.DefaultPersistenceProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x8a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GetSpecType_FallbackPersistenceProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetSpecType_FallbackPersistenceProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.FallbackPersistenceProfileNone != nil {
-		{
-			size, err := m.FallbackPersistenceProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x9a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GetSpecType_FallbackPersistenceProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetSpecType_FallbackPersistenceProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.FallbackPersistenceProfile != nil {
-		{
-			size, err := m.FallbackPersistenceProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xa2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GetSpecType_StatisticsProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetSpecType_StatisticsProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.StatisticsProfileNone != nil {
-		{
-			size, err := m.StatisticsProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xba
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GetSpecType_StatisticsProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetSpecType_StatisticsProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.StatisticsProfile != nil {
-		{
-			size, err := m.StatisticsProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xc2
-	}
-	return len(dAtA) - i, nil
-}
 func (m *GetSpecType_Http3) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -13100,98 +7709,6 @@ func (m *GetSpecType_Http3) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0xca
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GetSpecType_LastHopPoolNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetSpecType_LastHopPoolNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.LastHopPoolNone != nil {
-		{
-			size, err := m.LastHopPoolNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xb2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GetSpecType_LastHopPool) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetSpecType_LastHopPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.LastHopPool != nil {
-		{
-			size, err := m.LastHopPool.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xba
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GetSpecType_RequestLoggingProfileNone) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetSpecType_RequestLoggingProfileNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.RequestLoggingProfileNone != nil {
-		{
-			size, err := m.RequestLoggingProfileNone.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xe2
-	}
-	return len(dAtA) - i, nil
-}
-func (m *GetSpecType_RequestLoggingProfile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetSpecType_RequestLoggingProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.RequestLoggingProfile != nil {
-		{
-			size, err := m.RequestLoggingProfile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0xea
 	}
 	return len(dAtA) - i, nil
 }
@@ -13258,10 +7775,6 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.State != nil {
-		l = m.State.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if m.DomainChoice != nil {
 		n += m.DomainChoice.Size()
 	}
@@ -13290,48 +7803,11 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.DefaultPersistenceProfileChoice != nil {
-		n += m.DefaultPersistenceProfileChoice.Size()
-	}
-	if m.FallbackPersistenceProfileChoice != nil {
-		n += m.FallbackPersistenceProfileChoice.Size()
-	}
 	if len(m.TrafficPolicies) > 0 {
 		for _, e := range m.TrafficPolicies {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
-	}
-	if m.StatisticsProfileChoice != nil {
-		n += m.StatisticsProfileChoice.Size()
-	}
-	if m.Translations != nil {
-		l = m.Translations.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.ClonePoolOptions != nil {
-		l = m.ClonePoolOptions.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.AutoLastHop != nil {
-		l = m.AutoLastHop.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.Sse != 0 {
-		n += 2 + sovTypes(uint64(m.Sse))
-	}
-	if m.Json != 0 {
-		n += 2 + sovTypes(uint64(m.Json))
-	}
-	if m.LastHopPoolChoice != nil {
-		n += m.LastHopPoolChoice.Size()
-	}
-	if m.Nat64 != nil {
-		l = m.Nat64.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.RequestLoggingProfileChoice != nil {
-		n += m.RequestLoggingProfileChoice.Size()
 	}
 	if m.VsScore != 0 {
 		n += 2 + sovTypes(uint64(m.VsScore))
@@ -13390,78 +7866,6 @@ func (m *GlobalSpecType_Https) Size() (n int) {
 	}
 	return n
 }
-func (m *GlobalSpecType_DefaultPersistenceProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DefaultPersistenceProfileNone != nil {
-		l = m.DefaultPersistenceProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_DefaultPersistenceProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DefaultPersistenceProfile != nil {
-		l = m.DefaultPersistenceProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_FallbackPersistenceProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.FallbackPersistenceProfileNone != nil {
-		l = m.FallbackPersistenceProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_FallbackPersistenceProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.FallbackPersistenceProfile != nil {
-		l = m.FallbackPersistenceProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_StatisticsProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.StatisticsProfileNone != nil {
-		l = m.StatisticsProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_StatisticsProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.StatisticsProfile != nil {
-		l = m.StatisticsProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *GlobalSpecType_Http3) Size() (n int) {
 	if m == nil {
 		return 0
@@ -13470,54 +7874,6 @@ func (m *GlobalSpecType_Http3) Size() (n int) {
 	_ = l
 	if m.Http3 != nil {
 		l = m.Http3.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_LastHopPoolNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.LastHopPoolNone != nil {
-		l = m.LastHopPoolNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_LastHopPool) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.LastHopPool != nil {
-		l = m.LastHopPool.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_RequestLoggingProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.RequestLoggingProfileNone != nil {
-		l = m.RequestLoggingProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_RequestLoggingProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.RequestLoggingProfile != nil {
-		l = m.RequestLoggingProfile.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -13717,30 +8073,15 @@ func (m *HTTPServices) Size() (n int) {
 		l = m.ProtocolClientProfile.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.WebsocketClientProfileChoice != nil {
-		n += m.WebsocketClientProfileChoice.Size()
-	}
 	if len(m.SslClientProfiles) > 0 {
 		for _, e := range m.SslClientProfiles {
 			l = e.Size()
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.StreamProfileChoice != nil {
-		n += m.StreamProfileChoice.Size()
-	}
-	if m.Http2ClientProfileChoice != nil {
-		n += m.Http2ClientProfileChoice.Size()
-	}
 	if m.HttpClientProfile != nil {
 		l = m.HttpClientProfile.Size()
 		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.FixProfileChoice != nil {
-		n += m.FixProfileChoice.Size()
-	}
-	if m.OcspProfileChoice != nil {
-		n += m.OcspProfileChoice.Size()
 	}
 	if m.ServerAppTypeChoice != nil {
 		n += m.ServerAppTypeChoice.Size()
@@ -13748,126 +8089,6 @@ func (m *HTTPServices) Size() (n int) {
 	return n
 }
 
-func (m *HTTPServices_WebsocketClientProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.WebsocketClientProfileNone != nil {
-		l = m.WebsocketClientProfileNone.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPServices_WebsocketClientProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.WebsocketClientProfile != nil {
-		l = m.WebsocketClientProfile.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPServices_StreamProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.StreamProfileNone != nil {
-		l = m.StreamProfileNone.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPServices_StreamProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.StreamProfile != nil {
-		l = m.StreamProfile.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPServices_Http2ClientProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Http2ClientProfileNone != nil {
-		l = m.Http2ClientProfileNone.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPServices_Http2ClientProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Http2ClientProfile != nil {
-		l = m.Http2ClientProfile.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPServices_FixProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.FixProfileNone != nil {
-		l = m.FixProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPServices_FixProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.FixProfile != nil {
-		l = m.FixProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPServices_OcspProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.OcspProfileNone != nil {
-		l = m.OcspProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPServices_OcspProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.OcspProfile != nil {
-		l = m.OcspProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *HTTPServices_ServerAppTypeSameAsClient) Size() (n int) {
 	if m == nil {
 		return 0
@@ -13976,12 +8197,6 @@ func (m *HTTPDefaultServerSelection) Size() (n int) {
 	if m.HttpServerProfileChoice != nil {
 		n += m.HttpServerProfileChoice.Size()
 	}
-	if m.WebsocketServerProfileChoice != nil {
-		n += m.WebsocketServerProfileChoice.Size()
-	}
-	if m.Http2ServerProfileChoice != nil {
-		n += m.Http2ServerProfileChoice.Size()
-	}
 	if len(m.SslServerProfiles) > 0 {
 		for _, e := range m.SslServerProfiles {
 			l = e.Size()
@@ -14036,66 +8251,6 @@ func (m *HTTPDefaultServerSelection_HttpServerProfile) Size() (n int) {
 	if m.HttpServerProfile != nil {
 		l = m.HttpServerProfile.Size()
 		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.WebsocketServerProfileSameAsClient != nil {
-		l = m.WebsocketServerProfileSameAsClient.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPDefaultServerSelection_WebsocketServerProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.WebsocketServerProfile != nil {
-		l = m.WebsocketServerProfile.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPDefaultServerSelection_Http2ServerProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Http2ServerProfileNone != nil {
-		l = m.Http2ServerProfileNone.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPDefaultServerSelection_Http2ServerProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Http2ServerProfile != nil {
-		l = m.Http2ServerProfile.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *HTTPDefaultServerSelection_Http2ServerProfileSameAsClient) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Http2ServerProfileSameAsClient != nil {
-		l = m.Http2ServerProfileSameAsClient.Size()
-		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -14347,10 +8502,6 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.State != nil {
-		l = m.State.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if len(m.Domains) > 0 {
 		for _, s := range m.Domains {
 			l = len(s)
@@ -14376,48 +8527,11 @@ func (m *CreateSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.DefaultPersistenceProfileChoice != nil {
-		n += m.DefaultPersistenceProfileChoice.Size()
-	}
-	if m.FallbackPersistenceProfileChoice != nil {
-		n += m.FallbackPersistenceProfileChoice.Size()
-	}
 	if len(m.TrafficPolicies) > 0 {
 		for _, e := range m.TrafficPolicies {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
-	}
-	if m.StatisticsProfileChoice != nil {
-		n += m.StatisticsProfileChoice.Size()
-	}
-	if m.Translations != nil {
-		l = m.Translations.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.ClonePoolOptions != nil {
-		l = m.ClonePoolOptions.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.AutoLastHop != nil {
-		l = m.AutoLastHop.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.Sse != 0 {
-		n += 2 + sovTypes(uint64(m.Sse))
-	}
-	if m.Json != 0 {
-		n += 2 + sovTypes(uint64(m.Json))
-	}
-	if m.LastHopPoolChoice != nil {
-		n += m.LastHopPoolChoice.Size()
-	}
-	if m.Nat64 != nil {
-		l = m.Nat64.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.RequestLoggingProfileChoice != nil {
-		n += m.RequestLoggingProfileChoice.Size()
 	}
 	if m.VsScore != 0 {
 		n += 2 + sovTypes(uint64(m.VsScore))
@@ -14448,78 +8562,6 @@ func (m *CreateSpecType_Https) Size() (n int) {
 	}
 	return n
 }
-func (m *CreateSpecType_DefaultPersistenceProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DefaultPersistenceProfileNone != nil {
-		l = m.DefaultPersistenceProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_DefaultPersistenceProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DefaultPersistenceProfile != nil {
-		l = m.DefaultPersistenceProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_FallbackPersistenceProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.FallbackPersistenceProfileNone != nil {
-		l = m.FallbackPersistenceProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_FallbackPersistenceProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.FallbackPersistenceProfile != nil {
-		l = m.FallbackPersistenceProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_StatisticsProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.StatisticsProfileNone != nil {
-		l = m.StatisticsProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_StatisticsProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.StatisticsProfile != nil {
-		l = m.StatisticsProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *CreateSpecType_Http3) Size() (n int) {
 	if m == nil {
 		return 0
@@ -14528,54 +8570,6 @@ func (m *CreateSpecType_Http3) Size() (n int) {
 	_ = l
 	if m.Http3 != nil {
 		l = m.Http3.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_LastHopPoolNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.LastHopPoolNone != nil {
-		l = m.LastHopPoolNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_LastHopPool) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.LastHopPool != nil {
-		l = m.LastHopPool.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_RequestLoggingProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.RequestLoggingProfileNone != nil {
-		l = m.RequestLoggingProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_RequestLoggingProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.RequestLoggingProfile != nil {
-		l = m.RequestLoggingProfile.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -14610,10 +8604,6 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.State != nil {
-		l = m.State.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if len(m.Domains) > 0 {
 		for _, s := range m.Domains {
 			l = len(s)
@@ -14639,48 +8629,11 @@ func (m *ReplaceSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.DefaultPersistenceProfileChoice != nil {
-		n += m.DefaultPersistenceProfileChoice.Size()
-	}
-	if m.FallbackPersistenceProfileChoice != nil {
-		n += m.FallbackPersistenceProfileChoice.Size()
-	}
 	if len(m.TrafficPolicies) > 0 {
 		for _, e := range m.TrafficPolicies {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
-	}
-	if m.StatisticsProfileChoice != nil {
-		n += m.StatisticsProfileChoice.Size()
-	}
-	if m.Translations != nil {
-		l = m.Translations.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.ClonePoolOptions != nil {
-		l = m.ClonePoolOptions.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.AutoLastHop != nil {
-		l = m.AutoLastHop.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.Sse != 0 {
-		n += 2 + sovTypes(uint64(m.Sse))
-	}
-	if m.Json != 0 {
-		n += 2 + sovTypes(uint64(m.Json))
-	}
-	if m.LastHopPoolChoice != nil {
-		n += m.LastHopPoolChoice.Size()
-	}
-	if m.Nat64 != nil {
-		l = m.Nat64.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.RequestLoggingProfileChoice != nil {
-		n += m.RequestLoggingProfileChoice.Size()
 	}
 	if m.VsScore != 0 {
 		n += 2 + sovTypes(uint64(m.VsScore))
@@ -14711,78 +8664,6 @@ func (m *ReplaceSpecType_Https) Size() (n int) {
 	}
 	return n
 }
-func (m *ReplaceSpecType_DefaultPersistenceProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DefaultPersistenceProfileNone != nil {
-		l = m.DefaultPersistenceProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_DefaultPersistenceProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DefaultPersistenceProfile != nil {
-		l = m.DefaultPersistenceProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_FallbackPersistenceProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.FallbackPersistenceProfileNone != nil {
-		l = m.FallbackPersistenceProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_FallbackPersistenceProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.FallbackPersistenceProfile != nil {
-		l = m.FallbackPersistenceProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_StatisticsProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.StatisticsProfileNone != nil {
-		l = m.StatisticsProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_StatisticsProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.StatisticsProfile != nil {
-		l = m.StatisticsProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *ReplaceSpecType_Http3) Size() (n int) {
 	if m == nil {
 		return 0
@@ -14791,54 +8672,6 @@ func (m *ReplaceSpecType_Http3) Size() (n int) {
 	_ = l
 	if m.Http3 != nil {
 		l = m.Http3.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_LastHopPoolNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.LastHopPoolNone != nil {
-		l = m.LastHopPoolNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_LastHopPool) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.LastHopPool != nil {
-		l = m.LastHopPool.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_RequestLoggingProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.RequestLoggingProfileNone != nil {
-		l = m.RequestLoggingProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_RequestLoggingProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.RequestLoggingProfile != nil {
-		l = m.RequestLoggingProfile.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -14902,48 +8735,11 @@ func (m *GetSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.DefaultPersistenceProfileChoice != nil {
-		n += m.DefaultPersistenceProfileChoice.Size()
-	}
-	if m.FallbackPersistenceProfileChoice != nil {
-		n += m.FallbackPersistenceProfileChoice.Size()
-	}
 	if len(m.TrafficPolicies) > 0 {
 		for _, e := range m.TrafficPolicies {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
-	}
-	if m.StatisticsProfileChoice != nil {
-		n += m.StatisticsProfileChoice.Size()
-	}
-	if m.Translations != nil {
-		l = m.Translations.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.ClonePoolOptions != nil {
-		l = m.ClonePoolOptions.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.AutoLastHop != nil {
-		l = m.AutoLastHop.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.Sse != 0 {
-		n += 2 + sovTypes(uint64(m.Sse))
-	}
-	if m.Json != 0 {
-		n += 2 + sovTypes(uint64(m.Json))
-	}
-	if m.LastHopPoolChoice != nil {
-		n += m.LastHopPoolChoice.Size()
-	}
-	if m.Nat64 != nil {
-		l = m.Nat64.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.RequestLoggingProfileChoice != nil {
-		n += m.RequestLoggingProfileChoice.Size()
 	}
 	if m.VsScore != 0 {
 		n += 2 + sovTypes(uint64(m.VsScore))
@@ -14974,78 +8770,6 @@ func (m *GetSpecType_Https) Size() (n int) {
 	}
 	return n
 }
-func (m *GetSpecType_DefaultPersistenceProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DefaultPersistenceProfileNone != nil {
-		l = m.DefaultPersistenceProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_DefaultPersistenceProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DefaultPersistenceProfile != nil {
-		l = m.DefaultPersistenceProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_FallbackPersistenceProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.FallbackPersistenceProfileNone != nil {
-		l = m.FallbackPersistenceProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_FallbackPersistenceProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.FallbackPersistenceProfile != nil {
-		l = m.FallbackPersistenceProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_StatisticsProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.StatisticsProfileNone != nil {
-		l = m.StatisticsProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_StatisticsProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.StatisticsProfile != nil {
-		l = m.StatisticsProfile.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *GetSpecType_Http3) Size() (n int) {
 	if m == nil {
 		return 0
@@ -15054,54 +8778,6 @@ func (m *GetSpecType_Http3) Size() (n int) {
 	_ = l
 	if m.Http3 != nil {
 		l = m.Http3.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_LastHopPoolNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.LastHopPoolNone != nil {
-		l = m.LastHopPoolNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_LastHopPool) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.LastHopPool != nil {
-		l = m.LastHopPool.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_RequestLoggingProfileNone) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.RequestLoggingProfileNone != nil {
-		l = m.RequestLoggingProfileNone.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_RequestLoggingProfile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.RequestLoggingProfile != nil {
-		l = m.RequestLoggingProfile.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -15157,25 +8833,13 @@ func (this *GlobalSpecType) String() string {
 	}
 	repeatedStringForTrafficPolicies += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`State:` + strings.Replace(fmt.Sprintf("%v", this.State), "TMMStateType", "schema.TMMStateType", 1) + `,`,
 		`DomainChoice:` + fmt.Sprintf("%v", this.DomainChoice) + `,`,
 		`Domains:` + fmt.Sprintf("%v", this.Domains) + `,`,
 		`VirtualServerType:` + fmt.Sprintf("%v", this.VirtualServerType) + `,`,
 		`ConnectionLimitOptions:` + strings.Replace(this.ConnectionLimitOptions.String(), "ConnectionLimitsType", "ConnectionLimitsType", 1) + `,`,
 		`VirtualAddresses:` + repeatedStringForVirtualAddresses + `,`,
 		`Irules:` + repeatedStringForIrules + `,`,
-		`DefaultPersistenceProfileChoice:` + fmt.Sprintf("%v", this.DefaultPersistenceProfileChoice) + `,`,
-		`FallbackPersistenceProfileChoice:` + fmt.Sprintf("%v", this.FallbackPersistenceProfileChoice) + `,`,
 		`TrafficPolicies:` + repeatedStringForTrafficPolicies + `,`,
-		`StatisticsProfileChoice:` + fmt.Sprintf("%v", this.StatisticsProfileChoice) + `,`,
-		`Translations:` + strings.Replace(this.Translations.String(), "TranslationType", "TranslationType", 1) + `,`,
-		`ClonePoolOptions:` + strings.Replace(this.ClonePoolOptions.String(), "ClonePoolType", "ClonePoolType", 1) + `,`,
-		`AutoLastHop:` + strings.Replace(fmt.Sprintf("%v", this.AutoLastHop), "TMMVirtualServerAutoLastHopType", "schema.TMMVirtualServerAutoLastHopType", 1) + `,`,
-		`Sse:` + fmt.Sprintf("%v", this.Sse) + `,`,
-		`Json:` + fmt.Sprintf("%v", this.Json) + `,`,
-		`LastHopPoolChoice:` + fmt.Sprintf("%v", this.LastHopPoolChoice) + `,`,
-		`Nat64:` + strings.Replace(fmt.Sprintf("%v", this.Nat64), "TMMVirtualServerNAT64Type", "schema.TMMVirtualServerNAT64Type", 1) + `,`,
-		`RequestLoggingProfileChoice:` + fmt.Sprintf("%v", this.RequestLoggingProfileChoice) + `,`,
 		`VsScore:` + fmt.Sprintf("%v", this.VsScore) + `,`,
 		`ImmediateActionOnServiceDown:` + strings.Replace(fmt.Sprintf("%v", this.ImmediateActionOnServiceDown), "TMMImmediateActionOnServiceDownType", "schema.TMMImmediateActionOnServiceDownType", 1) + `,`,
 		`DefaultPoolChoice:` + fmt.Sprintf("%v", this.DefaultPoolChoice) + `,`,
@@ -15215,112 +8879,12 @@ func (this *GlobalSpecType_Https) String() string {
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_DefaultPersistenceProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_DefaultPersistenceProfileNone{`,
-		`DefaultPersistenceProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.DefaultPersistenceProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_DefaultPersistenceProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_DefaultPersistenceProfile{`,
-		`DefaultPersistenceProfile:` + strings.Replace(fmt.Sprintf("%v", this.DefaultPersistenceProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_FallbackPersistenceProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_FallbackPersistenceProfileNone{`,
-		`FallbackPersistenceProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.FallbackPersistenceProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_FallbackPersistenceProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_FallbackPersistenceProfile{`,
-		`FallbackPersistenceProfile:` + strings.Replace(fmt.Sprintf("%v", this.FallbackPersistenceProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_StatisticsProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_StatisticsProfileNone{`,
-		`StatisticsProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.StatisticsProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_StatisticsProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_StatisticsProfile{`,
-		`StatisticsProfile:` + strings.Replace(fmt.Sprintf("%v", this.StatisticsProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *GlobalSpecType_Http3) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_Http3{`,
 		`Http3:` + strings.Replace(fmt.Sprintf("%v", this.Http3), "HTTP3Services", "HTTP3Services", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_LastHopPoolNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_LastHopPoolNone{`,
-		`LastHopPoolNone:` + strings.Replace(fmt.Sprintf("%v", this.LastHopPoolNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_LastHopPool) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_LastHopPool{`,
-		`LastHopPool:` + strings.Replace(fmt.Sprintf("%v", this.LastHopPool), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_RequestLoggingProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_RequestLoggingProfileNone{`,
-		`RequestLoggingProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.RequestLoggingProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_RequestLoggingProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_RequestLoggingProfile{`,
-		`RequestLoggingProfile:` + strings.Replace(fmt.Sprintf("%v", this.RequestLoggingProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15484,114 +9048,9 @@ func (this *HTTPServices) String() string {
 	s := strings.Join([]string{`&HTTPServices{`,
 		`Services:` + repeatedStringForServices + `,`,
 		`ProtocolClientProfile:` + strings.Replace(fmt.Sprintf("%v", this.ProtocolClientProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`WebsocketClientProfileChoice:` + fmt.Sprintf("%v", this.WebsocketClientProfileChoice) + `,`,
 		`SslClientProfiles:` + repeatedStringForSslClientProfiles + `,`,
-		`StreamProfileChoice:` + fmt.Sprintf("%v", this.StreamProfileChoice) + `,`,
-		`Http2ClientProfileChoice:` + fmt.Sprintf("%v", this.Http2ClientProfileChoice) + `,`,
 		`HttpClientProfile:` + strings.Replace(fmt.Sprintf("%v", this.HttpClientProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`FixProfileChoice:` + fmt.Sprintf("%v", this.FixProfileChoice) + `,`,
-		`OcspProfileChoice:` + fmt.Sprintf("%v", this.OcspProfileChoice) + `,`,
 		`ServerAppTypeChoice:` + fmt.Sprintf("%v", this.ServerAppTypeChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPServices_WebsocketClientProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPServices_WebsocketClientProfileNone{`,
-		`WebsocketClientProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.WebsocketClientProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPServices_WebsocketClientProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPServices_WebsocketClientProfile{`,
-		`WebsocketClientProfile:` + strings.Replace(fmt.Sprintf("%v", this.WebsocketClientProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPServices_StreamProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPServices_StreamProfileNone{`,
-		`StreamProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.StreamProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPServices_StreamProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPServices_StreamProfile{`,
-		`StreamProfile:` + strings.Replace(fmt.Sprintf("%v", this.StreamProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPServices_Http2ClientProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPServices_Http2ClientProfileNone{`,
-		`Http2ClientProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.Http2ClientProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPServices_Http2ClientProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPServices_Http2ClientProfile{`,
-		`Http2ClientProfile:` + strings.Replace(fmt.Sprintf("%v", this.Http2ClientProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPServices_FixProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPServices_FixProfileNone{`,
-		`FixProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.FixProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPServices_FixProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPServices_FixProfile{`,
-		`FixProfile:` + strings.Replace(fmt.Sprintf("%v", this.FixProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPServices_OcspProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPServices_OcspProfileNone{`,
-		`OcspProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.OcspProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPServices_OcspProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPServices_OcspProfile{`,
-		`OcspProfile:` + strings.Replace(fmt.Sprintf("%v", this.OcspProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15690,8 +9149,6 @@ func (this *HTTPDefaultServerSelection) String() string {
 	s := strings.Join([]string{`&HTTPDefaultServerSelection{`,
 		`ProtocolServerProfileChoice:` + fmt.Sprintf("%v", this.ProtocolServerProfileChoice) + `,`,
 		`HttpServerProfileChoice:` + fmt.Sprintf("%v", this.HttpServerProfileChoice) + `,`,
-		`WebsocketServerProfileChoice:` + fmt.Sprintf("%v", this.WebsocketServerProfileChoice) + `,`,
-		`Http2ServerProfileChoice:` + fmt.Sprintf("%v", this.Http2ServerProfileChoice) + `,`,
 		`SslServerProfiles:` + repeatedStringForSslServerProfiles + `,`,
 		`}`,
 	}, "")
@@ -15733,56 +9190,6 @@ func (this *HTTPDefaultServerSelection_HttpServerProfile) String() string {
 	}
 	s := strings.Join([]string{`&HTTPDefaultServerSelection_HttpServerProfile{`,
 		`HttpServerProfile:` + strings.Replace(fmt.Sprintf("%v", this.HttpServerProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient{`,
-		`WebsocketServerProfileSameAsClient:` + strings.Replace(fmt.Sprintf("%v", this.WebsocketServerProfileSameAsClient), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPDefaultServerSelection_WebsocketServerProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPDefaultServerSelection_WebsocketServerProfile{`,
-		`WebsocketServerProfile:` + strings.Replace(fmt.Sprintf("%v", this.WebsocketServerProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPDefaultServerSelection_Http2ServerProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPDefaultServerSelection_Http2ServerProfileNone{`,
-		`Http2ServerProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.Http2ServerProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPDefaultServerSelection_Http2ServerProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPDefaultServerSelection_Http2ServerProfile{`,
-		`Http2ServerProfile:` + strings.Replace(fmt.Sprintf("%v", this.Http2ServerProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *HTTPDefaultServerSelection_Http2ServerProfileSameAsClient) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HTTPDefaultServerSelection_Http2ServerProfileSameAsClient{`,
-		`Http2ServerProfileSameAsClient:` + strings.Replace(fmt.Sprintf("%v", this.Http2ServerProfileSameAsClient), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -16000,24 +9407,12 @@ func (this *CreateSpecType) String() string {
 	}
 	repeatedStringForTrafficPolicies += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
-		`State:` + strings.Replace(fmt.Sprintf("%v", this.State), "TMMStateType", "schema.TMMStateType", 1) + `,`,
 		`Domains:` + fmt.Sprintf("%v", this.Domains) + `,`,
 		`VirtualServerType:` + fmt.Sprintf("%v", this.VirtualServerType) + `,`,
 		`ConnectionLimitOptions:` + strings.Replace(this.ConnectionLimitOptions.String(), "ConnectionLimitsType", "ConnectionLimitsType", 1) + `,`,
 		`VirtualAddresses:` + repeatedStringForVirtualAddresses + `,`,
 		`Irules:` + repeatedStringForIrules + `,`,
-		`DefaultPersistenceProfileChoice:` + fmt.Sprintf("%v", this.DefaultPersistenceProfileChoice) + `,`,
-		`FallbackPersistenceProfileChoice:` + fmt.Sprintf("%v", this.FallbackPersistenceProfileChoice) + `,`,
 		`TrafficPolicies:` + repeatedStringForTrafficPolicies + `,`,
-		`StatisticsProfileChoice:` + fmt.Sprintf("%v", this.StatisticsProfileChoice) + `,`,
-		`Translations:` + strings.Replace(this.Translations.String(), "TranslationType", "TranslationType", 1) + `,`,
-		`ClonePoolOptions:` + strings.Replace(this.ClonePoolOptions.String(), "ClonePoolType", "ClonePoolType", 1) + `,`,
-		`AutoLastHop:` + strings.Replace(fmt.Sprintf("%v", this.AutoLastHop), "TMMVirtualServerAutoLastHopType", "schema.TMMVirtualServerAutoLastHopType", 1) + `,`,
-		`Sse:` + fmt.Sprintf("%v", this.Sse) + `,`,
-		`Json:` + fmt.Sprintf("%v", this.Json) + `,`,
-		`LastHopPoolChoice:` + fmt.Sprintf("%v", this.LastHopPoolChoice) + `,`,
-		`Nat64:` + strings.Replace(fmt.Sprintf("%v", this.Nat64), "TMMVirtualServerNAT64Type", "schema.TMMVirtualServerNAT64Type", 1) + `,`,
-		`RequestLoggingProfileChoice:` + fmt.Sprintf("%v", this.RequestLoggingProfileChoice) + `,`,
 		`VsScore:` + fmt.Sprintf("%v", this.VsScore) + `,`,
 		`ImmediateActionOnServiceDown:` + strings.Replace(fmt.Sprintf("%v", this.ImmediateActionOnServiceDown), "TMMImmediateActionOnServiceDownType", "schema.TMMImmediateActionOnServiceDownType", 1) + `,`,
 		`DefaultPoolChoice:` + fmt.Sprintf("%v", this.DefaultPoolChoice) + `,`,
@@ -16036,112 +9431,12 @@ func (this *CreateSpecType_Https) String() string {
 	}, "")
 	return s
 }
-func (this *CreateSpecType_DefaultPersistenceProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_DefaultPersistenceProfileNone{`,
-		`DefaultPersistenceProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.DefaultPersistenceProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_DefaultPersistenceProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_DefaultPersistenceProfile{`,
-		`DefaultPersistenceProfile:` + strings.Replace(fmt.Sprintf("%v", this.DefaultPersistenceProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_FallbackPersistenceProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_FallbackPersistenceProfileNone{`,
-		`FallbackPersistenceProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.FallbackPersistenceProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_FallbackPersistenceProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_FallbackPersistenceProfile{`,
-		`FallbackPersistenceProfile:` + strings.Replace(fmt.Sprintf("%v", this.FallbackPersistenceProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_StatisticsProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_StatisticsProfileNone{`,
-		`StatisticsProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.StatisticsProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_StatisticsProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_StatisticsProfile{`,
-		`StatisticsProfile:` + strings.Replace(fmt.Sprintf("%v", this.StatisticsProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *CreateSpecType_Http3) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_Http3{`,
 		`Http3:` + strings.Replace(fmt.Sprintf("%v", this.Http3), "HTTP3Services", "HTTP3Services", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_LastHopPoolNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_LastHopPoolNone{`,
-		`LastHopPoolNone:` + strings.Replace(fmt.Sprintf("%v", this.LastHopPoolNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_LastHopPool) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_LastHopPool{`,
-		`LastHopPool:` + strings.Replace(fmt.Sprintf("%v", this.LastHopPool), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_RequestLoggingProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_RequestLoggingProfileNone{`,
-		`RequestLoggingProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.RequestLoggingProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_RequestLoggingProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_RequestLoggingProfile{`,
-		`RequestLoggingProfile:` + strings.Replace(fmt.Sprintf("%v", this.RequestLoggingProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -16186,24 +9481,12 @@ func (this *ReplaceSpecType) String() string {
 	}
 	repeatedStringForTrafficPolicies += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
-		`State:` + strings.Replace(fmt.Sprintf("%v", this.State), "TMMStateType", "schema.TMMStateType", 1) + `,`,
 		`Domains:` + fmt.Sprintf("%v", this.Domains) + `,`,
 		`VirtualServerType:` + fmt.Sprintf("%v", this.VirtualServerType) + `,`,
 		`ConnectionLimitOptions:` + strings.Replace(this.ConnectionLimitOptions.String(), "ConnectionLimitsType", "ConnectionLimitsType", 1) + `,`,
 		`VirtualAddresses:` + repeatedStringForVirtualAddresses + `,`,
 		`Irules:` + repeatedStringForIrules + `,`,
-		`DefaultPersistenceProfileChoice:` + fmt.Sprintf("%v", this.DefaultPersistenceProfileChoice) + `,`,
-		`FallbackPersistenceProfileChoice:` + fmt.Sprintf("%v", this.FallbackPersistenceProfileChoice) + `,`,
 		`TrafficPolicies:` + repeatedStringForTrafficPolicies + `,`,
-		`StatisticsProfileChoice:` + fmt.Sprintf("%v", this.StatisticsProfileChoice) + `,`,
-		`Translations:` + strings.Replace(this.Translations.String(), "TranslationType", "TranslationType", 1) + `,`,
-		`ClonePoolOptions:` + strings.Replace(this.ClonePoolOptions.String(), "ClonePoolType", "ClonePoolType", 1) + `,`,
-		`AutoLastHop:` + strings.Replace(fmt.Sprintf("%v", this.AutoLastHop), "TMMVirtualServerAutoLastHopType", "schema.TMMVirtualServerAutoLastHopType", 1) + `,`,
-		`Sse:` + fmt.Sprintf("%v", this.Sse) + `,`,
-		`Json:` + fmt.Sprintf("%v", this.Json) + `,`,
-		`LastHopPoolChoice:` + fmt.Sprintf("%v", this.LastHopPoolChoice) + `,`,
-		`Nat64:` + strings.Replace(fmt.Sprintf("%v", this.Nat64), "TMMVirtualServerNAT64Type", "schema.TMMVirtualServerNAT64Type", 1) + `,`,
-		`RequestLoggingProfileChoice:` + fmt.Sprintf("%v", this.RequestLoggingProfileChoice) + `,`,
 		`VsScore:` + fmt.Sprintf("%v", this.VsScore) + `,`,
 		`ImmediateActionOnServiceDown:` + strings.Replace(fmt.Sprintf("%v", this.ImmediateActionOnServiceDown), "TMMImmediateActionOnServiceDownType", "schema.TMMImmediateActionOnServiceDownType", 1) + `,`,
 		`DefaultPoolChoice:` + fmt.Sprintf("%v", this.DefaultPoolChoice) + `,`,
@@ -16222,112 +9505,12 @@ func (this *ReplaceSpecType_Https) String() string {
 	}, "")
 	return s
 }
-func (this *ReplaceSpecType_DefaultPersistenceProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_DefaultPersistenceProfileNone{`,
-		`DefaultPersistenceProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.DefaultPersistenceProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_DefaultPersistenceProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_DefaultPersistenceProfile{`,
-		`DefaultPersistenceProfile:` + strings.Replace(fmt.Sprintf("%v", this.DefaultPersistenceProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_FallbackPersistenceProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_FallbackPersistenceProfileNone{`,
-		`FallbackPersistenceProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.FallbackPersistenceProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_FallbackPersistenceProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_FallbackPersistenceProfile{`,
-		`FallbackPersistenceProfile:` + strings.Replace(fmt.Sprintf("%v", this.FallbackPersistenceProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_StatisticsProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_StatisticsProfileNone{`,
-		`StatisticsProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.StatisticsProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_StatisticsProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_StatisticsProfile{`,
-		`StatisticsProfile:` + strings.Replace(fmt.Sprintf("%v", this.StatisticsProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *ReplaceSpecType_Http3) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_Http3{`,
 		`Http3:` + strings.Replace(fmt.Sprintf("%v", this.Http3), "HTTP3Services", "HTTP3Services", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_LastHopPoolNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_LastHopPoolNone{`,
-		`LastHopPoolNone:` + strings.Replace(fmt.Sprintf("%v", this.LastHopPoolNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_LastHopPool) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_LastHopPool{`,
-		`LastHopPool:` + strings.Replace(fmt.Sprintf("%v", this.LastHopPool), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_RequestLoggingProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_RequestLoggingProfileNone{`,
-		`RequestLoggingProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.RequestLoggingProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_RequestLoggingProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_RequestLoggingProfile{`,
-		`RequestLoggingProfile:` + strings.Replace(fmt.Sprintf("%v", this.RequestLoggingProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -16378,18 +9561,7 @@ func (this *GetSpecType) String() string {
 		`ConnectionLimitOptions:` + strings.Replace(this.ConnectionLimitOptions.String(), "ConnectionLimitsType", "ConnectionLimitsType", 1) + `,`,
 		`VirtualAddresses:` + repeatedStringForVirtualAddresses + `,`,
 		`Irules:` + repeatedStringForIrules + `,`,
-		`DefaultPersistenceProfileChoice:` + fmt.Sprintf("%v", this.DefaultPersistenceProfileChoice) + `,`,
-		`FallbackPersistenceProfileChoice:` + fmt.Sprintf("%v", this.FallbackPersistenceProfileChoice) + `,`,
 		`TrafficPolicies:` + repeatedStringForTrafficPolicies + `,`,
-		`StatisticsProfileChoice:` + fmt.Sprintf("%v", this.StatisticsProfileChoice) + `,`,
-		`Translations:` + strings.Replace(this.Translations.String(), "TranslationType", "TranslationType", 1) + `,`,
-		`ClonePoolOptions:` + strings.Replace(this.ClonePoolOptions.String(), "ClonePoolType", "ClonePoolType", 1) + `,`,
-		`AutoLastHop:` + strings.Replace(fmt.Sprintf("%v", this.AutoLastHop), "TMMVirtualServerAutoLastHopType", "schema.TMMVirtualServerAutoLastHopType", 1) + `,`,
-		`Sse:` + fmt.Sprintf("%v", this.Sse) + `,`,
-		`Json:` + fmt.Sprintf("%v", this.Json) + `,`,
-		`LastHopPoolChoice:` + fmt.Sprintf("%v", this.LastHopPoolChoice) + `,`,
-		`Nat64:` + strings.Replace(fmt.Sprintf("%v", this.Nat64), "TMMVirtualServerNAT64Type", "schema.TMMVirtualServerNAT64Type", 1) + `,`,
-		`RequestLoggingProfileChoice:` + fmt.Sprintf("%v", this.RequestLoggingProfileChoice) + `,`,
 		`VsScore:` + fmt.Sprintf("%v", this.VsScore) + `,`,
 		`ImmediateActionOnServiceDown:` + strings.Replace(fmt.Sprintf("%v", this.ImmediateActionOnServiceDown), "TMMImmediateActionOnServiceDownType", "schema.TMMImmediateActionOnServiceDownType", 1) + `,`,
 		`DefaultPoolChoice:` + fmt.Sprintf("%v", this.DefaultPoolChoice) + `,`,
@@ -16408,112 +9580,12 @@ func (this *GetSpecType_Https) String() string {
 	}, "")
 	return s
 }
-func (this *GetSpecType_DefaultPersistenceProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_DefaultPersistenceProfileNone{`,
-		`DefaultPersistenceProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.DefaultPersistenceProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_DefaultPersistenceProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_DefaultPersistenceProfile{`,
-		`DefaultPersistenceProfile:` + strings.Replace(fmt.Sprintf("%v", this.DefaultPersistenceProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_FallbackPersistenceProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_FallbackPersistenceProfileNone{`,
-		`FallbackPersistenceProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.FallbackPersistenceProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_FallbackPersistenceProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_FallbackPersistenceProfile{`,
-		`FallbackPersistenceProfile:` + strings.Replace(fmt.Sprintf("%v", this.FallbackPersistenceProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_StatisticsProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_StatisticsProfileNone{`,
-		`StatisticsProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.StatisticsProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_StatisticsProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_StatisticsProfile{`,
-		`StatisticsProfile:` + strings.Replace(fmt.Sprintf("%v", this.StatisticsProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *GetSpecType_Http3) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_Http3{`,
 		`Http3:` + strings.Replace(fmt.Sprintf("%v", this.Http3), "HTTP3Services", "HTTP3Services", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_LastHopPoolNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_LastHopPoolNone{`,
-		`LastHopPoolNone:` + strings.Replace(fmt.Sprintf("%v", this.LastHopPoolNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_LastHopPool) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_LastHopPool{`,
-		`LastHopPool:` + strings.Replace(fmt.Sprintf("%v", this.LastHopPool), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_RequestLoggingProfileNone) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_RequestLoggingProfileNone{`,
-		`RequestLoggingProfileNone:` + strings.Replace(fmt.Sprintf("%v", this.RequestLoggingProfileNone), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_RequestLoggingProfile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_RequestLoggingProfile{`,
-		`RequestLoggingProfile:` + strings.Replace(fmt.Sprintf("%v", this.RequestLoggingProfile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -16575,42 +9647,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: GlobalSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.State == nil {
-				m.State = &schema.TMMStateType{}
-			}
-			if err := m.State.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Managed", wireType)
@@ -16852,146 +9888,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 16:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultPersistenceProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DefaultPersistenceProfileChoice = &GlobalSpecType_DefaultPersistenceProfileNone{v}
-			iNdEx = postIndex
-		case 17:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultPersistenceProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DefaultPersistenceProfileChoice = &GlobalSpecType_DefaultPersistenceProfile{v}
-			iNdEx = postIndex
-		case 19:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FallbackPersistenceProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FallbackPersistenceProfileChoice = &GlobalSpecType_FallbackPersistenceProfileNone{v}
-			iNdEx = postIndex
-		case 20:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FallbackPersistenceProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FallbackPersistenceProfileChoice = &GlobalSpecType_FallbackPersistenceProfile{v}
-			iNdEx = postIndex
 		case 21:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TrafficPolicies", wireType)
@@ -17025,76 +9921,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.TrafficPolicies[len(m.TrafficPolicies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		case 23:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StatisticsProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.StatisticsProfileChoice = &GlobalSpecType_StatisticsProfileNone{v}
-			iNdEx = postIndex
-		case 24:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StatisticsProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.StatisticsProfileChoice = &GlobalSpecType_StatisticsProfile{v}
 			iNdEx = postIndex
 		case 25:
 			if wireType != 2 {
@@ -17130,328 +9956,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.VirtualServerType = &GlobalSpecType_Http3{v}
-			iNdEx = postIndex
-		case 34:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Translations", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Translations == nil {
-				m.Translations = &TranslationType{}
-			}
-			if err := m.Translations.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 41:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClonePoolOptions", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ClonePoolOptions == nil {
-				m.ClonePoolOptions = &ClonePoolType{}
-			}
-			if err := m.ClonePoolOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 49:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AutoLastHop", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AutoLastHop == nil {
-				m.AutoLastHop = &schema.TMMVirtualServerAutoLastHopType{}
-			}
-			if err := m.AutoLastHop.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 50:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sse", wireType)
-			}
-			m.Sse = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Sse |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 51:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Json", wireType)
-			}
-			m.Json = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Json |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 54:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastHopPoolNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.LastHopPoolChoice = &GlobalSpecType_LastHopPoolNone{v}
-			iNdEx = postIndex
-		case 55:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastHopPool", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.LastHopPoolChoice = &GlobalSpecType_LastHopPool{v}
-			iNdEx = postIndex
-		case 56:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Nat64", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Nat64 == nil {
-				m.Nat64 = &schema.TMMVirtualServerNAT64Type{}
-			}
-			if err := m.Nat64.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 60:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RequestLoggingProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RequestLoggingProfileChoice = &GlobalSpecType_RequestLoggingProfileNone{v}
-			iNdEx = postIndex
-		case 61:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RequestLoggingProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RequestLoggingProfileChoice = &GlobalSpecType_RequestLoggingProfile{v}
 			iNdEx = postIndex
 		case 62:
 			if wireType != 0 {
@@ -18491,76 +10995,6 @@ func (m *HTTPServices) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WebsocketClientProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.WebsocketClientProfileChoice = &HTTPServices_WebsocketClientProfileNone{v}
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WebsocketClientProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.WebsocketClientProfileChoice = &HTTPServices_WebsocketClientProfile{v}
-			iNdEx = postIndex
 		case 9:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SslClientProfiles", wireType)
@@ -18594,146 +11028,6 @@ func (m *HTTPServices) Unmarshal(dAtA []byte) error {
 			if err := m.SslClientProfiles[len(m.SslClientProfiles)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		case 11:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StreamProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.StreamProfileChoice = &HTTPServices_StreamProfileNone{v}
-			iNdEx = postIndex
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StreamProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.StreamProfileChoice = &HTTPServices_StreamProfile{v}
-			iNdEx = postIndex
-		case 14:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Http2ClientProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Http2ClientProfileChoice = &HTTPServices_Http2ClientProfileNone{v}
-			iNdEx = postIndex
-		case 15:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Http2ClientProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Http2ClientProfileChoice = &HTTPServices_Http2ClientProfile{v}
 			iNdEx = postIndex
 		case 16:
 			if wireType != 2 {
@@ -18770,146 +11064,6 @@ func (m *HTTPServices) Unmarshal(dAtA []byte) error {
 			if err := m.HttpClientProfile.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		case 20:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FixProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FixProfileChoice = &HTTPServices_FixProfileNone{v}
-			iNdEx = postIndex
-		case 21:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FixProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FixProfileChoice = &HTTPServices_FixProfile{v}
-			iNdEx = postIndex
-		case 23:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OcspProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.OcspProfileChoice = &HTTPServices_OcspProfileNone{v}
-			iNdEx = postIndex
-		case 24:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OcspProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.OcspProfileChoice = &HTTPServices_OcspProfile{v}
 			iNdEx = postIndex
 		case 26:
 			if wireType != 2 {
@@ -19453,146 +11607,6 @@ func (m *HTTPDefaultServerSelection) Unmarshal(dAtA []byte) error {
 			}
 			m.HttpServerProfileChoice = &HTTPDefaultServerSelection_HttpServerProfile{v}
 			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WebsocketServerProfileSameAsClient", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.WebsocketServerProfileChoice = &HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient{v}
-			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WebsocketServerProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.WebsocketServerProfileChoice = &HTTPDefaultServerSelection_WebsocketServerProfile{v}
-			iNdEx = postIndex
-		case 14:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Http2ServerProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Http2ServerProfileChoice = &HTTPDefaultServerSelection_Http2ServerProfileNone{v}
-			iNdEx = postIndex
-		case 15:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Http2ServerProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Http2ServerProfileChoice = &HTTPDefaultServerSelection_Http2ServerProfile{v}
-			iNdEx = postIndex
 		case 16:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SslServerProfiles", wireType)
@@ -19626,41 +11640,6 @@ func (m *HTTPDefaultServerSelection) Unmarshal(dAtA []byte) error {
 			if err := m.SslServerProfiles[len(m.SslServerProfiles)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		case 27:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Http2ServerProfileSameAsClient", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Http2ServerProfileChoice = &HTTPDefaultServerSelection_Http2ServerProfileSameAsClient{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -20874,42 +12853,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: CreateSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.State == nil {
-				m.State = &schema.TMMStateType{}
-			}
-			if err := m.State.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Domains", wireType)
@@ -21081,146 +13024,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 16:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultPersistenceProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DefaultPersistenceProfileChoice = &CreateSpecType_DefaultPersistenceProfileNone{v}
-			iNdEx = postIndex
-		case 17:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultPersistenceProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DefaultPersistenceProfileChoice = &CreateSpecType_DefaultPersistenceProfile{v}
-			iNdEx = postIndex
-		case 19:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FallbackPersistenceProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FallbackPersistenceProfileChoice = &CreateSpecType_FallbackPersistenceProfileNone{v}
-			iNdEx = postIndex
-		case 20:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FallbackPersistenceProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FallbackPersistenceProfileChoice = &CreateSpecType_FallbackPersistenceProfile{v}
-			iNdEx = postIndex
 		case 21:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TrafficPolicies", wireType)
@@ -21254,76 +13057,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.TrafficPolicies[len(m.TrafficPolicies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		case 23:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StatisticsProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.StatisticsProfileChoice = &CreateSpecType_StatisticsProfileNone{v}
-			iNdEx = postIndex
-		case 24:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StatisticsProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.StatisticsProfileChoice = &CreateSpecType_StatisticsProfile{v}
 			iNdEx = postIndex
 		case 25:
 			if wireType != 2 {
@@ -21359,328 +13092,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.VirtualServerType = &CreateSpecType_Http3{v}
-			iNdEx = postIndex
-		case 34:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Translations", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Translations == nil {
-				m.Translations = &TranslationType{}
-			}
-			if err := m.Translations.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 41:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClonePoolOptions", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ClonePoolOptions == nil {
-				m.ClonePoolOptions = &ClonePoolType{}
-			}
-			if err := m.ClonePoolOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 49:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AutoLastHop", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AutoLastHop == nil {
-				m.AutoLastHop = &schema.TMMVirtualServerAutoLastHopType{}
-			}
-			if err := m.AutoLastHop.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 50:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sse", wireType)
-			}
-			m.Sse = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Sse |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 51:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Json", wireType)
-			}
-			m.Json = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Json |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 54:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastHopPoolNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.LastHopPoolChoice = &CreateSpecType_LastHopPoolNone{v}
-			iNdEx = postIndex
-		case 55:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastHopPool", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.LastHopPoolChoice = &CreateSpecType_LastHopPool{v}
-			iNdEx = postIndex
-		case 56:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Nat64", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Nat64 == nil {
-				m.Nat64 = &schema.TMMVirtualServerNAT64Type{}
-			}
-			if err := m.Nat64.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 60:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RequestLoggingProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RequestLoggingProfileChoice = &CreateSpecType_RequestLoggingProfileNone{v}
-			iNdEx = postIndex
-		case 61:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RequestLoggingProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RequestLoggingProfileChoice = &CreateSpecType_RequestLoggingProfile{v}
 			iNdEx = postIndex
 		case 62:
 			if wireType != 0 {
@@ -21896,42 +13307,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: ReplaceSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.State == nil {
-				m.State = &schema.TMMStateType{}
-			}
-			if err := m.State.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Domains", wireType)
@@ -22103,146 +13478,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 16:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultPersistenceProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DefaultPersistenceProfileChoice = &ReplaceSpecType_DefaultPersistenceProfileNone{v}
-			iNdEx = postIndex
-		case 17:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultPersistenceProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DefaultPersistenceProfileChoice = &ReplaceSpecType_DefaultPersistenceProfile{v}
-			iNdEx = postIndex
-		case 19:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FallbackPersistenceProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FallbackPersistenceProfileChoice = &ReplaceSpecType_FallbackPersistenceProfileNone{v}
-			iNdEx = postIndex
-		case 20:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FallbackPersistenceProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FallbackPersistenceProfileChoice = &ReplaceSpecType_FallbackPersistenceProfile{v}
-			iNdEx = postIndex
 		case 21:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TrafficPolicies", wireType)
@@ -22276,76 +13511,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.TrafficPolicies[len(m.TrafficPolicies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		case 23:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StatisticsProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.StatisticsProfileChoice = &ReplaceSpecType_StatisticsProfileNone{v}
-			iNdEx = postIndex
-		case 24:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StatisticsProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.StatisticsProfileChoice = &ReplaceSpecType_StatisticsProfile{v}
 			iNdEx = postIndex
 		case 25:
 			if wireType != 2 {
@@ -22381,328 +13546,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.VirtualServerType = &ReplaceSpecType_Http3{v}
-			iNdEx = postIndex
-		case 34:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Translations", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Translations == nil {
-				m.Translations = &TranslationType{}
-			}
-			if err := m.Translations.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 41:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClonePoolOptions", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ClonePoolOptions == nil {
-				m.ClonePoolOptions = &ClonePoolType{}
-			}
-			if err := m.ClonePoolOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 49:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AutoLastHop", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AutoLastHop == nil {
-				m.AutoLastHop = &schema.TMMVirtualServerAutoLastHopType{}
-			}
-			if err := m.AutoLastHop.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 50:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sse", wireType)
-			}
-			m.Sse = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Sse |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 51:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Json", wireType)
-			}
-			m.Json = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Json |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 54:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastHopPoolNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.LastHopPoolChoice = &ReplaceSpecType_LastHopPoolNone{v}
-			iNdEx = postIndex
-		case 55:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastHopPool", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.LastHopPoolChoice = &ReplaceSpecType_LastHopPool{v}
-			iNdEx = postIndex
-		case 56:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Nat64", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Nat64 == nil {
-				m.Nat64 = &schema.TMMVirtualServerNAT64Type{}
-			}
-			if err := m.Nat64.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 60:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RequestLoggingProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RequestLoggingProfileChoice = &ReplaceSpecType_RequestLoggingProfileNone{v}
-			iNdEx = postIndex
-		case 61:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RequestLoggingProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RequestLoggingProfileChoice = &ReplaceSpecType_RequestLoggingProfile{v}
 			iNdEx = postIndex
 		case 62:
 			if wireType != 0 {
@@ -23125,146 +13968,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 16:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultPersistenceProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DefaultPersistenceProfileChoice = &GetSpecType_DefaultPersistenceProfileNone{v}
-			iNdEx = postIndex
-		case 17:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultPersistenceProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DefaultPersistenceProfileChoice = &GetSpecType_DefaultPersistenceProfile{v}
-			iNdEx = postIndex
-		case 19:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FallbackPersistenceProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FallbackPersistenceProfileChoice = &GetSpecType_FallbackPersistenceProfileNone{v}
-			iNdEx = postIndex
-		case 20:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FallbackPersistenceProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FallbackPersistenceProfileChoice = &GetSpecType_FallbackPersistenceProfile{v}
-			iNdEx = postIndex
 		case 21:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TrafficPolicies", wireType)
@@ -23298,76 +14001,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.TrafficPolicies[len(m.TrafficPolicies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		case 23:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StatisticsProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.StatisticsProfileChoice = &GetSpecType_StatisticsProfileNone{v}
-			iNdEx = postIndex
-		case 24:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StatisticsProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.StatisticsProfileChoice = &GetSpecType_StatisticsProfile{v}
 			iNdEx = postIndex
 		case 25:
 			if wireType != 2 {
@@ -23403,328 +14036,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.VirtualServerType = &GetSpecType_Http3{v}
-			iNdEx = postIndex
-		case 34:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Translations", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Translations == nil {
-				m.Translations = &TranslationType{}
-			}
-			if err := m.Translations.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 41:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClonePoolOptions", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ClonePoolOptions == nil {
-				m.ClonePoolOptions = &ClonePoolType{}
-			}
-			if err := m.ClonePoolOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 49:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AutoLastHop", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AutoLastHop == nil {
-				m.AutoLastHop = &schema.TMMVirtualServerAutoLastHopType{}
-			}
-			if err := m.AutoLastHop.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 50:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sse", wireType)
-			}
-			m.Sse = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Sse |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 51:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Json", wireType)
-			}
-			m.Json = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Json |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 54:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastHopPoolNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.LastHopPoolChoice = &GetSpecType_LastHopPoolNone{v}
-			iNdEx = postIndex
-		case 55:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastHopPool", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.LastHopPoolChoice = &GetSpecType_LastHopPool{v}
-			iNdEx = postIndex
-		case 56:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Nat64", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Nat64 == nil {
-				m.Nat64 = &schema.TMMVirtualServerNAT64Type{}
-			}
-			if err := m.Nat64.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 60:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RequestLoggingProfileNone", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RequestLoggingProfileChoice = &GetSpecType_RequestLoggingProfileNone{v}
-			iNdEx = postIndex
-		case 61:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RequestLoggingProfile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RequestLoggingProfileChoice = &GetSpecType_RequestLoggingProfile{v}
 			iNdEx = postIndex
 		case 62:
 			if wireType != 0 {

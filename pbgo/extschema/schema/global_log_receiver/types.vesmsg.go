@@ -69,8 +69,32 @@ func (m *AWSCloudwatchConfig) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAwsCredDRefInfo()
 }
+func (m *AWSCloudwatchConfig) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAwsCredDRefInfoForOverlay(generateHash)
+}
 
 func (m *AWSCloudwatchConfig) GetAwsCredDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAwsCred()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_credentials.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_credentials.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "aws_cred",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *AWSCloudwatchConfig) GetAwsCredDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetAwsCred()
 	if vref == nil {
 		return nil, nil
@@ -1153,6 +1177,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetReceiverDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReceiverDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
@@ -1212,6 +1243,77 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp_bucket_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_FileReceiver:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetReceiverDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReceiver() == nil {
+		return nil, nil
+	}
+	switch m.GetReceiver().(type) {
+	case *CreateSpecType_S3Receiver:
+		drInfos, err := m.GetS3Receiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetS3Receiver().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "s3_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_HttpReceiver:
+		return nil, nil
+	case *CreateSpecType_DatadogReceiver:
+		return nil, nil
+	case *CreateSpecType_SplunkReceiver:
+		return nil, nil
+	case *CreateSpecType_ElasticReceiver:
+		drInfos, err := m.GetElasticReceiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "elastic_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_AzureReceiver:
+		return nil, nil
+	case *CreateSpecType_AzureEventHubsReceiver:
+		return nil, nil
+	case *CreateSpecType_AwsCloudWatchReceiver:
+		drInfos, err := m.GetAwsCloudWatchReceiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsCloudWatchReceiver().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_cloud_watch_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_KafkaReceiver:
+		return nil, nil
+	case *CreateSpecType_NewRelicReceiver:
+		return nil, nil
+	case *CreateSpecType_SumoLogicReceiver:
+		return nil, nil
+	case *CreateSpecType_QradarReceiver:
+		return nil, nil
+	case *CreateSpecType_GcpBucketReceiver:
+		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1934,8 +2036,41 @@ func (m *ElasticConfig) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAuthChoiceDRefInfo()
 }
+func (m *ElasticConfig) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAuthChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *ElasticConfig) GetAuthChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetAuthChoice().(type) {
+	case *ElasticConfig_AuthNone:
+		return nil, nil
+	case *ElasticConfig_AuthBasic:
+		return nil, nil
+	case *ElasticConfig_AuthAws:
+		vref := m.GetAuthAws()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_credentials.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_credentials.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "auth_aws",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ElasticConfig) GetAuthChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetAuthChoice().(type) {
 	case *ElasticConfig_AuthNone:
 		return nil, nil
@@ -2365,8 +2500,32 @@ func (m *GCPBucketConfig) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetGcpCredDRefInfo()
 }
+func (m *GCPBucketConfig) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGcpCredDRefInfoForOverlay(generateHash)
+}
 
 func (m *GCPBucketConfig) GetGcpCredDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetGcpCred()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_credentials.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_credentials.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "gcp_cred",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GCPBucketConfig) GetGcpCredDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetGcpCred()
 	if vref == nil {
 		return nil, nil
@@ -2617,6 +2776,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetReceiverDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReceiverDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
@@ -2676,6 +2842,77 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp_bucket_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_FileReceiver:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetReceiverDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReceiver() == nil {
+		return nil, nil
+	}
+	switch m.GetReceiver().(type) {
+	case *GetSpecType_S3Receiver:
+		drInfos, err := m.GetS3Receiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetS3Receiver().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "s3_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_HttpReceiver:
+		return nil, nil
+	case *GetSpecType_DatadogReceiver:
+		return nil, nil
+	case *GetSpecType_SplunkReceiver:
+		return nil, nil
+	case *GetSpecType_ElasticReceiver:
+		drInfos, err := m.GetElasticReceiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "elastic_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_AzureReceiver:
+		return nil, nil
+	case *GetSpecType_AzureEventHubsReceiver:
+		return nil, nil
+	case *GetSpecType_AwsCloudWatchReceiver:
+		drInfos, err := m.GetAwsCloudWatchReceiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsCloudWatchReceiver().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_cloud_watch_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_KafkaReceiver:
+		return nil, nil
+	case *GetSpecType_NewRelicReceiver:
+		return nil, nil
+	case *GetSpecType_SumoLogicReceiver:
+		return nil, nil
+	case *GetSpecType_QradarReceiver:
+		return nil, nil
+	case *GetSpecType_GcpBucketReceiver:
+		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -3170,6 +3407,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetReceiverDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetReceiverDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
@@ -3242,7 +3497,95 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetReceiverDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReceiver() == nil {
+		return nil, nil
+	}
+	switch m.GetReceiver().(type) {
+	case *GlobalSpecType_S3Receiver:
+		drInfos, err := m.GetS3Receiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetS3Receiver().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "s3_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_HttpReceiver:
+		return nil, nil
+	case *GlobalSpecType_DatadogReceiver:
+		return nil, nil
+	case *GlobalSpecType_SplunkReceiver:
+		return nil, nil
+	case *GlobalSpecType_ElasticReceiver:
+		drInfos, err := m.GetElasticReceiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "elastic_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_AzureReceiver:
+		return nil, nil
+	case *GlobalSpecType_AzureEventHubsReceiver:
+		return nil, nil
+	case *GlobalSpecType_AwsCloudWatchReceiver:
+		drInfos, err := m.GetAwsCloudWatchReceiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsCloudWatchReceiver().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_cloud_watch_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_KafkaReceiver:
+		return nil, nil
+	case *GlobalSpecType_NewRelicReceiver:
+		return nil, nil
+	case *GlobalSpecType_SumoLogicReceiver:
+		return nil, nil
+	case *GlobalSpecType_QradarReceiver:
+		return nil, nil
+	case *GlobalSpecType_GcpBucketReceiver:
+		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp_bucket_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_FileReceiver:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -4875,6 +5218,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetReceiverDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReceiverDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
@@ -4934,6 +5284,77 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp_bucket_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_FileReceiver:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetReceiverDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReceiver() == nil {
+		return nil, nil
+	}
+	switch m.GetReceiver().(type) {
+	case *ReplaceSpecType_S3Receiver:
+		drInfos, err := m.GetS3Receiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetS3Receiver().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "s3_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_HttpReceiver:
+		return nil, nil
+	case *ReplaceSpecType_DatadogReceiver:
+		return nil, nil
+	case *ReplaceSpecType_SplunkReceiver:
+		return nil, nil
+	case *ReplaceSpecType_ElasticReceiver:
+		drInfos, err := m.GetElasticReceiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "elastic_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_AzureReceiver:
+		return nil, nil
+	case *ReplaceSpecType_AzureEventHubsReceiver:
+		return nil, nil
+	case *ReplaceSpecType_AwsCloudWatchReceiver:
+		drInfos, err := m.GetAwsCloudWatchReceiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsCloudWatchReceiver().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_cloud_watch_receiver." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_KafkaReceiver:
+		return nil, nil
+	case *ReplaceSpecType_NewRelicReceiver:
+		return nil, nil
+	case *ReplaceSpecType_SumoLogicReceiver:
+		return nil, nil
+	case *ReplaceSpecType_QradarReceiver:
+		return nil, nil
+	case *ReplaceSpecType_GcpBucketReceiver:
+		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -5505,8 +5926,32 @@ func (m *S3Config) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAwsCredDRefInfo()
 }
+func (m *S3Config) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAwsCredDRefInfoForOverlay(generateHash)
+}
 
 func (m *S3Config) GetAwsCredDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAwsCred()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_credentials.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_credentials.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "aws_cred",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *S3Config) GetAwsCredDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetAwsCred()
 	if vref == nil {
 		return nil, nil

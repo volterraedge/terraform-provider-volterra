@@ -69,8 +69,32 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetK8SClusterRoleDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetK8SClusterRoleDRefInfoForOverlay(generateHash)
+}
 
 func (m *CreateSpecType) GetK8SClusterRoleDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetK8SClusterRole()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("k8s_cluster_role.Object")
+	dri := db.DRefInfo{
+		RefdType:   "k8s_cluster_role.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "k8s_cluster_role",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *CreateSpecType) GetK8SClusterRoleDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetK8SClusterRole()
 	if vref == nil {
 		return nil, nil
@@ -298,8 +322,32 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetK8SClusterRoleDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetK8SClusterRoleDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetSpecType) GetK8SClusterRoleDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetK8SClusterRole()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("k8s_cluster_role.Object")
+	dri := db.DRefInfo{
+		RefdType:   "k8s_cluster_role.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "k8s_cluster_role",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GetSpecType) GetK8SClusterRoleDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetK8SClusterRole()
 	if vref == nil {
 		return nil, nil
@@ -527,8 +575,32 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetK8SClusterRoleDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetK8SClusterRoleDRefInfoForOverlay(generateHash)
+}
 
 func (m *GlobalSpecType) GetK8SClusterRoleDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetK8SClusterRole()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("k8s_cluster_role.Object")
+	dri := db.DRefInfo{
+		RefdType:   "k8s_cluster_role.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "k8s_cluster_role",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetK8SClusterRoleDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetK8SClusterRole()
 	if vref == nil {
 		return nil, nil
@@ -782,8 +854,32 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetK8SClusterRoleDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetK8SClusterRoleDRefInfoForOverlay(generateHash)
+}
 
 func (m *ReplaceSpecType) GetK8SClusterRoleDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetK8SClusterRole()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("k8s_cluster_role.Object")
+	dri := db.DRefInfo{
+		RefdType:   "k8s_cluster_role.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "k8s_cluster_role",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ReplaceSpecType) GetK8SClusterRoleDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetK8SClusterRole()
 	if vref == nil {
 		return nil, nil

@@ -369,6 +369,13 @@ func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return nil, nil
 }
+func (m *GetResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
 
 type ValidateGetResponse struct {
 	FldValidators map[string]db.ValidatorFunc
@@ -635,6 +642,13 @@ func (m *ListResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetItemsDRefInfo()
 }
+func (m *ListResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetItemsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ListResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
@@ -646,6 +660,26 @@ func (m *ListResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetItems() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("items[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ListResponse) GetItemsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetItems() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetItems() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetItems() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -757,6 +791,13 @@ func (m *ListResponseItem) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *ListResponseItem) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
+func (m *ListResponseItem) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	if m == nil {
 		return nil, nil
 	}

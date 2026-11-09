@@ -23,18 +23,16 @@ resource "volterra_service_policy_rule" "example" {
 
   // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
 
-  asn_matcher {
-    asn_sets {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  any_asn          = true
   challenge_action = ["challenge_action"]
 
   // One of the arguments from this list "any_client client_name client_name_matcher client_selector ip_threat_category_list" must be set
 
-  any_client = true
+  client_name_matcher {
+    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+  }
 
   // One of the arguments from this list "any_ip ip_matcher ip_prefix_list" must be set
 
@@ -42,7 +40,7 @@ resource "volterra_service_policy_rule" "example" {
   waf_action {
     // One of the arguments from this list "app_firewall_detection_control data_guard_control jwt_claims_validation jwt_validation none waf_in_monitoring_mode waf_skip_processing" must be set
 
-    jwt_claims_validation = true
+    none = true
   }
 }
 
@@ -85,7 +83,7 @@ Argument Reference
 
 `bot_action` - (Optional) Bot action to be enforced if the input request matches the rule.. See [Bot Action ](#bot-action) below for details.
 
-`challenge_action` - (Required) Select challenge action, enable javascript/captcha challenge or disable challenge (`String`).(Deprecated)
+`challenge_action` - (Optional) Select challenge action, enable javascript/captcha challenge or disable challenge (`String`).(Deprecated)
 
 ###### One of the arguments from this list "any_client, client_name, client_name_matcher, client_selector, ip_threat_category_list" must be set
 
@@ -505,7 +503,7 @@ The predicate evaluates to true if the expressions in the label selector are tru
 
 Shape Protected Endpoint Action that include application traffic type and mitigation.
 
-`allow_goodbot` - (Required) Good bot (`Bool`).(Deprecated)
+`allow_goodbot` - (Optional) Good bot (`Bool`).(Deprecated)
 
 `app_traffic_type` - (Required) Traffic type (`String`).
 
@@ -515,7 +513,7 @@ Shape Protected Endpoint Action that include application traffic type and mitiga
 
 `transaction_result` - (Optional) Success/failure Criteria for transaction result. See [Shape Protected Endpoint Action Transaction Result ](#shape-protected-endpoint-action-transaction-result) below for details.
 
-`web_scraping` - (Required) Web scraping protection enabled for protected endpoint (`Bool`).(Deprecated)
+`web_scraping` - (Optional) Web scraping protection enabled for protected endpoint (`Bool`).(Deprecated)
 
 ### Url Matcher
 

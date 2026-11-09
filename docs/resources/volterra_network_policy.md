@@ -23,8 +23,10 @@ resource "volterra_network_policy" "example" {
   endpoint {
     // One of the arguments from this list "any inside_endpoints interface label_selector namespace outside_endpoints prefix_list" must be set
 
-    label_selector {
-      expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+    interface {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
     }
   }
 }

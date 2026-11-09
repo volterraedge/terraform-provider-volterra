@@ -82,6 +82,29 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertisePoliciesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertisePoliciesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCertificatesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertificatesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualHostsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualHostsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetAdvertisePoliciesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetAdvertisePolicies()
@@ -94,6 +117,34 @@ func (m *GlobalSpecType) GetAdvertisePoliciesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.advertise_policies[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "advertise_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "advertise_policies",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetAdvertisePoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetAdvertisePolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.advertise_policies[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "advertise_policy.Object",
 			RefdUID:    ref.Uid,
@@ -149,6 +200,34 @@ func (m *GlobalSpecType) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetCertificatesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCertificates()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.certificates[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "certificate.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "certificates",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetCertificatesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetCertificatesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -180,6 +259,34 @@ func (m *GlobalSpecType) GetVirtualHostsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.virtual_hosts[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_host.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "virtual_hosts",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetVirtualHostsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetVirtualHosts()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.virtual_hosts[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_host.Object",
 			RefdUID:    ref.Uid,

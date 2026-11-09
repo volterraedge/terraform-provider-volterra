@@ -1534,7 +1534,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-vs_pool-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.vs_pool.crudapi.API.Get"
             },
             "delete": {
@@ -1610,7 +1609,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-vs_pool-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.vs_pool.crudapi.API.Delete"
             },
             "put": {
@@ -1694,7 +1692,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-vs_pool-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.vs_pool.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -1842,7 +1839,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-vs_pool-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.vs_pool.crudapi.API.List"
             },
             "post": {
@@ -1920,7 +1916,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-vs_pool-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.vs_pool.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2068,7 +2063,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-vs_pool-crudapi-api-liststream"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.vs_pool.crudapi.API.ListStream"
             },
             "x-displayname": "",
@@ -2176,7 +2170,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-vs_pool-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.vs_pool.crudapi.API.Get"
             },
             "x-displayname": "",
@@ -2324,7 +2317,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-vs_pool-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.vs_pool.crudapi.API.List"
             },
             "x-displayname": "",
@@ -2407,7 +2399,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-vs_pool-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.vs_pool.crudapi.API.Delete"
             },
             "put": {
@@ -2491,7 +2482,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-vs_pool-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.vs_pool.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -2576,7 +2566,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-vs_pool-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.vs_pool.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2898,12 +2887,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -3697,34 +3686,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "viewsNetworkSelectType": {
-            "type": "object",
-            "description": "x-required\nSelect virtual network (VRF) for this interface.\nThere are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.\nA site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.\nGlobal VRFs are configured via Networking \u003e Segments. A site can have multple Network Segments (global VRFs).",
-            "title": "NetworkSelectType",
-            "x-displayname": "Network Select",
-            "x-ves-oneof-field-network_choice": "[\"segment_network\",\"site_local_inside_network\",\"site_local_network\"]",
-            "x-ves-proto-message": "ves.io.schema.views.NetworkSelectType",
-            "properties": {
-                "segment_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network]\n",
-                    "title": "Segment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment (Global VRF)"
-                },
-                "site_local_inside_network": {
-                    "description": "Exclusive with [segment_network site_local_network]\n",
-                    "title": "Site Local Network Inside",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Site Local Inside (Local VRF)"
-                },
-                "site_local_network": {
-                    "description": "Exclusive with [segment_network site_local_inside_network]\n",
-                    "title": "Site Local Network",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Site Local Outside (Local VRF)"
-                }
-            }
-        },
         "viewsvs_poolGlobalSpecType": {
             "type": "object",
             "description": "Shape of the pool specification",
@@ -3813,73 +3774,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "viewsvs_poolVirtualNetworkType": {
-            "type": "object",
-            "description": "Select Virtual Network",
-            "title": "Select Segment",
-            "x-displayname": "Segment",
-            "x-ves-oneof-field-member_type_choice": "[\"custom_ip\",\"dns\"]",
-            "x-ves-proto-message": "ves.io.schema.views.vs_pool.VirtualNetworkType",
-            "properties": {
-                "custom_ip": {
-                    "description": "Exclusive with [dns]\n IP Address",
-                    "title": "IP Address",
-                    "$ref": "#/definitions/vs_poolCustomIP",
-                    "x-displayname": "IP Address"
-                },
-                "dns": {
-                    "description": "Exclusive with [custom_ip]\n DNS",
-                    "title": "DNS",
-                    "$ref": "#/definitions/vs_poolDNSPublicName",
-                    "x-displayname": "DNS"
-                },
-                "segment_network": {
-                    "title": "Segment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment"
-                }
-            }
-        },
-        "vs_poolCBIPServiceType": {
-            "type": "object",
-            "description": "Specify origin server with Classic BIG-IP Service (Virtual Server)",
-            "title": "CBIPServiceType",
-            "x-displayname": "Classic BIG-IP",
-            "x-ves-proto-message": "ves.io.schema.views.vs_pool.CBIPServiceType",
-            "properties": {
-                "cbip_service_name": {
-                    "type": "string",
-                    "description": " Name of the discovered Classic BIG-IP virtual server to be used as origin.\n\nExample: - \"cbip-vs1-dev\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Service Name",
-                    "x-displayname": "Service Name",
-                    "x-ves-example": "cbip-vs1-dev",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                }
-            }
-        },
-        "vs_poolConsulServiceType": {
-            "type": "object",
-            "description": "Specify origin server with HashiCorp Consul service name and site information",
-            "title": "ConsulServiceType",
-            "x-displayname": "Consul",
-            "x-ves-proto-message": "ves.io.schema.views.vs_pool.ConsulServiceType",
-            "properties": {
-                "consul_service_name": {
-                    "type": "string",
-                    "description": " Consul service name of this origin server will be listed, including cluster-id.\n The format is servicename:cluster-id.\n\nExample: - \"matching:production\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Service Name",
-                    "x-displayname": "Service Name",
-                    "x-ves-example": "matching:production",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                }
-            }
-        },
         "vs_poolCustomIP": {
             "type": "object",
             "description": "Custom IP Selection",
@@ -3890,21 +3784,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with []\n V4 IP\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with []\n V4 IP\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "V4 VIP",
                     "x-displayname": "IPv4",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv4": "true"
-                    }
-                },
-                "ip_v6": {
-                    "type": "string",
-                    "description": " Optional common virtual V6 IP across all nodes to be used as automatic VIP.\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "Common V6 VIP",
-                    "x-displayname": "IPv6",
-                    "x-ves-example": "2001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4": "true",
+                        "ves.io.schema.rules.string.not_empty": "true"
                     }
                 }
             }
@@ -3946,34 +3833,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "vs_poolDiscoveredService": {
-            "type": "object",
-            "description": "Discovered",
-            "title": "Discovered",
-            "x-displayname": "Discovered",
-            "x-ves-oneof-field-discovered_service_choice": "[\"cbip_service\",\"consul_service\",\"k8s_service\"]",
-            "x-ves-proto-message": "ves.io.schema.views.vs_pool.DiscoveredService",
-            "properties": {
-                "cbip_service": {
-                    "description": "Exclusive with [consul_service k8s_service]\n Specify origin server with Classic BIG-IP service name",
-                    "title": "CBIPServiceType",
-                    "$ref": "#/definitions/vs_poolCBIPServiceType",
-                    "x-displayname": "Classic BIG-IP"
-                },
-                "consul_service": {
-                    "description": "Exclusive with [cbip_service k8s_service]\n Specify origin server with Hashi Corp Consul service name and site information",
-                    "title": "ConsulServiceType",
-                    "$ref": "#/definitions/vs_poolConsulServiceType",
-                    "x-displayname": "Consul"
-                },
-                "k8s_service": {
-                    "description": "Exclusive with [cbip_service consul_service]\n Specify origin server with K8s service name and site information",
-                    "title": "K8SServiceType",
-                    "$ref": "#/definitions/vs_poolK8SServiceType",
-                    "x-displayname": "K8s"
-                }
-            }
-        },
         "vs_poolGlobalWhereType": {
             "type": "object",
             "title": "Global",
@@ -4002,31 +3861,12 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "vs_poolK8SServiceType": {
-            "type": "object",
-            "description": "Specify origin server with K8s service name and site information",
-            "title": "K8SServiceType",
-            "x-displayname": "K8s",
-            "x-ves-proto-message": "ves.io.schema.views.vs_pool.K8SServiceType",
-            "properties": {
-                "k8s_service_name": {
-                    "type": "string",
-                    "description": " K8s service name of the origin server will be listed, including the namespace and cluster-id.\n For vK8s services, you need to enter a string with the format servicename.namespace:cluster-id. If the servicename is \"frontend\",\n namespace is \"speedtest\" and cluster-id is \"prod\", then you will enter \"frontend.speedtest:prod\".\n Both namespace and cluster-id are optional.\n\nExample: - \"matching.default:production\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ves_service_namespace_name: true\n",
-                    "title": "Service Name",
-                    "x-displayname": "Service Name",
-                    "x-ves-example": "matching.default:production",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ves_service_namespace_name": "true"
-                    }
-                }
-            }
-        },
         "vs_poolPoolMemberType": {
             "type": "object",
             "description": "Pool Member",
             "title": "Pool Member",
             "x-displayname": "Pool Member",
-            "x-ves-oneof-field-member_type_choice": "[\"private\",\"public\"]",
+            "x-ves-oneof-field-member_type_choice": "[\"public\"]",
             "x-ves-proto-message": "ves.io.schema.views.vs_pool.PoolMemberType",
             "properties": {
                 "description": {
@@ -4069,14 +3909,8 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
-                "private": {
-                    "description": "Exclusive with [public]\n",
-                    "title": "Private",
-                    "$ref": "#/definitions/vs_poolPrivateMemberType",
-                    "x-displayname": "Private"
-                },
                 "public": {
-                    "description": "Exclusive with [private]\n",
+                    "description": "Exclusive with []\n",
                     "title": "Public",
                     "$ref": "#/definitions/vs_poolPublicMemberType",
                     "x-displayname": "Public"
@@ -4090,33 +3924,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
-                }
-            }
-        },
-        "vs_poolPrivateMemberType": {
-            "type": "object",
-            "title": "PrivateMemberType",
-            "x-displayname": "PrivateMemberType",
-            "x-ves-oneof-field-where_type_choice": "[\"site\",\"virtual_ce_sites\",\"virtual_network\"]",
-            "x-ves-proto-message": "ves.io.schema.views.vs_pool.PrivateMemberType",
-            "properties": {
-                "site": {
-                    "description": "Exclusive with [virtual_ce_sites virtual_network]\n",
-                    "title": "Site Type",
-                    "$ref": "#/definitions/vs_poolSecureMeshV2SiteType",
-                    "x-displayname": "Sites"
-                },
-                "virtual_ce_sites": {
-                    "description": "Exclusive with [site virtual_network]\n",
-                    "title": "Virtual Sites",
-                    "$ref": "#/definitions/vs_poolVirtualCESites",
-                    "x-displayname": "Virtual Sites"
-                },
-                "virtual_network": {
-                    "description": "Exclusive with [site virtual_ce_sites]\n",
-                    "title": "Segment",
-                    "$ref": "#/definitions/viewsvs_poolVirtualNetworkType",
-                    "x-displayname": "Segment"
                 }
             }
         },
@@ -4178,53 +3985,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "vs_poolSecureMeshV2SiteType": {
-            "type": "object",
-            "title": "Site",
-            "x-displayname": "Site",
-            "x-ves-oneof-field-member_type_choice": "[\"custom_ip\",\"discovered\",\"dns\"]",
-            "x-ves-oneof-field-network_selection_choice": "[\"f5_global_network\",\"network_option\"]",
-            "x-ves-proto-message": "ves.io.schema.views.vs_pool.SecureMeshV2SiteType",
-            "properties": {
-                "custom_ip": {
-                    "description": "Exclusive with [discovered dns]\n IP Address",
-                    "title": "IP Address",
-                    "$ref": "#/definitions/vs_poolCustomIP",
-                    "x-displayname": "IP Address"
-                },
-                "discovered": {
-                    "description": "Exclusive with [custom_ip dns]\n Discovered",
-                    "title": "Discovered",
-                    "$ref": "#/definitions/vs_poolDiscoveredService",
-                    "x-displayname": "Discovered"
-                },
-                "dns": {
-                    "description": "Exclusive with [custom_ip discovered]\n DNS",
-                    "title": "DNS",
-                    "$ref": "#/definitions/vs_poolDNSPublicName",
-                    "x-displayname": "DNS"
-                },
-                "f5_global_network": {
-                    "description": "Exclusive with [network_option]\n",
-                    "title": "F5 Global Network",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "F5 Global Network"
-                },
-                "network_option": {
-                    "description": "Exclusive with [f5_global_network]\n Select Network",
-                    "title": "Select Network",
-                    "$ref": "#/definitions/viewsNetworkSelectType",
-                    "x-displayname": "Select Network"
-                },
-                "site_name": {
-                    "description": "\n\nExample: - \"smsv2-site-name\"-",
-                    "title": "Name",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Name",
-                    "x-ves-example": "smsv2-site-name"
-                }
-            }
-        },
         "vs_poolSpecType": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.vs_pool.SpecType",
@@ -4272,59 +4032,6 @@ var APISwaggerJSON string = `{
                     "description": " Depicts Success or Failure from control plane",
                     "title": "status",
                     "x-displayname": "Status"
-                }
-            }
-        },
-        "vs_poolVirtualCESites": {
-            "type": "object",
-            "title": "Customer Edge Virtual Sites",
-            "x-displayname": "Customer Edge Virtual Sites",
-            "x-ves-oneof-field-member_type_choice": "[\"custom_ip\",\"discovered\",\"dns\"]",
-            "x-ves-oneof-field-network_choice": "[\"segment_network\",\"site_local_inside_network\",\"site_local_network\"]",
-            "x-ves-proto-message": "ves.io.schema.views.vs_pool.VirtualCESites",
-            "properties": {
-                "custom_ip": {
-                    "description": "Exclusive with [discovered dns]\n IP Address",
-                    "title": "IP Address",
-                    "$ref": "#/definitions/vs_poolCustomIP",
-                    "x-displayname": "IP Address"
-                },
-                "discovered": {
-                    "description": "Exclusive with [custom_ip dns]\n Discovered",
-                    "title": "Discovered",
-                    "$ref": "#/definitions/vs_poolDiscoveredService",
-                    "x-displayname": "Discovered"
-                },
-                "dns": {
-                    "description": "Exclusive with [custom_ip discovered]\n DNS",
-                    "title": "DNS",
-                    "$ref": "#/definitions/vs_poolDNSPublicName",
-                    "x-displayname": "DNS"
-                },
-                "segment_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network]\n",
-                    "title": "Segment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment (Global VRF)"
-                },
-                "site_local_inside_network": {
-                    "description": "Exclusive with [segment_network site_local_network]\n",
-                    "title": "Site Local Network Inside",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Site Local Inside (Local VRF)"
-                },
-                "site_local_network": {
-                    "description": "Exclusive with [segment_network site_local_inside_network]\n",
-                    "title": "Site Local Network",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Site Local Outside (Local VRF)"
-                },
-                "virtual_site_name": {
-                    "description": "\n\nExample: - \"shared/ce-site\"-",
-                    "title": "Virtual Site",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Virtual Site",
-                    "x-ves-example": "shared/ce-site"
                 }
             }
         },

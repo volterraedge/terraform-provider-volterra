@@ -13,6 +13,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -278,7 +280,107 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetRelatesToDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetNamespaceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetNamespaceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRelatesToDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRelatesToDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetNamespaceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNamespaceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRelatesToDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRelatesToDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+
+func (m *CreateSpecType) GetNamespaceDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetNamespace()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.namespace[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "namespace.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "namespace",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetNamespaceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNamespace()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.namespace[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "namespace.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "namespace",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+
+// GetNamespaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateSpecType) GetNamespaceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "namespace.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: namespace")
+	}
+	for _, ref := range m.GetNamespace() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+	return entries, nil
 }
 
 func (m *CreateSpecType) GetRelatesToDRefInfo() ([]db.DRefInfo, error) {
@@ -292,6 +394,34 @@ func (m *CreateSpecType) GetRelatesToDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("CreateSpecType.relates_to[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "customer_support.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "relates_to",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetRelatesToDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetRelatesTo()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.relates_to[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "customer_support.Object",
 			RefdUID:    ref.Uid,
@@ -328,6 +458,53 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for namespace")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for namespace")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated namespace")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items namespace")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -340,6 +517,12 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+	if fv, exists := v.FldValidators["attachment_at_creation"]; exists {
+		vOpts := append(opts, db.WithValidateField("attachment_at_creation"))
+		if err := fv(ctx, m.GetAttachmentAtCreation(), vOpts...); err != nil {
+			return err
+		}
 	}
 	if fv, exists := v.FldValidators["category"]; exists {
 		vOpts := append(opts, db.WithValidateField("category"))
@@ -359,6 +542,12 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["description"]; exists {
 		vOpts := append(opts, db.WithValidateField("description"))
 		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -443,6 +632,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -499,6 +706,11 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
+	if fdrInfos, err := m.GetNamespaceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetNamespaceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 	if fdrInfos, err := m.GetRelatesToDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRelatesToDRefInfo() FAILED")
 	} else {
@@ -506,6 +718,34 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	if fdrInfos, err := m.GetUserDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetUserDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFollowupsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFollowupsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNamespaceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNamespaceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRelatesToDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRelatesToDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUserDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUserDRefInfoForOverlay() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -523,6 +763,34 @@ func (m *GetSpecType) GetFollowupsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.followups[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "customer_support.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "followups",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetFollowupsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetFollowups()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.followups[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "customer_support.Object",
 			RefdUID:    ref.Uid,
@@ -555,6 +823,77 @@ func (m *GetSpecType) GetFollowupsDBEntries(ctx context.Context, d db.Interface)
 	return entries, nil
 }
 
+func (m *GetSpecType) GetNamespaceDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetNamespace()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.namespace[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "namespace.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "namespace",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetNamespaceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNamespace()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.namespace[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "namespace.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "namespace",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+
+// GetNamespaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetNamespaceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "namespace.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: namespace")
+	}
+	for _, ref := range m.GetNamespace() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+	return entries, nil
+}
+
 func (m *GetSpecType) GetRelatesToDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetRelatesTo()
 	if len(refs) == 0 {
@@ -566,6 +905,34 @@ func (m *GetSpecType) GetRelatesToDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.relates_to[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "customer_support.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "relates_to",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetRelatesToDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetRelatesTo()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.relates_to[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "customer_support.Object",
 			RefdUID:    ref.Uid,
@@ -621,6 +988,34 @@ func (m *GetSpecType) GetUserDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetUserDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetUser()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.user[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "user.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "user",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetUserDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GetSpecType) GetUserDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -645,6 +1040,53 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for namespace")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for namespace")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated namespace")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items namespace")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -657,6 +1099,12 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+	if fv, exists := v.FldValidators["attachment_at_creation"]; exists {
+		vOpts := append(opts, db.WithValidateField("attachment_at_creation"))
+		if err := fv(ctx, m.GetAttachmentAtCreation(), vOpts...); err != nil {
+			return err
+		}
 	}
 	if fv, exists := v.FldValidators["author_name"]; exists {
 		vOpts := append(opts, db.WithValidateField("author_name"))
@@ -713,6 +1161,12 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
 		}
 	}
 	if fv, exists := v.FldValidators["ongoing"]; exists {
@@ -829,6 +1283,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -885,6 +1357,11 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
+	if fdrInfos, err := m.GetNamespaceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetNamespaceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 	if fdrInfos, err := m.GetRelatesToDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRelatesToDRefInfo() FAILED")
 	} else {
@@ -892,6 +1369,34 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	if fdrInfos, err := m.GetUserDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetUserDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFollowupsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFollowupsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNamespaceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNamespaceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRelatesToDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRelatesToDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUserDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUserDRefInfoForOverlay() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -909,6 +1414,34 @@ func (m *GlobalSpecType) GetFollowupsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.followups[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "customer_support.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "followups",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetFollowupsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetFollowups()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.followups[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "customer_support.Object",
 			RefdUID:    ref.Uid,
@@ -941,6 +1474,77 @@ func (m *GlobalSpecType) GetFollowupsDBEntries(ctx context.Context, d db.Interfa
 	return entries, nil
 }
 
+func (m *GlobalSpecType) GetNamespaceDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetNamespace()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.namespace[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "namespace.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "namespace",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetNamespaceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNamespace()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.namespace[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "namespace.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "namespace",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+
+// GetNamespaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetNamespaceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "namespace.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: namespace")
+	}
+	for _, ref := range m.GetNamespace() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+	return entries, nil
+}
+
 func (m *GlobalSpecType) GetRelatesToDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetRelatesTo()
 	if len(refs) == 0 {
@@ -952,6 +1556,34 @@ func (m *GlobalSpecType) GetRelatesToDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.relates_to[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "customer_support.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "relates_to",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetRelatesToDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetRelatesTo()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.relates_to[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "customer_support.Object",
 			RefdUID:    ref.Uid,
@@ -1007,6 +1639,34 @@ func (m *GlobalSpecType) GetUserDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetUserDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetUser()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.user[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "user.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "user",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetUserDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetUserDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1031,6 +1691,53 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for namespace")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for namespace")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated namespace")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items namespace")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -1043,6 +1750,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+	if fv, exists := v.FldValidators["attachment_at_creation"]; exists {
+		vOpts := append(opts, db.WithValidateField("attachment_at_creation"))
+		if err := fv(ctx, m.GetAttachmentAtCreation(), vOpts...); err != nil {
+			return err
+		}
 	}
 	if fv, exists := v.FldValidators["author_name"]; exists {
 		vOpts := append(opts, db.WithValidateField("author_name"))
@@ -1105,6 +1818,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
 		}
 	}
 	if fv, exists := v.FldValidators["ongoing"]; exists {
@@ -1233,6 +1952,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()
@@ -1245,9 +1982,11 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	if f == nil {
 		return
 	}
+	m.AttachmentAtCreation = f.GetAttachmentAtCreation()
 	m.Category = f.GetCategory()
 	m.Comments = f.GetComments()
 	m.Description = f.GetDescription()
+	m.Namespace = f.GetNamespace()
 	m.Ongoing = f.GetOngoing()
 	m.Priority = f.GetPriority()
 	m.ProductData = f.GetProductData()
@@ -1277,9 +2016,11 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
+	f.AttachmentAtCreation = m1.AttachmentAtCreation
 	f.Category = m1.Category
 	f.Comments = m1.Comments
 	f.Description = m1.Description
+	f.Namespace = m1.Namespace
 	f.Ongoing = m1.Ongoing
 	f.Priority = m1.Priority
 	f.ProductData = m1.ProductData
@@ -1306,6 +2047,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.AttachmentAtCreation = f.GetAttachmentAtCreation()
 	m.AuthorName = f.GetAuthorName()
 	m.Category = f.GetCategory()
 	m.Comments = f.GetComments()
@@ -1314,6 +2056,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.Description = f.GetDescription()
 	m.Escalated = f.GetEscalated()
 	m.Followups = f.GetFollowups()
+	m.Namespace = f.GetNamespace()
 	m.Ongoing = f.GetOngoing()
 	m.Priority = f.GetPriority()
 	m.ProductData = f.GetProductData()
@@ -1347,6 +2090,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	f.AttachmentAtCreation = m1.AttachmentAtCreation
 	f.AuthorName = m1.AuthorName
 	f.Category = m1.Category
 	f.Comments = m1.Comments
@@ -1355,6 +2099,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.Description = m1.Description
 	f.Escalated = m1.Escalated
 	f.Followups = m1.Followups
+	f.Namespace = m1.Namespace
 	f.Ongoing = m1.Ongoing
 	f.Priority = m1.Priority
 	f.ProductData = m1.ProductData

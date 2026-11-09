@@ -6036,9 +6036,14 @@ var APISwaggerJSON string = `{
                 },
                 "issuer": {
                     "type": "string",
-                    "description": "Exclusive with [issuer_disable]\n",
+                    "description": "Exclusive with [issuer_disable]\n\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "issuer",
-                    "x-displayname": "Exact Match"
+                    "maxLength": 512,
+                    "x-displayname": "Exact Match",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
                 },
                 "issuer_disable": {
                     "description": "Exclusive with [issuer]\n",
@@ -9726,12 +9731,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -10488,20 +10493,26 @@ var APISwaggerJSON string = `{
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"none\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info none]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info none]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType",
                     "x-displayname": "Clear Secret"
+                },
+                "none": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info]\n No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.",
+                    "title": "None",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "None"
                 }
             }
         },
@@ -11786,7 +11797,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "port": {
                     "type": "integer",
-                    "description": " Port the workload can be reached on\n Enter a custom port only if your origin server uses a non-default port. Leave the value as 0 to automatically use 443 (TLS) or 80 (non-TLS).\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": " Port the workload can be reached on\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Port",
                     "format": "int64",
                     "x-displayname": "Origin Server Port",
@@ -11994,6 +12005,12 @@ var APISwaggerJSON string = `{
                     "type": "boolean",
                     "description": "x-displayName: \"Ignore-Response-Cookie\"\nBy default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present.",
                     "title": "Set Cookie",
+                    "format": "boolean"
+                },
+                "serve_stale": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Serve Stale\"\nServe a stale cached object during origin unreachability while asynchronously revalidating it with the origin server, when the requested object is already in cache.",
+                    "title": "Serve Stale",
                     "format": "boolean"
                 }
             }
@@ -12971,6 +12988,19 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/virtual_hostDNSRecord"
                     },
                     "x-displayname": "DNS Records"
+                },
+                "dns_zones": {
+                    "type": "array",
+                    "description": " DNS Zone references in use by this object\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
+                    "title": "DNS Zone References",
+                    "maxItems": 256,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "DNS Zone References",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256"
+                    }
                 }
             }
         },

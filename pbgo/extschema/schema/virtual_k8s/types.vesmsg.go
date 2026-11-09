@@ -80,8 +80,43 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDefaultFlavorRefDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultFlavorRefDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVsiteRefsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVsiteRefsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *CreateSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetDefaultFlavorRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("workload_flavor.Object")
+	dri := db.DRefInfo{
+		RefdType:   "workload_flavor.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "default_flavor_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *CreateSpecType) GetDefaultFlavorRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
 		return nil, nil
@@ -137,6 +172,34 @@ func (m *CreateSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("CreateSpecType.vsite_refs[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "vsite_refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetVsiteRefsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetVsiteRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.vsite_refs[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_site.Object",
 			RefdUID:    ref.Uid,
@@ -358,8 +421,43 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDefaultFlavorRefDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultFlavorRefDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVsiteRefsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVsiteRefsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetDefaultFlavorRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("workload_flavor.Object")
+	dri := db.DRefInfo{
+		RefdType:   "workload_flavor.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "default_flavor_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GetSpecType) GetDefaultFlavorRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
 		return nil, nil
@@ -415,6 +513,34 @@ func (m *GetSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.vsite_refs[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "vsite_refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetVsiteRefsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetVsiteRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.vsite_refs[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_site.Object",
 			RefdUID:    ref.Uid,
@@ -636,8 +762,43 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDefaultFlavorRefDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultFlavorRefDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVsiteRefsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVsiteRefsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetDefaultFlavorRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("workload_flavor.Object")
+	dri := db.DRefInfo{
+		RefdType:   "workload_flavor.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "default_flavor_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetDefaultFlavorRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
 		return nil, nil
@@ -693,6 +854,34 @@ func (m *GlobalSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.vsite_refs[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "vsite_refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetVsiteRefsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetVsiteRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.vsite_refs[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_site.Object",
 			RefdUID:    ref.Uid,
@@ -914,8 +1103,43 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDefaultFlavorRefDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultFlavorRefDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVsiteRefsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVsiteRefsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ReplaceSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetDefaultFlavorRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("workload_flavor.Object")
+	dri := db.DRefInfo{
+		RefdType:   "workload_flavor.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "default_flavor_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ReplaceSpecType) GetDefaultFlavorRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetDefaultFlavorRef()
 	if vref == nil {
 		return nil, nil
@@ -971,6 +1195,34 @@ func (m *ReplaceSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("ReplaceSpecType.vsite_refs[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "vsite_refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetVsiteRefsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetVsiteRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.vsite_refs[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_site.Object",
 			RefdUID:    ref.Uid,

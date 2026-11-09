@@ -136,6 +136,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRbacPolicyDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRbacPolicyDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetSpecType) GetRbacPolicyDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetRbacPolicy()
@@ -148,6 +155,34 @@ func (m *GetSpecType) GetRbacPolicyDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.rbac_policy[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "rbac_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "rbac_policy",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetRbacPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetRbacPolicy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.rbac_policy[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "rbac_policy.Object",
 			RefdUID:    ref.Uid,
@@ -327,6 +362,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRbacPolicyDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRbacPolicyDRefInfoForOverlay(generateHash)
+}
 
 func (m *GlobalSpecType) GetRbacPolicyDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetRbacPolicy()
@@ -339,6 +381,34 @@ func (m *GlobalSpecType) GetRbacPolicyDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.rbac_policy[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "rbac_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "rbac_policy",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetRbacPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetRbacPolicy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.rbac_policy[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "rbac_policy.Object",
 			RefdUID:    ref.Uid,

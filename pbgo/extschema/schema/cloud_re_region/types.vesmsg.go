@@ -69,6 +69,13 @@ func (m *AWSType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNodesDRefInfo()
 }
+func (m *AWSType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNodesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AWSType) GetNodesDRefInfo() ([]db.DRefInfo, error) {
@@ -80,6 +87,26 @@ func (m *AWSType) GetNodesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNodes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("nodes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AWSType) GetNodesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNodes() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetNodes() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodes() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -234,6 +261,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCloudDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
@@ -245,6 +279,27 @@ func (m *GlobalSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetCloudDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCloud() == nil {
+		return nil, nil
+	}
+	switch m.GetCloud().(type) {
+	case *GlobalSpecType_Aws:
+		drInfos, err := m.GetAws().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAws().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -406,8 +461,32 @@ func (m *NodeType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSiteDRefInfo()
 }
+func (m *NodeType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteDRefInfoForOverlay(generateHash)
+}
 
 func (m *NodeType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *NodeType) GetSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil

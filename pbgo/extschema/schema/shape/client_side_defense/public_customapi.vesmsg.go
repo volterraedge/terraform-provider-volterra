@@ -304,6 +304,18 @@ func (v *ValidateBehaviorMetrics) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
+	if fv, exists := v.FldValidators["scripts_with_cookie_operations"]; exists {
+		vOpts := append(opts, db.WithValidateField("scripts_with_cookie_operations"))
+		if err := fv(ctx, m.GetScriptsWithCookieOperations(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["scripts_with_dom_mutations"]; exists {
+		vOpts := append(opts, db.WithValidateField("scripts_with_dom_mutations"))
+		if err := fv(ctx, m.GetScriptsWithDomMutations(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["scripts_with_form_field_reads"]; exists {
 		vOpts := append(opts, db.WithValidateField("scripts_with_form_field_reads"))
 		if err := fv(ctx, m.GetScriptsWithFormFieldReads(), vOpts...); err != nil {
@@ -319,6 +331,12 @@ func (v *ValidateBehaviorMetrics) Validate(ctx context.Context, pm interface{}, 
 	if fv, exists := v.FldValidators["scripts_with_new_behaviors"]; exists {
 		vOpts := append(opts, db.WithValidateField("scripts_with_new_behaviors"))
 		if err := fv(ctx, m.GetScriptsWithNewBehaviors(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["scripts_with_storage_operations"]; exists {
+		vOpts := append(opts, db.WithValidateField("scripts_with_storage_operations"))
+		if err := fv(ctx, m.GetScriptsWithStorageOperations(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -610,6 +628,245 @@ func BulkDeleteDomainsResponseValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CookieOperation) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CookieOperation) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CookieOperation) DeepCopy() *CookieOperation {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CookieOperation{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CookieOperation) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CookieOperation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CookieOperationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCookieOperation struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCookieOperation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CookieOperation)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CookieOperation got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["api"]; exists {
+		vOpts := append(opts, db.WithValidateField("api"))
+		if err := fv(ctx, m.GetApi(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["cookie_name"]; exists {
+		vOpts := append(opts, db.WithValidateField("cookie_name"))
+		if err := fv(ctx, m.GetCookieName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["domain"]; exists {
+		vOpts := append(opts, db.WithValidateField("domain"))
+		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["first_seen"]; exists {
+		vOpts := append(opts, db.WithValidateField("first_seen"))
+		if err := fv(ctx, m.GetFirstSeen(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["last_seen"]; exists {
+		vOpts := append(opts, db.WithValidateField("last_seen"))
+		if err := fv(ctx, m.GetLastSeen(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["operation"]; exists {
+		vOpts := append(opts, db.WithValidateField("operation"))
+		if err := fv(ctx, m.GetOperation(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["path"]; exists {
+		vOpts := append(opts, db.WithValidateField("path"))
+		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["same_site"]; exists {
+		vOpts := append(opts, db.WithValidateField("same_site"))
+		if err := fv(ctx, m.GetSameSite(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["secure"]; exists {
+		vOpts := append(opts, db.WithValidateField("secure"))
+		if err := fv(ctx, m.GetSecure(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCookieOperationValidator = func() *ValidateCookieOperation {
+	v := &ValidateCookieOperation{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CookieOperationValidator() db.Validator {
+	return DefaultCookieOperationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CookieOperationsFilters) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CookieOperationsFilters) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CookieOperationsFilters) DeepCopy() *CookieOperationsFilters {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CookieOperationsFilters{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CookieOperationsFilters) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CookieOperationsFilters) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CookieOperationsFiltersValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCookieOperationsFilters struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCookieOperationsFilters) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CookieOperationsFilters)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CookieOperationsFilters got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["api_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("api_filter"))
+		if err := fv(ctx, m.GetApiFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["cookie_name_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("cookie_name_filter"))
+		if err := fv(ctx, m.GetCookieNameFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["domain_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("domain_filter"))
+		if err := fv(ctx, m.GetDomainFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["operation_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("operation_filter"))
+		if err := fv(ctx, m.GetOperationFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["path_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("path_filter"))
+		if err := fv(ctx, m.GetPathFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["same_site_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("same_site_filter"))
+		if err := fv(ctx, m.GetSameSiteFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["secure_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("secure_filter"))
+		if err := fv(ctx, m.GetSecureFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCookieOperationsFiltersValidator = func() *ValidateCookieOperationsFilters {
+	v := &ValidateCookieOperationsFilters{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["cookie_name_filter"] = StringFilterValidator().Validate
+	v.FldValidators["operation_filter"] = StringFilterValidator().Validate
+	v.FldValidators["domain_filter"] = StringFilterValidator().Validate
+	v.FldValidators["path_filter"] = StringFilterValidator().Validate
+	v.FldValidators["secure_filter"] = BoolFilterValidator().Validate
+	v.FldValidators["same_site_filter"] = StringFilterValidator().Validate
+	v.FldValidators["api_filter"] = StringFilterValidator().Validate
+
+	return v
+}()
+
+func CookieOperationsFiltersValidator() db.Validator {
+	return DefaultCookieOperationsFiltersValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateReportRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -859,6 +1116,193 @@ var DefaultCreateReportResponseValidator = func() *ValidateCreateReportResponse 
 
 func CreateReportResponseValidator() db.Validator {
 	return DefaultCreateReportResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DomMutation) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DomMutation) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DomMutation) DeepCopy() *DomMutation {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DomMutation{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DomMutation) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DomMutation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DomMutationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDomMutation struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDomMutation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DomMutation)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DomMutation got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["api"]; exists {
+		vOpts := append(opts, db.WithValidateField("api"))
+		if err := fv(ctx, m.GetApi(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["element"]; exists {
+		vOpts := append(opts, db.WithValidateField("element"))
+		if err := fv(ctx, m.GetElement(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["first_seen"]; exists {
+		vOpts := append(opts, db.WithValidateField("first_seen"))
+		if err := fv(ctx, m.GetFirstSeen(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["last_seen"]; exists {
+		vOpts := append(opts, db.WithValidateField("last_seen"))
+		if err := fv(ctx, m.GetLastSeen(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["operation"]; exists {
+		vOpts := append(opts, db.WithValidateField("operation"))
+		if err := fv(ctx, m.GetOperation(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDomMutationValidator = func() *ValidateDomMutation {
+	v := &ValidateDomMutation{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DomMutationValidator() db.Validator {
+	return DefaultDomMutationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DomMutationsFilters) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DomMutationsFilters) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DomMutationsFilters) DeepCopy() *DomMutationsFilters {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DomMutationsFilters{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DomMutationsFilters) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DomMutationsFilters) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DomMutationsFiltersValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDomMutationsFilters struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDomMutationsFilters) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DomMutationsFilters)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DomMutationsFilters got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["api_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("api_filter"))
+		if err := fv(ctx, m.GetApiFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["element_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("element_filter"))
+		if err := fv(ctx, m.GetElementFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["operation_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("operation_filter"))
+		if err := fv(ctx, m.GetOperationFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDomMutationsFiltersValidator = func() *ValidateDomMutationsFilters {
+	v := &ValidateDomMutationsFilters{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["element_filter"] = StringFilterValidator().Validate
+	v.FldValidators["operation_filter"] = StringFilterValidator().Validate
+	v.FldValidators["api_filter"] = StringFilterValidator().Validate
+
+	return v
+}()
+
+func DomMutationsFiltersValidator() db.Validator {
+	return DefaultDomMutationsFiltersValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1394,6 +1838,736 @@ func InlineScriptValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ListCookieOperationsByScriptRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListCookieOperationsByScriptRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListCookieOperationsByScriptRequest) DeepCopy() *ListCookieOperationsByScriptRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListCookieOperationsByScriptRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListCookieOperationsByScriptRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListCookieOperationsByScriptRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListCookieOperationsByScriptRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListCookieOperationsByScriptRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListCookieOperationsByScriptRequest) IdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for id")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListCookieOperationsByScriptRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListCookieOperationsByScriptRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListCookieOperationsByScriptRequest) PageSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for page_size")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListCookieOperationsByScriptRequest) PageNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for page_number")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListCookieOperationsByScriptRequest) PageTokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for page_token")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateListCookieOperationsByScriptRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListCookieOperationsByScriptRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListCookieOperationsByScriptRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["end_time"]; exists {
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["filters"]; exists {
+		vOpts := append(opts, db.WithValidateField("filters"))
+		if err := fv(ctx, m.GetFilters(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["id"]; exists {
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_number"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_number"))
+		if err := fv(ctx, m.GetPageNumber(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_size"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_size"))
+		if err := fv(ctx, m.GetPageSize(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_token"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_token"))
+		if err := fv(ctx, m.GetPageToken(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["sorts"]; exists {
+		vOpts := append(opts, db.WithValidateField("sorts"))
+		for idx, item := range m.GetSorts() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["start_time"]; exists {
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListCookieOperationsByScriptRequestValidator = func() *ValidateListCookieOperationsByScriptRequest {
+	v := &ValidateListCookieOperationsByScriptRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhId := v.IdValidationRuleHandler
+	rulesId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFn, err = vrhId(rulesId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListCookieOperationsByScriptRequest.id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["id"] = vFn
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.message.required":  "true",
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListCookieOperationsByScriptRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.message.required":  "true",
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListCookieOperationsByScriptRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
+	vrhPageSize := v.PageSizeValidationRuleHandler
+	rulesPageSize := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "1000",
+	}
+	vFn, err = vrhPageSize(rulesPageSize)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListCookieOperationsByScriptRequest.page_size: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["page_size"] = vFn
+
+	vrhPageNumber := v.PageNumberValidationRuleHandler
+	rulesPageNumber := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+	}
+	vFn, err = vrhPageNumber(rulesPageNumber)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListCookieOperationsByScriptRequest.page_number: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["page_number"] = vFn
+
+	vrhPageToken := v.PageTokenValidationRuleHandler
+	rulesPageToken := map[string]string{
+		"ves.io.schema.rules.string.max_len": "512",
+	}
+	vFn, err = vrhPageToken(rulesPageToken)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListCookieOperationsByScriptRequest.page_token: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["page_token"] = vFn
+	v.FldValidators["filters"] = CookieOperationsFiltersValidator().Validate
+
+	return v
+}()
+
+func ListCookieOperationsByScriptRequestValidator() db.Validator {
+	return DefaultListCookieOperationsByScriptRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListCookieOperationsByScriptResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListCookieOperationsByScriptResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListCookieOperationsByScriptResponse) DeepCopy() *ListCookieOperationsByScriptResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListCookieOperationsByScriptResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListCookieOperationsByScriptResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListCookieOperationsByScriptResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListCookieOperationsByScriptResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListCookieOperationsByScriptResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListCookieOperationsByScriptResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListCookieOperationsByScriptResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListCookieOperationsByScriptResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["items"]; exists {
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["next_page_token"]; exists {
+		vOpts := append(opts, db.WithValidateField("next_page_token"))
+		if err := fv(ctx, m.GetNextPageToken(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_number"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_number"))
+		if err := fv(ctx, m.GetPageNumber(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_size"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_size"))
+		if err := fv(ctx, m.GetPageSize(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["total_count"]; exists {
+		vOpts := append(opts, db.WithValidateField("total_count"))
+		if err := fv(ctx, m.GetTotalCount(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["total_pages"]; exists {
+		vOpts := append(opts, db.WithValidateField("total_pages"))
+		if err := fv(ctx, m.GetTotalPages(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["total_size"]; exists {
+		vOpts := append(opts, db.WithValidateField("total_size"))
+		if err := fv(ctx, m.GetTotalSize(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListCookieOperationsByScriptResponseValidator = func() *ValidateListCookieOperationsByScriptResponse {
+	v := &ValidateListCookieOperationsByScriptResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ListCookieOperationsByScriptResponseValidator() db.Validator {
+	return DefaultListCookieOperationsByScriptResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListDomMutationsByScriptRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListDomMutationsByScriptRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListDomMutationsByScriptRequest) DeepCopy() *ListDomMutationsByScriptRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListDomMutationsByScriptRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListDomMutationsByScriptRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListDomMutationsByScriptRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListDomMutationsByScriptRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListDomMutationsByScriptRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListDomMutationsByScriptRequest) IdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for id")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListDomMutationsByScriptRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListDomMutationsByScriptRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListDomMutationsByScriptRequest) PageSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for page_size")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListDomMutationsByScriptRequest) PageNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for page_number")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListDomMutationsByScriptRequest) PageTokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for page_token")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateListDomMutationsByScriptRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListDomMutationsByScriptRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListDomMutationsByScriptRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["end_time"]; exists {
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["filters"]; exists {
+		vOpts := append(opts, db.WithValidateField("filters"))
+		if err := fv(ctx, m.GetFilters(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["id"]; exists {
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_number"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_number"))
+		if err := fv(ctx, m.GetPageNumber(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_size"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_size"))
+		if err := fv(ctx, m.GetPageSize(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_token"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_token"))
+		if err := fv(ctx, m.GetPageToken(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["sorts"]; exists {
+		vOpts := append(opts, db.WithValidateField("sorts"))
+		for idx, item := range m.GetSorts() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["start_time"]; exists {
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListDomMutationsByScriptRequestValidator = func() *ValidateListDomMutationsByScriptRequest {
+	v := &ValidateListDomMutationsByScriptRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhId := v.IdValidationRuleHandler
+	rulesId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFn, err = vrhId(rulesId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListDomMutationsByScriptRequest.id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["id"] = vFn
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.message.required":  "true",
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListDomMutationsByScriptRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.message.required":  "true",
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListDomMutationsByScriptRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
+	vrhPageSize := v.PageSizeValidationRuleHandler
+	rulesPageSize := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "1000",
+	}
+	vFn, err = vrhPageSize(rulesPageSize)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListDomMutationsByScriptRequest.page_size: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["page_size"] = vFn
+
+	vrhPageNumber := v.PageNumberValidationRuleHandler
+	rulesPageNumber := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+	}
+	vFn, err = vrhPageNumber(rulesPageNumber)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListDomMutationsByScriptRequest.page_number: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["page_number"] = vFn
+
+	vrhPageToken := v.PageTokenValidationRuleHandler
+	rulesPageToken := map[string]string{
+		"ves.io.schema.rules.string.max_len": "512",
+	}
+	vFn, err = vrhPageToken(rulesPageToken)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListDomMutationsByScriptRequest.page_token: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["page_token"] = vFn
+	v.FldValidators["filters"] = DomMutationsFiltersValidator().Validate
+
+	return v
+}()
+
+func ListDomMutationsByScriptRequestValidator() db.Validator {
+	return DefaultListDomMutationsByScriptRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListDomMutationsByScriptResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListDomMutationsByScriptResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListDomMutationsByScriptResponse) DeepCopy() *ListDomMutationsByScriptResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListDomMutationsByScriptResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListDomMutationsByScriptResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListDomMutationsByScriptResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListDomMutationsByScriptResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListDomMutationsByScriptResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListDomMutationsByScriptResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListDomMutationsByScriptResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListDomMutationsByScriptResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["items"]; exists {
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["next_page_token"]; exists {
+		vOpts := append(opts, db.WithValidateField("next_page_token"))
+		if err := fv(ctx, m.GetNextPageToken(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_number"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_number"))
+		if err := fv(ctx, m.GetPageNumber(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_size"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_size"))
+		if err := fv(ctx, m.GetPageSize(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["total_count"]; exists {
+		vOpts := append(opts, db.WithValidateField("total_count"))
+		if err := fv(ctx, m.GetTotalCount(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["total_pages"]; exists {
+		vOpts := append(opts, db.WithValidateField("total_pages"))
+		if err := fv(ctx, m.GetTotalPages(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["total_size"]; exists {
+		vOpts := append(opts, db.WithValidateField("total_size"))
+		if err := fv(ctx, m.GetTotalSize(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListDomMutationsByScriptResponseValidator = func() *ValidateListDomMutationsByScriptResponse {
+	v := &ValidateListDomMutationsByScriptResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ListDomMutationsByScriptResponseValidator() db.Validator {
+	return DefaultListDomMutationsByScriptResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ListInlineScriptsRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1776,6 +2950,371 @@ var DefaultListReportsWithHistoryResponseValidator = func() *ValidateListReports
 
 func ListReportsWithHistoryResponseValidator() db.Validator {
 	return DefaultListReportsWithHistoryResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListStorageOperationsByScriptRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListStorageOperationsByScriptRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListStorageOperationsByScriptRequest) DeepCopy() *ListStorageOperationsByScriptRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListStorageOperationsByScriptRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListStorageOperationsByScriptRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListStorageOperationsByScriptRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListStorageOperationsByScriptRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListStorageOperationsByScriptRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListStorageOperationsByScriptRequest) IdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for id")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListStorageOperationsByScriptRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListStorageOperationsByScriptRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListStorageOperationsByScriptRequest) PageSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for page_size")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListStorageOperationsByScriptRequest) PageNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for page_number")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateListStorageOperationsByScriptRequest) PageTokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for page_token")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateListStorageOperationsByScriptRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListStorageOperationsByScriptRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListStorageOperationsByScriptRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["end_time"]; exists {
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["filters"]; exists {
+		vOpts := append(opts, db.WithValidateField("filters"))
+		if err := fv(ctx, m.GetFilters(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["id"]; exists {
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_number"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_number"))
+		if err := fv(ctx, m.GetPageNumber(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_size"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_size"))
+		if err := fv(ctx, m.GetPageSize(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_token"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_token"))
+		if err := fv(ctx, m.GetPageToken(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["sorts"]; exists {
+		vOpts := append(opts, db.WithValidateField("sorts"))
+		for idx, item := range m.GetSorts() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["start_time"]; exists {
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListStorageOperationsByScriptRequestValidator = func() *ValidateListStorageOperationsByScriptRequest {
+	v := &ValidateListStorageOperationsByScriptRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhId := v.IdValidationRuleHandler
+	rulesId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFn, err = vrhId(rulesId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListStorageOperationsByScriptRequest.id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["id"] = vFn
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.message.required":  "true",
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListStorageOperationsByScriptRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.message.required":  "true",
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListStorageOperationsByScriptRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
+	vrhPageSize := v.PageSizeValidationRuleHandler
+	rulesPageSize := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "1000",
+	}
+	vFn, err = vrhPageSize(rulesPageSize)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListStorageOperationsByScriptRequest.page_size: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["page_size"] = vFn
+
+	vrhPageNumber := v.PageNumberValidationRuleHandler
+	rulesPageNumber := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+	}
+	vFn, err = vrhPageNumber(rulesPageNumber)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListStorageOperationsByScriptRequest.page_number: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["page_number"] = vFn
+
+	vrhPageToken := v.PageTokenValidationRuleHandler
+	rulesPageToken := map[string]string{
+		"ves.io.schema.rules.string.max_len": "512",
+	}
+	vFn, err = vrhPageToken(rulesPageToken)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListStorageOperationsByScriptRequest.page_token: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["page_token"] = vFn
+	v.FldValidators["filters"] = StorageOperationsFiltersValidator().Validate
+
+	return v
+}()
+
+func ListStorageOperationsByScriptRequestValidator() db.Validator {
+	return DefaultListStorageOperationsByScriptRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListStorageOperationsByScriptResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListStorageOperationsByScriptResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListStorageOperationsByScriptResponse) DeepCopy() *ListStorageOperationsByScriptResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListStorageOperationsByScriptResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListStorageOperationsByScriptResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListStorageOperationsByScriptResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListStorageOperationsByScriptResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListStorageOperationsByScriptResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListStorageOperationsByScriptResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListStorageOperationsByScriptResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListStorageOperationsByScriptResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["items"]; exists {
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["next_page_token"]; exists {
+		vOpts := append(opts, db.WithValidateField("next_page_token"))
+		if err := fv(ctx, m.GetNextPageToken(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_number"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_number"))
+		if err := fv(ctx, m.GetPageNumber(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["page_size"]; exists {
+		vOpts := append(opts, db.WithValidateField("page_size"))
+		if err := fv(ctx, m.GetPageSize(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["total_count"]; exists {
+		vOpts := append(opts, db.WithValidateField("total_count"))
+		if err := fv(ctx, m.GetTotalCount(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["total_pages"]; exists {
+		vOpts := append(opts, db.WithValidateField("total_pages"))
+		if err := fv(ctx, m.GetTotalPages(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["total_size"]; exists {
+		vOpts := append(opts, db.WithValidateField("total_size"))
+		if err := fv(ctx, m.GetTotalSize(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListStorageOperationsByScriptResponseValidator = func() *ValidateListStorageOperationsByScriptResponse {
+	v := &ValidateListStorageOperationsByScriptResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ListStorageOperationsByScriptResponseValidator() db.Validator {
+	return DefaultListStorageOperationsByScriptResponseValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2646,6 +4185,193 @@ var DefaultScriptsReportCriteriaValidator = func() *ValidateScriptsReportCriteri
 
 func ScriptsReportCriteriaValidator() db.Validator {
 	return DefaultScriptsReportCriteriaValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StorageOperation) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StorageOperation) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StorageOperation) DeepCopy() *StorageOperation {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StorageOperation{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StorageOperation) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StorageOperation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StorageOperationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateStorageOperation struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStorageOperation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StorageOperation)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StorageOperation got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["first_seen"]; exists {
+		vOpts := append(opts, db.WithValidateField("first_seen"))
+		if err := fv(ctx, m.GetFirstSeen(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["key_name"]; exists {
+		vOpts := append(opts, db.WithValidateField("key_name"))
+		if err := fv(ctx, m.GetKeyName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["last_seen"]; exists {
+		vOpts := append(opts, db.WithValidateField("last_seen"))
+		if err := fv(ctx, m.GetLastSeen(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["operation"]; exists {
+		vOpts := append(opts, db.WithValidateField("operation"))
+		if err := fv(ctx, m.GetOperation(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["storage_type"]; exists {
+		vOpts := append(opts, db.WithValidateField("storage_type"))
+		if err := fv(ctx, m.GetStorageType(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStorageOperationValidator = func() *ValidateStorageOperation {
+	v := &ValidateStorageOperation{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func StorageOperationValidator() db.Validator {
+	return DefaultStorageOperationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StorageOperationsFilters) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StorageOperationsFilters) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StorageOperationsFilters) DeepCopy() *StorageOperationsFilters {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StorageOperationsFilters{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StorageOperationsFilters) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StorageOperationsFilters) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StorageOperationsFiltersValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateStorageOperationsFilters struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStorageOperationsFilters) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StorageOperationsFilters)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StorageOperationsFilters got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["key_name_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("key_name_filter"))
+		if err := fv(ctx, m.GetKeyNameFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["operation_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("operation_filter"))
+		if err := fv(ctx, m.GetOperationFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["storage_type_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("storage_type_filter"))
+		if err := fv(ctx, m.GetStorageTypeFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStorageOperationsFiltersValidator = func() *ValidateStorageOperationsFilters {
+	v := &ValidateStorageOperationsFilters{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["storage_type_filter"] = StringFilterValidator().Validate
+	v.FldValidators["key_name_filter"] = StringFilterValidator().Validate
+	v.FldValidators["operation_filter"] = StringFilterValidator().Validate
+
+	return v
+}()
+
+func StorageOperationsFiltersValidator() db.Validator {
+	return DefaultStorageOperationsFiltersValidator
 }
 
 // augmented methods on protoc/std generated struct

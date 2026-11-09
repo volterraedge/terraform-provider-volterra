@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/svcfw"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_api_credential "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
 )
 
@@ -52,19 +53,41 @@ func resourceVolterraAPICredential() *schema.Resource {
 				Required: true,
 			},
 			"api_credential_type": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:       schema.TypeString,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 			"virtual_k8s_namespace": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:       schema.TypeString,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 			"virtual_k8s_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:       schema.TypeString,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 			"api_credential_password": {
-				Type:     schema.TypeString,
+				Type:       schema.TypeString,
+				Optional:   true,
+				Sensitive:  true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
+			"api_certificate": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"password": {
+							Type:      schema.TypeString,
+							Required:  true,
+							Sensitive: true,
+						},
+					},
+				},
+			},
+			"api_token": {
+				Type:     schema.TypeBool,
 				Optional: true,
 			},
 			"data": {
@@ -123,31 +146,64 @@ func resourceVolterraAPICredentialCreate(d *schema.ResourceData, meta interface{
 		created_at = v.(string)
 	}
 
-	apiCredValue, ok := ves_io_schema_api_credential.APICredentialType_value[apiCredParams.apiCredType]
-	if !ok {
-		return fmt.Errorf("Invalid api_credential_type, valid ones are: API_CERTIFICATE, KUBE_CONFIG, API_TOKEN")
-	}
-
 	apiCredReq := &ves_io_schema_api_credential.CreateRequest{
 		Name:           apiCredParams.name,
 		Namespace:      svcfw.SystemNSVal,
 		ExpirationDays: apiCredParams.expirydays,
 	}
 
-	apiCredSpec := &ves_io_schema_api_credential.CustomCreateSpecType{
-		Type: ves_io_schema_api_credential.APICredentialType(apiCredValue),
+	var apiCredSpec *ves_io_schema_api_credential.CustomCreateSpecType
+	if apiCredParams.apiCredType != "" {
+		apiCredValue, ok := ves_io_schema_api_credential.APICredentialType_value[apiCredParams.apiCredType]
+		if !ok {
+			return fmt.Errorf("Invalid api_credential_type, valid ones are: API_CERTIFICATE, KUBE_CONFIG, API_TOKEN")
+		}
+
+		apiCredSpec = &ves_io_schema_api_credential.CustomCreateSpecType{
+			Type: ves_io_schema_api_credential.APICredentialType(apiCredValue),
+		}
+
+		if apiCredParams.vk8sName != "" {
+			apiCredSpec.VirtualK8SName = apiCredParams.vk8sName
+		}
+		if apiCredParams.vk8sNS != "" {
+			apiCredSpec.VirtualK8SNamespace = apiCredParams.vk8sNS
+		}
+		if apiCredParams.password != "" {
+			apiCredSpec.Password = apiCredParams.password
+		}
+		apiCredReq.Spec = apiCredSpec
 	}
 
-	if apiCredParams.vk8sName != "" {
-		apiCredSpec.VirtualK8SName = apiCredParams.vk8sName
+	credentialChoiceTypeFound := false
+
+	if v, ok := d.GetOk("api_certificate"); ok && !credentialChoiceTypeFound {
+		credentialChoiceTypeFound = true
+		sl := v.([]interface{})
+		apiCert := &ves_io_schema_api_credential.CreateRequest_ApiCertificate{
+			ApiCertificate: &ves_io_schema_api_credential.ApiCertificateType{},
+		}
+		for _, val := range sl {
+			apiCertMapStrToI := val.(map[string]interface{})
+			if va, ok := apiCertMapStrToI["password"]; ok {
+				apiCert.ApiCertificate.Password = va.(string)
+			}
+		}
+		apiCredReq.SelfCredentialChoice = apiCert
 	}
-	if apiCredParams.vk8sNS != "" {
-		apiCredSpec.VirtualK8SNamespace = apiCredParams.vk8sNS
+
+	if v, ok := d.GetOk("api_token"); ok && !credentialChoiceTypeFound {
+		credentialChoiceTypeFound = true
+		if v.(bool) {
+			apiCredReq.SelfCredentialChoice = &ves_io_schema_api_credential.CreateRequest_ApiToken{
+				ApiToken: &ves_io_schema.Empty{},
+			}
+		}
 	}
-	if apiCredParams.password != "" {
-		apiCredSpec.Password = apiCredParams.password
+
+	if apiCredReq.Spec == nil && apiCredReq.SelfCredentialChoice == nil {
+		return fmt.Errorf("one of api_credential_type, api_certificate, or api_token must be configured")
 	}
-	apiCredReq.Spec = apiCredSpec
 
 	yamlReq, err := codec.ToYAML(apiCredReq)
 	if err != nil {
@@ -210,6 +266,7 @@ func resourceVolterraAPICredentialUpdate(d *schema.ResourceData, meta interface{
 	var created_at string
 	var expirydays uint32
 	var apiCredType string
+	var apiToken bool
 	var automatic_approval_api_token bool
 	client := meta.(*APIClient)
 
@@ -219,6 +276,9 @@ func resourceVolterraAPICredentialUpdate(d *schema.ResourceData, meta interface{
 
 	if v, ok := d.GetOk("api_credential_type"); ok {
 		apiCredType = v.(string)
+	}
+	if v, ok := d.GetOk("api_token"); ok {
+		apiToken = v.(bool)
 	}
 
 	if v, ok := d.GetOk("automatic_approval_api_token"); ok {
@@ -248,19 +308,21 @@ func resourceVolterraAPICredentialUpdate(d *schema.ResourceData, meta interface{
 		return fmt.Errorf("Error finding Volterra API Credential resource %q: %s", d.Id(), err)
 	}
 
-	isActive := rsp.(*ves_io_schema_api_credential.GetResponse).GetObject().GetSpec().GetGcSpec().GetActive()
+	apiCredSpec := rsp.(*ves_io_schema_api_credential.GetResponse).GetObject().GetSpec().GetGcSpec()
+	isActive := apiCredSpec.GetActive()
+	isAPIToken := apiCredType == "API_TOKEN" || apiToken || apiCredSpec.GetType() == ves_io_schema_api_credential.API_TOKEN
 
-	expirationDate, err := convertTimestampToString(rsp.(*ves_io_schema_api_credential.GetResponse).GetObject().GetSpec().GetGcSpec().GetExpirationTimestamp())
+	expirationDate, err := convertTimestampToString(apiCredSpec.GetExpirationTimestamp())
 
 	expireDate, err := time.Parse(time.RFC3339, expirationDate)
 	if err != nil {
 		return fmt.Errorf("invalid expiration date format: %s", err)
 	}
 
-	log.Println(time.Now().After(expireDate), apiCredType, automatic_approval_api_token)
+	log.Println(time.Now().After(expireDate), isAPIToken, automatic_approval_api_token)
 
 	// Check if the certificate is expired
-	if time.Now().After(expireDate) && apiCredType == "API_TOKEN" && automatic_approval_api_token {
+	if time.Now().After(expireDate) && isAPIToken && automatic_approval_api_token {
 		renReq := &ves_io_schema_api_credential.RenewRequest{
 			Name:           d.Id(),
 			Namespace:      svcfw.SystemNSVal,

@@ -809,6 +809,28 @@ func (v *ValidateBFSecretChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *BFSecretChoice_VesIoAccessSecretPolicy:
+		if fv, exists := v.FldValidators["choice.ves_io_access_secret_policy"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesIoAccessSecretPolicy).VesIoAccessSecretPolicy
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_access_secret_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BFSecretChoice_VesIoAcmeIssuerSecret:
+		if fv, exists := v.FldValidators["choice.ves_io_acme_issuer_secret"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesIoAcmeIssuerSecret).VesIoAcmeIssuerSecret
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_acme_issuer_secret"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 	return nil
 }
@@ -2042,6 +2064,17 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("device_intelligence"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_AdspConsole:
+		if fv, exists := v.FldValidators["choice.adsp_console"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_AdspConsole).AdspConsole
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("adsp_console"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

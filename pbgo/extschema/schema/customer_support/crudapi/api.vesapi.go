@@ -2871,6 +2871,13 @@ var APISwaggerJSON string = `{
             "x-displayname": "Customer Support",
             "x-ves-proto-message": "ves.io.schema.customer_support.GlobalSpecType",
             "properties": {
+                "attachment_at_creation": {
+                    "type": "boolean",
+                    "description": " Tracks if an attachment was provided at the time of support ticket creation\n\nExample: - true-",
+                    "title": "Attachment At Creation",
+                    "format": "boolean",
+                    "x-displayname": "Attachment At Creation"
+                },
                 "author_name": {
                     "type": "string",
                     "description": " Author of the comment (as a name)\n\nExample: - \"John Smith\"-",
@@ -2942,6 +2949,20 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Followup tickets"
+                },
+                "namespace": {
+                    "type": "array",
+                    "description": " Namespace determines the objects, configurations, and policies relevant to the support ticket.\n\nExample: - \"{\"uid\"\"12345-abcde-67890-fghij\", \"name\": \"system\", \"tenant\": \"test\"}\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Namespace",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "{\"uid\": \"12345-abcde-67890-fghij\", \"name\": \"system\", \"tenant\": \"test\"}",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "ongoing": {
                     "type": "boolean",
@@ -3212,7 +3233,7 @@ var APISwaggerJSON string = `{
         },
         "customer_supportSupportTopic": {
             "type": "string",
-            "description": "Support Topic indicates the list of topics for service tickets\n\nUnknown/empty priority\nACCOUNT_SUPPORT_TOPIC_ACCESS_REQUEST\nACCOUNT_SUPPORT_TOPIC_ACCOUNT\nACCOUNT_SUPPORT_TOPIC_BILLING\nACCOUNT_SUPPORT_TOPIC_BILLING_PLAN_CHANGE\nACCOUNT_SUPPORT_TOPIC_PUBLIC_IP\nACCOUNT_SUPPORT_TOPIC_QUOTA_INCREASE\nACCOUNT_SUPPORT_TOPIC_RMA\nACCOUNT_SUPPORT_TOPIC_TAX_EXEMPT_VERIFICATION\nACCOUNT_SUPPORT_TOPIC_OTHERS\nTECHNICAL_SUPPORT_TOPIC_CONFIGURATION_CHANGES\nTECHNICAL_SUPPORT_TOPIC_ERROR_MESSAGE\nTECHNICAL_SUPPORT_TOPIC_NEW_CONFIGURATION\nTECHNICAL_SUPPORT_TOPIC_PRODUCT_QUESTION\nTECHNICAL_SUPPORT_TOPIC_TROUBLESHOOTING\nTECHNICAL_SUPPORT_TOPIC_OTHERS\nINCIDENT_SUPPORT_TOPIC_LATENCY\nINCIDENT_SUPPORT_TOPIC_PERFORMANCE_DEGRADATION\nINCIDENT_SUPPORT_TOPIC_PARTIAL_OUTAGE\nINCIDENT_SUPPORT_TOPIC_COMPLETE_OUTAGE\nINCIDENT_SUPPORT_TOPIC_OTHERS\nTASK_TOPIC_PLAN_TRANSITION\nPROBLEM_TOPIC_SUPPORT_ALERT\nQUESTION_TOPIC_INFRASTRUCTURE\nTECHNICAL_SUPPORT_TOPIC_DELEGATED_DOMAIN_MIGRATION\nACCOUNT_SUPPORT_TOPIC_PUBLIC_IPv6\nACCOUNT_SUPPORT_TOPIC_DUALSTACK_IP\nTECHNICAL_SUPPORT_TOPIC_TERRAFORM_PROVIDER",
+            "description": "Support Topic indicates the list of topics for service tickets\n\nUnknown/empty priority\nACCOUNT_SUPPORT_TOPIC_ACCESS_REQUEST\nACCOUNT_SUPPORT_TOPIC_ACCOUNT\nACCOUNT_SUPPORT_TOPIC_BILLING\nACCOUNT_SUPPORT_TOPIC_BILLING_PLAN_CHANGE\nACCOUNT_SUPPORT_TOPIC_PUBLIC_IP\nACCOUNT_SUPPORT_TOPIC_QUOTA_INCREASE\nACCOUNT_SUPPORT_TOPIC_RMA\nACCOUNT_SUPPORT_TOPIC_TAX_EXEMPT_VERIFICATION\nACCOUNT_SUPPORT_TOPIC_OTHERS\nTECHNICAL_SUPPORT_TOPIC_CONFIGURATION_CHANGES\nTECHNICAL_SUPPORT_TOPIC_ERROR_MESSAGE\nTECHNICAL_SUPPORT_TOPIC_NEW_CONFIGURATION\nTECHNICAL_SUPPORT_TOPIC_PRODUCT_QUESTION\nTECHNICAL_SUPPORT_TOPIC_TROUBLESHOOTING\nTECHNICAL_SUPPORT_TOPIC_OTHERS\nINCIDENT_SUPPORT_TOPIC_LATENCY\nINCIDENT_SUPPORT_TOPIC_PERFORMANCE_DEGRADATION\nINCIDENT_SUPPORT_TOPIC_PARTIAL_OUTAGE\nINCIDENT_SUPPORT_TOPIC_COMPLETE_OUTAGE\nINCIDENT_SUPPORT_TOPIC_OTHERS\nTASK_TOPIC_PLAN_TRANSITION\nPROBLEM_TOPIC_SUPPORT_ALERT\nQUESTION_TOPIC_INFRASTRUCTURE\nTECHNICAL_SUPPORT_TOPIC_DELEGATED_DOMAIN_MIGRATION\nACCOUNT_SUPPORT_TOPIC_PUBLIC_IPv6\nACCOUNT_SUPPORT_TOPIC_DUALSTACK_IP\nTECHNICAL_SUPPORT_TOPIC_TERRAFORM_PROVIDER\nINCIDENT_SUPPORT_TOPIC_ATTACK_F5_INITIATED",
             "title": "SupportTopic",
             "enum": [
                 "TOPIC_UNKNOWN",
@@ -3242,7 +3263,8 @@ var APISwaggerJSON string = `{
                 "TECHNICAL_SUPPORT_TOPIC_DELEGATED_DOMAIN_MIGRATION",
                 "ACCOUNT_SUPPORT_TOPIC_PUBLIC_IPV6",
                 "ACCOUNT_SUPPORT_TOPIC_PUBLIC_DUALSTACK_IP",
-                "TECHNICAL_SUPPORT_TOPIC_TERRAFORM_PROVIDER"
+                "TECHNICAL_SUPPORT_TOPIC_TERRAFORM_PROVIDER",
+                "INCIDENT_SUPPORT_TOPIC_ATTACK_F5_INITIATED"
             ],
             "default": "TOPIC_UNKNOWN",
             "x-displayname": "Support Topic",
@@ -3335,12 +3357,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {

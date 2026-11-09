@@ -68,6 +68,13 @@ func (m *BigIpAccessSiteList) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetBigipSiteDRefInfo()
 }
+func (m *BigIpAccessSiteList) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetBigipSiteDRefInfoForOverlay(generateHash)
+}
 
 func (m *BigIpAccessSiteList) GetBigipSiteDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetBigipSite()
@@ -80,6 +87,34 @@ func (m *BigIpAccessSiteList) GetBigipSiteDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("BigIpAccessSiteList.bigip_site[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "bigip_site",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *BigIpAccessSiteList) GetBigipSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetBigipSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("BigIpAccessSiteList.bigip_site[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
@@ -259,6 +294,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetBigIpInstanceDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetBigIpInstanceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
@@ -268,6 +310,22 @@ func (m *CreateSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetBigIpInstance().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "big_ip_instance." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetBigIpInstanceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBigIpInstance() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetBigIpInstance().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -456,6 +514,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetBigIpInstanceDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetBigIpInstanceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
@@ -465,6 +530,22 @@ func (m *GetSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetBigIpInstance().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "big_ip_instance." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetBigIpInstanceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBigIpInstance() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetBigIpInstance().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -653,6 +734,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetBigIpInstanceDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetBigIpInstanceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
@@ -662,6 +750,22 @@ func (m *GlobalSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetBigIpInstance().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "big_ip_instance." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetBigIpInstanceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBigIpInstance() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetBigIpInstance().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -986,6 +1090,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetBigIpInstanceDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetBigIpInstanceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
@@ -995,6 +1106,22 @@ func (m *ReplaceSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetBigIpInstance().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "big_ip_instance." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetBigIpInstanceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBigIpInstance() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetBigIpInstance().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

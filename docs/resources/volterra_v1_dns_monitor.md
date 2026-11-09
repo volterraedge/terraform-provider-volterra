@@ -31,7 +31,7 @@ resource "volterra_v1_dns_monitor" "example" {
 
   // One of the arguments from this list "interval_12_hours interval_15_mins interval_1_day interval_1_hour interval_1_min interval_30_mins interval_30_secs interval_5_mins interval_6_hours" must be set
 
-  interval_30_mins = true
+  interval_30_secs = true
   lookup_timeout   = ["5000"]
   on_failure_count = ["2"]
 

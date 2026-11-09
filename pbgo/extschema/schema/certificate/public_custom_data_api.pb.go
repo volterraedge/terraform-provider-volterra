@@ -40,131 +40,151 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// SSL Profile Type
+// SSLProfileType
 //
 // x-displayName: "SSL Profile Type"
-// Types of ssl profiles
+// Types of SSL profiles
 type SSLProfileType int32
 
 const (
+	// x-displayName: "Unspecified"
+	// x-unit: "type"
+	UNSPECIFIED_SSL_PROFILE SSLProfileType = 0
 	// x-displayName: "Client"
 	// x-unit: "type"
-	CLIENT SSLProfileType = 0
+	CLIENT SSLProfileType = 1
 	// x-displayName: "Server"
 	// x-unit: "type"
-	SERVER SSLProfileType = 1
+	SERVER SSLProfileType = 2
 	// x-displayName: "OCSP"
 	// x-unit: "type"
-	OCSP SSLProfileType = 2
+	OCSP SSLProfileType = 3
 )
 
 var SSLProfileType_name = map[int32]string{
-	0: "CLIENT",
-	1: "SERVER",
-	2: "OCSP",
+	0: "UNSPECIFIED_SSL_PROFILE",
+	1: "CLIENT",
+	2: "SERVER",
+	3: "OCSP",
 }
 
 var SSLProfileType_value = map[string]int32{
-	"CLIENT": 0,
-	"SERVER": 1,
-	"OCSP":   2,
+	"UNSPECIFIED_SSL_PROFILE": 0,
+	"CLIENT":                  1,
+	"SERVER":                  2,
+	"OCSP":                    3,
 }
 
 func (SSLProfileType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_0a6786e97590497b, []int{0}
 }
 
-// Load Balancer Type
+// LoadBalancerType
 //
 // x-displayName: "Load Balancer Type"
-// Types of supported load balancers
+// Types of supported load balancers: {VIRTUAL_SERVER, HTTP, TCP}
 type LoadBalancerType int32
 
 const (
+	// x-displayName: "Unspecified"
+	// x-unit: "type"
+	UNSPECIFIED_LB LoadBalancerType = 0
 	// x-displayName: "Virtual Server"
 	// x-unit: "type"
-	VIRTUAL_SERVER LoadBalancerType = 0
+	VIRTUAL_SERVER LoadBalancerType = 1
 	// x-displayName: "HTTP"
 	// x-unit: "type"
-	HTTP LoadBalancerType = 1
+	HTTP LoadBalancerType = 2
 	// x-displayName: "TCP"
 	// x-unit: "type"
-	TCP LoadBalancerType = 2
+	TCP LoadBalancerType = 3
 )
 
 var LoadBalancerType_name = map[int32]string{
-	0: "VIRTUAL_SERVER",
-	1: "HTTP",
-	2: "TCP",
+	0: "UNSPECIFIED_LB",
+	1: "VIRTUAL_SERVER",
+	2: "HTTP",
+	3: "TCP",
 }
 
 var LoadBalancerType_value = map[string]int32{
-	"VIRTUAL_SERVER": 0,
-	"HTTP":           1,
-	"TCP":            2,
+	"UNSPECIFIED_LB": 0,
+	"VIRTUAL_SERVER": 1,
+	"HTTP":           2,
+	"TCP":            3,
 }
 
 func (LoadBalancerType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_0a6786e97590497b, []int{1}
 }
 
-// Certificate Type
+// CertType
 //
 // x-displayName: "Certificate Type"
-// Type of certificate based on how it was provisioned
+// Type of certificate based on how it was provisioned: {CUSTOM, AUTO}
 type CertType int32
 
 const (
+	// x-displayName: "Unspecified"
+	// x-unit: "type"
+	UNSPECIFIED_CERT CertType = 0
 	// x-displayName: "Custom"
 	// x-unit: "type"
-	CUSTOM CertType = 0
+	CUSTOM CertType = 1
 	// x-displayName: "Autocert"
 	// x-unit: "type"
-	AUTO CertType = 1
+	AUTO CertType = 2
 )
 
 var CertType_name = map[int32]string{
-	0: "CUSTOM",
-	1: "AUTO",
+	0: "UNSPECIFIED_CERT",
+	1: "CUSTOM",
+	2: "AUTO",
 }
 
 var CertType_value = map[string]int32{
-	"CUSTOM": 0,
-	"AUTO":   1,
+	"UNSPECIFIED_CERT": 0,
+	"CUSTOM":           1,
+	"AUTO":             2,
 }
 
 func (CertType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_0a6786e97590497b, []int{2}
 }
 
-// Certificate Status
+// CertStatus
 //
-// x-displayName: "Certificate Type"
-// Type of certificate based on how it was provisioned
+// x-displayName: "Certificate Status"
+// Status of a certificate based on its expiration: {UP_TO_DATE, EXPIRING, EXPIRED}
 type CertStatus int32
 
 const (
+	// x-displayName: "Unspecified"
+	// x-unit: "type"
+	UNSPECIFIED_STATUS CertStatus = 0
 	// x-displayName: "Up to Date"
 	// x-unit: "type"
-	UP_TO_DATE CertStatus = 0
+	UP_TO_DATE CertStatus = 1
 	// x-displayName: "Expiring"
 	// x-unit: "type"
-	EXPIRING CertStatus = 1
+	EXPIRING CertStatus = 2
 	// x-displayName: "Expired"
 	// x-unit: "type"
-	EXPIRED CertStatus = 2
+	EXPIRED CertStatus = 3
 )
 
 var CertStatus_name = map[int32]string{
-	0: "UP_TO_DATE",
-	1: "EXPIRING",
-	2: "EXPIRED",
+	0: "UNSPECIFIED_STATUS",
+	1: "UP_TO_DATE",
+	2: "EXPIRING",
+	3: "EXPIRED",
 }
 
 var CertStatus_value = map[string]int32{
-	"UP_TO_DATE": 0,
-	"EXPIRING":   1,
-	"EXPIRED":    2,
+	"UNSPECIFIED_STATUS": 0,
+	"UP_TO_DATE":         1,
+	"EXPIRING":           2,
+	"EXPIRED":            3,
 }
 
 func (CertStatus) EnumDescriptor() ([]byte, []int) {
@@ -186,24 +206,28 @@ type CertificateHealthStatusListRequest struct {
 	//
 	// x-displayName: "Order"
 	// x-example: "ASCENDING"
-	// List the certificates in ascending or descending order, by expiration date. Default is descending.
+	// List the certificates in ascending or descending order, by expiration date.
+	// Default is ascending (soonest to expire first).
 	Order schema.SortOrder `protobuf:"varint,2,opt,name=order,proto3,enum=ves.io.schema.SortOrder" json:"order,omitempty"`
 	// Max Results
 	//
 	// x-displayName: "Max Results"
 	// x-example: "10"
-	// Max number of certificates to return. Default to 10. Max of 1000.
+	// Max number of certificates to return. Default is 10. Max of 1000.
 	MaxResults uint32 `protobuf:"varint,3,opt,name=max_results,json=maxResults,proto3" json:"max_results,omitempty"`
-	// Type
+	// Load Balancer Type Filter
 	//
-	// x-displayName: "Type"
-	// Returns certificates associated with specific load balancer types, {VIRTUAL_SERVER, HTTP, TCP}. If this is omitted then certificates are returned for all load balancer types.
+	// x-displayName: "Load Balancer Type"
+	// Filter certificates by associated load balancer types.
+	// One or more types in {VIRTUAL_SERVER, HTTP, TCP} can be specified.
+	// If omitted, certificates for all load balancer types are returned.
 	LbType []LoadBalancerType `protobuf:"varint,4,rep,packed,name=lb_type,json=lbType,proto3,enum=ves.io.schema.certificate.LoadBalancerType" json:"lb_type,omitempty"`
-	// Certificate Type
+	// Certificate Type Filter
 	//
 	// x-displayName: "Certificate Type"
-	// Select fields to be returned in the response.
-	// One or more fields in {CUSTOM, AUTO} can be specified. If this is omitted then all certificate types are returned.
+	// Filter certificates by provisioning type.
+	// One or more types in {CUSTOM, AUTO} can be specified.
+	// If omitted, all certificate types are returned.
 	CertType []CertType `protobuf:"varint,5,rep,packed,name=cert_type,json=certType,proto3,enum=ves.io.schema.certificate.CertType" json:"cert_type,omitempty"`
 }
 
@@ -282,17 +306,17 @@ type CertificateHealthStatusListResponse struct {
 	// Items
 	//
 	// x-displayName: "Items"
-	// Collection of Certificate Health Status
+	// Collection of Certificate Health Status items, filtered and sorted per request parameters
 	Items []*CertificateHealthStatusListResponseItem `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
-	// Total number of certificates that are expired
+	// Total Expired
 	//
-	// x-displayName: "Total number of Expired Certificates"
-	// Total number of certificates that are expired
+	// x-displayName: "Total Expired Certificates"
+	// Total number of expired certificates matching the applied filters
 	TotalExpired uint32 `protobuf:"varint,2,opt,name=total_expired,json=totalExpired,proto3" json:"total_expired,omitempty"`
-	// Total number of certificates that are expiring within 14 days
+	// Total Expiring Soon
 	//
-	// x-displayName: "Total number of certificates expiring within 14 days"
-	// Total number of certificates that are expiring within 14 days
+	// x-displayName: "Total Expiring Soon"
+	// Total number of certificates expiring within 14 days, matching the applied filters
 	TotalExpiringSoon uint32 `protobuf:"varint,3,opt,name=total_expiring_soon,json=totalExpiringSoon,proto3" json:"total_expiring_soon,omitempty"`
 }
 
@@ -354,48 +378,51 @@ func (m *CertificateHealthStatusListResponse) GetTotalExpiringSoon() uint32 {
 // x-displayName: "Certificate Health Status List Item"
 // Individual item in a collection of Certificates
 type CertificateHealthStatusListResponseItem struct {
-	// Name
+	// Namespace
 	//
-	// x-displayName: "Name"
+	// x-displayName: "Namespace"
 	// x-example: "ns1"
 	// Namespace where the certificate lives
 	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// Name
 	//
 	// x-displayName: "Name"
-	// x-example: "ns1"
+	// x-example: "my-certificate"
 	// Name of the certificate
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	// Information
 	//
 	// x-displayName: "Certificate Information"
-	// Information about this certificate.
+	// Detailed information about this certificate
 	Info *schema.CertInfoType `protobuf:"bytes,3,opt,name=info,proto3" json:"info,omitempty"`
-	// Type
+	// Load Balancer Types
 	//
-	// x-displayName: "Type"
-	// The type(s) of load balancers that are associated with this certificate, {VIRTUAL_SERVER, HTTP, TCP}.
+	// x-displayName: "Load Balancer Types"
+	// The load balancer type(s) associated with this certificate.
+	// One or more of {VIRTUAL_SERVER, HTTP, TCP}.
 	Type []LoadBalancerType `protobuf:"varint,4,rep,packed,name=type,proto3,enum=ves.io.schema.certificate.LoadBalancerType" json:"type,omitempty"`
-	// Is an Auto-cert Certificate
+	// Is Autocert
 	//
-	// x-displayName: "Is an Autocert Certificate"
-	// Information about this certificate.
+	// x-displayName: "Is Autocert Certificate"
+	// True if this certificate was automatically provisioned
 	IsAutocert bool `protobuf:"varint,5,opt,name=is_autocert,json=isAutocert,proto3" json:"is_autocert,omitempty"`
-	// Time until Expiry
+	// Time Until Expiry
 	//
 	// x-displayName: "Time Until Expiry"
-	// How many days until a certificate is set to expire
+	// Number of days until the certificate expires. Negative values indicate already expired.
 	TimeUntilExpiry int32 `protobuf:"varint,6,opt,name=time_until_expiry,json=timeUntilExpiry,proto3" json:"time_until_expiry,omitempty"`
 	// Status
 	//
 	// x-displayName: "Status"
-	// The current status of the certificate, based on its valid date range.
+	// Current status of the certificate based on its expiration.
+	// One of {UP_TO_DATE, EXPIRING, EXPIRED}.
 	Status CertStatus `protobuf:"varint,7,opt,name=status,proto3,enum=ves.io.schema.certificate.CertStatus" json:"status,omitempty"`
 	// SSL Profile Type
 	//
 	// x-displayName: "SSL Profile Type"
-	// One fields {CLIENT, SERVER, OCSP} can be specified.
-	SslprofileType SSLProfileType `protobuf:"varint,8,opt,name=sslprofile_type,json=sslprofileType,proto3,enum=ves.io.schema.certificate.SSLProfileType" json:"sslprofile_type,omitempty"`
+	// The SSL profile type for this certificate.
+	// One or more of {CLIENT, SERVER, OCSP}.
+	SslprofileType []SSLProfileType `protobuf:"varint,8,rep,packed,name=sslprofile_type,json=sslprofileType,proto3,enum=ves.io.schema.certificate.SSLProfileType" json:"sslprofile_type,omitempty"`
 }
 
 func (m *CertificateHealthStatusListResponseItem) Reset() {
@@ -478,15 +505,241 @@ func (m *CertificateHealthStatusListResponseItem) GetStatus() CertStatus {
 	if m != nil {
 		return m.Status
 	}
-	return UP_TO_DATE
+	return UNSPECIFIED_STATUS
 }
 
-func (m *CertificateHealthStatusListResponseItem) GetSslprofileType() SSLProfileType {
+func (m *CertificateHealthStatusListResponseItem) GetSslprofileType() []SSLProfileType {
 	if m != nil {
 		return m.SslprofileType
 	}
-	return CLIENT
+	return nil
 }
+
+// RetryIssuanceRequest
+//
+// x-displayName: "Retry Issuance Request"
+// Request to retry certificate issuance.
+type RetryIssuanceRequest struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-required
+	// x-example: "system"
+	// Namespace of the certificate.
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// name
+	//
+	// x-displayName: "Name"
+	// x-required
+	// x-example: "my-certificate"
+	// Name of the certificate.
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// force_renew
+	//
+	// x-displayName: "Force Renew"
+	// Request replacement of a currently valid certificate. When false or
+	// omitted, retry only re-drives failed or waiting certificate issuance.
+	// This option does not duplicate an issuance or renewal already in progress.
+	ForceRenew bool `protobuf:"varint,3,opt,name=force_renew,json=forceRenew,proto3" json:"force_renew,omitempty"`
+}
+
+func (m *RetryIssuanceRequest) Reset()      { *m = RetryIssuanceRequest{} }
+func (*RetryIssuanceRequest) ProtoMessage() {}
+func (*RetryIssuanceRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a6786e97590497b, []int{3}
+}
+func (m *RetryIssuanceRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RetryIssuanceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RetryIssuanceRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RetryIssuanceRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RetryIssuanceRequest.Merge(m, src)
+}
+func (m *RetryIssuanceRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *RetryIssuanceRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_RetryIssuanceRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RetryIssuanceRequest proto.InternalMessageInfo
+
+func (m *RetryIssuanceRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *RetryIssuanceRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *RetryIssuanceRequest) GetForceRenew() bool {
+	if m != nil {
+		return m.ForceRenew
+	}
+	return false
+}
+
+// RetryIssuanceResponse
+//
+// x-displayName: "Retry Issuance Response"
+// Response for retry issuance request.
+type RetryIssuanceResponse struct {
+}
+
+func (m *RetryIssuanceResponse) Reset()      { *m = RetryIssuanceResponse{} }
+func (*RetryIssuanceResponse) ProtoMessage() {}
+func (*RetryIssuanceResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a6786e97590497b, []int{4}
+}
+func (m *RetryIssuanceResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RetryIssuanceResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RetryIssuanceResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RetryIssuanceResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RetryIssuanceResponse.Merge(m, src)
+}
+func (m *RetryIssuanceResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *RetryIssuanceResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_RetryIssuanceResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RetryIssuanceResponse proto.InternalMessageInfo
+
+// RevokeCertificateRequest
+//
+// x-displayName: "Revoke Certificate Request"
+// Request to revoke an issued certificate.
+type RevokeCertificateRequest struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-required
+	// x-example: "system"
+	// Namespace of the certificate.
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// name
+	//
+	// x-displayName: "Name"
+	// x-required
+	// x-example: "my-certificate"
+	// Name of the certificate.
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (m *RevokeCertificateRequest) Reset()      { *m = RevokeCertificateRequest{} }
+func (*RevokeCertificateRequest) ProtoMessage() {}
+func (*RevokeCertificateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a6786e97590497b, []int{5}
+}
+func (m *RevokeCertificateRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RevokeCertificateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RevokeCertificateRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RevokeCertificateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RevokeCertificateRequest.Merge(m, src)
+}
+func (m *RevokeCertificateRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *RevokeCertificateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_RevokeCertificateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RevokeCertificateRequest proto.InternalMessageInfo
+
+func (m *RevokeCertificateRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *RevokeCertificateRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// RevokeCertificateResponse
+//
+// x-displayName: "Revoke Certificate Response"
+// Response for revoke certificate request.
+type RevokeCertificateResponse struct {
+}
+
+func (m *RevokeCertificateResponse) Reset()      { *m = RevokeCertificateResponse{} }
+func (*RevokeCertificateResponse) ProtoMessage() {}
+func (*RevokeCertificateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a6786e97590497b, []int{6}
+}
+func (m *RevokeCertificateResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RevokeCertificateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RevokeCertificateResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RevokeCertificateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RevokeCertificateResponse.Merge(m, src)
+}
+func (m *RevokeCertificateResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *RevokeCertificateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_RevokeCertificateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RevokeCertificateResponse proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterEnum("ves.io.schema.certificate.SSLProfileType", SSLProfileType_name, SSLProfileType_value)
@@ -503,6 +756,14 @@ func init() {
 	golang_proto.RegisterType((*CertificateHealthStatusListResponse)(nil), "ves.io.schema.certificate.CertificateHealthStatusListResponse")
 	proto.RegisterType((*CertificateHealthStatusListResponseItem)(nil), "ves.io.schema.certificate.CertificateHealthStatusListResponseItem")
 	golang_proto.RegisterType((*CertificateHealthStatusListResponseItem)(nil), "ves.io.schema.certificate.CertificateHealthStatusListResponseItem")
+	proto.RegisterType((*RetryIssuanceRequest)(nil), "ves.io.schema.certificate.RetryIssuanceRequest")
+	golang_proto.RegisterType((*RetryIssuanceRequest)(nil), "ves.io.schema.certificate.RetryIssuanceRequest")
+	proto.RegisterType((*RetryIssuanceResponse)(nil), "ves.io.schema.certificate.RetryIssuanceResponse")
+	golang_proto.RegisterType((*RetryIssuanceResponse)(nil), "ves.io.schema.certificate.RetryIssuanceResponse")
+	proto.RegisterType((*RevokeCertificateRequest)(nil), "ves.io.schema.certificate.RevokeCertificateRequest")
+	golang_proto.RegisterType((*RevokeCertificateRequest)(nil), "ves.io.schema.certificate.RevokeCertificateRequest")
+	proto.RegisterType((*RevokeCertificateResponse)(nil), "ves.io.schema.certificate.RevokeCertificateResponse")
+	golang_proto.RegisterType((*RevokeCertificateResponse)(nil), "ves.io.schema.certificate.RevokeCertificateResponse")
 }
 
 func init() {
@@ -513,71 +774,85 @@ func init() {
 }
 
 var fileDescriptor_0a6786e97590497b = []byte{
-	// 1023 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x55, 0x4f, 0x6f, 0x1b, 0xc5,
-	0x1b, 0xf6, 0xac, 0xe3, 0xc4, 0x99, 0x34, 0xee, 0x76, 0x7e, 0xbf, 0xc3, 0x36, 0x89, 0x16, 0xcb,
-	0x11, 0xc2, 0x04, 0xbc, 0x4b, 0x8c, 0xa0, 0xaa, 0x50, 0x91, 0x92, 0xd4, 0xa2, 0x96, 0x42, 0x6d,
-	0xad, 0xed, 0xa8, 0xea, 0x65, 0x35, 0x5e, 0x8f, 0x9d, 0x81, 0xdd, 0x9d, 0x65, 0x67, 0xd6, 0x38,
-	0x42, 0x48, 0xa8, 0xe2, 0xc2, 0x0d, 0xc1, 0x47, 0xe0, 0xc2, 0x47, 0xa8, 0xc8, 0x25, 0x12, 0x07,
-	0x7a, 0x42, 0x11, 0x70, 0x28, 0x9c, 0x88, 0xc3, 0xa1, 0x70, 0xea, 0x99, 0x13, 0xda, 0x59, 0x27,
-	0xfe, 0x53, 0x35, 0x41, 0xc0, 0xed, 0x9d, 0x79, 0xde, 0xe7, 0x99, 0xd9, 0x67, 0xde, 0x77, 0x5f,
-	0xf8, 0x66, 0x9f, 0x70, 0x83, 0x32, 0x93, 0x3b, 0xfb, 0xc4, 0xc3, 0xa6, 0x43, 0x42, 0x41, 0xbb,
-	0xd4, 0xc1, 0x82, 0x98, 0x41, 0xd4, 0x76, 0xa9, 0x63, 0x3b, 0x11, 0x17, 0xcc, 0xb3, 0x3b, 0x58,
-	0x60, 0x1b, 0x07, 0xd4, 0x08, 0x42, 0x26, 0x18, 0xba, 0x9e, 0xf0, 0x8c, 0x84, 0x67, 0x4c, 0xf0,
-	0x56, 0x4a, 0x3d, 0x2a, 0xf6, 0xa3, 0xb6, 0xe1, 0x30, 0xcf, 0xec, 0xb1, 0x1e, 0x33, 0x25, 0xa3,
-	0x1d, 0x75, 0xe5, 0x4a, 0x2e, 0x64, 0x94, 0x28, 0xad, 0xac, 0xf5, 0x18, 0xeb, 0xb9, 0xc4, 0xc4,
-	0x01, 0x35, 0xb1, 0xef, 0x33, 0x81, 0x05, 0x65, 0x3e, 0x1f, 0xa1, 0xfa, 0xb3, 0xf7, 0xb3, 0xc5,
-	0x41, 0x40, 0xce, 0xf0, 0xd5, 0x69, 0x9c, 0x05, 0x93, 0xe4, 0xeb, 0xd3, 0xe0, 0x24, 0x6f, 0x6d,
-	0x1a, 0xea, 0x63, 0x97, 0x76, 0xb0, 0x20, 0x23, 0xb4, 0x30, 0x83, 0x12, 0x4e, 0xfc, 0xfe, 0x8c,
-	0x78, 0x7e, 0x26, 0x87, 0x92, 0x0f, 0xed, 0xa9, 0x8c, 0xc2, 0xcf, 0x0a, 0x2c, 0xec, 0x8c, 0x8d,
-	0xb9, 0x43, 0xb0, 0x2b, 0xf6, 0x1b, 0x02, 0x8b, 0x88, 0xef, 0x52, 0x2e, 0x2c, 0xf2, 0x41, 0x44,
-	0xb8, 0x40, 0x6b, 0x70, 0xd1, 0xc7, 0x1e, 0xe1, 0x01, 0x76, 0x88, 0x06, 0xf2, 0xa0, 0xb8, 0x68,
-	0x8d, 0x37, 0x90, 0x01, 0x33, 0x2c, 0xec, 0x90, 0x50, 0x53, 0xf2, 0xa0, 0x98, 0x2b, 0x6b, 0xc6,
-	0xb4, 0xf1, 0x0d, 0x16, 0x8a, 0x5a, 0x8c, 0x5b, 0x49, 0x1a, 0xda, 0x84, 0x4b, 0x1e, 0x1e, 0xd8,
-	0x21, 0xe1, 0x91, 0x2b, 0xb8, 0x96, 0xce, 0x83, 0xe2, 0xf2, 0xb6, 0xfa, 0xcb, 0x21, 0x50, 0x36,
-	0x5f, 0xfb, 0xe6, 0xf7, 0xa3, 0x74, 0x66, 0x23, 0xad, 0x3d, 0x59, 0xb0, 0xa0, 0x87, 0x07, 0x56,
-	0x92, 0x83, 0xee, 0xc3, 0x05, 0xb7, 0x2d, 0x5d, 0xd5, 0xe6, 0xf2, 0xe9, 0x62, 0xae, 0xfc, 0x8a,
-	0xf1, 0xdc, 0xd7, 0x35, 0x76, 0x19, 0xee, 0x6c, 0x63, 0x17, 0xfb, 0x0e, 0x09, 0x9b, 0x07, 0x01,
-	0xd9, 0xfe, 0xbf, 0x54, 0xfd, 0x02, 0x28, 0x6a, 0xfa, 0x2c, 0xd2, 0x80, 0x35, 0xef, 0xb6, 0x63,
-	0x14, 0xed, 0xc1, 0xc5, 0xf3, 0x37, 0xd3, 0x32, 0x52, 0x7d, 0xfd, 0x02, 0xf5, 0xd8, 0xae, 0x19,
-	0x55, 0x65, 0x42, 0x35, 0xeb, 0x8c, 0xf0, 0xc2, 0x4f, 0x00, 0xae, 0x5f, 0xe8, 0x2d, 0x0f, 0x98,
-	0xcf, 0x09, 0xba, 0x07, 0x33, 0x54, 0x10, 0x8f, 0x6b, 0x20, 0x9f, 0x2e, 0x2e, 0x95, 0xb7, 0x2f,
-	0x39, 0xfb, 0x12, 0xb9, 0xaa, 0x20, 0x9e, 0x95, 0x08, 0xa2, 0x75, 0xb8, 0x2c, 0x98, 0xc0, 0xae,
-	0x4d, 0x06, 0x01, 0x0d, 0x49, 0x47, 0x3e, 0xd0, 0xb2, 0x75, 0x45, 0x6e, 0x56, 0x92, 0x3d, 0x64,
-	0xc0, 0xff, 0x4d, 0x24, 0x51, 0xbf, 0x67, 0x73, 0xc6, 0xfc, 0xe4, 0x55, 0xac, 0x6b, 0xe3, 0x54,
-	0xea, 0xf7, 0x1a, 0x8c, 0xf9, 0x85, 0x6f, 0xd3, 0xf0, 0xa5, 0xbf, 0x79, 0x8f, 0x4b, 0xea, 0x06,
-	0xc1, 0xb9, 0x78, 0x21, 0x6f, 0xb5, 0x68, 0xc9, 0x18, 0x99, 0x70, 0x8e, 0xfa, 0x5d, 0x26, 0x8f,
-	0x5f, 0x2a, 0xaf, 0xce, 0x78, 0x11, 0x9f, 0x5b, 0xf5, 0xbb, 0x2c, 0xf6, 0xd7, 0x92, 0x89, 0xa8,
-	0x05, 0xe7, 0xfe, 0xdb, 0xb2, 0x90, 0x72, 0xe8, 0x05, 0xb8, 0x44, 0xb9, 0x8d, 0x23, 0xc1, 0x62,
-	0x09, 0x2d, 0x93, 0x07, 0xc5, 0xac, 0x05, 0x29, 0xdf, 0x1a, 0xed, 0xa0, 0x0d, 0x78, 0x4d, 0x50,
-	0x8f, 0xd8, 0x91, 0x2f, 0xe8, 0xc8, 0xbb, 0x03, 0x6d, 0x3e, 0x0f, 0x8a, 0x19, 0xeb, 0x6a, 0x0c,
-	0xb4, 0xe2, 0x7d, 0x69, 0xdc, 0x01, 0xba, 0x05, 0xe7, 0xb9, 0x34, 0x48, 0x5b, 0x90, 0x1d, 0xf2,
-	0xe2, 0x25, 0x4f, 0x9c, 0xb8, 0x69, 0x8d, 0x48, 0xc8, 0x82, 0x57, 0x39, 0x77, 0x83, 0x90, 0x75,
-	0xa9, 0x4b, 0x92, 0x32, 0xcd, 0x4a, 0x9d, 0x97, 0x2f, 0xd0, 0x69, 0x34, 0x76, 0xeb, 0x09, 0x43,
-	0x9a, 0x95, 0x1b, 0x2b, 0xc4, 0xeb, 0x8d, 0x32, 0xcc, 0x4d, 0x67, 0x20, 0x08, 0xe7, 0x77, 0x76,
-	0xab, 0x95, 0xbb, 0x4d, 0x35, 0x15, 0xc7, 0x8d, 0x8a, 0xb5, 0x57, 0xb1, 0x54, 0x80, 0xb2, 0x70,
-	0xae, 0xb6, 0xd3, 0xa8, 0xab, 0xca, 0xc6, 0x4d, 0xa8, 0xce, 0x7a, 0x88, 0x10, 0xcc, 0xed, 0x55,
-	0xad, 0x66, 0x6b, 0x6b, 0xd7, 0x1e, 0x31, 0x52, 0x31, 0xe3, 0x4e, 0xb3, 0x59, 0x57, 0x01, 0x5a,
-	0x80, 0xe9, 0xe6, 0x4e, 0x4c, 0xcd, 0xc3, 0xec, 0x59, 0xdf, 0xc8, 0x83, 0x5a, 0x8d, 0x66, 0xed,
-	0xdd, 0x24, 0x75, 0xab, 0xd5, 0xac, 0xa9, 0x60, 0xe3, 0x06, 0x84, 0xe3, 0x4f, 0x47, 0x39, 0x08,
-	0x5b, 0x75, 0xbb, 0x59, 0xb3, 0x6f, 0x6f, 0x35, 0x2b, 0x6a, 0x0a, 0x5d, 0x81, 0xd9, 0xca, 0xbd,
-	0x7a, 0xd5, 0xaa, 0xde, 0x7d, 0x47, 0x05, 0x68, 0x09, 0x2e, 0xc8, 0x55, 0xe5, 0xb6, 0xaa, 0x94,
-	0xff, 0x50, 0xe0, 0xe2, 0x8e, 0x1c, 0x00, 0x5b, 0xf5, 0x2a, 0xfa, 0x4a, 0x81, 0xab, 0x17, 0x54,
-	0x27, 0xba, 0xf5, 0x4f, 0xbb, 0x4b, 0xfe, 0x08, 0x57, 0xde, 0xfe, 0x77, 0xcd, 0x59, 0xf8, 0x14,
-	0x3c, 0x7a, 0xa8, 0x80, 0xe1, 0x43, 0x25, 0xd3, 0x21, 0x1e, 0xdb, 0x1c, 0x7e, 0xa7, 0x95, 0xbb,
-	0x6f, 0x0c, 0x9c, 0x12, 0x27, 0x4e, 0x14, 0x12, 0x8f, 0xf0, 0xfd, 0x12, 0x17, 0xd8, 0xef, 0xe0,
-	0xb0, 0x53, 0xf2, 0x98, 0x4f, 0x05, 0x0b, 0x5f, 0xed, 0x13, 0x5e, 0xa2, 0xac, 0x14, 0x84, 0x6c,
-	0x70, 0x50, 0x0a, 0x09, 0xee, 0x3c, 0xf8, 0xf1, 0xb7, 0x2f, 0x95, 0xb7, 0xd0, 0xcd, 0xd1, 0xf8,
-	0x33, 0xcf, 0x3b, 0x8a, 0x9b, 0x1f, 0x9d, 0xc7, 0x1f, 0x4f, 0x0e, 0x4a, 0x6e, 0xef, 0xcb, 0x1b,
-	0xd9, 0x49, 0x45, 0xad, 0xdc, 0x38, 0x3a, 0x04, 0xe9, 0x1f, 0x0e, 0x41, 0xfe, 0xf9, 0x5f, 0x53,
-	0x6b, 0xbf, 0x47, 0x1c, 0xf1, 0xe7, 0x21, 0x48, 0x6e, 0xfa, 0xe0, 0x7b, 0x4d, 0x51, 0xc1, 0xf6,
-	0x67, 0xe0, 0xf8, 0x44, 0x4f, 0x3d, 0x3e, 0xd1, 0x53, 0x4f, 0x4f, 0x74, 0xf0, 0xc9, 0x50, 0x07,
-	0x5f, 0x0f, 0x75, 0xf0, 0x68, 0xa8, 0x83, 0xe3, 0xa1, 0x0e, 0x7e, 0x1d, 0xea, 0xe0, 0xc9, 0x50,
-	0x4f, 0x3d, 0x1d, 0xea, 0xe0, 0xf3, 0x53, 0x3d, 0x75, 0x74, 0xaa, 0x83, 0xe3, 0x53, 0x3d, 0xf5,
-	0xf8, 0x54, 0x4f, 0xdd, 0xaf, 0xf5, 0x58, 0xf0, 0x7e, 0xcf, 0xe8, 0x33, 0x57, 0x90, 0x30, 0xc4,
-	0x46, 0xc4, 0x4d, 0x19, 0x74, 0x59, 0xe8, 0xc5, 0x1f, 0xd7, 0xa7, 0x1d, 0x12, 0x96, 0xce, 0x60,
-	0x33, 0x68, 0xf7, 0x98, 0x49, 0x06, 0x62, 0x34, 0xbb, 0x9e, 0x1d, 0xfe, 0xed, 0x79, 0x39, 0xc2,
-	0x5e, 0xff, 0x2b, 0x00, 0x00, 0xff, 0xff, 0x93, 0x04, 0x4f, 0xca, 0x20, 0x08, 0x00, 0x00,
+	// 1244 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0x4f, 0x8f, 0xd3, 0xc6,
+	0x1b, 0xce, 0x38, 0xfb, 0x27, 0x3b, 0xcb, 0x2e, 0x66, 0x7e, 0xfc, 0x8a, 0xd9, 0x45, 0x26, 0x0a,
+	0xaa, 0x9a, 0xa6, 0x4d, 0x0c, 0x4b, 0x8b, 0x0a, 0x15, 0x48, 0x9b, 0x10, 0x4a, 0xa4, 0x40, 0x22,
+	0x27, 0x41, 0x88, 0x8b, 0x35, 0x71, 0x26, 0xd9, 0x29, 0xb1, 0xc7, 0xf5, 0x4c, 0x42, 0x22, 0x84,
+	0xd4, 0x72, 0x6b, 0x4f, 0x55, 0x7b, 0xea, 0x37, 0xe8, 0x47, 0xa8, 0xca, 0x05, 0xb5, 0x07, 0x38,
+	0x55, 0xa8, 0xed, 0x81, 0xf6, 0x54, 0xb2, 0x3d, 0x50, 0xa9, 0x07, 0xae, 0xbd, 0x55, 0x1e, 0x7b,
+	0xd9, 0x24, 0x0b, 0xbb, 0x40, 0xb9, 0x8d, 0xdf, 0x3f, 0xcf, 0xbc, 0xcf, 0xf3, 0xbe, 0x33, 0x1e,
+	0x78, 0xaa, 0x4f, 0x78, 0x8e, 0x32, 0x83, 0xdb, 0x1b, 0xc4, 0xc1, 0x86, 0x4d, 0x7c, 0x41, 0xdb,
+	0xd4, 0xc6, 0x82, 0x18, 0x5e, 0xaf, 0xd9, 0xa5, 0xb6, 0x65, 0xf7, 0xb8, 0x60, 0x8e, 0xd5, 0xc2,
+	0x02, 0x5b, 0xd8, 0xa3, 0x39, 0xcf, 0x67, 0x82, 0xa1, 0xc3, 0x61, 0x5e, 0x2e, 0xcc, 0xcb, 0x8d,
+	0xe5, 0xad, 0x64, 0x3b, 0x54, 0x6c, 0xf4, 0x9a, 0x39, 0x9b, 0x39, 0x46, 0x87, 0x75, 0x98, 0x21,
+	0x33, 0x9a, 0xbd, 0xb6, 0xfc, 0x92, 0x1f, 0x72, 0x15, 0x22, 0xad, 0x1c, 0xe9, 0x30, 0xd6, 0xe9,
+	0x12, 0x03, 0x7b, 0xd4, 0xc0, 0xae, 0xcb, 0x04, 0x16, 0x94, 0xb9, 0x3c, 0xf2, 0xea, 0x3b, 0xeb,
+	0xb3, 0xc4, 0xd0, 0x23, 0x5b, 0xfe, 0xd5, 0x49, 0x3f, 0xf3, 0xc6, 0x93, 0x0f, 0x4f, 0x3a, 0xc7,
+	0xf3, 0x8e, 0x4c, 0xba, 0xfa, 0xb8, 0x4b, 0x5b, 0x58, 0x90, 0xc8, 0x9b, 0x9a, 0xf2, 0x12, 0x4e,
+	0xdc, 0xfe, 0x14, 0x78, 0x72, 0x2a, 0x86, 0x92, 0x1b, 0xd6, 0x44, 0x44, 0xea, 0x37, 0x05, 0xa6,
+	0x0a, 0xdb, 0xc2, 0x5c, 0x24, 0xb8, 0x2b, 0x36, 0x6a, 0x02, 0x8b, 0x1e, 0x2f, 0x53, 0x2e, 0x4c,
+	0xf2, 0x49, 0x8f, 0x70, 0x81, 0x8e, 0xc0, 0x05, 0x17, 0x3b, 0x84, 0x7b, 0xd8, 0x26, 0x1a, 0x48,
+	0x82, 0xf4, 0x82, 0xb9, 0x6d, 0x40, 0x39, 0x38, 0xcb, 0xfc, 0x16, 0xf1, 0x35, 0x25, 0x09, 0xd2,
+	0xcb, 0x6b, 0x5a, 0x6e, 0x52, 0xf8, 0x1a, 0xf3, 0x45, 0x25, 0xf0, 0x9b, 0x61, 0x18, 0x3a, 0x01,
+	0x17, 0x1d, 0x3c, 0xb0, 0x7c, 0xc2, 0x7b, 0x5d, 0xc1, 0xb5, 0x78, 0x12, 0xa4, 0x97, 0xf2, 0xea,
+	0xef, 0x77, 0x80, 0x72, 0xe2, 0xf8, 0xf7, 0x7f, 0xdd, 0x8d, 0xcf, 0x66, 0xe2, 0xda, 0xe3, 0x79,
+	0x13, 0x3a, 0x78, 0x60, 0x86, 0x31, 0xe8, 0x1a, 0x9c, 0xef, 0x36, 0xa5, 0xaa, 0xda, 0x4c, 0x32,
+	0x9e, 0x5e, 0x5e, 0x7b, 0x27, 0xf7, 0xdc, 0xee, 0xe6, 0xca, 0x0c, 0xb7, 0xf2, 0xb8, 0x8b, 0x5d,
+	0x9b, 0xf8, 0xf5, 0xa1, 0x47, 0xf2, 0x07, 0x25, 0xea, 0x57, 0x40, 0x51, 0xe3, 0x5b, 0x2b, 0x0d,
+	0x98, 0x73, 0xdd, 0x66, 0xe0, 0x45, 0x57, 0xe0, 0xc2, 0xd3, 0x9e, 0x69, 0xb3, 0x12, 0xfd, 0xd8,
+	0x2e, 0xe8, 0x81, 0x5c, 0x53, 0xa8, 0xca, 0x18, 0x6a, 0xc2, 0x8e, 0xfc, 0xa9, 0x5f, 0x01, 0x3c,
+	0xb6, 0xab, 0xb6, 0xdc, 0x63, 0x2e, 0x27, 0xe8, 0x2a, 0x9c, 0xa5, 0x82, 0x38, 0x5c, 0x03, 0xc9,
+	0x78, 0x7a, 0x71, 0x2d, 0xbf, 0xc7, 0xde, 0x7b, 0xc0, 0x95, 0x04, 0x71, 0xcc, 0x10, 0x10, 0x1d,
+	0x83, 0x4b, 0x82, 0x09, 0xdc, 0xb5, 0xc8, 0xc0, 0xa3, 0x3e, 0x69, 0xc9, 0x06, 0x2d, 0x99, 0xfb,
+	0xa4, 0xb1, 0x18, 0xda, 0x50, 0x0e, 0xfe, 0x6f, 0x2c, 0x88, 0xba, 0x1d, 0x8b, 0x33, 0xe6, 0x86,
+	0x5d, 0x31, 0x0f, 0x6c, 0x87, 0x52, 0xb7, 0x53, 0x63, 0xcc, 0x4d, 0xfd, 0x18, 0x87, 0x6f, 0xbd,
+	0x60, 0x1d, 0x7b, 0xcc, 0x0d, 0x82, 0x33, 0xc1, 0x87, 0xac, 0x6a, 0xc1, 0x94, 0x6b, 0x64, 0xc0,
+	0x19, 0xea, 0xb6, 0x99, 0xdc, 0x7e, 0x71, 0x6d, 0x75, 0x4a, 0x8b, 0x60, 0xdf, 0x92, 0xdb, 0x66,
+	0x81, 0xbe, 0xa6, 0x0c, 0x44, 0x0d, 0x38, 0xf3, 0x7a, 0xc7, 0x42, 0xc2, 0xa1, 0xa3, 0x70, 0x91,
+	0x72, 0x0b, 0xf7, 0x04, 0x0b, 0x20, 0xb4, 0xd9, 0x24, 0x48, 0x27, 0x4c, 0x48, 0xf9, 0x7a, 0x64,
+	0x41, 0x19, 0x78, 0x40, 0x50, 0x87, 0x58, 0x3d, 0x57, 0xd0, 0x48, 0xbb, 0xa1, 0x36, 0x97, 0x04,
+	0xe9, 0x59, 0x73, 0x7f, 0xe0, 0x68, 0x04, 0x76, 0x29, 0xdc, 0x10, 0x9d, 0x85, 0x73, 0x5c, 0x0a,
+	0xa4, 0xcd, 0xcb, 0x13, 0xf2, 0xe6, 0x1e, 0x2d, 0x0e, 0xd5, 0x34, 0xa3, 0x24, 0x64, 0xc2, 0xfd,
+	0x9c, 0x77, 0x3d, 0x9f, 0xb5, 0x69, 0x97, 0x84, 0x63, 0x9a, 0x90, 0x6c, 0xdf, 0xde, 0x05, 0xa7,
+	0x56, 0x2b, 0x57, 0xc3, 0x0c, 0x29, 0xd6, 0xf2, 0x36, 0x82, 0x1c, 0xce, 0xcf, 0x00, 0x3c, 0x68,
+	0x12, 0xe1, 0x0f, 0x4b, 0x9c, 0xf7, 0x02, 0x49, 0xb6, 0x8e, 0x7a, 0x7a, 0x47, 0xcb, 0xf2, 0x50,
+	0xaa, 0xf3, 0x05, 0x50, 0x54, 0x30, 0xde, 0x3e, 0x7d, 0xbc, 0x7d, 0x13, 0x41, 0x61, 0x2b, 0x8f,
+	0xc2, 0xc5, 0x36, 0xf3, 0x6d, 0x62, 0xf9, 0xc4, 0x25, 0x37, 0x64, 0x47, 0x13, 0x26, 0x94, 0x26,
+	0x33, 0xb0, 0xa4, 0x0e, 0xc1, 0xff, 0x4f, 0x95, 0x10, 0x8e, 0x4e, 0xaa, 0x05, 0x35, 0x93, 0xf4,
+	0xd9, 0x75, 0x32, 0x36, 0x67, 0xaf, 0xbd, 0xbe, 0xd4, 0x2a, 0x3c, 0xfc, 0x8c, 0x5d, 0xc2, 0x12,
+	0x32, 0x15, 0xb8, 0x3c, 0xa9, 0x20, 0x5a, 0x85, 0x87, 0x1a, 0x97, 0x6b, 0xd5, 0x62, 0xa1, 0x74,
+	0xa1, 0x54, 0x3c, 0x6f, 0xd5, 0x6a, 0x65, 0xab, 0x6a, 0x56, 0x2e, 0x94, 0xca, 0x45, 0x35, 0x86,
+	0x20, 0x9c, 0x2b, 0x94, 0x4b, 0xc5, 0xcb, 0x75, 0x15, 0x04, 0xeb, 0x5a, 0xd1, 0xbc, 0x52, 0x34,
+	0x55, 0x05, 0x25, 0xe0, 0x4c, 0xa5, 0x50, 0xab, 0xaa, 0xf1, 0xcc, 0x25, 0xa8, 0x4e, 0x0f, 0x20,
+	0x42, 0x70, 0x79, 0x1c, 0xb2, 0x9c, 0x57, 0x63, 0x81, 0xed, 0x4a, 0xc9, 0xac, 0x37, 0xd6, 0xcb,
+	0x56, 0x84, 0x02, 0x02, 0x94, 0x8b, 0xf5, 0x7a, 0x55, 0x55, 0xd0, 0x3c, 0x8c, 0xd7, 0x0b, 0x01,
+	0xdc, 0x29, 0x98, 0xd8, 0xba, 0x88, 0xd0, 0x41, 0xa8, 0x8e, 0xc3, 0x14, 0x8a, 0x66, 0x3d, 0x2a,
+	0xa9, 0x51, 0xab, 0x57, 0x2e, 0x85, 0x00, 0xeb, 0x8d, 0x7a, 0x45, 0x55, 0x32, 0x15, 0x08, 0xb7,
+	0x27, 0x0c, 0xbd, 0x01, 0xd1, 0x04, 0xa7, 0xfa, 0x7a, 0xbd, 0x51, 0x53, 0x63, 0x68, 0x19, 0xc2,
+	0x46, 0xd5, 0xaa, 0x57, 0xac, 0xf3, 0xeb, 0xf5, 0xa2, 0x0a, 0xd0, 0x3e, 0x98, 0x28, 0x5e, 0xad,
+	0x96, 0xcc, 0xd2, 0xe5, 0x8f, 0x54, 0x05, 0x2d, 0xc2, 0x79, 0xf9, 0x55, 0x3c, 0xaf, 0xc6, 0xd7,
+	0x7e, 0x98, 0x83, 0x0b, 0x05, 0xf9, 0xff, 0x5d, 0xaf, 0x96, 0xd0, 0x37, 0x0a, 0x5c, 0xdd, 0xe5,
+	0x72, 0x40, 0x67, 0x5f, 0xf5, 0x72, 0x93, 0xcd, 0x5f, 0x39, 0xf7, 0xdf, 0xee, 0xc6, 0xd4, 0xcd,
+	0xfb, 0xdf, 0x29, 0x60, 0x74, 0x4f, 0x5b, 0x6b, 0xbf, 0x3f, 0xb0, 0xb3, 0x9c, 0xd8, 0x3d, 0x9f,
+	0x38, 0x84, 0x6f, 0x64, 0xb9, 0xc0, 0x6e, 0x0b, 0xfb, 0xad, 0xac, 0xc3, 0x5c, 0x2a, 0x98, 0xff,
+	0x6e, 0x9f, 0xf0, 0x2c, 0x65, 0x59, 0xcf, 0x67, 0x83, 0x61, 0xd6, 0x27, 0xb8, 0x75, 0xfb, 0x97,
+	0x3f, 0xbf, 0x56, 0x3e, 0x44, 0xa7, 0xa3, 0x37, 0x87, 0xf1, 0x74, 0xce, 0xb8, 0x71, 0xf3, 0xe9,
+	0xfa, 0xd6, 0xf8, 0xeb, 0x84, 0x5b, 0x1b, 0xb2, 0x0e, 0x2b, 0x3a, 0xc6, 0x7f, 0x03, 0xb8, 0x34,
+	0x31, 0xef, 0xc8, 0xd8, 0x85, 0xce, 0xb3, 0x0e, 0xe7, 0xca, 0xf1, 0x17, 0x4f, 0x88, 0x18, 0x0f,
+	0x46, 0xf7, 0xb4, 0x13, 0xcf, 0x65, 0x8b, 0x5b, 0x0e, 0x75, 0x27, 0xb9, 0xde, 0xf0, 0xa9, 0x20,
+	0x92, 0xec, 0xd9, 0xd4, 0x07, 0x2f, 0x41, 0x36, 0x74, 0xdc, 0x32, 0xfc, 0xa0, 0x8c, 0x33, 0x20,
+	0x83, 0xfe, 0x01, 0xf0, 0xc0, 0x8e, 0xf3, 0x85, 0x4e, 0xee, 0xca, 0xe0, 0xd9, 0x67, 0x7e, 0xe5,
+	0xbd, 0x97, 0x4b, 0x8a, 0xa8, 0x0f, 0x5f, 0x9d, 0xfa, 0xb9, 0xd4, 0xe9, 0x57, 0xa2, 0x1e, 0x94,
+	0x72, 0x06, 0x64, 0x56, 0x72, 0x77, 0xef, 0x80, 0xf8, 0xcf, 0x77, 0x40, 0xf2, 0xf9, 0x75, 0x57,
+	0x9a, 0x1f, 0x13, 0x5b, 0xdc, 0xfe, 0x49, 0x53, 0x54, 0x90, 0xff, 0x1c, 0x3c, 0x78, 0xa4, 0xc7,
+	0x1e, 0x3e, 0xd2, 0x63, 0x4f, 0x1e, 0xe9, 0xe0, 0xd3, 0x91, 0x0e, 0xbe, 0x1d, 0xe9, 0xe0, 0xfe,
+	0x48, 0x07, 0x0f, 0x46, 0x3a, 0xf8, 0x63, 0xa4, 0x83, 0xc7, 0x23, 0x3d, 0xf6, 0x64, 0xa4, 0x83,
+	0x2f, 0x37, 0xf5, 0xd8, 0xdd, 0x4d, 0x1d, 0x3c, 0xd8, 0xd4, 0x63, 0x0f, 0x37, 0xf5, 0xd8, 0xb5,
+	0x4a, 0x87, 0x79, 0xd7, 0x3b, 0xb9, 0x3e, 0xeb, 0x0a, 0xe2, 0xfb, 0x38, 0xd7, 0xe3, 0x86, 0x5c,
+	0xb4, 0x99, 0xef, 0x04, 0xbc, 0xfa, 0xb4, 0x45, 0xfc, 0xec, 0x96, 0xdb, 0xf0, 0x9a, 0x1d, 0x66,
+	0x90, 0x81, 0x88, 0x9e, 0x84, 0x3b, 0xdf, 0xd4, 0xcd, 0x39, 0xf9, 0x32, 0x3c, 0xf9, 0x6f, 0x00,
+	0x00, 0x00, 0xff, 0xff, 0x2e, 0x35, 0x0a, 0x70, 0x77, 0x0b, 0x00, 0x00,
 }
 
 func (x SSLProfileType) String() string {
@@ -734,7 +1009,111 @@ func (this *CertificateHealthStatusListResponseItem) Equal(that interface{}) boo
 	if this.Status != that1.Status {
 		return false
 	}
-	if this.SslprofileType != that1.SslprofileType {
+	if len(this.SslprofileType) != len(that1.SslprofileType) {
+		return false
+	}
+	for i := range this.SslprofileType {
+		if this.SslprofileType[i] != that1.SslprofileType[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *RetryIssuanceRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RetryIssuanceRequest)
+	if !ok {
+		that2, ok := that.(RetryIssuanceRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.ForceRenew != that1.ForceRenew {
+		return false
+	}
+	return true
+}
+func (this *RetryIssuanceResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RetryIssuanceResponse)
+	if !ok {
+		that2, ok := that.(RetryIssuanceResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	return true
+}
+func (this *RevokeCertificateRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RevokeCertificateRequest)
+	if !ok {
+		that2, ok := that.(RevokeCertificateRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	return true
+}
+func (this *RevokeCertificateResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RevokeCertificateResponse)
+	if !ok {
+		that2, ok := that.(RevokeCertificateResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
 		return false
 	}
 	return true
@@ -786,6 +1165,47 @@ func (this *CertificateHealthStatusListResponseItem) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *RetryIssuanceRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&certificate.RetryIssuanceRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "ForceRenew: "+fmt.Sprintf("%#v", this.ForceRenew)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *RetryIssuanceResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 4)
+	s = append(s, "&certificate.RetryIssuanceResponse{")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *RevokeCertificateRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&certificate.RevokeCertificateRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *RevokeCertificateResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 4)
+	s = append(s, "&certificate.RevokeCertificateResponse{")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPublicCustomDataApi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -812,6 +1232,21 @@ type CustomAPIClient interface {
 	// x-displayName: "Certificate Health Status List"
 	// Get Certificate Health Status of all certificates in a namespace
 	CertificateHealthStatusList(ctx context.Context, in *CertificateHealthStatusListRequest, opts ...grpc.CallOption) (*CertificateHealthStatusListResponse, error)
+	// Retry Certificate Issuance
+	//
+	// x-displayName: "Retry Certificate Issuance"
+	// Retries certificate issuance after a corrected error or wait condition.
+	// A retry for a valid certificate is a no-op unless force_renew is true.
+	// An active issuance or renewal is not duplicated.
+	RetryIssuance(ctx context.Context, in *RetryIssuanceRequest, opts ...grpc.CallOption) (*RetryIssuanceResponse, error)
+	// Revoke Certificate
+	//
+	// x-displayName: "Revoke Certificate"
+	// Revokes an issued certificate by sending an ACME revocation request to the
+	// issuing CA. The certificate is added to the CA's revocation list (CRL/OCSP)
+	// and will no longer be trusted by clients that check revocation status.
+	// The certificate object is not deleted — it transitions to the REVOKED state.
+	RevokeCertificate(ctx context.Context, in *RevokeCertificateRequest, opts ...grpc.CallOption) (*RevokeCertificateResponse, error)
 }
 
 type customAPIClient struct {
@@ -831,6 +1266,24 @@ func (c *customAPIClient) CertificateHealthStatusList(ctx context.Context, in *C
 	return out, nil
 }
 
+func (c *customAPIClient) RetryIssuance(ctx context.Context, in *RetryIssuanceRequest, opts ...grpc.CallOption) (*RetryIssuanceResponse, error) {
+	out := new(RetryIssuanceResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.certificate.CustomAPI/RetryIssuance", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customAPIClient) RevokeCertificate(ctx context.Context, in *RevokeCertificateRequest, opts ...grpc.CallOption) (*RevokeCertificateResponse, error) {
+	out := new(RevokeCertificateResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.certificate.CustomAPI/RevokeCertificate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomAPIServer is the server API for CustomAPI service.
 type CustomAPIServer interface {
 	// Certificate Health Status List
@@ -838,6 +1291,21 @@ type CustomAPIServer interface {
 	// x-displayName: "Certificate Health Status List"
 	// Get Certificate Health Status of all certificates in a namespace
 	CertificateHealthStatusList(context.Context, *CertificateHealthStatusListRequest) (*CertificateHealthStatusListResponse, error)
+	// Retry Certificate Issuance
+	//
+	// x-displayName: "Retry Certificate Issuance"
+	// Retries certificate issuance after a corrected error or wait condition.
+	// A retry for a valid certificate is a no-op unless force_renew is true.
+	// An active issuance or renewal is not duplicated.
+	RetryIssuance(context.Context, *RetryIssuanceRequest) (*RetryIssuanceResponse, error)
+	// Revoke Certificate
+	//
+	// x-displayName: "Revoke Certificate"
+	// Revokes an issued certificate by sending an ACME revocation request to the
+	// issuing CA. The certificate is added to the CA's revocation list (CRL/OCSP)
+	// and will no longer be trusted by clients that check revocation status.
+	// The certificate object is not deleted — it transitions to the REVOKED state.
+	RevokeCertificate(context.Context, *RevokeCertificateRequest) (*RevokeCertificateResponse, error)
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -846,6 +1314,12 @@ type UnimplementedCustomAPIServer struct {
 
 func (*UnimplementedCustomAPIServer) CertificateHealthStatusList(ctx context.Context, req *CertificateHealthStatusListRequest) (*CertificateHealthStatusListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CertificateHealthStatusList not implemented")
+}
+func (*UnimplementedCustomAPIServer) RetryIssuance(ctx context.Context, req *RetryIssuanceRequest) (*RetryIssuanceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RetryIssuance not implemented")
+}
+func (*UnimplementedCustomAPIServer) RevokeCertificate(ctx context.Context, req *RevokeCertificateRequest) (*RevokeCertificateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeCertificate not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -870,6 +1344,42 @@ func _CustomAPI_CertificateHealthStatusList_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_RetryIssuance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RetryIssuanceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).RetryIssuance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.certificate.CustomAPI/RetryIssuance",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).RetryIssuance(ctx, req.(*RetryIssuanceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPI_RevokeCertificate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeCertificateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).RevokeCertificate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.certificate.CustomAPI/RevokeCertificate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).RevokeCertificate(ctx, req.(*RevokeCertificateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.certificate.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
@@ -877,6 +1387,14 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CertificateHealthStatusList",
 			Handler:    _CustomAPI_CertificateHealthStatusList_Handler,
+		},
+		{
+			MethodName: "RetryIssuance",
+			Handler:    _CustomAPI_RetryIssuance_Handler,
+		},
+		{
+			MethodName: "RevokeCertificate",
+			Handler:    _CustomAPI_RevokeCertificate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1026,10 +1544,23 @@ func (m *CertificateHealthStatusListResponseItem) MarshalToSizedBuffer(dAtA []by
 	_ = i
 	var l int
 	_ = l
-	if m.SslprofileType != 0 {
-		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(m.SslprofileType))
+	if len(m.SslprofileType) > 0 {
+		dAtA6 := make([]byte, len(m.SslprofileType)*10)
+		var j5 int
+		for _, num := range m.SslprofileType {
+			for num >= 1<<7 {
+				dAtA6[j5] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j5++
+			}
+			dAtA6[j5] = uint8(num)
+			j5++
+		}
+		i -= j5
+		copy(dAtA[i:], dAtA6[:j5])
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(j5))
 		i--
-		dAtA[i] = 0x40
+		dAtA[i] = 0x42
 	}
 	if m.Status != 0 {
 		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(m.Status))
@@ -1052,20 +1583,20 @@ func (m *CertificateHealthStatusListResponseItem) MarshalToSizedBuffer(dAtA []by
 		dAtA[i] = 0x28
 	}
 	if len(m.Type) > 0 {
-		dAtA6 := make([]byte, len(m.Type)*10)
-		var j5 int
+		dAtA8 := make([]byte, len(m.Type)*10)
+		var j7 int
 		for _, num := range m.Type {
 			for num >= 1<<7 {
-				dAtA6[j5] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA8[j7] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j5++
+				j7++
 			}
-			dAtA6[j5] = uint8(num)
-			j5++
+			dAtA8[j7] = uint8(num)
+			j7++
 		}
-		i -= j5
-		copy(dAtA[i:], dAtA6[:j5])
-		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(j5))
+		i -= j7
+		copy(dAtA[i:], dAtA8[:j7])
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(j7))
 		i--
 		dAtA[i] = 0x22
 	}
@@ -1095,6 +1626,136 @@ func (m *CertificateHealthStatusListResponseItem) MarshalToSizedBuffer(dAtA []by
 		i--
 		dAtA[i] = 0xa
 	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RetryIssuanceRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RetryIssuanceRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RetryIssuanceRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ForceRenew {
+		i--
+		if m.ForceRenew {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RetryIssuanceResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RetryIssuanceResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RetryIssuanceResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *RevokeCertificateRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RevokeCertificateRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RevokeCertificateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RevokeCertificateResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RevokeCertificateResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RevokeCertificateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	return len(dAtA) - i, nil
 }
 
@@ -1197,9 +1858,68 @@ func (m *CertificateHealthStatusListResponseItem) Size() (n int) {
 	if m.Status != 0 {
 		n += 1 + sovPublicCustomDataApi(uint64(m.Status))
 	}
-	if m.SslprofileType != 0 {
-		n += 1 + sovPublicCustomDataApi(uint64(m.SslprofileType))
+	if len(m.SslprofileType) > 0 {
+		l = 0
+		for _, e := range m.SslprofileType {
+			l += sovPublicCustomDataApi(uint64(e))
+		}
+		n += 1 + sovPublicCustomDataApi(uint64(l)) + l
 	}
+	return n
+}
+
+func (m *RetryIssuanceRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	if m.ForceRenew {
+		n += 2
+	}
+	return n
+}
+
+func (m *RetryIssuanceResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *RevokeCertificateRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	return n
+}
+
+func (m *RevokeCertificateResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	return n
 }
 
@@ -1253,6 +1973,47 @@ func (this *CertificateHealthStatusListResponseItem) String() string {
 		`TimeUntilExpiry:` + fmt.Sprintf("%v", this.TimeUntilExpiry) + `,`,
 		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
 		`SslprofileType:` + fmt.Sprintf("%v", this.SslprofileType) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RetryIssuanceRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RetryIssuanceRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`ForceRenew:` + fmt.Sprintf("%v", this.ForceRenew) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RetryIssuanceResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RetryIssuanceResponse{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RevokeCertificateRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RevokeCertificateRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RevokeCertificateResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RevokeCertificateResponse{`,
 		`}`,
 	}, "")
 	return s
@@ -1908,10 +2669,132 @@ func (m *CertificateHealthStatusListResponseItem) Unmarshal(dAtA []byte) error {
 				}
 			}
 		case 8:
-			if wireType != 0 {
+			if wireType == 0 {
+				var v SSLProfileType
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicCustomDataApi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= SSLProfileType(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.SslprofileType = append(m.SslprofileType, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicCustomDataApi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthPublicCustomDataApi
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthPublicCustomDataApi
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.SslprofileType) == 0 {
+					m.SslprofileType = make([]SSLProfileType, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v SSLProfileType
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomDataApi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= SSLProfileType(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.SslprofileType = append(m.SslprofileType, v)
+				}
+			} else {
 				return fmt.Errorf("proto: wrong wireType = %d for field SslprofileType", wireType)
 			}
-			m.SslprofileType = 0
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RetryIssuanceRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomDataApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RetryIssuanceRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RetryIssuanceRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowPublicCustomDataApi
@@ -1921,11 +2804,299 @@ func (m *CertificateHealthStatusListResponseItem) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SslprofileType |= SSLProfileType(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ForceRenew", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.ForceRenew = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RetryIssuanceResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomDataApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RetryIssuanceResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RetryIssuanceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RevokeCertificateRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomDataApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RevokeCertificateRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RevokeCertificateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RevokeCertificateResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomDataApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RevokeCertificateResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RevokeCertificateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])

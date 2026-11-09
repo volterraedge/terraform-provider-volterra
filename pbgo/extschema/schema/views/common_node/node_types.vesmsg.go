@@ -215,6 +215,29 @@ func (m *Interface) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *Interface) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAddressChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAddressChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIpv6AddressChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIpv6AddressChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkOptionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkOptionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *Interface) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -230,6 +253,33 @@ func (m *Interface) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDhcpServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDhcpServer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "dhcp_server." + dri.DRField
+		}
+		return drInfos, err
+	case *Interface_NoIpv4Address:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *Interface) GetAddressChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAddressChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAddressChoice().(type) {
+	case *Interface_DhcpClient:
+		return nil, nil
+	case *Interface_StaticIp:
+		return nil, nil
+	case *Interface_DhcpServer:
+		drInfos, err := m.GetDhcpServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDhcpServer().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -276,6 +326,39 @@ func (m *Interface) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *Interface) GetIpv6AddressChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIpv6AddressChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetIpv6AddressChoice().(type) {
+	case *Interface_NoIpv6Address:
+		return nil, nil
+	case *Interface_StaticIpv6Address:
+		drInfos, err := m.GetStaticIpv6Address().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticIpv6Address().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "static_ipv6_address." + dri.DRField
+		}
+		return drInfos, err
+	case *Interface_Ipv6AutoConfig:
+		drInfos, err := m.GetIpv6AutoConfig().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpv6AutoConfig().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipv6_auto_config." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *Interface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNetworkOption() == nil {
@@ -284,6 +367,22 @@ func (m *Interface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetNetworkOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "network_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *Interface) GetNetworkOptionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetNetworkOption().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -813,8 +912,41 @@ func (m *NetworkSelectType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNetworkChoiceDRefInfo()
 }
+func (m *NetworkSelectType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *NetworkSelectType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetNetworkChoice().(type) {
+	case *NetworkSelectType_SiteLocalNetwork:
+		return nil, nil
+	case *NetworkSelectType_SiteLocalInsideNetwork:
+		return nil, nil
+	case *NetworkSelectType_SegmentNetwork:
+		vref := m.GetSegmentNetwork()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("segment.Object")
+		dri := db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "segment_network",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *NetworkSelectType) GetNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetNetworkChoice().(type) {
 	case *NetworkSelectType_SiteLocalNetwork:
 		return nil, nil
@@ -987,6 +1119,13 @@ func (m *Node) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetInterfaceListDRefInfo()
 }
+func (m *Node) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInterfaceListDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *Node) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
@@ -998,6 +1137,26 @@ func (m *Node) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInterfaceList() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("interface_list[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *Node) GetInterfaceListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInterfaceList() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetInterfaceList() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInterfaceList() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]

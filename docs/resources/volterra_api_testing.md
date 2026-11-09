@@ -30,16 +30,12 @@ resource "volterra_api_testing" "example" {
 
       basic_auth {
         password {
+          // One of the arguments from this list "blindfold_secret_info clear_secret_info none vault_secret_info wingman_secret_info" must be set
 
+          clear_secret_info {
+            provider = "box-provider"
 
-          // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-          blindfold_secret_info {
-            decryption_provider = "value"
-
-            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-            store_provider = "value"
+            url = "string:///U2VjcmV0SW5mb3JtYXRpb24="
           }
         }
 
@@ -106,13 +102,13 @@ Add and configure testing domains and credentials.
 
 x-displayName: "Value".
 
-
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -122,13 +118,13 @@ x-displayName: "Value".
 
 x-displayName: "Password".
 
-
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -138,13 +134,13 @@ x-displayName: "Password".
 
 x-displayName: "Token".
 
-
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -206,41 +202,21 @@ Add credentials for API testing to use in the selected environment..
 
 `standard` - (Optional) x-displayName: "Standard" (`Bool`).
 
-### Json Payload Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
 ### Login Endpoint Json Payload
 
 x-displayName: "JSON Payload".
 
-
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
 
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
+
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
-
-### Password Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Role Choice Admin
 
@@ -268,6 +244,10 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
+
 ### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
@@ -287,16 +267,6 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
-
-### Token Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Value Blindfold Secret Info Internal
 

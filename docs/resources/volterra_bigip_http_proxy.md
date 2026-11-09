@@ -35,7 +35,11 @@ resource "volterra_bigip_http_proxy" "example" {
           health_check {
             // One of the arguments from this list "icmp_health_check tcp_health_check" can be set
 
-            icmp_health_check = true
+            tcp_health_check {
+              expected_response = ".*"
+
+              send_payload = "send_payload"
+            }
           }
 
           healthy_threshold = "2"
@@ -54,36 +58,16 @@ resource "volterra_bigip_http_proxy" "example" {
         origin_servers {
           // One of the arguments from this list "k8s_service private_ip public_ip public_name" must be set
 
-          k8s_service {
-            // One of the arguments from this list "inside_network outside_network vk8s_networks" must be set
+          public_ip {
+            // One of the arguments from this list "ip ipv6" must be set
 
-            inside_network = true
-
-            protocol = "protocol"
-
-            // One of the arguments from this list "service_name service_selector" must be set
-
-            service_name = "matching.default:production"
-            site_locator {
-              // One of the arguments from this list "site virtual_site" must be set
-
-              site {
-                name      = "test1"
-                namespace = "staging"
-                tenant    = "acmecorp"
-              }
-            }
-            snat_pool {
-              // One of the arguments from this list "no_snat_pool snat_pool" can be set
-
-              no_snat_pool = true
-            }
+            ipv6 = "2001::1"
           }
         }
 
         // One of the arguments from this list "automatic_port lb_port port" must be set
 
-        automatic_port = true
+        lb_port = true
       }
 
       priority = "1"
@@ -97,7 +81,7 @@ resource "volterra_bigip_http_proxy" "example" {
 
     // One of the arguments from this list "http https https_auto_cert" must be set
 
-    https_auto_cert {
+    https {
       add_hsts = true
 
       coalescing_options {
@@ -119,40 +103,43 @@ resource "volterra_bigip_http_proxy" "example" {
       http_protocol_options {
         // One of the arguments from this list "http_protocol_enable_v1_only http_protocol_enable_v1_v2 http_protocol_enable_v2_only" must be set
 
-        http_protocol_enable_v1_only {
-          header_transformation {
-            // One of the arguments from this list "default_header_transformation legacy_header_transformation preserve_case_header_transformation proper_case_header_transformation" must be set
-
-            preserve_case_header_transformation = true
-          }
-        }
+        http_protocol_enable_v2_only = true
       }
       http_redirect = true
-
-      // One of the arguments from this list "no_mtls use_mtls" must be set
-
-      no_mtls = true
 
       // One of the arguments from this list "disable_path_normalize enable_path_normalize" must be set
 
       enable_path_normalize = true
 
-      // One of the arguments from this list "port port_ranges" can be set
+      // One of the arguments from this list "port port_ranges" must be set
 
-      port = "port"
+      port = "443"
 
       // One of the arguments from this list "append_server_name default_header pass_through server_name" can be set
 
       default_header = true
-      tls_config {
-        // One of the arguments from this list "custom_security default_security low_security medium_security" must be set
 
-        default_security = true
+      // One of the arguments from this list "tls_cert_params tls_parameters" must be set
+
+      tls_cert_params {
+        certificates {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        // One of the arguments from this list "no_mtls use_mtls" must be set
+
+        no_mtls = true
+        tls_config {
+          // One of the arguments from this list "custom_security default_security low_security medium_security" must be set
+
+          default_security = true
+        }
       }
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -400,7 +387,7 @@ Specify origin server with public IP.
 
 ###### One of the arguments from this list "ip, ipv6" must be set
 
-`ip` - (Optional) Public IPV4 address (`String`).
+`ip`- (Optional) Public IPV4 address (`String`).
 
 `ipv6` - (Optional) Public IPV6 address (`String`).
 
@@ -746,7 +733,7 @@ User is responsible for managing DNS to this Load Balancer..
 
 `append_server_name` - (Optional) If header value is already present, it is not overwritten and passed as-is. (`String`).
 
-`default_header` - (Optional) Response header name is “server” and value is “volt-adc” (`Bool`).
+`default_header` - (Optional) Response header name is "server" and value is "volt-adc" (`Bool`).
 
 `pass_through` - (Optional) Pass existing server header as is. If server header is absent, a new header is not appended. (`Bool`).
 
@@ -802,7 +789,7 @@ DNS records will be managed by Volterra..
 
 `append_server_name` - (Optional) If header value is already present, it is not overwritten and passed as-is. (`String`).
 
-`default_header` - (Optional) Response header name is “server” and value is “volt-adc” (`Bool`).
+`default_header` - (Optional) Response header name is "server" and value is "volt-adc" (`Bool`).
 
 `pass_through` - (Optional) Pass existing server header as is. If server header is absent, a new header is not appended. (`Bool`).
 
@@ -1002,6 +989,10 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
+
 ### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
@@ -1024,7 +1015,7 @@ Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 ### Server Header Choice Default Header
 
-Response header name is “server” and value is “volt-adc”.
+Response header name is "server" and value is "volt-adc".
 
 ### Server Header Choice Pass Through
 
@@ -1070,11 +1061,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -1161,4 +1154,4 @@ X-Forwarded-Client-Cert header will be added with the configured fields.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured bigip_http_proxy.
+*   `id` - This is the id of the configured bigip_http_proxy.

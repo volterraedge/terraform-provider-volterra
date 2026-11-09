@@ -69,6 +69,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetProxyAdvertisementDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetProxyAdvertisementDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) {
@@ -78,6 +85,22 @@ func (m *CreateSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) 
 	drInfos, err := m.GetProxyAdvertisement().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "proxy_advertisement." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetProxyAdvertisementDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProxyAdvertisement() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetProxyAdvertisement().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -226,6 +249,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetProxyAdvertisementDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetProxyAdvertisementDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) {
@@ -235,6 +265,22 @@ func (m *GetSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetProxyAdvertisement().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "proxy_advertisement." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetProxyAdvertisementDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProxyAdvertisement() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetProxyAdvertisement().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -394,6 +440,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProxyAdvertisementDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProxyAdvertisementDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) {
@@ -411,7 +475,40 @@ func (m *GlobalSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) 
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetProxyAdvertisementDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProxyAdvertisement() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetProxyAdvertisement().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "proxy_advertisement." + dri.DRField
+	}
+	return drInfos, err
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -603,6 +700,13 @@ func (m *ProxyAdvertisementType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAdvertiseChoiceDRefInfo()
 }
+func (m *ProxyAdvertisementType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAdvertiseChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ProxyAdvertisementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -628,6 +732,41 @@ func (m *ProxyAdvertisementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, er
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ProxyAdvertisementType) GetAdvertiseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *ProxyAdvertisementType_DoNotAdvertise:
+		return nil, nil
+	case *ProxyAdvertisementType_AdvertiseOnPublicDefaultVip:
+		return nil, nil
+	case *ProxyAdvertisementType_AdvertiseOnPublic:
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *ProxyAdvertisementType_AdvertiseCustom:
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -798,6 +937,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetProxyAdvertisementDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetProxyAdvertisementDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error) {
@@ -807,6 +953,22 @@ func (m *ReplaceSpecType) GetProxyAdvertisementDRefInfo() ([]db.DRefInfo, error)
 	drInfos, err := m.GetProxyAdvertisement().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "proxy_advertisement." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetProxyAdvertisementDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProxyAdvertisement() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetProxyAdvertisement().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetProxyAdvertisement().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

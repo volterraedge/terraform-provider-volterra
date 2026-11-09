@@ -142,6 +142,16 @@ func ResourceAzureVnetSiteInstanceResourceV1() *schema.Resource {
 							},
 						},
 
+						"none": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
 						"vault_secret_info": {
 
 							Type:       schema.TypeList,
@@ -1171,6 +1181,17 @@ func ResourceAzureVnetSiteInstanceResourceV1() *schema.Resource {
 																									},
 																								},
 
+																								"none": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
+																									},
+																								},
+
 																								"vault_secret_info": {
 
 																									Type:       schema.TypeList,
@@ -1466,6 +1487,16 @@ func ResourceAzureVnetSiteInstanceResourceV1() *schema.Resource {
 																									Required: true,
 																								},
 																							},
+																						},
+																					},
+
+																					"none": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
 																						},
 																					},
 
@@ -2925,6 +2956,17 @@ func ResourceAzureVnetSiteInstanceResourceV1() *schema.Resource {
 																									},
 																								},
 
+																								"none": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
+																									},
+																								},
+
 																								"vault_secret_info": {
 
 																									Type:       schema.TypeList,
@@ -3220,6 +3262,16 @@ func ResourceAzureVnetSiteInstanceResourceV1() *schema.Resource {
 																									Required: true,
 																								},
 																							},
+																						},
+																					},
+
+																					"none": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
 																						},
 																					},
 
@@ -5241,6 +5293,17 @@ func ResourceAzureVnetSiteInstanceResourceV1() *schema.Resource {
 																									},
 																								},
 
+																								"none": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
+																									},
+																								},
+
 																								"vault_secret_info": {
 
 																									Type:       schema.TypeList,
@@ -6235,6 +6298,17 @@ func ResourceAzureVnetSiteInstanceResourceV1() *schema.Resource {
 																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
+																									},
+																								},
+
+																								"none": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
 																									},
 																								},
 

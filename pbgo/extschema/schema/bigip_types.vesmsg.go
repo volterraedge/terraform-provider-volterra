@@ -514,6 +514,13 @@ func (m *TMMHealthMonitoringType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetHealthcheckDRefInfo()
 }
+func (m *TMMHealthMonitoringType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHealthcheckDRefInfoForOverlay(generateHash)
+}
 
 func (m *TMMHealthMonitoringType) GetHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetHealthcheck()
@@ -526,6 +533,34 @@ func (m *TMMHealthMonitoringType) GetHealthcheckDRefInfo() ([]db.DRefInfo, error
 			return nil, fmt.Errorf("TMMHealthMonitoringType.healthcheck[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "healthcheck.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "healthcheck",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *TMMHealthMonitoringType) GetHealthcheckDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetHealthcheck()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("TMMHealthMonitoringType.healthcheck[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "healthcheck.Object",
 			RefdUID:    ref.Uid,

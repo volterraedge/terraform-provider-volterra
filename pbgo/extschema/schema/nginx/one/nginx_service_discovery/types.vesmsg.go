@@ -68,6 +68,13 @@ func (m *ConfigSyncGroup) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetConfigSyncGroupDRefInfo()
 }
+func (m *ConfigSyncGroup) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetConfigSyncGroupDRefInfoForOverlay(generateHash)
+}
 
 func (m *ConfigSyncGroup) GetConfigSyncGroupDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetConfigSyncGroup()
@@ -80,6 +87,34 @@ func (m *ConfigSyncGroup) GetConfigSyncGroupDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("ConfigSyncGroup.config_sync_group[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "nginx_csg.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "config_sync_group",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ConfigSyncGroup) GetConfigSyncGroupDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetConfigSyncGroup()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ConfigSyncGroup.config_sync_group[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "nginx_csg.Object",
 			RefdUID:    ref.Uid,
@@ -259,6 +294,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveryTargetDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryTargetDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
@@ -268,6 +310,22 @@ func (m *CreateSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetDiscoveryTarget().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDiscoveryTarget().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "discovery_target." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetDiscoveryTargetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDiscoveryTarget() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDiscoveryTarget().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDiscoveryTarget().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -430,6 +488,13 @@ func (m *DiscoveryTarget) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTargetDRefInfo()
 }
+func (m *DiscoveryTarget) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTargetDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *DiscoveryTarget) GetTargetDRefInfo() ([]db.DRefInfo, error) {
@@ -451,6 +516,37 @@ func (m *DiscoveryTarget) GetTargetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetConfigSyncGroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConfigSyncGroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "config_sync_group." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DiscoveryTarget) GetTargetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTarget() == nil {
+		return nil, nil
+	}
+	switch m.GetTarget().(type) {
+	case *DiscoveryTarget_NginxInstance:
+		drInfos, err := m.GetNginxInstance().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNginxInstance().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "nginx_instance." + dri.DRField
+		}
+		return drInfos, err
+	case *DiscoveryTarget_ConfigSyncGroup:
+		drInfos, err := m.GetConfigSyncGroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConfigSyncGroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -599,6 +695,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveryTargetDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryTargetDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
@@ -608,6 +711,22 @@ func (m *GetSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetDiscoveryTarget().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDiscoveryTarget().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "discovery_target." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetDiscoveryTargetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDiscoveryTarget() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDiscoveryTarget().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDiscoveryTarget().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -782,6 +901,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveryTargetDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryTargetDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
@@ -791,6 +917,22 @@ func (m *GlobalSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetDiscoveryTarget().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDiscoveryTarget().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "discovery_target." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetDiscoveryTargetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDiscoveryTarget() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDiscoveryTarget().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDiscoveryTarget().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -965,6 +1107,13 @@ func (m *NGINXInstance) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNginxInstanceDRefInfo()
 }
+func (m *NGINXInstance) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNginxInstanceDRefInfoForOverlay(generateHash)
+}
 
 func (m *NGINXInstance) GetNginxInstanceDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetNginxInstance()
@@ -977,6 +1126,34 @@ func (m *NGINXInstance) GetNginxInstanceDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("NGINXInstance.nginx_instance[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "nginx_instance.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "nginx_instance",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *NGINXInstance) GetNginxInstanceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNginxInstance()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("NGINXInstance.nginx_instance[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "nginx_instance.Object",
 			RefdUID:    ref.Uid,
@@ -1156,6 +1333,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveryTargetDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryTargetDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
@@ -1165,6 +1349,22 @@ func (m *ReplaceSpecType) GetDiscoveryTargetDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetDiscoveryTarget().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDiscoveryTarget().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "discovery_target." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetDiscoveryTargetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDiscoveryTarget() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDiscoveryTarget().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDiscoveryTarget().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

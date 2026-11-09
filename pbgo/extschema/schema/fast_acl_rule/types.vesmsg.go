@@ -79,6 +79,24 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetActionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetActionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSourceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSourceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
@@ -88,6 +106,22 @@ func (m *CreateSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAction().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "action." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetActionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAction() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAction().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAction().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -108,6 +142,29 @@ func (m *CreateSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ip_prefix_set." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetSourceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSource() == nil {
+		return nil, nil
+	}
+	switch m.GetSource().(type) {
+	case *CreateSpecType_Prefix:
+		return nil, nil
+	case *CreateSpecType_IpPrefixSet:
+		drInfos, err := m.GetIpPrefixSet().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -351,6 +408,13 @@ func (m *FastAclRuleAction) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetActionDRefInfo()
 }
+func (m *FastAclRuleAction) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetActionDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *FastAclRuleAction) GetActionDRefInfo() ([]db.DRefInfo, error) {
@@ -372,6 +436,37 @@ func (m *FastAclRuleAction) GetActionDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetProtocolPolicerAction().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetProtocolPolicerAction().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "protocol_policer_action." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *FastAclRuleAction) GetActionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAction() == nil {
+		return nil, nil
+	}
+	switch m.GetAction().(type) {
+	case *FastAclRuleAction_PolicerAction:
+		drInfos, err := m.GetPolicerAction().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPolicerAction().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "policer_action." + dri.DRField
+		}
+		return drInfos, err
+	case *FastAclRuleAction_ProtocolPolicerAction:
+		drInfos, err := m.GetProtocolPolicerAction().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetProtocolPolicerAction().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -507,6 +602,24 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetActionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetActionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSourceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSourceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
@@ -516,6 +629,22 @@ func (m *GetSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAction().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "action." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetActionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAction() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAction().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAction().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -536,6 +665,29 @@ func (m *GetSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ip_prefix_set." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetSourceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSource() == nil {
+		return nil, nil
+	}
+	switch m.GetSource().(type) {
+	case *GetSpecType_Prefix:
+		return nil, nil
+	case *GetSpecType_IpPrefixSet:
+		drInfos, err := m.GetIpPrefixSet().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -790,6 +942,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetActionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetActionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSourceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSourceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
@@ -799,6 +969,22 @@ func (m *GlobalSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAction().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "action." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetActionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAction() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAction().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAction().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -819,6 +1005,29 @@ func (m *GlobalSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ip_prefix_set." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetSourceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSource() == nil {
+		return nil, nil
+	}
+	switch m.GetSource().(type) {
+	case *GlobalSpecType_Prefix:
+		return nil, nil
+	case *GlobalSpecType_IpPrefixSet:
+		drInfos, err := m.GetIpPrefixSet().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1073,6 +1282,24 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetActionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetActionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSourceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSourceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
@@ -1082,6 +1309,22 @@ func (m *ReplaceSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAction().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "action." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetActionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAction() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAction().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAction().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1102,6 +1345,29 @@ func (m *ReplaceSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ip_prefix_set." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetSourceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSource() == nil {
+		return nil, nil
+	}
+	switch m.GetSource().(type) {
+	case *ReplaceSpecType_Prefix:
+		return nil, nil
+	case *ReplaceSpecType_IpPrefixSet:
+		drInfos, err := m.GetIpPrefixSet().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

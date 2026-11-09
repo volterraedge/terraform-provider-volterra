@@ -66,6 +66,13 @@ func (m *GlobalNetworkItem) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRefDRefInfo()
 }
+func (m *GlobalNetworkItem) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRefDRefInfoForOverlay(generateHash)
+}
 
 func (m *GlobalNetworkItem) GetRefDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetRef()
@@ -78,6 +85,34 @@ func (m *GlobalNetworkItem) GetRefDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalNetworkItem.ref[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ref",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalNetworkItem) GetRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalNetworkItem.ref[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_network.Object",
 			RefdUID:    ref.Uid,
@@ -307,6 +342,13 @@ func (m *GlobalNetworkListResp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetItemsDRefInfo()
 }
+func (m *GlobalNetworkListResp) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetItemsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalNetworkListResp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
@@ -318,6 +360,26 @@ func (m *GlobalNetworkListResp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetItems() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("items[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalNetworkListResp) GetItemsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetItems() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetItems() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetItems() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -412,6 +474,13 @@ func (m *SegmentItem) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRefDRefInfo()
 }
+func (m *SegmentItem) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRefDRefInfoForOverlay(generateHash)
+}
 
 func (m *SegmentItem) GetRefDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetRef()
@@ -424,6 +493,34 @@ func (m *SegmentItem) GetRefDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("SegmentItem.ref[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ref",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *SegmentItem) GetRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SegmentItem.ref[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "segment.Object",
 			RefdUID:    ref.Uid,
@@ -653,6 +750,13 @@ func (m *SegmentListResp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetItemsDRefInfo()
 }
+func (m *SegmentListResp) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetItemsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SegmentListResp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
@@ -664,6 +768,26 @@ func (m *SegmentListResp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetItems() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("items[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SegmentListResp) GetItemsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetItems() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetItems() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetItems() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]

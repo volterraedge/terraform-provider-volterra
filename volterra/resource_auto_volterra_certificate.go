@@ -87,7 +87,7 @@ func resourceVolterraCertificate() *schema.Resource {
 
 			"certificate_url": {
 				Type:     schema.TypeString,
-				Required: true,
+				Optional: true,
 			},
 
 			"custom_hash_algorithms": {
@@ -126,7 +126,7 @@ func resourceVolterraCertificate() *schema.Resource {
 
 				Type:     schema.TypeList,
 				MaxItems: 1,
-				Required: true,
+				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -206,10 +206,21 @@ func resourceVolterraCertificate() *schema.Resource {
 									},
 
 									"url": {
+										Sensitive: true,
 										Type:     schema.TypeString,
 										Required: true,
 									},
 								},
+							},
+						},
+
+						"none": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
 							},
 						},
 
@@ -274,6 +285,158 @@ func resourceVolterraCertificate() *schema.Resource {
 						},
 					},
 				},
+			},
+
+			"auto_cert": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"dns_01": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"cname_delegation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"delegated": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"http_01": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"virtual_host_ref": {
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"namespace": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"tenant": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"pre_validated": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
+						"domains": {
+							Type: schema.TypeList,
+
+							Required: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
+						"custom_issuer": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"issuer_ref": {
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"default": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"key_algorithm": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"renew_before_days": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"manual": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
 			},
 		},
 	}
@@ -531,6 +694,15 @@ func resourceVolterraCertificateCreate(d *schema.ResourceData, meta interface{})
 
 				}
 
+				if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+					secretInfoOneofTypeFound = true
+					secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+					secretInfoOneofInt.None = &ves_io_schema.Empty{}
+					privateKey.SecretInfoOneof = secretInfoOneofInt
+
+				}
+
 				if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 					secretInfoOneofTypeFound = true
@@ -602,6 +774,226 @@ func resourceVolterraCertificateCreate(d *schema.ResourceData, meta interface{})
 				}
 
 			}
+		}
+
+	}
+
+	//provider
+
+	providerTypeFound := false
+
+	if v, ok := d.GetOk("auto_cert"); ok && !isIntfNil(v) && !providerTypeFound {
+
+		providerTypeFound = true
+		providerInt := &ves_io_schema_certificate.CreateSpecType_AutoCert{}
+		providerInt.AutoCert = &ves_io_schema_certificate.AutoCertConfig{}
+		createSpec.Provider = providerInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				challengeChoiceTypeFound := false
+
+				if v, ok := cs["dns_01"]; ok && !isIntfNil(v) && !challengeChoiceTypeFound {
+
+					challengeChoiceTypeFound = true
+					challengeChoiceInt := &ves_io_schema_certificate.AutoCertConfig_Dns_01{}
+					challengeChoiceInt.Dns_01 = &ves_io_schema_certificate.DNS01ChallengeConfig{}
+					providerInt.AutoCert.ChallengeChoice = challengeChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							dnsProviderChoiceTypeFound := false
+
+							if v, ok := cs["cname_delegation"]; ok && !isIntfNil(v) && !dnsProviderChoiceTypeFound {
+
+								dnsProviderChoiceTypeFound = true
+
+								if v.(bool) {
+									dnsProviderChoiceInt := &ves_io_schema_certificate.DNS01ChallengeConfig_CnameDelegation{}
+									dnsProviderChoiceInt.CnameDelegation = &ves_io_schema.Empty{}
+									challengeChoiceInt.Dns_01.DnsProviderChoice = dnsProviderChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["delegated"]; ok && !isIntfNil(v) && !dnsProviderChoiceTypeFound {
+
+								dnsProviderChoiceTypeFound = true
+
+								if v.(bool) {
+									dnsProviderChoiceInt := &ves_io_schema_certificate.DNS01ChallengeConfig_Delegated{}
+									dnsProviderChoiceInt.Delegated = &ves_io_schema.Empty{}
+									challengeChoiceInt.Dns_01.DnsProviderChoice = dnsProviderChoiceInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["http_01"]; ok && !isIntfNil(v) && !challengeChoiceTypeFound {
+
+					challengeChoiceTypeFound = true
+					challengeChoiceInt := &ves_io_schema_certificate.AutoCertConfig_Http_01{}
+					challengeChoiceInt.Http_01 = &ves_io_schema_certificate.HTTP01ChallengeConfig{}
+					providerInt.AutoCert.ChallengeChoice = challengeChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["virtual_host_ref"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								virtualHostRefInt := &ves_io_schema_views.ObjectRefType{}
+								challengeChoiceInt.Http_01.VirtualHostRef = virtualHostRefInt
+
+								for _, set := range sl {
+									if set != nil {
+										vhrMapToStrVal := set.(map[string]interface{})
+										if val, ok := vhrMapToStrVal["name"]; ok && !isIntfNil(v) {
+											virtualHostRefInt.Name = val.(string)
+										}
+										if val, ok := vhrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											virtualHostRefInt.Namespace = val.(string)
+										}
+
+										if val, ok := vhrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											virtualHostRefInt.Tenant = val.(string)
+										}
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["pre_validated"]; ok && !isIntfNil(v) && !challengeChoiceTypeFound {
+
+					challengeChoiceTypeFound = true
+					challengeChoiceInt := &ves_io_schema_certificate.AutoCertConfig_PreValidated{}
+					challengeChoiceInt.PreValidated = &ves_io_schema_certificate.PreValidatedConfig{}
+					providerInt.AutoCert.ChallengeChoice = challengeChoiceInt
+
+				}
+
+				if v, ok := cs["domains"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field domains")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					providerInt.AutoCert.Domains = ls
+
+				}
+
+				issuerChoiceTypeFound := false
+
+				if v, ok := cs["custom_issuer"]; ok && !isIntfNil(v) && !issuerChoiceTypeFound {
+
+					issuerChoiceTypeFound = true
+					issuerChoiceInt := &ves_io_schema_certificate.AutoCertConfig_CustomIssuer{}
+					issuerChoiceInt.CustomIssuer = &ves_io_schema_certificate.CustomIssuer{}
+					providerInt.AutoCert.IssuerChoice = issuerChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["issuer_ref"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								issuerRefInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								issuerChoiceInt.CustomIssuer.IssuerRef = issuerRefInt
+								for i, ps := range sl {
+									if ps != nil {
+
+										irMapToStrVal := ps.(map[string]interface{})
+										issuerRefInt[i] = &ves_io_schema.ObjectRefType{}
+
+										issuerRefInt[i].Kind = "acme_issuer"
+
+										if v, ok := irMapToStrVal["name"]; ok && !isIntfNil(v) {
+											issuerRefInt[i].Name = v.(string)
+										}
+
+										if v, ok := irMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											issuerRefInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := irMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											issuerRefInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := irMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											issuerRefInt[i].Uid = v.(string)
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["default"]; ok && !isIntfNil(v) && !issuerChoiceTypeFound {
+
+					issuerChoiceTypeFound = true
+
+					if v.(bool) {
+						issuerChoiceInt := &ves_io_schema_certificate.AutoCertConfig_Default{}
+						issuerChoiceInt.Default = &ves_io_schema.Empty{}
+						providerInt.AutoCert.IssuerChoice = issuerChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["key_algorithm"]; ok && !isIntfNil(v) {
+
+					providerInt.AutoCert.KeyAlgorithm = ves_io_schema_certificate.KeyAlgorithm(ves_io_schema_certificate.KeyAlgorithm_value[v.(string)])
+
+				}
+
+				if v, ok := cs["renew_before_days"]; ok && !isIntfNil(v) {
+
+					providerInt.AutoCert.RenewBeforeDays = uint32(v.(int))
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("manual"); ok && !providerTypeFound {
+
+		providerTypeFound = true
+
+		if v.(bool) {
+			providerInt := &ves_io_schema_certificate.CreateSpecType_Manual{}
+			providerInt.Manual = &ves_io_schema.Empty{}
+			createSpec.Provider = providerInt
 		}
 
 	}
@@ -900,6 +1292,15 @@ func resourceVolterraCertificateUpdate(d *schema.ResourceData, meta interface{})
 
 				}
 
+				if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+					secretInfoOneofTypeFound = true
+					secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+					secretInfoOneofInt.None = &ves_io_schema.Empty{}
+					privateKey.SecretInfoOneof = secretInfoOneofInt
+
+				}
+
 				if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 					secretInfoOneofTypeFound = true
@@ -971,6 +1372,224 @@ func resourceVolterraCertificateUpdate(d *schema.ResourceData, meta interface{})
 				}
 
 			}
+		}
+
+	}
+
+	providerTypeFound := false
+
+	if v, ok := d.GetOk("auto_cert"); ok && !isIntfNil(v) && !providerTypeFound {
+
+		providerTypeFound = true
+		providerInt := &ves_io_schema_certificate.ReplaceSpecType_AutoCert{}
+		providerInt.AutoCert = &ves_io_schema_certificate.AutoCertConfig{}
+		updateSpec.Provider = providerInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				challengeChoiceTypeFound := false
+
+				if v, ok := cs["dns_01"]; ok && !isIntfNil(v) && !challengeChoiceTypeFound {
+
+					challengeChoiceTypeFound = true
+					challengeChoiceInt := &ves_io_schema_certificate.AutoCertConfig_Dns_01{}
+					challengeChoiceInt.Dns_01 = &ves_io_schema_certificate.DNS01ChallengeConfig{}
+					providerInt.AutoCert.ChallengeChoice = challengeChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							dnsProviderChoiceTypeFound := false
+
+							if v, ok := cs["cname_delegation"]; ok && !isIntfNil(v) && !dnsProviderChoiceTypeFound {
+
+								dnsProviderChoiceTypeFound = true
+
+								if v.(bool) {
+									dnsProviderChoiceInt := &ves_io_schema_certificate.DNS01ChallengeConfig_CnameDelegation{}
+									dnsProviderChoiceInt.CnameDelegation = &ves_io_schema.Empty{}
+									challengeChoiceInt.Dns_01.DnsProviderChoice = dnsProviderChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["delegated"]; ok && !isIntfNil(v) && !dnsProviderChoiceTypeFound {
+
+								dnsProviderChoiceTypeFound = true
+
+								if v.(bool) {
+									dnsProviderChoiceInt := &ves_io_schema_certificate.DNS01ChallengeConfig_Delegated{}
+									dnsProviderChoiceInt.Delegated = &ves_io_schema.Empty{}
+									challengeChoiceInt.Dns_01.DnsProviderChoice = dnsProviderChoiceInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["http_01"]; ok && !isIntfNil(v) && !challengeChoiceTypeFound {
+
+					challengeChoiceTypeFound = true
+					challengeChoiceInt := &ves_io_schema_certificate.AutoCertConfig_Http_01{}
+					challengeChoiceInt.Http_01 = &ves_io_schema_certificate.HTTP01ChallengeConfig{}
+					providerInt.AutoCert.ChallengeChoice = challengeChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["virtual_host_ref"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								virtualHostRefInt := &ves_io_schema_views.ObjectRefType{}
+								challengeChoiceInt.Http_01.VirtualHostRef = virtualHostRefInt
+
+								for _, set := range sl {
+									if set != nil {
+										vhrMapToStrVal := set.(map[string]interface{})
+										if val, ok := vhrMapToStrVal["name"]; ok && !isIntfNil(v) {
+											virtualHostRefInt.Name = val.(string)
+										}
+										if val, ok := vhrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											virtualHostRefInt.Namespace = val.(string)
+										}
+
+										if val, ok := vhrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											virtualHostRefInt.Tenant = val.(string)
+										}
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["pre_validated"]; ok && !isIntfNil(v) && !challengeChoiceTypeFound {
+
+					challengeChoiceTypeFound = true
+					challengeChoiceInt := &ves_io_schema_certificate.AutoCertConfig_PreValidated{}
+					challengeChoiceInt.PreValidated = &ves_io_schema_certificate.PreValidatedConfig{}
+					providerInt.AutoCert.ChallengeChoice = challengeChoiceInt
+
+				}
+
+				if v, ok := cs["domains"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field domains")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					providerInt.AutoCert.Domains = ls
+
+				}
+
+				issuerChoiceTypeFound := false
+
+				if v, ok := cs["custom_issuer"]; ok && !isIntfNil(v) && !issuerChoiceTypeFound {
+
+					issuerChoiceTypeFound = true
+					issuerChoiceInt := &ves_io_schema_certificate.AutoCertConfig_CustomIssuer{}
+					issuerChoiceInt.CustomIssuer = &ves_io_schema_certificate.CustomIssuer{}
+					providerInt.AutoCert.IssuerChoice = issuerChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["issuer_ref"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								issuerRefInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								issuerChoiceInt.CustomIssuer.IssuerRef = issuerRefInt
+								for i, ps := range sl {
+									if ps != nil {
+
+										irMapToStrVal := ps.(map[string]interface{})
+										issuerRefInt[i] = &ves_io_schema.ObjectRefType{}
+
+										issuerRefInt[i].Kind = "acme_issuer"
+
+										if v, ok := irMapToStrVal["name"]; ok && !isIntfNil(v) {
+											issuerRefInt[i].Name = v.(string)
+										}
+
+										if v, ok := irMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											issuerRefInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := irMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											issuerRefInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := irMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											issuerRefInt[i].Uid = v.(string)
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["default"]; ok && !isIntfNil(v) && !issuerChoiceTypeFound {
+
+					issuerChoiceTypeFound = true
+
+					if v.(bool) {
+						issuerChoiceInt := &ves_io_schema_certificate.AutoCertConfig_Default{}
+						issuerChoiceInt.Default = &ves_io_schema.Empty{}
+						providerInt.AutoCert.IssuerChoice = issuerChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["key_algorithm"]; ok && !isIntfNil(v) {
+
+					providerInt.AutoCert.KeyAlgorithm = ves_io_schema_certificate.KeyAlgorithm(ves_io_schema_certificate.KeyAlgorithm_value[v.(string)])
+
+				}
+
+				if v, ok := cs["renew_before_days"]; ok && !isIntfNil(v) {
+
+					providerInt.AutoCert.RenewBeforeDays = uint32(v.(int))
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("manual"); ok && !providerTypeFound {
+
+		providerTypeFound = true
+
+		if v.(bool) {
+			providerInt := &ves_io_schema_certificate.ReplaceSpecType_Manual{}
+			providerInt.Manual = &ves_io_schema.Empty{}
+			updateSpec.Provider = providerInt
 		}
 
 	}

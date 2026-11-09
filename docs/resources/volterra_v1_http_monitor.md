@@ -23,14 +23,14 @@ resource "volterra_v1_http_monitor" "example" {
   external_sources {
     // One of the arguments from this list "aws f5xc" must be set
 
-    aws {
-      regions = ["us-east-1"]
+    f5xc {
+      regions = ["ves-io-us"]
     }
   }
 
   // One of the arguments from this list "interval_12_hours interval_15_mins interval_1_day interval_1_hour interval_1_min interval_30_mins interval_30_secs interval_5_mins interval_6_hours" must be set
 
-  interval_1_hour = true
+  interval_30_secs = true
 
   // One of the arguments from this list "delete get head options patch post put" must be set
 

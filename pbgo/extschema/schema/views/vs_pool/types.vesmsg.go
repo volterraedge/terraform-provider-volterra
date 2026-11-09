@@ -283,6 +283,24 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetHealthMonitoringDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHealthMonitoringDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPoolMembersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPoolMembersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetHealthMonitoringDRefInfo() ([]db.DRefInfo, error) {
@@ -292,6 +310,22 @@ func (m *CreateSpecType) GetHealthMonitoringDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetHealthMonitoring().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetHealthMonitoring().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "health_monitoring." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetHealthMonitoringDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetHealthMonitoring() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetHealthMonitoring().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetHealthMonitoring().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -310,6 +344,26 @@ func (m *CreateSpecType) GetPoolMembersDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPoolMembers() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("pool_members[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetPoolMembersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPoolMembers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetPoolMembers() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPoolMembers() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -582,20 +636,20 @@ type ValidateCustomIP struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCustomIP) VipSelectTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vip_select_type")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCustomIP) VipSelectTypeIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_Ip, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
 	}
 	return oValidatorFn_Ip, nil
-}
-
-func (v *ValidateCustomIP) VipSelectTypeIpV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_IpV6, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_v6")
-	}
-	return oValidatorFn_IpV6, nil
 }
 
 func (v *ValidateCustomIP) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -612,6 +666,16 @@ func (v *ValidateCustomIP) Validate(ctx context.Context, pm interface{}, opts ..
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["vip_select_type"]; exists {
+		val := m.GetVipSelectType()
+		vOpts := append(opts,
+			db.WithValidateField("vip_select_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetVipSelectType().(type) {
 	case *CustomIP_Ip:
 		if fv, exists := v.FldValidators["vip_select_type.ip"]; exists {
@@ -619,17 +683,6 @@ func (v *ValidateCustomIP) Validate(ctx context.Context, pm interface{}, opts ..
 			vOpts := append(opts,
 				db.WithValidateField("vip_select_type"),
 				db.WithValidateField("ip"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CustomIP_IpV6:
-		if fv, exists := v.FldValidators["vip_select_type.ip_v6"]; exists {
-			val := m.GetVipSelectType().(*CustomIP_IpV6).IpV6
-			vOpts := append(opts,
-				db.WithValidateField("vip_select_type"),
-				db.WithValidateField("ip_v6"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -649,26 +702,28 @@ var DefaultCustomIPValidator = func() *ValidateCustomIP {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+	vrhVipSelectType := v.VipSelectTypeValidationRuleHandler
+	rulesVipSelectType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhVipSelectType(rulesVipSelectType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomIP.vip_select_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vip_select_type"] = vFn
 	vrhVipSelectTypeIp := v.VipSelectTypeIpValidationRuleHandler
 	rulesVipSelectTypeIp := map[string]string{
-		"ves.io.schema.rules.string.ipv4": "true",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
+		"ves.io.schema.rules.string.not_empty": "true",
 	}
 	vFnMap["vip_select_type.ip"], err = vrhVipSelectTypeIp(rulesVipSelectTypeIp)
 	if err != nil {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomIP.vip_select_type_ip: %s", err)
 		panic(errMsg)
 	}
-	vrhVipSelectTypeIpV6 := v.VipSelectTypeIpV6ValidationRuleHandler
-	rulesVipSelectTypeIpV6 := map[string]string{
-		"ves.io.schema.rules.string.ipv6": "true",
-	}
-	vFnMap["vip_select_type.ip_v6"], err = vrhVipSelectTypeIpV6(rulesVipSelectTypeIpV6)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomIP.vip_select_type_ip_v6: %s", err)
-		panic(errMsg)
-	}
 	v.FldValidators["vip_select_type.ip"] = vFnMap["vip_select_type.ip"]
-	v.FldValidators["vip_select_type.ip_v6"] = vFnMap["vip_select_type.ip_v6"]
 
 	return v
 }()
@@ -968,6 +1023,24 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetHealthMonitoringDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHealthMonitoringDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPoolMembersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPoolMembersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetHealthMonitoringDRefInfo() ([]db.DRefInfo, error) {
@@ -977,6 +1050,22 @@ func (m *GetSpecType) GetHealthMonitoringDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetHealthMonitoring().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetHealthMonitoring().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "health_monitoring." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetHealthMonitoringDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetHealthMonitoring() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetHealthMonitoring().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetHealthMonitoring().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -995,6 +1084,26 @@ func (m *GetSpecType) GetPoolMembersDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPoolMembers() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("pool_members[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetPoolMembersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPoolMembers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetPoolMembers() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPoolMembers() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1286,6 +1395,29 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetHealthMonitoringDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHealthMonitoringDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPoolMembersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPoolMembersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetHealthMonitoringDRefInfo() ([]db.DRefInfo, error) {
@@ -1295,6 +1427,22 @@ func (m *GlobalSpecType) GetHealthMonitoringDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetHealthMonitoring().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetHealthMonitoring().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "health_monitoring." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetHealthMonitoringDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetHealthMonitoring() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetHealthMonitoring().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetHealthMonitoring().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1323,7 +1471,44 @@ func (m *GlobalSpecType) GetPoolMembersDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetPoolMembersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPoolMembers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetPoolMembers() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPoolMembers() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("pool_members[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1850,6 +2035,13 @@ func (m *PoolMemberType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetMemberTypeChoiceDRefInfo()
 }
+func (m *PoolMemberType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetMemberTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *PoolMemberType) GetMemberTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1867,14 +2059,25 @@ func (m *PoolMemberType) GetMemberTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "public." + dri.DRField
 		}
 		return drInfos, err
-	case *PoolMemberType_Private:
-		drInfos, err := m.GetPrivate().GetDRefInfo()
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *PoolMemberType) GetMemberTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMemberTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMemberTypeChoice().(type) {
+	case *PoolMemberType_Public:
+		drInfos, err := m.GetPublic().GetDRefInfoForOverlay(generateHash)
 		if err != nil {
-			return nil, errors.Wrap(err, "GetPrivate().GetDRefInfo() FAILED")
+			return nil, errors.Wrap(err, "GetPublic().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
-			dri.DRField = "private." + dri.DRField
+			dri.DRField = "public." + dri.DRField
 		}
 		return drInfos, err
 	default:
@@ -1983,17 +2186,6 @@ func (v *ValidatePoolMemberType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *PoolMemberType_Private:
-		if fv, exists := v.FldValidators["member_type_choice.private"]; exists {
-			val := m.GetMemberTypeChoice().(*PoolMemberType_Private).Private
-			vOpts := append(opts,
-				db.WithValidateField("member_type_choice"),
-				db.WithValidateField("private"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	}
 	if fv, exists := v.FldValidators["name"]; exists {
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -2083,7 +2275,6 @@ var DefaultPoolMemberTypeValidator = func() *ValidatePoolMemberType {
 	}
 	v.FldValidators["port"] = vFn
 	v.FldValidators["member_type_choice.public"] = PublicMemberTypeValidator().Validate
-	v.FldValidators["member_type_choice.private"] = PrivateMemberTypeValidator().Validate
 	v.FldValidators["member_selection"] = ves_io_schema.TMMPoolMemberSelectionTypeValidator().Validate
 
 	return v
@@ -2137,6 +2328,13 @@ func (m *PrivateMemberType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetWhereTypeChoiceDRefInfo()
 }
+func (m *PrivateMemberType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWhereTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *PrivateMemberType) GetWhereTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2168,6 +2366,47 @@ func (m *PrivateMemberType) GetWhereTypeChoiceDRefInfo() ([]db.DRefInfo, error) 
 		drInfos, err := m.GetVirtualNetwork().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualNetwork().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_network." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *PrivateMemberType) GetWhereTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhereTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetWhereTypeChoice().(type) {
+	case *PrivateMemberType_Site:
+		drInfos, err := m.GetSite().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSite().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site." + dri.DRField
+		}
+		return drInfos, err
+	case *PrivateMemberType_VirtualCeSites:
+		drInfos, err := m.GetVirtualCeSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualCeSites().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_ce_sites." + dri.DRField
+		}
+		return drInfos, err
+	case *PrivateMemberType_VirtualNetwork:
+		drInfos, err := m.GetVirtualNetwork().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualNetwork().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2293,6 +2532,13 @@ func (m *PublicMemberType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetWhereSelectionChoiceDRefInfo()
 }
+func (m *PublicMemberType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWhereSelectionChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *PublicMemberType) GetWhereSelectionChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2306,6 +2552,29 @@ func (m *PublicMemberType) GetWhereSelectionChoiceDRefInfo() ([]db.DRefInfo, err
 		drInfos, err := m.GetRegionalRe().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRegionalRe().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "regional_re." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *PublicMemberType) GetWhereSelectionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhereSelectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetWhereSelectionChoice().(type) {
+	case *PublicMemberType_AllRe:
+		return nil, nil
+	case *PublicMemberType_RegionalRe:
+		drInfos, err := m.GetRegionalRe().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRegionalRe().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2419,6 +2688,13 @@ func (m *RegionalWhereType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRegionalEdgeSiteDRefInfo()
 }
+func (m *RegionalWhereType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRegionalEdgeSiteDRefInfoForOverlay(generateHash)
+}
 
 func (m *RegionalWhereType) GetRegionalEdgeSiteDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetRegionalEdgeSite()
@@ -2433,6 +2709,30 @@ func (m *RegionalWhereType) GetRegionalEdgeSiteDRefInfo() ([]db.DRefInfo, error)
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("site.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "regional_edge_site",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *RegionalWhereType) GetRegionalEdgeSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetRegionalEdgeSite()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("RegionalWhereType.regional_edge_site[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("site.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdTenant: vref.Tenant,
@@ -2610,6 +2910,24 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetHealthMonitoringDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHealthMonitoringDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPoolMembersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPoolMembersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetHealthMonitoringDRefInfo() ([]db.DRefInfo, error) {
@@ -2619,6 +2937,22 @@ func (m *ReplaceSpecType) GetHealthMonitoringDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetHealthMonitoring().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetHealthMonitoring().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "health_monitoring." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetHealthMonitoringDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetHealthMonitoring() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetHealthMonitoring().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetHealthMonitoring().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2637,6 +2971,26 @@ func (m *ReplaceSpecType) GetPoolMembersDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPoolMembers() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("pool_members[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetPoolMembersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPoolMembers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetPoolMembers() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPoolMembers() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -2923,6 +3277,24 @@ func (m *SecureMeshV2SiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *SecureMeshV2SiteType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetNetworkSelectionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkSelectionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteNameDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteNameDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *SecureMeshV2SiteType) GetNetworkSelectionChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2947,7 +3319,47 @@ func (m *SecureMeshV2SiteType) GetNetworkSelectionChoiceDRefInfo() ([]db.DRefInf
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *SecureMeshV2SiteType) GetNetworkSelectionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkSelectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkSelectionChoice().(type) {
+	case *SecureMeshV2SiteType_F5GlobalNetwork:
+		return nil, nil
+	case *SecureMeshV2SiteType_NetworkOption:
+		drInfos, err := m.GetNetworkOption().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "network_option." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *SecureMeshV2SiteType) GetSiteNameDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSiteName()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("securemesh_site_v2.Object")
+	dri := db.DRefInfo{
+		RefdType:   "securemesh_site_v2.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "site_name",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *SecureMeshV2SiteType) GetSiteNameDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSiteName()
 	if vref == nil {
 		return nil, nil
@@ -3150,8 +3562,52 @@ func (m *VirtualCESites) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *VirtualCESites) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetNetworkChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualSiteNameDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualSiteNameDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *VirtualCESites) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetNetworkChoice().(type) {
+	case *VirtualCESites_SiteLocalNetwork:
+		return nil, nil
+	case *VirtualCESites_SiteLocalInsideNetwork:
+		return nil, nil
+	case *VirtualCESites_SegmentNetwork:
+		vref := m.GetSegmentNetwork()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("segment.Object")
+		dri := db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "segment_network",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *VirtualCESites) GetNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetNetworkChoice().(type) {
 	case *VirtualCESites_SiteLocalNetwork:
 		return nil, nil
@@ -3213,6 +3669,23 @@ func (m *VirtualCESites) GetNetworkChoiceDBEntries(ctx context.Context, d db.Int
 }
 
 func (m *VirtualCESites) GetVirtualSiteNameDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetVirtualSiteName()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "virtual_site_name",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *VirtualCESites) GetVirtualSiteNameDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetVirtualSiteName()
 	if vref == nil {
 		return nil, nil
@@ -3415,8 +3888,32 @@ func (m *VirtualNetworkType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSegmentNetworkDRefInfo()
 }
+func (m *VirtualNetworkType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSegmentNetworkDRefInfoForOverlay(generateHash)
+}
 
 func (m *VirtualNetworkType) GetSegmentNetworkDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSegmentNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment_network",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *VirtualNetworkType) GetSegmentNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSegmentNetwork()
 	if vref == nil {
 		return nil, nil

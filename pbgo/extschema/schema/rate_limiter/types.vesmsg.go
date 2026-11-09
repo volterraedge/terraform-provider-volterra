@@ -68,6 +68,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetUserIdentificationDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetUserIdentificationDRefInfoForOverlay(generateHash)
+}
 
 func (m *CreateSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetUserIdentification()
@@ -80,6 +87,34 @@ func (m *CreateSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) 
 			return nil, fmt.Errorf("CreateSpecType.user_identification[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "user_identification.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "user_identification",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetUserIdentificationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetUserIdentification()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.user_identification[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "user_identification.Object",
 			RefdUID:    ref.Uid,
@@ -322,6 +357,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetUserIdentificationDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetUserIdentificationDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetUserIdentification()
@@ -334,6 +376,34 @@ func (m *GetSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.user_identification[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "user_identification.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "user_identification",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetUserIdentificationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetUserIdentification()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.user_identification[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "user_identification.Object",
 			RefdUID:    ref.Uid,
@@ -576,6 +646,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetUserIdentificationDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetUserIdentificationDRefInfoForOverlay(generateHash)
+}
 
 func (m *GlobalSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetUserIdentification()
@@ -588,6 +665,34 @@ func (m *GlobalSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) 
 			return nil, fmt.Errorf("GlobalSpecType.user_identification[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "user_identification.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "user_identification",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetUserIdentificationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetUserIdentification()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.user_identification[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "user_identification.Object",
 			RefdUID:    ref.Uid,
@@ -1553,6 +1658,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetUserIdentificationDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetUserIdentificationDRefInfoForOverlay(generateHash)
+}
 
 func (m *ReplaceSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetUserIdentification()
@@ -1565,6 +1677,34 @@ func (m *ReplaceSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error)
 			return nil, fmt.Errorf("ReplaceSpecType.user_identification[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "user_identification.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "user_identification",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetUserIdentificationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetUserIdentification()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.user_identification[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "user_identification.Object",
 			RefdUID:    ref.Uid,

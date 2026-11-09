@@ -69,8 +69,32 @@ func (m *AlertPolicyStatus) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPolicyDRefInfo()
 }
+func (m *AlertPolicyStatus) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPolicyDRefInfoForOverlay(generateHash)
+}
 
 func (m *AlertPolicyStatus) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetPolicy()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("alert_policy.Object")
+	dri := db.DRefInfo{
+		RefdType:   "alert_policy.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "policy",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *AlertPolicyStatus) GetPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetPolicy()
 	if vref == nil {
 		return nil, nil
@@ -266,6 +290,13 @@ func (m *SpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetGcSpecDRefInfo()
 }
+func (m *SpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGcSpecDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
@@ -275,6 +306,22 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "gc_spec." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SpecType) GetGcSpecDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGcSpec() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetGcSpec().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

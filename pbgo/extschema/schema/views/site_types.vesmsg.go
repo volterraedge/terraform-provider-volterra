@@ -5155,6 +5155,13 @@ func (m *GlobalNetworkConnectionListType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetGlobalNetworkConnectionsDRefInfo()
 }
+func (m *GlobalNetworkConnectionListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGlobalNetworkConnectionsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalNetworkConnectionListType) GetGlobalNetworkConnectionsDRefInfo() ([]db.DRefInfo, error) {
@@ -5166,6 +5173,26 @@ func (m *GlobalNetworkConnectionListType) GetGlobalNetworkConnectionsDRefInfo() 
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGlobalNetworkConnections() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("global_network_connections[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalNetworkConnectionListType) GetGlobalNetworkConnectionsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGlobalNetworkConnections() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetGlobalNetworkConnections() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkConnections() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -5337,6 +5364,13 @@ func (m *GlobalNetworkConnectionType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetConnectionChoiceDRefInfo()
 }
+func (m *GlobalNetworkConnectionType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetConnectionChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalNetworkConnectionType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -5358,6 +5392,37 @@ func (m *GlobalNetworkConnectionType) GetConnectionChoiceDRefInfo() ([]db.DRefIn
 		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_dr." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalNetworkConnectionType) GetConnectionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectionChoice().(type) {
+	case *GlobalNetworkConnectionType_SliToGlobalDr:
+		drInfos, err := m.GetSliToGlobalDr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_dr." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalNetworkConnectionType_SloToGlobalDr:
+		drInfos, err := m.GetSloToGlobalDr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -5885,8 +5950,32 @@ func (m *PrivateConnectConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCloudLinkDRefInfo()
 }
+func (m *PrivateConnectConfigType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudLinkDRefInfoForOverlay(generateHash)
+}
 
 func (m *PrivateConnectConfigType) GetCloudLinkDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCloudLink()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_link.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_link.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cloud_link",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *PrivateConnectConfigType) GetCloudLinkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCloudLink()
 	if vref == nil {
 		return nil, nil
@@ -6153,8 +6242,32 @@ func (m *SMSv2InterfaceOptions) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSegmentNetworkDRefInfo()
 }
+func (m *SMSv2InterfaceOptions) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSegmentNetworkDRefInfoForOverlay(generateHash)
+}
 
 func (m *SMSv2InterfaceOptions) GetSegmentNetworkDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSegmentNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment_network",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *SMSv2InterfaceOptions) GetSegmentNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSegmentNetwork()
 	if vref == nil {
 		return nil, nil
@@ -6760,6 +6873,13 @@ func (m *SiteStaticRoutesListType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetStaticRouteListDRefInfo()
 }
+func (m *SiteStaticRoutesListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetStaticRouteListDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SiteStaticRoutesListType) GetStaticRouteListDRefInfo() ([]db.DRefInfo, error) {
@@ -6771,6 +6891,26 @@ func (m *SiteStaticRoutesListType) GetStaticRouteListDRefInfo() ([]db.DRefInfo, 
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticRouteList() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("static_route_list[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SiteStaticRoutesListType) GetStaticRouteListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetStaticRouteList() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetStaticRouteList() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticRouteList() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -6929,6 +7069,13 @@ func (m *SiteStaticRoutesType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetConfigModeChoiceDRefInfo()
 }
+func (m *SiteStaticRoutesType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetConfigModeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SiteStaticRoutesType) GetConfigModeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -6940,6 +7087,27 @@ func (m *SiteStaticRoutesType) GetConfigModeChoiceDRefInfo() ([]db.DRefInfo, err
 		drInfos, err := m.GetCustomStaticRoute().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomStaticRoute().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "custom_static_route." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SiteStaticRoutesType) GetConfigModeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConfigModeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetConfigModeChoice().(type) {
+	case *SiteStaticRoutesType_CustomStaticRoute:
+		drInfos, err := m.GetCustomStaticRoute().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCustomStaticRoute().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

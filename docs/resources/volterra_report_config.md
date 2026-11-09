@@ -25,13 +25,17 @@ resource "volterra_report_config" "example" {
   waap {
     // One of the arguments from this list "daily monthly weekly" must be set
 
-    daily {
+    weekly {
+      day = "Monday"
+
       report_generation_time = "08:30:00 PM"
     }
 
     // One of the arguments from this list "all_namespaces current_namespace namespaces" must be set
 
-    current_namespace = true
+    namespaces {
+      namespaces = ["['test', 'production']"]
+    }
   }
 }
 

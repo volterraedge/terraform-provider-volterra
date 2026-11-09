@@ -25,7 +25,6 @@ resource "volterra_protected_application" "example" {
   big_ip_iapp = true
   region      = ["US"]
 }
-
 ```
 
 Argument Reference

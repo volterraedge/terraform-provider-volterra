@@ -69,6 +69,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetUztnaHealthcheckDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetUztnaHealthcheckDRefInfoForOverlay(generateHash)
+}
 
 func (m *CreateSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetUztnaHealthcheck()
@@ -83,6 +90,30 @@ func (m *CreateSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("uztna_healthcheck.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_healthcheck.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "uztna_healthcheck",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetUztnaHealthcheckDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetUztnaHealthcheck()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("CreateSpecType.uztna_healthcheck[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("uztna_healthcheck.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_healthcheck.Object",
 			RefdTenant: vref.Tenant,
@@ -366,6 +397,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetUztnaHealthcheckDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetUztnaHealthcheckDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetUztnaHealthcheck()
@@ -380,6 +418,30 @@ func (m *GetSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("uztna_healthcheck.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_healthcheck.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "uztna_healthcheck",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetUztnaHealthcheckDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetUztnaHealthcheck()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.uztna_healthcheck[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("uztna_healthcheck.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_healthcheck.Object",
 			RefdTenant: vref.Tenant,
@@ -663,6 +725,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetUztnaHealthcheckDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetUztnaHealthcheckDRefInfoForOverlay(generateHash)
+}
 
 func (m *GlobalSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetUztnaHealthcheck()
@@ -677,6 +746,30 @@ func (m *GlobalSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("uztna_healthcheck.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_healthcheck.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "uztna_healthcheck",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetUztnaHealthcheckDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetUztnaHealthcheck()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.uztna_healthcheck[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("uztna_healthcheck.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_healthcheck.Object",
 			RefdTenant: vref.Tenant,
@@ -1509,6 +1602,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetUztnaHealthcheckDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetUztnaHealthcheckDRefInfoForOverlay(generateHash)
+}
 
 func (m *ReplaceSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetUztnaHealthcheck()
@@ -1523,6 +1623,30 @@ func (m *ReplaceSpecType) GetUztnaHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("uztna_healthcheck.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_healthcheck.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "uztna_healthcheck",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetUztnaHealthcheckDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetUztnaHealthcheck()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.uztna_healthcheck[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("uztna_healthcheck.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_healthcheck.Object",
 			RefdTenant: vref.Tenant,

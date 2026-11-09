@@ -3099,12 +3099,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -3479,20 +3479,26 @@ var APISwaggerJSON string = `{
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"none\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info none]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info none]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType",
                     "x-displayname": "Clear Secret"
+                },
+                "none": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info]\n No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.",
+                    "title": "None",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
                 }
             }
         },
@@ -5099,6 +5105,7 @@ var APISwaggerJSON string = `{
             "description": "Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site.",
             "title": "DNS \u0026 NTP Servers",
             "x-displayname": "DNS \u0026 NTP Servers Settings",
+            "x-ves-oneof-field-cedns_record_choice": "[\"disable_cedns_record\",\"enable_cedns_record\"]",
             "x-ves-oneof-field-dns_server_choice": "[\"custom_dns\",\"f5_dns_default\"]",
             "x-ves-oneof-field-ntp_server_choice": "[\"custom_ntp\",\"f5_ntp_default\"]",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.DNSNTPServerConfig",
@@ -5114,6 +5121,18 @@ var APISwaggerJSON string = `{
                     "title": "Custom",
                     "$ref": "#/definitions/securemesh_site_v2CustomNTPSettings",
                     "x-displayname": "Custom"
+                },
+                "disable_cedns_record": {
+                    "description": "Exclusive with [enable_cedns_record]\n Disable publishing external DNS for this Site",
+                    "title": "Disable CE External DNS",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "enable_cedns_record": {
+                    "description": "Exclusive with [disable_cedns_record]\n Enable publishing external DNS for this Site",
+                    "title": "Enable CE External DNS",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
                 },
                 "f5_dns_default": {
                     "description": "Exclusive with [custom_dns]\n F5 defaults will use 8.8.8.8, 8.8.4.4",
@@ -5781,6 +5800,22 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
+        },
+        "securemesh_site_v2HyperVProviderType": {
+            "type": "object",
+            "description": "Hyper-V Provider Type",
+            "title": "Hyper-V Provider Type",
+            "x-displayname": "Hyper-V Provider Type",
+            "x-ves-oneof-field-orchestration_choice": "[\"not_managed\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.HyperVProviderType",
+            "properties": {
+                "not_managed": {
+                    "description": "Exclusive with []\n F5 Distributed Cloud will not automate any provisioning (ex: node bringup) for this site.\n Customers will need to do this either via provider specific manual workflows\n or by using automation tools such as Terraform.",
+                    "title": "Not Managed By F5XC",
+                    "$ref": "#/definitions/securemesh_site_v2NodeList",
+                    "x-displayname": "Not Managed By F5XC"
+                }
+            }
         },
         "securemesh_site_v2Interface": {
             "type": "object",
@@ -7521,7 +7556,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-management_network_choice": "[\"disable_management_network\",\"enable_management_network\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_enhanced_firewall_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-node_ha_choice": "[\"disable_ha\",\"enable_ha\"]",
-            "x-ves-oneof-field-provider_choice": "[\"aws\",\"azure\",\"baremetal\",\"eks_k8s\",\"equinix\",\"gcp\",\"kvm\",\"nutanix\",\"oci\",\"openshift_virtualization\",\"openstack\",\"vmware\"]",
+            "x-ves-oneof-field-provider_choice": "[\"aks_k8s\",\"aws\",\"azure\",\"baremetal\",\"eks_k8s\",\"equinix\",\"gcp\",\"gke_k8s\",\"hyper_v\",\"kvm\",\"nutanix\",\"oci\",\"oci_k8s\",\"openshift_virtualization\",\"openstack\",\"vmware\"]",
             "x-ves-oneof-field-proxy_bypass_choice": "[\"custom_proxy_bypass\",\"no_proxy_bypass\"]",
             "x-ves-oneof-field-s2s_connectivity_sli_choice": "[\"dc_cluster_group_sli\",\"no_s2s_connectivity_sli\"]",
             "x-ves-oneof-field-s2s_connectivity_slo_choice": "[\"dc_cluster_group_slo\",\"no_s2s_connectivity_slo\",\"site_mesh_group_on_slo\"]",
@@ -7543,18 +7578,23 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsAdminUserCredentialsType",
                     "x-displayname": "Admin User Credentials"
                 },
+                "aks_k8s": {
+                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2KubernetesProviderType",
+                    "x-displayname": "Microsoft AKS"
+                },
                 "aws": {
-                    "description": "Exclusive with [azure baremetal eks_k8s equinix gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2AWSProviderType",
                     "x-displayname": "AWS"
                 },
                 "azure": {
-                    "description": "Exclusive with [aws baremetal eks_k8s equinix gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2AzureProviderType",
                     "x-displayname": "Azure"
                 },
                 "baremetal": {
-                    "description": "Exclusive with [aws azure eks_k8s equinix gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2BaremetalProviderType",
                     "x-displayname": "Baremetal"
                 },
@@ -7619,9 +7659,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "DNS \u0026 NTP Servers Settings"
                 },
                 "eks_k8s": {
-                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2KubernetesProviderType",
-                    "x-displayname": "EKS (AWS Based Kubernetes)"
+                    "x-displayname": "Amazon EKS"
                 },
                 "enable_advanced_delivery": {
                     "description": "Exclusive with [disable_advanced_delivery]\n",
@@ -7649,7 +7689,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable"
                 },
                 "equinix": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2EquinixProviderType",
                     "x-displayname": "Equinix"
                 },
@@ -7659,12 +7699,22 @@ var APISwaggerJSON string = `{
                     "x-displayname": "F5 Enterprise Proxy"
                 },
                 "gcp": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2GCPProviderType",
                     "x-displayname": "GCP"
                 },
+                "gke_k8s": {
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2KubernetesProviderType",
+                    "x-displayname": "Google GKE"
+                },
+                "hyper_v": {
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2HyperVProviderType",
+                    "x-displayname": "Hyper-V"
+                },
                 "kvm": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2KVMProviderType",
                     "x-displayname": "KVM (EA)"
                 },
@@ -7714,14 +7764,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disabled"
                 },
                 "nutanix": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2NutanixProviderType",
                     "x-displayname": "Nutanix"
                 },
                 "oci": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm nutanix openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OCIProviderType",
                     "x-displayname": "OCI"
+                },
+                "oci_k8s": {
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2KubernetesProviderType",
+                    "x-displayname": "Openshift Kubernetes Engine"
                 },
                 "offline_survivability_mode": {
                     "description": " Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC).\n When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline.\n The certificates needed to keep the services running on this site are signed using a local CA.\n Secrets would also be cached locally to handle any connectivity loss.\n When the mode is toggled, services will restart and traffic disruption will be seen.",
@@ -7729,12 +7784,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Offline Survivability Mode"
                 },
                 "openshift_virtualization": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm nutanix oci openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OpenShiftProviderType",
                     "x-displayname": "OpenShift Virtualization"
                 },
                 "openstack": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm nutanix oci openshift_virtualization vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OpenstackProviderType",
                     "x-displayname": "OpenStack"
                 },
@@ -7797,7 +7852,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Upgrade Settings"
                 },
                 "vmware": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm nutanix oci openshift_virtualization openstack]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack]\n",
                     "$ref": "#/definitions/securemesh_site_v2VMwareProviderType",
                     "x-displayname": "VMWare"
                 }
@@ -7850,7 +7905,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-management_network_choice": "[\"disable_management_network\",\"enable_management_network\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_enhanced_firewall_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-node_ha_choice": "[\"disable_ha\",\"enable_ha\"]",
-            "x-ves-oneof-field-provider_choice": "[\"aws\",\"azure\",\"baremetal\",\"eks_k8s\",\"equinix\",\"gcp\",\"kvm\",\"nutanix\",\"oci\",\"openshift_virtualization\",\"openstack\",\"vmware\"]",
+            "x-ves-oneof-field-provider_choice": "[\"aks_k8s\",\"aws\",\"azure\",\"baremetal\",\"eks_k8s\",\"equinix\",\"gcp\",\"gke_k8s\",\"hyper_v\",\"kvm\",\"nutanix\",\"oci\",\"oci_k8s\",\"openshift_virtualization\",\"openstack\",\"vmware\"]",
             "x-ves-oneof-field-proxy_bypass_choice": "[\"custom_proxy_bypass\",\"no_proxy_bypass\"]",
             "x-ves-oneof-field-s2s_connectivity_sli_choice": "[\"dc_cluster_group_sli\",\"no_s2s_connectivity_sli\"]",
             "x-ves-oneof-field-s2s_connectivity_slo_choice": "[\"dc_cluster_group_slo\",\"no_s2s_connectivity_slo\",\"site_mesh_group_on_slo\"]",
@@ -7872,18 +7927,23 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsAdminUserCredentialsType",
                     "x-displayname": "Admin User Credentials"
                 },
+                "aks_k8s": {
+                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2KubernetesProviderType",
+                    "x-displayname": "Microsoft AKS"
+                },
                 "aws": {
-                    "description": "Exclusive with [azure baremetal eks_k8s equinix gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2AWSProviderType",
                     "x-displayname": "AWS"
                 },
                 "azure": {
-                    "description": "Exclusive with [aws baremetal eks_k8s equinix gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2AzureProviderType",
                     "x-displayname": "Azure"
                 },
                 "baremetal": {
-                    "description": "Exclusive with [aws azure eks_k8s equinix gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2BaremetalProviderType",
                     "x-displayname": "Baremetal"
                 },
@@ -7948,9 +8008,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "DNS \u0026 NTP Servers Settings"
                 },
                 "eks_k8s": {
-                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2KubernetesProviderType",
-                    "x-displayname": "EKS (AWS Based Kubernetes)"
+                    "x-displayname": "Amazon EKS"
                 },
                 "enable_advanced_delivery": {
                     "description": "Exclusive with [disable_advanced_delivery]\n",
@@ -7978,7 +8038,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable"
                 },
                 "equinix": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2EquinixProviderType",
                     "x-displayname": "Equinix"
                 },
@@ -7988,12 +8048,22 @@ var APISwaggerJSON string = `{
                     "x-displayname": "F5 Enterprise Proxy"
                 },
                 "gcp": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2GCPProviderType",
                     "x-displayname": "GCP"
                 },
+                "gke_k8s": {
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2KubernetesProviderType",
+                    "x-displayname": "Google GKE"
+                },
+                "hyper_v": {
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2HyperVProviderType",
+                    "x-displayname": "Hyper-V"
+                },
                 "kvm": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2KVMProviderType",
                     "x-displayname": "KVM (EA)"
                 },
@@ -8043,14 +8113,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disabled"
                 },
                 "nutanix": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2NutanixProviderType",
                     "x-displayname": "Nutanix"
                 },
                 "oci": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm nutanix openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OCIProviderType",
                     "x-displayname": "OCI"
+                },
+                "oci_k8s": {
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2KubernetesProviderType",
+                    "x-displayname": "Openshift Kubernetes Engine"
                 },
                 "offline_survivability_mode": {
                     "description": " Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC).\n When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline.\n The certificates needed to keep the services running on this site are signed using a local CA.\n Secrets would also be cached locally to handle any connectivity loss.\n When the mode is toggled, services will restart and traffic disruption will be seen.",
@@ -8058,12 +8133,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Offline Survivability Mode"
                 },
                 "openshift_virtualization": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm nutanix oci openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OpenShiftProviderType",
                     "x-displayname": "OpenShift Virtualization"
                 },
                 "openstack": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm nutanix oci openshift_virtualization vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OpenstackProviderType",
                     "x-displayname": "OpenStack"
                 },
@@ -8150,7 +8225,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Upgrade Settings"
                 },
                 "vmware": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm nutanix oci openshift_virtualization openstack]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack]\n",
                     "$ref": "#/definitions/securemesh_site_v2VMwareProviderType",
                     "x-displayname": "VMWare"
                 },
@@ -8234,7 +8309,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver_with_net\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_enhanced_firewall_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-node_ha_choice": "[\"disable_ha\",\"enable_ha\"]",
-            "x-ves-oneof-field-provider_choice": "[\"aws\",\"azure\",\"baremetal\",\"eks_k8s\",\"equinix\",\"gcp\",\"kvm\",\"nutanix\",\"oci\",\"openshift_virtualization\",\"openstack\",\"vmware\"]",
+            "x-ves-oneof-field-provider_choice": "[\"aks_k8s\",\"aws\",\"azure\",\"baremetal\",\"eks_k8s\",\"equinix\",\"gcp\",\"gke_k8s\",\"hyper_v\",\"kvm\",\"nutanix\",\"oci\",\"oci_k8s\",\"openshift_virtualization\",\"openstack\",\"vmware\"]",
             "x-ves-oneof-field-proxy_bypass_choice": "[\"custom_proxy_bypass\",\"no_proxy_bypass\"]",
             "x-ves-oneof-field-s2s_connectivity_sli_choice": "[\"dc_cluster_group_sli\",\"no_s2s_connectivity_sli\"]",
             "x-ves-oneof-field-s2s_connectivity_slo_choice": "[\"dc_cluster_group_slo\",\"no_s2s_connectivity_slo\",\"site_mesh_group_on_slo\"]",
@@ -8256,18 +8331,23 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsAdminUserCredentialsType",
                     "x-displayname": "Admin User Credentials"
                 },
+                "aks_k8s": {
+                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2KubernetesProviderType",
+                    "x-displayname": "Microsoft AKS"
+                },
                 "aws": {
-                    "description": "Exclusive with [azure baremetal eks_k8s equinix gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2AWSProviderType",
                     "x-displayname": "AWS"
                 },
                 "azure": {
-                    "description": "Exclusive with [aws baremetal eks_k8s equinix gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2AzureProviderType",
                     "x-displayname": "Azure"
                 },
                 "baremetal": {
-                    "description": "Exclusive with [aws azure eks_k8s equinix gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2BaremetalProviderType",
                     "x-displayname": "Baremetal"
                 },
@@ -8327,9 +8407,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "DNS \u0026 NTP Servers Settings"
                 },
                 "eks_k8s": {
-                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2KubernetesProviderType",
-                    "x-displayname": "EKS (AWS Based Kubernetes)"
+                    "x-displayname": "Amazon EKS"
                 },
                 "enable_advanced_delivery": {
                     "description": "Exclusive with [disable_advanced_delivery]\n",
@@ -8352,7 +8432,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable"
                 },
                 "equinix": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s gcp kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2EquinixProviderType",
                     "x-displayname": "Equinix"
                 },
@@ -8362,12 +8442,22 @@ var APISwaggerJSON string = `{
                     "x-displayname": "F5 Enterprise Proxy"
                 },
                 "gcp": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2GCPProviderType",
                     "x-displayname": "GCP"
                 },
+                "gke_k8s": {
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2KubernetesProviderType",
+                    "x-displayname": "Google GKE"
+                },
+                "hyper_v": {
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s kvm nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2HyperVProviderType",
+                    "x-displayname": "Hyper-V"
+                },
                 "kvm": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp nutanix oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v nutanix oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2KVMProviderType",
                     "x-displayname": "KVM (EA)"
                 },
@@ -8417,14 +8507,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disabled"
                 },
                 "nutanix": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm oci openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm oci oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2NutanixProviderType",
                     "x-displayname": "Nutanix"
                 },
                 "oci": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm nutanix openshift_virtualization openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci_k8s openshift_virtualization openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OCIProviderType",
                     "x-displayname": "OCI"
+                },
+                "oci_k8s": {
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci openshift_virtualization openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2KubernetesProviderType",
+                    "x-displayname": "Openshift Kubernetes Engine"
                 },
                 "offline_survivability_mode": {
                     "description": " Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC).\n When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline.\n The certificates needed to keep the services running on this site are signed using a local CA.\n Secrets would also be cached locally to handle any connectivity loss.\n When the mode is toggled, services will restart and traffic disruption will be seen.",
@@ -8432,12 +8527,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Offline Survivability Mode"
                 },
                 "openshift_virtualization": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm nutanix oci openstack vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OpenShiftProviderType",
                     "x-displayname": "OpenShift Virtualization"
                 },
                 "openstack": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm nutanix oci openshift_virtualization vmware]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OpenstackProviderType",
                     "x-displayname": "OpenStack"
                 },
@@ -8500,7 +8595,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Upgrade Settings"
                 },
                 "vmware": {
-                    "description": "Exclusive with [aws azure baremetal eks_k8s equinix gcp kvm nutanix oci openshift_virtualization openstack]\n",
+                    "description": "Exclusive with [aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack]\n",
                     "$ref": "#/definitions/securemesh_site_v2VMwareProviderType",
                     "x-displayname": "VMWare"
                 }

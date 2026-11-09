@@ -32,19 +32,13 @@ resource "volterra_dns_zone" "example" {
 
       // One of the arguments from this list "a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record" must be set
 
-      cds_record {
-        name = "www or mail or * or ww* or *ab"
+      mx_record {
+        name = "www or mail or * or corp.web or *.b"
 
         values {
-          // One of the arguments from this list "sha1_digest sha256_digest sha384_digest" must be set
+          domain = "mail.example.com"
 
-          sha1_digest {
-            digest = "addf120b430021c36c232c99ef8d926aea2acd6b"
-          }
-
-          ds_key_algorithm = "ds_key_algorithm"
-
-          key_tag = "15228"
+          priority = "10"
         }
       }
     }
@@ -71,19 +65,15 @@ resource "volterra_dns_zone" "example" {
 
         // One of the arguments from this list "a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record" must be set
 
-        ds_record {
-          name = "www or mail or * or ww* or *ab"
+        caa_record {
+          name = "www or mail or * or corp.web or *.b"
 
           values {
-            // One of the arguments from this list "sha1_digest sha256_digest sha384_digest" must be set
+            flags = "0"
 
-            sha1_digest {
-              digest = "addf120b430021c36c232c99ef8d926aea2acd6b"
-            }
+            tag = "issue"
 
-            ds_key_algorithm = "ds_key_algorithm"
-
-            key_tag = "15228"
+            value = "value"
           }
         }
       }
@@ -94,7 +84,6 @@ resource "volterra_dns_zone" "example" {
     default_soa_parameters = true
   }
 }
-
 ```
 
 Argument Reference
@@ -121,6 +110,18 @@ Argument Reference
 `primary` - (Optional) Primary DNS. See [Dns Type Primary ](#dns-type-primary) below for details.
 
 `secondary` - (Optional) Secondary DNS. See [Dns Type Secondary ](#dns-type-secondary) below for details.
+
+`namespace_rbac` - (Optional) such as f5xc-dns-management-admin.. See [Namespace Rbac ](#namespace-rbac) below for details.
+
+### Namespace Rbac
+
+such as f5xc-dns-management-admin..
+
+###### One of the arguments from this list "disabled, enabled" can be set
+
+`disabled` - (Optional) existing DNS permissions (`Bool`).
+
+`enabled` - (Optional) domains and auto-cert, and manage DNS records in this zone.. See [Mode Enabled ](#mode-enabled) below for details.
 
 ### Afsdb Record Values
 
@@ -292,9 +293,19 @@ x-required.
 
 DNSSEC disabled.
 
+### Mode Disabled
+
+existing DNS permissions.
+
 ### Mode Enable
 
 DNSSEC enable.
+
+### Mode Enabled
+
+domains and auto-cert, and manage DNS records in this zone..
+
+`namespaces` - (Required) x-required (`String`).
 
 ### Mx Record Values
 
@@ -474,11 +485,13 @@ x-displayName: "TSIG Key Value in Base 64 Format".
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -501,6 +514,10 @@ Clear Secret is used for the secrets that are not encrypted.
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
 
 ### Secret Info Oneof Vault Secret Info
 

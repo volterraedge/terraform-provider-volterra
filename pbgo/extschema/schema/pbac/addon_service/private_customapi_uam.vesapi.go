@@ -928,13 +928,14 @@ var CustomPrivateAPISwaggerJSON string = `{
         },
         "schemaAddonServiceState": {
             "type": "string",
-            "description": "State of a service\n\ndefault state\ninitiated subscription request and is pending to activate (requested).\nsuccessfully subscribed\nservice subscription request ended up in error state.",
+            "description": "State of a service\n\ndefault state\ninitiated subscription request and is pending to activate (requested).\nsuccessfully subscribed\nservice subscription request ended up in error state.\nThe subscription request has been initiated and is awaiting activation.\nThis state is added by the Eywa service when requesting the component service to configure the addon service.",
             "title": "AddonServiceState",
             "enum": [
                 "AS_NONE",
                 "AS_PENDING",
                 "AS_SUBSCRIBED",
-                "AS_ERROR"
+                "AS_ERROR",
+                "AS_CONFIGURING"
             ],
             "default": "AS_NONE",
             "x-displayname": "Addon Service State",

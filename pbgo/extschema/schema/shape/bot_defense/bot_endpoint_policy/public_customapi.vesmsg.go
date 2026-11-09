@@ -181,6 +181,322 @@ func CustomReplaceResponseValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DeployPolicyRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DeployPolicyRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DeployPolicyRequest) DeepCopy() *DeployPolicyRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DeployPolicyRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DeployPolicyRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DeployPolicyRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DeployPolicyRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDeployPolicyRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDeployPolicyRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateDeployPolicyRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateDeployPolicyRequest) CommentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for comments")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateDeployPolicyRequest) TargetInfrasValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for target_infras")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for target_infras")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated target_infras")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items target_infras")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateDeployPolicyRequest) VersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for version")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDeployPolicyRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DeployPolicyRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DeployPolicyRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["comments"]; exists {
+		vOpts := append(opts, db.WithValidateField("comments"))
+		if err := fv(ctx, m.GetComments(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["target_infras"]; exists {
+		vOpts := append(opts, db.WithValidateField("target_infras"))
+		if err := fv(ctx, m.GetTargetInfras(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["version"]; exists {
+		vOpts := append(opts, db.WithValidateField("version"))
+		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDeployPolicyRequestValidator = func() *ValidateDeployPolicyRequest {
+	v := &ValidateDeployPolicyRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.ves_object_name": "true",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DeployPolicyRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.ves_object_name": "true",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DeployPolicyRequest.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhComments := v.CommentsValidationRuleHandler
+	rulesComments := map[string]string{
+		"ves.io.schema.rules.string.max_len": "2048",
+	}
+	vFn, err = vrhComments(rulesComments)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DeployPolicyRequest.comments: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["comments"] = vFn
+
+	vrhTargetInfras := v.TargetInfrasValidationRuleHandler
+	rulesTargetInfras := map[string]string{
+		"ves.io.schema.rules.message.required":                      "true",
+		"ves.io.schema.rules.repeated.items.string.min_len":         "1",
+		"ves.io.schema.rules.repeated.items.string.ves_object_name": "true",
+		"ves.io.schema.rules.repeated.max_items":                    "128",
+		"ves.io.schema.rules.repeated.min_items":                    "1",
+		"ves.io.schema.rules.repeated.unique":                       "true",
+	}
+	vFn, err = vrhTargetInfras(rulesTargetInfras)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DeployPolicyRequest.target_infras: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["target_infras"] = vFn
+
+	vrhVersion := v.VersionValidationRuleHandler
+	rulesVersion := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFn, err = vrhVersion(rulesVersion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DeployPolicyRequest.version: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["version"] = vFn
+
+	return v
+}()
+
+func DeployPolicyRequestValidator() db.Validator {
+	return DefaultDeployPolicyRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DeployPolicyResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DeployPolicyResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DeployPolicyResponse) DeepCopy() *DeployPolicyResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DeployPolicyResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DeployPolicyResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DeployPolicyResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DeployPolicyResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDeployPolicyResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDeployPolicyResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DeployPolicyResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DeployPolicyResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["deploy_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("deploy_status"))
+		if err := fv(ctx, m.GetDeployStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDeployPolicyResponseValidator = func() *ValidateDeployPolicyResponse {
+	v := &ValidateDeployPolicyResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DeployPolicyResponseValidator() db.Validator {
+	return DefaultDeployPolicyResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetContentRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

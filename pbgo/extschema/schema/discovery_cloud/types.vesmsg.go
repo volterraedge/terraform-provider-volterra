@@ -80,8 +80,48 @@ func (m *AwsDiscovery) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *AwsDiscovery) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAccessInfoDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAccessInfoDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVpcConfigsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVpcConfigsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *AwsDiscovery) GetAccessInfoDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetAccessInfo().(type) {
+	case *AwsDiscovery_CloudUserAccountRef:
+		vref := m.GetCloudUserAccountRef()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_user_account.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_user_account.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "cloud_user_account_ref",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *AwsDiscovery) GetAccessInfoDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetAccessInfo().(type) {
 	case *AwsDiscovery_CloudUserAccountRef:
 		vref := m.GetCloudUserAccountRef()
@@ -146,6 +186,26 @@ func (m *AwsDiscovery) GetVpcConfigsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVpcConfigs() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("vpc_configs[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AwsDiscovery) GetVpcConfigsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVpcConfigs() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetVpcConfigs() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVpcConfigs() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -476,8 +536,43 @@ func (m *AwsVpcConfig) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *AwsVpcConfig) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRegionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRegionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWhereDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWhereDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *AwsVpcConfig) GetRegionDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetRegion()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("discovery_cloud_region.Object")
+	dri := db.DRefInfo{
+		RefdType:   "discovery_cloud_region.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "region",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *AwsVpcConfig) GetRegionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetRegion()
 	if vref == nil {
 		return nil, nil
@@ -530,6 +625,22 @@ func (m *AwsVpcConfig) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "where." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AwsVpcConfig) GetWhereDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhere() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWhere().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWhere().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -780,6 +891,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveryChoiceDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -791,6 +909,27 @@ func (m *CreateSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetAwsDiscovery().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_discovery." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDiscoveryChoice().(type) {
+	case *CreateSpecType_AwsDiscovery:
+		drInfos, err := m.GetAwsDiscovery().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsDiscovery().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -892,6 +1031,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveryChoiceDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -903,6 +1049,27 @@ func (m *GetSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetAwsDiscovery().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_discovery." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDiscoveryChoice().(type) {
+	case *GetSpecType_AwsDiscovery:
+		drInfos, err := m.GetAwsDiscovery().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsDiscovery().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1004,6 +1171,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveryChoiceDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1015,6 +1189,27 @@ func (m *GlobalSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetAwsDiscovery().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_discovery." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDiscoveryChoice().(type) {
+	case *GlobalSpecType_AwsDiscovery:
+		drInfos, err := m.GetAwsDiscovery().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsDiscovery().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1116,6 +1311,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveryChoiceDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1127,6 +1329,27 @@ func (m *ReplaceSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetAwsDiscovery().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_discovery." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDiscoveryChoice().(type) {
+	case *ReplaceSpecType_AwsDiscovery:
+		drInfos, err := m.GetAwsDiscovery().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsDiscovery().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1228,8 +1451,53 @@ func (m *SiteSelector) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSiteSelectorDRefInfo()
 }
+func (m *SiteSelector) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteSelectorDRefInfoForOverlay(generateHash)
+}
 
 func (m *SiteSelector) GetSiteSelectorDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetSiteSelector().(type) {
+	case *SiteSelector_Site:
+		vref := m.GetSite()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("site.Object")
+		dri := db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "site",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *SiteSelector_VirtualSite:
+		vref := m.GetVirtualSite()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_site.Object")
+		dri := db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_site",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *SiteSelector) GetSiteSelectorDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetSiteSelector().(type) {
 	case *SiteSelector_Site:
 		vref := m.GetSite()

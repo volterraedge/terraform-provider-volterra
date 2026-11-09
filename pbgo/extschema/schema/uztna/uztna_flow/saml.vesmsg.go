@@ -283,6 +283,13 @@ func (m *Certificate) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCertificateDRefInfo()
 }
+func (m *Certificate) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCertificateDRefInfoForOverlay(generateHash)
+}
 
 func (m *Certificate) GetCertificateDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetCertificate()
@@ -295,6 +302,34 @@ func (m *Certificate) GetCertificateDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("Certificate.certificate[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "certificate.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "certificate",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *Certificate) GetCertificateDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCertificate()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("Certificate.certificate[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "certificate.Object",
 			RefdUID:    ref.Uid,
@@ -411,6 +446,13 @@ func (m *IdentityProvider) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetIdpAssertVerificationCertDRefInfo()
 }
+func (m *IdentityProvider) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIdpAssertVerificationCertDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *IdentityProvider) GetIdpAssertVerificationCertDRefInfo() ([]db.DRefInfo, error) {
@@ -420,6 +462,22 @@ func (m *IdentityProvider) GetIdpAssertVerificationCertDRefInfo() ([]db.DRefInfo
 	drInfos, err := m.GetIdpAssertVerificationCert().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetIdpAssertVerificationCert().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "idp_assert_verification_cert." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *IdentityProvider) GetIdpAssertVerificationCertDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIdpAssertVerificationCert() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetIdpAssertVerificationCert().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIdpAssertVerificationCert().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -803,6 +861,24 @@ func (m *SAMLMessage) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *SAMLMessage) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIdpDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIdpDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServiceProviderPropertiesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServiceProviderPropertiesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *SAMLMessage) GetIdpDRefInfo() ([]db.DRefInfo, error) {
@@ -820,6 +896,22 @@ func (m *SAMLMessage) GetIdpDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *SAMLMessage) GetIdpDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIdp() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetIdp().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIdp().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "idp." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *SAMLMessage) GetServiceProviderPropertiesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetServiceProviderProperties() == nil {
@@ -828,6 +920,22 @@ func (m *SAMLMessage) GetServiceProviderPropertiesDRefInfo() ([]db.DRefInfo, err
 	drInfos, err := m.GetServiceProviderProperties().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetServiceProviderProperties().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "service_provider_properties." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SAMLMessage) GetServiceProviderPropertiesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServiceProviderProperties() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetServiceProviderProperties().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetServiceProviderProperties().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1032,6 +1140,24 @@ func (m *ServiceProviderProperties) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ServiceProviderProperties) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSignAuthenticationRequestDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSignAuthenticationRequestDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWantEncryptedAssertionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWantEncryptedAssertionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ServiceProviderProperties) GetSignAuthenticationRequestDRefInfo() ([]db.DRefInfo, error) {
@@ -1049,6 +1175,22 @@ func (m *ServiceProviderProperties) GetSignAuthenticationRequestDRefInfo() ([]db
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ServiceProviderProperties) GetSignAuthenticationRequestDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSignAuthenticationRequest() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetSignAuthenticationRequest().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSignAuthenticationRequest().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "sign_authentication_request." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *ServiceProviderProperties) GetWantEncryptedAssertionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWantEncryptedAssertion() == nil {
@@ -1057,6 +1199,22 @@ func (m *ServiceProviderProperties) GetWantEncryptedAssertionDRefInfo() ([]db.DR
 	drInfos, err := m.GetWantEncryptedAssertion().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWantEncryptedAssertion().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "want_encrypted_assertion." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ServiceProviderProperties) GetWantEncryptedAssertionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWantEncryptedAssertion() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWantEncryptedAssertion().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWantEncryptedAssertion().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1468,6 +1626,13 @@ func (m *SignAuthenticationRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSignAuthTypeChoiceDRefInfo()
 }
+func (m *SignAuthenticationRequest) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSignAuthTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SignAuthenticationRequest) GetSignAuthTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1481,6 +1646,29 @@ func (m *SignAuthenticationRequest) GetSignAuthTypeChoiceDRefInfo() ([]db.DRefIn
 		drInfos, err := m.GetSignAuth().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSignAuth().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sign_auth." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SignAuthenticationRequest) GetSignAuthTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSignAuthTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSignAuthTypeChoice().(type) {
+	case *SignAuthenticationRequest_NoAuthReq:
+		return nil, nil
+	case *SignAuthenticationRequest_SignAuth:
+		drInfos, err := m.GetSignAuth().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSignAuth().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1861,6 +2049,13 @@ func (m *WantEncryptedRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetWantEncryptedRequestDRefInfo()
 }
+func (m *WantEncryptedRequest) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWantEncryptedRequestDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *WantEncryptedRequest) GetWantEncryptedRequestDRefInfo() ([]db.DRefInfo, error) {
@@ -1874,6 +2069,29 @@ func (m *WantEncryptedRequest) GetWantEncryptedRequestDRefInfo() ([]db.DRefInfo,
 		drInfos, err := m.GetEncryptReq().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEncryptReq().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "encrypt_req." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *WantEncryptedRequest) GetWantEncryptedRequestDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWantEncryptedRequest() == nil {
+		return nil, nil
+	}
+	switch m.GetWantEncryptedRequest().(type) {
+	case *WantEncryptedRequest_NoEncryptReq:
+		return nil, nil
+	case *WantEncryptedRequest_EncryptReq:
+		drInfos, err := m.GetEncryptReq().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEncryptReq().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

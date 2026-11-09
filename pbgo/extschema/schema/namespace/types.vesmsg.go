@@ -544,6 +544,160 @@ func DynamicDataRespValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DynamicDefaultValuesResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DynamicDefaultValuesResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DynamicDefaultValuesResp) DeepCopy() *DynamicDefaultValuesResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DynamicDefaultValuesResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DynamicDefaultValuesResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DynamicDefaultValuesResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DynamicDefaultValuesRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDynamicDefaultValuesResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDynamicDefaultValuesResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DynamicDefaultValuesResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DynamicDefaultValuesResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["response_body"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_body"))
+		if err := fv(ctx, m.GetResponseBody(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDynamicDefaultValuesRespValidator = func() *ValidateDynamicDefaultValuesResp {
+	v := &ValidateDynamicDefaultValuesResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DynamicDefaultValuesRespValidator() db.Validator {
+	return DefaultDynamicDefaultValuesRespValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetDynamicDefaultValuesReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetDynamicDefaultValuesReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetDynamicDefaultValuesReq) DeepCopy() *GetDynamicDefaultValuesReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetDynamicDefaultValuesReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetDynamicDefaultValuesReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetDynamicDefaultValuesReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetDynamicDefaultValuesReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetDynamicDefaultValuesReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetDynamicDefaultValuesReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetDynamicDefaultValuesReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetDynamicDefaultValuesReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["request_body"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_body"))
+		if err := fv(ctx, m.GetRequestBody(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetDynamicDefaultValuesReqValidator = func() *ValidateGetDynamicDefaultValuesReq {
+	v := &ValidateGetDynamicDefaultValuesReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetDynamicDefaultValuesReqValidator() db.Validator {
+	return DefaultGetDynamicDefaultValuesReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -911,9 +1065,9 @@ func (v *ValidateNamespaceStatusResponse) Validate(ctx context.Context, pm inter
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["namespace_state"]; exists {
-		vOpts := append(opts, db.WithValidateField("namespace_state"))
-		if err := fv(ctx, m.GetNamespaceState(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["namespace_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace_status"))
+		if err := fv(ctx, m.GetNamespaceStatus(), vOpts...); err != nil {
 			return err
 		}
 	}

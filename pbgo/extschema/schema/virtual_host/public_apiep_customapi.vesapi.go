@@ -6110,6 +6110,15 @@ var ApiepCustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "API Endpoints"
                 },
+                "discovered_domains": {
+                    "type": "array",
+                    "description": " list of domains that the system has discovered",
+                    "title": "Discovered Domains",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Discovered Domains"
+                },
                 "last_update": {
                     "type": "string",
                     "description": " The API endpoints Last Update timestamp indicates most recent update of API endpoints happened\n The API Discovery periodically updates the API endpoints list based on application's traffic",

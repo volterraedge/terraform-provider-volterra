@@ -22,13 +22,7 @@ resource "volterra_tcp_loadbalancer" "example" {
 
   // One of the arguments from this list "advertise_custom advertise_dualstack_on_public advertise_on_public advertise_on_public_default_dualstack_vip advertise_on_public_default_ipv6_vip advertise_on_public_default_vip advertise_v6_on_public do_not_advertise" must be set
 
-  advertise_v6_on_public {
-    public_ip {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  advertise_on_public_default_dualstack_vip = true
 
   // One of the arguments from this list "do_not_retract_cluster retract_cluster" must be set
 
@@ -40,44 +34,11 @@ resource "volterra_tcp_loadbalancer" "example" {
 
   // One of the arguments from this list "tcp tls_tcp tls_tcp_auto_cert" must be set
 
-  tls_tcp {
-    // One of the arguments from this list "tls_cert_params tls_parameters" must be set
-
-    tls_parameters {
-      // One of the arguments from this list "no_mtls use_mtls" must be set
-
-      no_mtls = true
-
-      tls_certificates {
-        certificate_url = "value"
-
-        description = "Certificate used in production environment"
-
-        // One of the arguments from this list "custom_hash_algorithms disable_ocsp_stapling use_system_defaults" can be set
-
-        use_system_defaults {}
-        private_key {
-
-
-          // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-          wingman_secret_info {
-            name = "ChargeBack-API-Key"
-          }
-        }
-      }
-
-      tls_config {
-        // One of the arguments from this list "custom_security default_security low_security medium_security" must be set
-
-        default_security = true
-      }
-    }
-  }
+  tcp = true
 
   // One of the arguments from this list "listen_port port_ranges" must be set
 
-  listen_port = "0"
+  port_ranges = "80,443,8080-8191,9080"
 
   // One of the arguments from this list "active_service_policies no_service_policies service_policies_from_namespace" must be set
 
@@ -451,16 +412,6 @@ F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in th
 
 Inherit the Load Balancer's Listen Port..
 
-### Private Key Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
 ### Ref
 
 Reference to another volterra object is shown like below
@@ -488,6 +439,10 @@ Clear Secret is used for the secrets that are not encrypted.
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
 
 ### Secret Info Oneof Vault Secret Info
 
@@ -533,13 +488,13 @@ Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
 TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
 
-
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 

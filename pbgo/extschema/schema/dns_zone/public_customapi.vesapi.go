@@ -66,6 +66,14 @@ func (c *CustomAPIGrpcClient) doRPCEditCryptoKey(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.EditCryptoKey(ctx, req, opts...)
 	return rsp, err
 }
+func (c *CustomAPIGrpcClient) doRPCEditNamespaceRBAC(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &EditNamespaceRBACRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_zone.EditNamespaceRBACRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.EditNamespaceRBAC(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCExportZoneFile(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ExportZoneFileRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -181,6 +189,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["CloneFromDNSDomain"] = ccl.doRPCCloneFromDNSDomain
 	rpcFns["DeleteCryptoKey"] = ccl.doRPCDeleteCryptoKey
 	rpcFns["EditCryptoKey"] = ccl.doRPCEditCryptoKey
+	rpcFns["EditNamespaceRBAC"] = ccl.doRPCEditNamespaceRBAC
 	rpcFns["ExportZoneFile"] = ccl.doRPCExportZoneFile
 	rpcFns["GetCryptoKeys"] = ccl.doRPCGetCryptoKeys
 	rpcFns["GetLocalZoneFile"] = ccl.doRPCGetLocalZoneFile
@@ -527,6 +536,91 @@ func (c *CustomAPIRestClient) doRPCEditCryptoKey(ctx context.Context, callOpts *
 	pbRsp := &EditCryptoKeyResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.EditCryptoKeyResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+func (c *CustomAPIRestClient) doRPCEditNamespaceRBAC(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &EditNamespaceRBACRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_zone.EditNamespaceRBACRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("namespace_rbac", fmt.Sprintf("%v", req.NamespaceRbac))
+		for _, item := range req.ZoneNames {
+			q.Add("zone_names", fmt.Sprintf("%v", item))
+		}
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &EditNamespaceRBACResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.EditNamespaceRBACResponse", body)
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1386,6 +1480,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns["CloneFromDNSDomain"] = ccl.doRPCCloneFromDNSDomain
 	rpcFns["DeleteCryptoKey"] = ccl.doRPCDeleteCryptoKey
 	rpcFns["EditCryptoKey"] = ccl.doRPCEditCryptoKey
+	rpcFns["EditNamespaceRBAC"] = ccl.doRPCEditNamespaceRBAC
 	rpcFns["ExportZoneFile"] = ccl.doRPCExportZoneFile
 	rpcFns["GetCryptoKeys"] = ccl.doRPCGetCryptoKeys
 	rpcFns["GetLocalZoneFile"] = ccl.doRPCGetLocalZoneFile
@@ -1422,6 +1517,10 @@ func (c *customAPIInprocClient) DeleteCryptoKey(ctx context.Context, in *DeleteC
 func (c *customAPIInprocClient) EditCryptoKey(ctx context.Context, in *EditCryptoKeyRequest, opts ...grpc.CallOption) (*EditCryptoKeyResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomAPI.EditCryptoKey")
 	return c.CustomAPIServer.EditCryptoKey(ctx, in)
+}
+func (c *customAPIInprocClient) EditNamespaceRBAC(ctx context.Context, in *EditNamespaceRBACRequest, opts ...grpc.CallOption) (*EditNamespaceRBACResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomAPI.EditNamespaceRBAC")
+	return c.CustomAPIServer.EditNamespaceRBAC(ctx, in)
 }
 func (c *customAPIInprocClient) ExportZoneFile(ctx context.Context, in *ExportZoneFileRequest, opts ...grpc.CallOption) (*ExportZoneFileResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomAPI.ExportZoneFile")
@@ -1674,6 +1773,54 @@ func (s *customAPISrv) EditCryptoKey(ctx context.Context, in *EditCryptoKeyReque
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.EditCryptoKeyResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) EditNamespaceRBAC(ctx context.Context, in *EditNamespaceRBACRequest) (*EditNamespaceRBACResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.dns_zone.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *EditNamespaceRBACResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.EditNamespaceRBACRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.EditNamespaceRBAC' operation on 'dns_zone'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.dns_zone.CustomAPI.EditNamespaceRBAC"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.EditNamespaceRBAC(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.EditNamespaceRBACResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -3016,6 +3163,90 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-customapi-initiatezonetransfer"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.InitiateZoneTransfer"
+            },
+            "x-displayname": "DNS Zone Custom API",
+            "x-ves-proto-service": "ves.io.schema.dns_zone.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/dns_zone/namespace_rbac": {
+            "post": {
+                "summary": "Edit Namespace RBAC",
+                "description": "Apply the same namespace-based access control configuration to multiple\nDNS zones.",
+                "operationId": "ves.io.schema.dns_zone.CustomAPI.EditNamespaceRBAC",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/dns_zoneEditNamespaceRBACResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dns_zoneEditNamespaceRBACRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-customapi-editnamespacerbac"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.EditNamespaceRBAC"
             },
             "x-displayname": "DNS Zone Custom API",
             "x-ves-proto-service": "ves.io.schema.dns_zone.CustomAPI",
@@ -4597,6 +4828,56 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Edit CryptoKey Response",
             "x-ves-proto-message": "ves.io.schema.dns_zone.EditCryptoKeyResponse"
         },
+        "dns_zoneEditNamespaceRBACRequest": {
+            "type": "object",
+            "description": "Request to apply the same namespace-based access control configuration to\nmultiple DNS zones.",
+            "title": "Edit Namespace RBAC Request",
+            "x-displayname": "Edit Namespace RBAC Request",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.EditNamespaceRBACRequest",
+            "properties": {
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace is always system for dns_zone.\n\nExample: - \"system\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system"
+                },
+                "namespace_rbac": {
+                    "description": " Namespace-based access control configuration to apply to all specified DNS zones.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Namespace RBAC",
+                    "$ref": "#/definitions/dns_zoneNamespaceRBAC",
+                    "x-displayname": "Namespace RBAC",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "zone_names": {
+                    "type": "array",
+                    "description": " Names of the DNS zones to update.\n\nExample: - \"example.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Zone Names",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Zone Names",
+                    "x-ves-example": "example.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "dns_zoneEditNamespaceRBACResponse": {
+            "type": "object",
+            "description": "Response returned after editing the namespace-based access control\nconfiguration for the specified DNS zones.",
+            "title": "Edit Namespace RBAC Response",
+            "x-displayname": "Edit Namespace RBAC Response",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.EditNamespaceRBACResponse"
+        },
         "dns_zoneExportZoneFileResponse": {
             "type": "object",
             "description": "Export Zone File Response",
@@ -4738,6 +5019,12 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "domain": {
                     "type": "string"
+                },
+                "namespace_rbac": {
+                    "description": " Namespace-based access control configuration for the DNS zone.\n Updates require a role that carries the f5xc-dns-standard-admin API group,\n such as f5xc-dns-management-admin.",
+                    "title": "Namespace RBAC",
+                    "$ref": "#/definitions/dns_zoneNamespaceRBAC",
+                    "x-displayname": "Namespace access for this DNS zone"
                 },
                 "num_of_dns_records": {
                     "type": "integer",
@@ -5280,6 +5567,58 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneNamespaceRBAC": {
+            "type": "object",
+            "description": "Namespace-based access control configuration for a DNS zone.\nOnly users with a role that carries the f5xc-dns-standard-admin API group,\nsuch as f5xc-dns-management-admin, can configure this block.\nAuthorization is enforced by the API service.\nx-textBlockContent:\nControl which namespaces can use this zone for HTTP Load\nBalancer domains and auto-cert. Changes are restricted to DNS\nadministrators. When disabled, any namespace can use this zone.\nx-textBlockPosition: \"inside\"",
+            "title": "Namespace RBAC",
+            "x-displayname": "Namespace access for this DNS Zone",
+            "x-ves-oneof-field-mode": "[\"disabled\",\"enabled\"]",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.NamespaceRBAC",
+            "properties": {
+                "disabled": {
+                    "description": "Exclusive with [enabled]\n Any namespace can use this DNS zone for HTTP Load Balancer\n domains and auto-cert. DNS records can be managed based on\n existing DNS permissions",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "enabled": {
+                    "description": "Exclusive with [disabled]\n Map this DNS zone to authorized namespaces (up to 64). Only\n mapped namespaces can use this zone for HTTP Load Balancer\n domains and auto-cert, and manage DNS records in this zone.",
+                    "title": "Enabled",
+                    "$ref": "#/definitions/dns_zoneNamespaceRBACEnabled",
+                    "x-displayname": "Enabled"
+                }
+            }
+        },
+        "dns_zoneNamespaceRBACEnabled": {
+            "type": "object",
+            "title": "Enabled",
+            "x-displayname": "Enabled",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.NamespaceRBACEnabled",
+            "properties": {
+                "namespaces": {
+                    "type": "array",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Authorized namespaces",
+                    "minItems": 1,
+                    "maxItems": 64,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Authorized namespaces",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "dns_zonePrimaryDNSGetSpecType": {
             "type": "object",
             "title": "PrimaryDNSGetSpecType",
@@ -5293,7 +5632,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "allow_http_lb_managed_records": {
                     "type": "boolean",
-                    "description": " Option to allow user-created HTTP, TCP, and CDN load balancer related resource records to be automatically managed in a protected RRset.",
+                    "description": " Allow F5 Distributed Cloud services to automatically create and manage resource records in a protected RRset.",
                     "format": "boolean"
                 },
                 "default_rr_set_group": {
@@ -6337,20 +6676,26 @@ var CustomAPISwaggerJSON string = `{
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"none\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info none]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info none]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType",
                     "x-displayname": "Clear Secret"
+                },
+                "none": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info]\n No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.",
+                    "title": "None",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
                 }
             }
         },

@@ -279,6 +279,29 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEndpointsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetEndpointsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHealthChecksDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHealthChecksDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTlsParametersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *CreateSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetEndpoints()
@@ -291,6 +314,34 @@ func (m *CreateSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("CreateSpecType.endpoints[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "endpoint.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "endpoints",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetEndpointsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetEndpoints()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.endpoints[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "endpoint.Object",
 			RefdUID:    ref.Uid,
@@ -346,6 +397,34 @@ func (m *CreateSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetHealthChecksDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetHealthChecks()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.health_checks[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "healthcheck.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "health_checks",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetHealthChecksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *CreateSpecType) GetHealthChecksDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -374,6 +453,22 @@ func (m *CreateSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetTlsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetTlsParametersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTlsParameters().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1139,6 +1234,29 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEndpointsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetEndpointsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHealthChecksDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHealthChecksDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTlsParametersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetEndpoints()
@@ -1151,6 +1269,34 @@ func (m *GetSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.endpoints[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "endpoint.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "endpoints",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetEndpointsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetEndpoints()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.endpoints[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "endpoint.Object",
 			RefdUID:    ref.Uid,
@@ -1206,6 +1352,34 @@ func (m *GetSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetHealthChecksDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetHealthChecks()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.health_checks[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "healthcheck.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "health_checks",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetHealthChecksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GetSpecType) GetHealthChecksDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1234,6 +1408,22 @@ func (m *GetSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetTlsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetTlsParametersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTlsParameters().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1894,6 +2084,34 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetClusterTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClusterTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetEndpointsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetEndpointsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHealthChecksDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHealthChecksDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTlsParametersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetClusterTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -1918,6 +2136,29 @@ func (m *GlobalSpecType) GetClusterTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetClusterTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetClusterType() == nil {
+		return nil, nil
+	}
+	switch m.GetClusterType().(type) {
+	case *GlobalSpecType_DefaultCluster:
+		return nil, nil
+	case *GlobalSpecType_TmmPoolCluster:
+		drInfos, err := m.GetTmmPoolCluster().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTmmPoolCluster().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tmm_pool_cluster." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetEndpoints()
 	if len(refs) == 0 {
@@ -1929,6 +2170,34 @@ func (m *GlobalSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.endpoints[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "endpoint.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "endpoints",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetEndpointsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetEndpoints()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.endpoints[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "endpoint.Object",
 			RefdUID:    ref.Uid,
@@ -1984,6 +2253,34 @@ func (m *GlobalSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetHealthChecksDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetHealthChecks()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.health_checks[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "healthcheck.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "health_checks",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetHealthChecksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetHealthChecksDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -2012,6 +2309,22 @@ func (m *GlobalSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetTlsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetTlsParametersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTlsParameters().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3055,6 +3368,29 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEndpointsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetEndpointsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHealthChecksDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHealthChecksDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTlsParametersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ReplaceSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetEndpoints()
@@ -3067,6 +3403,34 @@ func (m *ReplaceSpecType) GetEndpointsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("ReplaceSpecType.endpoints[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "endpoint.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "endpoints",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetEndpointsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetEndpoints()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.endpoints[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "endpoint.Object",
 			RefdUID:    ref.Uid,
@@ -3122,6 +3486,34 @@ func (m *ReplaceSpecType) GetHealthChecksDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetHealthChecksDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetHealthChecks()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.health_checks[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "healthcheck.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "health_checks",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetHealthChecksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *ReplaceSpecType) GetHealthChecksDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -3150,6 +3542,22 @@ func (m *ReplaceSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetTlsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetTlsParametersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTlsParameters().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3751,6 +4159,13 @@ func (m *TMMPoolType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetHealthMonitoringDRefInfo()
 }
+func (m *TMMPoolType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHealthMonitoringDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TMMPoolType) GetHealthMonitoringDRefInfo() ([]db.DRefInfo, error) {
@@ -3760,6 +4175,22 @@ func (m *TMMPoolType) GetHealthMonitoringDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetHealthMonitoring().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetHealthMonitoring().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "health_monitoring." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TMMPoolType) GetHealthMonitoringDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetHealthMonitoring() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetHealthMonitoring().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetHealthMonitoring().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

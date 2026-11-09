@@ -32,7 +32,17 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "api_definition api_definitions api_specification disable_api_definition" must be set
 
-  disable_api_definition = true
+  api_specification {
+    api_definition {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    // One of the arguments from this list "validation_all_spec_endpoints validation_custom_list validation_disabled" must be set
+
+    validation_disabled = true
+  }
 
   // One of the arguments from this list "disable_api_discovery enable_api_discovery" must be set
 
@@ -80,31 +90,23 @@ resource "volterra_http_loadbalancer" "example" {
         sensitive_data_detection_config {
           // One of the arguments from this list "any_domain specific_domain" must be set
 
-          any_domain = true
+          specific_domain = "api.example.com"
 
           // One of the arguments from this list "key_pattern key_value_pattern value_pattern" must be set
 
-          key_value_pattern {
-            key_pattern {
-              // One of the arguments from this list "exact_value regex_value" must be set
+          value_pattern {
+            // One of the arguments from this list "exact_value regex_value" must be set
 
-              exact_value = "x-volt-header"
-            }
-
-            value_pattern {
-              // One of the arguments from this list "exact_value regex_value" must be set
-
-              regex_value = "'^new.*$', 'san f.*', '.* del .*'"
-            }
+            exact_value = "x-volt-header"
           }
 
           // One of the arguments from this list "all_request_sections all_response_sections all_sections custom_sections" must be set
 
-          all_sections = true
+          all_request_sections = true
 
           // One of the arguments from this list "any_target api_endpoint_target api_group base_path" must be set
 
-          any_target = true
+          api_group = "oas-all-operations"
         }
 
         sensitive_data_type {
@@ -124,24 +126,12 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "captcha_challenge enable_challenge js_challenge no_challenge policy_based_challenge" must be set
 
-  enable_challenge {
-    // One of the arguments from this list "captcha_challenge_parameters default_captcha_challenge_parameters" can be set
-
-    default_captcha_challenge_parameters = true
-
-    // One of the arguments from this list "default_js_challenge_parameters js_challenge_parameters" can be set
-
-    default_js_challenge_parameters = true
-
-    // One of the arguments from this list "default_mitigation_settings malicious_user_mitigation" can be set
-
-    default_mitigation_settings = true
-  }
-  domains = ["www.foo.com"]
+  no_challenge = true
+  domains      = ["www.foo.com"]
 
   // One of the arguments from this list "cookie_stickiness least_active random ring_hash round_robin source_ip_stickiness" must be set
 
-  source_ip_stickiness = true
+  least_active = true
 
   // One of the arguments from this list "http https https_auto_cert" must be set
 
@@ -150,7 +140,7 @@ resource "volterra_http_loadbalancer" "example" {
 
     // One of the arguments from this list "port port_ranges" must be set
 
-    port = "80"
+    port_ranges = "80,443,8080-8191,9080"
   }
 
   // One of the arguments from this list "disable_malicious_user_detection enable_malicious_user_detection" must be set
@@ -163,7 +153,182 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "api_rate_limit disable_rate_limit rate_limit" must be set
 
-  disable_rate_limit = true
+  api_rate_limit {
+    api_endpoint_rules {
+      api_endpoint_method {
+        invert_matcher = true
+
+        methods = ["['GET', 'POST', 'DELETE']"]
+      }
+
+      api_endpoint_path = "value"
+
+      base_path = "/"
+
+      client_matcher {
+        // One of the arguments from this list "any_client client_selector ip_threat_category_list" must be set
+
+        any_client = true
+
+        // One of the arguments from this list "any_ip asn_list asn_matcher ip_matcher ip_prefix_list" must be set
+
+        any_ip = true
+        tls_fingerprint_matcher {
+          classes = ["classes"]
+
+          exact_values = ["['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"]
+
+          excluded_values = ["['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"]
+        }
+      }
+
+      // One of the arguments from this list "any_domain specific_domain" must be set
+
+      specific_domain = "specific_domain"
+
+      // One of the arguments from this list "inline_rate_limiter ref_rate_limiter" must be set
+
+      inline_rate_limiter {
+        // One of the arguments from this list "ref_user_id use_http_lb_user_id" must be set
+
+        use_http_lb_user_id = true
+
+        threshold = "1"
+
+        unit = "unit"
+      }
+      request_matcher {
+        cookie_matchers {
+          invert_matcher = true
+
+          // One of the arguments from this list "check_not_present check_present item presence" must be set
+
+          presence = true
+          name = "Session"
+        }
+
+        headers {
+          invert_matcher = true
+
+          // One of the arguments from this list "check_not_present check_present item presence" must be set
+
+          presence = true
+          name = "Accept-Encoding"
+        }
+
+        jwt_claims {
+          invert_matcher = true
+
+          // One of the arguments from this list "check_not_present check_present item" must be set
+
+          check_not_present = true
+          name = "user_id"
+        }
+
+        query_params {
+          invert_matcher = true
+
+          key = "sourceid"
+
+          // One of the arguments from this list "check_not_present check_present item presence" must be set
+
+          presence = true
+        }
+      }
+    }
+
+    // One of the arguments from this list "bypass_rate_limiting_rules custom_ip_allowed_list ip_allowed_list no_ip_allowed_list" must be set
+
+    no_ip_allowed_list = true
+    server_url_rules {
+      api_group = "oas-all-operations"
+
+      base_path = "/"
+
+      client_matcher {
+        // One of the arguments from this list "any_client client_selector ip_threat_category_list" must be set
+
+        any_client = true
+
+        // One of the arguments from this list "any_ip asn_list asn_matcher ip_matcher ip_prefix_list" must be set
+
+        asn_matcher {
+          asn_sets {
+            name      = "test1"
+            namespace = "staging"
+            tenant    = "acmecorp"
+          }
+        }
+        tls_fingerprint_matcher {
+          classes = ["classes"]
+
+          exact_values = ["['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"]
+
+          excluded_values = ["['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"]
+        }
+      }
+
+      // One of the arguments from this list "any_domain specific_domain" must be set
+
+      any_domain = true
+
+      // One of the arguments from this list "inline_rate_limiter ref_rate_limiter" must be set
+
+      inline_rate_limiter {
+        // One of the arguments from this list "ref_user_id use_http_lb_user_id" must be set
+
+        use_http_lb_user_id = true
+
+        threshold = "1"
+
+        unit = "unit"
+      }
+      request_matcher {
+        cookie_matchers {
+          invert_matcher = true
+
+          // One of the arguments from this list "check_not_present check_present item presence" must be set
+
+          check_not_present = true
+          name = "Session"
+        }
+
+        headers {
+          invert_matcher = true
+
+          // One of the arguments from this list "check_not_present check_present item presence" must be set
+
+          item {
+            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+
+            transformers = ["transformers"]
+          }
+          name = "Accept-Encoding"
+        }
+
+        jwt_claims {
+          invert_matcher = true
+
+          // One of the arguments from this list "check_not_present check_present item" must be set
+
+          check_not_present = true
+          name = "user_id"
+        }
+
+        query_params {
+          invert_matcher = true
+
+          key = "sourceid"
+
+          // One of the arguments from this list "check_not_present check_present item presence" must be set
+
+          presence = true
+        }
+      }
+    }
+  }
 
   // One of the arguments from this list "default_sensitive_data_policy sensitive_data_policy" must be set
 
@@ -175,7 +340,7 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "disable_threat_mesh enable_threat_mesh" must be set
 
-  enable_threat_mesh = true
+  disable_threat_mesh = true
 
   // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
 
@@ -265,15 +430,23 @@ Argument Reference
 
 `bot_defense_advanced` - (Optional) x-displayName: "Enable Bot Defense". See [Bot Defense Choice Bot Defense Advanced ](#bot-defense-choice-bot-defense-advanced) below for details.(Deprecated)
 
-`bot_defense_advanced_protection` - (Optional) Select Bot Defense. See [Bot Defense Choice Bot Defense Advanced Protection ](#bot-defense-choice-bot-defense-advanced-protection) below for details.
+`bot_defense_advanced_protection` - (Optional) x-displayName: "Enable Bot Defense Advanced". See [Bot Defense Choice Bot Defense Advanced Protection ](#bot-defense-choice-bot-defense-advanced-protection) below for details.
 
 `disable_bot_defense` - (Optional) No Bot Defense configuration for this load balancer (`Bool`).
 
-###### One of the arguments from this list "caching_policy, disable_caching" can be set
+###### One of the arguments from this list "bot_protection, disable_bot_protection" can be set
 
-`caching_policy` - (Optional) Caching Policies for the CDN.. See [Cache Options Caching Policy ](#cache-options-caching-policy) below for details.
+`bot_protection` - (Optional) Application-wide protection for web applications against automated threats and unwanted bot activity.. See [Bot Protection Choice Bot Protection ](#bot-protection-choice-bot-protection) below for details.
+
+`disable_bot_protection` - (Optional) No Bot Protection configuration for this load balancer (`Bool`).
+
+###### One of the arguments from this list "caching_policy, disable_caching, enable_cdn" can be set
+
+`caching_policy` - (Optional) Deprecated in favor of CDNConfig.. See [Cache Options Caching Policy ](#cache-options-caching-policy) below for details.(Deprecated)
 
 `disable_caching` - (Optional) x-displayName: "Disable" (`Bool`).
+
+`enable_cdn` - (Optional) CDN caching and image optimization configuration.. See [Cache Options Enable Cdn ](#cache-options-enable-cdn) below for details.
 
 ###### One of the arguments from this list "captcha_challenge, enable_challenge, js_challenge, no_challenge, policy_based_challenge" must be set
 
@@ -684,6 +857,12 @@ More options like header manipulation, compression etc..
 `custom_errors` - (Optional) Map of integer error codes as keys and string values that can be used to provide custom http pages for each error code. Key of the map can be either response code class or HTTP Error code. Response code classes for key is configured as follows 3 -- for 3xx response code class, 4 -- for 4xx response code class, 5 -- for 5xx response code class. Value of the map is string which represents custom HTTP responses. Specific response code takes preference when both response code and response code class matches for a request.(map(string)).
 
 `disable_default_error_pages` - (Optional) Disable the use of default F5XC error pages. (`Bool`).
+
+###### One of the arguments from this list "disable_http10, enable_http10" must be set
+
+`disable_http10` - (Optional) Reject HTTP/1.0 and HTTP/0.9 traffic on this LB. (`Bool`).
+
+`enable_http10` - (Optional) Allow HTTP/1.0 and HTTP/0.9 traffic on this LB. (`Bool`).
 
 `idle_timeout` - (Optional) received, otherwise the stream is reset. (`Int`).
 
@@ -1471,11 +1650,13 @@ x-displayName: "Value".
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -1715,6 +1896,16 @@ Web and mobile traffic channel..
 
 `mobile_identifier` - (Optional) Mobile identifier type (`String`).
 
+### Applied Domains Choice All Domains
+
+x-displayName: "All Domains".
+
+### Applied Domains Choice Select Domains
+
+x-displayName: "Select Domains".
+
+`domains` - (Required) x-required (`String`).
+
 ### Asn Choice Any Asn
 
 any_asn.
@@ -1749,11 +1940,13 @@ x-displayName: "Password".
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -1767,11 +1960,13 @@ x-displayName: "Token".
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -1873,7 +2068,7 @@ x-displayName: "Enable Bot Defense".
 
 ### Bot Defense Choice Bot Defense Advanced Protection
 
-Select Bot Defense.
+x-displayName: "Enable Bot Defense Advanced".
 
 ###### One of the arguments from this list "both_web_and_mobile, mobile_only, web_only" must be set
 
@@ -1902,6 +2097,22 @@ Configuration for Bot Defense JavaScript Injection.
 ### Bot Defense Javascript Injection Choice Inherited Bot Defense Javascript Injection
 
 Hence no custom configuration is applied on the route.
+
+### Bot Protection Choice Bot Protection
+
+Application-wide protection for web applications against automated threats and unwanted bot activity..
+
+###### One of the arguments from this list "disable_js_insert, js_insert_all_pages, js_insert_all_pages_except, js_insertion_rules" must be set
+
+`disable_js_insert` - (Optional) Disable JavaScript insertion. (`Bool`).
+
+`js_insert_all_pages` - (Optional) Insert Bot Defense JavaScript in all pages.. See [Java Script Choice Js Insert All Pages ](#java-script-choice-js-insert-all-pages) below for details.
+
+`js_insert_all_pages_except` - (Optional) Insert Bot Defense JavaScript in all pages with the exceptions.. See [Java Script Choice Js Insert All Pages Except ](#java-script-choice-js-insert-all-pages-except) below for details.
+
+`js_insertion_rules` - (Optional) Specify custom JavaScript insertion rules.. See [Java Script Choice Js Insertion Rules ](#java-script-choice-js-insertion-rules) below for details.
+
+`policy` - (Required) The default policy settings will be applied, with all bot detection types configured under the low-risk criteria. The domain is derived from the HTTP Load Balancer, and the path is set to include everything.. See [ref](#ref) below for details.
 
 ### Buffer Choice Buffer Policy
 
@@ -1991,11 +2202,21 @@ Eligible for caching the content.
 
 ### Cache Options Caching Policy
 
-Caching Policies for the CDN..
+Deprecated in favor of CDNConfig..
 
 `custom_cache_rule` - (Optional) Rules are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs.. See [Caching Policy Custom Cache Rule ](#caching-policy-custom-cache-rule) below for details.
 
 `default_cache_action` - (Optional) Default value for Cache action.. See [Caching Policy Default Cache Action ](#caching-policy-default-cache-action) below for details.
+
+### Cache Options Enable Cdn
+
+CDN caching and image optimization configuration..
+
+`caching_policy` - (Required) x-required. See [Enable Cdn Caching Policy ](#enable-cdn-caching-policy) below for details.
+
+`compression_params` - (Optional) Only GZIP compression is supported. See [Enable Cdn Compression Params ](#enable-cdn-compression-params) below for details.
+
+`image_optimization_config` - (Optional) Automatically translates images into the most compatible format (WebP/AVIF). See [Enable Cdn Image Optimization Config ](#enable-cdn-image-optimization-config) below for details.
 
 ### Caching Caching Disable
 
@@ -3129,6 +3350,32 @@ Manage rules to detect sensitive data in requests and/or response sections..
 
 `disabled_built_in_rules` - (Optional) List of disabled built-in sensitive data detection rules.. See [Sensitive Data Detection Rules Disabled Built In Rules ](#sensitive-data-detection-rules-disabled-built-in-rules) below for details.
 
+### Enable Cdn Caching Policy
+
+x-required.
+
+`custom_cache_rule` - (Optional) Rules are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs.. See [Caching Policy Custom Cache Rule ](#caching-policy-custom-cache-rule) below for details.
+
+`default_cache_action` - (Optional) Default value for Cache action.. See [Caching Policy Default Cache Action ](#caching-policy-default-cache-action) below for details.
+
+### Enable Cdn Compression Params
+
+Only GZIP compression is supported.
+
+`content_length` - (Optional) Minimum response length, in bytes, which will trigger compression. The default value is 30. (`Int`).
+
+`content_type` - (Optional) "text/xml" (`String`).
+
+`disable_on_etag_header` - (Optional) weak etags will be preserved and the ones that require strong validation will be removed. (`Bool`).
+
+`remove_accept_encoding_header` - (Optional) so that responses do not get compressed before reaching the filter. (`Bool`).
+
+### Enable Cdn Image Optimization Config
+
+Automatically translates images into the most compatible format (WebP/AVIF).
+
+`image_optimizations` - (Required) x-required. See [Image Optimization Config Image Optimizations ](#image-optimization-config-image-optimizations) below for details.
+
 ### Enable Discovery Api Crawler
 
 Configure Discovered API Settings..
@@ -3495,6 +3742,14 @@ Host header will be swapped with hostname of upstream host chosen by the cluster
 
 Host header is not modified.
 
+### Http10 Choice Disable Http10
+
+Reject HTTP/1.0 and HTTP/0.9 traffic on this LB..
+
+### Http10 Choice Enable Http10
+
+Allow HTTP/1.0 and HTTP/0.9 traffic on this LB..
+
 ### Http1 Config Header Transformation
 
 the stateful formatter will take effect, and the stateless formatter will be disregarded..
@@ -3670,6 +3925,40 @@ Configuration of TLS settings such as min/max TLS version and ciphersuites.
 `low_security` - (Optional) TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (`Bool`).
 
 `medium_security` - (Optional) TLS v1.0+ with PFS ciphers and medium strength crypto algorithms. (`Bool`).
+
+### Image Optimization Config Image Optimizations
+
+x-required.
+
+###### One of the arguments from this list "all_domains, select_domains" can be set
+
+`all_domains` - (Optional) x-displayName: "All Domains" (`Bool`).
+
+`select_domains` - (Optional) x-displayName: "Select Domains". See [Applied Domains Choice Select Domains ](#applied-domains-choice-select-domains) below for details.
+
+###### One of the arguments from this list "express" can be set
+
+`express` - (Optional) x-choiceDescription: "Use Accept Header parameters for transformations" (`Bool`).
+
+`name` - (Required) x-example: "my-image-optimization" (`String`).
+
+`path` - (Required) x-required. See [Image Optimizations Path ](#image-optimizations-path) below for details.
+
+### Image Optimization Method Express
+
+x-choiceDescription: "Use Accept Header parameters for transformations".
+
+### Image Optimizations Path
+
+x-required.
+
+###### One of the arguments from this list "path, prefix, regex" must be set
+
+`path` - (Optional) Exact path value to match (`String`).
+
+`prefix` - (Optional) Path prefix to match (e.g. the value / will match on all paths) (`String`).
+
+`regex` - (Optional) Regular expression of path match (e.g. the value .* will match on all paths) (`String`).
 
 ### Ip Allowed List Choice Bypass Rate Limiting Rules
 
@@ -4199,7 +4488,7 @@ User is responsible for managing DNS to this load balancer..
 
 `append_server_name` - (Optional) If header value is already present, it is not overwritten and passed as-is. (`String`).
 
-`default_header` - (Optional) Response header name is “server” and value is “volt-adc” (`Bool`).
+`default_header` - (Optional) Response header name is "server" and value is "volt-adc" (`Bool`).
 
 `pass_through` - (Optional) Pass existing server header as is. If server header is absent, a new header is not appended. (`Bool`).
 
@@ -4255,7 +4544,7 @@ or a DNS CNAME record should be created in your DNS provider's portal(only for D
 
 `append_server_name` - (Optional) If header value is already present, it is not overwritten and passed as-is. (`String`).
 
-`default_header` - (Optional) Response header name is “server” and value is “volt-adc” (`Bool`).
+`default_header` - (Optional) Response header name is "server" and value is "volt-adc" (`Bool`).
 
 `pass_through` - (Optional) Pass existing server header as is. If server header is absent, a new header is not appended. (`Bool`).
 
@@ -4271,11 +4560,13 @@ Defines the structure of the API request payload, including payload structure, f
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -5759,6 +6050,10 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
+
 ### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
@@ -5895,7 +6190,7 @@ x-displayName: "JSON Path".
 
 ### Server Header Choice Default Header
 
-Response header name is “server” and value is “volt-adc”.
+Response header name is "server" and value is "volt-adc".
 
 ### Server Header Choice Pass Through
 
@@ -5977,11 +6272,13 @@ Enter the password to assign credentials for the selected domain to crawl.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -6417,11 +6714,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -6595,7 +6894,13 @@ Collect transaction result..
 
 x-displayName: "Enable".
 
-`client_ip_headers` - (Required) For X-Forwarded-For header, the system will read the IP address(rightmost - 1), as the client ip (`String`).
+`client_ip_headers` - (Required) headers that are inserted or overwritten by trusted proxies. (`String`).
+
+###### One of the arguments from this list "xff_num_trusted_hops_custom, xff_num_trusted_hops_default" can be set
+
+`xff_num_trusted_hops_custom` - (Optional) before selecting the client IP address. The minimum value is 1. (`Int`).
+
+`xff_num_trusted_hops_default` - (Optional) X-Forwarded-For header. (`Bool`).
 
 ### Trusted Clients Metadata
 
@@ -6843,11 +7148,13 @@ Secret Value of the Cookie header.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -6980,6 +7287,10 @@ No X-Forwarded-Client-Cert header will be added.
 X-Forwarded-Client-Cert header will be added with the configured fields.
 
 `xfcc_header_elements` - (Required) X-Forwarded-Client-Cert header elements to be added to requests (`List of Strings`).
+
+### Xff Num Trusted Hops Choice Xff Num Trusted Hops Default
+
+X-Forwarded-For header..
 
 Attribute Reference
 -------------------

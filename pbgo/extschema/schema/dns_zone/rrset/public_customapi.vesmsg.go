@@ -68,6 +68,13 @@ func (m *CreateRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRrsetDRefInfo()
 }
+func (m *CreateRequest) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRrsetDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateRequest) GetRrsetDRefInfo() ([]db.DRefInfo, error) {
@@ -77,6 +84,22 @@ func (m *CreateRequest) GetRrsetDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetRrset().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRrset().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "rrset." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateRequest) GetRrsetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRrset() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRrset().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRrset().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -615,6 +638,13 @@ func (m *ReplaceRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRrsetDRefInfo()
 }
+func (m *ReplaceRequest) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRrsetDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceRequest) GetRrsetDRefInfo() ([]db.DRefInfo, error) {
@@ -624,6 +654,22 @@ func (m *ReplaceRequest) GetRrsetDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetRrset().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRrset().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "rrset." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceRequest) GetRrsetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRrset() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRrset().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRrset().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -853,6 +899,13 @@ func (m *Response) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRrsetDRefInfo()
 }
+func (m *Response) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRrsetDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *Response) GetRrsetDRefInfo() ([]db.DRefInfo, error) {
@@ -862,6 +915,22 @@ func (m *Response) GetRrsetDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetRrset().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRrset().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "rrset." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *Response) GetRrsetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRrset() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRrset().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRrset().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

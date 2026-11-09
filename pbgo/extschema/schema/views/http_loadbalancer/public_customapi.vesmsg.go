@@ -70,8 +70,32 @@ func (m *AssignAPIDefinitionReq) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetApiDefinitionDRefInfo()
 }
+func (m *AssignAPIDefinitionReq) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApiDefinitionDRefInfoForOverlay(generateHash)
+}
 
 func (m *AssignAPIDefinitionReq) GetApiDefinitionDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetApiDefinition()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("api_definition.Object")
+	dri := db.DRefInfo{
+		RefdType:   "api_definition.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "api_definition",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *AssignAPIDefinitionReq) GetApiDefinitionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetApiDefinition()
 	if vref == nil {
 		return nil, nil
@@ -399,6 +423,13 @@ func (m *GetDnsInfoResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDnsInfoDRefInfo()
 }
+func (m *GetDnsInfoResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDnsInfoDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetDnsInfoResponse) GetDnsInfoDRefInfo() ([]db.DRefInfo, error) {
@@ -408,6 +439,22 @@ func (m *GetDnsInfoResponse) GetDnsInfoDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetDnsInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDnsInfo().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "dns_info." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetDnsInfoResponse) GetDnsInfoDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDnsInfo() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDnsInfo().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDnsInfo().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -815,6 +862,13 @@ func (m *ListAvailableAPIDefinitionsResp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAvailableApiDefinitionsDRefInfo()
 }
+func (m *ListAvailableAPIDefinitionsResp) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAvailableApiDefinitionsDRefInfoForOverlay(generateHash)
+}
 
 func (m *ListAvailableAPIDefinitionsResp) GetAvailableApiDefinitionsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetAvailableApiDefinitions()
@@ -829,6 +883,30 @@ func (m *ListAvailableAPIDefinitionsResp) GetAvailableApiDefinitionsDRefInfo() (
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("api_definition.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "api_definition.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "available_api_definitions",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ListAvailableAPIDefinitionsResp) GetAvailableApiDefinitionsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetAvailableApiDefinitions()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ListAvailableAPIDefinitionsResp.available_api_definitions[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("api_definition.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "api_definition.Object",
 			RefdTenant: vref.Tenant,

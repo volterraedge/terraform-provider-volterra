@@ -410,6 +410,13 @@ func (m *DcClusterGroupStatus) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSiteInfoDRefInfo()
 }
+func (m *DcClusterGroupStatus) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteInfoDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *DcClusterGroupStatus) GetSiteInfoDRefInfo() ([]db.DRefInfo, error) {
@@ -421,6 +428,26 @@ func (m *DcClusterGroupStatus) GetSiteInfoDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteInfo() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("site_info[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DcClusterGroupStatus) GetSiteInfoDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteInfo() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSiteInfo() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteInfo() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -770,6 +797,13 @@ func (m *SiteMeshGroupStatus) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSiteInfoDRefInfo()
 }
+func (m *SiteMeshGroupStatus) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteInfoDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SiteMeshGroupStatus) GetSiteInfoDRefInfo() ([]db.DRefInfo, error) {
@@ -781,6 +815,26 @@ func (m *SiteMeshGroupStatus) GetSiteInfoDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteInfo() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("site_info[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SiteMeshGroupStatus) GetSiteInfoDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteInfo() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSiteInfo() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteInfo() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]

@@ -348,6 +348,13 @@ func (m *CustomGetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return nil, nil
 }
+func (m *CustomGetResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
 
 type ValidateCustomGetResponse struct {
 	FldValidators map[string]db.ValidatorFunc
@@ -541,6 +548,13 @@ func (m *CustomListResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetItemsDRefInfo()
 }
+func (m *CustomListResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetItemsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CustomListResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
@@ -552,6 +566,26 @@ func (m *CustomListResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetItems() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("items[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CustomListResponse) GetItemsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetItems() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetItems() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetItems() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -819,6 +853,13 @@ func (m *Role) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetGetSpecDRefInfo()
 }
+func (m *Role) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGetSpecDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *Role) GetGetSpecDRefInfo() ([]db.DRefInfo, error) {
@@ -828,6 +869,22 @@ func (m *Role) GetGetSpecDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetGetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "get_spec." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *Role) GetGetSpecDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGetSpec() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetGetSpec().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetGetSpec().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

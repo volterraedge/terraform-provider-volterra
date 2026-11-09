@@ -744,6 +744,17 @@ func ResourceSecureMeshSiteInstanceResourceV1() *schema.Resource {
 																									},
 																								},
 
+																								"none": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
+																									},
+																								},
+
 																								"vault_secret_info": {
 
 																									Type:       schema.TypeList,

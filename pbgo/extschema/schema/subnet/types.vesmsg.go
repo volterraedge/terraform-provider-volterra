@@ -81,6 +81,24 @@ func (m *ConnectToLayer2) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ConnectToLayer2) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetLayer2IntfInternalRefDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLayer2IntfInternalRefDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLayer2IntfRefDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLayer2IntfRefDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ConnectToLayer2) GetLayer2IntfInternalRefDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetLayer2IntfInternalRef()
@@ -93,6 +111,34 @@ func (m *ConnectToLayer2) GetLayer2IntfInternalRefDRefInfo() ([]db.DRefInfo, err
 			return nil, fmt.Errorf("ConnectToLayer2.layer2_intf_internal_ref[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "layer2_intf_internal_ref",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ConnectToLayer2) GetLayer2IntfInternalRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetLayer2IntfInternalRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ConnectToLayer2.layer2_intf_internal_ref[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_interface.Object",
 			RefdUID:    ref.Uid,
@@ -126,6 +172,23 @@ func (m *ConnectToLayer2) GetLayer2IntfInternalRefDBEntries(ctx context.Context,
 }
 
 func (m *ConnectToLayer2) GetLayer2IntfRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetLayer2IntfRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("network_interface.Object")
+	dri := db.DRefInfo{
+		RefdType:   "network_interface.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "layer2_intf_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ConnectToLayer2) GetLayer2IntfRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetLayer2IntfRef()
 	if vref == nil {
 		return nil, nil
@@ -307,6 +370,24 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetConnectionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetConnectionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteSubnetParamsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteSubnetParamsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -335,6 +416,33 @@ func (m *CreateSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetConnectionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectionChoice().(type) {
+	case *CreateSpecType_ConnectToSlo:
+		return nil, nil
+	case *CreateSpecType_ConnectToSli:
+		return nil, nil
+	case *CreateSpecType_IsolatedNw:
+		return nil, nil
+	case *CreateSpecType_ConnectToLayer2:
+		drInfos, err := m.GetConnectToLayer2().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConnectToLayer2().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "connect_to_layer2." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetSiteSubnetParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteSubnetParams() == nil {
@@ -345,6 +453,26 @@ func (m *CreateSpecType) GetSiteSubnetParamsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteSubnetParams() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("site_subnet_params[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetSiteSubnetParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteSubnetParams() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSiteSubnetParams() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteSubnetParams() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -838,6 +966,24 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetConnectionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetConnectionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteSubnetParamsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteSubnetParamsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -866,6 +1012,33 @@ func (m *GetSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetConnectionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectionChoice().(type) {
+	case *GetSpecType_ConnectToSlo:
+		return nil, nil
+	case *GetSpecType_ConnectToSli:
+		return nil, nil
+	case *GetSpecType_IsolatedNw:
+		return nil, nil
+	case *GetSpecType_ConnectToLayer2:
+		drInfos, err := m.GetConnectToLayer2().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConnectToLayer2().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "connect_to_layer2." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetSiteSubnetParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteSubnetParams() == nil {
@@ -876,6 +1049,26 @@ func (m *GetSpecType) GetSiteSubnetParamsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteSubnetParams() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("site_subnet_params[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetSiteSubnetParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteSubnetParams() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSiteSubnetParams() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteSubnetParams() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1098,6 +1291,29 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetConnectionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetConnectionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteDhcpServerParamsInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteDhcpServerParamsInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteSubnetParamsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteSubnetParamsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1115,6 +1331,33 @@ func (m *GlobalSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetConnectToLayer2().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConnectToLayer2().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "connect_to_layer2." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetConnectionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectionChoice().(type) {
+	case *GlobalSpecType_ConnectToSlo:
+		return nil, nil
+	case *GlobalSpecType_ConnectToSli:
+		return nil, nil
+	case *GlobalSpecType_IsolatedNw:
+		return nil, nil
+	case *GlobalSpecType_ConnectToLayer2:
+		drInfos, err := m.GetConnectToLayer2().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConnectToLayer2().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1146,6 +1389,26 @@ func (m *GlobalSpecType) GetSiteDhcpServerParamsInternalDRefInfo() ([]db.DRefInf
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetSiteDhcpServerParamsInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteDhcpServerParamsInternal() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSiteDhcpServerParamsInternal() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteDhcpServerParamsInternal() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("site_dhcp_server_params_internal[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetSiteSubnetParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteSubnetParams() == nil {
@@ -1156,6 +1419,26 @@ func (m *GlobalSpecType) GetSiteSubnetParamsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteSubnetParams() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("site_subnet_params[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetSiteSubnetParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteSubnetParams() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSiteSubnetParams() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteSubnetParams() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1425,6 +1708,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetConnectionChoiceDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetConnectionChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1442,6 +1732,33 @@ func (m *ReplaceSpecType) GetConnectionChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetConnectToLayer2().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConnectToLayer2().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "connect_to_layer2." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetConnectionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectionChoice().(type) {
+	case *ReplaceSpecType_ConnectToSlo:
+		return nil, nil
+	case *ReplaceSpecType_ConnectToSli:
+		return nil, nil
+	case *ReplaceSpecType_IsolatedNw:
+		return nil, nil
+	case *ReplaceSpecType_ConnectToLayer2:
+		drInfos, err := m.GetConnectToLayer2().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConnectToLayer2().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1576,8 +1893,32 @@ func (m *SiteSubnetParametersType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSiteDRefInfo()
 }
+func (m *SiteSubnetParametersType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteDRefInfoForOverlay(generateHash)
+}
 
 func (m *SiteSubnetParametersType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *SiteSubnetParametersType) GetSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -1782,6 +2123,24 @@ func (m *SubnetDHCPServerParametersType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *SubnetDHCPServerParametersType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSiteDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSubnetDhcpServerParamsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSubnetDhcpServerParamsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *SubnetDHCPServerParametersType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetSite()
@@ -1794,6 +2153,34 @@ func (m *SubnetDHCPServerParametersType) GetSiteDRefInfo() ([]db.DRefInfo, error
 			return nil, fmt.Errorf("SubnetDHCPServerParametersType.site[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "site",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *SubnetDHCPServerParametersType) GetSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SubnetDHCPServerParametersType.site[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
@@ -1834,6 +2221,22 @@ func (m *SubnetDHCPServerParametersType) GetSubnetDhcpServerParamsDRefInfo() ([]
 	drInfos, err := m.GetSubnetDhcpServerParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSubnetDhcpServerParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "subnet_dhcp_server_params." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SubnetDHCPServerParametersType) GetSubnetDhcpServerParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSubnetDhcpServerParams() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetSubnetDhcpServerParams().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSubnetDhcpServerParams().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

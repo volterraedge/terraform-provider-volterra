@@ -271,6 +271,12 @@ func (v *ValidateDNSLBHealthStatusListResponseItem) Validate(ctx context.Context
 			}
 		}
 	}
+	if fv, exists := v.FldValidators["virtual_host"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtual_host"))
+		if err := fv(ctx, m.GetVirtualHost(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -348,6 +354,12 @@ func (v *ValidateDNSLBHealthStatusRequest) Validate(ctx context.Context, pm inte
 	if fv, exists := v.FldValidators["namespace"]; exists {
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["virtual_host"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtual_host"))
+		if err := fv(ctx, m.GetVirtualHost(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -535,6 +547,12 @@ func (v *ValidateDNSLBPoolHealthStatusListResponseItem) Validate(ctx context.Con
 			}
 		}
 	}
+	if fv, exists := v.FldValidators["virtual_host"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtual_host"))
+		if err := fv(ctx, m.GetVirtualHost(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -618,6 +636,12 @@ func (v *ValidateDNSLBPoolHealthStatusRequest) Validate(ctx context.Context, pm 
 	if fv, exists := v.FldValidators["namespace"]; exists {
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["virtual_host"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtual_host"))
+		if err := fv(ctx, m.GetVirtualHost(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -1178,6 +1202,12 @@ func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) Validate(ctx conte
 	if fv, exists := v.FldValidators["unhealthy_ports"]; exists {
 		vOpts := append(opts, db.WithValidateField("unhealthy_ports"))
 		if err := fv(ctx, m.GetUnhealthyPorts(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["virtual_host"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtual_host"))
+		if err := fv(ctx, m.GetVirtualHost(), vOpts...); err != nil {
 			return err
 		}
 	}

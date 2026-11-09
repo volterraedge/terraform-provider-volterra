@@ -211,6 +211,13 @@ func (m *GetFilteredDNSMonitorListResponse) GetDRefInfo() ([]db.DRefInfo, error)
 
 	return nil, nil
 }
+func (m *GetFilteredDNSMonitorListResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
 
 type ValidateGetFilteredDNSMonitorListResponse struct {
 	FldValidators map[string]db.ValidatorFunc

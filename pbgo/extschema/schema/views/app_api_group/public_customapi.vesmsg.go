@@ -437,6 +437,13 @@ func (m *EvaluateApiGroupReq) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetApiGroupDRefInfo()
 }
+func (m *EvaluateApiGroupReq) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApiGroupDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *EvaluateApiGroupReq) GetApiGroupDRefInfo() ([]db.DRefInfo, error) {
@@ -446,6 +453,22 @@ func (m *EvaluateApiGroupReq) GetApiGroupDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetApiGroup().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApiGroup().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_group." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *EvaluateApiGroupReq) GetApiGroupDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiGroup() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApiGroup().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiGroup().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -542,6 +565,13 @@ func (m *EvaluateApiGroupRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetApiGroupDRefInfo()
 }
+func (m *EvaluateApiGroupRsp) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApiGroupDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *EvaluateApiGroupRsp) GetApiGroupDRefInfo() ([]db.DRefInfo, error) {
@@ -551,6 +581,22 @@ func (m *EvaluateApiGroupRsp) GetApiGroupDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetApiGroup().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApiGroup().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_group." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *EvaluateApiGroupRsp) GetApiGroupDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiGroup() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApiGroup().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiGroup().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

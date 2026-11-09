@@ -170,10 +170,21 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 												},
 
 												"url": {
+													Sensitive: true,
 													Type:     schema.TypeString,
 													Required: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -317,6 +328,18 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"disable_cedns_record": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_cedns_record": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 
 						"custom_dns": {
 
@@ -465,10 +488,21 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 												},
 
 												"url": {
+													Sensitive: true,
 													Type:     schema.TypeString,
 													Required: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -581,7 +615,7 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 
 						"private_adn": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -1536,6 +1570,901 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 
 										Type:     schema.TypeBool,
 										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"aks_k8s": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disable_anti_affinity": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_anti_affinity": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"rules": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"label_key": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"label_value": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"topology_keys": {
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"deployment_size": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+
+						"labels": {
+							Type:     schema.TypeMap,
+							Optional: true,
+						},
+
+						"not_managed": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"node_list": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"hostname": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"interface_list": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"dhcp_client": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"dhcp_server": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"dhcp_networks": {
+
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"dns_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"same_as_dgw": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dgw_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"first_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"last_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"pool_settings": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"pools": {
+
+																						Type:       schema.TypeList,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"end_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"exclude": {
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"start_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"dhcp_option82_tag": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"fixed_ip_map": {
+																			Type:       schema.TypeMap,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_end": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_start": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"interface_ip_map": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+																						Type:       schema.TypeMap,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv4_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ip": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"default_gw": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"dns_server": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"ip_address": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"bond_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"devices": {
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"active_backup": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"lacp": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"rate": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"link_polling_interval": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"link_up_delay": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"ethernet_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"mac": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"vlan_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"vlan_id": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"ipv6_auto_config": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"host": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"router": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"network_prefix": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"stateful": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"dhcp_networks": {
+
+																									Type:     schema.TypeList,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"network_prefix": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"network_prefix_allocator": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"name": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"namespace": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"tenant": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
+																											"pool_settings": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+
+																											"pools": {
+
+																												Type:     schema.TypeList,
+																												Optional: true,
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"end_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+
+																														"exclude": {
+																															Type:       schema.TypeBool,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"start_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+																													},
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"fixed_ip_map": {
+																									Type:     schema.TypeMap,
+																									Optional: true,
+																								},
+
+																								"automatic_from_end": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"automatic_from_start": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"interface_ip_map": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"interface_ip_map": {
+																												Type:     schema.TypeMap,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"dns_config": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"configured_list": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"dns_list": {
+																												Type: schema.TypeList,
+
+																												Required: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"local_dns": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"configured_address": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"first_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+
+																											"last_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv6_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ipv6_address": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cluster_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Required: true,
+																								},
+																								"value": {
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"default_gw": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"ip_address": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"node_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"ip_address": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"is_management": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"is_primary": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"labels": {
+																Type:     schema.TypeMap,
+																Optional: true,
+															},
+
+															"monitor": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
+															"monitor_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"mtu": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"network_option": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Required: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"segment_network": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"namespace": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"tenant": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"site_local_inside_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"site_local_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"priority": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_enabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"public_ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"type": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
 									},
 								},
 							},
@@ -6634,6 +7563,1740 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 				},
 			},
 
+			"gke_k8s": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disable_anti_affinity": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_anti_affinity": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"rules": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"label_key": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"label_value": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"topology_keys": {
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"deployment_size": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+
+						"labels": {
+							Type:     schema.TypeMap,
+							Optional: true,
+						},
+
+						"not_managed": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"node_list": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"hostname": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"interface_list": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"dhcp_client": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"dhcp_server": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"dhcp_networks": {
+
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"dns_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"same_as_dgw": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dgw_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"first_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"last_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"pool_settings": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"pools": {
+
+																						Type:       schema.TypeList,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"end_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"exclude": {
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"start_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"dhcp_option82_tag": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"fixed_ip_map": {
+																			Type:       schema.TypeMap,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_end": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_start": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"interface_ip_map": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+																						Type:       schema.TypeMap,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv4_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ip": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"default_gw": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"dns_server": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"ip_address": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"bond_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"devices": {
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"active_backup": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"lacp": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"rate": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"link_polling_interval": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"link_up_delay": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"ethernet_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"mac": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"vlan_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"vlan_id": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"ipv6_auto_config": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"host": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"router": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"network_prefix": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"stateful": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"dhcp_networks": {
+
+																									Type:     schema.TypeList,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"network_prefix": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"network_prefix_allocator": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"name": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"namespace": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"tenant": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
+																											"pool_settings": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+
+																											"pools": {
+
+																												Type:     schema.TypeList,
+																												Optional: true,
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"end_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+
+																														"exclude": {
+																															Type:       schema.TypeBool,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"start_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+																													},
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"fixed_ip_map": {
+																									Type:     schema.TypeMap,
+																									Optional: true,
+																								},
+
+																								"automatic_from_end": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"automatic_from_start": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"interface_ip_map": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"interface_ip_map": {
+																												Type:     schema.TypeMap,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"dns_config": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"configured_list": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"dns_list": {
+																												Type: schema.TypeList,
+
+																												Required: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"local_dns": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"configured_address": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"first_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+
+																											"last_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv6_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ipv6_address": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cluster_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Required: true,
+																								},
+																								"value": {
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"default_gw": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"ip_address": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"node_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"ip_address": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"is_management": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"is_primary": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"labels": {
+																Type:     schema.TypeMap,
+																Optional: true,
+															},
+
+															"monitor": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
+															"monitor_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"mtu": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"network_option": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Required: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"segment_network": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"namespace": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"tenant": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"site_local_inside_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"site_local_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"priority": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_enabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"public_ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"type": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"hyper_v": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"not_managed": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"node_list": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"hostname": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"interface_list": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"dhcp_client": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"dhcp_server": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"dhcp_networks": {
+
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"dns_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"same_as_dgw": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dgw_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"first_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"last_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"pool_settings": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"pools": {
+
+																						Type:       schema.TypeList,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"end_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"exclude": {
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"start_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"dhcp_option82_tag": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"fixed_ip_map": {
+																			Type:       schema.TypeMap,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_end": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_start": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"interface_ip_map": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+																						Type:       schema.TypeMap,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv4_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ip": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"default_gw": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"dns_server": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"ip_address": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"bond_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"devices": {
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"active_backup": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"lacp": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"rate": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"link_polling_interval": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"link_up_delay": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"ethernet_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"mac": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"vlan_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"vlan_id": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"ipv6_auto_config": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"host": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"router": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"network_prefix": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"stateful": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"dhcp_networks": {
+
+																									Type:     schema.TypeList,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"network_prefix": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"network_prefix_allocator": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"name": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"namespace": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"tenant": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
+																											"pool_settings": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+
+																											"pools": {
+
+																												Type:     schema.TypeList,
+																												Optional: true,
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"end_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+
+																														"exclude": {
+																															Type:       schema.TypeBool,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"start_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+																													},
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"fixed_ip_map": {
+																									Type:     schema.TypeMap,
+																									Optional: true,
+																								},
+
+																								"automatic_from_end": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"automatic_from_start": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"interface_ip_map": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"interface_ip_map": {
+																												Type:     schema.TypeMap,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"dns_config": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"configured_list": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"dns_list": {
+																												Type: schema.TypeList,
+
+																												Required: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"local_dns": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"configured_address": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"first_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+
+																											"last_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv6_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ipv6_address": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cluster_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Required: true,
+																								},
+																								"value": {
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"default_gw": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"ip_address": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"node_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"ip_address": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"is_management": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"is_primary": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"labels": {
+																Type:     schema.TypeMap,
+																Optional: true,
+															},
+
+															"monitor": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
+															"monitor_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"mtu": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"network_option": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Required: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"segment_network": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"namespace": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"tenant": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"site_local_inside_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"site_local_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"priority": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_enabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"public_ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"type": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"kvm": {
 
 				Type:     schema.TypeList,
@@ -8325,6 +10988,901 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 							Type:     schema.TypeList,
 							MaxItems: 1,
 							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"node_list": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"hostname": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"interface_list": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"dhcp_client": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"dhcp_server": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"dhcp_networks": {
+
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"dns_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"same_as_dgw": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dgw_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"first_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"last_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"pool_settings": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"pools": {
+
+																						Type:       schema.TypeList,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"end_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"exclude": {
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"start_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"dhcp_option82_tag": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"fixed_ip_map": {
+																			Type:       schema.TypeMap,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_end": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_start": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"interface_ip_map": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+																						Type:       schema.TypeMap,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv4_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ip": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"default_gw": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"dns_server": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"ip_address": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"bond_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"devices": {
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"active_backup": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"lacp": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"rate": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"link_polling_interval": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"link_up_delay": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"ethernet_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"mac": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"vlan_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"vlan_id": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"ipv6_auto_config": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"host": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"router": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"network_prefix": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"stateful": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"dhcp_networks": {
+
+																									Type:     schema.TypeList,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"network_prefix": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"network_prefix_allocator": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"name": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"namespace": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"tenant": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
+																											"pool_settings": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+
+																											"pools": {
+
+																												Type:     schema.TypeList,
+																												Optional: true,
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"end_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+
+																														"exclude": {
+																															Type:       schema.TypeBool,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"start_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+																													},
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"fixed_ip_map": {
+																									Type:     schema.TypeMap,
+																									Optional: true,
+																								},
+
+																								"automatic_from_end": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"automatic_from_start": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"interface_ip_map": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"interface_ip_map": {
+																												Type:     schema.TypeMap,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"dns_config": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"configured_list": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"dns_list": {
+																												Type: schema.TypeList,
+
+																												Required: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"local_dns": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"configured_address": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"first_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+
+																											"last_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv6_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ipv6_address": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cluster_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Required: true,
+																								},
+																								"value": {
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"default_gw": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"ip_address": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"node_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"ip_address": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"is_management": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"is_primary": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"labels": {
+																Type:     schema.TypeMap,
+																Optional: true,
+															},
+
+															"monitor": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
+															"monitor_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"mtu": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"network_option": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Required: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"segment_network": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"namespace": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"tenant": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"site_local_inside_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"site_local_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"priority": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_enabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"public_ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"type": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"oci_k8s": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disable_anti_affinity": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_anti_affinity": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"rules": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"label_key": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"label_value": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"topology_keys": {
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"deployment_size": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+
+						"labels": {
+							Type:     schema.TypeMap,
+							Optional: true,
+						},
+
+						"not_managed": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -13458,6 +17016,15 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := adminPasswordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								adminPassword.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := adminPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -13671,6 +17238,32 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			if set != nil {
 				dnsNtpConfigMapStrToI := set.(map[string]interface{})
+
+				cednsRecordChoiceTypeFound := false
+
+				if v, ok := dnsNtpConfigMapStrToI["disable_cedns_record"]; ok && !isIntfNil(v) && !cednsRecordChoiceTypeFound {
+
+					cednsRecordChoiceTypeFound = true
+
+					if v.(bool) {
+						cednsRecordChoiceInt := &ves_io_schema_views_securemesh_site_v2.DNSNTPServerConfig_DisableCednsRecord{}
+						cednsRecordChoiceInt.DisableCednsRecord = &ves_io_schema.Empty{}
+						dnsNtpConfig.CednsRecordChoice = cednsRecordChoiceInt
+					}
+
+				}
+
+				if v, ok := dnsNtpConfigMapStrToI["enable_cedns_record"]; ok && !isIntfNil(v) && !cednsRecordChoiceTypeFound {
+
+					cednsRecordChoiceTypeFound = true
+
+					if v.(bool) {
+						cednsRecordChoiceInt := &ves_io_schema_views_securemesh_site_v2.DNSNTPServerConfig_EnableCednsRecord{}
+						cednsRecordChoiceInt.EnableCednsRecord = &ves_io_schema.Empty{}
+						dnsNtpConfig.CednsRecordChoice = cednsRecordChoiceInt
+					}
+
+				}
 
 				dnsServerChoiceTypeFound := false
 
@@ -13889,6 +17482,15 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 									}
 								}
+
+							}
+
+							if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								password.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -15514,6 +19116,1283 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 	//provider_choice
 
 	providerChoiceTypeFound := false
+
+	if v, ok := d.GetOk("aks_k8s"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
+
+		providerChoiceTypeFound = true
+		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_AksK8S{}
+		providerChoiceInt.AksK8S = &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType{}
+		createSpec.ProviderChoice = providerChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				antiAffinityChoiceTypeFound := false
+
+				if v, ok := cs["disable_anti_affinity"]; ok && !isIntfNil(v) && !antiAffinityChoiceTypeFound {
+
+					antiAffinityChoiceTypeFound = true
+
+					if v.(bool) {
+						antiAffinityChoiceInt := &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType_DisableAntiAffinity{}
+						antiAffinityChoiceInt.DisableAntiAffinity = &ves_io_schema.Empty{}
+						providerChoiceInt.AksK8S.AntiAffinityChoice = antiAffinityChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["enable_anti_affinity"]; ok && !isIntfNil(v) && !antiAffinityChoiceTypeFound {
+
+					antiAffinityChoiceTypeFound = true
+					antiAffinityChoiceInt := &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType_EnableAntiAffinity{}
+					antiAffinityChoiceInt.EnableAntiAffinity = &ves_io_schema_views_securemesh_site_v2.PodAntiAffinityConfigType{}
+					providerChoiceInt.AksK8S.AntiAffinityChoice = antiAffinityChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								rules := make([]*ves_io_schema_views_securemesh_site_v2.PodAntiAffinityRule, len(sl))
+								antiAffinityChoiceInt.EnableAntiAffinity.Rules = rules
+								for i, set := range sl {
+									if set != nil {
+										rules[i] = &ves_io_schema_views_securemesh_site_v2.PodAntiAffinityRule{}
+										rulesMapStrToI := set.(map[string]interface{})
+
+										if w, ok := rulesMapStrToI["label_key"]; ok && !isIntfNil(w) {
+											rules[i].LabelKey = w.(string)
+										}
+
+										if w, ok := rulesMapStrToI["label_value"]; ok && !isIntfNil(w) {
+											rules[i].LabelValue = w.(string)
+										}
+
+										if w, ok := rulesMapStrToI["topology_keys"]; ok && !isIntfNil(w) {
+											ls := make([]string, len(w.([]interface{})))
+											for i, v := range w.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field topology_keys")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											rules[i].TopologyKeys = ls
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["deployment_size"]; ok && !isIntfNil(v) {
+
+					providerChoiceInt.AksK8S.DeploymentSize = ves_io_schema_views_securemesh_site_v2.KubernetesDeploymentSize(ves_io_schema_views_securemesh_site_v2.KubernetesDeploymentSize_value[v.(string)])
+
+				}
+
+				if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+
+					ms := map[string]string{}
+					for k, v := range v.(map[string]interface{}) {
+						ms[k] = v.(string)
+					}
+					providerChoiceInt.AksK8S.Labels = ms
+				}
+
+				if v, ok := cs["not_managed"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					notManaged := &ves_io_schema_views_securemesh_site_v2.NodeList{}
+					providerChoiceInt.AksK8S.NotManaged = notManaged
+					for _, set := range sl {
+						if set != nil {
+							notManagedMapStrToI := set.(map[string]interface{})
+
+							if v, ok := notManagedMapStrToI["node_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								nodeList := make([]*ves_io_schema_views_securemesh_site_v2.Node, len(sl))
+								notManaged.NodeList = nodeList
+								for i, set := range sl {
+									if set != nil {
+										nodeList[i] = &ves_io_schema_views_securemesh_site_v2.Node{}
+										nodeListMapStrToI := set.(map[string]interface{})
+
+										if w, ok := nodeListMapStrToI["hostname"]; ok && !isIntfNil(w) {
+											nodeList[i].Hostname = w.(string)
+										}
+
+										if v, ok := nodeListMapStrToI["interface_list"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											interfaceList := make([]*ves_io_schema_views_securemesh_site_v2.Interface, len(sl))
+											nodeList[i].InterfaceList = interfaceList
+											for i, set := range sl {
+												if set != nil {
+													interfaceList[i] = &ves_io_schema_views_securemesh_site_v2.Interface{}
+													interfaceListMapStrToI := set.(map[string]interface{})
+
+													addressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["dhcp_client"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}
+															addressChoiceInt.DhcpClient = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
+														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
+																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
+																	for i, set := range sl {
+																		if set != nil {
+																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
+																			dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																			dnsChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
+
+																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
+
+																				dnsChoiceInt.DnsAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+
+																				if v.(bool) {
+																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
+																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
+																				}
+
+																			}
+
+																			gatewayChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
+
+																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+
+																				gatewayChoiceInt.DgwAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
+																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
+																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			networkPrefixChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
+
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
+																				dhcpNetworks[i].Pools = pools
+																				for i, set := range sl {
+																					if set != nil {
+																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
+																						poolsMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																							pools[i].EndIp = w.(string)
+																						}
+
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
+																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																							pools[i].StartIp = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
+
+																}
+
+																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																	ms := map[string]string{}
+																	for k, v := range v.(map[string]interface{}) {
+																		ms[k] = v.(string)
+																	}
+																	addressChoiceInt.DhcpServer.FixedIpMap = ms
+																}
+
+																interfacesAddressingChoiceTypeFound := false
+
+																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
+																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
+																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
+																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
+																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				ms := map[string]string{}
+																				for k, v := range v.(map[string]interface{}) {
+																					ms[k] = v.(string)
+																				}
+																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv4Address{}
+															addressChoiceInt.NoIpv4Address = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ip"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIp{}
+														addressChoiceInt.StaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
+
+																}
+
+																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DnsServer = v.(string)
+
+																}
+
+																if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.IpAddress = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["description"]; ok && !isIntfNil(w) {
+														interfaceList[i].Description = w.(string)
+													}
+
+													interfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["bond_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_BondInterface{}
+														interfaceChoiceInt.BondInterface = &ves_io_schema_fleet.FleetBondDeviceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["devices"]; ok && !isIntfNil(v) {
+
+																	ls := make([]string, len(v.([]interface{})))
+																	for i, v := range v.([]interface{}) {
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
+																	}
+																	interfaceChoiceInt.BondInterface.Devices = ls
+
+																}
+
+																lacpChoiceTypeFound := false
+
+																if v, ok := cs["active_backup"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+
+																	if v.(bool) {
+																		lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_ActiveBackup{}
+																		lacpChoiceInt.ActiveBackup = &ves_io_schema.Empty{}
+																		interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["lacp"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+																	lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_Lacp{}
+																	lacpChoiceInt.Lacp = &ves_io_schema_fleet.BondLacpType{}
+																	interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["rate"]; ok && !isIntfNil(v) {
+
+																				lacpChoiceInt.Lacp.Rate = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["link_polling_interval"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkPollingInterval = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["link_up_delay"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkUpDelay = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["ethernet_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_EthernetInterface{}
+														interfaceChoiceInt.EthernetInterface = &ves_io_schema_views_securemesh_site_v2.EthernetInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["mac"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Mac = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["vlan_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_VlanInterface{}
+														interfaceChoiceInt.VlanInterface = &ves_io_schema_views_securemesh_site_v2.VlanInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["vlan_id"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.VlanId = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													ipv6AddressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["ipv6_auto_config"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Ipv6AutoConfig{}
+														ipv6AddressChoiceInt.Ipv6AutoConfig = &ves_io_schema_network_interface.IPV6AutoConfigType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																autoconfigChoiceTypeFound := false
+
+																if v, ok := cs["host"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+
+																	if v.(bool) {
+																		autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Host{}
+																		autoconfigChoiceInt.Host = &ves_io_schema.Empty{}
+																		ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["router"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+																	autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Router{}
+																	autoconfigChoiceInt.Router = &ves_io_schema_network_interface.IPV6AutoConfigRouterType{}
+																	ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			addressChoiceTypeFound := false
+
+																			if v, ok := cs["network_prefix"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_NetworkPrefix{}
+
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				addressChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := cs["stateful"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_Stateful{}
+																				addressChoiceInt.Stateful = &ves_io_schema_network_interface.DHCPIPV6StatefulServer{}
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPIPV6NetworkType, len(sl))
+																							addressChoiceInt.Stateful.DhcpNetworks = dhcpNetworks
+																							for i, set := range sl {
+																								if set != nil {
+																									dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPIPV6NetworkType{}
+																									dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																									networkPrefixChoiceTypeFound := false
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefix{}
+
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
+																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																												}
+
+																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																												}
+
+																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										pools := make([]*ves_io_schema_network_interface.DHCPIPV6PoolType, len(sl))
+																										dhcpNetworks[i].Pools = pools
+																										for i, set := range sl {
+																											if set != nil {
+																												pools[i] = &ves_io_schema_network_interface.DHCPIPV6PoolType{}
+																												poolsMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																													pools[i].EndIp = w.(string)
+																												}
+
+																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																													pools[i].Exclude = w.(bool)
+																												}
+
+																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																													pools[i].StartIp = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																							ms := map[string]string{}
+																							for k, v := range v.(map[string]interface{}) {
+																								ms[k] = v.(string)
+																							}
+																							addressChoiceInt.Stateful.FixedIpMap = ms
+																						}
+
+																						interfacesAddressingChoiceTypeFound := false
+
+																						if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromEnd{}
+																								interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}
+																								interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+																							interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_InterfaceIpMap{}
+																							interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPV6Type{}
+																							addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																										ms := map[string]string{}
+																										for k, v := range v.(map[string]interface{}) {
+																											ms[k] = v.(string)
+																										}
+																										interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := cs["dns_config"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				dnsConfig := &ves_io_schema_network_interface.IPV6DnsConfig{}
+																				autoconfigChoiceInt.Router.DnsConfig = dnsConfig
+																				for _, set := range sl {
+																					if set != nil {
+																						dnsConfigMapStrToI := set.(map[string]interface{})
+
+																						dnsChoiceTypeFound := false
+
+																						if v, ok := dnsConfigMapStrToI["configured_list"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_ConfiguredList{}
+																							dnsChoiceInt.ConfiguredList = &ves_io_schema_network_interface.IPV6DnsList{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["dns_list"]; ok && !isIntfNil(v) {
+
+																										ls := make([]string, len(v.([]interface{})))
+																										for i, v := range v.([]interface{}) {
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
+																										}
+																										dnsChoiceInt.ConfiguredList.DnsList = ls
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := dnsConfigMapStrToI["local_dns"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_LocalDns{}
+																							dnsChoiceInt.LocalDns = &ves_io_schema_network_interface.IPV6LocalDnsAddress{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									localDnsChoiceTypeFound := false
+
+																									if v, ok := cs["configured_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+																										localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_ConfiguredAddress{}
+
+																										dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+
+																										localDnsChoiceInt.ConfiguredAddress = v.(string)
+
+																									}
+
+																									if v, ok := cs["first_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}
+																											localDnsChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																									if v, ok := cs["last_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_LastAddress{}
+																											localDnsChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+
+														if v.(bool) {
+															ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv6Address{}
+															ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+															interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIpv6Address{}
+														ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																networkPrefixChoiceTypeFound := false
+
+																if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+																	networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+																				networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+																				for _, set := range sl {
+																					if set != nil {
+																						interfaceIpMapMapStrToI := set.(map[string]interface{})
+																						key, ok := interfaceIpMapMapStrToI["name"]
+																						if ok && !isIntfNil(key) {
+																							interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																							val, _ := interfaceIpMapMapStrToI["value"]
+
+																							interfaceIpMapVals := val.([]interface{})
+																							for _, intVal := range interfaceIpMapVals {
+																								if intVal != nil {
+
+																									interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																									if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].IpAddress = w.(string)
+																									}
+
+																									// break after one loop
+																									break
+																								}
+																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+																	networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsManagement = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsPrimary = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
+														ms := map[string]string{}
+														for k, v := range w.(map[string]interface{}) {
+															ms[k] = v.(string)
+														}
+														interfaceList[i].Labels = ms
+													}
+
+													monitoringChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
+														monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
+														interfaceList[i].MonitoringChoice = monitoringChoiceInt
+
+													}
+
+													if v, ok := interfaceListMapStrToI["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+
+														if v.(bool) {
+															monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_MonitorDisabled{}
+															monitoringChoiceInt.MonitorDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].MonitoringChoice = monitoringChoiceInt
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["mtu"]; ok && !isIntfNil(w) {
+														interfaceList[i].Mtu = uint32(w.(int))
+													}
+
+													if w, ok := interfaceListMapStrToI["name"]; ok && !isIntfNil(w) {
+														interfaceList[i].Name = w.(string)
+													}
+
+													if v, ok := interfaceListMapStrToI["network_option"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														networkOption := &ves_io_schema_views.NetworkSelectType{}
+														interfaceList[i].NetworkOption = networkOption
+														for _, set := range sl {
+															if set != nil {
+																networkOptionMapStrToI := set.(map[string]interface{})
+
+																networkChoiceTypeFound := false
+
+																if v, ok := networkOptionMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+																	networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SegmentNetwork{}
+																	networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+																	networkOption.NetworkChoice = networkChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+																			}
+
+																			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+																			}
+
+																			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalInsideNetwork{}
+																		networkChoiceInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalNetwork{}
+																		networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["priority"]; ok && !isIntfNil(w) {
+														interfaceList[i].Priority = uint32(w.(int))
+													}
+
+													siteToSiteConnectivityInterfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_disabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceDisabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_enabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceEnabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceEnabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := nodeListMapStrToI["public_ip"]; ok && !isIntfNil(w) {
+											nodeList[i].PublicIp = w.(string)
+										}
+
+										if w, ok := nodeListMapStrToI["type"]; ok && !isIntfNil(w) {
+											nodeList[i].Type = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
 
 	if v, ok := d.GetOk("aws"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
@@ -22792,6 +27671,2483 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
+	if v, ok := d.GetOk("gke_k8s"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
+
+		providerChoiceTypeFound = true
+		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_GkeK8S{}
+		providerChoiceInt.GkeK8S = &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType{}
+		createSpec.ProviderChoice = providerChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				antiAffinityChoiceTypeFound := false
+
+				if v, ok := cs["disable_anti_affinity"]; ok && !isIntfNil(v) && !antiAffinityChoiceTypeFound {
+
+					antiAffinityChoiceTypeFound = true
+
+					if v.(bool) {
+						antiAffinityChoiceInt := &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType_DisableAntiAffinity{}
+						antiAffinityChoiceInt.DisableAntiAffinity = &ves_io_schema.Empty{}
+						providerChoiceInt.GkeK8S.AntiAffinityChoice = antiAffinityChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["enable_anti_affinity"]; ok && !isIntfNil(v) && !antiAffinityChoiceTypeFound {
+
+					antiAffinityChoiceTypeFound = true
+					antiAffinityChoiceInt := &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType_EnableAntiAffinity{}
+					antiAffinityChoiceInt.EnableAntiAffinity = &ves_io_schema_views_securemesh_site_v2.PodAntiAffinityConfigType{}
+					providerChoiceInt.GkeK8S.AntiAffinityChoice = antiAffinityChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								rules := make([]*ves_io_schema_views_securemesh_site_v2.PodAntiAffinityRule, len(sl))
+								antiAffinityChoiceInt.EnableAntiAffinity.Rules = rules
+								for i, set := range sl {
+									if set != nil {
+										rules[i] = &ves_io_schema_views_securemesh_site_v2.PodAntiAffinityRule{}
+										rulesMapStrToI := set.(map[string]interface{})
+
+										if w, ok := rulesMapStrToI["label_key"]; ok && !isIntfNil(w) {
+											rules[i].LabelKey = w.(string)
+										}
+
+										if w, ok := rulesMapStrToI["label_value"]; ok && !isIntfNil(w) {
+											rules[i].LabelValue = w.(string)
+										}
+
+										if w, ok := rulesMapStrToI["topology_keys"]; ok && !isIntfNil(w) {
+											ls := make([]string, len(w.([]interface{})))
+											for i, v := range w.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field topology_keys")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											rules[i].TopologyKeys = ls
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["deployment_size"]; ok && !isIntfNil(v) {
+
+					providerChoiceInt.GkeK8S.DeploymentSize = ves_io_schema_views_securemesh_site_v2.KubernetesDeploymentSize(ves_io_schema_views_securemesh_site_v2.KubernetesDeploymentSize_value[v.(string)])
+
+				}
+
+				if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+
+					ms := map[string]string{}
+					for k, v := range v.(map[string]interface{}) {
+						ms[k] = v.(string)
+					}
+					providerChoiceInt.GkeK8S.Labels = ms
+				}
+
+				if v, ok := cs["not_managed"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					notManaged := &ves_io_schema_views_securemesh_site_v2.NodeList{}
+					providerChoiceInt.GkeK8S.NotManaged = notManaged
+					for _, set := range sl {
+						if set != nil {
+							notManagedMapStrToI := set.(map[string]interface{})
+
+							if v, ok := notManagedMapStrToI["node_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								nodeList := make([]*ves_io_schema_views_securemesh_site_v2.Node, len(sl))
+								notManaged.NodeList = nodeList
+								for i, set := range sl {
+									if set != nil {
+										nodeList[i] = &ves_io_schema_views_securemesh_site_v2.Node{}
+										nodeListMapStrToI := set.(map[string]interface{})
+
+										if w, ok := nodeListMapStrToI["hostname"]; ok && !isIntfNil(w) {
+											nodeList[i].Hostname = w.(string)
+										}
+
+										if v, ok := nodeListMapStrToI["interface_list"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											interfaceList := make([]*ves_io_schema_views_securemesh_site_v2.Interface, len(sl))
+											nodeList[i].InterfaceList = interfaceList
+											for i, set := range sl {
+												if set != nil {
+													interfaceList[i] = &ves_io_schema_views_securemesh_site_v2.Interface{}
+													interfaceListMapStrToI := set.(map[string]interface{})
+
+													addressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["dhcp_client"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}
+															addressChoiceInt.DhcpClient = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
+														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
+																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
+																	for i, set := range sl {
+																		if set != nil {
+																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
+																			dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																			dnsChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
+
+																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
+
+																				dnsChoiceInt.DnsAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+
+																				if v.(bool) {
+																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
+																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
+																				}
+
+																			}
+
+																			gatewayChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
+
+																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+
+																				gatewayChoiceInt.DgwAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
+																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
+																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			networkPrefixChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
+
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
+																				dhcpNetworks[i].Pools = pools
+																				for i, set := range sl {
+																					if set != nil {
+																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
+																						poolsMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																							pools[i].EndIp = w.(string)
+																						}
+
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
+																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																							pools[i].StartIp = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
+
+																}
+
+																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																	ms := map[string]string{}
+																	for k, v := range v.(map[string]interface{}) {
+																		ms[k] = v.(string)
+																	}
+																	addressChoiceInt.DhcpServer.FixedIpMap = ms
+																}
+
+																interfacesAddressingChoiceTypeFound := false
+
+																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
+																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
+																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
+																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
+																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				ms := map[string]string{}
+																				for k, v := range v.(map[string]interface{}) {
+																					ms[k] = v.(string)
+																				}
+																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv4Address{}
+															addressChoiceInt.NoIpv4Address = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ip"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIp{}
+														addressChoiceInt.StaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
+
+																}
+
+																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DnsServer = v.(string)
+
+																}
+
+																if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.IpAddress = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["description"]; ok && !isIntfNil(w) {
+														interfaceList[i].Description = w.(string)
+													}
+
+													interfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["bond_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_BondInterface{}
+														interfaceChoiceInt.BondInterface = &ves_io_schema_fleet.FleetBondDeviceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["devices"]; ok && !isIntfNil(v) {
+
+																	ls := make([]string, len(v.([]interface{})))
+																	for i, v := range v.([]interface{}) {
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
+																	}
+																	interfaceChoiceInt.BondInterface.Devices = ls
+
+																}
+
+																lacpChoiceTypeFound := false
+
+																if v, ok := cs["active_backup"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+
+																	if v.(bool) {
+																		lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_ActiveBackup{}
+																		lacpChoiceInt.ActiveBackup = &ves_io_schema.Empty{}
+																		interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["lacp"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+																	lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_Lacp{}
+																	lacpChoiceInt.Lacp = &ves_io_schema_fleet.BondLacpType{}
+																	interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["rate"]; ok && !isIntfNil(v) {
+
+																				lacpChoiceInt.Lacp.Rate = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["link_polling_interval"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkPollingInterval = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["link_up_delay"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkUpDelay = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["ethernet_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_EthernetInterface{}
+														interfaceChoiceInt.EthernetInterface = &ves_io_schema_views_securemesh_site_v2.EthernetInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["mac"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Mac = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["vlan_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_VlanInterface{}
+														interfaceChoiceInt.VlanInterface = &ves_io_schema_views_securemesh_site_v2.VlanInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["vlan_id"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.VlanId = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													ipv6AddressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["ipv6_auto_config"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Ipv6AutoConfig{}
+														ipv6AddressChoiceInt.Ipv6AutoConfig = &ves_io_schema_network_interface.IPV6AutoConfigType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																autoconfigChoiceTypeFound := false
+
+																if v, ok := cs["host"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+
+																	if v.(bool) {
+																		autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Host{}
+																		autoconfigChoiceInt.Host = &ves_io_schema.Empty{}
+																		ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["router"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+																	autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Router{}
+																	autoconfigChoiceInt.Router = &ves_io_schema_network_interface.IPV6AutoConfigRouterType{}
+																	ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			addressChoiceTypeFound := false
+
+																			if v, ok := cs["network_prefix"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_NetworkPrefix{}
+
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				addressChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := cs["stateful"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_Stateful{}
+																				addressChoiceInt.Stateful = &ves_io_schema_network_interface.DHCPIPV6StatefulServer{}
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPIPV6NetworkType, len(sl))
+																							addressChoiceInt.Stateful.DhcpNetworks = dhcpNetworks
+																							for i, set := range sl {
+																								if set != nil {
+																									dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPIPV6NetworkType{}
+																									dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																									networkPrefixChoiceTypeFound := false
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefix{}
+
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
+																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																												}
+
+																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																												}
+
+																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										pools := make([]*ves_io_schema_network_interface.DHCPIPV6PoolType, len(sl))
+																										dhcpNetworks[i].Pools = pools
+																										for i, set := range sl {
+																											if set != nil {
+																												pools[i] = &ves_io_schema_network_interface.DHCPIPV6PoolType{}
+																												poolsMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																													pools[i].EndIp = w.(string)
+																												}
+
+																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																													pools[i].Exclude = w.(bool)
+																												}
+
+																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																													pools[i].StartIp = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																							ms := map[string]string{}
+																							for k, v := range v.(map[string]interface{}) {
+																								ms[k] = v.(string)
+																							}
+																							addressChoiceInt.Stateful.FixedIpMap = ms
+																						}
+
+																						interfacesAddressingChoiceTypeFound := false
+
+																						if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromEnd{}
+																								interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}
+																								interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+																							interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_InterfaceIpMap{}
+																							interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPV6Type{}
+																							addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																										ms := map[string]string{}
+																										for k, v := range v.(map[string]interface{}) {
+																											ms[k] = v.(string)
+																										}
+																										interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := cs["dns_config"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				dnsConfig := &ves_io_schema_network_interface.IPV6DnsConfig{}
+																				autoconfigChoiceInt.Router.DnsConfig = dnsConfig
+																				for _, set := range sl {
+																					if set != nil {
+																						dnsConfigMapStrToI := set.(map[string]interface{})
+
+																						dnsChoiceTypeFound := false
+
+																						if v, ok := dnsConfigMapStrToI["configured_list"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_ConfiguredList{}
+																							dnsChoiceInt.ConfiguredList = &ves_io_schema_network_interface.IPV6DnsList{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["dns_list"]; ok && !isIntfNil(v) {
+
+																										ls := make([]string, len(v.([]interface{})))
+																										for i, v := range v.([]interface{}) {
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
+																										}
+																										dnsChoiceInt.ConfiguredList.DnsList = ls
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := dnsConfigMapStrToI["local_dns"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_LocalDns{}
+																							dnsChoiceInt.LocalDns = &ves_io_schema_network_interface.IPV6LocalDnsAddress{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									localDnsChoiceTypeFound := false
+
+																									if v, ok := cs["configured_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+																										localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_ConfiguredAddress{}
+
+																										dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+
+																										localDnsChoiceInt.ConfiguredAddress = v.(string)
+
+																									}
+
+																									if v, ok := cs["first_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}
+																											localDnsChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																									if v, ok := cs["last_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_LastAddress{}
+																											localDnsChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+
+														if v.(bool) {
+															ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv6Address{}
+															ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+															interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIpv6Address{}
+														ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																networkPrefixChoiceTypeFound := false
+
+																if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+																	networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+																				networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+																				for _, set := range sl {
+																					if set != nil {
+																						interfaceIpMapMapStrToI := set.(map[string]interface{})
+																						key, ok := interfaceIpMapMapStrToI["name"]
+																						if ok && !isIntfNil(key) {
+																							interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																							val, _ := interfaceIpMapMapStrToI["value"]
+
+																							interfaceIpMapVals := val.([]interface{})
+																							for _, intVal := range interfaceIpMapVals {
+																								if intVal != nil {
+
+																									interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																									if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].IpAddress = w.(string)
+																									}
+
+																									// break after one loop
+																									break
+																								}
+																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+																	networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsManagement = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsPrimary = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
+														ms := map[string]string{}
+														for k, v := range w.(map[string]interface{}) {
+															ms[k] = v.(string)
+														}
+														interfaceList[i].Labels = ms
+													}
+
+													monitoringChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
+														monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
+														interfaceList[i].MonitoringChoice = monitoringChoiceInt
+
+													}
+
+													if v, ok := interfaceListMapStrToI["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+
+														if v.(bool) {
+															monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_MonitorDisabled{}
+															monitoringChoiceInt.MonitorDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].MonitoringChoice = monitoringChoiceInt
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["mtu"]; ok && !isIntfNil(w) {
+														interfaceList[i].Mtu = uint32(w.(int))
+													}
+
+													if w, ok := interfaceListMapStrToI["name"]; ok && !isIntfNil(w) {
+														interfaceList[i].Name = w.(string)
+													}
+
+													if v, ok := interfaceListMapStrToI["network_option"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														networkOption := &ves_io_schema_views.NetworkSelectType{}
+														interfaceList[i].NetworkOption = networkOption
+														for _, set := range sl {
+															if set != nil {
+																networkOptionMapStrToI := set.(map[string]interface{})
+
+																networkChoiceTypeFound := false
+
+																if v, ok := networkOptionMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+																	networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SegmentNetwork{}
+																	networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+																	networkOption.NetworkChoice = networkChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+																			}
+
+																			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+																			}
+
+																			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalInsideNetwork{}
+																		networkChoiceInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalNetwork{}
+																		networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["priority"]; ok && !isIntfNil(w) {
+														interfaceList[i].Priority = uint32(w.(int))
+													}
+
+													siteToSiteConnectivityInterfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_disabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceDisabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_enabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceEnabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceEnabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := nodeListMapStrToI["public_ip"]; ok && !isIntfNil(w) {
+											nodeList[i].PublicIp = w.(string)
+										}
+
+										if w, ok := nodeListMapStrToI["type"]; ok && !isIntfNil(w) {
+											nodeList[i].Type = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("hyper_v"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
+
+		providerChoiceTypeFound = true
+		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_HyperV{}
+		providerChoiceInt.HyperV = &ves_io_schema_views_securemesh_site_v2.HyperVProviderType{}
+		createSpec.ProviderChoice = providerChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				orchestrationChoiceTypeFound := false
+
+				if v, ok := cs["not_managed"]; ok && !isIntfNil(v) && !orchestrationChoiceTypeFound {
+
+					orchestrationChoiceTypeFound = true
+					orchestrationChoiceInt := &ves_io_schema_views_securemesh_site_v2.HyperVProviderType_NotManaged{}
+					orchestrationChoiceInt.NotManaged = &ves_io_schema_views_securemesh_site_v2.NodeList{}
+					providerChoiceInt.HyperV.OrchestrationChoice = orchestrationChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["node_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								nodeList := make([]*ves_io_schema_views_securemesh_site_v2.Node, len(sl))
+								orchestrationChoiceInt.NotManaged.NodeList = nodeList
+								for i, set := range sl {
+									if set != nil {
+										nodeList[i] = &ves_io_schema_views_securemesh_site_v2.Node{}
+										nodeListMapStrToI := set.(map[string]interface{})
+
+										if w, ok := nodeListMapStrToI["hostname"]; ok && !isIntfNil(w) {
+											nodeList[i].Hostname = w.(string)
+										}
+
+										if v, ok := nodeListMapStrToI["interface_list"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											interfaceList := make([]*ves_io_schema_views_securemesh_site_v2.Interface, len(sl))
+											nodeList[i].InterfaceList = interfaceList
+											for i, set := range sl {
+												if set != nil {
+													interfaceList[i] = &ves_io_schema_views_securemesh_site_v2.Interface{}
+													interfaceListMapStrToI := set.(map[string]interface{})
+
+													addressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["dhcp_client"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}
+															addressChoiceInt.DhcpClient = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
+														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
+																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
+																	for i, set := range sl {
+																		if set != nil {
+																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
+																			dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																			dnsChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
+
+																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
+
+																				dnsChoiceInt.DnsAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+
+																				if v.(bool) {
+																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
+																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
+																				}
+
+																			}
+
+																			gatewayChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
+
+																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+
+																				gatewayChoiceInt.DgwAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
+																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
+																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			networkPrefixChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
+
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
+																				dhcpNetworks[i].Pools = pools
+																				for i, set := range sl {
+																					if set != nil {
+																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
+																						poolsMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																							pools[i].EndIp = w.(string)
+																						}
+
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
+																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																							pools[i].StartIp = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
+
+																}
+
+																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																	ms := map[string]string{}
+																	for k, v := range v.(map[string]interface{}) {
+																		ms[k] = v.(string)
+																	}
+																	addressChoiceInt.DhcpServer.FixedIpMap = ms
+																}
+
+																interfacesAddressingChoiceTypeFound := false
+
+																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
+																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
+																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
+																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
+																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				ms := map[string]string{}
+																				for k, v := range v.(map[string]interface{}) {
+																					ms[k] = v.(string)
+																				}
+																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv4Address{}
+															addressChoiceInt.NoIpv4Address = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ip"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIp{}
+														addressChoiceInt.StaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
+
+																}
+
+																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DnsServer = v.(string)
+
+																}
+
+																if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.IpAddress = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["description"]; ok && !isIntfNil(w) {
+														interfaceList[i].Description = w.(string)
+													}
+
+													interfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["bond_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_BondInterface{}
+														interfaceChoiceInt.BondInterface = &ves_io_schema_fleet.FleetBondDeviceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["devices"]; ok && !isIntfNil(v) {
+
+																	ls := make([]string, len(v.([]interface{})))
+																	for i, v := range v.([]interface{}) {
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
+																	}
+																	interfaceChoiceInt.BondInterface.Devices = ls
+
+																}
+
+																lacpChoiceTypeFound := false
+
+																if v, ok := cs["active_backup"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+
+																	if v.(bool) {
+																		lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_ActiveBackup{}
+																		lacpChoiceInt.ActiveBackup = &ves_io_schema.Empty{}
+																		interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["lacp"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+																	lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_Lacp{}
+																	lacpChoiceInt.Lacp = &ves_io_schema_fleet.BondLacpType{}
+																	interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["rate"]; ok && !isIntfNil(v) {
+
+																				lacpChoiceInt.Lacp.Rate = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["link_polling_interval"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkPollingInterval = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["link_up_delay"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkUpDelay = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["ethernet_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_EthernetInterface{}
+														interfaceChoiceInt.EthernetInterface = &ves_io_schema_views_securemesh_site_v2.EthernetInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["mac"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Mac = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["vlan_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_VlanInterface{}
+														interfaceChoiceInt.VlanInterface = &ves_io_schema_views_securemesh_site_v2.VlanInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["vlan_id"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.VlanId = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													ipv6AddressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["ipv6_auto_config"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Ipv6AutoConfig{}
+														ipv6AddressChoiceInt.Ipv6AutoConfig = &ves_io_schema_network_interface.IPV6AutoConfigType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																autoconfigChoiceTypeFound := false
+
+																if v, ok := cs["host"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+
+																	if v.(bool) {
+																		autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Host{}
+																		autoconfigChoiceInt.Host = &ves_io_schema.Empty{}
+																		ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["router"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+																	autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Router{}
+																	autoconfigChoiceInt.Router = &ves_io_schema_network_interface.IPV6AutoConfigRouterType{}
+																	ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			addressChoiceTypeFound := false
+
+																			if v, ok := cs["network_prefix"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_NetworkPrefix{}
+
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				addressChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := cs["stateful"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_Stateful{}
+																				addressChoiceInt.Stateful = &ves_io_schema_network_interface.DHCPIPV6StatefulServer{}
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPIPV6NetworkType, len(sl))
+																							addressChoiceInt.Stateful.DhcpNetworks = dhcpNetworks
+																							for i, set := range sl {
+																								if set != nil {
+																									dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPIPV6NetworkType{}
+																									dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																									networkPrefixChoiceTypeFound := false
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefix{}
+
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
+																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																												}
+
+																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																												}
+
+																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										pools := make([]*ves_io_schema_network_interface.DHCPIPV6PoolType, len(sl))
+																										dhcpNetworks[i].Pools = pools
+																										for i, set := range sl {
+																											if set != nil {
+																												pools[i] = &ves_io_schema_network_interface.DHCPIPV6PoolType{}
+																												poolsMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																													pools[i].EndIp = w.(string)
+																												}
+
+																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																													pools[i].Exclude = w.(bool)
+																												}
+
+																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																													pools[i].StartIp = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																							ms := map[string]string{}
+																							for k, v := range v.(map[string]interface{}) {
+																								ms[k] = v.(string)
+																							}
+																							addressChoiceInt.Stateful.FixedIpMap = ms
+																						}
+
+																						interfacesAddressingChoiceTypeFound := false
+
+																						if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromEnd{}
+																								interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}
+																								interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+																							interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_InterfaceIpMap{}
+																							interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPV6Type{}
+																							addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																										ms := map[string]string{}
+																										for k, v := range v.(map[string]interface{}) {
+																											ms[k] = v.(string)
+																										}
+																										interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := cs["dns_config"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				dnsConfig := &ves_io_schema_network_interface.IPV6DnsConfig{}
+																				autoconfigChoiceInt.Router.DnsConfig = dnsConfig
+																				for _, set := range sl {
+																					if set != nil {
+																						dnsConfigMapStrToI := set.(map[string]interface{})
+
+																						dnsChoiceTypeFound := false
+
+																						if v, ok := dnsConfigMapStrToI["configured_list"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_ConfiguredList{}
+																							dnsChoiceInt.ConfiguredList = &ves_io_schema_network_interface.IPV6DnsList{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["dns_list"]; ok && !isIntfNil(v) {
+
+																										ls := make([]string, len(v.([]interface{})))
+																										for i, v := range v.([]interface{}) {
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
+																										}
+																										dnsChoiceInt.ConfiguredList.DnsList = ls
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := dnsConfigMapStrToI["local_dns"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_LocalDns{}
+																							dnsChoiceInt.LocalDns = &ves_io_schema_network_interface.IPV6LocalDnsAddress{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									localDnsChoiceTypeFound := false
+
+																									if v, ok := cs["configured_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+																										localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_ConfiguredAddress{}
+
+																										dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+
+																										localDnsChoiceInt.ConfiguredAddress = v.(string)
+
+																									}
+
+																									if v, ok := cs["first_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}
+																											localDnsChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																									if v, ok := cs["last_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_LastAddress{}
+																											localDnsChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+
+														if v.(bool) {
+															ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv6Address{}
+															ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+															interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIpv6Address{}
+														ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																networkPrefixChoiceTypeFound := false
+
+																if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+																	networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+																				networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+																				for _, set := range sl {
+																					if set != nil {
+																						interfaceIpMapMapStrToI := set.(map[string]interface{})
+																						key, ok := interfaceIpMapMapStrToI["name"]
+																						if ok && !isIntfNil(key) {
+																							interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																							val, _ := interfaceIpMapMapStrToI["value"]
+
+																							interfaceIpMapVals := val.([]interface{})
+																							for _, intVal := range interfaceIpMapVals {
+																								if intVal != nil {
+
+																									interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																									if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].IpAddress = w.(string)
+																									}
+
+																									// break after one loop
+																									break
+																								}
+																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+																	networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsManagement = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsPrimary = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
+														ms := map[string]string{}
+														for k, v := range w.(map[string]interface{}) {
+															ms[k] = v.(string)
+														}
+														interfaceList[i].Labels = ms
+													}
+
+													monitoringChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
+														monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
+														interfaceList[i].MonitoringChoice = monitoringChoiceInt
+
+													}
+
+													if v, ok := interfaceListMapStrToI["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+
+														if v.(bool) {
+															monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_MonitorDisabled{}
+															monitoringChoiceInt.MonitorDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].MonitoringChoice = monitoringChoiceInt
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["mtu"]; ok && !isIntfNil(w) {
+														interfaceList[i].Mtu = uint32(w.(int))
+													}
+
+													if w, ok := interfaceListMapStrToI["name"]; ok && !isIntfNil(w) {
+														interfaceList[i].Name = w.(string)
+													}
+
+													if v, ok := interfaceListMapStrToI["network_option"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														networkOption := &ves_io_schema_views.NetworkSelectType{}
+														interfaceList[i].NetworkOption = networkOption
+														for _, set := range sl {
+															if set != nil {
+																networkOptionMapStrToI := set.(map[string]interface{})
+
+																networkChoiceTypeFound := false
+
+																if v, ok := networkOptionMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+																	networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SegmentNetwork{}
+																	networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+																	networkOption.NetworkChoice = networkChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+																			}
+
+																			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+																			}
+
+																			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalInsideNetwork{}
+																		networkChoiceInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalNetwork{}
+																		networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["priority"]; ok && !isIntfNil(w) {
+														interfaceList[i].Priority = uint32(w.(int))
+													}
+
+													siteToSiteConnectivityInterfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_disabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceDisabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_enabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceEnabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceEnabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := nodeListMapStrToI["public_ip"]; ok && !isIntfNil(w) {
+											nodeList[i].PublicIp = w.(string)
+										}
+
+										if w, ok := nodeListMapStrToI["type"]; ok && !isIntfNil(w) {
+											nodeList[i].Type = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
 	if v, ok := d.GetOk("kvm"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
@@ -25223,6 +32579,1283 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 								sl := v.([]interface{})
 								nodeList := make([]*ves_io_schema_views_securemesh_site_v2.Node, len(sl))
 								orchestrationChoiceInt.NotManaged.NodeList = nodeList
+								for i, set := range sl {
+									if set != nil {
+										nodeList[i] = &ves_io_schema_views_securemesh_site_v2.Node{}
+										nodeListMapStrToI := set.(map[string]interface{})
+
+										if w, ok := nodeListMapStrToI["hostname"]; ok && !isIntfNil(w) {
+											nodeList[i].Hostname = w.(string)
+										}
+
+										if v, ok := nodeListMapStrToI["interface_list"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											interfaceList := make([]*ves_io_schema_views_securemesh_site_v2.Interface, len(sl))
+											nodeList[i].InterfaceList = interfaceList
+											for i, set := range sl {
+												if set != nil {
+													interfaceList[i] = &ves_io_schema_views_securemesh_site_v2.Interface{}
+													interfaceListMapStrToI := set.(map[string]interface{})
+
+													addressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["dhcp_client"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}
+															addressChoiceInt.DhcpClient = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
+														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
+																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
+																	for i, set := range sl {
+																		if set != nil {
+																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
+																			dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																			dnsChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
+
+																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
+
+																				dnsChoiceInt.DnsAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+
+																				if v.(bool) {
+																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
+																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
+																				}
+
+																			}
+
+																			gatewayChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
+
+																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+
+																				gatewayChoiceInt.DgwAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
+																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
+																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			networkPrefixChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
+
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
+																				dhcpNetworks[i].Pools = pools
+																				for i, set := range sl {
+																					if set != nil {
+																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
+																						poolsMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																							pools[i].EndIp = w.(string)
+																						}
+
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
+																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																							pools[i].StartIp = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
+
+																}
+
+																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																	ms := map[string]string{}
+																	for k, v := range v.(map[string]interface{}) {
+																		ms[k] = v.(string)
+																	}
+																	addressChoiceInt.DhcpServer.FixedIpMap = ms
+																}
+
+																interfacesAddressingChoiceTypeFound := false
+
+																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
+																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
+																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
+																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
+																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				ms := map[string]string{}
+																				for k, v := range v.(map[string]interface{}) {
+																					ms[k] = v.(string)
+																				}
+																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv4Address{}
+															addressChoiceInt.NoIpv4Address = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ip"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIp{}
+														addressChoiceInt.StaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
+
+																}
+
+																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DnsServer = v.(string)
+
+																}
+
+																if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.IpAddress = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["description"]; ok && !isIntfNil(w) {
+														interfaceList[i].Description = w.(string)
+													}
+
+													interfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["bond_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_BondInterface{}
+														interfaceChoiceInt.BondInterface = &ves_io_schema_fleet.FleetBondDeviceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["devices"]; ok && !isIntfNil(v) {
+
+																	ls := make([]string, len(v.([]interface{})))
+																	for i, v := range v.([]interface{}) {
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
+																	}
+																	interfaceChoiceInt.BondInterface.Devices = ls
+
+																}
+
+																lacpChoiceTypeFound := false
+
+																if v, ok := cs["active_backup"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+
+																	if v.(bool) {
+																		lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_ActiveBackup{}
+																		lacpChoiceInt.ActiveBackup = &ves_io_schema.Empty{}
+																		interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["lacp"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+																	lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_Lacp{}
+																	lacpChoiceInt.Lacp = &ves_io_schema_fleet.BondLacpType{}
+																	interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["rate"]; ok && !isIntfNil(v) {
+
+																				lacpChoiceInt.Lacp.Rate = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["link_polling_interval"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkPollingInterval = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["link_up_delay"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkUpDelay = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["ethernet_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_EthernetInterface{}
+														interfaceChoiceInt.EthernetInterface = &ves_io_schema_views_securemesh_site_v2.EthernetInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["mac"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Mac = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["vlan_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_VlanInterface{}
+														interfaceChoiceInt.VlanInterface = &ves_io_schema_views_securemesh_site_v2.VlanInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["vlan_id"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.VlanId = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													ipv6AddressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["ipv6_auto_config"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Ipv6AutoConfig{}
+														ipv6AddressChoiceInt.Ipv6AutoConfig = &ves_io_schema_network_interface.IPV6AutoConfigType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																autoconfigChoiceTypeFound := false
+
+																if v, ok := cs["host"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+
+																	if v.(bool) {
+																		autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Host{}
+																		autoconfigChoiceInt.Host = &ves_io_schema.Empty{}
+																		ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["router"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+																	autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Router{}
+																	autoconfigChoiceInt.Router = &ves_io_schema_network_interface.IPV6AutoConfigRouterType{}
+																	ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			addressChoiceTypeFound := false
+
+																			if v, ok := cs["network_prefix"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_NetworkPrefix{}
+
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				addressChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := cs["stateful"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_Stateful{}
+																				addressChoiceInt.Stateful = &ves_io_schema_network_interface.DHCPIPV6StatefulServer{}
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPIPV6NetworkType, len(sl))
+																							addressChoiceInt.Stateful.DhcpNetworks = dhcpNetworks
+																							for i, set := range sl {
+																								if set != nil {
+																									dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPIPV6NetworkType{}
+																									dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																									networkPrefixChoiceTypeFound := false
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefix{}
+
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
+																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																												}
+
+																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																												}
+
+																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										pools := make([]*ves_io_schema_network_interface.DHCPIPV6PoolType, len(sl))
+																										dhcpNetworks[i].Pools = pools
+																										for i, set := range sl {
+																											if set != nil {
+																												pools[i] = &ves_io_schema_network_interface.DHCPIPV6PoolType{}
+																												poolsMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																													pools[i].EndIp = w.(string)
+																												}
+
+																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																													pools[i].Exclude = w.(bool)
+																												}
+
+																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																													pools[i].StartIp = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																							ms := map[string]string{}
+																							for k, v := range v.(map[string]interface{}) {
+																								ms[k] = v.(string)
+																							}
+																							addressChoiceInt.Stateful.FixedIpMap = ms
+																						}
+
+																						interfacesAddressingChoiceTypeFound := false
+
+																						if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromEnd{}
+																								interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}
+																								interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+																							interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_InterfaceIpMap{}
+																							interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPV6Type{}
+																							addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																										ms := map[string]string{}
+																										for k, v := range v.(map[string]interface{}) {
+																											ms[k] = v.(string)
+																										}
+																										interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := cs["dns_config"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				dnsConfig := &ves_io_schema_network_interface.IPV6DnsConfig{}
+																				autoconfigChoiceInt.Router.DnsConfig = dnsConfig
+																				for _, set := range sl {
+																					if set != nil {
+																						dnsConfigMapStrToI := set.(map[string]interface{})
+
+																						dnsChoiceTypeFound := false
+
+																						if v, ok := dnsConfigMapStrToI["configured_list"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_ConfiguredList{}
+																							dnsChoiceInt.ConfiguredList = &ves_io_schema_network_interface.IPV6DnsList{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["dns_list"]; ok && !isIntfNil(v) {
+
+																										ls := make([]string, len(v.([]interface{})))
+																										for i, v := range v.([]interface{}) {
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
+																										}
+																										dnsChoiceInt.ConfiguredList.DnsList = ls
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := dnsConfigMapStrToI["local_dns"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_LocalDns{}
+																							dnsChoiceInt.LocalDns = &ves_io_schema_network_interface.IPV6LocalDnsAddress{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									localDnsChoiceTypeFound := false
+
+																									if v, ok := cs["configured_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+																										localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_ConfiguredAddress{}
+
+																										dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+
+																										localDnsChoiceInt.ConfiguredAddress = v.(string)
+
+																									}
+
+																									if v, ok := cs["first_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}
+																											localDnsChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																									if v, ok := cs["last_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_LastAddress{}
+																											localDnsChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+
+														if v.(bool) {
+															ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv6Address{}
+															ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+															interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIpv6Address{}
+														ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																networkPrefixChoiceTypeFound := false
+
+																if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+																	networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+																				networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+																				for _, set := range sl {
+																					if set != nil {
+																						interfaceIpMapMapStrToI := set.(map[string]interface{})
+																						key, ok := interfaceIpMapMapStrToI["name"]
+																						if ok && !isIntfNil(key) {
+																							interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																							val, _ := interfaceIpMapMapStrToI["value"]
+
+																							interfaceIpMapVals := val.([]interface{})
+																							for _, intVal := range interfaceIpMapVals {
+																								if intVal != nil {
+
+																									interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																									if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].IpAddress = w.(string)
+																									}
+
+																									// break after one loop
+																									break
+																								}
+																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+																	networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsManagement = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsPrimary = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
+														ms := map[string]string{}
+														for k, v := range w.(map[string]interface{}) {
+															ms[k] = v.(string)
+														}
+														interfaceList[i].Labels = ms
+													}
+
+													monitoringChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
+														monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
+														interfaceList[i].MonitoringChoice = monitoringChoiceInt
+
+													}
+
+													if v, ok := interfaceListMapStrToI["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+
+														if v.(bool) {
+															monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_MonitorDisabled{}
+															monitoringChoiceInt.MonitorDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].MonitoringChoice = monitoringChoiceInt
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["mtu"]; ok && !isIntfNil(w) {
+														interfaceList[i].Mtu = uint32(w.(int))
+													}
+
+													if w, ok := interfaceListMapStrToI["name"]; ok && !isIntfNil(w) {
+														interfaceList[i].Name = w.(string)
+													}
+
+													if v, ok := interfaceListMapStrToI["network_option"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														networkOption := &ves_io_schema_views.NetworkSelectType{}
+														interfaceList[i].NetworkOption = networkOption
+														for _, set := range sl {
+															if set != nil {
+																networkOptionMapStrToI := set.(map[string]interface{})
+
+																networkChoiceTypeFound := false
+
+																if v, ok := networkOptionMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+																	networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SegmentNetwork{}
+																	networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+																	networkOption.NetworkChoice = networkChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+																			}
+
+																			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+																			}
+
+																			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalInsideNetwork{}
+																		networkChoiceInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalNetwork{}
+																		networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["priority"]; ok && !isIntfNil(w) {
+														interfaceList[i].Priority = uint32(w.(int))
+													}
+
+													siteToSiteConnectivityInterfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_disabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceDisabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_enabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceEnabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceEnabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := nodeListMapStrToI["public_ip"]; ok && !isIntfNil(w) {
+											nodeList[i].PublicIp = w.(string)
+										}
+
+										if w, ok := nodeListMapStrToI["type"]; ok && !isIntfNil(w) {
+											nodeList[i].Type = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("oci_k8s"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
+
+		providerChoiceTypeFound = true
+		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_OciK8S{}
+		providerChoiceInt.OciK8S = &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType{}
+		createSpec.ProviderChoice = providerChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				antiAffinityChoiceTypeFound := false
+
+				if v, ok := cs["disable_anti_affinity"]; ok && !isIntfNil(v) && !antiAffinityChoiceTypeFound {
+
+					antiAffinityChoiceTypeFound = true
+
+					if v.(bool) {
+						antiAffinityChoiceInt := &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType_DisableAntiAffinity{}
+						antiAffinityChoiceInt.DisableAntiAffinity = &ves_io_schema.Empty{}
+						providerChoiceInt.OciK8S.AntiAffinityChoice = antiAffinityChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["enable_anti_affinity"]; ok && !isIntfNil(v) && !antiAffinityChoiceTypeFound {
+
+					antiAffinityChoiceTypeFound = true
+					antiAffinityChoiceInt := &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType_EnableAntiAffinity{}
+					antiAffinityChoiceInt.EnableAntiAffinity = &ves_io_schema_views_securemesh_site_v2.PodAntiAffinityConfigType{}
+					providerChoiceInt.OciK8S.AntiAffinityChoice = antiAffinityChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								rules := make([]*ves_io_schema_views_securemesh_site_v2.PodAntiAffinityRule, len(sl))
+								antiAffinityChoiceInt.EnableAntiAffinity.Rules = rules
+								for i, set := range sl {
+									if set != nil {
+										rules[i] = &ves_io_schema_views_securemesh_site_v2.PodAntiAffinityRule{}
+										rulesMapStrToI := set.(map[string]interface{})
+
+										if w, ok := rulesMapStrToI["label_key"]; ok && !isIntfNil(w) {
+											rules[i].LabelKey = w.(string)
+										}
+
+										if w, ok := rulesMapStrToI["label_value"]; ok && !isIntfNil(w) {
+											rules[i].LabelValue = w.(string)
+										}
+
+										if w, ok := rulesMapStrToI["topology_keys"]; ok && !isIntfNil(w) {
+											ls := make([]string, len(w.([]interface{})))
+											for i, v := range w.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field topology_keys")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											rules[i].TopologyKeys = ls
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["deployment_size"]; ok && !isIntfNil(v) {
+
+					providerChoiceInt.OciK8S.DeploymentSize = ves_io_schema_views_securemesh_site_v2.KubernetesDeploymentSize(ves_io_schema_views_securemesh_site_v2.KubernetesDeploymentSize_value[v.(string)])
+
+				}
+
+				if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+
+					ms := map[string]string{}
+					for k, v := range v.(map[string]interface{}) {
+						ms[k] = v.(string)
+					}
+					providerChoiceInt.OciK8S.Labels = ms
+				}
+
+				if v, ok := cs["not_managed"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					notManaged := &ves_io_schema_views_securemesh_site_v2.NodeList{}
+					providerChoiceInt.OciK8S.NotManaged = notManaged
+					for _, set := range sl {
+						if set != nil {
+							notManagedMapStrToI := set.(map[string]interface{})
+
+							if v, ok := notManagedMapStrToI["node_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								nodeList := make([]*ves_io_schema_views_securemesh_site_v2.Node, len(sl))
+								notManaged.NodeList = nodeList
 								for i, set := range sl {
 									if set != nil {
 										nodeList[i] = &ves_io_schema_views_securemesh_site_v2.Node{}
@@ -32483,6 +41116,15 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := adminPasswordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								adminPassword.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := adminPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -32691,6 +41333,32 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			if set != nil {
 				dnsNtpConfigMapStrToI := set.(map[string]interface{})
+
+				cednsRecordChoiceTypeFound := false
+
+				if v, ok := dnsNtpConfigMapStrToI["disable_cedns_record"]; ok && !isIntfNil(v) && !cednsRecordChoiceTypeFound {
+
+					cednsRecordChoiceTypeFound = true
+
+					if v.(bool) {
+						cednsRecordChoiceInt := &ves_io_schema_views_securemesh_site_v2.DNSNTPServerConfig_DisableCednsRecord{}
+						cednsRecordChoiceInt.DisableCednsRecord = &ves_io_schema.Empty{}
+						dnsNtpConfig.CednsRecordChoice = cednsRecordChoiceInt
+					}
+
+				}
+
+				if v, ok := dnsNtpConfigMapStrToI["enable_cedns_record"]; ok && !isIntfNil(v) && !cednsRecordChoiceTypeFound {
+
+					cednsRecordChoiceTypeFound = true
+
+					if v.(bool) {
+						cednsRecordChoiceInt := &ves_io_schema_views_securemesh_site_v2.DNSNTPServerConfig_EnableCednsRecord{}
+						cednsRecordChoiceInt.EnableCednsRecord = &ves_io_schema.Empty{}
+						dnsNtpConfig.CednsRecordChoice = cednsRecordChoiceInt
+					}
+
+				}
 
 				dnsServerChoiceTypeFound := false
 
@@ -32907,6 +41575,15 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 									}
 								}
+
+							}
+
+							if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								password.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -34488,6 +43165,1283 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 	}
 
 	providerChoiceTypeFound := false
+
+	if v, ok := d.GetOk("aks_k8s"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
+
+		providerChoiceTypeFound = true
+		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_AksK8S{}
+		providerChoiceInt.AksK8S = &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType{}
+		updateSpec.ProviderChoice = providerChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				antiAffinityChoiceTypeFound := false
+
+				if v, ok := cs["disable_anti_affinity"]; ok && !isIntfNil(v) && !antiAffinityChoiceTypeFound {
+
+					antiAffinityChoiceTypeFound = true
+
+					if v.(bool) {
+						antiAffinityChoiceInt := &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType_DisableAntiAffinity{}
+						antiAffinityChoiceInt.DisableAntiAffinity = &ves_io_schema.Empty{}
+						providerChoiceInt.AksK8S.AntiAffinityChoice = antiAffinityChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["enable_anti_affinity"]; ok && !isIntfNil(v) && !antiAffinityChoiceTypeFound {
+
+					antiAffinityChoiceTypeFound = true
+					antiAffinityChoiceInt := &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType_EnableAntiAffinity{}
+					antiAffinityChoiceInt.EnableAntiAffinity = &ves_io_schema_views_securemesh_site_v2.PodAntiAffinityConfigType{}
+					providerChoiceInt.AksK8S.AntiAffinityChoice = antiAffinityChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								rules := make([]*ves_io_schema_views_securemesh_site_v2.PodAntiAffinityRule, len(sl))
+								antiAffinityChoiceInt.EnableAntiAffinity.Rules = rules
+								for i, set := range sl {
+									if set != nil {
+										rules[i] = &ves_io_schema_views_securemesh_site_v2.PodAntiAffinityRule{}
+										rulesMapStrToI := set.(map[string]interface{})
+
+										if w, ok := rulesMapStrToI["label_key"]; ok && !isIntfNil(w) {
+											rules[i].LabelKey = w.(string)
+										}
+
+										if w, ok := rulesMapStrToI["label_value"]; ok && !isIntfNil(w) {
+											rules[i].LabelValue = w.(string)
+										}
+
+										if w, ok := rulesMapStrToI["topology_keys"]; ok && !isIntfNil(w) {
+											ls := make([]string, len(w.([]interface{})))
+											for i, v := range w.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field topology_keys")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											rules[i].TopologyKeys = ls
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["deployment_size"]; ok && !isIntfNil(v) {
+
+					providerChoiceInt.AksK8S.DeploymentSize = ves_io_schema_views_securemesh_site_v2.KubernetesDeploymentSize(ves_io_schema_views_securemesh_site_v2.KubernetesDeploymentSize_value[v.(string)])
+
+				}
+
+				if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+
+					ms := map[string]string{}
+					for k, v := range v.(map[string]interface{}) {
+						ms[k] = v.(string)
+					}
+					providerChoiceInt.AksK8S.Labels = ms
+				}
+
+				if v, ok := cs["not_managed"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					notManaged := &ves_io_schema_views_securemesh_site_v2.NodeList{}
+					providerChoiceInt.AksK8S.NotManaged = notManaged
+					for _, set := range sl {
+						if set != nil {
+							notManagedMapStrToI := set.(map[string]interface{})
+
+							if v, ok := notManagedMapStrToI["node_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								nodeList := make([]*ves_io_schema_views_securemesh_site_v2.Node, len(sl))
+								notManaged.NodeList = nodeList
+								for i, set := range sl {
+									if set != nil {
+										nodeList[i] = &ves_io_schema_views_securemesh_site_v2.Node{}
+										nodeListMapStrToI := set.(map[string]interface{})
+
+										if w, ok := nodeListMapStrToI["hostname"]; ok && !isIntfNil(w) {
+											nodeList[i].Hostname = w.(string)
+										}
+
+										if v, ok := nodeListMapStrToI["interface_list"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											interfaceList := make([]*ves_io_schema_views_securemesh_site_v2.Interface, len(sl))
+											nodeList[i].InterfaceList = interfaceList
+											for i, set := range sl {
+												if set != nil {
+													interfaceList[i] = &ves_io_schema_views_securemesh_site_v2.Interface{}
+													interfaceListMapStrToI := set.(map[string]interface{})
+
+													addressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["dhcp_client"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}
+															addressChoiceInt.DhcpClient = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
+														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
+																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
+																	for i, set := range sl {
+																		if set != nil {
+																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
+																			dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																			dnsChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
+
+																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
+
+																				dnsChoiceInt.DnsAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+
+																				if v.(bool) {
+																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
+																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
+																				}
+
+																			}
+
+																			gatewayChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
+
+																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+
+																				gatewayChoiceInt.DgwAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
+																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
+																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			networkPrefixChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
+
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
+																				dhcpNetworks[i].Pools = pools
+																				for i, set := range sl {
+																					if set != nil {
+																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
+																						poolsMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																							pools[i].EndIp = w.(string)
+																						}
+
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
+																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																							pools[i].StartIp = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
+
+																}
+
+																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																	ms := map[string]string{}
+																	for k, v := range v.(map[string]interface{}) {
+																		ms[k] = v.(string)
+																	}
+																	addressChoiceInt.DhcpServer.FixedIpMap = ms
+																}
+
+																interfacesAddressingChoiceTypeFound := false
+
+																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
+																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
+																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
+																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
+																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				ms := map[string]string{}
+																				for k, v := range v.(map[string]interface{}) {
+																					ms[k] = v.(string)
+																				}
+																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv4Address{}
+															addressChoiceInt.NoIpv4Address = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ip"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIp{}
+														addressChoiceInt.StaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
+
+																}
+
+																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DnsServer = v.(string)
+
+																}
+
+																if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.IpAddress = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["description"]; ok && !isIntfNil(w) {
+														interfaceList[i].Description = w.(string)
+													}
+
+													interfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["bond_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_BondInterface{}
+														interfaceChoiceInt.BondInterface = &ves_io_schema_fleet.FleetBondDeviceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["devices"]; ok && !isIntfNil(v) {
+
+																	ls := make([]string, len(v.([]interface{})))
+																	for i, v := range v.([]interface{}) {
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
+																	}
+																	interfaceChoiceInt.BondInterface.Devices = ls
+
+																}
+
+																lacpChoiceTypeFound := false
+
+																if v, ok := cs["active_backup"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+
+																	if v.(bool) {
+																		lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_ActiveBackup{}
+																		lacpChoiceInt.ActiveBackup = &ves_io_schema.Empty{}
+																		interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["lacp"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+																	lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_Lacp{}
+																	lacpChoiceInt.Lacp = &ves_io_schema_fleet.BondLacpType{}
+																	interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["rate"]; ok && !isIntfNil(v) {
+
+																				lacpChoiceInt.Lacp.Rate = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["link_polling_interval"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkPollingInterval = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["link_up_delay"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkUpDelay = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["ethernet_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_EthernetInterface{}
+														interfaceChoiceInt.EthernetInterface = &ves_io_schema_views_securemesh_site_v2.EthernetInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["mac"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Mac = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["vlan_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_VlanInterface{}
+														interfaceChoiceInt.VlanInterface = &ves_io_schema_views_securemesh_site_v2.VlanInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["vlan_id"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.VlanId = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													ipv6AddressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["ipv6_auto_config"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Ipv6AutoConfig{}
+														ipv6AddressChoiceInt.Ipv6AutoConfig = &ves_io_schema_network_interface.IPV6AutoConfigType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																autoconfigChoiceTypeFound := false
+
+																if v, ok := cs["host"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+
+																	if v.(bool) {
+																		autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Host{}
+																		autoconfigChoiceInt.Host = &ves_io_schema.Empty{}
+																		ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["router"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+																	autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Router{}
+																	autoconfigChoiceInt.Router = &ves_io_schema_network_interface.IPV6AutoConfigRouterType{}
+																	ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			addressChoiceTypeFound := false
+
+																			if v, ok := cs["network_prefix"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_NetworkPrefix{}
+
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				addressChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := cs["stateful"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_Stateful{}
+																				addressChoiceInt.Stateful = &ves_io_schema_network_interface.DHCPIPV6StatefulServer{}
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPIPV6NetworkType, len(sl))
+																							addressChoiceInt.Stateful.DhcpNetworks = dhcpNetworks
+																							for i, set := range sl {
+																								if set != nil {
+																									dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPIPV6NetworkType{}
+																									dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																									networkPrefixChoiceTypeFound := false
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefix{}
+
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
+																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																												}
+
+																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																												}
+
+																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										pools := make([]*ves_io_schema_network_interface.DHCPIPV6PoolType, len(sl))
+																										dhcpNetworks[i].Pools = pools
+																										for i, set := range sl {
+																											if set != nil {
+																												pools[i] = &ves_io_schema_network_interface.DHCPIPV6PoolType{}
+																												poolsMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																													pools[i].EndIp = w.(string)
+																												}
+
+																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																													pools[i].Exclude = w.(bool)
+																												}
+
+																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																													pools[i].StartIp = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																							ms := map[string]string{}
+																							for k, v := range v.(map[string]interface{}) {
+																								ms[k] = v.(string)
+																							}
+																							addressChoiceInt.Stateful.FixedIpMap = ms
+																						}
+
+																						interfacesAddressingChoiceTypeFound := false
+
+																						if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromEnd{}
+																								interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}
+																								interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+																							interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_InterfaceIpMap{}
+																							interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPV6Type{}
+																							addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																										ms := map[string]string{}
+																										for k, v := range v.(map[string]interface{}) {
+																											ms[k] = v.(string)
+																										}
+																										interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := cs["dns_config"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				dnsConfig := &ves_io_schema_network_interface.IPV6DnsConfig{}
+																				autoconfigChoiceInt.Router.DnsConfig = dnsConfig
+																				for _, set := range sl {
+																					if set != nil {
+																						dnsConfigMapStrToI := set.(map[string]interface{})
+
+																						dnsChoiceTypeFound := false
+
+																						if v, ok := dnsConfigMapStrToI["configured_list"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_ConfiguredList{}
+																							dnsChoiceInt.ConfiguredList = &ves_io_schema_network_interface.IPV6DnsList{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["dns_list"]; ok && !isIntfNil(v) {
+
+																										ls := make([]string, len(v.([]interface{})))
+																										for i, v := range v.([]interface{}) {
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
+																										}
+																										dnsChoiceInt.ConfiguredList.DnsList = ls
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := dnsConfigMapStrToI["local_dns"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_LocalDns{}
+																							dnsChoiceInt.LocalDns = &ves_io_schema_network_interface.IPV6LocalDnsAddress{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									localDnsChoiceTypeFound := false
+
+																									if v, ok := cs["configured_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+																										localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_ConfiguredAddress{}
+
+																										dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+
+																										localDnsChoiceInt.ConfiguredAddress = v.(string)
+
+																									}
+
+																									if v, ok := cs["first_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}
+																											localDnsChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																									if v, ok := cs["last_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_LastAddress{}
+																											localDnsChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+
+														if v.(bool) {
+															ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv6Address{}
+															ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+															interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIpv6Address{}
+														ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																networkPrefixChoiceTypeFound := false
+
+																if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+																	networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+																				networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+																				for _, set := range sl {
+																					if set != nil {
+																						interfaceIpMapMapStrToI := set.(map[string]interface{})
+																						key, ok := interfaceIpMapMapStrToI["name"]
+																						if ok && !isIntfNil(key) {
+																							interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																							val, _ := interfaceIpMapMapStrToI["value"]
+
+																							interfaceIpMapVals := val.([]interface{})
+																							for _, intVal := range interfaceIpMapVals {
+																								if intVal != nil {
+
+																									interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																									if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].IpAddress = w.(string)
+																									}
+
+																									// break after one loop
+																									break
+																								}
+																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+																	networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsManagement = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsPrimary = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
+														ms := map[string]string{}
+														for k, v := range w.(map[string]interface{}) {
+															ms[k] = v.(string)
+														}
+														interfaceList[i].Labels = ms
+													}
+
+													monitoringChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
+														monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
+														interfaceList[i].MonitoringChoice = monitoringChoiceInt
+
+													}
+
+													if v, ok := interfaceListMapStrToI["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+
+														if v.(bool) {
+															monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_MonitorDisabled{}
+															monitoringChoiceInt.MonitorDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].MonitoringChoice = monitoringChoiceInt
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["mtu"]; ok && !isIntfNil(w) {
+														interfaceList[i].Mtu = uint32(w.(int))
+													}
+
+													if w, ok := interfaceListMapStrToI["name"]; ok && !isIntfNil(w) {
+														interfaceList[i].Name = w.(string)
+													}
+
+													if v, ok := interfaceListMapStrToI["network_option"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														networkOption := &ves_io_schema_views.NetworkSelectType{}
+														interfaceList[i].NetworkOption = networkOption
+														for _, set := range sl {
+															if set != nil {
+																networkOptionMapStrToI := set.(map[string]interface{})
+
+																networkChoiceTypeFound := false
+
+																if v, ok := networkOptionMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+																	networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SegmentNetwork{}
+																	networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+																	networkOption.NetworkChoice = networkChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+																			}
+
+																			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+																			}
+
+																			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalInsideNetwork{}
+																		networkChoiceInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalNetwork{}
+																		networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["priority"]; ok && !isIntfNil(w) {
+														interfaceList[i].Priority = uint32(w.(int))
+													}
+
+													siteToSiteConnectivityInterfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_disabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceDisabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_enabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceEnabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceEnabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := nodeListMapStrToI["public_ip"]; ok && !isIntfNil(w) {
+											nodeList[i].PublicIp = w.(string)
+										}
+
+										if w, ok := nodeListMapStrToI["type"]; ok && !isIntfNil(w) {
+											nodeList[i].Type = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
 
 	if v, ok := d.GetOk("aws"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
@@ -41766,6 +51720,2483 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
+	if v, ok := d.GetOk("gke_k8s"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
+
+		providerChoiceTypeFound = true
+		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_GkeK8S{}
+		providerChoiceInt.GkeK8S = &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType{}
+		updateSpec.ProviderChoice = providerChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				antiAffinityChoiceTypeFound := false
+
+				if v, ok := cs["disable_anti_affinity"]; ok && !isIntfNil(v) && !antiAffinityChoiceTypeFound {
+
+					antiAffinityChoiceTypeFound = true
+
+					if v.(bool) {
+						antiAffinityChoiceInt := &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType_DisableAntiAffinity{}
+						antiAffinityChoiceInt.DisableAntiAffinity = &ves_io_schema.Empty{}
+						providerChoiceInt.GkeK8S.AntiAffinityChoice = antiAffinityChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["enable_anti_affinity"]; ok && !isIntfNil(v) && !antiAffinityChoiceTypeFound {
+
+					antiAffinityChoiceTypeFound = true
+					antiAffinityChoiceInt := &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType_EnableAntiAffinity{}
+					antiAffinityChoiceInt.EnableAntiAffinity = &ves_io_schema_views_securemesh_site_v2.PodAntiAffinityConfigType{}
+					providerChoiceInt.GkeK8S.AntiAffinityChoice = antiAffinityChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								rules := make([]*ves_io_schema_views_securemesh_site_v2.PodAntiAffinityRule, len(sl))
+								antiAffinityChoiceInt.EnableAntiAffinity.Rules = rules
+								for i, set := range sl {
+									if set != nil {
+										rules[i] = &ves_io_schema_views_securemesh_site_v2.PodAntiAffinityRule{}
+										rulesMapStrToI := set.(map[string]interface{})
+
+										if w, ok := rulesMapStrToI["label_key"]; ok && !isIntfNil(w) {
+											rules[i].LabelKey = w.(string)
+										}
+
+										if w, ok := rulesMapStrToI["label_value"]; ok && !isIntfNil(w) {
+											rules[i].LabelValue = w.(string)
+										}
+
+										if w, ok := rulesMapStrToI["topology_keys"]; ok && !isIntfNil(w) {
+											ls := make([]string, len(w.([]interface{})))
+											for i, v := range w.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field topology_keys")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											rules[i].TopologyKeys = ls
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["deployment_size"]; ok && !isIntfNil(v) {
+
+					providerChoiceInt.GkeK8S.DeploymentSize = ves_io_schema_views_securemesh_site_v2.KubernetesDeploymentSize(ves_io_schema_views_securemesh_site_v2.KubernetesDeploymentSize_value[v.(string)])
+
+				}
+
+				if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+
+					ms := map[string]string{}
+					for k, v := range v.(map[string]interface{}) {
+						ms[k] = v.(string)
+					}
+					providerChoiceInt.GkeK8S.Labels = ms
+				}
+
+				if v, ok := cs["not_managed"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					notManaged := &ves_io_schema_views_securemesh_site_v2.NodeList{}
+					providerChoiceInt.GkeK8S.NotManaged = notManaged
+					for _, set := range sl {
+						if set != nil {
+							notManagedMapStrToI := set.(map[string]interface{})
+
+							if v, ok := notManagedMapStrToI["node_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								nodeList := make([]*ves_io_schema_views_securemesh_site_v2.Node, len(sl))
+								notManaged.NodeList = nodeList
+								for i, set := range sl {
+									if set != nil {
+										nodeList[i] = &ves_io_schema_views_securemesh_site_v2.Node{}
+										nodeListMapStrToI := set.(map[string]interface{})
+
+										if w, ok := nodeListMapStrToI["hostname"]; ok && !isIntfNil(w) {
+											nodeList[i].Hostname = w.(string)
+										}
+
+										if v, ok := nodeListMapStrToI["interface_list"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											interfaceList := make([]*ves_io_schema_views_securemesh_site_v2.Interface, len(sl))
+											nodeList[i].InterfaceList = interfaceList
+											for i, set := range sl {
+												if set != nil {
+													interfaceList[i] = &ves_io_schema_views_securemesh_site_v2.Interface{}
+													interfaceListMapStrToI := set.(map[string]interface{})
+
+													addressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["dhcp_client"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}
+															addressChoiceInt.DhcpClient = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
+														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
+																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
+																	for i, set := range sl {
+																		if set != nil {
+																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
+																			dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																			dnsChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
+
+																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
+
+																				dnsChoiceInt.DnsAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+
+																				if v.(bool) {
+																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
+																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
+																				}
+
+																			}
+
+																			gatewayChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
+
+																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+
+																				gatewayChoiceInt.DgwAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
+																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
+																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			networkPrefixChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
+
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
+																				dhcpNetworks[i].Pools = pools
+																				for i, set := range sl {
+																					if set != nil {
+																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
+																						poolsMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																							pools[i].EndIp = w.(string)
+																						}
+
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
+																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																							pools[i].StartIp = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
+
+																}
+
+																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																	ms := map[string]string{}
+																	for k, v := range v.(map[string]interface{}) {
+																		ms[k] = v.(string)
+																	}
+																	addressChoiceInt.DhcpServer.FixedIpMap = ms
+																}
+
+																interfacesAddressingChoiceTypeFound := false
+
+																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
+																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
+																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
+																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
+																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				ms := map[string]string{}
+																				for k, v := range v.(map[string]interface{}) {
+																					ms[k] = v.(string)
+																				}
+																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv4Address{}
+															addressChoiceInt.NoIpv4Address = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ip"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIp{}
+														addressChoiceInt.StaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
+
+																}
+
+																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DnsServer = v.(string)
+
+																}
+
+																if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.IpAddress = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["description"]; ok && !isIntfNil(w) {
+														interfaceList[i].Description = w.(string)
+													}
+
+													interfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["bond_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_BondInterface{}
+														interfaceChoiceInt.BondInterface = &ves_io_schema_fleet.FleetBondDeviceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["devices"]; ok && !isIntfNil(v) {
+
+																	ls := make([]string, len(v.([]interface{})))
+																	for i, v := range v.([]interface{}) {
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
+																	}
+																	interfaceChoiceInt.BondInterface.Devices = ls
+
+																}
+
+																lacpChoiceTypeFound := false
+
+																if v, ok := cs["active_backup"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+
+																	if v.(bool) {
+																		lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_ActiveBackup{}
+																		lacpChoiceInt.ActiveBackup = &ves_io_schema.Empty{}
+																		interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["lacp"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+																	lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_Lacp{}
+																	lacpChoiceInt.Lacp = &ves_io_schema_fleet.BondLacpType{}
+																	interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["rate"]; ok && !isIntfNil(v) {
+
+																				lacpChoiceInt.Lacp.Rate = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["link_polling_interval"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkPollingInterval = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["link_up_delay"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkUpDelay = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["ethernet_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_EthernetInterface{}
+														interfaceChoiceInt.EthernetInterface = &ves_io_schema_views_securemesh_site_v2.EthernetInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["mac"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Mac = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["vlan_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_VlanInterface{}
+														interfaceChoiceInt.VlanInterface = &ves_io_schema_views_securemesh_site_v2.VlanInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["vlan_id"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.VlanId = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													ipv6AddressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["ipv6_auto_config"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Ipv6AutoConfig{}
+														ipv6AddressChoiceInt.Ipv6AutoConfig = &ves_io_schema_network_interface.IPV6AutoConfigType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																autoconfigChoiceTypeFound := false
+
+																if v, ok := cs["host"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+
+																	if v.(bool) {
+																		autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Host{}
+																		autoconfigChoiceInt.Host = &ves_io_schema.Empty{}
+																		ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["router"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+																	autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Router{}
+																	autoconfigChoiceInt.Router = &ves_io_schema_network_interface.IPV6AutoConfigRouterType{}
+																	ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			addressChoiceTypeFound := false
+
+																			if v, ok := cs["network_prefix"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_NetworkPrefix{}
+
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				addressChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := cs["stateful"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_Stateful{}
+																				addressChoiceInt.Stateful = &ves_io_schema_network_interface.DHCPIPV6StatefulServer{}
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPIPV6NetworkType, len(sl))
+																							addressChoiceInt.Stateful.DhcpNetworks = dhcpNetworks
+																							for i, set := range sl {
+																								if set != nil {
+																									dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPIPV6NetworkType{}
+																									dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																									networkPrefixChoiceTypeFound := false
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefix{}
+
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
+																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																												}
+
+																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																												}
+
+																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										pools := make([]*ves_io_schema_network_interface.DHCPIPV6PoolType, len(sl))
+																										dhcpNetworks[i].Pools = pools
+																										for i, set := range sl {
+																											if set != nil {
+																												pools[i] = &ves_io_schema_network_interface.DHCPIPV6PoolType{}
+																												poolsMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																													pools[i].EndIp = w.(string)
+																												}
+
+																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																													pools[i].Exclude = w.(bool)
+																												}
+
+																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																													pools[i].StartIp = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																							ms := map[string]string{}
+																							for k, v := range v.(map[string]interface{}) {
+																								ms[k] = v.(string)
+																							}
+																							addressChoiceInt.Stateful.FixedIpMap = ms
+																						}
+
+																						interfacesAddressingChoiceTypeFound := false
+
+																						if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromEnd{}
+																								interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}
+																								interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+																							interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_InterfaceIpMap{}
+																							interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPV6Type{}
+																							addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																										ms := map[string]string{}
+																										for k, v := range v.(map[string]interface{}) {
+																											ms[k] = v.(string)
+																										}
+																										interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := cs["dns_config"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				dnsConfig := &ves_io_schema_network_interface.IPV6DnsConfig{}
+																				autoconfigChoiceInt.Router.DnsConfig = dnsConfig
+																				for _, set := range sl {
+																					if set != nil {
+																						dnsConfigMapStrToI := set.(map[string]interface{})
+
+																						dnsChoiceTypeFound := false
+
+																						if v, ok := dnsConfigMapStrToI["configured_list"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_ConfiguredList{}
+																							dnsChoiceInt.ConfiguredList = &ves_io_schema_network_interface.IPV6DnsList{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["dns_list"]; ok && !isIntfNil(v) {
+
+																										ls := make([]string, len(v.([]interface{})))
+																										for i, v := range v.([]interface{}) {
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
+																										}
+																										dnsChoiceInt.ConfiguredList.DnsList = ls
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := dnsConfigMapStrToI["local_dns"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_LocalDns{}
+																							dnsChoiceInt.LocalDns = &ves_io_schema_network_interface.IPV6LocalDnsAddress{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									localDnsChoiceTypeFound := false
+
+																									if v, ok := cs["configured_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+																										localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_ConfiguredAddress{}
+
+																										dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+
+																										localDnsChoiceInt.ConfiguredAddress = v.(string)
+
+																									}
+
+																									if v, ok := cs["first_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}
+																											localDnsChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																									if v, ok := cs["last_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_LastAddress{}
+																											localDnsChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+
+														if v.(bool) {
+															ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv6Address{}
+															ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+															interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIpv6Address{}
+														ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																networkPrefixChoiceTypeFound := false
+
+																if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+																	networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+																				networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+																				for _, set := range sl {
+																					if set != nil {
+																						interfaceIpMapMapStrToI := set.(map[string]interface{})
+																						key, ok := interfaceIpMapMapStrToI["name"]
+																						if ok && !isIntfNil(key) {
+																							interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																							val, _ := interfaceIpMapMapStrToI["value"]
+
+																							interfaceIpMapVals := val.([]interface{})
+																							for _, intVal := range interfaceIpMapVals {
+																								if intVal != nil {
+
+																									interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																									if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].IpAddress = w.(string)
+																									}
+
+																									// break after one loop
+																									break
+																								}
+																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+																	networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsManagement = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsPrimary = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
+														ms := map[string]string{}
+														for k, v := range w.(map[string]interface{}) {
+															ms[k] = v.(string)
+														}
+														interfaceList[i].Labels = ms
+													}
+
+													monitoringChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
+														monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
+														interfaceList[i].MonitoringChoice = monitoringChoiceInt
+
+													}
+
+													if v, ok := interfaceListMapStrToI["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+
+														if v.(bool) {
+															monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_MonitorDisabled{}
+															monitoringChoiceInt.MonitorDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].MonitoringChoice = monitoringChoiceInt
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["mtu"]; ok && !isIntfNil(w) {
+														interfaceList[i].Mtu = uint32(w.(int))
+													}
+
+													if w, ok := interfaceListMapStrToI["name"]; ok && !isIntfNil(w) {
+														interfaceList[i].Name = w.(string)
+													}
+
+													if v, ok := interfaceListMapStrToI["network_option"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														networkOption := &ves_io_schema_views.NetworkSelectType{}
+														interfaceList[i].NetworkOption = networkOption
+														for _, set := range sl {
+															if set != nil {
+																networkOptionMapStrToI := set.(map[string]interface{})
+
+																networkChoiceTypeFound := false
+
+																if v, ok := networkOptionMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+																	networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SegmentNetwork{}
+																	networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+																	networkOption.NetworkChoice = networkChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+																			}
+
+																			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+																			}
+
+																			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalInsideNetwork{}
+																		networkChoiceInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalNetwork{}
+																		networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["priority"]; ok && !isIntfNil(w) {
+														interfaceList[i].Priority = uint32(w.(int))
+													}
+
+													siteToSiteConnectivityInterfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_disabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceDisabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_enabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceEnabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceEnabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := nodeListMapStrToI["public_ip"]; ok && !isIntfNil(w) {
+											nodeList[i].PublicIp = w.(string)
+										}
+
+										if w, ok := nodeListMapStrToI["type"]; ok && !isIntfNil(w) {
+											nodeList[i].Type = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("hyper_v"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
+
+		providerChoiceTypeFound = true
+		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_HyperV{}
+		providerChoiceInt.HyperV = &ves_io_schema_views_securemesh_site_v2.HyperVProviderType{}
+		updateSpec.ProviderChoice = providerChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				orchestrationChoiceTypeFound := false
+
+				if v, ok := cs["not_managed"]; ok && !isIntfNil(v) && !orchestrationChoiceTypeFound {
+
+					orchestrationChoiceTypeFound = true
+					orchestrationChoiceInt := &ves_io_schema_views_securemesh_site_v2.HyperVProviderType_NotManaged{}
+					orchestrationChoiceInt.NotManaged = &ves_io_schema_views_securemesh_site_v2.NodeList{}
+					providerChoiceInt.HyperV.OrchestrationChoice = orchestrationChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["node_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								nodeList := make([]*ves_io_schema_views_securemesh_site_v2.Node, len(sl))
+								orchestrationChoiceInt.NotManaged.NodeList = nodeList
+								for i, set := range sl {
+									if set != nil {
+										nodeList[i] = &ves_io_schema_views_securemesh_site_v2.Node{}
+										nodeListMapStrToI := set.(map[string]interface{})
+
+										if w, ok := nodeListMapStrToI["hostname"]; ok && !isIntfNil(w) {
+											nodeList[i].Hostname = w.(string)
+										}
+
+										if v, ok := nodeListMapStrToI["interface_list"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											interfaceList := make([]*ves_io_schema_views_securemesh_site_v2.Interface, len(sl))
+											nodeList[i].InterfaceList = interfaceList
+											for i, set := range sl {
+												if set != nil {
+													interfaceList[i] = &ves_io_schema_views_securemesh_site_v2.Interface{}
+													interfaceListMapStrToI := set.(map[string]interface{})
+
+													addressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["dhcp_client"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}
+															addressChoiceInt.DhcpClient = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
+														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
+																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
+																	for i, set := range sl {
+																		if set != nil {
+																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
+																			dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																			dnsChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
+
+																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
+
+																				dnsChoiceInt.DnsAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+
+																				if v.(bool) {
+																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
+																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
+																				}
+
+																			}
+
+																			gatewayChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
+
+																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+
+																				gatewayChoiceInt.DgwAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
+																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
+																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			networkPrefixChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
+
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
+																				dhcpNetworks[i].Pools = pools
+																				for i, set := range sl {
+																					if set != nil {
+																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
+																						poolsMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																							pools[i].EndIp = w.(string)
+																						}
+
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
+																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																							pools[i].StartIp = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
+
+																}
+
+																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																	ms := map[string]string{}
+																	for k, v := range v.(map[string]interface{}) {
+																		ms[k] = v.(string)
+																	}
+																	addressChoiceInt.DhcpServer.FixedIpMap = ms
+																}
+
+																interfacesAddressingChoiceTypeFound := false
+
+																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
+																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
+																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
+																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
+																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				ms := map[string]string{}
+																				for k, v := range v.(map[string]interface{}) {
+																					ms[k] = v.(string)
+																				}
+																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv4Address{}
+															addressChoiceInt.NoIpv4Address = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ip"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIp{}
+														addressChoiceInt.StaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
+
+																}
+
+																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DnsServer = v.(string)
+
+																}
+
+																if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.IpAddress = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["description"]; ok && !isIntfNil(w) {
+														interfaceList[i].Description = w.(string)
+													}
+
+													interfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["bond_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_BondInterface{}
+														interfaceChoiceInt.BondInterface = &ves_io_schema_fleet.FleetBondDeviceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["devices"]; ok && !isIntfNil(v) {
+
+																	ls := make([]string, len(v.([]interface{})))
+																	for i, v := range v.([]interface{}) {
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
+																	}
+																	interfaceChoiceInt.BondInterface.Devices = ls
+
+																}
+
+																lacpChoiceTypeFound := false
+
+																if v, ok := cs["active_backup"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+
+																	if v.(bool) {
+																		lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_ActiveBackup{}
+																		lacpChoiceInt.ActiveBackup = &ves_io_schema.Empty{}
+																		interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["lacp"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+																	lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_Lacp{}
+																	lacpChoiceInt.Lacp = &ves_io_schema_fleet.BondLacpType{}
+																	interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["rate"]; ok && !isIntfNil(v) {
+
+																				lacpChoiceInt.Lacp.Rate = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["link_polling_interval"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkPollingInterval = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["link_up_delay"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkUpDelay = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["ethernet_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_EthernetInterface{}
+														interfaceChoiceInt.EthernetInterface = &ves_io_schema_views_securemesh_site_v2.EthernetInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["mac"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Mac = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["vlan_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_VlanInterface{}
+														interfaceChoiceInt.VlanInterface = &ves_io_schema_views_securemesh_site_v2.VlanInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["vlan_id"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.VlanId = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													ipv6AddressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["ipv6_auto_config"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Ipv6AutoConfig{}
+														ipv6AddressChoiceInt.Ipv6AutoConfig = &ves_io_schema_network_interface.IPV6AutoConfigType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																autoconfigChoiceTypeFound := false
+
+																if v, ok := cs["host"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+
+																	if v.(bool) {
+																		autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Host{}
+																		autoconfigChoiceInt.Host = &ves_io_schema.Empty{}
+																		ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["router"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+																	autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Router{}
+																	autoconfigChoiceInt.Router = &ves_io_schema_network_interface.IPV6AutoConfigRouterType{}
+																	ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			addressChoiceTypeFound := false
+
+																			if v, ok := cs["network_prefix"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_NetworkPrefix{}
+
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				addressChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := cs["stateful"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_Stateful{}
+																				addressChoiceInt.Stateful = &ves_io_schema_network_interface.DHCPIPV6StatefulServer{}
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPIPV6NetworkType, len(sl))
+																							addressChoiceInt.Stateful.DhcpNetworks = dhcpNetworks
+																							for i, set := range sl {
+																								if set != nil {
+																									dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPIPV6NetworkType{}
+																									dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																									networkPrefixChoiceTypeFound := false
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefix{}
+
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
+																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																												}
+
+																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																												}
+
+																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										pools := make([]*ves_io_schema_network_interface.DHCPIPV6PoolType, len(sl))
+																										dhcpNetworks[i].Pools = pools
+																										for i, set := range sl {
+																											if set != nil {
+																												pools[i] = &ves_io_schema_network_interface.DHCPIPV6PoolType{}
+																												poolsMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																													pools[i].EndIp = w.(string)
+																												}
+
+																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																													pools[i].Exclude = w.(bool)
+																												}
+
+																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																													pools[i].StartIp = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																							ms := map[string]string{}
+																							for k, v := range v.(map[string]interface{}) {
+																								ms[k] = v.(string)
+																							}
+																							addressChoiceInt.Stateful.FixedIpMap = ms
+																						}
+
+																						interfacesAddressingChoiceTypeFound := false
+
+																						if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromEnd{}
+																								interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}
+																								interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+																							interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_InterfaceIpMap{}
+																							interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPV6Type{}
+																							addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																										ms := map[string]string{}
+																										for k, v := range v.(map[string]interface{}) {
+																											ms[k] = v.(string)
+																										}
+																										interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := cs["dns_config"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				dnsConfig := &ves_io_schema_network_interface.IPV6DnsConfig{}
+																				autoconfigChoiceInt.Router.DnsConfig = dnsConfig
+																				for _, set := range sl {
+																					if set != nil {
+																						dnsConfigMapStrToI := set.(map[string]interface{})
+
+																						dnsChoiceTypeFound := false
+
+																						if v, ok := dnsConfigMapStrToI["configured_list"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_ConfiguredList{}
+																							dnsChoiceInt.ConfiguredList = &ves_io_schema_network_interface.IPV6DnsList{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["dns_list"]; ok && !isIntfNil(v) {
+
+																										ls := make([]string, len(v.([]interface{})))
+																										for i, v := range v.([]interface{}) {
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
+																										}
+																										dnsChoiceInt.ConfiguredList.DnsList = ls
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := dnsConfigMapStrToI["local_dns"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_LocalDns{}
+																							dnsChoiceInt.LocalDns = &ves_io_schema_network_interface.IPV6LocalDnsAddress{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									localDnsChoiceTypeFound := false
+
+																									if v, ok := cs["configured_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+																										localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_ConfiguredAddress{}
+
+																										dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+
+																										localDnsChoiceInt.ConfiguredAddress = v.(string)
+
+																									}
+
+																									if v, ok := cs["first_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}
+																											localDnsChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																									if v, ok := cs["last_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_LastAddress{}
+																											localDnsChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+
+														if v.(bool) {
+															ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv6Address{}
+															ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+															interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIpv6Address{}
+														ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																networkPrefixChoiceTypeFound := false
+
+																if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+																	networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+																				networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+																				for _, set := range sl {
+																					if set != nil {
+																						interfaceIpMapMapStrToI := set.(map[string]interface{})
+																						key, ok := interfaceIpMapMapStrToI["name"]
+																						if ok && !isIntfNil(key) {
+																							interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																							val, _ := interfaceIpMapMapStrToI["value"]
+
+																							interfaceIpMapVals := val.([]interface{})
+																							for _, intVal := range interfaceIpMapVals {
+																								if intVal != nil {
+
+																									interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																									if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].IpAddress = w.(string)
+																									}
+
+																									// break after one loop
+																									break
+																								}
+																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+																	networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsManagement = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsPrimary = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
+														ms := map[string]string{}
+														for k, v := range w.(map[string]interface{}) {
+															ms[k] = v.(string)
+														}
+														interfaceList[i].Labels = ms
+													}
+
+													monitoringChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
+														monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
+														interfaceList[i].MonitoringChoice = monitoringChoiceInt
+
+													}
+
+													if v, ok := interfaceListMapStrToI["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+
+														if v.(bool) {
+															monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_MonitorDisabled{}
+															monitoringChoiceInt.MonitorDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].MonitoringChoice = monitoringChoiceInt
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["mtu"]; ok && !isIntfNil(w) {
+														interfaceList[i].Mtu = uint32(w.(int))
+													}
+
+													if w, ok := interfaceListMapStrToI["name"]; ok && !isIntfNil(w) {
+														interfaceList[i].Name = w.(string)
+													}
+
+													if v, ok := interfaceListMapStrToI["network_option"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														networkOption := &ves_io_schema_views.NetworkSelectType{}
+														interfaceList[i].NetworkOption = networkOption
+														for _, set := range sl {
+															if set != nil {
+																networkOptionMapStrToI := set.(map[string]interface{})
+
+																networkChoiceTypeFound := false
+
+																if v, ok := networkOptionMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+																	networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SegmentNetwork{}
+																	networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+																	networkOption.NetworkChoice = networkChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+																			}
+
+																			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+																			}
+
+																			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalInsideNetwork{}
+																		networkChoiceInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalNetwork{}
+																		networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["priority"]; ok && !isIntfNil(w) {
+														interfaceList[i].Priority = uint32(w.(int))
+													}
+
+													siteToSiteConnectivityInterfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_disabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceDisabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_enabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceEnabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceEnabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := nodeListMapStrToI["public_ip"]; ok && !isIntfNil(w) {
+											nodeList[i].PublicIp = w.(string)
+										}
+
+										if w, ok := nodeListMapStrToI["type"]; ok && !isIntfNil(w) {
+											nodeList[i].Type = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
 	if v, ok := d.GetOk("kvm"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
@@ -44197,6 +56628,1283 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 								sl := v.([]interface{})
 								nodeList := make([]*ves_io_schema_views_securemesh_site_v2.Node, len(sl))
 								orchestrationChoiceInt.NotManaged.NodeList = nodeList
+								for i, set := range sl {
+									if set != nil {
+										nodeList[i] = &ves_io_schema_views_securemesh_site_v2.Node{}
+										nodeListMapStrToI := set.(map[string]interface{})
+
+										if w, ok := nodeListMapStrToI["hostname"]; ok && !isIntfNil(w) {
+											nodeList[i].Hostname = w.(string)
+										}
+
+										if v, ok := nodeListMapStrToI["interface_list"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											interfaceList := make([]*ves_io_schema_views_securemesh_site_v2.Interface, len(sl))
+											nodeList[i].InterfaceList = interfaceList
+											for i, set := range sl {
+												if set != nil {
+													interfaceList[i] = &ves_io_schema_views_securemesh_site_v2.Interface{}
+													interfaceListMapStrToI := set.(map[string]interface{})
+
+													addressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["dhcp_client"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}
+															addressChoiceInt.DhcpClient = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
+														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
+																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
+																	for i, set := range sl {
+																		if set != nil {
+																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
+																			dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																			dnsChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
+
+																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
+
+																				dnsChoiceInt.DnsAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+
+																				if v.(bool) {
+																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
+																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
+																				}
+
+																			}
+
+																			gatewayChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
+
+																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+
+																				gatewayChoiceInt.DgwAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
+																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
+																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			networkPrefixChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
+
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
+																				dhcpNetworks[i].Pools = pools
+																				for i, set := range sl {
+																					if set != nil {
+																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
+																						poolsMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																							pools[i].EndIp = w.(string)
+																						}
+
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
+																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																							pools[i].StartIp = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
+
+																}
+
+																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																	ms := map[string]string{}
+																	for k, v := range v.(map[string]interface{}) {
+																		ms[k] = v.(string)
+																	}
+																	addressChoiceInt.DhcpServer.FixedIpMap = ms
+																}
+
+																interfacesAddressingChoiceTypeFound := false
+
+																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
+																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
+																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
+																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
+																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				ms := map[string]string{}
+																				for k, v := range v.(map[string]interface{}) {
+																					ms[k] = v.(string)
+																				}
+																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv4Address{}
+															addressChoiceInt.NoIpv4Address = &ves_io_schema.Empty{}
+															interfaceList[i].AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ip"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIp{}
+														addressChoiceInt.StaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+														interfaceList[i].AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
+
+																}
+
+																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.DnsServer = v.(string)
+
+																}
+
+																if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.StaticIp.IpAddress = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["description"]; ok && !isIntfNil(w) {
+														interfaceList[i].Description = w.(string)
+													}
+
+													interfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["bond_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_BondInterface{}
+														interfaceChoiceInt.BondInterface = &ves_io_schema_fleet.FleetBondDeviceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["devices"]; ok && !isIntfNil(v) {
+
+																	ls := make([]string, len(v.([]interface{})))
+																	for i, v := range v.([]interface{}) {
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
+																	}
+																	interfaceChoiceInt.BondInterface.Devices = ls
+
+																}
+
+																lacpChoiceTypeFound := false
+
+																if v, ok := cs["active_backup"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+
+																	if v.(bool) {
+																		lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_ActiveBackup{}
+																		lacpChoiceInt.ActiveBackup = &ves_io_schema.Empty{}
+																		interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["lacp"]; ok && !isIntfNil(v) && !lacpChoiceTypeFound {
+
+																	lacpChoiceTypeFound = true
+																	lacpChoiceInt := &ves_io_schema_fleet.FleetBondDeviceType_Lacp{}
+																	lacpChoiceInt.Lacp = &ves_io_schema_fleet.BondLacpType{}
+																	interfaceChoiceInt.BondInterface.LacpChoice = lacpChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["rate"]; ok && !isIntfNil(v) {
+
+																				lacpChoiceInt.Lacp.Rate = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["link_polling_interval"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkPollingInterval = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["link_up_delay"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.LinkUpDelay = uint32(v.(int))
+
+																}
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.BondInterface.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["ethernet_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_EthernetInterface{}
+														interfaceChoiceInt.EthernetInterface = &ves_io_schema_views_securemesh_site_v2.EthernetInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["mac"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.EthernetInterface.Mac = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["vlan_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+														interfaceChoiceTypeFound = true
+														interfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_VlanInterface{}
+														interfaceChoiceInt.VlanInterface = &ves_io_schema_views_securemesh_site_v2.VlanInterfaceType{}
+														interfaceList[i].InterfaceChoice = interfaceChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.Device = v.(string)
+
+																}
+
+																if v, ok := cs["vlan_id"]; ok && !isIntfNil(v) {
+
+																	interfaceChoiceInt.VlanInterface.VlanId = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													ipv6AddressChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["ipv6_auto_config"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Ipv6AutoConfig{}
+														ipv6AddressChoiceInt.Ipv6AutoConfig = &ves_io_schema_network_interface.IPV6AutoConfigType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																autoconfigChoiceTypeFound := false
+
+																if v, ok := cs["host"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+
+																	if v.(bool) {
+																		autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Host{}
+																		autoconfigChoiceInt.Host = &ves_io_schema.Empty{}
+																		ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["router"]; ok && !isIntfNil(v) && !autoconfigChoiceTypeFound {
+
+																	autoconfigChoiceTypeFound = true
+																	autoconfigChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigType_Router{}
+																	autoconfigChoiceInt.Router = &ves_io_schema_network_interface.IPV6AutoConfigRouterType{}
+																	ipv6AddressChoiceInt.Ipv6AutoConfig.AutoconfigChoice = autoconfigChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			addressChoiceTypeFound := false
+
+																			if v, ok := cs["network_prefix"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_NetworkPrefix{}
+
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				addressChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := cs["stateful"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+																				addressChoiceTypeFound = true
+																				addressChoiceInt := &ves_io_schema_network_interface.IPV6AutoConfigRouterType_Stateful{}
+																				addressChoiceInt.Stateful = &ves_io_schema_network_interface.DHCPIPV6StatefulServer{}
+																				autoconfigChoiceInt.Router.AddressChoice = addressChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPIPV6NetworkType, len(sl))
+																							addressChoiceInt.Stateful.DhcpNetworks = dhcpNetworks
+																							for i, set := range sl {
+																								if set != nil {
+																									dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPIPV6NetworkType{}
+																									dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																									networkPrefixChoiceTypeFound := false
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefix{}
+
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
+																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																												}
+
+																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																												}
+
+																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										pools := make([]*ves_io_schema_network_interface.DHCPIPV6PoolType, len(sl))
+																										dhcpNetworks[i].Pools = pools
+																										for i, set := range sl {
+																											if set != nil {
+																												pools[i] = &ves_io_schema_network_interface.DHCPIPV6PoolType{}
+																												poolsMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																													pools[i].EndIp = w.(string)
+																												}
+
+																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																													pools[i].Exclude = w.(bool)
+																												}
+
+																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																													pools[i].StartIp = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																							ms := map[string]string{}
+																							for k, v := range v.(map[string]interface{}) {
+																								ms[k] = v.(string)
+																							}
+																							addressChoiceInt.Stateful.FixedIpMap = ms
+																						}
+
+																						interfacesAddressingChoiceTypeFound := false
+
+																						if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromEnd{}
+																								interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+
+																							if v.(bool) {
+																								interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}
+																								interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																								addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																							interfacesAddressingChoiceTypeFound = true
+																							interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPIPV6StatefulServer_InterfaceIpMap{}
+																							interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPV6Type{}
+																							addressChoiceInt.Stateful.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																										ms := map[string]string{}
+																										for k, v := range v.(map[string]interface{}) {
+																											ms[k] = v.(string)
+																										}
+																										interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := cs["dns_config"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				dnsConfig := &ves_io_schema_network_interface.IPV6DnsConfig{}
+																				autoconfigChoiceInt.Router.DnsConfig = dnsConfig
+																				for _, set := range sl {
+																					if set != nil {
+																						dnsConfigMapStrToI := set.(map[string]interface{})
+
+																						dnsChoiceTypeFound := false
+
+																						if v, ok := dnsConfigMapStrToI["configured_list"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_ConfiguredList{}
+																							dnsChoiceInt.ConfiguredList = &ves_io_schema_network_interface.IPV6DnsList{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["dns_list"]; ok && !isIntfNil(v) {
+
+																										ls := make([]string, len(v.([]interface{})))
+																										for i, v := range v.([]interface{}) {
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
+																										}
+																										dnsChoiceInt.ConfiguredList.DnsList = ls
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := dnsConfigMapStrToI["local_dns"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																							dnsChoiceTypeFound = true
+																							dnsChoiceInt := &ves_io_schema_network_interface.IPV6DnsConfig_LocalDns{}
+																							dnsChoiceInt.LocalDns = &ves_io_schema_network_interface.IPV6LocalDnsAddress{}
+																							dnsConfig.DnsChoice = dnsChoiceInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									localDnsChoiceTypeFound := false
+
+																									if v, ok := cs["configured_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+																										localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_ConfiguredAddress{}
+
+																										dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+
+																										localDnsChoiceInt.ConfiguredAddress = v.(string)
+
+																									}
+
+																									if v, ok := cs["first_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}
+																											localDnsChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																									if v, ok := cs["last_address"]; ok && !isIntfNil(v) && !localDnsChoiceTypeFound {
+
+																										localDnsChoiceTypeFound = true
+
+																										if v.(bool) {
+																											localDnsChoiceInt := &ves_io_schema_network_interface.IPV6LocalDnsAddress_LastAddress{}
+																											localDnsChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																											dnsChoiceInt.LocalDns.LocalDnsChoice = localDnsChoiceInt
+																										}
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+
+														if v.(bool) {
+															ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_NoIpv6Address{}
+															ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+															interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_StaticIpv6Address{}
+														ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+														interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																networkPrefixChoiceTypeFound := false
+
+																if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+																	networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+																				networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+																				for _, set := range sl {
+																					if set != nil {
+																						interfaceIpMapMapStrToI := set.(map[string]interface{})
+																						key, ok := interfaceIpMapMapStrToI["name"]
+																						if ok && !isIntfNil(key) {
+																							interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																							val, _ := interfaceIpMapMapStrToI["value"]
+
+																							interfaceIpMapVals := val.([]interface{})
+																							for _, intVal := range interfaceIpMapVals {
+																								if intVal != nil {
+
+																									interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																									if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].IpAddress = w.(string)
+																									}
+
+																									// break after one loop
+																									break
+																								}
+																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+																	networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsManagement = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
+														interfaceList[i].IsPrimary = w.(bool)
+													}
+
+													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
+														ms := map[string]string{}
+														for k, v := range w.(map[string]interface{}) {
+															ms[k] = v.(string)
+														}
+														interfaceList[i].Labels = ms
+													}
+
+													monitoringChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
+														monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
+														interfaceList[i].MonitoringChoice = monitoringChoiceInt
+
+													}
+
+													if v, ok := interfaceListMapStrToI["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+
+														monitoringChoiceTypeFound = true
+
+														if v.(bool) {
+															monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_MonitorDisabled{}
+															monitoringChoiceInt.MonitorDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].MonitoringChoice = monitoringChoiceInt
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["mtu"]; ok && !isIntfNil(w) {
+														interfaceList[i].Mtu = uint32(w.(int))
+													}
+
+													if w, ok := interfaceListMapStrToI["name"]; ok && !isIntfNil(w) {
+														interfaceList[i].Name = w.(string)
+													}
+
+													if v, ok := interfaceListMapStrToI["network_option"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														networkOption := &ves_io_schema_views.NetworkSelectType{}
+														interfaceList[i].NetworkOption = networkOption
+														for _, set := range sl {
+															if set != nil {
+																networkOptionMapStrToI := set.(map[string]interface{})
+
+																networkChoiceTypeFound := false
+
+																if v, ok := networkOptionMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+																	networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SegmentNetwork{}
+																	networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+																	networkOption.NetworkChoice = networkChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+																			}
+
+																			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+																			}
+
+																			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																				networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalInsideNetwork{}
+																		networkChoiceInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+																if v, ok := networkOptionMapStrToI["site_local_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+																	networkChoiceTypeFound = true
+
+																	if v.(bool) {
+																		networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalNetwork{}
+																		networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
+																		networkOption.NetworkChoice = networkChoiceInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if w, ok := interfaceListMapStrToI["priority"]; ok && !isIntfNil(w) {
+														interfaceList[i].Priority = uint32(w.(int))
+													}
+
+													siteToSiteConnectivityInterfaceChoiceTypeFound := false
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_disabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceDisabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceDisabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+													if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_enabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
+
+														siteToSiteConnectivityInterfaceChoiceTypeFound = true
+
+														if v.(bool) {
+															siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_SiteToSiteConnectivityInterfaceEnabled{}
+															siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceEnabled = &ves_io_schema.Empty{}
+															interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := nodeListMapStrToI["public_ip"]; ok && !isIntfNil(w) {
+											nodeList[i].PublicIp = w.(string)
+										}
+
+										if w, ok := nodeListMapStrToI["type"]; ok && !isIntfNil(w) {
+											nodeList[i].Type = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("oci_k8s"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
+
+		providerChoiceTypeFound = true
+		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_OciK8S{}
+		providerChoiceInt.OciK8S = &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType{}
+		updateSpec.ProviderChoice = providerChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				antiAffinityChoiceTypeFound := false
+
+				if v, ok := cs["disable_anti_affinity"]; ok && !isIntfNil(v) && !antiAffinityChoiceTypeFound {
+
+					antiAffinityChoiceTypeFound = true
+
+					if v.(bool) {
+						antiAffinityChoiceInt := &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType_DisableAntiAffinity{}
+						antiAffinityChoiceInt.DisableAntiAffinity = &ves_io_schema.Empty{}
+						providerChoiceInt.OciK8S.AntiAffinityChoice = antiAffinityChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["enable_anti_affinity"]; ok && !isIntfNil(v) && !antiAffinityChoiceTypeFound {
+
+					antiAffinityChoiceTypeFound = true
+					antiAffinityChoiceInt := &ves_io_schema_views_securemesh_site_v2.KubernetesProviderType_EnableAntiAffinity{}
+					antiAffinityChoiceInt.EnableAntiAffinity = &ves_io_schema_views_securemesh_site_v2.PodAntiAffinityConfigType{}
+					providerChoiceInt.OciK8S.AntiAffinityChoice = antiAffinityChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								rules := make([]*ves_io_schema_views_securemesh_site_v2.PodAntiAffinityRule, len(sl))
+								antiAffinityChoiceInt.EnableAntiAffinity.Rules = rules
+								for i, set := range sl {
+									if set != nil {
+										rules[i] = &ves_io_schema_views_securemesh_site_v2.PodAntiAffinityRule{}
+										rulesMapStrToI := set.(map[string]interface{})
+
+										if w, ok := rulesMapStrToI["label_key"]; ok && !isIntfNil(w) {
+											rules[i].LabelKey = w.(string)
+										}
+
+										if w, ok := rulesMapStrToI["label_value"]; ok && !isIntfNil(w) {
+											rules[i].LabelValue = w.(string)
+										}
+
+										if w, ok := rulesMapStrToI["topology_keys"]; ok && !isIntfNil(w) {
+											ls := make([]string, len(w.([]interface{})))
+											for i, v := range w.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field topology_keys")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											rules[i].TopologyKeys = ls
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["deployment_size"]; ok && !isIntfNil(v) {
+
+					providerChoiceInt.OciK8S.DeploymentSize = ves_io_schema_views_securemesh_site_v2.KubernetesDeploymentSize(ves_io_schema_views_securemesh_site_v2.KubernetesDeploymentSize_value[v.(string)])
+
+				}
+
+				if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+
+					ms := map[string]string{}
+					for k, v := range v.(map[string]interface{}) {
+						ms[k] = v.(string)
+					}
+					providerChoiceInt.OciK8S.Labels = ms
+				}
+
+				if v, ok := cs["not_managed"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					notManaged := &ves_io_schema_views_securemesh_site_v2.NodeList{}
+					providerChoiceInt.OciK8S.NotManaged = notManaged
+					for _, set := range sl {
+						if set != nil {
+							notManagedMapStrToI := set.(map[string]interface{})
+
+							if v, ok := notManagedMapStrToI["node_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								nodeList := make([]*ves_io_schema_views_securemesh_site_v2.Node, len(sl))
+								notManaged.NodeList = nodeList
 								for i, set := range sl {
 									if set != nil {
 										nodeList[i] = &ves_io_schema_views_securemesh_site_v2.Node{}

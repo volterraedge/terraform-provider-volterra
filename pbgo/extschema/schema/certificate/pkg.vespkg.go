@@ -16,6 +16,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.certificate.SpecType"] = SpecTypeValidator()
 	vr["ves.io.schema.certificate.Object"] = ObjectValidator()
 	vr["ves.io.schema.certificate.StatusObject"] = StatusObjectValidator()
+	vr["ves.io.schema.certificate.StoreCertificateResultRequest"] = StoreCertificateResultRequestValidator()
+	vr["ves.io.schema.certificate.StoreCertificateResultResponse"] = StoreCertificateResultResponseValidator()
 	vr["ves.io.schema.certificate.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.certificate.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.certificate.DeleteRequest"] = DeleteRequestValidator()
@@ -29,9 +31,20 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.certificate.CertificateHealthStatusListRequest"] = CertificateHealthStatusListRequestValidator()
 	vr["ves.io.schema.certificate.CertificateHealthStatusListResponse"] = CertificateHealthStatusListResponseValidator()
 	vr["ves.io.schema.certificate.CertificateHealthStatusListResponseItem"] = CertificateHealthStatusListResponseItemValidator()
+	vr["ves.io.schema.certificate.RetryIssuanceRequest"] = RetryIssuanceRequestValidator()
+	vr["ves.io.schema.certificate.RetryIssuanceResponse"] = RetryIssuanceResponseValidator()
+	vr["ves.io.schema.certificate.RevokeCertificateRequest"] = RevokeCertificateRequestValidator()
+	vr["ves.io.schema.certificate.RevokeCertificateResponse"] = RevokeCertificateResponseValidator()
+	vr["ves.io.schema.certificate.AutoCertConfig"] = AutoCertConfigValidator()
+	vr["ves.io.schema.certificate.CertificateLifecycleStatus"] = CertificateLifecycleStatusValidator()
 	vr["ves.io.schema.certificate.CreateSpecType"] = CreateSpecTypeValidator()
+	vr["ves.io.schema.certificate.CustomIssuer"] = CustomIssuerValidator()
+	vr["ves.io.schema.certificate.DNS01ChallengeConfig"] = DNS01ChallengeConfigValidator()
+	vr["ves.io.schema.certificate.DNSInstruction"] = DNSInstructionValidator()
 	vr["ves.io.schema.certificate.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.certificate.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.certificate.HTTP01ChallengeConfig"] = HTTP01ChallengeConfigValidator()
+	vr["ves.io.schema.certificate.PreValidatedConfig"] = PreValidatedConfigValidator()
 	vr["ves.io.schema.certificate.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.certificate.VirtualHostAutoCert"] = VirtualHostAutoCertValidator()
 }
@@ -48,14 +61,35 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
+	mdr.RPCConfidentialRequestRegistry["ves.io.schema.certificate.CustomPrivateAPI.StoreCertificateResult"] = "ves.io.schema.certificate.StoreCertificateResultRequest"
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.certificate.API.Create"] = []string{
+		"spec.auto_cert.http_01",
 		"spec.private_key.blindfold_secret_info_internal",
 		"spec.private_key.secret_encoding_type",
 		"spec.private_key.vault_secret_info",
 		"spec.private_key.wingman_secret_info",
 	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.certificate.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.virtual_servers.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.certificate.API.Create"] = "ves.io.schema.certificate.CreateRequest"
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.certificate.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.virtual_servers.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.certificate.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.virtual_servers.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.certificate.API.Replace"] = []string{
+		"spec.auto_cert.http_01",
 		"spec.private_key.blindfold_secret_info_internal",
 		"spec.private_key.secret_encoding_type",
 		"spec.private_key.vault_secret_info",
@@ -82,6 +116,21 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
+	customCSR = mdr.PvtCustomServiceRegistry
+	func() {
+		// set swagger jsons for our and external schemas
+		customCSR.SwaggerRegistry["ves.io.schema.certificate.Object"] = CustomPrivateAPISwaggerJSON
+		customCSR.GrpcClientRegistry["ves.io.schema.certificate.CustomPrivateAPI"] = NewCustomPrivateAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.certificate.CustomPrivateAPI"] = NewCustomPrivateAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.certificate.CustomPrivateAPI"] = RegisterCustomPrivateAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.certificate.CustomPrivateAPI"] = RegisterGwCustomPrivateAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.certificate.CustomPrivateAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomPrivateAPIServer(svc)
+		}
+	}()
 	csr = mdr.PubCRUDServiceRegistry
 	func() {
 		// set swagger jsons for our and external schemas

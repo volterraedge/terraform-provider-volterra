@@ -169,10 +169,21 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 												},
 
 												"url": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:      schema.TypeString,
+													Required:  true,
+													Sensitive: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -339,10 +350,21 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 												},
 
 												"url": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:      schema.TypeString,
+													Required:  true,
+													Sensitive: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -514,10 +536,21 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 												},
 
 												"url": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:      schema.TypeString,
+													Required:  true,
+													Sensitive: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -711,10 +744,21 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 																		},
 
 																		"url": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:      schema.TypeString,
+																			Required:  true,
+																			Sensitive: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -876,10 +920,21 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 																		},
 
 																		"url": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:      schema.TypeString,
+																			Required:  true,
+																			Sensitive: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -1189,10 +1244,21 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 												},
 
 												"url": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:      schema.TypeString,
+													Required:  true,
+													Sensitive: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -1464,6 +1530,15 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 							}
 
+							if v, ok := apiKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								apiKey.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := apiKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -1666,6 +1741,15 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 									}
 								}
+
+							}
+
+							if v, ok := routingKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								routingKey.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -1877,6 +1961,15 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 									}
 								}
+
+							}
+
+							if v, ok := urlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								url.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -2125,6 +2218,15 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 													}
 
+													if v, ok := tokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														token.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := tokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -2321,6 +2423,15 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 															}
 														}
+
+													}
+
+													if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														password.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -2736,6 +2847,15 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 									}
 								}
+
+							}
+
+							if v, ok := urlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								url.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -3063,6 +3183,15 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 							}
 
+							if v, ok := apiKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								apiKey.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := apiKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -3265,6 +3394,15 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 									}
 								}
+
+							}
+
+							if v, ok := routingKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								routingKey.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -3476,6 +3614,15 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 									}
 								}
+
+							}
+
+							if v, ok := urlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								url.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -3724,6 +3871,15 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 													}
 
+													if v, ok := tokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														token.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := tokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -3920,6 +4076,15 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 															}
 														}
+
+													}
+
+													if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														password.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -4335,6 +4500,15 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 									}
 								}
+
+							}
+
+							if v, ok := urlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								url.SecretInfoOneof = secretInfoOneofInt
 
 							}
 

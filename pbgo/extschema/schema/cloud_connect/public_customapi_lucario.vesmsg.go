@@ -69,8 +69,32 @@ func (m *DiscoverVPCRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCredDRefInfo()
 }
+func (m *DiscoverVPCRequest) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCredDRefInfoForOverlay(generateHash)
+}
 
 func (m *DiscoverVPCRequest) GetCredDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCred()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_credentials.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_credentials.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cred",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *DiscoverVPCRequest) GetCredDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -215,6 +239,13 @@ func (m *DiscoverVPCResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveredVpcDRefInfo()
 }
+func (m *DiscoverVPCResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveredVpcDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *DiscoverVPCResponse) GetDiscoveredVpcDRefInfo() ([]db.DRefInfo, error) {
@@ -226,6 +257,26 @@ func (m *DiscoverVPCResponse) GetDiscoveredVpcDRefInfo() ([]db.DRefInfo, error) 
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDiscoveredVpc() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("discovered_vpc[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DiscoverVPCResponse) GetDiscoveredVpcDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDiscoveredVpc() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDiscoveredVpc() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDiscoveredVpc() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -321,8 +372,32 @@ func (m *DiscoveredVPCType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCredDRefInfo()
 }
+func (m *DiscoveredVPCType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCredDRefInfoForOverlay(generateHash)
+}
 
 func (m *DiscoveredVPCType) GetCredDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCred()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_credentials.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_credentials.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cred",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *DiscoveredVPCType) GetCredDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil
@@ -473,8 +548,32 @@ func (m *ReApplyVPCAttachmentRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCloudConnectDRefInfo()
 }
+func (m *ReApplyVPCAttachmentRequest) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudConnectDRefInfoForOverlay(generateHash)
+}
 
 func (m *ReApplyVPCAttachmentRequest) GetCloudConnectDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCloudConnect()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_connect.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_connect.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cloud_connect",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ReApplyVPCAttachmentRequest) GetCloudConnectDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCloudConnect()
 	if vref == nil {
 		return nil, nil

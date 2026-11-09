@@ -66,6 +66,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetFlowTypeDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetFlowTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -75,6 +82,22 @@ func (m *CreateSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetFlowType().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetFlowType().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "flow_type." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetFlowTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFlowType() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetFlowType().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetFlowType().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -200,6 +223,13 @@ func (m *FlowType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetFlowTypeChoiceDRefInfo()
 }
+func (m *FlowType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetFlowTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *FlowType) GetFlowTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -211,6 +241,29 @@ func (m *FlowType) GetFlowTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetSamlMessage().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSamlMessage().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "saml_message." + dri.DRField
+		}
+		return drInfos, err
+	case *FlowType_GeoMatch:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *FlowType) GetFlowTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFlowTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetFlowTypeChoice().(type) {
+	case *FlowType_SamlMessage:
+		drInfos, err := m.GetSamlMessage().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSamlMessage().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -361,6 +414,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetFlowTypeDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetFlowTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -370,6 +430,22 @@ func (m *GetSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetFlowType().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetFlowType().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "flow_type." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetFlowTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFlowType() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetFlowType().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetFlowType().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -495,6 +571,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetFlowTypeDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetFlowTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -504,6 +587,22 @@ func (m *GlobalSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetFlowType().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetFlowType().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "flow_type." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetFlowTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFlowType() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetFlowType().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetFlowType().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -629,6 +728,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetFlowTypeDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetFlowTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -638,6 +744,22 @@ func (m *ReplaceSpecType) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetFlowType().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetFlowType().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "flow_type." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetFlowTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFlowType() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetFlowType().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetFlowType().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

@@ -57,4 +57,4 @@ DC Cluster Group Mesh Type configuration. Choice of data plane, data plane and c
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured dc_cluster_group.
+-   `id` - This is the id of the configured dc_cluster_group.

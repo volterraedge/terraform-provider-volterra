@@ -69,6 +69,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDestinationDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDestinationDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
@@ -78,6 +85,22 @@ func (m *CreateSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetDestination().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDestination().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "destination." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetDestinationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDestination() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDestination().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDestination().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -592,6 +615,13 @@ func (m *Destination) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetVirtualHostDRefInfo()
 }
+func (m *Destination) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualHostDRefInfoForOverlay(generateHash)
+}
 
 func (m *Destination) GetVirtualHostDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetVirtualHost()
@@ -604,6 +634,34 @@ func (m *Destination) GetVirtualHostDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("Destination.virtual_host[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_host.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "virtual_host",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *Destination) GetVirtualHostDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetVirtualHost()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("Destination.virtual_host[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_host.Object",
 			RefdUID:    ref.Uid,
@@ -782,6 +840,13 @@ func (m *DoSMitigationRuleInfo) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetItemDRefInfo()
 }
+func (m *DoSMitigationRuleInfo) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetItemDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *DoSMitigationRuleInfo) GetItemDRefInfo() ([]db.DRefInfo, error) {
@@ -791,6 +856,22 @@ func (m *DoSMitigationRuleInfo) GetItemDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetItem().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetItem().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "item." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DoSMitigationRuleInfo) GetItemDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetItem() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetItem().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetItem().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -926,6 +1007,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDestinationDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDestinationDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
@@ -935,6 +1023,22 @@ func (m *GetSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetDestination().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDestination().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "destination." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetDestinationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDestination() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDestination().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDestination().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1449,6 +1553,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDestinationDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDestinationDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
@@ -1458,6 +1569,22 @@ func (m *GlobalSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetDestination().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDestination().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "destination." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetDestinationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDestination() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDestination().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDestination().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2037,6 +2164,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDestinationDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDestinationDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
@@ -2046,6 +2180,22 @@ func (m *ReplaceSpecType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetDestination().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDestination().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "destination." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetDestinationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDestination() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDestination().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDestination().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

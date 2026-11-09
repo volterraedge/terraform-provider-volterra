@@ -76,12 +76,6 @@ func (v *ValidateCipherConfig) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-	if fv, exists := v.FldValidators["cipher_group"]; exists {
-		vOpts := append(opts, db.WithValidateField("cipher_group"))
-		if err := fv(ctx, m.GetCipherGroup(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["ciphers"]; exists {
 		vOpts := append(opts, db.WithValidateField("ciphers"))
 		if err := fv(ctx, m.GetCiphers(), vOpts...); err != nil {

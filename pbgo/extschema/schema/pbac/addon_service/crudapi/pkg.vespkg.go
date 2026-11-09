@@ -26,6 +26,27 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.pbac.addon_service.crudapi.API.Create"] = []string{
+		"spec.gc_spec.entitlement_config.entitlement_features.quota_mapping.object_limits.operator",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.pbac.addon_service.crudapi.API.Create"] = []string{
+		"spec.gc_spec.entitlement_config.entitlement_features.quota_mapping.object_limits.operator",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.pbac.addon_service.crudapi.API.Get"] = []string{
+		"spec.gc_spec.entitlement_config.entitlement_features.quota_mapping.object_limits.operator",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.pbac.addon_service.crudapi.API.List"] = []string{
+		"items.#.spec.gc_spec.entitlement_config.entitlement_features.quota_mapping.object_limits.operator",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.pbac.addon_service.crudapi.API.ListStream"] = []string{
+		"items.#.spec.gc_spec.entitlement_config.entitlement_features.quota_mapping.object_limits.operator",
+	}
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.pbac.addon_service.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.entitlement_config.entitlement_features.quota_mapping.object_limits.operator",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.pbac.addon_service.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.entitlement_config.entitlement_features.quota_mapping.object_limits.operator",
+	}
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

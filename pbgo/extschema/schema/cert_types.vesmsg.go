@@ -189,6 +189,29 @@ func (m *CertificateParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CertificateParamsType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificatesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertificatesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCrlDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCrlDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetValidationParamsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetValidationParamsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *CertificateParamsType) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetCertificates()
@@ -201,6 +224,34 @@ func (m *CertificateParamsType) GetCertificatesDRefInfo() ([]db.DRefInfo, error)
 			return nil, fmt.Errorf("CertificateParamsType.certificates[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "certificate.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "certificates",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CertificateParamsType) GetCertificatesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCertificates()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CertificateParamsType.certificates[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "certificate.Object",
 			RefdUID:    ref.Uid,
@@ -256,6 +307,34 @@ func (m *CertificateParamsType) GetCrlDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CertificateParamsType) GetCrlDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCrl()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CertificateParamsType.crl[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "crl.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "crl",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetCrlDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *CertificateParamsType) GetCrlDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -284,6 +363,22 @@ func (m *CertificateParamsType) GetValidationParamsDRefInfo() ([]db.DRefInfo, er
 	drInfos, err := m.GetValidationParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetValidationParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "validation_params." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CertificateParamsType) GetValidationParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValidationParams() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetValidationParams().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetValidationParams().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -738,6 +833,24 @@ func (m *DownstreamTlsParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *DownstreamTlsParamsType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCommonParamsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCommonParamsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCrlDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCrlDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *DownstreamTlsParamsType) GetCommonParamsDRefInfo() ([]db.DRefInfo, error) {
@@ -747,6 +860,22 @@ func (m *DownstreamTlsParamsType) GetCommonParamsDRefInfo() ([]db.DRefInfo, erro
 	drInfos, err := m.GetCommonParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCommonParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "common_params." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DownstreamTlsParamsType) GetCommonParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCommonParams() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCommonParams().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCommonParams().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -766,6 +895,34 @@ func (m *DownstreamTlsParamsType) GetCrlDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("DownstreamTlsParamsType.crl[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "crl.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "crl",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *DownstreamTlsParamsType) GetCrlDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCrl()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("DownstreamTlsParamsType.crl[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "crl.Object",
 			RefdUID:    ref.Uid,
@@ -1104,6 +1261,13 @@ func (m *HostAccessInfoType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTlsConfigDRefInfo()
 }
+func (m *HostAccessInfoType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTlsConfigDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HostAccessInfoType) GetTlsConfigDRefInfo() ([]db.DRefInfo, error) {
@@ -1113,6 +1277,22 @@ func (m *HostAccessInfoType) GetTlsConfigDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetTlsConfig().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsConfig().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_config." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HostAccessInfoType) GetTlsConfigDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTlsConfig() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTlsConfig().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsConfig().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1414,6 +1594,13 @@ func (m *TlsParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValidationParamsDRefInfo()
 }
+func (m *TlsParamsType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValidationParamsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TlsParamsType) GetValidationParamsDRefInfo() ([]db.DRefInfo, error) {
@@ -1423,6 +1610,22 @@ func (m *TlsParamsType) GetValidationParamsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetValidationParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetValidationParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "validation_params." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TlsParamsType) GetValidationParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValidationParams() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetValidationParams().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetValidationParams().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1623,6 +1826,29 @@ func (m *UpstreamCertificateParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *UpstreamCertificateParamsType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificatesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertificatesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServerValidationChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServerValidationChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetValidationParamsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetValidationParamsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *UpstreamCertificateParamsType) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetCertificates()
@@ -1635,6 +1861,34 @@ func (m *UpstreamCertificateParamsType) GetCertificatesDRefInfo() ([]db.DRefInfo
 			return nil, fmt.Errorf("UpstreamCertificateParamsType.certificates[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "certificate.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "certificates",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *UpstreamCertificateParamsType) GetCertificatesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCertificates()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("UpstreamCertificateParamsType.certificates[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "certificate.Object",
 			RefdUID:    ref.Uid,
@@ -1692,6 +1946,31 @@ func (m *UpstreamCertificateParamsType) GetServerValidationChoiceDRefInfo() ([]d
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *UpstreamCertificateParamsType) GetServerValidationChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServerValidationChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServerValidationChoice().(type) {
+	case *UpstreamCertificateParamsType_SkipServerVerification:
+		return nil, nil
+	case *UpstreamCertificateParamsType_VolterraTrustedCa:
+		return nil, nil
+	case *UpstreamCertificateParamsType_TlsValidationParams:
+		drInfos, err := m.GetTlsValidationParams().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTlsValidationParams().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tls_validation_params." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *UpstreamCertificateParamsType) GetValidationParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetValidationParams() == nil {
@@ -1700,6 +1979,22 @@ func (m *UpstreamCertificateParamsType) GetValidationParamsDRefInfo() ([]db.DRef
 	drInfos, err := m.GetValidationParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetValidationParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "validation_params." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *UpstreamCertificateParamsType) GetValidationParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValidationParams() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetValidationParams().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetValidationParams().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1983,6 +2278,13 @@ func (m *UpstreamTlsParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTlsParamsChoiceDRefInfo()
 }
+func (m *UpstreamTlsParamsType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTlsParamsChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *UpstreamTlsParamsType) GetTlsParamsChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2004,6 +2306,37 @@ func (m *UpstreamTlsParamsType) GetTlsParamsChoiceDRefInfo() ([]db.DRefInfo, err
 		drInfos, err := m.GetCertParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCertParams().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cert_params." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *UpstreamTlsParamsType) GetTlsParamsChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTlsParamsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetTlsParamsChoice().(type) {
+	case *UpstreamTlsParamsType_CommonParams:
+		drInfos, err := m.GetCommonParams().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCommonParams().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "common_params." + dri.DRField
+		}
+		return drInfos, err
+	case *UpstreamTlsParamsType_CertParams:
+		drInfos, err := m.GetCertParams().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCertParams().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

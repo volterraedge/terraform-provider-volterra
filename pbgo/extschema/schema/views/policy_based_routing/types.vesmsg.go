@@ -82,6 +82,24 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetForwardingClassListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardingClassListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *CreateSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetForwardingClassList()
@@ -96,6 +114,30 @@ func (m *CreateSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error)
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("forwarding_class.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "forwarding_class.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forwarding_class_list",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetForwardingClassListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetForwardingClassList()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("CreateSpecType.forwarding_class_list[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("forwarding_class.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "forwarding_class.Object",
 			RefdTenant: vref.Tenant,
@@ -156,6 +198,37 @@ func (m *CreateSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetForwardProxyPbr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetForwardProxyPbr().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "forward_proxy_pbr." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPolicyChoice().(type) {
+	case *CreateSpecType_NetworkPbr:
+		drInfos, err := m.GetNetworkPbr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNetworkPbr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "network_pbr." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_ForwardProxyPbr:
+		drInfos, err := m.GetForwardProxyPbr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetForwardProxyPbr().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -380,6 +453,24 @@ func (m *ForwardProxyPBRRuleType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ForwardProxyPBRRuleType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetForwardingClassListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardingClassListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSourceChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSourceChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ForwardProxyPBRRuleType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetForwardingClassList()
@@ -394,6 +485,30 @@ func (m *ForwardProxyPBRRuleType) GetForwardingClassListDRefInfo() ([]db.DRefInf
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("forwarding_class.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "forwarding_class.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forwarding_class_list",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ForwardProxyPBRRuleType) GetForwardingClassListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetForwardingClassList()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ForwardProxyPBRRuleType.forwarding_class_list[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("forwarding_class.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "forwarding_class.Object",
 			RefdTenant: vref.Tenant,
@@ -435,6 +550,50 @@ func (m *ForwardProxyPBRRuleType) GetForwardingClassListDBEntries(ctx context.Co
 }
 
 func (m *ForwardProxyPBRRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetSourceChoice().(type) {
+	case *ForwardProxyPBRRuleType_AllSources:
+		return nil, nil
+	case *ForwardProxyPBRRuleType_PrefixList:
+		return nil, nil
+	case *ForwardProxyPBRRuleType_Interface:
+		vref := m.GetInterface()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_interface.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "interface",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *ForwardProxyPBRRuleType_LabelSelector:
+		return nil, nil
+	case *ForwardProxyPBRRuleType_IpPrefixSet:
+		vref := m.GetIpPrefixSet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("ip_prefix_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "ip_prefix_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ip_prefix_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ForwardProxyPBRRuleType) GetSourceChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetSourceChoice().(type) {
 	case *ForwardProxyPBRRuleType_AllSources:
 		return nil, nil
@@ -881,6 +1040,13 @@ func (m *ForwardProxyPBRType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetForwardProxyPbrRulesDRefInfo()
 }
+func (m *ForwardProxyPBRType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetForwardProxyPbrRulesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ForwardProxyPBRType) GetForwardProxyPbrRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -892,6 +1058,26 @@ func (m *ForwardProxyPBRType) GetForwardProxyPbrRulesDRefInfo() ([]db.DRefInfo, 
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetForwardProxyPbrRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("forward_proxy_pbr_rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ForwardProxyPBRType) GetForwardProxyPbrRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyPbrRules() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetForwardProxyPbrRules() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetForwardProxyPbrRules() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1060,6 +1246,24 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetForwardingClassListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardingClassListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetForwardingClassList()
@@ -1074,6 +1278,30 @@ func (m *GetSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("forwarding_class.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "forwarding_class.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forwarding_class_list",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetForwardingClassListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetForwardingClassList()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.forwarding_class_list[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("forwarding_class.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "forwarding_class.Object",
 			RefdTenant: vref.Tenant,
@@ -1134,6 +1362,37 @@ func (m *GetSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetForwardProxyPbr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetForwardProxyPbr().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "forward_proxy_pbr." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPolicyChoice().(type) {
+	case *GetSpecType_NetworkPbr:
+		drInfos, err := m.GetNetworkPbr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNetworkPbr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "network_pbr." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_ForwardProxyPbr:
+		drInfos, err := m.GetForwardProxyPbr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetForwardProxyPbr().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1363,6 +1622,29 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetForwardingClassListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardingClassListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetForwardingClassList()
@@ -1377,6 +1659,30 @@ func (m *GlobalSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error)
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("forwarding_class.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "forwarding_class.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forwarding_class_list",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetForwardingClassListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetForwardingClassList()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.forwarding_class_list[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("forwarding_class.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "forwarding_class.Object",
 			RefdTenant: vref.Tenant,
@@ -1448,7 +1754,55 @@ func (m *GlobalSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPolicyChoice().(type) {
+	case *GlobalSpecType_NetworkPbr:
+		drInfos, err := m.GetNetworkPbr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNetworkPbr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "network_pbr." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_ForwardProxyPbr:
+		drInfos, err := m.GetForwardProxyPbr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetForwardProxyPbr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "forward_proxy_pbr." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1713,6 +2067,24 @@ func (m *NetworkPBRRuleType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *NetworkPBRRuleType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDestinationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDestinationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardingClassListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardingClassListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *NetworkPBRRuleType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
@@ -1739,6 +2111,31 @@ func (m *NetworkPBRRuleType) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *NetworkPBRRuleType) GetDestinationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDestination() == nil {
+		return nil, nil
+	}
+	switch m.GetDestination().(type) {
+	case *NetworkPBRRuleType_Any:
+		return nil, nil
+	case *NetworkPBRRuleType_PrefixList:
+		return nil, nil
+	case *NetworkPBRRuleType_IpPrefixSet:
+		drInfos, err := m.GetIpPrefixSet().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ip_prefix_set." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *NetworkPBRRuleType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetForwardingClassList()
 	if len(vrefs) == 0 {
@@ -1752,6 +2149,30 @@ func (m *NetworkPBRRuleType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, er
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("forwarding_class.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "forwarding_class.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forwarding_class_list",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *NetworkPBRRuleType) GetForwardingClassListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetForwardingClassList()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("NetworkPBRRuleType.forwarding_class_list[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("forwarding_class.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "forwarding_class.Object",
 			RefdTenant: vref.Tenant,
@@ -2135,6 +2556,24 @@ func (m *NetworkPBRType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *NetworkPBRType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetNetworkPbrRulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPbrRulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSourceChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSourceChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *NetworkPBRType) GetNetworkPbrRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -2156,7 +2595,55 @@ func (m *NetworkPBRType) GetNetworkPbrRulesDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *NetworkPBRType) GetNetworkPbrRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPbrRules() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetNetworkPbrRules() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNetworkPbrRules() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("network_pbr_rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 func (m *NetworkPBRType) GetSourceChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetSourceChoice().(type) {
+	case *NetworkPBRType_Any:
+		return nil, nil
+	case *NetworkPBRType_PrefixList:
+		return nil, nil
+	case *NetworkPBRType_Interface:
+		vref := m.GetInterface()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_interface.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "interface",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *NetworkPBRType_LabelSelector:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *NetworkPBRType) GetSourceChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetSourceChoice().(type) {
 	case *NetworkPBRType_Any:
 		return nil, nil
@@ -2439,6 +2926,24 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetForwardingClassListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardingClassListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ReplaceSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetForwardingClassList()
@@ -2453,6 +2958,30 @@ func (m *ReplaceSpecType) GetForwardingClassListDRefInfo() ([]db.DRefInfo, error
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("forwarding_class.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "forwarding_class.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forwarding_class_list",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetForwardingClassListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetForwardingClassList()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.forwarding_class_list[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("forwarding_class.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "forwarding_class.Object",
 			RefdTenant: vref.Tenant,
@@ -2513,6 +3042,37 @@ func (m *ReplaceSpecType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetForwardProxyPbr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetForwardProxyPbr().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "forward_proxy_pbr." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPolicyChoice().(type) {
+	case *ReplaceSpecType_NetworkPbr:
+		drInfos, err := m.GetNetworkPbr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNetworkPbr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "network_pbr." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_ForwardProxyPbr:
+		drInfos, err := m.GetForwardProxyPbr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetForwardProxyPbr().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

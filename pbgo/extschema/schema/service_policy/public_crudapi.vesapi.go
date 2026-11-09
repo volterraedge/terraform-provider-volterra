@@ -4885,12 +4885,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -6924,6 +6924,11 @@ var APISwaggerJSON string = `{
                     "title": "client selector",
                     "$ref": "#/definitions/schemaLabelSelectorType"
                 },
+                "client_tenant": {
+                    "type": "string",
+                    "description": "x-displayName: \"Client Tenant\"\nx-example: \"tenant-name\"\nThe predicate evaluates to true if the client's tenant matches the specified value.",
+                    "title": "client tenant"
+                },
                 "content_rewrite_action": {
                     "description": "x-displayName: \"Shape Content Rewrite Action Type\"\nRewrite HTML response action to insert HTML content such as Javascript \u003cscript\u003e tags into the HTML document",
                     "title": "Shape Content Rewrite Action",
@@ -7026,6 +7031,11 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/policyJWTClaimMatcherType"
                     }
+                },
+                "kms_operation": {
+                    "description": "x-displayName: \"KMS Operation\"\nA list of exact values for the expected KMS operation in the request.\nThe predicate evaluates to true if the KMS operation matches any of the exact values in the matcher.",
+                    "title": "kms operation",
+                    "$ref": "#/definitions/policyStringMatcherType"
                 },
                 "label_matcher": {
                     "description": "x-displayName: \"Label Matcher\"\nx-example: \"['environment', 'location', 'deployment']\"\nA list of label keys that identify the label values that need to be the same for the client and server. Note that the actual label values are not specified\nhere, just the label keys. This predicate facilitates reuse of rules and policies across multiple dimensions such as deployment, environment, and location.\nThe predicate evaluates to true if the values of the client and server labels for all the keys specified in the label matcher are equal. The values of any\nother labels do not matter.",

@@ -195,6 +195,13 @@ func (m *ListPolicyResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetItemsDRefInfo()
 }
+func (m *ListPolicyResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetItemsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ListPolicyResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
@@ -206,6 +213,26 @@ func (m *ListPolicyResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetItems() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("items[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ListPolicyResponse) GetItemsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetItems() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetItems() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetItems() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -310,6 +337,13 @@ func (m *ListPolicyResponseItem) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetGetSpecDRefInfo()
 }
+func (m *ListPolicyResponseItem) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGetSpecDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ListPolicyResponseItem) GetGetSpecDRefInfo() ([]db.DRefInfo, error) {
@@ -319,6 +353,22 @@ func (m *ListPolicyResponseItem) GetGetSpecDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetGetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "get_spec." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ListPolicyResponseItem) GetGetSpecDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGetSpec() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetGetSpec().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetGetSpec().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

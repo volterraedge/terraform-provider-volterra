@@ -26,23 +26,12 @@ resource "volterra_network_firewall" "example" {
 
   // One of the arguments from this list "active_forward_proxy_policies disable_forward_proxy_policy forward_proxy_policy_set" must be set
 
-  active_forward_proxy_policies {
-    forward_proxy_policies {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  disable_forward_proxy_policy = true
 
   // One of the arguments from this list "active_enhanced_firewall_policies active_network_policies disable_network_policy network_policy_set" must be set
 
-  network_policy_set {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  disable_network_policy = true
 }
-
 ```
 
 Argument Reference

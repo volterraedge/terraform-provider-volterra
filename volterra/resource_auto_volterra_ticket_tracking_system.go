@@ -83,8 +83,9 @@ func resourceVolterraTicketTrackingSystem() *schema.Resource {
 									},
 
 									"api_token": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:      schema.TypeString,
+										Required:  true,
+										Sensitive: true,
 									},
 
 									"encrypted_api_token": {
@@ -92,6 +93,7 @@ func resourceVolterraTicketTrackingSystem() *schema.Resource {
 										Type:       schema.TypeList,
 										MaxItems:   1,
 										Optional:   true,
+										Sensitive:  true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -178,11 +180,23 @@ func resourceVolterraTicketTrackingSystem() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:       schema.TypeString,
 																Required:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -462,6 +476,15 @@ func resourceVolterraTicketTrackingSystemCreate(d *schema.ResourceData, meta int
 
 												}
 											}
+
+										}
+
+										if v, ok := encryptedApiTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											encryptedApiToken.SecretInfoOneof = secretInfoOneofInt
 
 										}
 
@@ -800,6 +823,15 @@ func resourceVolterraTicketTrackingSystemUpdate(d *schema.ResourceData, meta int
 
 												}
 											}
+
+										}
+
+										if v, ok := encryptedApiTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											encryptedApiToken.SecretInfoOneof = secretInfoOneofInt
 
 										}
 

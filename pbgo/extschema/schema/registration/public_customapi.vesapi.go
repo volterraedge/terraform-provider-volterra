@@ -3826,7 +3826,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "registrationProvider": {
             "type": "string",
-            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.\nRSeries Device\nOCI Cloud Instance\nNutanix instance\nOpenStack Instance\nEquinix Instance\nOpenShift Virtualization Instance\nCE On Kubernetes Instance",
+            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.\nRSeries Device\nOCI Cloud Instance\nNutanix instance\nOpenStack Instance\nEquinix Instance\nOpenShift Virtualization Instance\nCE On Kubernetes Instance\nHyper-V Instance\nKubernetes cluster in GCP\nKubernetes cluster in AWS\nKubernetes cluster in Azure\nKubernetes cluster in OpenShift",
             "title": "Infrastructure provider",
             "enum": [
                 "UNKNOWN",
@@ -3854,7 +3854,12 @@ var CustomAPISwaggerJSON string = `{
                 "OPENSTACK",
                 "EQUINIX",
                 "OPENSHIFT_VIRTUALIZATION",
-                "KUBERNETES"
+                "KUBERNETES",
+                "HYPERV",
+                "GKE_K8S",
+                "EKS_K8S",
+                "AKS_K8S",
+                "OCI_K8S"
             ],
             "default": "UNKNOWN",
             "x-displayname": "Infrastructure Provider",

@@ -144,6 +144,13 @@ func (m *CredentialsResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCredDRefInfo()
 }
+func (m *CredentialsResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCredDRefInfoForOverlay(generateHash)
+}
 
 func (m *CredentialsResponse) GetCredDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetCred()
@@ -158,6 +165,30 @@ func (m *CredentialsResponse) GetCredDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("cloud_credentials.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cloud_credentials.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "cred",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CredentialsResponse) GetCredDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetCred()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("CredentialsResponse.cred[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_credentials.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "cloud_credentials.Object",
 			RefdTenant: vref.Tenant,

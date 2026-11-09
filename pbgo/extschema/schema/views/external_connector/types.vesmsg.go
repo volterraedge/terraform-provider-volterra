@@ -137,6 +137,13 @@ func (m *ConnectionTypeGRE) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetGreParametersDRefInfo()
 }
+func (m *ConnectionTypeGRE) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGreParametersDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ConnectionTypeGRE) GetGreParametersDRefInfo() ([]db.DRefInfo, error) {
@@ -146,6 +153,22 @@ func (m *ConnectionTypeGRE) GetGreParametersDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetGreParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGreParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "gre_parameters." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ConnectionTypeGRE) GetGreParametersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGreParameters() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetGreParameters().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetGreParameters().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -260,6 +283,24 @@ func (m *ConnectionTypeIPSec) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ConnectionTypeIPSec) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIkeParametersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIkeParametersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIpsecTunnelParametersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIpsecTunnelParametersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ConnectionTypeIPSec) GetIkeParametersDRefInfo() ([]db.DRefInfo, error) {
@@ -277,6 +318,22 @@ func (m *ConnectionTypeIPSec) GetIkeParametersDRefInfo() ([]db.DRefInfo, error) 
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ConnectionTypeIPSec) GetIkeParametersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIkeParameters() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetIkeParameters().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIkeParameters().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ike_parameters." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *ConnectionTypeIPSec) GetIpsecTunnelParametersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetIpsecTunnelParameters() == nil {
@@ -285,6 +342,22 @@ func (m *ConnectionTypeIPSec) GetIpsecTunnelParametersDRefInfo() ([]db.DRefInfo,
 	drInfos, err := m.GetIpsecTunnelParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetIpsecTunnelParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ipsec_tunnel_parameters." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ConnectionTypeIPSec) GetIpsecTunnelParametersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIpsecTunnelParameters() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetIpsecTunnelParameters().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIpsecTunnelParameters().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -468,8 +541,43 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCeSiteReferenceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCeSiteReferenceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetConnectionTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetConnectionTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *CreateSpecType) GetCeSiteReferenceDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCeSiteReference()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "ce_site_reference",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *CreateSpecType) GetCeSiteReferenceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCeSiteReference()
 	if vref == nil {
 		return nil, nil
@@ -534,6 +642,39 @@ func (m *CreateSpecType) GetConnectionTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetGre().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGre().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gre." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_DirectConnection:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetConnectionTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectionType() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectionType().(type) {
+	case *CreateSpecType_Ipsec:
+		drInfos, err := m.GetIpsec().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpsec().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipsec." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_Gre:
+		drInfos, err := m.GetGre().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGre().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -831,6 +972,13 @@ func (m *GRETunnelParameters) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTunnelSourceVnDRefInfo()
 }
+func (m *GRETunnelParameters) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTunnelSourceVnDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GRETunnelParameters) GetTunnelSourceVnDRefInfo() ([]db.DRefInfo, error) {
@@ -846,6 +994,31 @@ func (m *GRETunnelParameters) GetTunnelSourceVnDRefInfo() ([]db.DRefInfo, error)
 		drInfos, err := m.GetSegment().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSegment().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "segment." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GRETunnelParameters) GetTunnelSourceVnDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTunnelSourceVn() == nil {
+		return nil, nil
+	}
+	switch m.GetTunnelSourceVn().(type) {
+	case *GRETunnelParameters_SiteLocalNetwork:
+		return nil, nil
+	case *GRETunnelParameters_SiteLocalInsideNetwork:
+		return nil, nil
+	case *GRETunnelParameters_Segment:
+		drInfos, err := m.GetSegment().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegment().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1099,8 +1272,43 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCeSiteReferenceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCeSiteReferenceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetConnectionTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetConnectionTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetCeSiteReferenceDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCeSiteReference()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "ce_site_reference",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GetSpecType) GetCeSiteReferenceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCeSiteReference()
 	if vref == nil {
 		return nil, nil
@@ -1165,6 +1373,39 @@ func (m *GetSpecType) GetConnectionTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetGre().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGre().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gre." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_DirectConnection:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetConnectionTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectionType() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectionType().(type) {
+	case *GetSpecType_Ipsec:
+		drInfos, err := m.GetIpsec().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpsec().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipsec." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_Gre:
+		drInfos, err := m.GetGre().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGre().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1389,8 +1630,48 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCeSiteReferenceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCeSiteReferenceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetConnectionTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetConnectionTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetCeSiteReferenceDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCeSiteReference()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "ce_site_reference",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetCeSiteReferenceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCeSiteReference()
 	if vref == nil {
 		return nil, nil
@@ -1468,7 +1749,57 @@ func (m *GlobalSpecType) GetConnectionTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetConnectionTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectionType() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectionType().(type) {
+	case *GlobalSpecType_Ipsec:
+		drInfos, err := m.GetIpsec().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpsec().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipsec." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_Gre:
+		drInfos, err := m.GetGre().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGre().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gre." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_DirectConnection:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1713,8 +2044,43 @@ func (m *IkeParameters) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *IkeParameters) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIkePhase1ProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIkePhase1ProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIkePhase2ProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIkePhase2ProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *IkeParameters) GetIkePhase1ProfileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetIkePhase1Profile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("ike_phase1_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "ike_phase1_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "ike_phase1_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *IkeParameters) GetIkePhase1ProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetIkePhase1Profile()
 	if vref == nil {
 		return nil, nil
@@ -1760,6 +2126,23 @@ func (m *IkeParameters) GetIkePhase1ProfileDBEntries(ctx context.Context, d db.I
 }
 
 func (m *IkeParameters) GetIkePhase2ProfileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetIkePhase2Profile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("ike_phase2_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "ike_phase2_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "ike_phase2_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *IkeParameters) GetIkePhase2ProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetIkePhase2Profile()
 	if vref == nil {
 		return nil, nil
@@ -2131,8 +2514,43 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCeSiteReferenceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCeSiteReferenceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetConnectionTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetConnectionTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ReplaceSpecType) GetCeSiteReferenceDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCeSiteReference()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "ce_site_reference",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ReplaceSpecType) GetCeSiteReferenceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCeSiteReference()
 	if vref == nil {
 		return nil, nil
@@ -2197,6 +2615,39 @@ func (m *ReplaceSpecType) GetConnectionTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetGre().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGre().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gre." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_DirectConnection:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetConnectionTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectionType() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectionType().(type) {
+	case *ReplaceSpecType_Ipsec:
+		drInfos, err := m.GetIpsec().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpsec().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipsec." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_Gre:
+		drInfos, err := m.GetGre().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGre().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2596,6 +3047,13 @@ func (m *TunnelParameters) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTunnelSourceVnDRefInfo()
 }
+func (m *TunnelParameters) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTunnelSourceVnDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TunnelParameters) GetTunnelSourceVnDRefInfo() ([]db.DRefInfo, error) {
@@ -2611,6 +3069,31 @@ func (m *TunnelParameters) GetTunnelSourceVnDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetSegment().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSegment().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "segment." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TunnelParameters) GetTunnelSourceVnDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTunnelSourceVn() == nil {
+		return nil, nil
+	}
+	switch m.GetTunnelSourceVn().(type) {
+	case *TunnelParameters_SiteLocalNetwork:
+		return nil, nil
+	case *TunnelParameters_SiteLocalInsideNetwork:
+		return nil, nil
+	case *TunnelParameters_Segment:
+		drInfos, err := m.GetSegment().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegment().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

@@ -540,8 +540,32 @@ func (m *GetSuggestedWAFExclusionRuleRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetWafExclusionPolicyDRefInfo()
 }
+func (m *GetSuggestedWAFExclusionRuleRsp) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWafExclusionPolicyDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetSuggestedWAFExclusionRuleRsp) GetWafExclusionPolicyDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetWafExclusionPolicy()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("waf_exclusion_policy.Object")
+	dri := db.DRefInfo{
+		RefdType:   "waf_exclusion_policy.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "waf_exclusion_policy",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GetSuggestedWAFExclusionRuleRsp) GetWafExclusionPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetWafExclusionPolicy()
 	if vref == nil {
 		return nil, nil

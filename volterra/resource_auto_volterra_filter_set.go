@@ -79,6 +79,22 @@ func resourceVolterraFilterSet() *schema.Resource {
 							Required: true,
 						},
 
+						"advanced_filter_expression_field": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"expression": {
+										Type:     schema.TypeString,
+										Required: true,
+									},
+								},
+							},
+						},
+
 						"date_field": {
 
 							Type:     schema.TypeList,
@@ -258,6 +274,29 @@ func resourceVolterraFilterSetCreate(d *schema.ResourceData, meta interface{}) e
 				}
 
 				fieldValueTypeFound := false
+
+				if v, ok := filterFieldsMapStrToI["advanced_filter_expression_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
+
+					fieldValueTypeFound = true
+					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_AdvancedFilterExpressionField{}
+					fieldValueInt.AdvancedFilterExpressionField = &ves_io_schema_filter_set.AdvancedFilterExpressionField{}
+					filterFields[i].FieldValue = fieldValueInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["expression"]; ok && !isIntfNil(v) {
+
+								fieldValueInt.AdvancedFilterExpressionField.Expression = v.(string)
+
+							}
+
+						}
+					}
+
+				}
 
 				if v, ok := filterFieldsMapStrToI["date_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
 
@@ -536,6 +575,29 @@ func resourceVolterraFilterSetUpdate(d *schema.ResourceData, meta interface{}) e
 				}
 
 				fieldValueTypeFound := false
+
+				if v, ok := filterFieldsMapStrToI["advanced_filter_expression_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
+
+					fieldValueTypeFound = true
+					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_AdvancedFilterExpressionField{}
+					fieldValueInt.AdvancedFilterExpressionField = &ves_io_schema_filter_set.AdvancedFilterExpressionField{}
+					filterFields[i].FieldValue = fieldValueInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["expression"]; ok && !isIntfNil(v) {
+
+								fieldValueInt.AdvancedFilterExpressionField.Expression = v.(string)
+
+							}
+
+						}
+					}
+
+				}
 
 				if v, ok := filterFieldsMapStrToI["date_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
 

@@ -144,6 +144,7 @@ func (c *UamKubeConfigAPIRestClient) doRPCCreateGlobalKubeConfig(ctx context.Con
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("expiration_days", fmt.Sprintf("%v", req.ExpirationDays))
 		q.Add("expiration_timestamp", fmt.Sprintf("%v", req.ExpirationTimestamp))
 		q.Add("site", fmt.Sprintf("%v", req.Site))
 
@@ -893,6 +894,14 @@ var UamKubeConfigAPISwaggerJSON string = `{
             "x-displayname": "Create Kube Config Request",
             "x-ves-proto-message": "ves.io.schema.site.CreateGlobalKubeConfigReq",
             "properties": {
+                "expiration_days": {
+                    "type": "integer",
+                    "description": " The number of days until the generated kubeconfig certificate expires.\n\nExample: - \"30\"-",
+                    "title": "Expiry in days",
+                    "format": "int64",
+                    "x-displayname": "Expiry in days",
+                    "x-ves-example": "30"
+                },
                 "expiration_timestamp": {
                     "type": "string",
                     "description": " Timestamp of kubeconfig's certificate expiry.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.timestamp.gt_now: true\n  ves.io.schema.rules.timestamp.within.seconds: 31536000\n",

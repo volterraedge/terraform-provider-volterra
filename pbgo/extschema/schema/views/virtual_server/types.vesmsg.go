@@ -80,8 +80,50 @@ func (m *ClonePoolType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ClonePoolType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetClonePoolClientChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClonePoolClientChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetClonePoolServerChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClonePoolServerChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ClonePoolType) GetClonePoolClientChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetClonePoolClientChoice().(type) {
+	case *ClonePoolType_PoolClientNone:
+		return nil, nil
+	case *ClonePoolType_PoolClient:
+		vref := m.GetPoolClient()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("vs_pool.Object")
+		dri := db.DRefInfo{
+			RefdType:   "vs_pool.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "pool_client",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ClonePoolType) GetClonePoolClientChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetClonePoolClientChoice().(type) {
 	case *ClonePoolType_PoolClientNone:
 		return nil, nil
@@ -140,6 +182,30 @@ func (m *ClonePoolType) GetClonePoolClientChoiceDBEntries(ctx context.Context, d
 }
 
 func (m *ClonePoolType) GetClonePoolServerChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetClonePoolServerChoice().(type) {
+	case *ClonePoolType_PoolServerNone:
+		return nil, nil
+	case *ClonePoolType_PoolServer:
+		vref := m.GetPoolServer()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("vs_pool.Object")
+		dri := db.DRefInfo{
+			RefdType:   "vs_pool.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "pool_server",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ClonePoolType) GetClonePoolServerChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetClonePoolServerChoice().(type) {
 	case *ClonePoolType_PoolServerNone:
 		return nil, nil
@@ -463,43 +529,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetClonePoolOptionsDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetClonePoolOptionsDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetDefaultPersistenceProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetDefaultPersistenceProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
 	if fdrInfos, err := m.GetDefaultPoolChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDefaultPoolChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetFallbackPersistenceProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetFallbackPersistenceProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
 	if fdrInfos, err := m.GetIrulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIrulesDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetLastHopPoolChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetLastHopPoolChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetRequestLoggingProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetRequestLoggingProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetStatisticsProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetStatisticsProfileChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -520,8 +556,63 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAccessProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAccessProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDefaultPoolChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultPoolChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIrulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIrulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTrafficPoliciesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTrafficPoliciesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualAddressesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualAddressesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualServerTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServerTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *CreateSpecType) GetAccessProfileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAccessProfile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("access_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "access_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "access_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *CreateSpecType) GetAccessProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetAccessProfile()
 	if vref == nil {
 		return nil, nil
@@ -566,39 +657,23 @@ func (m *CreateSpecType) GetAccessProfileDBEntries(ctx context.Context, d db.Int
 	return entries, nil
 }
 
-// GetDRefInfo for the field's type
-func (m *CreateSpecType) GetClonePoolOptionsDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetClonePoolOptions() == nil {
+func (m *CreateSpecType) GetDefaultPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDefaultPoolChoice().(type) {
+	case *CreateSpecType_DefaultPoolNone:
 		return nil, nil
-	}
-	drInfos, err := m.GetClonePoolOptions().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetClonePoolOptions().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "clone_pool_options." + dri.DRField
-	}
-	return drInfos, err
-}
-
-func (m *CreateSpecType) GetDefaultPersistenceProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetDefaultPersistenceProfileChoice().(type) {
-	case *CreateSpecType_DefaultPersistenceProfileNone:
-		return nil, nil
-	case *CreateSpecType_DefaultPersistenceProfile:
-		vref := m.GetDefaultPersistenceProfile()
+	case *CreateSpecType_DefaultPool:
+		vref := m.GetDefaultPool()
 		if vref == nil {
 			return nil, nil
 		}
 		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("persistence_profile.Object")
+		vdRef.SetKind("vs_pool.Object")
 		dri := db.DRefInfo{
-			RefdType:   "persistence_profile.Object",
+			RefdType:   "vs_pool.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
 			RefdName:   vref.Name,
-			DRField:    "default_persistence_profile",
+			DRField:    "default_pool",
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
@@ -606,41 +681,7 @@ func (m *CreateSpecType) GetDefaultPersistenceProfileChoiceDRefInfo() ([]db.DRef
 		return nil, nil
 	}
 }
-
-// GetDefaultPersistenceProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *CreateSpecType) GetDefaultPersistenceProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetDefaultPersistenceProfileChoice().(type) {
-	case *CreateSpecType_DefaultPersistenceProfileNone:
-	case *CreateSpecType_DefaultPersistenceProfile:
-		refdType, err := d.TypeForEntryKind("", "", "persistence_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: persistence_profile")
-		}
-		vref := m.GetDefaultPersistenceProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "persistence_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *CreateSpecType) GetDefaultPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
+func (m *CreateSpecType) GetDefaultPoolChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDefaultPoolChoice().(type) {
 	case *CreateSpecType_DefaultPoolNone:
 		return nil, nil
@@ -698,64 +739,6 @@ func (m *CreateSpecType) GetDefaultPoolChoiceDBEntries(ctx context.Context, d db
 	return entries, nil
 }
 
-func (m *CreateSpecType) GetFallbackPersistenceProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetFallbackPersistenceProfileChoice().(type) {
-	case *CreateSpecType_FallbackPersistenceProfileNone:
-		return nil, nil
-	case *CreateSpecType_FallbackPersistenceProfile:
-		vref := m.GetFallbackPersistenceProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("persistence_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "persistence_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "fallback_persistence_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetFallbackPersistenceProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *CreateSpecType) GetFallbackPersistenceProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetFallbackPersistenceProfileChoice().(type) {
-	case *CreateSpecType_FallbackPersistenceProfileNone:
-	case *CreateSpecType_FallbackPersistenceProfile:
-		refdType, err := d.TypeForEntryKind("", "", "persistence_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: persistence_profile")
-		}
-		vref := m.GetFallbackPersistenceProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "persistence_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
 func (m *CreateSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetIrules()
 	if len(refs) == 0 {
@@ -767,6 +750,34 @@ func (m *CreateSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("CreateSpecType.irules[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "irule.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "irules",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetIrulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIrules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.irules[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "irule.Object",
 			RefdUID:    ref.Uid,
@@ -799,180 +810,6 @@ func (m *CreateSpecType) GetIrulesDBEntries(ctx context.Context, d db.Interface)
 	return entries, nil
 }
 
-func (m *CreateSpecType) GetLastHopPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetLastHopPoolChoice().(type) {
-	case *CreateSpecType_LastHopPoolNone:
-		return nil, nil
-	case *CreateSpecType_LastHopPool:
-		vref := m.GetLastHopPool()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("vs_pool.Object")
-		dri := db.DRefInfo{
-			RefdType:   "vs_pool.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "last_hop_pool",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetLastHopPoolChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *CreateSpecType) GetLastHopPoolChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetLastHopPoolChoice().(type) {
-	case *CreateSpecType_LastHopPoolNone:
-	case *CreateSpecType_LastHopPool:
-		refdType, err := d.TypeForEntryKind("", "", "vs_pool.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: vs_pool")
-		}
-		vref := m.GetLastHopPool()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "vs_pool.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *CreateSpecType) GetRequestLoggingProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetRequestLoggingProfileChoice().(type) {
-	case *CreateSpecType_RequestLoggingProfileNone:
-		return nil, nil
-	case *CreateSpecType_RequestLoggingProfile:
-		vref := m.GetRequestLoggingProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("request_logging_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "request_logging_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "request_logging_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetRequestLoggingProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *CreateSpecType) GetRequestLoggingProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetRequestLoggingProfileChoice().(type) {
-	case *CreateSpecType_RequestLoggingProfileNone:
-	case *CreateSpecType_RequestLoggingProfile:
-		refdType, err := d.TypeForEntryKind("", "", "request_logging_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: request_logging_profile")
-		}
-		vref := m.GetRequestLoggingProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "request_logging_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *CreateSpecType) GetStatisticsProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetStatisticsProfileChoice().(type) {
-	case *CreateSpecType_StatisticsProfileNone:
-		return nil, nil
-	case *CreateSpecType_StatisticsProfile:
-		vref := m.GetStatisticsProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("statistics_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "statistics_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "statistics_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetStatisticsProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *CreateSpecType) GetStatisticsProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetStatisticsProfileChoice().(type) {
-	case *CreateSpecType_StatisticsProfileNone:
-	case *CreateSpecType_StatisticsProfile:
-		refdType, err := d.TypeForEntryKind("", "", "statistics_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: statistics_profile")
-		}
-		vref := m.GetStatisticsProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "statistics_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
 func (m *CreateSpecType) GetTrafficPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetTrafficPolicies()
 	if len(refs) == 0 {
@@ -984,6 +821,34 @@ func (m *CreateSpecType) GetTrafficPoliciesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("CreateSpecType.traffic_policies[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "traffic_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "traffic_policies",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetTrafficPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTrafficPolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.traffic_policies[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "traffic_policy.Object",
 			RefdUID:    ref.Uid,
@@ -1029,6 +894,30 @@ func (m *CreateSpecType) GetVirtualAddressesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("virtual_address.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_address.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_addresses",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetVirtualAddressesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetVirtualAddresses()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("CreateSpecType.virtual_addresses[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_address.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_address.Object",
 			RefdTenant: vref.Tenant,
@@ -1100,6 +989,37 @@ func (m *CreateSpecType) GetVirtualServerTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetVirtualServerTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVirtualServerType() == nil {
+		return nil, nil
+	}
+	switch m.GetVirtualServerType().(type) {
+	case *CreateSpecType_Https:
+		drInfos, err := m.GetHttps().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_Http3:
+		drInfos, err := m.GetHttp3().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttp3().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http3." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1138,6 +1058,52 @@ func (v *ValidateCreateSpecType) DomainsValidationRuleHandler(rules map[string]s
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateCreateSpecType) VirtualAddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for virtual_addresses")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for virtual_addresses")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated virtual_addresses")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items virtual_addresses")
 		}
 		return nil
 	}
@@ -1198,6 +1164,23 @@ func (v *ValidateCreateSpecType) VsScoreValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
+func (v *ValidateCreateSpecType) AccessProfileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_profile")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
 
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
@@ -1218,47 +1201,10 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["auto_last_hop"]; exists {
-		vOpts := append(opts, db.WithValidateField("auto_last_hop"))
-		if err := fv(ctx, m.GetAutoLastHop(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["clone_pool_options"]; exists {
-		vOpts := append(opts, db.WithValidateField("clone_pool_options"))
-		if err := fv(ctx, m.GetClonePoolOptions(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["connection_limit_options"]; exists {
 		vOpts := append(opts, db.WithValidateField("connection_limit_options"))
 		if err := fv(ctx, m.GetConnectionLimitOptions(), vOpts...); err != nil {
 			return err
-		}
-	}
-
-	switch m.GetDefaultPersistenceProfileChoice().(type) {
-	case *CreateSpecType_DefaultPersistenceProfileNone:
-		if fv, exists := v.FldValidators["default_persistence_profile_choice.default_persistence_profile_none"]; exists {
-			val := m.GetDefaultPersistenceProfileChoice().(*CreateSpecType_DefaultPersistenceProfileNone).DefaultPersistenceProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("default_persistence_profile_choice"),
-				db.WithValidateField("default_persistence_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_DefaultPersistenceProfile:
-		if fv, exists := v.FldValidators["default_persistence_profile_choice.default_persistence_profile"]; exists {
-			val := m.GetDefaultPersistenceProfileChoice().(*CreateSpecType_DefaultPersistenceProfile).DefaultPersistenceProfile
-			vOpts := append(opts,
-				db.WithValidateField("default_persistence_profile_choice"),
-				db.WithValidateField("default_persistence_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
 		}
 	}
 
@@ -1292,31 +1238,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-
-	switch m.GetFallbackPersistenceProfileChoice().(type) {
-	case *CreateSpecType_FallbackPersistenceProfileNone:
-		if fv, exists := v.FldValidators["fallback_persistence_profile_choice.fallback_persistence_profile_none"]; exists {
-			val := m.GetFallbackPersistenceProfileChoice().(*CreateSpecType_FallbackPersistenceProfileNone).FallbackPersistenceProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("fallback_persistence_profile_choice"),
-				db.WithValidateField("fallback_persistence_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_FallbackPersistenceProfile:
-		if fv, exists := v.FldValidators["fallback_persistence_profile_choice.fallback_persistence_profile"]; exists {
-			val := m.GetFallbackPersistenceProfileChoice().(*CreateSpecType_FallbackPersistenceProfile).FallbackPersistenceProfile
-			vOpts := append(opts,
-				db.WithValidateField("fallback_persistence_profile_choice"),
-				db.WithValidateField("fallback_persistence_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
 	if fv, exists := v.FldValidators["immediate_action_on_service_down"]; exists {
 		vOpts := append(opts, db.WithValidateField("immediate_action_on_service_down"))
 		if err := fv(ctx, m.GetImmediateActionOnServiceDown(), vOpts...); err != nil {
@@ -1332,124 +1253,16 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			}
 		}
 	}
-	if fv, exists := v.FldValidators["json"]; exists {
-		vOpts := append(opts, db.WithValidateField("json"))
-		if err := fv(ctx, m.GetJson(), vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetLastHopPoolChoice().(type) {
-	case *CreateSpecType_LastHopPoolNone:
-		if fv, exists := v.FldValidators["last_hop_pool_choice.last_hop_pool_none"]; exists {
-			val := m.GetLastHopPoolChoice().(*CreateSpecType_LastHopPoolNone).LastHopPoolNone
-			vOpts := append(opts,
-				db.WithValidateField("last_hop_pool_choice"),
-				db.WithValidateField("last_hop_pool_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_LastHopPool:
-		if fv, exists := v.FldValidators["last_hop_pool_choice.last_hop_pool"]; exists {
-			val := m.GetLastHopPoolChoice().(*CreateSpecType_LastHopPool).LastHopPool
-			vOpts := append(opts,
-				db.WithValidateField("last_hop_pool_choice"),
-				db.WithValidateField("last_hop_pool"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
-	if fv, exists := v.FldValidators["nat64"]; exists {
-		vOpts := append(opts, db.WithValidateField("nat64"))
-		if err := fv(ctx, m.GetNat64(), vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetRequestLoggingProfileChoice().(type) {
-	case *CreateSpecType_RequestLoggingProfileNone:
-		if fv, exists := v.FldValidators["request_logging_profile_choice.request_logging_profile_none"]; exists {
-			val := m.GetRequestLoggingProfileChoice().(*CreateSpecType_RequestLoggingProfileNone).RequestLoggingProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("request_logging_profile_choice"),
-				db.WithValidateField("request_logging_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_RequestLoggingProfile:
-		if fv, exists := v.FldValidators["request_logging_profile_choice.request_logging_profile"]; exists {
-			val := m.GetRequestLoggingProfileChoice().(*CreateSpecType_RequestLoggingProfile).RequestLoggingProfile
-			vOpts := append(opts,
-				db.WithValidateField("request_logging_profile_choice"),
-				db.WithValidateField("request_logging_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
-	if fv, exists := v.FldValidators["sse"]; exists {
-		vOpts := append(opts, db.WithValidateField("sse"))
-		if err := fv(ctx, m.GetSse(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["state"]; exists {
-		vOpts := append(opts, db.WithValidateField("state"))
-		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetStatisticsProfileChoice().(type) {
-	case *CreateSpecType_StatisticsProfileNone:
-		if fv, exists := v.FldValidators["statistics_profile_choice.statistics_profile_none"]; exists {
-			val := m.GetStatisticsProfileChoice().(*CreateSpecType_StatisticsProfileNone).StatisticsProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("statistics_profile_choice"),
-				db.WithValidateField("statistics_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_StatisticsProfile:
-		if fv, exists := v.FldValidators["statistics_profile_choice.statistics_profile"]; exists {
-			val := m.GetStatisticsProfileChoice().(*CreateSpecType_StatisticsProfile).StatisticsProfile
-			vOpts := append(opts,
-				db.WithValidateField("statistics_profile_choice"),
-				db.WithValidateField("statistics_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
 	if fv, exists := v.FldValidators["traffic_policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("traffic_policies"))
 		if err := fv(ctx, m.GetTrafficPolicies(), vOpts...); err != nil {
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["translations"]; exists {
-		vOpts := append(opts, db.WithValidateField("translations"))
-		if err := fv(ctx, m.GetTranslations(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["virtual_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_addresses"))
-		for idx, item := range m.GetVirtualAddresses() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetVirtualAddresses(), vOpts...); err != nil {
+			return err
 		}
 	}
 
@@ -1514,6 +1327,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhVirtualAddresses := v.VirtualAddressesValidationRuleHandler
+	rulesVirtualAddresses := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVirtualAddresses(rulesVirtualAddresses)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.virtual_addresses: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["virtual_addresses"] = vFn
+
 	vrhTrafficPolicies := v.TrafficPoliciesValidationRuleHandler
 	rulesTrafficPolicies := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "32",
@@ -1536,18 +1360,21 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vs_score"] = vFn
-	v.FldValidators["default_persistence_profile_choice.default_persistence_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	vrhAccessProfile := v.AccessProfileValidationRuleHandler
+	rulesAccessProfile := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAccessProfile(rulesAccessProfile)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.access_profile: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["access_profile"] = vFn
 	v.FldValidators["default_pool_choice.default_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["fallback_persistence_profile_choice.fallback_persistence_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["last_hop_pool_choice.last_hop_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["request_logging_profile_choice.request_logging_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["statistics_profile_choice.statistics_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["virtual_server_type.https"] = HTTPServicesValidator().Validate
 	v.FldValidators["virtual_server_type.http3"] = HTTP3ServicesValidator().Validate
 	v.FldValidators["connection_limit_options"] = ConnectionLimitsTypeValidator().Validate
-	v.FldValidators["virtual_addresses"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["clone_pool_options"] = ClonePoolTypeValidator().Validate
-	v.FldValidators["access_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -1600,6 +1427,13 @@ func (m *DomainsManagedByF5XC) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDomainsDRefInfo()
 }
+func (m *DomainsManagedByF5XC) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDomainsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *DomainsManagedByF5XC) GetDomainsDRefInfo() ([]db.DRefInfo, error) {
@@ -1611,6 +1445,26 @@ func (m *DomainsManagedByF5XC) GetDomainsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDomains() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("domains[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DomainsManagedByF5XC) GetDomainsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDomains() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDomains() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDomains() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1774,43 +1628,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetClonePoolOptionsDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetClonePoolOptionsDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetDefaultPersistenceProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetDefaultPersistenceProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
 	if fdrInfos, err := m.GetDefaultPoolChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDefaultPoolChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetFallbackPersistenceProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetFallbackPersistenceProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
 	if fdrInfos, err := m.GetIrulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIrulesDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetLastHopPoolChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetLastHopPoolChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetRequestLoggingProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetRequestLoggingProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetStatisticsProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetStatisticsProfileChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -1831,8 +1655,63 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAccessProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAccessProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDefaultPoolChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultPoolChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIrulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIrulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTrafficPoliciesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTrafficPoliciesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualAddressesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualAddressesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualServerTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServerTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetAccessProfileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAccessProfile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("access_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "access_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "access_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GetSpecType) GetAccessProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetAccessProfile()
 	if vref == nil {
 		return nil, nil
@@ -1877,39 +1756,23 @@ func (m *GetSpecType) GetAccessProfileDBEntries(ctx context.Context, d db.Interf
 	return entries, nil
 }
 
-// GetDRefInfo for the field's type
-func (m *GetSpecType) GetClonePoolOptionsDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetClonePoolOptions() == nil {
+func (m *GetSpecType) GetDefaultPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDefaultPoolChoice().(type) {
+	case *GetSpecType_DefaultPoolNone:
 		return nil, nil
-	}
-	drInfos, err := m.GetClonePoolOptions().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetClonePoolOptions().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "clone_pool_options." + dri.DRField
-	}
-	return drInfos, err
-}
-
-func (m *GetSpecType) GetDefaultPersistenceProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetDefaultPersistenceProfileChoice().(type) {
-	case *GetSpecType_DefaultPersistenceProfileNone:
-		return nil, nil
-	case *GetSpecType_DefaultPersistenceProfile:
-		vref := m.GetDefaultPersistenceProfile()
+	case *GetSpecType_DefaultPool:
+		vref := m.GetDefaultPool()
 		if vref == nil {
 			return nil, nil
 		}
 		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("persistence_profile.Object")
+		vdRef.SetKind("vs_pool.Object")
 		dri := db.DRefInfo{
-			RefdType:   "persistence_profile.Object",
+			RefdType:   "vs_pool.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
 			RefdName:   vref.Name,
-			DRField:    "default_persistence_profile",
+			DRField:    "default_pool",
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
@@ -1917,41 +1780,7 @@ func (m *GetSpecType) GetDefaultPersistenceProfileChoiceDRefInfo() ([]db.DRefInf
 		return nil, nil
 	}
 }
-
-// GetDefaultPersistenceProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GetSpecType) GetDefaultPersistenceProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetDefaultPersistenceProfileChoice().(type) {
-	case *GetSpecType_DefaultPersistenceProfileNone:
-	case *GetSpecType_DefaultPersistenceProfile:
-		refdType, err := d.TypeForEntryKind("", "", "persistence_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: persistence_profile")
-		}
-		vref := m.GetDefaultPersistenceProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "persistence_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *GetSpecType) GetDefaultPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
+func (m *GetSpecType) GetDefaultPoolChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDefaultPoolChoice().(type) {
 	case *GetSpecType_DefaultPoolNone:
 		return nil, nil
@@ -2009,64 +1838,6 @@ func (m *GetSpecType) GetDefaultPoolChoiceDBEntries(ctx context.Context, d db.In
 	return entries, nil
 }
 
-func (m *GetSpecType) GetFallbackPersistenceProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetFallbackPersistenceProfileChoice().(type) {
-	case *GetSpecType_FallbackPersistenceProfileNone:
-		return nil, nil
-	case *GetSpecType_FallbackPersistenceProfile:
-		vref := m.GetFallbackPersistenceProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("persistence_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "persistence_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "fallback_persistence_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetFallbackPersistenceProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GetSpecType) GetFallbackPersistenceProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetFallbackPersistenceProfileChoice().(type) {
-	case *GetSpecType_FallbackPersistenceProfileNone:
-	case *GetSpecType_FallbackPersistenceProfile:
-		refdType, err := d.TypeForEntryKind("", "", "persistence_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: persistence_profile")
-		}
-		vref := m.GetFallbackPersistenceProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "persistence_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
 func (m *GetSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetIrules()
 	if len(refs) == 0 {
@@ -2078,6 +1849,34 @@ func (m *GetSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.irules[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "irule.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "irules",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetIrulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIrules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.irules[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "irule.Object",
 			RefdUID:    ref.Uid,
@@ -2110,180 +1909,6 @@ func (m *GetSpecType) GetIrulesDBEntries(ctx context.Context, d db.Interface) ([
 	return entries, nil
 }
 
-func (m *GetSpecType) GetLastHopPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetLastHopPoolChoice().(type) {
-	case *GetSpecType_LastHopPoolNone:
-		return nil, nil
-	case *GetSpecType_LastHopPool:
-		vref := m.GetLastHopPool()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("vs_pool.Object")
-		dri := db.DRefInfo{
-			RefdType:   "vs_pool.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "last_hop_pool",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetLastHopPoolChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GetSpecType) GetLastHopPoolChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetLastHopPoolChoice().(type) {
-	case *GetSpecType_LastHopPoolNone:
-	case *GetSpecType_LastHopPool:
-		refdType, err := d.TypeForEntryKind("", "", "vs_pool.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: vs_pool")
-		}
-		vref := m.GetLastHopPool()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "vs_pool.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *GetSpecType) GetRequestLoggingProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetRequestLoggingProfileChoice().(type) {
-	case *GetSpecType_RequestLoggingProfileNone:
-		return nil, nil
-	case *GetSpecType_RequestLoggingProfile:
-		vref := m.GetRequestLoggingProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("request_logging_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "request_logging_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "request_logging_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetRequestLoggingProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GetSpecType) GetRequestLoggingProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetRequestLoggingProfileChoice().(type) {
-	case *GetSpecType_RequestLoggingProfileNone:
-	case *GetSpecType_RequestLoggingProfile:
-		refdType, err := d.TypeForEntryKind("", "", "request_logging_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: request_logging_profile")
-		}
-		vref := m.GetRequestLoggingProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "request_logging_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *GetSpecType) GetStatisticsProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetStatisticsProfileChoice().(type) {
-	case *GetSpecType_StatisticsProfileNone:
-		return nil, nil
-	case *GetSpecType_StatisticsProfile:
-		vref := m.GetStatisticsProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("statistics_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "statistics_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "statistics_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetStatisticsProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GetSpecType) GetStatisticsProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetStatisticsProfileChoice().(type) {
-	case *GetSpecType_StatisticsProfileNone:
-	case *GetSpecType_StatisticsProfile:
-		refdType, err := d.TypeForEntryKind("", "", "statistics_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: statistics_profile")
-		}
-		vref := m.GetStatisticsProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "statistics_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
 func (m *GetSpecType) GetTrafficPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetTrafficPolicies()
 	if len(refs) == 0 {
@@ -2295,6 +1920,34 @@ func (m *GetSpecType) GetTrafficPoliciesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.traffic_policies[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "traffic_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "traffic_policies",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetTrafficPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTrafficPolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.traffic_policies[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "traffic_policy.Object",
 			RefdUID:    ref.Uid,
@@ -2340,6 +1993,30 @@ func (m *GetSpecType) GetVirtualAddressesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("virtual_address.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_address.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_addresses",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetVirtualAddressesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetVirtualAddresses()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.virtual_addresses[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_address.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_address.Object",
 			RefdTenant: vref.Tenant,
@@ -2411,6 +2088,37 @@ func (m *GetSpecType) GetVirtualServerTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetVirtualServerTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVirtualServerType() == nil {
+		return nil, nil
+	}
+	switch m.GetVirtualServerType().(type) {
+	case *GetSpecType_Https:
+		drInfos, err := m.GetHttps().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_Http3:
+		drInfos, err := m.GetHttp3().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttp3().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http3." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -2449,6 +2157,52 @@ func (v *ValidateGetSpecType) DomainsValidationRuleHandler(rules map[string]stri
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateGetSpecType) VirtualAddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for virtual_addresses")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for virtual_addresses")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated virtual_addresses")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items virtual_addresses")
 		}
 		return nil
 	}
@@ -2509,6 +2263,23 @@ func (v *ValidateGetSpecType) VsScoreValidationRuleHandler(rules map[string]stri
 
 	return validatorFn, nil
 }
+func (v *ValidateGetSpecType) AccessProfileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_profile")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
 
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
@@ -2529,47 +2300,10 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["auto_last_hop"]; exists {
-		vOpts := append(opts, db.WithValidateField("auto_last_hop"))
-		if err := fv(ctx, m.GetAutoLastHop(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["clone_pool_options"]; exists {
-		vOpts := append(opts, db.WithValidateField("clone_pool_options"))
-		if err := fv(ctx, m.GetClonePoolOptions(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["connection_limit_options"]; exists {
 		vOpts := append(opts, db.WithValidateField("connection_limit_options"))
 		if err := fv(ctx, m.GetConnectionLimitOptions(), vOpts...); err != nil {
 			return err
-		}
-	}
-
-	switch m.GetDefaultPersistenceProfileChoice().(type) {
-	case *GetSpecType_DefaultPersistenceProfileNone:
-		if fv, exists := v.FldValidators["default_persistence_profile_choice.default_persistence_profile_none"]; exists {
-			val := m.GetDefaultPersistenceProfileChoice().(*GetSpecType_DefaultPersistenceProfileNone).DefaultPersistenceProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("default_persistence_profile_choice"),
-				db.WithValidateField("default_persistence_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GetSpecType_DefaultPersistenceProfile:
-		if fv, exists := v.FldValidators["default_persistence_profile_choice.default_persistence_profile"]; exists {
-			val := m.GetDefaultPersistenceProfileChoice().(*GetSpecType_DefaultPersistenceProfile).DefaultPersistenceProfile
-			vOpts := append(opts,
-				db.WithValidateField("default_persistence_profile_choice"),
-				db.WithValidateField("default_persistence_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
 		}
 	}
 
@@ -2603,31 +2337,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			return err
 		}
 	}
-
-	switch m.GetFallbackPersistenceProfileChoice().(type) {
-	case *GetSpecType_FallbackPersistenceProfileNone:
-		if fv, exists := v.FldValidators["fallback_persistence_profile_choice.fallback_persistence_profile_none"]; exists {
-			val := m.GetFallbackPersistenceProfileChoice().(*GetSpecType_FallbackPersistenceProfileNone).FallbackPersistenceProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("fallback_persistence_profile_choice"),
-				db.WithValidateField("fallback_persistence_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GetSpecType_FallbackPersistenceProfile:
-		if fv, exists := v.FldValidators["fallback_persistence_profile_choice.fallback_persistence_profile"]; exists {
-			val := m.GetFallbackPersistenceProfileChoice().(*GetSpecType_FallbackPersistenceProfile).FallbackPersistenceProfile
-			vOpts := append(opts,
-				db.WithValidateField("fallback_persistence_profile_choice"),
-				db.WithValidateField("fallback_persistence_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
 	if fv, exists := v.FldValidators["immediate_action_on_service_down"]; exists {
 		vOpts := append(opts, db.WithValidateField("immediate_action_on_service_down"))
 		if err := fv(ctx, m.GetImmediateActionOnServiceDown(), vOpts...); err != nil {
@@ -2643,103 +2352,10 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			}
 		}
 	}
-	if fv, exists := v.FldValidators["json"]; exists {
-		vOpts := append(opts, db.WithValidateField("json"))
-		if err := fv(ctx, m.GetJson(), vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetLastHopPoolChoice().(type) {
-	case *GetSpecType_LastHopPoolNone:
-		if fv, exists := v.FldValidators["last_hop_pool_choice.last_hop_pool_none"]; exists {
-			val := m.GetLastHopPoolChoice().(*GetSpecType_LastHopPoolNone).LastHopPoolNone
-			vOpts := append(opts,
-				db.WithValidateField("last_hop_pool_choice"),
-				db.WithValidateField("last_hop_pool_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GetSpecType_LastHopPool:
-		if fv, exists := v.FldValidators["last_hop_pool_choice.last_hop_pool"]; exists {
-			val := m.GetLastHopPoolChoice().(*GetSpecType_LastHopPool).LastHopPool
-			vOpts := append(opts,
-				db.WithValidateField("last_hop_pool_choice"),
-				db.WithValidateField("last_hop_pool"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
-	if fv, exists := v.FldValidators["nat64"]; exists {
-		vOpts := append(opts, db.WithValidateField("nat64"))
-		if err := fv(ctx, m.GetNat64(), vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetRequestLoggingProfileChoice().(type) {
-	case *GetSpecType_RequestLoggingProfileNone:
-		if fv, exists := v.FldValidators["request_logging_profile_choice.request_logging_profile_none"]; exists {
-			val := m.GetRequestLoggingProfileChoice().(*GetSpecType_RequestLoggingProfileNone).RequestLoggingProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("request_logging_profile_choice"),
-				db.WithValidateField("request_logging_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GetSpecType_RequestLoggingProfile:
-		if fv, exists := v.FldValidators["request_logging_profile_choice.request_logging_profile"]; exists {
-			val := m.GetRequestLoggingProfileChoice().(*GetSpecType_RequestLoggingProfile).RequestLoggingProfile
-			vOpts := append(opts,
-				db.WithValidateField("request_logging_profile_choice"),
-				db.WithValidateField("request_logging_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
-	if fv, exists := v.FldValidators["sse"]; exists {
-		vOpts := append(opts, db.WithValidateField("sse"))
-		if err := fv(ctx, m.GetSse(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["state"]; exists {
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
-		}
-	}
-
-	switch m.GetStatisticsProfileChoice().(type) {
-	case *GetSpecType_StatisticsProfileNone:
-		if fv, exists := v.FldValidators["statistics_profile_choice.statistics_profile_none"]; exists {
-			val := m.GetStatisticsProfileChoice().(*GetSpecType_StatisticsProfileNone).StatisticsProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("statistics_profile_choice"),
-				db.WithValidateField("statistics_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GetSpecType_StatisticsProfile:
-		if fv, exists := v.FldValidators["statistics_profile_choice.statistics_profile"]; exists {
-			val := m.GetStatisticsProfileChoice().(*GetSpecType_StatisticsProfile).StatisticsProfile
-			vOpts := append(opts,
-				db.WithValidateField("statistics_profile_choice"),
-				db.WithValidateField("statistics_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
 		}
 	}
 	if fv, exists := v.FldValidators["traffic_policies"]; exists {
@@ -2748,19 +2364,10 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["translations"]; exists {
-		vOpts := append(opts, db.WithValidateField("translations"))
-		if err := fv(ctx, m.GetTranslations(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["virtual_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_addresses"))
-		for idx, item := range m.GetVirtualAddresses() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetVirtualAddresses(), vOpts...); err != nil {
+			return err
 		}
 	}
 
@@ -2825,6 +2432,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhVirtualAddresses := v.VirtualAddressesValidationRuleHandler
+	rulesVirtualAddresses := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVirtualAddresses(rulesVirtualAddresses)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.virtual_addresses: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["virtual_addresses"] = vFn
+
 	vrhTrafficPolicies := v.TrafficPoliciesValidationRuleHandler
 	rulesTrafficPolicies := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "32",
@@ -2847,18 +2465,21 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vs_score"] = vFn
-	v.FldValidators["default_persistence_profile_choice.default_persistence_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	vrhAccessProfile := v.AccessProfileValidationRuleHandler
+	rulesAccessProfile := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAccessProfile(rulesAccessProfile)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.access_profile: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["access_profile"] = vFn
 	v.FldValidators["default_pool_choice.default_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["fallback_persistence_profile_choice.fallback_persistence_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["last_hop_pool_choice.last_hop_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["request_logging_profile_choice.request_logging_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["statistics_profile_choice.statistics_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["virtual_server_type.https"] = HTTPServicesValidator().Validate
 	v.FldValidators["virtual_server_type.http3"] = HTTP3ServicesValidator().Validate
 	v.FldValidators["connection_limit_options"] = ConnectionLimitsTypeValidator().Validate
-	v.FldValidators["virtual_addresses"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["clone_pool_options"] = ClonePoolTypeValidator().Validate
-	v.FldValidators["access_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -2915,16 +2536,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetClonePoolOptionsDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetClonePoolOptionsDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetDefaultPersistenceProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetDefaultPersistenceProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
 	if fdrInfos, err := m.GetDefaultPoolChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDefaultPoolChoiceDRefInfo() FAILED")
 	} else {
@@ -2935,28 +2546,8 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetFallbackPersistenceProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetFallbackPersistenceProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
 	if fdrInfos, err := m.GetIrulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIrulesDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetLastHopPoolChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetLastHopPoolChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetRequestLoggingProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetRequestLoggingProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetStatisticsProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetStatisticsProfileChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -2982,8 +2573,73 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAccessProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAccessProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDefaultPoolChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultPoolChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDomainChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDomainChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIrulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIrulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTrafficPoliciesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTrafficPoliciesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualAddressesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualAddressesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualServerTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServerTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetAccessProfileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAccessProfile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("access_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "access_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "access_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetAccessProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetAccessProfile()
 	if vref == nil {
 		return nil, nil
@@ -3028,39 +2684,23 @@ func (m *GlobalSpecType) GetAccessProfileDBEntries(ctx context.Context, d db.Int
 	return entries, nil
 }
 
-// GetDRefInfo for the field's type
-func (m *GlobalSpecType) GetClonePoolOptionsDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetClonePoolOptions() == nil {
+func (m *GlobalSpecType) GetDefaultPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDefaultPoolChoice().(type) {
+	case *GlobalSpecType_DefaultPoolNone:
 		return nil, nil
-	}
-	drInfos, err := m.GetClonePoolOptions().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetClonePoolOptions().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "clone_pool_options." + dri.DRField
-	}
-	return drInfos, err
-}
-
-func (m *GlobalSpecType) GetDefaultPersistenceProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetDefaultPersistenceProfileChoice().(type) {
-	case *GlobalSpecType_DefaultPersistenceProfileNone:
-		return nil, nil
-	case *GlobalSpecType_DefaultPersistenceProfile:
-		vref := m.GetDefaultPersistenceProfile()
+	case *GlobalSpecType_DefaultPool:
+		vref := m.GetDefaultPool()
 		if vref == nil {
 			return nil, nil
 		}
 		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("persistence_profile.Object")
+		vdRef.SetKind("vs_pool.Object")
 		dri := db.DRefInfo{
-			RefdType:   "persistence_profile.Object",
+			RefdType:   "vs_pool.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
 			RefdName:   vref.Name,
-			DRField:    "default_persistence_profile",
+			DRField:    "default_pool",
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
@@ -3068,41 +2708,7 @@ func (m *GlobalSpecType) GetDefaultPersistenceProfileChoiceDRefInfo() ([]db.DRef
 		return nil, nil
 	}
 }
-
-// GetDefaultPersistenceProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GlobalSpecType) GetDefaultPersistenceProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetDefaultPersistenceProfileChoice().(type) {
-	case *GlobalSpecType_DefaultPersistenceProfileNone:
-	case *GlobalSpecType_DefaultPersistenceProfile:
-		refdType, err := d.TypeForEntryKind("", "", "persistence_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: persistence_profile")
-		}
-		vref := m.GetDefaultPersistenceProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "persistence_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *GlobalSpecType) GetDefaultPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
+func (m *GlobalSpecType) GetDefaultPoolChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDefaultPoolChoice().(type) {
 	case *GlobalSpecType_DefaultPoolNone:
 		return nil, nil
@@ -3183,62 +2789,27 @@ func (m *GlobalSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
-func (m *GlobalSpecType) GetFallbackPersistenceProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetFallbackPersistenceProfileChoice().(type) {
-	case *GlobalSpecType_FallbackPersistenceProfileNone:
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetDomainChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDomainChoice() == nil {
 		return nil, nil
-	case *GlobalSpecType_FallbackPersistenceProfile:
-		vref := m.GetFallbackPersistenceProfile()
-		if vref == nil {
-			return nil, nil
+	}
+	switch m.GetDomainChoice().(type) {
+	case *GlobalSpecType_Managed:
+		drInfos, err := m.GetManaged().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetManaged().GetDRefInfoForOverlay() FAILED")
 		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("persistence_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "persistence_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "fallback_persistence_profile",
-			Ref:        vdRef,
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "managed." + dri.DRField
 		}
-		return []db.DRefInfo{dri}, nil
+		return drInfos, err
+	case *GlobalSpecType_NotManaged:
+		return nil, nil
 	default:
 		return nil, nil
 	}
-}
-
-// GetFallbackPersistenceProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GlobalSpecType) GetFallbackPersistenceProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetFallbackPersistenceProfileChoice().(type) {
-	case *GlobalSpecType_FallbackPersistenceProfileNone:
-	case *GlobalSpecType_FallbackPersistenceProfile:
-		refdType, err := d.TypeForEntryKind("", "", "persistence_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: persistence_profile")
-		}
-		vref := m.GetFallbackPersistenceProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "persistence_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
 }
 
 func (m *GlobalSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
@@ -3252,6 +2823,34 @@ func (m *GlobalSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.irules[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "irule.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "irules",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetIrulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIrules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.irules[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "irule.Object",
 			RefdUID:    ref.Uid,
@@ -3284,180 +2883,6 @@ func (m *GlobalSpecType) GetIrulesDBEntries(ctx context.Context, d db.Interface)
 	return entries, nil
 }
 
-func (m *GlobalSpecType) GetLastHopPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetLastHopPoolChoice().(type) {
-	case *GlobalSpecType_LastHopPoolNone:
-		return nil, nil
-	case *GlobalSpecType_LastHopPool:
-		vref := m.GetLastHopPool()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("vs_pool.Object")
-		dri := db.DRefInfo{
-			RefdType:   "vs_pool.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "last_hop_pool",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetLastHopPoolChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GlobalSpecType) GetLastHopPoolChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetLastHopPoolChoice().(type) {
-	case *GlobalSpecType_LastHopPoolNone:
-	case *GlobalSpecType_LastHopPool:
-		refdType, err := d.TypeForEntryKind("", "", "vs_pool.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: vs_pool")
-		}
-		vref := m.GetLastHopPool()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "vs_pool.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *GlobalSpecType) GetRequestLoggingProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetRequestLoggingProfileChoice().(type) {
-	case *GlobalSpecType_RequestLoggingProfileNone:
-		return nil, nil
-	case *GlobalSpecType_RequestLoggingProfile:
-		vref := m.GetRequestLoggingProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("request_logging_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "request_logging_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "request_logging_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetRequestLoggingProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GlobalSpecType) GetRequestLoggingProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetRequestLoggingProfileChoice().(type) {
-	case *GlobalSpecType_RequestLoggingProfileNone:
-	case *GlobalSpecType_RequestLoggingProfile:
-		refdType, err := d.TypeForEntryKind("", "", "request_logging_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: request_logging_profile")
-		}
-		vref := m.GetRequestLoggingProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "request_logging_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *GlobalSpecType) GetStatisticsProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetStatisticsProfileChoice().(type) {
-	case *GlobalSpecType_StatisticsProfileNone:
-		return nil, nil
-	case *GlobalSpecType_StatisticsProfile:
-		vref := m.GetStatisticsProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("statistics_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "statistics_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "statistics_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetStatisticsProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GlobalSpecType) GetStatisticsProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetStatisticsProfileChoice().(type) {
-	case *GlobalSpecType_StatisticsProfileNone:
-	case *GlobalSpecType_StatisticsProfile:
-		refdType, err := d.TypeForEntryKind("", "", "statistics_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: statistics_profile")
-		}
-		vref := m.GetStatisticsProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "statistics_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
 func (m *GlobalSpecType) GetTrafficPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetTrafficPolicies()
 	if len(refs) == 0 {
@@ -3469,6 +2894,34 @@ func (m *GlobalSpecType) GetTrafficPoliciesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.traffic_policies[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "traffic_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "traffic_policies",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetTrafficPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTrafficPolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.traffic_policies[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "traffic_policy.Object",
 			RefdUID:    ref.Uid,
@@ -3502,6 +2955,23 @@ func (m *GlobalSpecType) GetTrafficPoliciesDBEntries(ctx context.Context, d db.I
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -3559,6 +3029,30 @@ func (m *GlobalSpecType) GetVirtualAddressesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("virtual_address.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_address.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_addresses",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetVirtualAddressesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetVirtualAddresses()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.virtual_addresses[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_address.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_address.Object",
 			RefdTenant: vref.Tenant,
@@ -3630,6 +3124,37 @@ func (m *GlobalSpecType) GetVirtualServerTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetVirtualServerTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVirtualServerType() == nil {
+		return nil, nil
+	}
+	switch m.GetVirtualServerType().(type) {
+	case *GlobalSpecType_Https:
+		drInfos, err := m.GetHttps().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_Http3:
+		drInfos, err := m.GetHttp3().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttp3().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http3." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -3675,6 +3200,52 @@ func (v *ValidateGlobalSpecType) DomainsValidationRuleHandler(rules map[string]s
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateGlobalSpecType) VirtualAddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for virtual_addresses")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for virtual_addresses")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated virtual_addresses")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items virtual_addresses")
 		}
 		return nil
 	}
@@ -3735,6 +3306,23 @@ func (v *ValidateGlobalSpecType) VsScoreValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
+func (v *ValidateGlobalSpecType) AccessProfileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_profile")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
 
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
@@ -3755,47 +3343,10 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["auto_last_hop"]; exists {
-		vOpts := append(opts, db.WithValidateField("auto_last_hop"))
-		if err := fv(ctx, m.GetAutoLastHop(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["clone_pool_options"]; exists {
-		vOpts := append(opts, db.WithValidateField("clone_pool_options"))
-		if err := fv(ctx, m.GetClonePoolOptions(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["connection_limit_options"]; exists {
 		vOpts := append(opts, db.WithValidateField("connection_limit_options"))
 		if err := fv(ctx, m.GetConnectionLimitOptions(), vOpts...); err != nil {
 			return err
-		}
-	}
-
-	switch m.GetDefaultPersistenceProfileChoice().(type) {
-	case *GlobalSpecType_DefaultPersistenceProfileNone:
-		if fv, exists := v.FldValidators["default_persistence_profile_choice.default_persistence_profile_none"]; exists {
-			val := m.GetDefaultPersistenceProfileChoice().(*GlobalSpecType_DefaultPersistenceProfileNone).DefaultPersistenceProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("default_persistence_profile_choice"),
-				db.WithValidateField("default_persistence_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GlobalSpecType_DefaultPersistenceProfile:
-		if fv, exists := v.FldValidators["default_persistence_profile_choice.default_persistence_profile"]; exists {
-			val := m.GetDefaultPersistenceProfileChoice().(*GlobalSpecType_DefaultPersistenceProfile).DefaultPersistenceProfile
-			vOpts := append(opts,
-				db.WithValidateField("default_persistence_profile_choice"),
-				db.WithValidateField("default_persistence_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
 		}
 	}
 
@@ -3864,31 +3415,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-
-	switch m.GetFallbackPersistenceProfileChoice().(type) {
-	case *GlobalSpecType_FallbackPersistenceProfileNone:
-		if fv, exists := v.FldValidators["fallback_persistence_profile_choice.fallback_persistence_profile_none"]; exists {
-			val := m.GetFallbackPersistenceProfileChoice().(*GlobalSpecType_FallbackPersistenceProfileNone).FallbackPersistenceProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("fallback_persistence_profile_choice"),
-				db.WithValidateField("fallback_persistence_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GlobalSpecType_FallbackPersistenceProfile:
-		if fv, exists := v.FldValidators["fallback_persistence_profile_choice.fallback_persistence_profile"]; exists {
-			val := m.GetFallbackPersistenceProfileChoice().(*GlobalSpecType_FallbackPersistenceProfile).FallbackPersistenceProfile
-			vOpts := append(opts,
-				db.WithValidateField("fallback_persistence_profile_choice"),
-				db.WithValidateField("fallback_persistence_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
 	if fv, exists := v.FldValidators["immediate_action_on_service_down"]; exists {
 		vOpts := append(opts, db.WithValidateField("immediate_action_on_service_down"))
 		if err := fv(ctx, m.GetImmediateActionOnServiceDown(), vOpts...); err != nil {
@@ -3904,114 +3430,9 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			}
 		}
 	}
-	if fv, exists := v.FldValidators["json"]; exists {
-		vOpts := append(opts, db.WithValidateField("json"))
-		if err := fv(ctx, m.GetJson(), vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetLastHopPoolChoice().(type) {
-	case *GlobalSpecType_LastHopPoolNone:
-		if fv, exists := v.FldValidators["last_hop_pool_choice.last_hop_pool_none"]; exists {
-			val := m.GetLastHopPoolChoice().(*GlobalSpecType_LastHopPoolNone).LastHopPoolNone
-			vOpts := append(opts,
-				db.WithValidateField("last_hop_pool_choice"),
-				db.WithValidateField("last_hop_pool_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GlobalSpecType_LastHopPool:
-		if fv, exists := v.FldValidators["last_hop_pool_choice.last_hop_pool"]; exists {
-			val := m.GetLastHopPoolChoice().(*GlobalSpecType_LastHopPool).LastHopPool
-			vOpts := append(opts,
-				db.WithValidateField("last_hop_pool_choice"),
-				db.WithValidateField("last_hop_pool"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
-	if fv, exists := v.FldValidators["nat64"]; exists {
-		vOpts := append(opts, db.WithValidateField("nat64"))
-		if err := fv(ctx, m.GetNat64(), vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetRequestLoggingProfileChoice().(type) {
-	case *GlobalSpecType_RequestLoggingProfileNone:
-		if fv, exists := v.FldValidators["request_logging_profile_choice.request_logging_profile_none"]; exists {
-			val := m.GetRequestLoggingProfileChoice().(*GlobalSpecType_RequestLoggingProfileNone).RequestLoggingProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("request_logging_profile_choice"),
-				db.WithValidateField("request_logging_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GlobalSpecType_RequestLoggingProfile:
-		if fv, exists := v.FldValidators["request_logging_profile_choice.request_logging_profile"]; exists {
-			val := m.GetRequestLoggingProfileChoice().(*GlobalSpecType_RequestLoggingProfile).RequestLoggingProfile
-			vOpts := append(opts,
-				db.WithValidateField("request_logging_profile_choice"),
-				db.WithValidateField("request_logging_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
-	if fv, exists := v.FldValidators["sse"]; exists {
-		vOpts := append(opts, db.WithValidateField("sse"))
-		if err := fv(ctx, m.GetSse(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["state"]; exists {
-		vOpts := append(opts, db.WithValidateField("state"))
-		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetStatisticsProfileChoice().(type) {
-	case *GlobalSpecType_StatisticsProfileNone:
-		if fv, exists := v.FldValidators["statistics_profile_choice.statistics_profile_none"]; exists {
-			val := m.GetStatisticsProfileChoice().(*GlobalSpecType_StatisticsProfileNone).StatisticsProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("statistics_profile_choice"),
-				db.WithValidateField("statistics_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GlobalSpecType_StatisticsProfile:
-		if fv, exists := v.FldValidators["statistics_profile_choice.statistics_profile"]; exists {
-			val := m.GetStatisticsProfileChoice().(*GlobalSpecType_StatisticsProfile).StatisticsProfile
-			vOpts := append(opts,
-				db.WithValidateField("statistics_profile_choice"),
-				db.WithValidateField("statistics_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
 	if fv, exists := v.FldValidators["traffic_policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("traffic_policies"))
 		if err := fv(ctx, m.GetTrafficPolicies(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["translations"]; exists {
-		vOpts := append(opts, db.WithValidateField("translations"))
-		if err := fv(ctx, m.GetTranslations(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -4023,11 +3444,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if fv, exists := v.FldValidators["virtual_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_addresses"))
-		for idx, item := range m.GetVirtualAddresses() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetVirtualAddresses(), vOpts...); err != nil {
+			return err
 		}
 	}
 
@@ -4102,6 +3520,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhVirtualAddresses := v.VirtualAddressesValidationRuleHandler
+	rulesVirtualAddresses := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVirtualAddresses(rulesVirtualAddresses)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.virtual_addresses: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["virtual_addresses"] = vFn
+
 	vrhTrafficPolicies := v.TrafficPoliciesValidationRuleHandler
 	rulesTrafficPolicies := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "32",
@@ -4124,20 +3553,23 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vs_score"] = vFn
-	v.FldValidators["default_persistence_profile_choice.default_persistence_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	vrhAccessProfile := v.AccessProfileValidationRuleHandler
+	rulesAccessProfile := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAccessProfile(rulesAccessProfile)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.access_profile: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["access_profile"] = vFn
 	v.FldValidators["default_pool_choice.default_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["domain_choice.managed"] = DomainsManagedByF5XCValidator().Validate
 	v.FldValidators["domain_choice.not_managed"] = NotManagedDomainsTypeValidator().Validate
-	v.FldValidators["fallback_persistence_profile_choice.fallback_persistence_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["last_hop_pool_choice.last_hop_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["request_logging_profile_choice.request_logging_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["statistics_profile_choice.statistics_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["virtual_server_type.https"] = HTTPServicesValidator().Validate
 	v.FldValidators["virtual_server_type.http3"] = HTTP3ServicesValidator().Validate
 	v.FldValidators["connection_limit_options"] = ConnectionLimitsTypeValidator().Validate
-	v.FldValidators["virtual_addresses"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["clone_pool_options"] = ClonePoolTypeValidator().Validate
-	v.FldValidators["access_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -4207,8 +3639,55 @@ func (m *HTTP3DefaultServerSelection) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *HTTP3DefaultServerSelection) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetHttpServerProfileChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpServerProfileChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSslServerProfilesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSslServerProfilesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTcpServerProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTcpServerProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *HTTP3DefaultServerSelection) GetHttpServerProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetHttpServerProfileChoice().(type) {
+	case *HTTP3DefaultServerSelection_HttpServerProfileSameAsClient:
+		return nil, nil
+	case *HTTP3DefaultServerSelection_HttpServerProfile:
+		vref := m.GetHttpServerProfile()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("http_profile.Object")
+		dri := db.DRefInfo{
+			RefdType:   "http_profile.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "http_server_profile",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *HTTP3DefaultServerSelection) GetHttpServerProfileChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetHttpServerProfileChoice().(type) {
 	case *HTTP3DefaultServerSelection_HttpServerProfileSameAsClient:
 		return nil, nil
@@ -4290,6 +3769,30 @@ func (m *HTTP3DefaultServerSelection) GetSslServerProfilesDRefInfo() ([]db.DRefI
 	}
 	return drInfos, nil
 }
+func (m *HTTP3DefaultServerSelection) GetSslServerProfilesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSslServerProfiles()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("HTTP3DefaultServerSelection.ssl_server_profiles[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("ssl_server_profile.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_server_profile.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ssl_server_profiles",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetSslServerProfilesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTP3DefaultServerSelection) GetSslServerProfilesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -4320,6 +3823,23 @@ func (m *HTTP3DefaultServerSelection) GetSslServerProfilesDBEntries(ctx context.
 }
 
 func (m *HTTP3DefaultServerSelection) GetTcpServerProfileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetTcpServerProfile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("tcp_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "tcp_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "tcp_server_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *HTTP3DefaultServerSelection) GetTcpServerProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetTcpServerProfile()
 	if vref == nil {
 		return nil, nil
@@ -4602,8 +4122,63 @@ func (m *HTTP3Services) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *HTTP3Services) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetHttp3ClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttp3ClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHttpClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProtocolClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetQuicProfileChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetQuicProfileChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServerAppTypeChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServerAppTypeChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSslClientProfilesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSslClientProfilesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *HTTP3Services) GetHttp3ClientProfileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetHttp3ClientProfile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("http3_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "http3_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "http3_client_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *HTTP3Services) GetHttp3ClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetHttp3ClientProfile()
 	if vref == nil {
 		return nil, nil
@@ -4665,6 +4240,23 @@ func (m *HTTP3Services) GetHttpClientProfileDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return []db.DRefInfo{dri}, nil
 }
+func (m *HTTP3Services) GetHttpClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vref := m.GetHttpClientProfile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("http_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "http_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "http_client_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
 
 // GetHttpClientProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTP3Services) GetHttpClientProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -4710,6 +4302,23 @@ func (m *HTTP3Services) GetProtocolClientProfileDRefInfo() ([]db.DRefInfo, error
 	}
 	return []db.DRefInfo{dri}, nil
 }
+func (m *HTTP3Services) GetProtocolClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vref := m.GetProtocolClientProfile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("udp_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "udp_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "protocol_client_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
 
 // GetProtocolClientProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTP3Services) GetProtocolClientProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -4739,6 +4348,30 @@ func (m *HTTP3Services) GetProtocolClientProfileDBEntries(ctx context.Context, d
 }
 
 func (m *HTTP3Services) GetQuicProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetQuicProfileChoice().(type) {
+	case *HTTP3Services_QuicClientProfileNone:
+		return nil, nil
+	case *HTTP3Services_QuicClientProfile:
+		vref := m.GetQuicClientProfile()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("quic_profile.Object")
+		dri := db.DRefInfo{
+			RefdType:   "quic_profile.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "quic_client_profile",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *HTTP3Services) GetQuicProfileChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetQuicProfileChoice().(type) {
 	case *HTTP3Services_QuicClientProfileNone:
 		return nil, nil
@@ -4817,6 +4450,27 @@ func (m *HTTP3Services) GetServerAppTypeChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTP3Services) GetServerAppTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServerAppTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServerAppTypeChoice().(type) {
+	case *HTTP3Services_ServerAppTypeDefault:
+		drInfos, err := m.GetServerAppTypeDefault().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetServerAppTypeDefault().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "server_app_type_default." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *HTTP3Services) GetSslClientProfilesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetSslClientProfiles()
 	if len(vrefs) == 0 {
@@ -4830,6 +4484,30 @@ func (m *HTTP3Services) GetSslClientProfilesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("ssl_client_profile.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_client_profile.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ssl_client_profiles",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTP3Services) GetSslClientProfilesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSslClientProfiles()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("HTTP3Services.ssl_client_profiles[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("ssl_client_profile.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "ssl_client_profile.Object",
 			RefdTenant: vref.Tenant,
@@ -5082,7 +4760,9 @@ var DefaultHTTP3ServicesValidator = func() *ValidateHTTP3Services {
 
 	vrhServices := v.ServicesValidationRuleHandler
 	rulesServices := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhServices(rulesServices)
@@ -5169,11 +4849,6 @@ func (m *HTTPDefaultServerSelection) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetHttp2ServerProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetHttp2ServerProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
 	if fdrInfos, err := m.GetHttpServerProfileChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHttpServerProfileChoiceDRefInfo() FAILED")
 	} else {
@@ -5189,76 +4864,57 @@ func (m *HTTPDefaultServerSelection) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetWebsocketServerProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetWebsocketServerProfileChoiceDRefInfo() FAILED")
+	return drInfos, nil
+}
+func (m *HTTPDefaultServerSelection) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetHttpServerProfileChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpServerProfileChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProtocolServerProfileChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolServerProfileChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSslServerProfilesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSslServerProfilesDRefInfoForOverlay() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 	return drInfos, nil
 }
 
-func (m *HTTPDefaultServerSelection) GetHttp2ServerProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetHttp2ServerProfileChoice().(type) {
-	case *HTTPDefaultServerSelection_Http2ServerProfileNone:
+func (m *HTTPDefaultServerSelection) GetHttpServerProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetHttpServerProfileChoice().(type) {
+	case *HTTPDefaultServerSelection_HttpServerProfileSameAsClient:
 		return nil, nil
-	case *HTTPDefaultServerSelection_Http2ServerProfile:
-		vref := m.GetHttp2ServerProfile()
+	case *HTTPDefaultServerSelection_HttpServerProfile:
+		vref := m.GetHttpServerProfile()
 		if vref == nil {
 			return nil, nil
 		}
 		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("http2_profile.Object")
+		vdRef.SetKind("http_profile.Object")
 		dri := db.DRefInfo{
-			RefdType:   "http2_profile.Object",
+			RefdType:   "http_profile.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
 			RefdName:   vref.Name,
-			DRField:    "http2_server_profile",
+			DRField:    "http_server_profile",
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
-	case *HTTPDefaultServerSelection_Http2ServerProfileSameAsClient:
-		return nil, nil
 	default:
 		return nil, nil
 	}
 }
-
-// GetHttp2ServerProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *HTTPDefaultServerSelection) GetHttp2ServerProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetHttp2ServerProfileChoice().(type) {
-	case *HTTPDefaultServerSelection_Http2ServerProfileNone:
-	case *HTTPDefaultServerSelection_Http2ServerProfile:
-		refdType, err := d.TypeForEntryKind("", "", "http2_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: http2_profile")
-		}
-		vref := m.GetHttp2ServerProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "http2_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	case *HTTPDefaultServerSelection_Http2ServerProfileSameAsClient:
-	}
-
-	return entries, nil
-}
-
-func (m *HTTPDefaultServerSelection) GetHttpServerProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
+func (m *HTTPDefaultServerSelection) GetHttpServerProfileChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetHttpServerProfileChoice().(type) {
 	case *HTTPDefaultServerSelection_HttpServerProfileSameAsClient:
 		return nil, nil
@@ -5340,6 +4996,30 @@ func (m *HTTPDefaultServerSelection) GetProtocolServerProfileChoiceDRefInfo() ([
 		return nil, nil
 	}
 }
+func (m *HTTPDefaultServerSelection) GetProtocolServerProfileChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	switch m.GetProtocolServerProfileChoice().(type) {
+	case *HTTPDefaultServerSelection_ProtocolServerProfileSameAsClient:
+		return nil, nil
+	case *HTTPDefaultServerSelection_ProtocolServerProfile:
+		vref := m.GetProtocolServerProfile()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("tcp_profile.Object")
+		dri := db.DRefInfo{
+			RefdType:   "tcp_profile.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "protocol_server_profile",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
 
 // GetProtocolServerProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTPDefaultServerSelection) GetProtocolServerProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -5398,6 +5078,30 @@ func (m *HTTPDefaultServerSelection) GetSslServerProfilesDRefInfo() ([]db.DRefIn
 	}
 	return drInfos, nil
 }
+func (m *HTTPDefaultServerSelection) GetSslServerProfilesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSslServerProfiles()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("HTTPDefaultServerSelection.ssl_server_profiles[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("ssl_server_profile.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_server_profile.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ssl_server_profiles",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetSslServerProfilesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTPDefaultServerSelection) GetSslServerProfilesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -5424,64 +5128,6 @@ func (m *HTTPDefaultServerSelection) GetSslServerProfilesDBEntries(ctx context.C
 			entries = append(entries, refdEnt)
 		}
 	}
-	return entries, nil
-}
-
-func (m *HTTPDefaultServerSelection) GetWebsocketServerProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetWebsocketServerProfileChoice().(type) {
-	case *HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient:
-		return nil, nil
-	case *HTTPDefaultServerSelection_WebsocketServerProfile:
-		vref := m.GetWebsocketServerProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("websocket_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "websocket_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "websocket_server_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetWebsocketServerProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *HTTPDefaultServerSelection) GetWebsocketServerProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetWebsocketServerProfileChoice().(type) {
-	case *HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient:
-	case *HTTPDefaultServerSelection_WebsocketServerProfile:
-		refdType, err := d.TypeForEntryKind("", "", "websocket_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: websocket_profile")
-		}
-		vref := m.GetWebsocketServerProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "websocket_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
 	return entries, nil
 }
 
@@ -5557,42 +5203,6 @@ func (v *ValidateHTTPDefaultServerSelection) Validate(ctx context.Context, pm in
 		return nil
 	}
 
-	switch m.GetHttp2ServerProfileChoice().(type) {
-	case *HTTPDefaultServerSelection_Http2ServerProfileNone:
-		if fv, exists := v.FldValidators["http2_server_profile_choice.http2_server_profile_none"]; exists {
-			val := m.GetHttp2ServerProfileChoice().(*HTTPDefaultServerSelection_Http2ServerProfileNone).Http2ServerProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("http2_server_profile_choice"),
-				db.WithValidateField("http2_server_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *HTTPDefaultServerSelection_Http2ServerProfile:
-		if fv, exists := v.FldValidators["http2_server_profile_choice.http2_server_profile"]; exists {
-			val := m.GetHttp2ServerProfileChoice().(*HTTPDefaultServerSelection_Http2ServerProfile).Http2ServerProfile
-			vOpts := append(opts,
-				db.WithValidateField("http2_server_profile_choice"),
-				db.WithValidateField("http2_server_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *HTTPDefaultServerSelection_Http2ServerProfileSameAsClient:
-		if fv, exists := v.FldValidators["http2_server_profile_choice.http2_server_profile_same_as_client"]; exists {
-			val := m.GetHttp2ServerProfileChoice().(*HTTPDefaultServerSelection_Http2ServerProfileSameAsClient).Http2ServerProfileSameAsClient
-			vOpts := append(opts,
-				db.WithValidateField("http2_server_profile_choice"),
-				db.WithValidateField("http2_server_profile_same_as_client"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
-
 	switch m.GetHttpServerProfileChoice().(type) {
 	case *HTTPDefaultServerSelection_HttpServerProfileSameAsClient:
 		if fv, exists := v.FldValidators["http_server_profile_choice.http_server_profile_same_as_client"]; exists {
@@ -5658,31 +5268,6 @@ func (v *ValidateHTTPDefaultServerSelection) Validate(ctx context.Context, pm in
 			return err
 		}
 	}
-
-	switch m.GetWebsocketServerProfileChoice().(type) {
-	case *HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient:
-		if fv, exists := v.FldValidators["websocket_server_profile_choice.websocket_server_profile_same_as_client"]; exists {
-			val := m.GetWebsocketServerProfileChoice().(*HTTPDefaultServerSelection_WebsocketServerProfileSameAsClient).WebsocketServerProfileSameAsClient
-			vOpts := append(opts,
-				db.WithValidateField("websocket_server_profile_choice"),
-				db.WithValidateField("websocket_server_profile_same_as_client"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *HTTPDefaultServerSelection_WebsocketServerProfile:
-		if fv, exists := v.FldValidators["websocket_server_profile_choice.websocket_server_profile"]; exists {
-			val := m.GetWebsocketServerProfileChoice().(*HTTPDefaultServerSelection_WebsocketServerProfile).WebsocketServerProfile
-			vOpts := append(opts,
-				db.WithValidateField("websocket_server_profile_choice"),
-				db.WithValidateField("websocket_server_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
 	return nil
 }
 
@@ -5718,10 +5303,8 @@ var DefaultHTTPDefaultServerSelectionValidator = func() *ValidateHTTPDefaultServ
 		panic(errMsg)
 	}
 	v.FldValidators["ssl_server_profiles"] = vFn
-	v.FldValidators["http2_server_profile_choice.http2_server_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["http_server_profile_choice.http_server_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["protocol_server_profile_choice.protocol_server_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["websocket_server_profile_choice.websocket_server_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -5773,23 +5356,8 @@ func (m *HTTPServices) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetFixProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetFixProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetHttp2ClientProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetHttp2ClientProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
 	if fdrInfos, err := m.GetHttpClientProfileDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHttpClientProfileDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetOcspProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetOcspProfileChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -5808,136 +5376,55 @@ func (m *HTTPServices) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetStreamProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetStreamProfileChoiceDRefInfo() FAILED")
+	return drInfos, nil
+}
+func (m *HTTPServices) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetHttpClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpClientProfileDRefInfoForOverlay() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetWebsocketClientProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetWebsocketClientProfileChoiceDRefInfo() FAILED")
+	if fdrInfos, err := m.GetProtocolClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServerAppTypeChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServerAppTypeChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSslClientProfilesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSslClientProfilesDRefInfoForOverlay() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 	return drInfos, nil
 }
 
-func (m *HTTPServices) GetFixProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetFixProfileChoice().(type) {
-	case *HTTPServices_FixProfileNone:
-		return nil, nil
-	case *HTTPServices_FixProfile:
-		vref := m.GetFixProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("fix_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "fix_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "fix_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetFixProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *HTTPServices) GetFixProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetFixProfileChoice().(type) {
-	case *HTTPServices_FixProfileNone:
-	case *HTTPServices_FixProfile:
-		refdType, err := d.TypeForEntryKind("", "", "fix_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: fix_profile")
-		}
-		vref := m.GetFixProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "fix_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *HTTPServices) GetHttp2ClientProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetHttp2ClientProfileChoice().(type) {
-	case *HTTPServices_Http2ClientProfileNone:
-		return nil, nil
-	case *HTTPServices_Http2ClientProfile:
-		vref := m.GetHttp2ClientProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("http2_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "http2_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "http2_client_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetHttp2ClientProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *HTTPServices) GetHttp2ClientProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetHttp2ClientProfileChoice().(type) {
-	case *HTTPServices_Http2ClientProfileNone:
-	case *HTTPServices_Http2ClientProfile:
-		refdType, err := d.TypeForEntryKind("", "", "http2_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: http2_profile")
-		}
-		vref := m.GetHttp2ClientProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "http2_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
 func (m *HTTPServices) GetHttpClientProfileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetHttpClientProfile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("http_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "http_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "http_client_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *HTTPServices) GetHttpClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetHttpClientProfile()
 	if vref == nil {
 		return nil, nil
@@ -5982,65 +5469,24 @@ func (m *HTTPServices) GetHttpClientProfileDBEntries(ctx context.Context, d db.I
 	return entries, nil
 }
 
-func (m *HTTPServices) GetOcspProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetOcspProfileChoice().(type) {
-	case *HTTPServices_OcspProfileNone:
-		return nil, nil
-	case *HTTPServices_OcspProfile:
-		vref := m.GetOcspProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("ocsp_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "ocsp_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "ocsp_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetOcspProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *HTTPServices) GetOcspProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetOcspProfileChoice().(type) {
-	case *HTTPServices_OcspProfileNone:
-	case *HTTPServices_OcspProfile:
-		refdType, err := d.TypeForEntryKind("", "", "ocsp_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: ocsp_profile")
-		}
-		vref := m.GetOcspProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "ocsp_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
 func (m *HTTPServices) GetProtocolClientProfileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetProtocolClientProfile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("tcp_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "tcp_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "protocol_client_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *HTTPServices) GetProtocolClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetProtocolClientProfile()
 	if vref == nil {
 		return nil, nil
@@ -6106,6 +5552,27 @@ func (m *HTTPServices) GetServerAppTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPServices) GetServerAppTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServerAppTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServerAppTypeChoice().(type) {
+	case *HTTPServices_ServerAppTypeSameAsClient:
+		drInfos, err := m.GetServerAppTypeSameAsClient().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetServerAppTypeSameAsClient().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "server_app_type_same_as_client." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *HTTPServices) GetSslClientProfilesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetSslClientProfiles()
 	if len(vrefs) == 0 {
@@ -6119,6 +5586,30 @@ func (m *HTTPServices) GetSslClientProfilesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("ssl_client_profile.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_client_profile.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ssl_client_profiles",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTPServices) GetSslClientProfilesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSslClientProfiles()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("HTTPServices.ssl_client_profiles[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("ssl_client_profile.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "ssl_client_profile.Object",
 			RefdTenant: vref.Tenant,
@@ -6156,122 +5647,6 @@ func (m *HTTPServices) GetSslClientProfilesDBEntries(ctx context.Context, d db.I
 			entries = append(entries, refdEnt)
 		}
 	}
-	return entries, nil
-}
-
-func (m *HTTPServices) GetStreamProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetStreamProfileChoice().(type) {
-	case *HTTPServices_StreamProfileNone:
-		return nil, nil
-	case *HTTPServices_StreamProfile:
-		vref := m.GetStreamProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("stream_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "stream_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "stream_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetStreamProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *HTTPServices) GetStreamProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetStreamProfileChoice().(type) {
-	case *HTTPServices_StreamProfileNone:
-	case *HTTPServices_StreamProfile:
-		refdType, err := d.TypeForEntryKind("", "", "stream_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: stream_profile")
-		}
-		vref := m.GetStreamProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "stream_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *HTTPServices) GetWebsocketClientProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetWebsocketClientProfileChoice().(type) {
-	case *HTTPServices_WebsocketClientProfileNone:
-		return nil, nil
-	case *HTTPServices_WebsocketClientProfile:
-		vref := m.GetWebsocketClientProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("websocket_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "websocket_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "websocket_client_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetWebsocketClientProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *HTTPServices) GetWebsocketClientProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetWebsocketClientProfileChoice().(type) {
-	case *HTTPServices_WebsocketClientProfileNone:
-	case *HTTPServices_WebsocketClientProfile:
-		refdType, err := d.TypeForEntryKind("", "", "websocket_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: websocket_profile")
-		}
-		vref := m.GetWebsocketClientProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "websocket_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
 	return entries, nil
 }
 
@@ -6419,85 +5794,10 @@ func (v *ValidateHTTPServices) Validate(ctx context.Context, pm interface{}, opt
 	if m == nil {
 		return nil
 	}
-
-	switch m.GetFixProfileChoice().(type) {
-	case *HTTPServices_FixProfileNone:
-		if fv, exists := v.FldValidators["fix_profile_choice.fix_profile_none"]; exists {
-			val := m.GetFixProfileChoice().(*HTTPServices_FixProfileNone).FixProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("fix_profile_choice"),
-				db.WithValidateField("fix_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *HTTPServices_FixProfile:
-		if fv, exists := v.FldValidators["fix_profile_choice.fix_profile"]; exists {
-			val := m.GetFixProfileChoice().(*HTTPServices_FixProfile).FixProfile
-			vOpts := append(opts,
-				db.WithValidateField("fix_profile_choice"),
-				db.WithValidateField("fix_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
-
-	switch m.GetHttp2ClientProfileChoice().(type) {
-	case *HTTPServices_Http2ClientProfileNone:
-		if fv, exists := v.FldValidators["http2_client_profile_choice.http2_client_profile_none"]; exists {
-			val := m.GetHttp2ClientProfileChoice().(*HTTPServices_Http2ClientProfileNone).Http2ClientProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("http2_client_profile_choice"),
-				db.WithValidateField("http2_client_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *HTTPServices_Http2ClientProfile:
-		if fv, exists := v.FldValidators["http2_client_profile_choice.http2_client_profile"]; exists {
-			val := m.GetHttp2ClientProfileChoice().(*HTTPServices_Http2ClientProfile).Http2ClientProfile
-			vOpts := append(opts,
-				db.WithValidateField("http2_client_profile_choice"),
-				db.WithValidateField("http2_client_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
 	if fv, exists := v.FldValidators["http_client_profile"]; exists {
 		vOpts := append(opts, db.WithValidateField("http_client_profile"))
 		if err := fv(ctx, m.GetHttpClientProfile(), vOpts...); err != nil {
 			return err
-		}
-	}
-
-	switch m.GetOcspProfileChoice().(type) {
-	case *HTTPServices_OcspProfileNone:
-		if fv, exists := v.FldValidators["ocsp_profile_choice.ocsp_profile_none"]; exists {
-			val := m.GetOcspProfileChoice().(*HTTPServices_OcspProfileNone).OcspProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("ocsp_profile_choice"),
-				db.WithValidateField("ocsp_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *HTTPServices_OcspProfile:
-		if fv, exists := v.FldValidators["ocsp_profile_choice.ocsp_profile"]; exists {
-			val := m.GetOcspProfileChoice().(*HTTPServices_OcspProfile).OcspProfile
-			vOpts := append(opts,
-				db.WithValidateField("ocsp_profile_choice"),
-				db.WithValidateField("ocsp_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
 		}
 	}
 	if fv, exists := v.FldValidators["protocol_client_profile"]; exists {
@@ -6532,56 +5832,6 @@ func (v *ValidateHTTPServices) Validate(ctx context.Context, pm interface{}, opt
 			return err
 		}
 	}
-
-	switch m.GetStreamProfileChoice().(type) {
-	case *HTTPServices_StreamProfileNone:
-		if fv, exists := v.FldValidators["stream_profile_choice.stream_profile_none"]; exists {
-			val := m.GetStreamProfileChoice().(*HTTPServices_StreamProfileNone).StreamProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("stream_profile_choice"),
-				db.WithValidateField("stream_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *HTTPServices_StreamProfile:
-		if fv, exists := v.FldValidators["stream_profile_choice.stream_profile"]; exists {
-			val := m.GetStreamProfileChoice().(*HTTPServices_StreamProfile).StreamProfile
-			vOpts := append(opts,
-				db.WithValidateField("stream_profile_choice"),
-				db.WithValidateField("stream_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
-
-	switch m.GetWebsocketClientProfileChoice().(type) {
-	case *HTTPServices_WebsocketClientProfileNone:
-		if fv, exists := v.FldValidators["websocket_client_profile_choice.websocket_client_profile_none"]; exists {
-			val := m.GetWebsocketClientProfileChoice().(*HTTPServices_WebsocketClientProfileNone).WebsocketClientProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("websocket_client_profile_choice"),
-				db.WithValidateField("websocket_client_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *HTTPServices_WebsocketClientProfile:
-		if fv, exists := v.FldValidators["websocket_client_profile_choice.websocket_client_profile"]; exists {
-			val := m.GetWebsocketClientProfileChoice().(*HTTPServices_WebsocketClientProfile).WebsocketClientProfile
-			vOpts := append(opts,
-				db.WithValidateField("websocket_client_profile_choice"),
-				db.WithValidateField("websocket_client_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
 	return nil
 }
 
@@ -6598,7 +5848,9 @@ var DefaultHTTPServicesValidator = func() *ValidateHTTPServices {
 
 	vrhServices := v.ServicesValidationRuleHandler
 	rulesServices := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhServices(rulesServices)
@@ -6621,6 +5873,7 @@ var DefaultHTTPServicesValidator = func() *ValidateHTTPServices {
 
 	vrhSslClientProfiles := v.SslClientProfilesValidationRuleHandler
 	rulesSslClientProfiles := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "32",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -6641,12 +5894,7 @@ var DefaultHTTPServicesValidator = func() *ValidateHTTPServices {
 		panic(errMsg)
 	}
 	v.FldValidators["http_client_profile"] = vFn
-	v.FldValidators["fix_profile_choice.fix_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["http2_client_profile_choice.http2_client_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["ocsp_profile_choice.ocsp_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["server_app_type_choice.server_app_type_same_as_client"] = HTTPDefaultServerSelectionValidator().Validate
-	v.FldValidators["stream_profile_choice.stream_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["websocket_client_profile_choice.websocket_client_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -6699,8 +5947,32 @@ func (m *ManagedDomain) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDnsZoneDRefInfo()
 }
+func (m *ManagedDomain) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDnsZoneDRefInfoForOverlay(generateHash)
+}
 
 func (m *ManagedDomain) GetDnsZoneDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetDnsZone()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("dns_zone.Object")
+	dri := db.DRefInfo{
+		RefdType:   "dns_zone.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "dns_zone",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ManagedDomain) GetDnsZoneDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetDnsZone()
 	if vref == nil {
 		return nil, nil
@@ -7030,43 +6302,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetClonePoolOptionsDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetClonePoolOptionsDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetDefaultPersistenceProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetDefaultPersistenceProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
 	if fdrInfos, err := m.GetDefaultPoolChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDefaultPoolChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetFallbackPersistenceProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetFallbackPersistenceProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
 	if fdrInfos, err := m.GetIrulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIrulesDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetLastHopPoolChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetLastHopPoolChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetRequestLoggingProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetRequestLoggingProfileChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-	if fdrInfos, err := m.GetStatisticsProfileChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetStatisticsProfileChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -7087,8 +6329,63 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAccessProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAccessProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDefaultPoolChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultPoolChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIrulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIrulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTrafficPoliciesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTrafficPoliciesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualAddressesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualAddressesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualServerTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServerTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ReplaceSpecType) GetAccessProfileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAccessProfile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("access_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "access_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "access_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ReplaceSpecType) GetAccessProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetAccessProfile()
 	if vref == nil {
 		return nil, nil
@@ -7133,39 +6430,23 @@ func (m *ReplaceSpecType) GetAccessProfileDBEntries(ctx context.Context, d db.In
 	return entries, nil
 }
 
-// GetDRefInfo for the field's type
-func (m *ReplaceSpecType) GetClonePoolOptionsDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetClonePoolOptions() == nil {
+func (m *ReplaceSpecType) GetDefaultPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDefaultPoolChoice().(type) {
+	case *ReplaceSpecType_DefaultPoolNone:
 		return nil, nil
-	}
-	drInfos, err := m.GetClonePoolOptions().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetClonePoolOptions().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "clone_pool_options." + dri.DRField
-	}
-	return drInfos, err
-}
-
-func (m *ReplaceSpecType) GetDefaultPersistenceProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetDefaultPersistenceProfileChoice().(type) {
-	case *ReplaceSpecType_DefaultPersistenceProfileNone:
-		return nil, nil
-	case *ReplaceSpecType_DefaultPersistenceProfile:
-		vref := m.GetDefaultPersistenceProfile()
+	case *ReplaceSpecType_DefaultPool:
+		vref := m.GetDefaultPool()
 		if vref == nil {
 			return nil, nil
 		}
 		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("persistence_profile.Object")
+		vdRef.SetKind("vs_pool.Object")
 		dri := db.DRefInfo{
-			RefdType:   "persistence_profile.Object",
+			RefdType:   "vs_pool.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
 			RefdName:   vref.Name,
-			DRField:    "default_persistence_profile",
+			DRField:    "default_pool",
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
@@ -7173,41 +6454,7 @@ func (m *ReplaceSpecType) GetDefaultPersistenceProfileChoiceDRefInfo() ([]db.DRe
 		return nil, nil
 	}
 }
-
-// GetDefaultPersistenceProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *ReplaceSpecType) GetDefaultPersistenceProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetDefaultPersistenceProfileChoice().(type) {
-	case *ReplaceSpecType_DefaultPersistenceProfileNone:
-	case *ReplaceSpecType_DefaultPersistenceProfile:
-		refdType, err := d.TypeForEntryKind("", "", "persistence_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: persistence_profile")
-		}
-		vref := m.GetDefaultPersistenceProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "persistence_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *ReplaceSpecType) GetDefaultPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
+func (m *ReplaceSpecType) GetDefaultPoolChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDefaultPoolChoice().(type) {
 	case *ReplaceSpecType_DefaultPoolNone:
 		return nil, nil
@@ -7265,64 +6512,6 @@ func (m *ReplaceSpecType) GetDefaultPoolChoiceDBEntries(ctx context.Context, d d
 	return entries, nil
 }
 
-func (m *ReplaceSpecType) GetFallbackPersistenceProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetFallbackPersistenceProfileChoice().(type) {
-	case *ReplaceSpecType_FallbackPersistenceProfileNone:
-		return nil, nil
-	case *ReplaceSpecType_FallbackPersistenceProfile:
-		vref := m.GetFallbackPersistenceProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("persistence_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "persistence_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "fallback_persistence_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetFallbackPersistenceProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *ReplaceSpecType) GetFallbackPersistenceProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetFallbackPersistenceProfileChoice().(type) {
-	case *ReplaceSpecType_FallbackPersistenceProfileNone:
-	case *ReplaceSpecType_FallbackPersistenceProfile:
-		refdType, err := d.TypeForEntryKind("", "", "persistence_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: persistence_profile")
-		}
-		vref := m.GetFallbackPersistenceProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "persistence_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
 func (m *ReplaceSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetIrules()
 	if len(refs) == 0 {
@@ -7334,6 +6523,34 @@ func (m *ReplaceSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("ReplaceSpecType.irules[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "irule.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "irules",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetIrulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIrules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.irules[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "irule.Object",
 			RefdUID:    ref.Uid,
@@ -7366,180 +6583,6 @@ func (m *ReplaceSpecType) GetIrulesDBEntries(ctx context.Context, d db.Interface
 	return entries, nil
 }
 
-func (m *ReplaceSpecType) GetLastHopPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetLastHopPoolChoice().(type) {
-	case *ReplaceSpecType_LastHopPoolNone:
-		return nil, nil
-	case *ReplaceSpecType_LastHopPool:
-		vref := m.GetLastHopPool()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("vs_pool.Object")
-		dri := db.DRefInfo{
-			RefdType:   "vs_pool.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "last_hop_pool",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetLastHopPoolChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *ReplaceSpecType) GetLastHopPoolChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetLastHopPoolChoice().(type) {
-	case *ReplaceSpecType_LastHopPoolNone:
-	case *ReplaceSpecType_LastHopPool:
-		refdType, err := d.TypeForEntryKind("", "", "vs_pool.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: vs_pool")
-		}
-		vref := m.GetLastHopPool()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "vs_pool.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *ReplaceSpecType) GetRequestLoggingProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetRequestLoggingProfileChoice().(type) {
-	case *ReplaceSpecType_RequestLoggingProfileNone:
-		return nil, nil
-	case *ReplaceSpecType_RequestLoggingProfile:
-		vref := m.GetRequestLoggingProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("request_logging_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "request_logging_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "request_logging_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetRequestLoggingProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *ReplaceSpecType) GetRequestLoggingProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetRequestLoggingProfileChoice().(type) {
-	case *ReplaceSpecType_RequestLoggingProfileNone:
-	case *ReplaceSpecType_RequestLoggingProfile:
-		refdType, err := d.TypeForEntryKind("", "", "request_logging_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: request_logging_profile")
-		}
-		vref := m.GetRequestLoggingProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "request_logging_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *ReplaceSpecType) GetStatisticsProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetStatisticsProfileChoice().(type) {
-	case *ReplaceSpecType_StatisticsProfileNone:
-		return nil, nil
-	case *ReplaceSpecType_StatisticsProfile:
-		vref := m.GetStatisticsProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("statistics_profile.Object")
-		dri := db.DRefInfo{
-			RefdType:   "statistics_profile.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "statistics_profile",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-	default:
-		return nil, nil
-	}
-}
-
-// GetStatisticsProfileChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *ReplaceSpecType) GetStatisticsProfileChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetStatisticsProfileChoice().(type) {
-	case *ReplaceSpecType_StatisticsProfileNone:
-	case *ReplaceSpecType_StatisticsProfile:
-		refdType, err := d.TypeForEntryKind("", "", "statistics_profile.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: statistics_profile")
-		}
-		vref := m.GetStatisticsProfile()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "statistics_profile.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
 func (m *ReplaceSpecType) GetTrafficPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetTrafficPolicies()
 	if len(refs) == 0 {
@@ -7551,6 +6594,34 @@ func (m *ReplaceSpecType) GetTrafficPoliciesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("ReplaceSpecType.traffic_policies[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "traffic_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "traffic_policies",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetTrafficPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTrafficPolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.traffic_policies[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "traffic_policy.Object",
 			RefdUID:    ref.Uid,
@@ -7596,6 +6667,30 @@ func (m *ReplaceSpecType) GetVirtualAddressesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("virtual_address.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_address.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_addresses",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetVirtualAddressesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetVirtualAddresses()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.virtual_addresses[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_address.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_address.Object",
 			RefdTenant: vref.Tenant,
@@ -7667,6 +6762,37 @@ func (m *ReplaceSpecType) GetVirtualServerTypeDRefInfo() ([]db.DRefInfo, error) 
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetVirtualServerTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVirtualServerType() == nil {
+		return nil, nil
+	}
+	switch m.GetVirtualServerType().(type) {
+	case *ReplaceSpecType_Https:
+		drInfos, err := m.GetHttps().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_Http3:
+		drInfos, err := m.GetHttp3().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttp3().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http3." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -7705,6 +6831,52 @@ func (v *ValidateReplaceSpecType) DomainsValidationRuleHandler(rules map[string]
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateReplaceSpecType) VirtualAddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for virtual_addresses")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for virtual_addresses")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated virtual_addresses")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items virtual_addresses")
 		}
 		return nil
 	}
@@ -7765,6 +6937,23 @@ func (v *ValidateReplaceSpecType) VsScoreValidationRuleHandler(rules map[string]
 
 	return validatorFn, nil
 }
+func (v *ValidateReplaceSpecType) AccessProfileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for access_profile")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
 
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
@@ -7785,47 +6974,10 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["auto_last_hop"]; exists {
-		vOpts := append(opts, db.WithValidateField("auto_last_hop"))
-		if err := fv(ctx, m.GetAutoLastHop(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["clone_pool_options"]; exists {
-		vOpts := append(opts, db.WithValidateField("clone_pool_options"))
-		if err := fv(ctx, m.GetClonePoolOptions(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["connection_limit_options"]; exists {
 		vOpts := append(opts, db.WithValidateField("connection_limit_options"))
 		if err := fv(ctx, m.GetConnectionLimitOptions(), vOpts...); err != nil {
 			return err
-		}
-	}
-
-	switch m.GetDefaultPersistenceProfileChoice().(type) {
-	case *ReplaceSpecType_DefaultPersistenceProfileNone:
-		if fv, exists := v.FldValidators["default_persistence_profile_choice.default_persistence_profile_none"]; exists {
-			val := m.GetDefaultPersistenceProfileChoice().(*ReplaceSpecType_DefaultPersistenceProfileNone).DefaultPersistenceProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("default_persistence_profile_choice"),
-				db.WithValidateField("default_persistence_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ReplaceSpecType_DefaultPersistenceProfile:
-		if fv, exists := v.FldValidators["default_persistence_profile_choice.default_persistence_profile"]; exists {
-			val := m.GetDefaultPersistenceProfileChoice().(*ReplaceSpecType_DefaultPersistenceProfile).DefaultPersistenceProfile
-			vOpts := append(opts,
-				db.WithValidateField("default_persistence_profile_choice"),
-				db.WithValidateField("default_persistence_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
 		}
 	}
 
@@ -7859,31 +7011,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			return err
 		}
 	}
-
-	switch m.GetFallbackPersistenceProfileChoice().(type) {
-	case *ReplaceSpecType_FallbackPersistenceProfileNone:
-		if fv, exists := v.FldValidators["fallback_persistence_profile_choice.fallback_persistence_profile_none"]; exists {
-			val := m.GetFallbackPersistenceProfileChoice().(*ReplaceSpecType_FallbackPersistenceProfileNone).FallbackPersistenceProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("fallback_persistence_profile_choice"),
-				db.WithValidateField("fallback_persistence_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ReplaceSpecType_FallbackPersistenceProfile:
-		if fv, exists := v.FldValidators["fallback_persistence_profile_choice.fallback_persistence_profile"]; exists {
-			val := m.GetFallbackPersistenceProfileChoice().(*ReplaceSpecType_FallbackPersistenceProfile).FallbackPersistenceProfile
-			vOpts := append(opts,
-				db.WithValidateField("fallback_persistence_profile_choice"),
-				db.WithValidateField("fallback_persistence_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
 	if fv, exists := v.FldValidators["immediate_action_on_service_down"]; exists {
 		vOpts := append(opts, db.WithValidateField("immediate_action_on_service_down"))
 		if err := fv(ctx, m.GetImmediateActionOnServiceDown(), vOpts...); err != nil {
@@ -7899,124 +7026,16 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			}
 		}
 	}
-	if fv, exists := v.FldValidators["json"]; exists {
-		vOpts := append(opts, db.WithValidateField("json"))
-		if err := fv(ctx, m.GetJson(), vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetLastHopPoolChoice().(type) {
-	case *ReplaceSpecType_LastHopPoolNone:
-		if fv, exists := v.FldValidators["last_hop_pool_choice.last_hop_pool_none"]; exists {
-			val := m.GetLastHopPoolChoice().(*ReplaceSpecType_LastHopPoolNone).LastHopPoolNone
-			vOpts := append(opts,
-				db.WithValidateField("last_hop_pool_choice"),
-				db.WithValidateField("last_hop_pool_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ReplaceSpecType_LastHopPool:
-		if fv, exists := v.FldValidators["last_hop_pool_choice.last_hop_pool"]; exists {
-			val := m.GetLastHopPoolChoice().(*ReplaceSpecType_LastHopPool).LastHopPool
-			vOpts := append(opts,
-				db.WithValidateField("last_hop_pool_choice"),
-				db.WithValidateField("last_hop_pool"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
-	if fv, exists := v.FldValidators["nat64"]; exists {
-		vOpts := append(opts, db.WithValidateField("nat64"))
-		if err := fv(ctx, m.GetNat64(), vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetRequestLoggingProfileChoice().(type) {
-	case *ReplaceSpecType_RequestLoggingProfileNone:
-		if fv, exists := v.FldValidators["request_logging_profile_choice.request_logging_profile_none"]; exists {
-			val := m.GetRequestLoggingProfileChoice().(*ReplaceSpecType_RequestLoggingProfileNone).RequestLoggingProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("request_logging_profile_choice"),
-				db.WithValidateField("request_logging_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ReplaceSpecType_RequestLoggingProfile:
-		if fv, exists := v.FldValidators["request_logging_profile_choice.request_logging_profile"]; exists {
-			val := m.GetRequestLoggingProfileChoice().(*ReplaceSpecType_RequestLoggingProfile).RequestLoggingProfile
-			vOpts := append(opts,
-				db.WithValidateField("request_logging_profile_choice"),
-				db.WithValidateField("request_logging_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
-	if fv, exists := v.FldValidators["sse"]; exists {
-		vOpts := append(opts, db.WithValidateField("sse"))
-		if err := fv(ctx, m.GetSse(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["state"]; exists {
-		vOpts := append(opts, db.WithValidateField("state"))
-		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetStatisticsProfileChoice().(type) {
-	case *ReplaceSpecType_StatisticsProfileNone:
-		if fv, exists := v.FldValidators["statistics_profile_choice.statistics_profile_none"]; exists {
-			val := m.GetStatisticsProfileChoice().(*ReplaceSpecType_StatisticsProfileNone).StatisticsProfileNone
-			vOpts := append(opts,
-				db.WithValidateField("statistics_profile_choice"),
-				db.WithValidateField("statistics_profile_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ReplaceSpecType_StatisticsProfile:
-		if fv, exists := v.FldValidators["statistics_profile_choice.statistics_profile"]; exists {
-			val := m.GetStatisticsProfileChoice().(*ReplaceSpecType_StatisticsProfile).StatisticsProfile
-			vOpts := append(opts,
-				db.WithValidateField("statistics_profile_choice"),
-				db.WithValidateField("statistics_profile"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	}
 	if fv, exists := v.FldValidators["traffic_policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("traffic_policies"))
 		if err := fv(ctx, m.GetTrafficPolicies(), vOpts...); err != nil {
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["translations"]; exists {
-		vOpts := append(opts, db.WithValidateField("translations"))
-		if err := fv(ctx, m.GetTranslations(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["virtual_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("virtual_addresses"))
-		for idx, item := range m.GetVirtualAddresses() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetVirtualAddresses(), vOpts...); err != nil {
+			return err
 		}
 	}
 
@@ -8081,6 +7100,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhVirtualAddresses := v.VirtualAddressesValidationRuleHandler
+	rulesVirtualAddresses := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVirtualAddresses(rulesVirtualAddresses)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.virtual_addresses: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["virtual_addresses"] = vFn
+
 	vrhTrafficPolicies := v.TrafficPoliciesValidationRuleHandler
 	rulesTrafficPolicies := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "32",
@@ -8103,18 +7133,21 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vs_score"] = vFn
-	v.FldValidators["default_persistence_profile_choice.default_persistence_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	vrhAccessProfile := v.AccessProfileValidationRuleHandler
+	rulesAccessProfile := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAccessProfile(rulesAccessProfile)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.access_profile: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["access_profile"] = vFn
 	v.FldValidators["default_pool_choice.default_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["fallback_persistence_profile_choice.fallback_persistence_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["last_hop_pool_choice.last_hop_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["request_logging_profile_choice.request_logging_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["statistics_profile_choice.statistics_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["virtual_server_type.https"] = HTTPServicesValidator().Validate
 	v.FldValidators["virtual_server_type.http3"] = HTTP3ServicesValidator().Validate
 	v.FldValidators["connection_limit_options"] = ConnectionLimitsTypeValidator().Validate
-	v.FldValidators["virtual_addresses"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["clone_pool_options"] = ClonePoolTypeValidator().Validate
-	v.FldValidators["access_profile"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -8164,6 +7197,14 @@ type ValidateServiceType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateServiceType) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateServiceType) PortChoicePortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
@@ -8192,6 +7233,16 @@ func (v *ValidateServiceType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["port_choice"]; exists {
+		val := m.GetPortChoice()
+		vOpts := append(opts,
+			db.WithValidateField("port_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetPortChoice().(type) {
@@ -8231,9 +7282,20 @@ var DefaultServiceTypeValidator = func() *ValidateServiceType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+	vrhPortChoice := v.PortChoiceValidationRuleHandler
+	rulesPortChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPortChoice(rulesPortChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServiceType.port_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port_choice"] = vFn
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "65535",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.lte":       "65535",
 	}
 	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
 	if err != nil {
@@ -8242,6 +7304,7 @@ var DefaultServiceTypeValidator = func() *ValidateServiceType {
 	}
 	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
 	rulesPortChoicePortRanges := map[string]string{
+		"ves.io.schema.rules.message.required":  "true",
 		"ves.io.schema.rules.string.max_len":    "32",
 		"ves.io.schema.rules.string.min_len":    "1",
 		"ves.io.schema.rules.string.port_range": "true",
@@ -8456,6 +7519,24 @@ func (m *TCPDefaultServerSelection) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *TCPDefaultServerSelection) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSslServerProfilesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSslServerProfilesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTcpServerProfileChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTcpServerProfileChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *TCPDefaultServerSelection) GetSslServerProfilesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetSslServerProfiles()
@@ -8470,6 +7551,30 @@ func (m *TCPDefaultServerSelection) GetSslServerProfilesDRefInfo() ([]db.DRefInf
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("ssl_server_profile.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_server_profile.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ssl_server_profiles",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *TCPDefaultServerSelection) GetSslServerProfilesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSslServerProfiles()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("TCPDefaultServerSelection.ssl_server_profiles[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("ssl_server_profile.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "ssl_server_profile.Object",
 			RefdTenant: vref.Tenant,
@@ -8511,6 +7616,30 @@ func (m *TCPDefaultServerSelection) GetSslServerProfilesDBEntries(ctx context.Co
 }
 
 func (m *TCPDefaultServerSelection) GetTcpServerProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetTcpServerProfileChoice().(type) {
+	case *TCPDefaultServerSelection_TcpServerProfileUseClient:
+		return nil, nil
+	case *TCPDefaultServerSelection_TcpServerProfile:
+		vref := m.GetTcpServerProfile()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("tcp_profile.Object")
+		dri := db.DRefInfo{
+			RefdType:   "tcp_profile.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "tcp_server_profile",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *TCPDefaultServerSelection) GetTcpServerProfileChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetTcpServerProfileChoice().(type) {
 	case *TCPDefaultServerSelection_TcpServerProfileUseClient:
 		return nil, nil
@@ -8784,8 +7913,48 @@ func (m *TCPServices) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *TCPServices) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProtocolClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServerAppTypeChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServerAppTypeChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSslClientProfilesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSslClientProfilesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *TCPServices) GetProtocolClientProfileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetProtocolClientProfile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("tcp_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "tcp_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "protocol_client_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *TCPServices) GetProtocolClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetProtocolClientProfile()
 	if vref == nil {
 		return nil, nil
@@ -8851,6 +8020,27 @@ func (m *TCPServices) GetServerAppTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *TCPServices) GetServerAppTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServerAppTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServerAppTypeChoice().(type) {
+	case *TCPServices_ServerAppTypeSameAsClient:
+		drInfos, err := m.GetServerAppTypeSameAsClient().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetServerAppTypeSameAsClient().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "server_app_type_same_as_client." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *TCPServices) GetSslClientProfilesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetSslClientProfiles()
 	if len(vrefs) == 0 {
@@ -8864,6 +8054,30 @@ func (m *TCPServices) GetSslClientProfilesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("ssl_client_profile.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_client_profile.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ssl_client_profiles",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *TCPServices) GetSslClientProfilesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSslClientProfiles()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("TCPServices.ssl_client_profiles[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("ssl_client_profile.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "ssl_client_profile.Object",
 			RefdTenant: vref.Tenant,
@@ -9261,6 +8475,24 @@ func (m *UDPDefaultServerSelection) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *UDPDefaultServerSelection) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSslServerProfilesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSslServerProfilesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUdpServerProfileChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUdpServerProfileChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *UDPDefaultServerSelection) GetSslServerProfilesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetSslServerProfiles()
@@ -9275,6 +8507,30 @@ func (m *UDPDefaultServerSelection) GetSslServerProfilesDRefInfo() ([]db.DRefInf
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("ssl_server_profile.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_server_profile.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ssl_server_profiles",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *UDPDefaultServerSelection) GetSslServerProfilesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSslServerProfiles()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("UDPDefaultServerSelection.ssl_server_profiles[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("ssl_server_profile.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "ssl_server_profile.Object",
 			RefdTenant: vref.Tenant,
@@ -9316,6 +8572,30 @@ func (m *UDPDefaultServerSelection) GetSslServerProfilesDBEntries(ctx context.Co
 }
 
 func (m *UDPDefaultServerSelection) GetUdpServerProfileChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUdpServerProfileChoice().(type) {
+	case *UDPDefaultServerSelection_UdpServerProfileUseClient:
+		return nil, nil
+	case *UDPDefaultServerSelection_UdpServerProfile:
+		vref := m.GetUdpServerProfile()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("udp_profile.Object")
+		dri := db.DRefInfo{
+			RefdType:   "udp_profile.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "udp_server_profile",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *UDPDefaultServerSelection) GetUdpServerProfileChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetUdpServerProfileChoice().(type) {
 	case *UDPDefaultServerSelection_UdpServerProfileUseClient:
 		return nil, nil
@@ -9589,8 +8869,48 @@ func (m *UDPServices) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *UDPServices) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProtocolClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServerAppTypeChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServerAppTypeChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSslClientProfilesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSslClientProfilesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *UDPServices) GetProtocolClientProfileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetProtocolClientProfile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("udp_profile.Object")
+	dri := db.DRefInfo{
+		RefdType:   "udp_profile.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "protocol_client_profile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *UDPServices) GetProtocolClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetProtocolClientProfile()
 	if vref == nil {
 		return nil, nil
@@ -9656,6 +8976,27 @@ func (m *UDPServices) GetServerAppTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *UDPServices) GetServerAppTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServerAppTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServerAppTypeChoice().(type) {
+	case *UDPServices_ServerAppTypeSameAsClient:
+		drInfos, err := m.GetServerAppTypeSameAsClient().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetServerAppTypeSameAsClient().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "server_app_type_same_as_client." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *UDPServices) GetSslClientProfilesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetSslClientProfiles()
 	if len(vrefs) == 0 {
@@ -9669,6 +9010,30 @@ func (m *UDPServices) GetSslClientProfilesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("ssl_client_profile.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_client_profile.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ssl_client_profiles",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *UDPServices) GetSslClientProfilesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSslClientProfiles()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("UDPServices.ssl_client_profiles[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("ssl_client_profile.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "ssl_client_profile.Object",
 			RefdTenant: vref.Tenant,
@@ -9926,41 +9291,6 @@ func UDPServicesValidator() db.Validator {
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
-func (r *CreateSpecType) SetDefaultPersistenceProfileChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.DefaultPersistenceProfileChoice.(type) {
-	case nil:
-		o.DefaultPersistenceProfileChoice = nil
-
-	case *CreateSpecType_DefaultPersistenceProfile:
-		o.DefaultPersistenceProfileChoice = &GlobalSpecType_DefaultPersistenceProfile{DefaultPersistenceProfile: of.DefaultPersistenceProfile}
-
-	case *CreateSpecType_DefaultPersistenceProfileNone:
-		o.DefaultPersistenceProfileChoice = &GlobalSpecType_DefaultPersistenceProfileNone{DefaultPersistenceProfileNone: of.DefaultPersistenceProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *CreateSpecType) GetDefaultPersistenceProfileChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.DefaultPersistenceProfileChoice.(type) {
-	case nil:
-		r.DefaultPersistenceProfileChoice = nil
-
-	case *GlobalSpecType_DefaultPersistenceProfile:
-		r.DefaultPersistenceProfileChoice = &CreateSpecType_DefaultPersistenceProfile{DefaultPersistenceProfile: of.DefaultPersistenceProfile}
-
-	case *GlobalSpecType_DefaultPersistenceProfileNone:
-		r.DefaultPersistenceProfileChoice = &CreateSpecType_DefaultPersistenceProfileNone{DefaultPersistenceProfileNone: of.DefaultPersistenceProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetDefaultPoolChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.DefaultPoolChoice.(type) {
 	case nil:
@@ -9988,146 +9318,6 @@ func (r *CreateSpecType) GetDefaultPoolChoiceFromGlobalSpecType(o *GlobalSpecTyp
 
 	case *GlobalSpecType_DefaultPoolNone:
 		r.DefaultPoolChoice = &CreateSpecType_DefaultPoolNone{DefaultPoolNone: of.DefaultPoolNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-// create setters in CreateSpecType from GlobalSpecType for oneof fields
-func (r *CreateSpecType) SetFallbackPersistenceProfileChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.FallbackPersistenceProfileChoice.(type) {
-	case nil:
-		o.FallbackPersistenceProfileChoice = nil
-
-	case *CreateSpecType_FallbackPersistenceProfile:
-		o.FallbackPersistenceProfileChoice = &GlobalSpecType_FallbackPersistenceProfile{FallbackPersistenceProfile: of.FallbackPersistenceProfile}
-
-	case *CreateSpecType_FallbackPersistenceProfileNone:
-		o.FallbackPersistenceProfileChoice = &GlobalSpecType_FallbackPersistenceProfileNone{FallbackPersistenceProfileNone: of.FallbackPersistenceProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *CreateSpecType) GetFallbackPersistenceProfileChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.FallbackPersistenceProfileChoice.(type) {
-	case nil:
-		r.FallbackPersistenceProfileChoice = nil
-
-	case *GlobalSpecType_FallbackPersistenceProfile:
-		r.FallbackPersistenceProfileChoice = &CreateSpecType_FallbackPersistenceProfile{FallbackPersistenceProfile: of.FallbackPersistenceProfile}
-
-	case *GlobalSpecType_FallbackPersistenceProfileNone:
-		r.FallbackPersistenceProfileChoice = &CreateSpecType_FallbackPersistenceProfileNone{FallbackPersistenceProfileNone: of.FallbackPersistenceProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-// create setters in CreateSpecType from GlobalSpecType for oneof fields
-func (r *CreateSpecType) SetLastHopPoolChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.LastHopPoolChoice.(type) {
-	case nil:
-		o.LastHopPoolChoice = nil
-
-	case *CreateSpecType_LastHopPool:
-		o.LastHopPoolChoice = &GlobalSpecType_LastHopPool{LastHopPool: of.LastHopPool}
-
-	case *CreateSpecType_LastHopPoolNone:
-		o.LastHopPoolChoice = &GlobalSpecType_LastHopPoolNone{LastHopPoolNone: of.LastHopPoolNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *CreateSpecType) GetLastHopPoolChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.LastHopPoolChoice.(type) {
-	case nil:
-		r.LastHopPoolChoice = nil
-
-	case *GlobalSpecType_LastHopPool:
-		r.LastHopPoolChoice = &CreateSpecType_LastHopPool{LastHopPool: of.LastHopPool}
-
-	case *GlobalSpecType_LastHopPoolNone:
-		r.LastHopPoolChoice = &CreateSpecType_LastHopPoolNone{LastHopPoolNone: of.LastHopPoolNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-// create setters in CreateSpecType from GlobalSpecType for oneof fields
-func (r *CreateSpecType) SetRequestLoggingProfileChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.RequestLoggingProfileChoice.(type) {
-	case nil:
-		o.RequestLoggingProfileChoice = nil
-
-	case *CreateSpecType_RequestLoggingProfile:
-		o.RequestLoggingProfileChoice = &GlobalSpecType_RequestLoggingProfile{RequestLoggingProfile: of.RequestLoggingProfile}
-
-	case *CreateSpecType_RequestLoggingProfileNone:
-		o.RequestLoggingProfileChoice = &GlobalSpecType_RequestLoggingProfileNone{RequestLoggingProfileNone: of.RequestLoggingProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *CreateSpecType) GetRequestLoggingProfileChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.RequestLoggingProfileChoice.(type) {
-	case nil:
-		r.RequestLoggingProfileChoice = nil
-
-	case *GlobalSpecType_RequestLoggingProfile:
-		r.RequestLoggingProfileChoice = &CreateSpecType_RequestLoggingProfile{RequestLoggingProfile: of.RequestLoggingProfile}
-
-	case *GlobalSpecType_RequestLoggingProfileNone:
-		r.RequestLoggingProfileChoice = &CreateSpecType_RequestLoggingProfileNone{RequestLoggingProfileNone: of.RequestLoggingProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-// create setters in CreateSpecType from GlobalSpecType for oneof fields
-func (r *CreateSpecType) SetStatisticsProfileChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.StatisticsProfileChoice.(type) {
-	case nil:
-		o.StatisticsProfileChoice = nil
-
-	case *CreateSpecType_StatisticsProfile:
-		o.StatisticsProfileChoice = &GlobalSpecType_StatisticsProfile{StatisticsProfile: of.StatisticsProfile}
-
-	case *CreateSpecType_StatisticsProfileNone:
-		o.StatisticsProfileChoice = &GlobalSpecType_StatisticsProfileNone{StatisticsProfileNone: of.StatisticsProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *CreateSpecType) GetStatisticsProfileChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.StatisticsProfileChoice.(type) {
-	case nil:
-		r.StatisticsProfileChoice = nil
-
-	case *GlobalSpecType_StatisticsProfile:
-		r.StatisticsProfileChoice = &CreateSpecType_StatisticsProfile{StatisticsProfile: of.StatisticsProfile}
-
-	case *GlobalSpecType_StatisticsProfileNone:
-		r.StatisticsProfileChoice = &CreateSpecType_StatisticsProfileNone{StatisticsProfileNone: of.StatisticsProfileNone}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -10175,24 +9365,12 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 		return
 	}
 	m.AccessProfile = f.GetAccessProfile()
-	m.AutoLastHop = f.GetAutoLastHop()
-	m.ClonePoolOptions = f.GetClonePoolOptions()
 	m.ConnectionLimitOptions = f.GetConnectionLimitOptions()
-	m.GetDefaultPersistenceProfileChoiceFromGlobalSpecType(f)
 	m.GetDefaultPoolChoiceFromGlobalSpecType(f)
 	m.Domains = f.GetDomains()
-	m.GetFallbackPersistenceProfileChoiceFromGlobalSpecType(f)
 	m.ImmediateActionOnServiceDown = f.GetImmediateActionOnServiceDown()
 	m.Irules = f.GetIrules()
-	m.Json = f.GetJson()
-	m.GetLastHopPoolChoiceFromGlobalSpecType(f)
-	m.Nat64 = f.GetNat64()
-	m.GetRequestLoggingProfileChoiceFromGlobalSpecType(f)
-	m.Sse = f.GetSse()
-	m.State = f.GetState()
-	m.GetStatisticsProfileChoiceFromGlobalSpecType(f)
 	m.TrafficPolicies = f.GetTrafficPolicies()
-	m.Translations = f.GetTranslations()
 	m.VirtualAddresses = f.GetVirtualAddresses()
 	m.GetVirtualServerTypeFromGlobalSpecType(f)
 	m.VsScore = f.GetVsScore()
@@ -10214,24 +9392,12 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	_ = m1
 
 	f.AccessProfile = m1.AccessProfile
-	f.AutoLastHop = m1.AutoLastHop
-	f.ClonePoolOptions = m1.ClonePoolOptions
 	f.ConnectionLimitOptions = m1.ConnectionLimitOptions
-	m1.SetDefaultPersistenceProfileChoiceToGlobalSpecType(f)
 	m1.SetDefaultPoolChoiceToGlobalSpecType(f)
 	f.Domains = m1.Domains
-	m1.SetFallbackPersistenceProfileChoiceToGlobalSpecType(f)
 	f.ImmediateActionOnServiceDown = m1.ImmediateActionOnServiceDown
 	f.Irules = m1.Irules
-	f.Json = m1.Json
-	m1.SetLastHopPoolChoiceToGlobalSpecType(f)
-	f.Nat64 = m1.Nat64
-	m1.SetRequestLoggingProfileChoiceToGlobalSpecType(f)
-	f.Sse = m1.Sse
-	f.State = m1.State
-	m1.SetStatisticsProfileChoiceToGlobalSpecType(f)
 	f.TrafficPolicies = m1.TrafficPolicies
-	f.Translations = m1.Translations
 	f.VirtualAddresses = m1.VirtualAddresses
 	m1.SetVirtualServerTypeToGlobalSpecType(f)
 	f.VsScore = m1.VsScore
@@ -10243,41 +9409,6 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
-}
-
-// create setters in GetSpecType from GlobalSpecType for oneof fields
-func (r *GetSpecType) SetDefaultPersistenceProfileChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.DefaultPersistenceProfileChoice.(type) {
-	case nil:
-		o.DefaultPersistenceProfileChoice = nil
-
-	case *GetSpecType_DefaultPersistenceProfile:
-		o.DefaultPersistenceProfileChoice = &GlobalSpecType_DefaultPersistenceProfile{DefaultPersistenceProfile: of.DefaultPersistenceProfile}
-
-	case *GetSpecType_DefaultPersistenceProfileNone:
-		o.DefaultPersistenceProfileChoice = &GlobalSpecType_DefaultPersistenceProfileNone{DefaultPersistenceProfileNone: of.DefaultPersistenceProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *GetSpecType) GetDefaultPersistenceProfileChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.DefaultPersistenceProfileChoice.(type) {
-	case nil:
-		r.DefaultPersistenceProfileChoice = nil
-
-	case *GlobalSpecType_DefaultPersistenceProfile:
-		r.DefaultPersistenceProfileChoice = &GetSpecType_DefaultPersistenceProfile{DefaultPersistenceProfile: of.DefaultPersistenceProfile}
-
-	case *GlobalSpecType_DefaultPersistenceProfileNone:
-		r.DefaultPersistenceProfileChoice = &GetSpecType_DefaultPersistenceProfileNone{DefaultPersistenceProfileNone: of.DefaultPersistenceProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -10308,146 +9439,6 @@ func (r *GetSpecType) GetDefaultPoolChoiceFromGlobalSpecType(o *GlobalSpecType) 
 
 	case *GlobalSpecType_DefaultPoolNone:
 		r.DefaultPoolChoice = &GetSpecType_DefaultPoolNone{DefaultPoolNone: of.DefaultPoolNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-// create setters in GetSpecType from GlobalSpecType for oneof fields
-func (r *GetSpecType) SetFallbackPersistenceProfileChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.FallbackPersistenceProfileChoice.(type) {
-	case nil:
-		o.FallbackPersistenceProfileChoice = nil
-
-	case *GetSpecType_FallbackPersistenceProfile:
-		o.FallbackPersistenceProfileChoice = &GlobalSpecType_FallbackPersistenceProfile{FallbackPersistenceProfile: of.FallbackPersistenceProfile}
-
-	case *GetSpecType_FallbackPersistenceProfileNone:
-		o.FallbackPersistenceProfileChoice = &GlobalSpecType_FallbackPersistenceProfileNone{FallbackPersistenceProfileNone: of.FallbackPersistenceProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *GetSpecType) GetFallbackPersistenceProfileChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.FallbackPersistenceProfileChoice.(type) {
-	case nil:
-		r.FallbackPersistenceProfileChoice = nil
-
-	case *GlobalSpecType_FallbackPersistenceProfile:
-		r.FallbackPersistenceProfileChoice = &GetSpecType_FallbackPersistenceProfile{FallbackPersistenceProfile: of.FallbackPersistenceProfile}
-
-	case *GlobalSpecType_FallbackPersistenceProfileNone:
-		r.FallbackPersistenceProfileChoice = &GetSpecType_FallbackPersistenceProfileNone{FallbackPersistenceProfileNone: of.FallbackPersistenceProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-// create setters in GetSpecType from GlobalSpecType for oneof fields
-func (r *GetSpecType) SetLastHopPoolChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.LastHopPoolChoice.(type) {
-	case nil:
-		o.LastHopPoolChoice = nil
-
-	case *GetSpecType_LastHopPool:
-		o.LastHopPoolChoice = &GlobalSpecType_LastHopPool{LastHopPool: of.LastHopPool}
-
-	case *GetSpecType_LastHopPoolNone:
-		o.LastHopPoolChoice = &GlobalSpecType_LastHopPoolNone{LastHopPoolNone: of.LastHopPoolNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *GetSpecType) GetLastHopPoolChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.LastHopPoolChoice.(type) {
-	case nil:
-		r.LastHopPoolChoice = nil
-
-	case *GlobalSpecType_LastHopPool:
-		r.LastHopPoolChoice = &GetSpecType_LastHopPool{LastHopPool: of.LastHopPool}
-
-	case *GlobalSpecType_LastHopPoolNone:
-		r.LastHopPoolChoice = &GetSpecType_LastHopPoolNone{LastHopPoolNone: of.LastHopPoolNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-// create setters in GetSpecType from GlobalSpecType for oneof fields
-func (r *GetSpecType) SetRequestLoggingProfileChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.RequestLoggingProfileChoice.(type) {
-	case nil:
-		o.RequestLoggingProfileChoice = nil
-
-	case *GetSpecType_RequestLoggingProfile:
-		o.RequestLoggingProfileChoice = &GlobalSpecType_RequestLoggingProfile{RequestLoggingProfile: of.RequestLoggingProfile}
-
-	case *GetSpecType_RequestLoggingProfileNone:
-		o.RequestLoggingProfileChoice = &GlobalSpecType_RequestLoggingProfileNone{RequestLoggingProfileNone: of.RequestLoggingProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *GetSpecType) GetRequestLoggingProfileChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.RequestLoggingProfileChoice.(type) {
-	case nil:
-		r.RequestLoggingProfileChoice = nil
-
-	case *GlobalSpecType_RequestLoggingProfile:
-		r.RequestLoggingProfileChoice = &GetSpecType_RequestLoggingProfile{RequestLoggingProfile: of.RequestLoggingProfile}
-
-	case *GlobalSpecType_RequestLoggingProfileNone:
-		r.RequestLoggingProfileChoice = &GetSpecType_RequestLoggingProfileNone{RequestLoggingProfileNone: of.RequestLoggingProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-// create setters in GetSpecType from GlobalSpecType for oneof fields
-func (r *GetSpecType) SetStatisticsProfileChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.StatisticsProfileChoice.(type) {
-	case nil:
-		o.StatisticsProfileChoice = nil
-
-	case *GetSpecType_StatisticsProfile:
-		o.StatisticsProfileChoice = &GlobalSpecType_StatisticsProfile{StatisticsProfile: of.StatisticsProfile}
-
-	case *GetSpecType_StatisticsProfileNone:
-		o.StatisticsProfileChoice = &GlobalSpecType_StatisticsProfileNone{StatisticsProfileNone: of.StatisticsProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *GetSpecType) GetStatisticsProfileChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.StatisticsProfileChoice.(type) {
-	case nil:
-		r.StatisticsProfileChoice = nil
-
-	case *GlobalSpecType_StatisticsProfile:
-		r.StatisticsProfileChoice = &GetSpecType_StatisticsProfile{StatisticsProfile: of.StatisticsProfile}
-
-	case *GlobalSpecType_StatisticsProfileNone:
-		r.StatisticsProfileChoice = &GetSpecType_StatisticsProfileNone{StatisticsProfileNone: of.StatisticsProfileNone}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -10495,24 +9486,13 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.AccessProfile = f.GetAccessProfile()
-	m.AutoLastHop = f.GetAutoLastHop()
-	m.ClonePoolOptions = f.GetClonePoolOptions()
 	m.ConnectionLimitOptions = f.GetConnectionLimitOptions()
-	m.GetDefaultPersistenceProfileChoiceFromGlobalSpecType(f)
 	m.GetDefaultPoolChoiceFromGlobalSpecType(f)
 	m.Domains = f.GetDomains()
-	m.GetFallbackPersistenceProfileChoiceFromGlobalSpecType(f)
 	m.ImmediateActionOnServiceDown = f.GetImmediateActionOnServiceDown()
 	m.Irules = f.GetIrules()
-	m.Json = f.GetJson()
-	m.GetLastHopPoolChoiceFromGlobalSpecType(f)
-	m.Nat64 = f.GetNat64()
-	m.GetRequestLoggingProfileChoiceFromGlobalSpecType(f)
-	m.Sse = f.GetSse()
-	m.State = f.GetState()
-	m.GetStatisticsProfileChoiceFromGlobalSpecType(f)
+
 	m.TrafficPolicies = f.GetTrafficPolicies()
-	m.Translations = f.GetTranslations()
 	m.VirtualAddresses = f.GetVirtualAddresses()
 	m.GetVirtualServerTypeFromGlobalSpecType(f)
 	m.VsScore = f.GetVsScore()
@@ -10534,24 +9514,13 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.AccessProfile = m1.AccessProfile
-	f.AutoLastHop = m1.AutoLastHop
-	f.ClonePoolOptions = m1.ClonePoolOptions
 	f.ConnectionLimitOptions = m1.ConnectionLimitOptions
-	m1.SetDefaultPersistenceProfileChoiceToGlobalSpecType(f)
 	m1.SetDefaultPoolChoiceToGlobalSpecType(f)
 	f.Domains = m1.Domains
-	m1.SetFallbackPersistenceProfileChoiceToGlobalSpecType(f)
 	f.ImmediateActionOnServiceDown = m1.ImmediateActionOnServiceDown
 	f.Irules = m1.Irules
-	f.Json = m1.Json
-	m1.SetLastHopPoolChoiceToGlobalSpecType(f)
-	f.Nat64 = m1.Nat64
-	m1.SetRequestLoggingProfileChoiceToGlobalSpecType(f)
-	f.Sse = m1.Sse
-	f.State = m1.State
-	m1.SetStatisticsProfileChoiceToGlobalSpecType(f)
+
 	f.TrafficPolicies = m1.TrafficPolicies
-	f.Translations = m1.Translations
 	f.VirtualAddresses = m1.VirtualAddresses
 	m1.SetVirtualServerTypeToGlobalSpecType(f)
 	f.VsScore = m1.VsScore
@@ -10563,41 +9532,6 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
-}
-
-// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
-func (r *ReplaceSpecType) SetDefaultPersistenceProfileChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.DefaultPersistenceProfileChoice.(type) {
-	case nil:
-		o.DefaultPersistenceProfileChoice = nil
-
-	case *ReplaceSpecType_DefaultPersistenceProfile:
-		o.DefaultPersistenceProfileChoice = &GlobalSpecType_DefaultPersistenceProfile{DefaultPersistenceProfile: of.DefaultPersistenceProfile}
-
-	case *ReplaceSpecType_DefaultPersistenceProfileNone:
-		o.DefaultPersistenceProfileChoice = &GlobalSpecType_DefaultPersistenceProfileNone{DefaultPersistenceProfileNone: of.DefaultPersistenceProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *ReplaceSpecType) GetDefaultPersistenceProfileChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.DefaultPersistenceProfileChoice.(type) {
-	case nil:
-		r.DefaultPersistenceProfileChoice = nil
-
-	case *GlobalSpecType_DefaultPersistenceProfile:
-		r.DefaultPersistenceProfileChoice = &ReplaceSpecType_DefaultPersistenceProfile{DefaultPersistenceProfile: of.DefaultPersistenceProfile}
-
-	case *GlobalSpecType_DefaultPersistenceProfileNone:
-		r.DefaultPersistenceProfileChoice = &ReplaceSpecType_DefaultPersistenceProfileNone{DefaultPersistenceProfileNone: of.DefaultPersistenceProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -10628,146 +9562,6 @@ func (r *ReplaceSpecType) GetDefaultPoolChoiceFromGlobalSpecType(o *GlobalSpecTy
 
 	case *GlobalSpecType_DefaultPoolNone:
 		r.DefaultPoolChoice = &ReplaceSpecType_DefaultPoolNone{DefaultPoolNone: of.DefaultPoolNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
-func (r *ReplaceSpecType) SetFallbackPersistenceProfileChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.FallbackPersistenceProfileChoice.(type) {
-	case nil:
-		o.FallbackPersistenceProfileChoice = nil
-
-	case *ReplaceSpecType_FallbackPersistenceProfile:
-		o.FallbackPersistenceProfileChoice = &GlobalSpecType_FallbackPersistenceProfile{FallbackPersistenceProfile: of.FallbackPersistenceProfile}
-
-	case *ReplaceSpecType_FallbackPersistenceProfileNone:
-		o.FallbackPersistenceProfileChoice = &GlobalSpecType_FallbackPersistenceProfileNone{FallbackPersistenceProfileNone: of.FallbackPersistenceProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *ReplaceSpecType) GetFallbackPersistenceProfileChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.FallbackPersistenceProfileChoice.(type) {
-	case nil:
-		r.FallbackPersistenceProfileChoice = nil
-
-	case *GlobalSpecType_FallbackPersistenceProfile:
-		r.FallbackPersistenceProfileChoice = &ReplaceSpecType_FallbackPersistenceProfile{FallbackPersistenceProfile: of.FallbackPersistenceProfile}
-
-	case *GlobalSpecType_FallbackPersistenceProfileNone:
-		r.FallbackPersistenceProfileChoice = &ReplaceSpecType_FallbackPersistenceProfileNone{FallbackPersistenceProfileNone: of.FallbackPersistenceProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
-func (r *ReplaceSpecType) SetLastHopPoolChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.LastHopPoolChoice.(type) {
-	case nil:
-		o.LastHopPoolChoice = nil
-
-	case *ReplaceSpecType_LastHopPool:
-		o.LastHopPoolChoice = &GlobalSpecType_LastHopPool{LastHopPool: of.LastHopPool}
-
-	case *ReplaceSpecType_LastHopPoolNone:
-		o.LastHopPoolChoice = &GlobalSpecType_LastHopPoolNone{LastHopPoolNone: of.LastHopPoolNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *ReplaceSpecType) GetLastHopPoolChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.LastHopPoolChoice.(type) {
-	case nil:
-		r.LastHopPoolChoice = nil
-
-	case *GlobalSpecType_LastHopPool:
-		r.LastHopPoolChoice = &ReplaceSpecType_LastHopPool{LastHopPool: of.LastHopPool}
-
-	case *GlobalSpecType_LastHopPoolNone:
-		r.LastHopPoolChoice = &ReplaceSpecType_LastHopPoolNone{LastHopPoolNone: of.LastHopPoolNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
-func (r *ReplaceSpecType) SetRequestLoggingProfileChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.RequestLoggingProfileChoice.(type) {
-	case nil:
-		o.RequestLoggingProfileChoice = nil
-
-	case *ReplaceSpecType_RequestLoggingProfile:
-		o.RequestLoggingProfileChoice = &GlobalSpecType_RequestLoggingProfile{RequestLoggingProfile: of.RequestLoggingProfile}
-
-	case *ReplaceSpecType_RequestLoggingProfileNone:
-		o.RequestLoggingProfileChoice = &GlobalSpecType_RequestLoggingProfileNone{RequestLoggingProfileNone: of.RequestLoggingProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *ReplaceSpecType) GetRequestLoggingProfileChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.RequestLoggingProfileChoice.(type) {
-	case nil:
-		r.RequestLoggingProfileChoice = nil
-
-	case *GlobalSpecType_RequestLoggingProfile:
-		r.RequestLoggingProfileChoice = &ReplaceSpecType_RequestLoggingProfile{RequestLoggingProfile: of.RequestLoggingProfile}
-
-	case *GlobalSpecType_RequestLoggingProfileNone:
-		r.RequestLoggingProfileChoice = &ReplaceSpecType_RequestLoggingProfileNone{RequestLoggingProfileNone: of.RequestLoggingProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
-func (r *ReplaceSpecType) SetStatisticsProfileChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.StatisticsProfileChoice.(type) {
-	case nil:
-		o.StatisticsProfileChoice = nil
-
-	case *ReplaceSpecType_StatisticsProfile:
-		o.StatisticsProfileChoice = &GlobalSpecType_StatisticsProfile{StatisticsProfile: of.StatisticsProfile}
-
-	case *ReplaceSpecType_StatisticsProfileNone:
-		o.StatisticsProfileChoice = &GlobalSpecType_StatisticsProfileNone{StatisticsProfileNone: of.StatisticsProfileNone}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *ReplaceSpecType) GetStatisticsProfileChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.StatisticsProfileChoice.(type) {
-	case nil:
-		r.StatisticsProfileChoice = nil
-
-	case *GlobalSpecType_StatisticsProfile:
-		r.StatisticsProfileChoice = &ReplaceSpecType_StatisticsProfile{StatisticsProfile: of.StatisticsProfile}
-
-	case *GlobalSpecType_StatisticsProfileNone:
-		r.StatisticsProfileChoice = &ReplaceSpecType_StatisticsProfileNone{StatisticsProfileNone: of.StatisticsProfileNone}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -10815,24 +9609,12 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 		return
 	}
 	m.AccessProfile = f.GetAccessProfile()
-	m.AutoLastHop = f.GetAutoLastHop()
-	m.ClonePoolOptions = f.GetClonePoolOptions()
 	m.ConnectionLimitOptions = f.GetConnectionLimitOptions()
-	m.GetDefaultPersistenceProfileChoiceFromGlobalSpecType(f)
 	m.GetDefaultPoolChoiceFromGlobalSpecType(f)
 	m.Domains = f.GetDomains()
-	m.GetFallbackPersistenceProfileChoiceFromGlobalSpecType(f)
 	m.ImmediateActionOnServiceDown = f.GetImmediateActionOnServiceDown()
 	m.Irules = f.GetIrules()
-	m.Json = f.GetJson()
-	m.GetLastHopPoolChoiceFromGlobalSpecType(f)
-	m.Nat64 = f.GetNat64()
-	m.GetRequestLoggingProfileChoiceFromGlobalSpecType(f)
-	m.Sse = f.GetSse()
-	m.State = f.GetState()
-	m.GetStatisticsProfileChoiceFromGlobalSpecType(f)
 	m.TrafficPolicies = f.GetTrafficPolicies()
-	m.Translations = f.GetTranslations()
 	m.VirtualAddresses = f.GetVirtualAddresses()
 	m.GetVirtualServerTypeFromGlobalSpecType(f)
 	m.VsScore = f.GetVsScore()
@@ -10854,24 +9636,12 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	_ = m1
 
 	f.AccessProfile = m1.AccessProfile
-	f.AutoLastHop = m1.AutoLastHop
-	f.ClonePoolOptions = m1.ClonePoolOptions
 	f.ConnectionLimitOptions = m1.ConnectionLimitOptions
-	m1.SetDefaultPersistenceProfileChoiceToGlobalSpecType(f)
 	m1.SetDefaultPoolChoiceToGlobalSpecType(f)
 	f.Domains = m1.Domains
-	m1.SetFallbackPersistenceProfileChoiceToGlobalSpecType(f)
 	f.ImmediateActionOnServiceDown = m1.ImmediateActionOnServiceDown
 	f.Irules = m1.Irules
-	f.Json = m1.Json
-	m1.SetLastHopPoolChoiceToGlobalSpecType(f)
-	f.Nat64 = m1.Nat64
-	m1.SetRequestLoggingProfileChoiceToGlobalSpecType(f)
-	f.Sse = m1.Sse
-	f.State = m1.State
-	m1.SetStatisticsProfileChoiceToGlobalSpecType(f)
 	f.TrafficPolicies = m1.TrafficPolicies
-	f.Translations = m1.Translations
 	f.VirtualAddresses = m1.VirtualAddresses
 	m1.SetVirtualServerTypeToGlobalSpecType(f)
 	f.VsScore = m1.VsScore

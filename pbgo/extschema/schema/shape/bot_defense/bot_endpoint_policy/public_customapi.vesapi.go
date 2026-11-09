@@ -42,6 +42,14 @@ func (c *CustomAPIGrpcClient) doRPCCustomReplace(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.CustomReplace(ctx, req, opts...)
 	return rsp, err
 }
+func (c *CustomAPIGrpcClient) doRPCDeploy(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &DeployPolicyRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.bot_defense.bot_endpoint_policy.DeployPolicyRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.Deploy(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCGetContent(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetContentRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -106,6 +114,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CustomReplace"] = ccl.doRPCCustomReplace
+	rpcFns["Deploy"] = ccl.doRPCDeploy
 	rpcFns["GetContent"] = ccl.doRPCGetContent
 	rpcFns["GetEndpointPoliciesAndVersionsList"] = ccl.doRPCGetEndpointPoliciesAndVersionsList
 	rpcFns["GetEndpointPolicyVersions"] = ccl.doRPCGetEndpointPolicyVersions
@@ -198,6 +207,93 @@ func (c *CustomAPIRestClient) doRPCCustomReplace(ctx context.Context, callOpts *
 	pbRsp := &CustomReplaceResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomReplaceResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+func (c *CustomAPIRestClient) doRPCDeploy(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &DeployPolicyRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.bot_defense.bot_endpoint_policy.DeployPolicyRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("comments", fmt.Sprintf("%v", req.Comments))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		for _, item := range req.TargetInfras {
+			q.Add("target_infras", fmt.Sprintf("%v", item))
+		}
+		q.Add("version", fmt.Sprintf("%v", req.Version))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &DeployPolicyResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.bot_endpoint_policy.DeployPolicyResponse", body)
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -562,6 +658,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CustomReplace"] = ccl.doRPCCustomReplace
+	rpcFns["Deploy"] = ccl.doRPCDeploy
 	rpcFns["GetContent"] = ccl.doRPCGetContent
 	rpcFns["GetEndpointPoliciesAndVersionsList"] = ccl.doRPCGetEndpointPoliciesAndVersionsList
 	rpcFns["GetEndpointPolicyVersions"] = ccl.doRPCGetEndpointPolicyVersions
@@ -580,6 +677,10 @@ type customAPIInprocClient struct {
 func (c *customAPIInprocClient) CustomReplace(ctx context.Context, in *CustomReplaceRequest, opts ...grpc.CallOption) (*CustomReplaceResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.CustomReplace")
 	return c.CustomAPIServer.CustomReplace(ctx, in)
+}
+func (c *customAPIInprocClient) Deploy(ctx context.Context, in *DeployPolicyRequest, opts ...grpc.CallOption) (*DeployPolicyResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.Deploy")
+	return c.CustomAPIServer.Deploy(ctx, in)
 }
 func (c *customAPIInprocClient) GetContent(ctx context.Context, in *GetContentRequest, opts ...grpc.CallOption) (*GetContentResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.GetContent")
@@ -664,6 +765,54 @@ func (s *customAPISrv) CustomReplace(ctx context.Context, in *CustomReplaceReque
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomReplaceResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) Deploy(ctx context.Context, in *DeployPolicyRequest) (*DeployPolicyResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *DeployPolicyResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.DeployPolicyRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.Deploy' operation on 'bot_endpoint_policy'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.Deploy"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.Deploy(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_endpoint_policy.DeployPolicyResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -1079,6 +1228,106 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/custom/namespaces/{namespace}/bot_endpoint_policys/{name}/deploy": {
+            "post": {
+                "summary": "Deploy Bot Endpoint Policy",
+                "description": "Deploy the latest version of a bot endpoint policy to a selected set of its\nassociated bot infrastructures.",
+                "operationId": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.Deploy",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/bot_endpoint_policyDeployPolicyResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"self-service-test\"\nx-required\nnamespace is used to scope the query",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "name\n\nx-example: \"my-endpoint-policy\"\nx-required\nName of the policy whose latest version is deployed",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Policy Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/bot_endpoint_policyDeployPolicyRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-shape-bot_defense-bot_endpoint_policy-customapi-deploy"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.Deploy"
+            },
+            "x-displayname": "Bot Endpoint Policy",
+            "x-ves-proto-service": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/bot_endpoint_policy/{name}/versions": {
             "get": {
                 "summary": "Bot Endpoint Policy Versions",
@@ -1465,6 +1714,33 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "HTTP Status Code",
             "x-ves-proto-enum": "ves.io.schema.shape.bot_defense.BlockActionHttpStatusCode"
         },
+        "bot_defenseBotInfraWithVersion": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Infrastructure with in-use policy version\"\nBot Infra Name with its in use version",
+            "title": "Bot Infrastructure with in-use version",
+            "properties": {
+                "bot_infra_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Bot Infra name\"\nx-example: \"cluster-1\"\nThe cluster id deployed this policy",
+                    "title": "Bot Infra Name"
+                },
+                "deployment_status": {
+                    "type": "string",
+                    "description": "x-displayName: \"Deployment Status\"\nx-example: \"Deployed\"\nThe status of policy deployed to cluster",
+                    "title": "Deployment Status"
+                },
+                "environment_type": {
+                    "type": "string",
+                    "description": "x-displayName: \"Environment Type\"\nx-example: \"TESTING\"\nThe environment of policy deployed to cluster",
+                    "title": "Environment Type"
+                },
+                "in_use_version": {
+                    "type": "string",
+                    "description": "x-displayName: \"In Use Version\"\nx-example: \"1.0\"\nThe version of policy deployed to cluster\nThe version format should be X.0",
+                    "title": "In Use Version"
+                }
+            }
+        },
         "bot_defenseComparisonOperator": {
             "type": "string",
             "description": "Select from one of the Comparison Operator.\n\n - EXACT: exact value\n\n - CONTAIN: contain value\n\n - START_WITH: start with value\n\n - END_WITH: end with value\n",
@@ -1774,7 +2050,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "domain_match": {
                     "type": "array",
-                    "description": "Domain Matchers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure how to match domains from which you accept traffic on this endpoint\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Domain Matchers",
                     "items": {
                         "$ref": "#/definitions/shapebot_defenseDomainMatcherType"
@@ -1837,7 +2113,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "header_match": {
                     "type": "array",
-                    "description": "Header Matchers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure a match for headers that either must be present or must not be present in a request for the request to be evaluated by Bot Defense.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Header Matchers",
                     "items": {
                         "$ref": "#/definitions/bot_defenseMatcherType"
@@ -1859,7 +2135,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "header_name": {
                     "type": "string",
-                    "description": " Enter the Header Name\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
+                    "description": " The name of the header to add to a blocked request.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
                     "title": "Header Name",
                     "x-displayname": "Header",
                     "x-ves-required": "true",
@@ -1870,7 +2146,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "header_value": {
                     "type": "string",
-                    "description": " Enter the Header Value\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " The header value to add to a blocked request.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Header Value",
                     "x-displayname": "Value",
                     "x-ves-required": "true",
@@ -1914,7 +2190,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Operator Name\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
+                    "description": " A name to identify this header matcher.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
                     "title": "Operator Name",
                     "x-displayname": "Name",
                     "x-ves-required": "true",
@@ -2059,21 +2335,21 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "case_insensitive": {
                     "type": "boolean",
-                    "description": " case insensitive checker",
+                    "description": " Determines if matching is case-sensitive.",
                     "title": "Check case insensitive",
                     "format": "boolean",
                     "x-displayname": "Case-Insensitive"
                 },
                 "not": {
                     "type": "boolean",
-                    "description": " not checker",
+                    "description": " Select Yes if you want Bot Defense to match values that are the opposite of the values you entered above.",
                     "title": "Check not",
                     "format": "boolean",
                     "x-displayname": "Not(!)"
                 },
                 "value": {
                     "type": "string",
-                    "description": " Query Matcher Value\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " The value you want to match.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Query Matcher Value",
                     "minLength": 1,
                     "maxLength": 256,
@@ -2148,7 +2424,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "path_match": {
                     "type": "array",
-                    "description": "Path Matchers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure how to match paths for endpoints you want to protect with Bot Defense.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Path Matchers",
                     "items": {
                         "$ref": "#/definitions/shapebot_defensePathMatcherType"
@@ -2171,21 +2447,21 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "case_insensitive": {
                     "type": "boolean",
-                    "description": " case insensitive checker",
+                    "description": " Determines if matching is case-sensitive.",
                     "title": "Check case insensitive",
                     "format": "boolean",
                     "x-displayname": "Case-Insensitive"
                 },
                 "not": {
                     "type": "boolean",
-                    "description": " not checker",
+                    "description": " Select Yes if you want Bot Defense to match values that are the opposite of the values you entered above.",
                     "title": "Check not",
                     "format": "boolean",
                     "x-displayname": "Not(!)"
                 },
                 "value": {
                     "type": "string",
-                    "description": " Path Matcher Value\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 2048\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " The value you want to match.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 2048\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Path Matcher Value",
                     "minLength": 1,
                     "maxLength": 2048,
@@ -2355,7 +2631,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Domain"
                 },
                 "flow_label_choice": {
-                    "description": " Endpoint label category\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " High-level label categories to help identity endpoints for more granular attack intent identification and reporting.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Endpoint category",
                     "$ref": "#/definitions/schemaBotPolicyFlowLabelCategoriesChoiceType",
                     "x-displayname": "Endpoint category",
@@ -2366,7 +2642,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "header": {
                     "type": "array",
-                    "description": " header matcher",
+                    "description": " Configure a match for headers that either must be present or must not be present in a request for the request to be evaluated by Bot Defense.",
                     "title": "Header",
                     "items": {
                         "$ref": "#/definitions/bot_defenseHeaderOperator"
@@ -2375,7 +2651,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "http_methods": {
                     "type": "array",
-                    "description": " List of HTTP methods.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 9\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " The methods you want to protect with Bot Defense.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 9\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "HTTP Methods",
                     "minItems": 1,
                     "maxItems": 9,
@@ -2403,13 +2679,13 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "path": {
-                    "description": " URI path matcher.",
+                    "description": " Configure how to match the paths for endpoints you want to protect with Bot Defense.",
                     "title": "Path",
                     "$ref": "#/definitions/bot_defensePathOperator",
                     "x-displayname": "Path"
                 },
                 "query": {
-                    "description": " query matcher.",
+                    "description": " Configure matches for the URL query parameters you want to protect.",
                     "title": "Query",
                     "$ref": "#/definitions/bot_defenseQueryOperator",
                     "x-displayname": "Query"
@@ -2421,13 +2697,13 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Treat Known Bots as Regular Requests"
                 },
                 "request_body": {
-                    "description": " request body matcher",
+                    "description": " Configure a match for specific content in the body of a protected endpoint request.",
                     "title": "Request Body",
                     "$ref": "#/definitions/bot_defenseRequestBodyOperator",
                     "x-displayname": "Request Body"
                 },
                 "transaction_result_criteria": {
-                    "description": " Establish criteria for transaction success and failure by replicating the conditions from the origin, using the response parameters to define the conditions",
+                    "description": " The success and failure conditions that replicate the behavior of the origin endpoint.  These conditions do not block or allow requests but help improve the ability of Bot Defense to detect bots.",
                     "title": "Transaction Result Criteria",
                     "$ref": "#/definitions/bot_defenseTransactionResult",
                     "x-displayname": "Transaction Result Criteria"
@@ -2440,7 +2716,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "usernames": {
                     "type": "array",
-                    "description": " Add the field name where you store username on the Request Body\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A request body parameter with a name-value pair that Bot Defense can use to identify the username associated with a request. Username reporting can help you identify individuals or accounts impacted by an attack\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Username Reporting",
                     "maxItems": 64,
                     "items": {
@@ -2510,14 +2786,14 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Domain"
                 },
                 "flow_label_choice": {
-                    "description": " Endpoint label category",
+                    "description": " High-level label categories to help identity endpoints for more granular attack intent identification and reporting.",
                     "title": "Endpoint category",
                     "$ref": "#/definitions/schemaBotPolicyFlowLabelCategoriesChoiceType",
                     "x-displayname": "Endpoint category"
                 },
                 "header": {
                     "type": "array",
-                    "description": " header matcher",
+                    "description": " Configure a match for headers that either must be present or must not be present in a request for the request to be evaluated by Bot Defense.",
                     "title": "Header",
                     "items": {
                         "$ref": "#/definitions/bot_defenseHeaderOperator"
@@ -2526,7 +2802,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "http_methods": {
                     "type": "array",
-                    "description": " List of HTTP methods.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 9\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " The methods you want to protect with Bot Defense.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 9\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "HTTP Methods",
                     "minItems": 1,
                     "maxItems": 9,
@@ -2554,13 +2830,13 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "path": {
-                    "description": " URI path matcher.",
+                    "description": " Configure how to match the paths for endpoints you want to protect with Bot Defense.",
                     "title": "Path",
                     "$ref": "#/definitions/bot_defensePathOperator",
                     "x-displayname": "Path"
                 },
                 "query": {
-                    "description": " query matcher.",
+                    "description": " Configure matches for the URL query parameters you want to protect.",
                     "title": "Query",
                     "$ref": "#/definitions/bot_defenseQueryOperator",
                     "x-displayname": "Query"
@@ -2578,13 +2854,13 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Treat Known Bots as Regular Requests"
                 },
                 "request_body": {
-                    "description": " request body matcher",
+                    "description": " Configure a match for specific content in the body of a protected endpoint request.",
                     "title": "Request Body",
                     "$ref": "#/definitions/bot_defenseRequestBodyOperator",
                     "x-displayname": "Request Body"
                 },
                 "transaction_result_criteria": {
-                    "description": " Establish criteria for transaction success and failure by replicating the conditions from the origin, using the response parameters to define the conditions",
+                    "description": " The success and failure conditions that replicate the behavior of the origin endpoint.  These conditions do not block or allow requests but help improve the ability of Bot Defense to detect bots.",
                     "title": "Transaction Result Criteria",
                     "$ref": "#/definitions/bot_defenseTransactionResult",
                     "x-displayname": "Transaction Result Criteria"
@@ -2597,7 +2873,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "usernames": {
                     "type": "array",
-                    "description": " Add the field name where you store username on the Request Body\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A request body parameter with a name-value pair that Bot Defense can use to identify the username associated with a request. Username reporting can help you identify individuals or accounts impacted by an attack.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Username Reporting",
                     "maxItems": 64,
                     "items": {
@@ -2642,7 +2918,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "query_match": {
                     "type": "array",
-                    "description": "Query Matchers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure matches for URL query parameters you want to protect.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Query Matchers",
                     "items": {
                         "$ref": "#/definitions/bot_defenseMatcherType"
@@ -2700,7 +2976,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "request_body_match": {
                     "type": "array",
-                    "description": "RequestBody Matchers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure a match for specific content in the body of a protected endpoint request.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "RequestBody Matchers",
                     "items": {
                         "$ref": "#/definitions/bot_defenseMatcherType"
@@ -3050,7 +3326,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "response_header_match_v2": {
                     "type": "array",
-                    "description": "Response Header Matchers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " How to match the header value that Bot Defense can use to identify valid requests\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Response Header Matchers",
                     "items": {
                         "$ref": "#/definitions/bot_defenseResponseHeaderMatcherTypeV2"
@@ -3196,7 +3472,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Header Name\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
+                    "description": " The response header Bot Defense can use to identify valid requests.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
                     "title": "Header Name",
                     "x-displayname": "Header Name",
                     "x-ves-required": "true",
@@ -3269,7 +3545,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Failure Conditions"
                 },
                 "transaction_result_success": {
-                    "description": " Define the conditions that will replicate success conditions for requests on this endpoint\n x-textBlockContent:\n **Define Condition**\n\n Set success and failure conditions based on the origin's response code, headers, body, or cookie",
+                    "description": " Define the conditions that will replicate success conditions for requests on this endpoint",
                     "title": "Success Conditions",
                     "$ref": "#/definitions/bot_defenseTransactionResultType",
                     "x-displayname": "Success Conditions"
@@ -3285,25 +3561,25 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.TransactionResultType",
             "properties": {
                 "cookie_v2": {
-                    "description": " Conditions in Cookie, if any, that would help identify valid Requests to the Origin.",
+                    "description": " Conditions in the cookie that identify valid requests to the endpoint",
                     "title": "Cookie",
                     "$ref": "#/definitions/bot_defenseCookies",
                     "x-displayname": "Cookies"
                 },
                 "responseBody": {
-                    "description": " Conditions in Response Body, if any, that would help identify valid Requests to the Origin.",
+                    "description": " Conditions in the response body that identify valid requests to the endpoint.",
                     "title": "Response Body",
                     "$ref": "#/definitions/bot_defenseResponseBody",
                     "x-displayname": "Response Body"
                 },
                 "responseCode": {
-                    "description": " Response Code returned by Origin for valid Requests.",
+                    "description": " The response code returned by the origin for valid requests.",
                     "title": "Response Code",
                     "$ref": "#/definitions/bot_defenseResponseCode",
                     "x-displayname": "Response Code"
                 },
                 "response_header_v2": {
-                    "description": " Conditions in Response Header, if any, that would help identify valid Requests to the Origin.",
+                    "description": " Conditions in the response header that identify valid requests to the endpoint.",
                     "title": "Response Header",
                     "$ref": "#/definitions/bot_defenseResponseHeaders",
                     "x-displayname": "Response Header"
@@ -3394,7 +3670,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "name_value_pair": {
                     "type": "array",
-                    "description": " Response Header Pair\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Headers to add to the blocked request. You can add multiple headers.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Response Header",
                     "items": {
                         "$ref": "#/definitions/bot_defenseHeaderNameValuePair"
@@ -3405,7 +3681,7 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "status": {
-                    "description": " HTTP Status code to respond with\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.not_in: [0]\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " The status code you want to display when Bot Defense blocks a request.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.not_in: [0]\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Status",
                     "$ref": "#/definitions/bot_defenseBlockActionHttpStatusCode",
                     "x-displayname": "Status",
@@ -3449,7 +3725,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "auto_type_header_name": {
                     "type": "string",
-                    "description": " A case-insensitive HTTP header name.\n\nExample: - \"Bot-Automation-Type\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "description": " The header that you want to add to requests that Bot Defense allows to continue to origin. You create the headers when you configure the protected endpoint.\n\nExample: - \"Bot-Automation-Type\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
                     "title": "auto_type_header_name",
                     "maxLength": 256,
                     "x-displayname": "Automation Type Header Name",
@@ -3471,7 +3747,7 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.WebClientRedirectMitigationActionType",
             "properties": {
                 "status": {
-                    "description": " HTTP Status code to respond with\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.in: [302]\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " The status code you want to display when Bot Defense blocks a request.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.in: [302]\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Status",
                     "$ref": "#/definitions/schemaHttpStatusCode",
                     "x-displayname": "Status",
@@ -3563,6 +3839,115 @@ var CustomAPISwaggerJSON string = `{
         "bot_endpoint_policyCustomReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomReplaceResponse"
+        },
+        "bot_endpoint_policyDeployPolicyRequest": {
+            "type": "object",
+            "description": "Request to deploy a bot endpoint policy's latest version to a selected set of\nits associated bot infrastructures.",
+            "title": "DeployPolicyRequest",
+            "x-displayname": "Deploy Policy Request",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.DeployPolicyRequest",
+            "properties": {
+                "comments": {
+                    "type": "string",
+                    "description": " Optional comments describing the deployment\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 2048\n",
+                    "title": "comments",
+                    "maxLength": 2048,
+                    "x-displayname": "Comments",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "2048"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the policy whose latest version is deployed\n\nExample: - \"my-endpoint-policy\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "x-displayname": "Policy Name",
+                    "x-ves-example": "my-endpoint-policy",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " namespace is used to scope the query\n\nExample: - \"self-service-test\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "title": "namespace",
+                    "minLength": 1,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "self-service-test",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
+                },
+                "target_infras": {
+                    "type": "array",
+                    "description": " Names of the bot infrastructures (selected by the user from the policy's\n associated infras) to deploy this policy to. Must be non-empty and each name\n must be present in the policy's associated bot infrastructures.\n\nExample: - \"[cluster-1, cluster-2]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.ves_object_name: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "target_infras",
+                    "minItems": 1,
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "x-displayname": "Target Bot Infrastructures",
+                    "x-ves-example": "[cluster-1, cluster-2]",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.items.string.ves_object_name": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "version": {
+                    "type": "string",
+                    "description": " Optional. The specific policy version to deploy. If empty, the policy's\n latest published version is deployed. When set, it must be an existing\n published version of the policy.\n\nExample: - \"3.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "version",
+                    "maxLength": 64,
+                    "x-displayname": "Policy Version",
+                    "x-ves-example": "3.0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                }
+            }
+        },
+        "bot_endpoint_policyDeployPolicyResponse": {
+            "type": "object",
+            "description": "Immediate response for a policy deployment. Only the overall deployment status\nis returned; the detailed per-infra lifecycle is tracked asynchronously and\nsurfaced via the deployments list/details APIs.",
+            "title": "DeployPolicyResponse",
+            "x-displayname": "Deploy Policy Response",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.DeployPolicyResponse",
+            "properties": {
+                "deploy_status": {
+                    "description": " Overall deployment status at the time the call returns\n\nExample: - \"IN_PROGRESS\"-",
+                    "title": "deploy_status",
+                    "$ref": "#/definitions/bot_endpoint_policyDeployStatus",
+                    "x-displayname": "Deploy Status",
+                    "x-ves-example": "IN_PROGRESS"
+                }
+            }
+        },
+        "bot_endpoint_policyDeployStatus": {
+            "type": "string",
+            "description": "Overall status of a bot endpoint policy deployment.\n\n - IN_PROGRESS: In Progress\n\n - FINISHED: Finished\n\n - FAILED: Failed\n",
+            "title": "DeployStatus",
+            "enum": [
+                "IN_PROGRESS",
+                "FINISHED",
+                "FAILED"
+            ],
+            "default": "IN_PROGRESS",
+            "x-displayname": "Deploy Status",
+            "x-ves-proto-enum": "ves.io.schema.shape.bot_defense.bot_endpoint_policy.DeployStatus"
         },
         "bot_endpoint_policyGetContentResponse": {
             "type": "object",
@@ -4578,13 +4963,13 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.DomainMatcherType",
             "properties": {
                 "negation": {
-                    "description": " not checker",
+                    "description": " Select Yes if you want Bot Defense to match values that are the opposite of the values you entered above.",
                     "title": "Check not",
                     "$ref": "#/definitions/bot_defenseNegationOperator",
                     "x-displayname": "Not(!)"
                 },
                 "operator": {
-                    "description": " Choose the Comparison Operator\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Comparison Operator",
                     "$ref": "#/definitions/bot_defenseComparisonOperator",
                     "x-displayname": "Comparison Operator",
@@ -4595,7 +4980,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "value": {
                     "type": "string",
-                    "description": " Domain Matcher Value\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " The value you want to match.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Domain Matcher Value",
                     "minLength": 1,
                     "maxLength": 256,

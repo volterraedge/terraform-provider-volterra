@@ -22,15 +22,7 @@ resource "volterra_azure_vnet_site" "example" {
 
   // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
 
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "dns ssh web_user_interface" can be set
-
-      ssh = true
-
-      network_type = "network_type"
-    }
-  }
+  default_blocked_services = true
 
   // One of the arguments from this list "azure_cred" must be set
 
@@ -42,12 +34,8 @@ resource "volterra_azure_vnet_site" "example" {
 
   // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
 
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-  machine_type = ["Standard_D4s_v4"]
+  logs_streaming_disabled = true
+  machine_type            = ["Standard_D4s_v4"]
 
   // One of the arguments from this list "alternate_region azure_region" must be set
 
@@ -97,7 +85,7 @@ resource "volterra_azure_vnet_site" "example" {
 
     // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
 
-    forward_proxy_allow_all = true
+    no_forward_proxy = true
 
     // One of the arguments from this list "global_network_list no_global_network" must be set
 
@@ -113,13 +101,7 @@ resource "volterra_azure_vnet_site" "example" {
 
     // One of the arguments from this list "active_enhanced_firewall_policies active_network_policies no_network_policy" must be set
 
-    active_enhanced_firewall_policies {
-      enhanced_firewall_policies {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
+    no_network_policy = true
 
     // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
 
@@ -136,7 +118,7 @@ resource "volterra_azure_vnet_site" "example" {
 
     // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
 
-    sm_connection_pvt_ip = true
+    sm_connection_public_ip = true
   }
   ssh_key = ["ssh-rsa AAAAB..."]
   vnet {
@@ -145,7 +127,7 @@ resource "volterra_azure_vnet_site" "example" {
     new_vnet {
       // One of the arguments from this list "autogenerate name" must be set
 
-      name = "name"
+      autogenerate = true
 
       primary_ipv4 = "10.1.0.0/16"
     }
@@ -267,11 +249,13 @@ Admin password user for accessing site through serial console ..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -351,7 +335,7 @@ Choice of using existing VNet or create new VNet.
 
 Select WAF Signatures Update Mode for the site. By default, new signatures will be applied manually..
 
-###### One of the arguments from this list "automatic, manual" can be set
+###### One of the arguments from this list "automatic, manual" must be set
 
 `automatic` - (Optional) New WAF signatures will be applied automatically as soon as they are released. (`Bool`).
 
@@ -563,11 +547,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -835,7 +821,7 @@ disruption will be seen.
 
 ###### One of the arguments from this list "disable, enable" must be set
 
-`disable` - (Optional) infrastructure. (`Bool`).
+`disable`- (Optional) infrastructure. (`Bool`).
 
 `enable` - (Optional) improving networking performance (`Bool`).
 
@@ -869,7 +855,7 @@ disruption will be seen.
 
 ###### One of the arguments from this list "disable, enable" must be set
 
-`disable` - (Optional) infrastructure. (`Bool`).
+`disable`- (Optional) infrastructure. (`Bool`).
 
 `enable` - (Optional) improving networking performance (`Bool`).
 
@@ -899,7 +885,7 @@ disruption will be seen.
 
 ###### One of the arguments from this list "disable, enable" must be set
 
-`disable` - (Optional) infrastructure. (`Bool`).
+`disable`- (Optional) infrastructure. (`Bool`).
 
 `enable` - (Optional) improving networking performance (`Bool`).
 
@@ -1089,11 +1075,13 @@ Authorization Key created by the circuit owner.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -1224,6 +1212,10 @@ Clear Secret is used for the secrets that are not encrypted.
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
 
 ### Secret Info Oneof Vault Secret Info
 

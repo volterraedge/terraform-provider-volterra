@@ -3179,6 +3179,12 @@ func (v *ValidateCreateGlobalKubeConfigReq) Validate(ctx context.Context, pm int
 	if m == nil {
 		return nil
 	}
+	if fv, exists := v.FldValidators["expiration_days"]; exists {
+		vOpts := append(opts, db.WithValidateField("expiration_days"))
+		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
@@ -5129,6 +5135,24 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetConnectedReDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetConnectedReDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetConnectedReForConfigDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetConnectedReForConfigDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetConnectedReDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetConnectedRe()
@@ -5141,6 +5165,34 @@ func (m *GetSpecType) GetConnectedReDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.connected_re[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "connected_re",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetConnectedReDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetConnectedRe()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.connected_re[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
@@ -5184,6 +5236,34 @@ func (m *GetSpecType) GetConnectedReForConfigDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.connected_re_for_config[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "connected_re_for_config",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetConnectedReForConfigDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetConnectedReForConfig()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.connected_re_for_config[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
@@ -6456,6 +6536,34 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetConnectedReDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetConnectedReDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetConnectedReForConfigDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetConnectedReForConfigDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetK8SClusterApiGwDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetK8SClusterApiGwDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualNetworkDnsServerConfigurationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualNetworkDnsServerConfigurationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetConnectedReDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetConnectedRe()
@@ -6468,6 +6576,34 @@ func (m *GlobalSpecType) GetConnectedReDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.connected_re[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "connected_re",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetConnectedReDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetConnectedRe()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.connected_re[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
@@ -6523,6 +6659,34 @@ func (m *GlobalSpecType) GetConnectedReForConfigDRefInfo() ([]db.DRefInfo, error
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetConnectedReForConfigDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetConnectedReForConfig()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.connected_re_for_config[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "connected_re_for_config",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetConnectedReForConfigDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetConnectedReForConfigDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -6566,6 +6730,34 @@ func (m *GlobalSpecType) GetK8SClusterApiGwDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetK8SClusterApiGwDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetK8SClusterApiGw()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.k8s_cluster_api_gw[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_host.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "k8s_cluster_api_gw",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetK8SClusterApiGwDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetK8SClusterApiGwDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -6596,6 +6788,26 @@ func (m *GlobalSpecType) GetVirtualNetworkDnsServerConfigurationDRefInfo() ([]db
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualNetworkDnsServerConfiguration() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("virtual_network_dns_server_configuration[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetVirtualNetworkDnsServerConfigurationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVirtualNetworkDnsServerConfiguration() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetVirtualNetworkDnsServerConfiguration() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualNetworkDnsServerConfiguration() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -10925,6 +11137,241 @@ func ReplaceSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *RevokeK8SServerSubCARequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RevokeK8SServerSubCARequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RevokeK8SServerSubCARequest) DeepCopy() *RevokeK8SServerSubCARequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RevokeK8SServerSubCARequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RevokeK8SServerSubCARequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RevokeK8SServerSubCARequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RevokeK8SServerSubCARequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRevokeK8SServerSubCARequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRevokeK8SServerSubCARequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateRevokeK8SServerSubCARequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateRevokeK8SServerSubCARequest) ReasonValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for reason")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRevokeK8SServerSubCARequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RevokeK8SServerSubCARequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RevokeK8SServerSubCARequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["reason"]; exists {
+		vOpts := append(opts, db.WithValidateField("reason"))
+		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRevokeK8SServerSubCARequestValidator = func() *ValidateRevokeK8SServerSubCARequest {
+	v := &ValidateRevokeK8SServerSubCARequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RevokeK8SServerSubCARequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RevokeK8SServerSubCARequest.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhReason := v.ReasonValidationRuleHandler
+	rulesReason := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhReason(rulesReason)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RevokeK8SServerSubCARequest.reason: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["reason"] = vFn
+
+	return v
+}()
+
+func RevokeK8SServerSubCARequestValidator() db.Validator {
+	return DefaultRevokeK8SServerSubCARequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RevokeK8SServerSubCAResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RevokeK8SServerSubCAResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RevokeK8SServerSubCAResponse) DeepCopy() *RevokeK8SServerSubCAResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RevokeK8SServerSubCAResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RevokeK8SServerSubCAResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RevokeK8SServerSubCAResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RevokeK8SServerSubCAResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRevokeK8SServerSubCAResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRevokeK8SServerSubCAResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RevokeK8SServerSubCAResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RevokeK8SServerSubCAResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["latest_version"]; exists {
+		vOpts := append(opts, db.WithValidateField("latest_version"))
+		if err := fv(ctx, m.GetLatestVersion(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["min_version"]; exists {
+		vOpts := append(opts, db.WithValidateField("min_version"))
+		if err := fv(ctx, m.GetMinVersion(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRevokeK8SServerSubCAResponseValidator = func() *ValidateRevokeK8SServerSubCAResponse {
+	v := &ValidateRevokeK8SServerSubCAResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func RevokeK8SServerSubCAResponseValidator() db.Validator {
+	return DefaultRevokeK8SServerSubCAResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *RevokeKubeConfigReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -12055,6 +12502,24 @@ func (m *TunnelConnectionStatus) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *TunnelConnectionStatus) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetBgpDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBgpDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTunnelDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTunnelDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *TunnelConnectionStatus) GetBgpDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetBgp()
@@ -12067,6 +12532,34 @@ func (m *TunnelConnectionStatus) GetBgpDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("TunnelConnectionStatus.bgp[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "bgp.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "bgp",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *TunnelConnectionStatus) GetBgpDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetBgp()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("TunnelConnectionStatus.bgp[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "bgp.Object",
 			RefdUID:    ref.Uid,
@@ -12110,6 +12603,34 @@ func (m *TunnelConnectionStatus) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("TunnelConnectionStatus.tunnel[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tunnel.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "tunnel",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *TunnelConnectionStatus) GetTunnelDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTunnel()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("TunnelConnectionStatus.tunnel[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "tunnel.Object",
 			RefdUID:    ref.Uid,
@@ -12879,6 +13400,29 @@ func (m *VerStatusType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *VerStatusType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetConfiguredTunnelStatusDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetConfiguredTunnelStatusDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetExtConnectorTunnelStatusDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetExtConnectorTunnelStatusDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteTunnelStatusDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteTunnelStatusDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *VerStatusType) GetConfiguredTunnelStatusDRefInfo() ([]db.DRefInfo, error) {
@@ -12890,6 +13434,26 @@ func (m *VerStatusType) GetConfiguredTunnelStatusDRefInfo() ([]db.DRefInfo, erro
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConfiguredTunnelStatus() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("configured_tunnel_status[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *VerStatusType) GetConfiguredTunnelStatusDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConfiguredTunnelStatus() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetConfiguredTunnelStatus() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConfiguredTunnelStatus() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -12920,6 +13484,26 @@ func (m *VerStatusType) GetExtConnectorTunnelStatusDRefInfo() ([]db.DRefInfo, er
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *VerStatusType) GetExtConnectorTunnelStatusDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetExtConnectorTunnelStatus() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetExtConnectorTunnelStatus() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetExtConnectorTunnelStatus() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("ext_connector_tunnel_status[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *VerStatusType) GetSiteTunnelStatusDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteTunnelStatus() == nil {
@@ -12930,6 +13514,26 @@ func (m *VerStatusType) GetSiteTunnelStatusDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteTunnelStatus() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("site_tunnel_status[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *VerStatusType) GetSiteTunnelStatusDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteTunnelStatus() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSiteTunnelStatus() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteTunnelStatus() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -13076,6 +13680,13 @@ func (m *VirtualNetworkDnsServerConfigurationType) GetDRefInfo() ([]db.DRefInfo,
 
 	return m.GetVirtualNetworkDRefInfo()
 }
+func (m *VirtualNetworkDnsServerConfigurationType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualNetworkDRefInfoForOverlay(generateHash)
+}
 
 func (m *VirtualNetworkDnsServerConfigurationType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetVirtualNetwork()
@@ -13088,6 +13699,34 @@ func (m *VirtualNetworkDnsServerConfigurationType) GetVirtualNetworkDRefInfo() (
 			return nil, fmt.Errorf("VirtualNetworkDnsServerConfigurationType.virtual_network[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "virtual_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *VirtualNetworkDnsServerConfigurationType) GetVirtualNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VirtualNetworkDnsServerConfigurationType.virtual_network[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_network.Object",
 			RefdUID:    ref.Uid,

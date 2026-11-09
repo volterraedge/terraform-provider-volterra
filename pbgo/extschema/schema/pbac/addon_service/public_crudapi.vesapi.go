@@ -1312,11 +1312,47 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "addon_serviceFixedValue": {
+            "type": "object",
+            "description": "x-displayName: \"Fixed Value\"\nFixedValue keeps quota constant irrespective of ordered quantity.",
+            "title": "FixedValue",
+            "properties": {
+                "value": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Value\"\nx-required\nFixed quota value.",
+                    "title": "value",
+                    "format": "int64"
+                }
+            }
+        },
+        "addon_serviceFloatMultiplier": {
+            "type": "object",
+            "description": "x-displayName: \"Float Multiplier\"\nordered value will be multiplied by this multiplier to derive the quota value.",
+            "title": "FloatMultiplier",
+            "properties": {
+                "multiplier": {
+                    "type": "number",
+                    "description": "x-displayName: \"Multiplier\"\nx-required\nMultiplier applied to the ordered quantity.",
+                    "title": "multiplier",
+                    "format": "float"
+                }
+            }
+        },
         "addon_serviceFormula": {
             "type": "object",
             "description": "x-displayName: \"Formula\"\nFormula holds the operator details for the entitlement feature",
             "title": "Formula",
             "properties": {
+                "fixed_value": {
+                    "description": "x-displayName: \"Fixed Value\"\nKeep the quota constant irrespective of the ordered quantity.",
+                    "title": "fixed_value",
+                    "$ref": "#/definitions/addon_serviceFixedValue"
+                },
+                "float_multiplier": {
+                    "description": "x-displayName: \"Float Multiplier\"\nDerive the quota by multiplying the ordered quantity by a factor.",
+                    "title": "float_multiplier",
+                    "$ref": "#/definitions/addon_serviceFloatMultiplier"
+                },
                 "operator": {
                     "description": "x-displayName: \"Operator\"\nOperator for the quota mapping",
                     "title": "Operator",
@@ -1843,6 +1879,11 @@ var APISwaggerJSON string = `{
                     "description": " Tier can be used to group addon services into tiers (e.g. basic, standard, premium, etc)",
                     "$ref": "#/definitions/schemaAddonServiceTierType",
                     "x-displayname": "Tier"
+                },
+                "type": {
+                    "description": " Type represents the addon service type.",
+                    "$ref": "#/definitions/schemaAddonServiceType",
+                    "x-displayname": "Type"
                 }
             }
         },
@@ -1875,6 +1916,19 @@ var APISwaggerJSON string = `{
             "default": "NO_TIER",
             "x-displayname": "Addon Service Tier",
             "x-ves-proto-enum": "ves.io.schema.AddonServiceTierType"
+        },
+        "schemaAddonServiceType": {
+            "type": "string",
+            "description": "AddonServiceType is for identifying the type of an addon service\n\nADDON_SERVICE is essentially a collection of API groups.\nADDON_FEATURE_ON_OFF represents addons used to toggle a feature on or off, which are not typically associated with API groups.\nADDON_SERVICE_PACKAGE is a collection of addon services.",
+            "title": "AddonServiceType",
+            "enum": [
+                "ADDON_SERVICE",
+                "ADDON_FEATURE_ON_OFF",
+                "ADDON_SERVICE_PACKAGE"
+            ],
+            "default": "ADDON_SERVICE",
+            "x-displayname": "Addon Service Type",
+            "x-ves-proto-enum": "ves.io.schema.AddonServiceType"
         },
         "schemaConditionType": {
             "type": "object",
@@ -1911,12 +1965,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {

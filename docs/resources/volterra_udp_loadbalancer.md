@@ -22,17 +22,11 @@ resource "volterra_udp_loadbalancer" "example" {
 
   // One of the arguments from this list "advertise_custom advertise_dualstack_on_public advertise_on_public advertise_on_public_default_dualstack_vip advertise_on_public_default_ipv6_vip advertise_on_public_default_vip advertise_v6_on_public do_not_advertise" must be set
 
-  advertise_on_public {
-    public_ip {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  advertise_on_public_default_vip = true
 
   // One of the arguments from this list "hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness" must be set
 
-  hash_policy_choice_source_ip_stickiness = true
+  hash_policy_choice_round_robin = true
 
   // One of the arguments from this list "udp" must be set
 

@@ -1012,6 +1012,24 @@ func (m *BgpPeer) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *BgpPeer) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetInterfaceRefsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInterfaceRefsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRoutingPoliciesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRoutingPoliciesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *BgpPeer) GetInterfaceRefsDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetInterfaceRefs()
@@ -1024,6 +1042,34 @@ func (m *BgpPeer) GetInterfaceRefsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("BgpPeer.interface_refs[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "interface_refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *BgpPeer) GetInterfaceRefsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetInterfaceRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("BgpPeer.interface_refs[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_interface.Object",
 			RefdUID:    ref.Uid,
@@ -1064,6 +1110,22 @@ func (m *BgpPeer) GetRoutingPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetRoutingPolicies().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRoutingPolicies().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "routing_policies." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *BgpPeer) GetRoutingPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRoutingPolicies() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRoutingPolicies().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRoutingPolicies().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1321,6 +1383,31 @@ func (v *ValidateBgpPeer) Validate(ctx context.Context, pm interface{}, opts ...
 		vOpts := append(opts, db.WithValidateField("bgp_peer_subnet_offset"))
 		if err := fv(ctx, m.GetBgpPeerSubnetOffset(), vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetEbgpMultihopChoice().(type) {
+	case *BgpPeer_EbgpMultihopEnabled:
+		if fv, exists := v.FldValidators["ebgp_multihop_choice.ebgp_multihop_enabled"]; exists {
+			val := m.GetEbgpMultihopChoice().(*BgpPeer_EbgpMultihopEnabled).EbgpMultihopEnabled
+			vOpts := append(opts,
+				db.WithValidateField("ebgp_multihop_choice"),
+				db.WithValidateField("ebgp_multihop_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BgpPeer_EbgpMultihopDisabled:
+		if fv, exists := v.FldValidators["ebgp_multihop_choice.ebgp_multihop_disabled"]; exists {
+			val := m.GetEbgpMultihopChoice().(*BgpPeer_EbgpMultihopDisabled).EbgpMultihopDisabled
+			vOpts := append(opts,
+				db.WithValidateField("ebgp_multihop_choice"),
+				db.WithValidateField("ebgp_multihop_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 	}
 	if fv, exists := v.FldValidators["families"]; exists {
@@ -1646,6 +1733,13 @@ func (m *BgpRoutePolicies) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRoutePolicyDRefInfo()
 }
+func (m *BgpRoutePolicies) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRoutePolicyDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *BgpRoutePolicies) GetRoutePolicyDRefInfo() ([]db.DRefInfo, error) {
@@ -1657,6 +1751,26 @@ func (m *BgpRoutePolicies) GetRoutePolicyDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoutePolicy() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("route_policy[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *BgpRoutePolicies) GetRoutePolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRoutePolicy() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutePolicy() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutePolicy() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1813,6 +1927,13 @@ func (m *BgpRoutePolicy) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetObjectRefsDRefInfo()
 }
+func (m *BgpRoutePolicy) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetObjectRefsDRefInfoForOverlay(generateHash)
+}
 
 func (m *BgpRoutePolicy) GetObjectRefsDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetObjectRefs()
@@ -1825,6 +1946,34 @@ func (m *BgpRoutePolicy) GetObjectRefsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("BgpRoutePolicy.object_refs[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "bgp_routing_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "object_refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *BgpRoutePolicy) GetObjectRefsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetObjectRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("BgpRoutePolicy.object_refs[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "bgp_routing_policy.Object",
 			RefdUID:    ref.Uid,
@@ -2055,6 +2204,13 @@ func (m *BgpStatusType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTunnelDRefInfo()
 }
+func (m *BgpStatusType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTunnelDRefInfoForOverlay(generateHash)
+}
 
 func (m *BgpStatusType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetTunnel()
@@ -2067,6 +2223,34 @@ func (m *BgpStatusType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("BgpStatusType.tunnel[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tunnel.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "tunnel",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *BgpStatusType) GetTunnelDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTunnel()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("BgpStatusType.tunnel[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "tunnel.Object",
 			RefdUID:    ref.Uid,
@@ -2293,6 +2477,24 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetPeersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPeersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWhereDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWhereDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
@@ -2314,6 +2516,26 @@ func (m *CreateSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetPeersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPeers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetPeers() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPeers() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
@@ -2322,6 +2544,22 @@ func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "where." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetWhereDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhere() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWhere().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWhere().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3471,6 +3709,24 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetPeersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPeersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWhereDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWhereDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
@@ -3492,6 +3748,26 @@ func (m *GetSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetPeersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPeers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetPeers() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPeers() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
@@ -3500,6 +3776,22 @@ func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "where." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetWhereDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhere() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWhere().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWhere().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3780,6 +4072,44 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetBgpPeersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBgpPeersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetBgpPeersV6DRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBgpPeersV6DRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkInterfaceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkInterfaceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPeersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPeersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWhereDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWhereDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetBgpPeersDRefInfo() ([]db.DRefInfo, error) {
@@ -3791,6 +4121,26 @@ func (m *GlobalSpecType) GetBgpPeersDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBgpPeers() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("bgp_peers[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetBgpPeersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBgpPeers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetBgpPeers() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBgpPeers() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -3821,6 +4171,26 @@ func (m *GlobalSpecType) GetBgpPeersV6DRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetBgpPeersV6DRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBgpPeersV6() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetBgpPeersV6() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBgpPeersV6() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("bgp_peers_v6[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 func (m *GlobalSpecType) GetNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetNetworkInterface()
 	if len(refs) == 0 {
@@ -3832,6 +4202,34 @@ func (m *GlobalSpecType) GetNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.network_interface[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "network_interface",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetNetworkInterfaceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNetworkInterface()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.network_interface[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_interface.Object",
 			RefdUID:    ref.Uid,
@@ -3884,7 +4282,44 @@ func (m *GlobalSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetPeersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPeers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetPeers() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPeers() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -3937,6 +4372,22 @@ func (m *GlobalSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "where." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetWhereDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhere() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWhere().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWhere().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -4372,6 +4823,13 @@ func (m *InterfaceList) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetInterfacesDRefInfo()
 }
+func (m *InterfaceList) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInterfacesDRefInfoForOverlay(generateHash)
+}
 
 func (m *InterfaceList) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetInterfaces()
@@ -4386,6 +4844,30 @@ func (m *InterfaceList) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("network_interface.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "interfaces",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *InterfaceList) GetInterfacesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetInterfaces()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("InterfaceList.interfaces[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_interface.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_interface.Object",
 			RefdTenant: vref.Tenant,
@@ -4676,6 +5158,24 @@ func (m *Peer) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *Peer) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEnableChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetEnableChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTypeChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTypeChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *Peer) GetEnableChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -4700,6 +5200,29 @@ func (m *Peer) GetEnableChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *Peer) GetEnableChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetEnableChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetEnableChoice().(type) {
+	case *Peer_Disable:
+		return nil, nil
+	case *Peer_RoutingPolicies:
+		drInfos, err := m.GetRoutingPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutingPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "routing_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *Peer) GetTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTypeChoice() == nil {
@@ -4710,6 +5233,29 @@ func (m *Peer) GetTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetExternal().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetExternal().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "external." + dri.DRField
+		}
+		return drInfos, err
+	case *Peer_Internal:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *Peer) GetTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetTypeChoice().(type) {
+	case *Peer_External:
+		drInfos, err := m.GetExternal().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetExternal().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4815,6 +5361,31 @@ func (v *ValidatePeer) Validate(ctx context.Context, pm interface{}, opts ...db.
 			vOpts := append(opts,
 				db.WithValidateField("bfd_choice"),
 				db.WithValidateField("bfd_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+
+	switch m.GetEbgpMultihopChoice().(type) {
+	case *Peer_EbgpMultihopEnabled:
+		if fv, exists := v.FldValidators["ebgp_multihop_choice.ebgp_multihop_enabled"]; exists {
+			val := m.GetEbgpMultihopChoice().(*Peer_EbgpMultihopEnabled).EbgpMultihopEnabled
+			vOpts := append(opts,
+				db.WithValidateField("ebgp_multihop_choice"),
+				db.WithValidateField("ebgp_multihop_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Peer_EbgpMultihopDisabled:
+		if fv, exists := v.FldValidators["ebgp_multihop_choice.ebgp_multihop_disabled"]; exists {
+			val := m.GetEbgpMultihopChoice().(*Peer_EbgpMultihopDisabled).EbgpMultihopDisabled
+			vOpts := append(opts,
+				db.WithValidateField("ebgp_multihop_choice"),
+				db.WithValidateField("ebgp_multihop_disabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -5093,6 +5664,13 @@ func (m *PeerExternal) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetInterfaceChoiceDRefInfo()
 }
+func (m *PeerExternal) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInterfaceChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *PeerExternal) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -5120,6 +5698,47 @@ func (m *PeerExternal) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "interface_list." + dri.DRField
+		}
+		return drInfos, err
+	case *PeerExternal_InsideInterfaces:
+		return nil, nil
+	case *PeerExternal_OutsideInterfaces:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *PeerExternal) GetInterfaceChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInterfaceChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetInterfaceChoice().(type) {
+	case *PeerExternal_Interface:
+		vref := m.GetInterface()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_interface.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "interface",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *PeerExternal_InterfaceList:
+		drInfos, err := m.GetInterfaceList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -6101,6 +6720,24 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetPeersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPeersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWhereDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWhereDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
@@ -6122,6 +6759,26 @@ func (m *ReplaceSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetPeersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPeers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetPeers() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPeers() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
@@ -6130,6 +6787,22 @@ func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "where." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetWhereDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhere() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWhere().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWhere().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

@@ -297,6 +297,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNetworkPolicyVersionDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkPolicyVersionDRefInfoForOverlay(generateHash)
+}
 
 func (m *GlobalSpecType) GetNetworkPolicyVersionDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetNetworkPolicyVersion()
@@ -311,6 +318,30 @@ func (m *GlobalSpecType) GetNetworkPolicyVersionDRefInfo() ([]db.DRefInfo, error
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("bot_policy_version.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "bot_policy_version.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_policy_version",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetNetworkPolicyVersionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetNetworkPolicyVersion()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.network_policy_version[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("bot_policy_version.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "bot_policy_version.Object",
 			RefdTenant: vref.Tenant,
@@ -643,6 +674,52 @@ func (v *ValidateReplaceSpecType) CommentsValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
+func (v *ValidateReplaceSpecType) BotInfrasWithVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for bot_infras_with_version")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_shape_bot_defense.BotInfraWithVersion, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_shape_bot_defense.BotInfraWithVersionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for bot_infras_with_version")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_shape_bot_defense.BotInfraWithVersion)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_shape_bot_defense.BotInfraWithVersion, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated bot_infras_with_version")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items bot_infras_with_version")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
 
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
@@ -656,6 +733,12 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+	if fv, exists := v.FldValidators["bot_infras_with_version"]; exists {
+		vOpts := append(opts, db.WithValidateField("bot_infras_with_version"))
+		if err := fv(ctx, m.GetBotInfrasWithVersion(), vOpts...); err != nil {
+			return err
+		}
 	}
 	if fv, exists := v.FldValidators["comments"]; exists {
 		vOpts := append(opts, db.WithValidateField("comments"))
@@ -711,6 +794,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["comments"] = vFn
+
+	vrhBotInfrasWithVersion := v.BotInfrasWithVersionValidationRuleHandler
+	rulesBotInfrasWithVersion := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhBotInfrasWithVersion(rulesBotInfrasWithVersion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.bot_infras_with_version: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_infras_with_version"] = vFn
 	v.FldValidators["network_policy_content"] = ves_io_schema_shape_bot_defense.NetworkPolicyContentValidator().Validate
 
 	return v
@@ -767,6 +861,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	if f == nil {
 		return
 	}
+	m.BotInfrasWithVersion = f.GetBotInfrasWithVersion()
 	m.Comments = f.GetComments()
 	m.LatestVersion = f.GetLatestVersion()
 	m.NetworkPolicyContent = f.GetNetworkPolicyContent()
@@ -789,6 +884,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	}
 	_ = m1
 
+	f.BotInfrasWithVersion = m1.BotInfrasWithVersion
 	f.Comments = m1.Comments
 	f.LatestVersion = m1.LatestVersion
 	f.NetworkPolicyContent = m1.NetworkPolicyContent

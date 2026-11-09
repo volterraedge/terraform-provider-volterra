@@ -102,8 +102,63 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiDefinitionRefDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDefinitionRefDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiDiscoveryDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCrawlerRefDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCrawlerRefDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSelectedCodeBaseIntegrationsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSelectedCodeBaseIntegrationsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSensitiveDataPolicyRefDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyRefDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetApiDefinitionRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetApiDefinitionRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("api_definition.Object")
+	dri := db.DRefInfo{
+		RefdType:   "api_definition.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "api_definition_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetApiDefinitionRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetApiDefinitionRef()
 	if vref == nil {
 		return nil, nil
@@ -165,6 +220,23 @@ func (m *GlobalSpecType) GetApiDiscoveryDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return []db.DRefInfo{dri}, nil
 }
+func (m *GlobalSpecType) GetApiDiscoveryDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vref := m.GetApiDiscovery()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("api_discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "api_discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "api_discovery",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
 
 // GetApiDiscoveryDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetApiDiscoveryDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -194,6 +266,23 @@ func (m *GlobalSpecType) GetApiDiscoveryDBEntries(ctx context.Context, d db.Inte
 }
 
 func (m *GlobalSpecType) GetCrawlerRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCrawlerRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("api_crawler.Object")
+	dri := db.DRefInfo{
+		RefdType:   "api_crawler.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "crawler_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetCrawlerRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCrawlerRef()
 	if vref == nil {
 		return nil, nil
@@ -258,7 +347,44 @@ func (m *GlobalSpecType) GetSelectedCodeBaseIntegrationsDRefInfo() ([]db.DRefInf
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetSelectedCodeBaseIntegrationsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSelectedCodeBaseIntegrations() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSelectedCodeBaseIntegrations() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSelectedCodeBaseIntegrations() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("selected_code_base_integrations[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 func (m *GlobalSpecType) GetSensitiveDataPolicyRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSensitiveDataPolicyRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("sensitive_data_policy.Object")
+	dri := db.DRefInfo{
+		RefdType:   "sensitive_data_policy.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "sensitive_data_policy_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetSensitiveDataPolicyRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSensitiveDataPolicyRef()
 	if vref == nil {
 		return nil, nil
@@ -304,6 +430,23 @@ func (m *GlobalSpecType) GetSensitiveDataPolicyRefDBEntries(ctx context.Context,
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil

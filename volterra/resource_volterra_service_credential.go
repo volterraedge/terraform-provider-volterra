@@ -31,13 +31,12 @@ const (
 )
 
 type serviceCredentialParams struct {
-	name            string
-	namespace       string
-	namespaceRoles  []*ves_io_schema.NamespaceRoleType
-	serviceCredType string
-	password        string
-	expirationdays  uint32
-	userGroupNames  []string
+	name           string
+	namespace      string
+	namespaceRoles []*ves_io_schema.NamespaceRoleType
+	password       string
+	expirationdays uint32
+	userGroupNames []string
 }
 
 func resourceVolterraServiceCredential() *schema.Resource {
@@ -70,12 +69,6 @@ func resourceVolterraServiceCredential() *schema.Resource {
 				},
 			},
 
-			"service_credential_type": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "SERVICE_API_CERTIFICATE",
-			},
-
 			"service_api_certificate": {
 				Type:     schema.TypeList,
 				Optional: true,
@@ -84,6 +77,7 @@ func resourceVolterraServiceCredential() *schema.Resource {
 						"password": {
 							Type:     schema.TypeString,
 							Required: true,
+							Sensitive: true,
 						},
 					},
 				},
@@ -195,10 +189,6 @@ func resourceVolterraServiceCredentialCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("service_credential_type"); ok {
-		serviceCredParams.serviceCredType = v.(string)
-	}
-
 	if v, ok := d.GetOk("expiration_days"); ok {
 		serviceCredParams.expirationdays = uint32(v.(int))
 	}
@@ -211,16 +201,9 @@ func resourceVolterraServiceCredentialCreate(d *schema.ResourceData, meta interf
 		serviceCredParams.userGroupNames = ls
 	}
 
-	serviceCredValue, ok := ves_io_schema_api_credential.APICredentialType_value[serviceCredParams.serviceCredType]
-
-	if !ok {
-		return fmt.Errorf("Invalid service_credential_type, valid ones are: SERVICE_API_TOKEN, SERVICE_API_CERTIFICATE, SERVICE_KUBE_CONFIG, SITE_GLOBAL_KUBE_CONFIG")
-	}
-
 	serviceCredRequest := &ves_io_schema_api_credential.CreateServiceCredentialsRequest{
 		Name:           serviceCredParams.name,
 		Namespace:      svcfw.SystemNSVal,
-		Type:           ves_io_schema_api_credential.APICredentialType(serviceCredValue),
 		ExpirationDays: serviceCredParams.expirationdays,
 		NamespaceRoles: serviceCredParams.namespaceRoles,
 		UserGroupNames: serviceCredParams.userGroupNames,
@@ -339,7 +322,6 @@ func resourceVolterraServiceCredentialRead(d *schema.ResourceData, meta interfac
 func resourceVolterraServiceCredentialUpdate(d *schema.ResourceData, meta interface{}) error {
 	var created_at string
 	var expirydays uint32
-	var serviceCredType string
 	var automatic_approval_api_token bool
 
 	client := meta.(*APIClient)
@@ -396,10 +378,6 @@ func resourceVolterraServiceCredentialUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("service_credential_type"); ok {
-		serviceCredType = v.(string)
-	}
-
 	yamlReq, err := codec.ToYAML(updateReq)
 	if err != nil {
 		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
@@ -434,7 +412,10 @@ func resourceVolterraServiceCredentialUpdate(d *schema.ResourceData, meta interf
 		return fmt.Errorf("Error finding Volterra Service Credential resource %q: %s", d.Id(), err)
 	}
 
-	expTime, err := convertTimestampToString(rsp.(*ves_io_schema_api_credential.GetServiceCredentialsResponse).GetExpiryTimestamp())
+	serviceCredRsp := rsp.(*ves_io_schema_api_credential.GetServiceCredentialsResponse)
+	serviceAPIToken := serviceCredRsp.GetType() == ves_io_schema_api_credential.SERVICE_API_TOKEN
+
+	expTime, err := convertTimestampToString(serviceCredRsp.GetExpiryTimestamp())
 	if err != nil {
 		return fmt.Errorf("Error converting expiration_timestamp: %s", err)
 	}
@@ -447,7 +428,7 @@ func resourceVolterraServiceCredentialUpdate(d *schema.ResourceData, meta interf
 	d.Set("expiration_timestamp", expTime)
 	d.Set("created_at", created_at)
 
-	if (d.HasChange("expiration_days")) && serviceCredType == "SERVICE_API_TOKEN" && automatic_approval_api_token && rsp.(*ves_io_schema_api_credential.GetServiceCredentialsResponse).GetActive() {
+	if (d.HasChange("expiration_days")) && serviceAPIToken && automatic_approval_api_token && serviceCredRsp.GetActive() {
 		renReq := &ves_io_schema_api_credential.RenewRequest{
 			Name:           d.Id(),
 			Namespace:      svcfw.SystemNSVal,
@@ -466,9 +447,9 @@ func resourceVolterraServiceCredentialUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if time.Now().After(expireDate) && serviceCredType == "SERVICE_API_TOKEN" && automatic_approval_api_token {
+	if time.Now().After(expireDate) && serviceAPIToken && automatic_approval_api_token {
 
-		rsp, err := client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(getServiceCredURI, d.Id()), fmt.Sprintf("%s.%s", apiCredRPCFQN, "GetServiceCredentials"), yamlReq)
+		rsp, err := client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(getServiceCredURI, d.Id()), fmt.Sprintf("%s.%s", apiCredRPCFQN, "GetServiceCredentials"), yamlReq1)
 
 		if err != nil {
 			if strings.Contains(err.Error(), "status code 404") {

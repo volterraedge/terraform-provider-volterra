@@ -148,6 +148,13 @@ func (m *GetDnsInfoResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDnsInfoDRefInfo()
 }
+func (m *GetDnsInfoResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDnsInfoDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetDnsInfoResponse) GetDnsInfoDRefInfo() ([]db.DRefInfo, error) {
@@ -157,6 +164,22 @@ func (m *GetDnsInfoResponse) GetDnsInfoDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetDnsInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDnsInfo().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "dns_info." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetDnsInfoResponse) GetDnsInfoDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDnsInfo() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDnsInfo().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDnsInfo().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

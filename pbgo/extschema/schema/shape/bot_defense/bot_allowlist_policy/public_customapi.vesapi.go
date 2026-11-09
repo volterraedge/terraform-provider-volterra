@@ -42,6 +42,14 @@ func (c *CustomAPIGrpcClient) doRPCCustomReplace(ctx context.Context, yamlReq st
 	rsp, err := c.grpcClient.CustomReplace(ctx, req, opts...)
 	return rsp, err
 }
+func (c *CustomAPIGrpcClient) doRPCDeploy(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &DeployPolicyRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.bot_defense.bot_allowlist_policy.DeployPolicyRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.Deploy(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCGetAllowlistPoliciesAndVersionsList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetPoliciesAndVersionsListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -98,6 +106,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CustomReplace"] = ccl.doRPCCustomReplace
+	rpcFns["Deploy"] = ccl.doRPCDeploy
 	rpcFns["GetAllowlistPoliciesAndVersionsList"] = ccl.doRPCGetAllowlistPoliciesAndVersionsList
 	rpcFns["GetAllowlistPolicyVersions"] = ccl.doRPCGetAllowlistPolicyVersions
 	rpcFns["GetContent"] = ccl.doRPCGetContent
@@ -189,6 +198,93 @@ func (c *CustomAPIRestClient) doRPCCustomReplace(ctx context.Context, callOpts *
 	pbRsp := &CustomReplaceResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomReplaceResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+func (c *CustomAPIRestClient) doRPCDeploy(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &DeployPolicyRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.bot_defense.bot_allowlist_policy.DeployPolicyRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("comments", fmt.Sprintf("%v", req.Comments))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		for _, item := range req.TargetInfras {
+			q.Add("target_infras", fmt.Sprintf("%v", item))
+		}
+		q.Add("version", fmt.Sprintf("%v", req.Version))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &DeployPolicyResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.bot_allowlist_policy.DeployPolicyResponse", body)
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -468,6 +564,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CustomReplace"] = ccl.doRPCCustomReplace
+	rpcFns["Deploy"] = ccl.doRPCDeploy
 	rpcFns["GetAllowlistPoliciesAndVersionsList"] = ccl.doRPCGetAllowlistPoliciesAndVersionsList
 	rpcFns["GetAllowlistPolicyVersions"] = ccl.doRPCGetAllowlistPolicyVersions
 	rpcFns["GetContent"] = ccl.doRPCGetContent
@@ -485,6 +582,10 @@ type customAPIInprocClient struct {
 func (c *customAPIInprocClient) CustomReplace(ctx context.Context, in *CustomReplaceRequest, opts ...grpc.CallOption) (*CustomReplaceResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI.CustomReplace")
 	return c.CustomAPIServer.CustomReplace(ctx, in)
+}
+func (c *customAPIInprocClient) Deploy(ctx context.Context, in *DeployPolicyRequest, opts ...grpc.CallOption) (*DeployPolicyResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI.Deploy")
+	return c.CustomAPIServer.Deploy(ctx, in)
 }
 func (c *customAPIInprocClient) GetAllowlistPoliciesAndVersionsList(ctx context.Context, in *GetPoliciesAndVersionsListRequest, opts ...grpc.CallOption) (*GetPoliciesAndVersionsListResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI.GetAllowlistPoliciesAndVersionsList")
@@ -565,6 +666,54 @@ func (s *customAPISrv) CustomReplace(ctx context.Context, in *CustomReplaceReque
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomReplaceResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) Deploy(ctx context.Context, in *DeployPolicyRequest) (*DeployPolicyResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *DeployPolicyResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_allowlist_policy.DeployPolicyRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.Deploy' operation on 'bot_allowlist_policy'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI.Deploy"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.Deploy(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.bot_allowlist_policy.DeployPolicyResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -919,6 +1068,106 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/custom/namespaces/{namespace}/bot_allowlist_policys/{name}/deploy": {
+            "post": {
+                "summary": "Deploy Bot Allowlist Policy",
+                "description": "Deploy a bot allowlist policy to a selected set of its associated bot\ninfrastructures.",
+                "operationId": "ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI.Deploy",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/bot_allowlist_policyDeployPolicyResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"self-service-test\"\nx-required\nnamespace is used to scope the query",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "name\n\nx-example: \"my-allowlist-policy\"\nx-required\nName of the policy to deploy",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Policy Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/bot_allowlist_policyDeployPolicyRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-shape-bot_defense-bot_allowlist_policy-customapi-deploy"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI.Deploy"
+            },
+            "x-displayname": "Bot allowlist Policy",
+            "x-ves-proto-service": "ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/bot_allowlist_policy/{name}/versions": {
             "get": {
                 "summary": "Bot Allowlist Policy Versions",
@@ -1145,6 +1394,115 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomReplaceResponse"
         },
+        "bot_allowlist_policyDeployPolicyRequest": {
+            "type": "object",
+            "description": "Request to deploy a bot allowlist policy to a selected set of its associated\nbot infrastructures.",
+            "title": "DeployPolicyRequest",
+            "x-displayname": "Deploy Policy Request",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_allowlist_policy.DeployPolicyRequest",
+            "properties": {
+                "comments": {
+                    "type": "string",
+                    "description": " Optional comments describing the deployment\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 2048\n",
+                    "title": "comments",
+                    "maxLength": 2048,
+                    "x-displayname": "Comments",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "2048"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the policy to deploy\n\nExample: - \"my-allowlist-policy\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "x-displayname": "Policy Name",
+                    "x-ves-example": "my-allowlist-policy",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " namespace is used to scope the query\n\nExample: - \"self-service-test\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "title": "namespace",
+                    "minLength": 1,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "self-service-test",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
+                },
+                "target_infras": {
+                    "type": "array",
+                    "description": " Names of the bot infrastructures (selected by the user from the policy's\n associated infras) to deploy this policy to. Must be non-empty and each name\n must be present in the policy's associated bot infrastructures.\n\nExample: - \"[cluster-1, cluster-2]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.ves_object_name: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "target_infras",
+                    "minItems": 1,
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "x-displayname": "Target Bot Infrastructures",
+                    "x-ves-example": "[cluster-1, cluster-2]",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.items.string.ves_object_name": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "version": {
+                    "type": "string",
+                    "description": " Optional policy version to deploy. When empty, the latest published version\n is deployed.\n\nExample: - \"2.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "version",
+                    "maxLength": 64,
+                    "x-displayname": "Version",
+                    "x-ves-example": "2.0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                }
+            }
+        },
+        "bot_allowlist_policyDeployPolicyResponse": {
+            "type": "object",
+            "description": "Immediate response for a policy deployment. Only the overall deployment status\nis returned; the detailed per-infra lifecycle is tracked asynchronously and\nsurfaced via the deployments list/details APIs.",
+            "title": "DeployPolicyResponse",
+            "x-displayname": "Deploy Policy Response",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_allowlist_policy.DeployPolicyResponse",
+            "properties": {
+                "deploy_status": {
+                    "description": " Overall deployment status at the time the call returns\n\nExample: - \"IN_PROGRESS\"-",
+                    "title": "deploy_status",
+                    "$ref": "#/definitions/bot_allowlist_policyDeployStatus",
+                    "x-displayname": "Deploy Status",
+                    "x-ves-example": "IN_PROGRESS"
+                }
+            }
+        },
+        "bot_allowlist_policyDeployStatus": {
+            "type": "string",
+            "description": "Overall status of a bot allowlist policy deployment.\n\n - IN_PROGRESS: In Progress\n\n - FINISHED: Finished\n\n - FAILED: Failed\n",
+            "title": "DeployStatus",
+            "enum": [
+                "IN_PROGRESS",
+                "FINISHED",
+                "FAILED"
+            ],
+            "default": "IN_PROGRESS",
+            "x-displayname": "Deploy Status",
+            "x-ves-proto-enum": "ves.io.schema.shape.bot_defense.bot_allowlist_policy.DeployStatus"
+        },
         "bot_allowlist_policyGetContentResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_allowlist_policy.GetContentResponse",
@@ -1229,6 +1587,33 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "bot_defenseBotInfraWithVersion": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Infrastructure with in-use policy version\"\nBot Infra Name with its in use version",
+            "title": "Bot Infrastructure with in-use version",
+            "properties": {
+                "bot_infra_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Bot Infra name\"\nx-example: \"cluster-1\"\nThe cluster id deployed this policy",
+                    "title": "Bot Infra Name"
+                },
+                "deployment_status": {
+                    "type": "string",
+                    "description": "x-displayName: \"Deployment Status\"\nx-example: \"Deployed\"\nThe status of policy deployed to cluster",
+                    "title": "Deployment Status"
+                },
+                "environment_type": {
+                    "type": "string",
+                    "description": "x-displayName: \"Environment Type\"\nx-example: \"TESTING\"\nThe environment of policy deployed to cluster",
+                    "title": "Environment Type"
+                },
+                "in_use_version": {
+                    "type": "string",
+                    "description": "x-displayName: \"In Use Version\"\nx-example: \"1.0\"\nThe version of policy deployed to cluster\nThe version format should be X.0",
+                    "title": "In Use Version"
+                }
+            }
+        },
         "bot_defenseIPAllowlistDetail": {
             "type": "object",
             "description": "IP Allowlist value",
@@ -1260,7 +1645,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "ip_allowlist": {
                     "type": "array",
-                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " IP addresses and IP prefixes added to the allow list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "IP \u0026 IP Prefix List",
                     "items": {
                         "$ref": "#/definitions/bot_defenseIPAllowlistDetail"
@@ -1272,7 +1657,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "ip_range_allowlist": {
                     "type": "array",
-                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Ranges of IP addresses added to the allowlist.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "IP Range List",
                     "items": {
                         "$ref": "#/definitions/bot_defenseIPRangeAllowlistDetail"
@@ -1293,13 +1678,13 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "ip_description": {
                     "type": "string",
-                    "description": " The description for ip address",
+                    "description": " Information to help identify the IP allowlist entry.",
                     "title": "ip description",
                     "x-displayname": "Description"
                 },
                 "ip_value": {
                     "type": "string",
-                    "description": " A single Ip address\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The IP address or IP prefix you want to add.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "ip value",
                     "x-displayname": "Value",
                     "x-ves-required": "true",
@@ -1342,12 +1727,12 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "description": "IP Range Allowlist value",
             "title": "IP Range Allowlist Detail",
-            "x-displayname": "IP Range Allowlist",
+            "x-displayname": "IP Range",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.IPRangeAllowlistDetail",
             "properties": {
                 "end_with": {
                     "type": "string",
-                    "description": " IP range end with\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The end of the IP address range.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "IP end with value",
                     "x-displayname": "End With",
                     "x-ves-required": "true",
@@ -1359,13 +1744,12 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "ip_description": {
                     "type": "string",
-                    "description": " The description for IP range",
                     "title": "ip description",
                     "x-displayname": "Description"
                 },
                 "start_with": {
                     "type": "string",
-                    "description": " IP range start with\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The beginning of the IP address range.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "IP start with value",
                     "x-displayname": "Start With",
                     "x-ves-required": "true",

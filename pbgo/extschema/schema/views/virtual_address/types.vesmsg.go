@@ -69,6 +69,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDeploymentTypeChoiceDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDeploymentTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetDeploymentTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -86,14 +93,25 @@ func (m *CreateSpecType) GetDeploymentTypeChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "public." + dri.DRField
 		}
 		return drInfos, err
-	case *CreateSpecType_Private:
-		drInfos, err := m.GetPrivate().GetDRefInfo()
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetDeploymentTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDeploymentTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDeploymentTypeChoice().(type) {
+	case *CreateSpecType_Public:
+		drInfos, err := m.GetPublic().GetDRefInfoForOverlay(generateHash)
 		if err != nil {
-			return nil, errors.Wrap(err, "GetPrivate().GetDRefInfo() FAILED")
+			return nil, errors.Wrap(err, "GetPublic().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
-			dri.DRField = "private." + dri.DRField
+			dri.DRField = "public." + dri.DRField
 		}
 		return drInfos, err
 	default:
@@ -163,17 +181,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *CreateSpecType_Private:
-		if fv, exists := v.FldValidators["deployment_type_choice.private"]; exists {
-			val := m.GetDeploymentTypeChoice().(*CreateSpecType_Private).Private
-			vOpts := append(opts,
-				db.WithValidateField("deployment_type_choice"),
-				db.WithValidateField("private"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	}
 	if fv, exists := v.FldValidators["state"]; exists {
 		vOpts := append(opts, db.WithValidateField("state"))
@@ -216,7 +223,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["state"] = vFn
 	v.FldValidators["deployment_type_choice.public"] = PublicDeploymentTypeValidator().Validate
-	v.FldValidators["deployment_type_choice.private"] = PrivateDeploymentTypeValidator().Validate
 
 	return v
 }()
@@ -266,6 +272,14 @@ type ValidateCustomVIP struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCustomVIP) VipSelectTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vip_select_type")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCustomVIP) VipSelectTypeIpV4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_IpV4, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -294,6 +308,16 @@ func (v *ValidateCustomVIP) Validate(ctx context.Context, pm interface{}, opts .
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["vip_select_type"]; exists {
+		val := m.GetVipSelectType()
+		vOpts := append(opts,
+			db.WithValidateField("vip_select_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetVipSelectType().(type) {
@@ -333,9 +357,21 @@ var DefaultCustomVIPValidator = func() *ValidateCustomVIP {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+	vrhVipSelectType := v.VipSelectTypeValidationRuleHandler
+	rulesVipSelectType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhVipSelectType(rulesVipSelectType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomVIP.vip_select_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vip_select_type"] = vFn
 	vrhVipSelectTypeIpV4 := v.VipSelectTypeIpV4ValidationRuleHandler
 	rulesVipSelectTypeIpV4 := map[string]string{
-		"ves.io.schema.rules.string.ipv4": "true",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
+		"ves.io.schema.rules.string.not_empty": "true",
 	}
 	vFnMap["vip_select_type.ip_v4"], err = vrhVipSelectTypeIpV4(rulesVipSelectTypeIpV4)
 	if err != nil {
@@ -405,6 +441,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDeploymentTypeChoiceDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDeploymentTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetDeploymentTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -422,14 +465,25 @@ func (m *GetSpecType) GetDeploymentTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "public." + dri.DRField
 		}
 		return drInfos, err
-	case *GetSpecType_Private:
-		drInfos, err := m.GetPrivate().GetDRefInfo()
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetDeploymentTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDeploymentTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDeploymentTypeChoice().(type) {
+	case *GetSpecType_Public:
+		drInfos, err := m.GetPublic().GetDRefInfoForOverlay(generateHash)
 		if err != nil {
-			return nil, errors.Wrap(err, "GetPrivate().GetDRefInfo() FAILED")
+			return nil, errors.Wrap(err, "GetPublic().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
-			dri.DRField = "private." + dri.DRField
+			dri.DRField = "public." + dri.DRField
 		}
 		return drInfos, err
 	default:
@@ -499,17 +553,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-	case *GetSpecType_Private:
-		if fv, exists := v.FldValidators["deployment_type_choice.private"]; exists {
-			val := m.GetDeploymentTypeChoice().(*GetSpecType_Private).Private
-			vOpts := append(opts,
-				db.WithValidateField("deployment_type_choice"),
-				db.WithValidateField("private"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	}
 	if fv, exists := v.FldValidators["state"]; exists {
 		vOpts := append(opts, db.WithValidateField("state"))
@@ -552,7 +595,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["state"] = vFn
 	v.FldValidators["deployment_type_choice.public"] = PublicDeploymentTypeValidator().Validate
-	v.FldValidators["deployment_type_choice.private"] = PrivateDeploymentTypeValidator().Validate
 
 	return v
 }()
@@ -616,6 +658,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDeploymentTypeChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDeploymentTypeChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDeploymentTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -633,14 +693,25 @@ func (m *GlobalSpecType) GetDeploymentTypeChoiceDRefInfo() ([]db.DRefInfo, error
 			dri.DRField = "public." + dri.DRField
 		}
 		return drInfos, err
-	case *GlobalSpecType_Private:
-		drInfos, err := m.GetPrivate().GetDRefInfo()
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetDeploymentTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDeploymentTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDeploymentTypeChoice().(type) {
+	case *GlobalSpecType_Public:
+		drInfos, err := m.GetPublic().GetDRefInfoForOverlay(generateHash)
 		if err != nil {
-			return nil, errors.Wrap(err, "GetPrivate().GetDRefInfo() FAILED")
+			return nil, errors.Wrap(err, "GetPublic().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
-			dri.DRField = "private." + dri.DRField
+			dri.DRField = "public." + dri.DRField
 		}
 		return drInfos, err
 	default:
@@ -649,6 +720,23 @@ func (m *GlobalSpecType) GetDeploymentTypeChoiceDRefInfo() ([]db.DRefInfo, error
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -755,17 +843,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *GlobalSpecType_Private:
-		if fv, exists := v.FldValidators["deployment_type_choice.private"]; exists {
-			val := m.GetDeploymentTypeChoice().(*GlobalSpecType_Private).Private
-			vOpts := append(opts,
-				db.WithValidateField("deployment_type_choice"),
-				db.WithValidateField("private"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	}
 	if fv, exists := v.FldValidators["state"]; exists {
 		vOpts := append(opts, db.WithValidateField("state"))
@@ -814,7 +891,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["state"] = vFn
 	v.FldValidators["deployment_type_choice.public"] = PublicDeploymentTypeValidator().Validate
-	v.FldValidators["deployment_type_choice.private"] = PrivateDeploymentTypeValidator().Validate
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -868,6 +944,13 @@ func (m *GlobalWhereType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetVipChoiceDRefInfo()
 }
+func (m *GlobalWhereType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVipChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalWhereType) GetVipChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -875,12 +958,31 @@ func (m *GlobalWhereType) GetVipChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 	switch m.GetVipChoice().(type) {
-	case *GlobalWhereType_TenantPublicDefaultVip:
-		return nil, nil
 	case *GlobalWhereType_SpecificVip:
 		drInfos, err := m.GetSpecificVip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSpecificVip().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "specific_vip." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalWhereType) GetVipChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVipChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetVipChoice().(type) {
+	case *GlobalWhereType_SpecificVip:
+		drInfos, err := m.GetSpecificVip().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSpecificVip().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -925,17 +1027,6 @@ func (v *ValidateGlobalWhereType) Validate(ctx context.Context, pm interface{}, 
 	}
 
 	switch m.GetVipChoice().(type) {
-	case *GlobalWhereType_TenantPublicDefaultVip:
-		if fv, exists := v.FldValidators["vip_choice.tenant_public_default_vip"]; exists {
-			val := m.GetVipChoice().(*GlobalWhereType_TenantPublicDefaultVip).TenantPublicDefaultVip
-			vOpts := append(opts,
-				db.WithValidateField("vip_choice"),
-				db.WithValidateField("tenant_public_default_vip"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *GlobalWhereType_SpecificVip:
 		if fv, exists := v.FldValidators["vip_choice.specific_vip"]; exists {
 			val := m.GetVipChoice().(*GlobalWhereType_SpecificVip).SpecificVip
@@ -1007,6 +1098,13 @@ func (m *PrivateDeploymentType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSiteTypeChoiceDRefInfo()
 }
+func (m *PrivateDeploymentType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *PrivateDeploymentType) GetSiteTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1038,6 +1136,47 @@ func (m *PrivateDeploymentType) GetSiteTypeChoiceDRefInfo() ([]db.DRefInfo, erro
 		drInfos, err := m.GetSegment().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSegment().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "segment." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *PrivateDeploymentType) GetSiteTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteTypeChoice().(type) {
+	case *PrivateDeploymentType_Site:
+		drInfos, err := m.GetSite().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSite().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site." + dri.DRField
+		}
+		return drInfos, err
+	case *PrivateDeploymentType_VirtualCeSites:
+		drInfos, err := m.GetVirtualCeSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualCeSites().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_ce_sites." + dri.DRField
+		}
+		return drInfos, err
+	case *PrivateDeploymentType_Segment:
+		drInfos, err := m.GetSegment().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegment().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1163,6 +1302,13 @@ func (m *PublicDeploymentType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetWhereSelectionChoiceDRefInfo()
 }
+func (m *PublicDeploymentType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWhereSelectionChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *PublicDeploymentType) GetWhereSelectionChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1180,24 +1326,25 @@ func (m *PublicDeploymentType) GetWhereSelectionChoiceDRefInfo() ([]db.DRefInfo,
 			dri.DRField = "global." + dri.DRField
 		}
 		return drInfos, err
-	case *PublicDeploymentType_Regional:
-		drInfos, err := m.GetRegional().GetDRefInfo()
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *PublicDeploymentType) GetWhereSelectionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhereSelectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetWhereSelectionChoice().(type) {
+	case *PublicDeploymentType_Global:
+		drInfos, err := m.GetGlobal().GetDRefInfoForOverlay(generateHash)
 		if err != nil {
-			return nil, errors.Wrap(err, "GetRegional().GetDRefInfo() FAILED")
+			return nil, errors.Wrap(err, "GetGlobal().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
-			dri.DRField = "regional." + dri.DRField
-		}
-		return drInfos, err
-	case *PublicDeploymentType_Vk8SService:
-		drInfos, err := m.GetVk8SService().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetVk8SService().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "vk8s_service." + dri.DRField
+			dri.DRField = "global." + dri.DRField
 		}
 		return drInfos, err
 	default:
@@ -1235,28 +1382,6 @@ func (v *ValidatePublicDeploymentType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-	case *PublicDeploymentType_Regional:
-		if fv, exists := v.FldValidators["where_selection_choice.regional"]; exists {
-			val := m.GetWhereSelectionChoice().(*PublicDeploymentType_Regional).Regional
-			vOpts := append(opts,
-				db.WithValidateField("where_selection_choice"),
-				db.WithValidateField("regional"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *PublicDeploymentType_Vk8SService:
-		if fv, exists := v.FldValidators["where_selection_choice.vk8s_service"]; exists {
-			val := m.GetWhereSelectionChoice().(*PublicDeploymentType_Vk8SService).Vk8SService
-			vOpts := append(opts,
-				db.WithValidateField("where_selection_choice"),
-				db.WithValidateField("vk8s_service"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	}
 	return nil
 }
@@ -1265,8 +1390,6 @@ func (v *ValidatePublicDeploymentType) Validate(ctx context.Context, pm interfac
 var DefaultPublicDeploymentTypeValidator = func() *ValidatePublicDeploymentType {
 	v := &ValidatePublicDeploymentType{FldValidators: map[string]db.ValidatorFunc{}}
 	v.FldValidators["where_selection_choice.global"] = GlobalWhereTypeValidator().Validate
-	v.FldValidators["where_selection_choice.regional"] = RegionalWhereTypeValidator().Validate
-	v.FldValidators["where_selection_choice.vk8s_service"] = ves_io_schema_views.WhereVK8SServiceValidator().Validate
 
 	return v
 }()
@@ -1330,6 +1453,24 @@ func (m *RegionalSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *RegionalSiteType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRegionalEdgeSiteDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRegionalEdgeSiteDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVipChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVipChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *RegionalSiteType) GetRegionalEdgeSiteDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetRegionalEdgeSite()
@@ -1344,6 +1485,30 @@ func (m *RegionalSiteType) GetRegionalEdgeSiteDRefInfo() ([]db.DRefInfo, error) 
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("site.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "regional_edge_site",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *RegionalSiteType) GetRegionalEdgeSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetRegionalEdgeSite()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("RegionalSiteType.regional_edge_site[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("site.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdTenant: vref.Tenant,
@@ -1390,12 +1555,31 @@ func (m *RegionalSiteType) GetVipChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 	switch m.GetVipChoice().(type) {
-	case *RegionalSiteType_TenantPublicDefaultVip:
-		return nil, nil
 	case *RegionalSiteType_SpecificVip:
 		drInfos, err := m.GetSpecificVip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSpecificVip().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "specific_vip." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RegionalSiteType) GetVipChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVipChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetVipChoice().(type) {
+	case *RegionalSiteType_SpecificVip:
+		drInfos, err := m.GetSpecificVip().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSpecificVip().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1449,17 +1633,6 @@ func (v *ValidateRegionalSiteType) Validate(ctx context.Context, pm interface{},
 	}
 
 	switch m.GetVipChoice().(type) {
-	case *RegionalSiteType_TenantPublicDefaultVip:
-		if fv, exists := v.FldValidators["vip_choice.tenant_public_default_vip"]; exists {
-			val := m.GetVipChoice().(*RegionalSiteType_TenantPublicDefaultVip).TenantPublicDefaultVip
-			vOpts := append(opts,
-				db.WithValidateField("vip_choice"),
-				db.WithValidateField("tenant_public_default_vip"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *RegionalSiteType_SpecificVip:
 		if fv, exists := v.FldValidators["vip_choice.specific_vip"]; exists {
 			val := m.GetVipChoice().(*RegionalSiteType_SpecificVip).SpecificVip
@@ -1532,6 +1705,13 @@ func (m *RegionalWhereType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSiteOrVirtualNetworkTypeDRefInfo()
 }
+func (m *RegionalWhereType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteOrVirtualNetworkTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *RegionalWhereType) GetSiteOrVirtualNetworkTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -1543,6 +1723,27 @@ func (m *RegionalWhereType) GetSiteOrVirtualNetworkTypeDRefInfo() ([]db.DRefInfo
 		drInfos, err := m.GetRegionalSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRegionalSite().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "regional_site." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RegionalWhereType) GetSiteOrVirtualNetworkTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteOrVirtualNetworkType() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteOrVirtualNetworkType().(type) {
+	case *RegionalWhereType_RegionalSite:
+		drInfos, err := m.GetRegionalSite().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRegionalSite().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1644,6 +1845,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDeploymentTypeChoiceDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDeploymentTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetDeploymentTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1661,14 +1869,25 @@ func (m *ReplaceSpecType) GetDeploymentTypeChoiceDRefInfo() ([]db.DRefInfo, erro
 			dri.DRField = "public." + dri.DRField
 		}
 		return drInfos, err
-	case *ReplaceSpecType_Private:
-		drInfos, err := m.GetPrivate().GetDRefInfo()
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetDeploymentTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDeploymentTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDeploymentTypeChoice().(type) {
+	case *ReplaceSpecType_Public:
+		drInfos, err := m.GetPublic().GetDRefInfoForOverlay(generateHash)
 		if err != nil {
-			return nil, errors.Wrap(err, "GetPrivate().GetDRefInfo() FAILED")
+			return nil, errors.Wrap(err, "GetPublic().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
-			dri.DRField = "private." + dri.DRField
+			dri.DRField = "public." + dri.DRField
 		}
 		return drInfos, err
 	default:
@@ -1738,17 +1957,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-	case *ReplaceSpecType_Private:
-		if fv, exists := v.FldValidators["deployment_type_choice.private"]; exists {
-			val := m.GetDeploymentTypeChoice().(*ReplaceSpecType_Private).Private
-			vOpts := append(opts,
-				db.WithValidateField("deployment_type_choice"),
-				db.WithValidateField("private"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	}
 	if fv, exists := v.FldValidators["state"]; exists {
 		vOpts := append(opts, db.WithValidateField("state"))
@@ -1791,7 +1999,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["state"] = vFn
 	v.FldValidators["deployment_type_choice.public"] = PublicDeploymentTypeValidator().Validate
-	v.FldValidators["deployment_type_choice.private"] = PrivateDeploymentTypeValidator().Validate
 
 	return v
 }()
@@ -1855,8 +2062,52 @@ func (m *SecureMeshV2SiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *SecureMeshV2SiteType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetNetworkChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteNameDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteNameDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *SecureMeshV2SiteType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetNetworkChoice().(type) {
+	case *SecureMeshV2SiteType_SiteLocalNetwork:
+		return nil, nil
+	case *SecureMeshV2SiteType_SiteLocalInsideNetwork:
+		return nil, nil
+	case *SecureMeshV2SiteType_SegmentNetwork:
+		vref := m.GetSegmentNetwork()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("segment.Object")
+		dri := db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "segment_network",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *SecureMeshV2SiteType) GetNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetNetworkChoice().(type) {
 	case *SecureMeshV2SiteType_SiteLocalNetwork:
 		return nil, nil
@@ -1918,6 +2169,23 @@ func (m *SecureMeshV2SiteType) GetNetworkChoiceDBEntries(ctx context.Context, d 
 }
 
 func (m *SecureMeshV2SiteType) GetSiteNameDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSiteName()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("securemesh_site_v2.Object")
+	dri := db.DRefInfo{
+		RefdType:   "securemesh_site_v2.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "site_name",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *SecureMeshV2SiteType) GetSiteNameDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSiteName()
 	if vref == nil {
 		return nil, nil
@@ -2096,8 +2364,32 @@ func (m *SegmentType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSegmentNetworkDRefInfo()
 }
+func (m *SegmentType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSegmentNetworkDRefInfoForOverlay(generateHash)
+}
 
 func (m *SegmentType) GetSegmentNetworkDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSegmentNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment_network",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *SegmentType) GetSegmentNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSegmentNetwork()
 	if vref == nil {
 		return nil, nil
@@ -2250,8 +2542,43 @@ func (m *VirtualCESites) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *VirtualCESites) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCeVirtualSiteDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCeVirtualSiteDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *VirtualCESites) GetCeVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCeVirtualSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "ce_virtual_site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *VirtualCESites) GetCeVirtualSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCeVirtualSite()
 	if vref == nil {
 		return nil, nil
@@ -2297,6 +2624,32 @@ func (m *VirtualCESites) GetCeVirtualSiteDBEntries(ctx context.Context, d db.Int
 }
 
 func (m *VirtualCESites) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetNetworkChoice().(type) {
+	case *VirtualCESites_SiteLocalNetwork:
+		return nil, nil
+	case *VirtualCESites_SiteLocalInsideNetwork:
+		return nil, nil
+	case *VirtualCESites_SegmentNetwork:
+		vref := m.GetSegmentNetwork()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("segment.Object")
+		dri := db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "segment_network",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *VirtualCESites) GetNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetNetworkChoice().(type) {
 	case *VirtualCESites_SiteLocalNetwork:
 		return nil, nil
@@ -2453,9 +2806,6 @@ func (r *CreateSpecType) SetDeploymentTypeChoiceToGlobalSpecType(o *GlobalSpecTy
 	case nil:
 		o.DeploymentTypeChoice = nil
 
-	case *CreateSpecType_Private:
-		o.DeploymentTypeChoice = &GlobalSpecType_Private{Private: of.Private}
-
 	case *CreateSpecType_Public:
 		o.DeploymentTypeChoice = &GlobalSpecType_Public{Public: of.Public}
 
@@ -2469,9 +2819,6 @@ func (r *CreateSpecType) GetDeploymentTypeChoiceFromGlobalSpecType(o *GlobalSpec
 	switch of := o.DeploymentTypeChoice.(type) {
 	case nil:
 		r.DeploymentTypeChoice = nil
-
-	case *GlobalSpecType_Private:
-		r.DeploymentTypeChoice = &CreateSpecType_Private{Private: of.Private}
 
 	case *GlobalSpecType_Public:
 		r.DeploymentTypeChoice = &CreateSpecType_Public{Public: of.Public}
@@ -2523,9 +2870,6 @@ func (r *GetSpecType) SetDeploymentTypeChoiceToGlobalSpecType(o *GlobalSpecType)
 	case nil:
 		o.DeploymentTypeChoice = nil
 
-	case *GetSpecType_Private:
-		o.DeploymentTypeChoice = &GlobalSpecType_Private{Private: of.Private}
-
 	case *GetSpecType_Public:
 		o.DeploymentTypeChoice = &GlobalSpecType_Public{Public: of.Public}
 
@@ -2539,9 +2883,6 @@ func (r *GetSpecType) GetDeploymentTypeChoiceFromGlobalSpecType(o *GlobalSpecTyp
 	switch of := o.DeploymentTypeChoice.(type) {
 	case nil:
 		r.DeploymentTypeChoice = nil
-
-	case *GlobalSpecType_Private:
-		r.DeploymentTypeChoice = &GetSpecType_Private{Private: of.Private}
 
 	case *GlobalSpecType_Public:
 		r.DeploymentTypeChoice = &GetSpecType_Public{Public: of.Public}
@@ -2593,9 +2934,6 @@ func (r *ReplaceSpecType) SetDeploymentTypeChoiceToGlobalSpecType(o *GlobalSpecT
 	case nil:
 		o.DeploymentTypeChoice = nil
 
-	case *ReplaceSpecType_Private:
-		o.DeploymentTypeChoice = &GlobalSpecType_Private{Private: of.Private}
-
 	case *ReplaceSpecType_Public:
 		o.DeploymentTypeChoice = &GlobalSpecType_Public{Public: of.Public}
 
@@ -2609,9 +2947,6 @@ func (r *ReplaceSpecType) GetDeploymentTypeChoiceFromGlobalSpecType(o *GlobalSpe
 	switch of := o.DeploymentTypeChoice.(type) {
 	case nil:
 		r.DeploymentTypeChoice = nil
-
-	case *GlobalSpecType_Private:
-		r.DeploymentTypeChoice = &ReplaceSpecType_Private{Private: of.Private}
 
 	case *GlobalSpecType_Public:
 		r.DeploymentTypeChoice = &ReplaceSpecType_Public{Public: of.Public}

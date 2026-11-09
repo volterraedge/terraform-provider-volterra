@@ -308,6 +308,13 @@ func (m *GetDoSAutoMitigationRulesRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDosAutomitigationRulesDRefInfo()
 }
+func (m *GetDoSAutoMitigationRulesRsp) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDosAutomitigationRulesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetDoSAutoMitigationRulesRsp) GetDosAutomitigationRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -319,6 +326,26 @@ func (m *GetDoSAutoMitigationRulesRsp) GetDosAutomitigationRulesDRefInfo() ([]db
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDosAutomitigationRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("dos_automitigation_rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetDoSAutoMitigationRulesRsp) GetDosAutomitigationRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDosAutomitigationRules() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDosAutomitigationRules() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDosAutomitigationRules() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]

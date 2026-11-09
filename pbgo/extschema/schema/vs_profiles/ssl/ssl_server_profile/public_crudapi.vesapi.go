@@ -1787,7 +1787,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-vs_profiles-ssl-ssl_server_profile-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.vs_profiles.ssl.ssl_server_profile.API.Create"
             },
             "x-displayname": "Virtual server server-side proxy SSL profile",
@@ -1888,7 +1887,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-vs_profiles-ssl-ssl_server_profile-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.vs_profiles.ssl.ssl_server_profile.API.Replace"
             },
             "x-displayname": "Virtual server server-side proxy SSL profile",
@@ -2005,7 +2003,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-vs_profiles-ssl-ssl_server_profile-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.vs_profiles.ssl.ssl_server_profile.API.List"
             },
             "x-displayname": "Virtual server server-side proxy SSL profile",
@@ -2116,7 +2113,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-vs_profiles-ssl-ssl_server_profile-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.vs_profiles.ssl.ssl_server_profile.API.Get"
             },
             "delete": {
@@ -2210,7 +2206,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-vs_profiles-ssl-ssl_server_profile-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.vs_profiles.ssl.ssl_server_profile.API.Delete"
             },
             "x-displayname": "Virtual server server-side proxy SSL profile",
@@ -2269,12 +2264,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -2923,7 +2918,7 @@ var APISwaggerJSON string = `{
             "title": "Create Virtual server server-side proxy SSL profile",
             "x-displayname": "Create Virtual server server-side proxy SSL profile",
             "x-ves-oneof-field-certificates_choice": "[\"certificates\"]",
-            "x-ves-oneof-field-cipher_config": "[\"cipher_group\",\"ciphers\"]",
+            "x-ves-oneof-field-cipher_config": "[\"ciphers\"]",
             "x-ves-proto-message": "ves.io.schema.vs_profiles.ssl.ssl_server_profile.CreateSpecType",
             "properties": {
                 "alert_timeout": {
@@ -2937,7 +2932,7 @@ var APISwaggerJSON string = `{
                 "allow_expired_crl": {
                     "description": " Use the specified CRL file even if it has expired.",
                     "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Allow Expired Crl"
+                    "x-displayname": "Allow Expired CRL"
                 },
                 "authenticate": {
                     "description": " Specifies frequency of authentication. The default value is once. Note that if this is set to always session cache and session ticket will be disabled.",
@@ -2959,29 +2954,9 @@ var APISwaggerJSON string = `{
                     "description": " Specifies a Common Name (CN) that is embedded in a server certificate. The system authenticates a server based on the specified CN.",
                     "x-displayname": "Authenticate Name"
                 },
-                "bypass_on_client_cert_fail": {
-                    "description": " Specifies whether bypass SSL forward proxy traffic when fails to retrieve the Client Certificate from the BIGIP that Server ask for. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Bypass On Client Cert Fail"
-                },
-                "bypass_on_handshake_alert": {
-                    "description": " Specifies whether bypass SSL forward proxy traffic when receiving handshake_failure(40) Alert. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Bypass On Handshake Alert"
-                },
-                "c3d_cert_lifespan": {
-                    "type": "integer",
-                    "description": " Specifies the lifespan of the certificate generated using SSL client certificate constrained delegation. The default value is 24 hours.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 24\n  ves.io.schema.rules.uint32.lte: 720\n",
-                    "format": "int64",
-                    "x-displayname": "C3d Cert Lifespan",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "24",
-                        "ves.io.schema.rules.uint32.lte": "720"
-                    }
-                },
                 "cache_size": {
                     "type": "integer",
-                    "description": " Specifies the SSL session cache size. For client-side profiles only, you can configure timeout and size values for the SSL session cache. Because each profile maintains a separate SSL session cache, you can configure the values on a per-profile basis.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 262144\n",
+                    "description": " Specifies the SSL session cache size in number of sessions. For client-side profiles only, you can configure timeout and size values for the SSL session cache. Because each profile maintains a separate SSL session cache, you can configure the values on a per-profile basis.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 262144\n",
                     "format": "int64",
                     "x-displayname": "Cache Size",
                     "x-ves-validation-rules": {
@@ -2989,45 +2964,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "262144"
                     }
                 },
-                "cache_timeout": {
-                    "type": "integer",
-                    "description": " Specifies the SSL session cache timeout value, which is the usable lifetime seconds of negotiated SSL session IDs. The default value is 3600 seconds. Acceptable values are integers greater than or equal to 0 and less than or equal to 86400.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 86400\n",
-                    "format": "int64",
-                    "x-displayname": "Cache Timeout",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "86400"
-                    }
-                },
                 "certificates": {
                     "description": "Exclusive with []\n Select one or more certificates with any domain names.",
                     "$ref": "#/definitions/ssl_server_profileCertificateList",
                     "x-displayname": "Certificates"
                 },
-                "cipher_group": {
-                    "type": "string",
-                    "description": "Exclusive with [ciphers]\n Specifies an associated cipher group.",
-                    "x-displayname": "Cipher Group"
-                },
                 "ciphers": {
                     "type": "string",
-                    "description": "Exclusive with [cipher_group]\n Specifies a cipher name.",
+                    "description": "Exclusive with []\n Specifies a cipher name.",
                     "x-displayname": "Ciphers"
-                },
-                "data_0rtt": {
-                    "description": " Specifies if TLSv1.3 should send 0-RTT early data when available. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Data 0-RTT"
                 },
                 "expire_cert_response_control": {
                     "description": " Specifies the action for the BIG-IP system to take when the server certificate has expired. The default value is drop, which causes the connection to be dropped. Conversely, you can specify ignore to cause the connection to ignore the error and continue or you can specify mask in case of SSL forward proxy to mask server certificate errors and continue with handshake and forge a good certificate on client-side. Note that drop works only if the certificate is trusted.",
-                    "$ref": "#/definitions/vs_profilesAcceptRejectChoice",
+                    "$ref": "#/definitions/vs_profilesCertResponseControlChoice",
                     "x-displayname": "Expire Cert Response Control"
-                },
-                "generic_alert": {
-                    "description": " Enables or disables generic-alert which if use generic alert number in Alert message. The default option is enabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Generic Alert"
                 },
                 "handshake_timeout": {
                     "type": "integer",
@@ -3039,52 +2989,10 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "30"
                     }
                 },
-                "max_active_handshakes": {
-                    "type": "integer",
-                    "description": " Specifies the maximum allowed active handshakes. The default value is 0.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 4294967295\n",
-                    "format": "int64",
-                    "x-displayname": "Max Active Handshakes",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "4294967295"
-                    }
-                },
-                "mod_ssl_methods": {
-                    "description": " Enables or disables ModSSL method emulation. Use enabled when OpenSSL methods are inadequate. For example, you can enable ModSSL method emulation when you want to use SSL compression over TLSv1.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Mod SSL Methods"
-                },
-                "mode": {
-                    "description": " Enables or disables SSL processing. The default value is enabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Mode"
-                },
-                "ocsp": {
-                    "type": "array",
-                    "description": " Specifies the name of ocsp profile for purpose of validating status of server certificate. Specifying none disables ocsp validation of server certificate. The default value is none.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "Ocsp",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
                 "peer_cert_mode": {
                     "description": " Specifies the peer certificate mode.",
                     "$ref": "#/definitions/vs_profilesPeerCertModeChoice",
                     "x-displayname": "Peer Cert Mode"
-                },
-                "proxy_ssl": {
-                    "description": " Enables proxy SSL mode, which requires a corresponding client SSL profile with proxy-ssl enabled to allow for modification of application data within an SSL tunnel.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Proxy SSL"
-                },
-                "proxy_ssl_passthrough": {
-                    "description": " Enables proxy SSL passthrough mode, which requires a corresponding client SSL profile with proxy-ssl-passthrough enabled to allow for modification of application data within an SSL tunnel.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Proxy SSL Passthrough"
                 },
                 "renegotiate_period": {
                     "type": "string",
@@ -3107,14 +3015,9 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/vs_profilesEnableDisableChoice",
                     "x-displayname": "Renegotiation"
                 },
-                "retain_certificate": {
-                    "description": " When true, server certificate is retained in SSL session.",
-                    "$ref": "#/definitions/vs_profilesTrueFalseChoice",
-                    "x-displayname": "Retain Certificate"
-                },
                 "revoked_cert_status_response_control": {
                     "description": " Specifies the system action when the server certificate status is revoked. The default value is drop, which causes the connection to be dropped. You can specify ignore to cause the connection to ignore the error and continue handshake. You can specify mask in case of SSL forward proxy to mask server certificate status error and continue handshake.",
-                    "$ref": "#/definitions/vs_profilesAcceptRejectChoice",
+                    "$ref": "#/definitions/vs_profilesCertResponseControlChoice",
                     "x-displayname": "Revoked Cert Status Response Control"
                 },
                 "secure_renegotiation": {
@@ -3127,81 +3030,43 @@ var APISwaggerJSON string = `{
                     "description": " Name matched to TLS/1.1 and above client SSL requests that support the Server Name Indication extension. The default value is empty, which disables support for this extension.",
                     "x-displayname": "Server Name"
                 },
-                "session_mirroring": {
-                    "description": " Enables or disables session mirroring to the high-availability peer. The default option is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Session Mirroring"
-                },
                 "session_ticket": {
                     "description": " Enables or disables session-ticket. The default option is disabled, see RFC5077.",
                     "$ref": "#/definitions/vs_profilesEnableDisableChoice",
                     "x-displayname": "Session Ticket"
                 },
-                "sni_default": {
-                    "description": " When true, this profile is the default SSL profile when a client connection does not specify a known server name, or does not specify any server name at all. The default value is false.",
-                    "$ref": "#/definitions/vs_profilesTrueFalseChoice",
-                    "x-displayname": "Sni Default"
+                "tm_options": {
+                    "type": "array",
+                    "description": " Enables options, including some industry-related workarounds. Enter options inside braces, for example, { dont-insert-empty-fragments }. The default value is { dont-insert-empty-fragments no-tlsv1.3 }.\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"dont-insert-empty-fragments no-tlsv1.3\\\",\\\"dont-insert-empty-fragments no-dtls\\\",\\\"dont-insert-empty-fragments no-dtlsv1\\\",\\\"dont-insert-empty-fragments no-dtlsv1.2\\\",\\\"dont-insert-empty-fragments no-session-resumption-on-renegotiation\\\",\\\"dont-insert-empty-fragments no-ssl\\\",\\\"dont-insert-empty-fragments no-sslv3\\\",\\\"dont-insert-empty-fragments no-tls\\\",\\\"dont-insert-empty-fragments no-tlsv1\\\",\\\"dont-insert-empty-fragments no-tlsv1.1\\\",\\\"dont-insert-empty-fragments no-tlsv1.2\\\",\\\"dont-insert-empty-fragments no-tlsv1.3\\\",\\\"dont-insert-empty-fragments passive-close\\\",\\\"dont-insert-empty-fragments single-dh-use\\\",\\\"dont-insert-empty-fragments tls-rollback-bug\\\"]\n",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Tm Options",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"dont-insert-empty-fragments no-tlsv1.3\\\",\\\"dont-insert-empty-fragments no-dtls\\\",\\\"dont-insert-empty-fragments no-dtlsv1\\\",\\\"dont-insert-empty-fragments no-dtlsv1.2\\\",\\\"dont-insert-empty-fragments no-session-resumption-on-renegotiation\\\",\\\"dont-insert-empty-fragments no-ssl\\\",\\\"dont-insert-empty-fragments no-sslv3\\\",\\\"dont-insert-empty-fragments no-tls\\\",\\\"dont-insert-empty-fragments no-tlsv1\\\",\\\"dont-insert-empty-fragments no-tlsv1.1\\\",\\\"dont-insert-empty-fragments no-tlsv1.2\\\",\\\"dont-insert-empty-fragments no-tlsv1.3\\\",\\\"dont-insert-empty-fragments passive-close\\\",\\\"dont-insert-empty-fragments single-dh-use\\\",\\\"dont-insert-empty-fragments tls-rollback-bug\\\"]"
+                    }
                 },
-                "sni_require": {
-                    "description": " When true, SNI support is required for the peer. If a client connection does not specify a known server name, or does not specify any server name at all, the connection will be rejected. The default value is false.",
-                    "$ref": "#/definitions/vs_profilesTrueFalseChoice",
-                    "x-displayname": "Sni Require"
-                },
-                "ssl_c3d": {
-                    "description": " Enables or disables SSL client certificate constrained delegation. The default option is disabled. Conversely, you can specify enabled to use the SSL client certificate constrained delegation.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "SSL C3d"
-                },
-                "ssl_forward_proxy": {
-                    "description": " Specifies if the SSL Forward Proxy feature is enabled. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "SSL Forward Proxy"
-                },
-                "ssl_forward_proxy_bypass": {
-                    "description": " Specifies if the SSL Forward Proxy Bypass feature is enabled. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "SSL Forward Proxy Bypass"
-                },
-                "ssl_forward_proxy_verified_handshake": {
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "SSL Forward Proxy Verified Handshake"
-                },
-                "ssl_sign_hash": {
-                    "description": " SSL sign hash algorithm to sign and verify SSL Server Key Exchange and Certificate Verify messages for the specified SSL profiles.",
-                    "$ref": "#/definitions/vs_profilesSslSignHashChoice",
-                    "x-displayname": "SSL Sign Hash"
-                },
-                "strict_resume": {
-                    "description": " You can enable or disable the resumption of SSL sessions after an unclean shutdown. The default value is disabled, which indicates that the SSL profile refuses to resume SSL sessions after an unclean shutdown.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Strict Resume"
-                },
-                "unclean_shutdown": {
-                    "description": " By default, the SSL profile performs unclean shutdowns of all SSL connections, which means that underlying TCP connections are closed without exchanging the required SSL shutdown alerts. If you want to force the SSL profile to perform a clean shutdown of all SSL connections, you can disable this.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Unclean Shutdown"
+                "trusted_ca_list": {
+                    "type": "array",
+                    "description": " Specifies the trusted CA list used to validate client certificates. When authenticating clients,\n the system validates the client certificate against the specified trusted CA list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Trusted CA List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "unknown_cert_status_response_control": {
                     "description": " Specifies the system action when the server certificate status is unknown. The default value is ignore, which causes the connection to ignore the error and continue handshake. You can specify drop which causes the connection to be dropped. You can specify mask in case of SSL forward proxy to mask server certificate status error and continue handshake.",
-                    "$ref": "#/definitions/vs_profilesAcceptRejectChoice",
+                    "$ref": "#/definitions/vs_profilesCertResponseControlChoice",
                     "x-displayname": "Unknown Cert Status Response Control"
                 },
                 "untrusted_cert_response_control": {
                     "description": " Specifies the system action when the server certificate has untrusted CA. The default value is drop, which causes the connection to be dropped. Conversely, you can specify ignore to cause the connection to ignore the error and continue or you can specify mask in case of SSL forward proxy to mask server certificate errors and continue with handshake and forge a good certificate on client-side.",
-                    "$ref": "#/definitions/vs_profilesAcceptRejectChoice",
+                    "$ref": "#/definitions/vs_profilesCertResponseControlChoice",
                     "x-displayname": "Untrusted Cert Response Control"
-                },
-                "user_spec": {
-                    "type": "array",
-                    "description": " User specified properties.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
-                    "maxItems": 50,
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "User Spec",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "50"
-                    }
                 }
             }
         },
@@ -3331,7 +3196,7 @@ var APISwaggerJSON string = `{
             "title": "Get Virtual server server-side proxy SSL profile",
             "x-displayname": "Get Virtual server server-side proxy SSL profile",
             "x-ves-oneof-field-certificates_choice": "[\"certificates\"]",
-            "x-ves-oneof-field-cipher_config": "[\"cipher_group\",\"ciphers\"]",
+            "x-ves-oneof-field-cipher_config": "[\"ciphers\"]",
             "x-ves-proto-message": "ves.io.schema.vs_profiles.ssl.ssl_server_profile.GetSpecType",
             "properties": {
                 "alert_timeout": {
@@ -3345,7 +3210,7 @@ var APISwaggerJSON string = `{
                 "allow_expired_crl": {
                     "description": " Use the specified CRL file even if it has expired.",
                     "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Allow Expired Crl"
+                    "x-displayname": "Allow Expired CRL"
                 },
                 "authenticate": {
                     "description": " Specifies frequency of authentication. The default value is once. Note that if this is set to always session cache and session ticket will be disabled.",
@@ -3367,29 +3232,9 @@ var APISwaggerJSON string = `{
                     "description": " Specifies a Common Name (CN) that is embedded in a server certificate. The system authenticates a server based on the specified CN.",
                     "x-displayname": "Authenticate Name"
                 },
-                "bypass_on_client_cert_fail": {
-                    "description": " Specifies whether bypass SSL forward proxy traffic when fails to retrieve the Client Certificate from the BIGIP that Server ask for. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Bypass On Client Cert Fail"
-                },
-                "bypass_on_handshake_alert": {
-                    "description": " Specifies whether bypass SSL forward proxy traffic when receiving handshake_failure(40) Alert. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Bypass On Handshake Alert"
-                },
-                "c3d_cert_lifespan": {
-                    "type": "integer",
-                    "description": " Specifies the lifespan of the certificate generated using SSL client certificate constrained delegation. The default value is 24 hours.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 24\n  ves.io.schema.rules.uint32.lte: 720\n",
-                    "format": "int64",
-                    "x-displayname": "C3d Cert Lifespan",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "24",
-                        "ves.io.schema.rules.uint32.lte": "720"
-                    }
-                },
                 "cache_size": {
                     "type": "integer",
-                    "description": " Specifies the SSL session cache size. For client-side profiles only, you can configure timeout and size values for the SSL session cache. Because each profile maintains a separate SSL session cache, you can configure the values on a per-profile basis.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 262144\n",
+                    "description": " Specifies the SSL session cache size in number of sessions. For client-side profiles only, you can configure timeout and size values for the SSL session cache. Because each profile maintains a separate SSL session cache, you can configure the values on a per-profile basis.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 262144\n",
                     "format": "int64",
                     "x-displayname": "Cache Size",
                     "x-ves-validation-rules": {
@@ -3397,45 +3242,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "262144"
                     }
                 },
-                "cache_timeout": {
-                    "type": "integer",
-                    "description": " Specifies the SSL session cache timeout value, which is the usable lifetime seconds of negotiated SSL session IDs. The default value is 3600 seconds. Acceptable values are integers greater than or equal to 0 and less than or equal to 86400.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 86400\n",
-                    "format": "int64",
-                    "x-displayname": "Cache Timeout",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "86400"
-                    }
-                },
                 "certificates": {
                     "description": "Exclusive with []\n Select one or more certificates with any domain names.",
                     "$ref": "#/definitions/ssl_server_profileCertificateList",
                     "x-displayname": "Certificates"
                 },
-                "cipher_group": {
-                    "type": "string",
-                    "description": "Exclusive with [ciphers]\n Specifies an associated cipher group.",
-                    "x-displayname": "Cipher Group"
-                },
                 "ciphers": {
                     "type": "string",
-                    "description": "Exclusive with [cipher_group]\n Specifies a cipher name.",
+                    "description": "Exclusive with []\n Specifies a cipher name.",
                     "x-displayname": "Ciphers"
-                },
-                "data_0rtt": {
-                    "description": " Specifies if TLSv1.3 should send 0-RTT early data when available. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Data 0-RTT"
                 },
                 "expire_cert_response_control": {
                     "description": " Specifies the action for the BIG-IP system to take when the server certificate has expired. The default value is drop, which causes the connection to be dropped. Conversely, you can specify ignore to cause the connection to ignore the error and continue or you can specify mask in case of SSL forward proxy to mask server certificate errors and continue with handshake and forge a good certificate on client-side. Note that drop works only if the certificate is trusted.",
-                    "$ref": "#/definitions/vs_profilesAcceptRejectChoice",
+                    "$ref": "#/definitions/vs_profilesCertResponseControlChoice",
                     "x-displayname": "Expire Cert Response Control"
-                },
-                "generic_alert": {
-                    "description": " Enables or disables generic-alert which if use generic alert number in Alert message. The default option is enabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Generic Alert"
                 },
                 "handshake_timeout": {
                     "type": "integer",
@@ -3447,52 +3267,10 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "30"
                     }
                 },
-                "max_active_handshakes": {
-                    "type": "integer",
-                    "description": " Specifies the maximum allowed active handshakes. The default value is 0.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 4294967295\n",
-                    "format": "int64",
-                    "x-displayname": "Max Active Handshakes",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "4294967295"
-                    }
-                },
-                "mod_ssl_methods": {
-                    "description": " Enables or disables ModSSL method emulation. Use enabled when OpenSSL methods are inadequate. For example, you can enable ModSSL method emulation when you want to use SSL compression over TLSv1.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Mod SSL Methods"
-                },
-                "mode": {
-                    "description": " Enables or disables SSL processing. The default value is enabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Mode"
-                },
-                "ocsp": {
-                    "type": "array",
-                    "description": " Specifies the name of ocsp profile for purpose of validating status of server certificate. Specifying none disables ocsp validation of server certificate. The default value is none.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "Ocsp",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
                 "peer_cert_mode": {
                     "description": " Specifies the peer certificate mode.",
                     "$ref": "#/definitions/vs_profilesPeerCertModeChoice",
                     "x-displayname": "Peer Cert Mode"
-                },
-                "proxy_ssl": {
-                    "description": " Enables proxy SSL mode, which requires a corresponding client SSL profile with proxy-ssl enabled to allow for modification of application data within an SSL tunnel.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Proxy SSL"
-                },
-                "proxy_ssl_passthrough": {
-                    "description": " Enables proxy SSL passthrough mode, which requires a corresponding client SSL profile with proxy-ssl-passthrough enabled to allow for modification of application data within an SSL tunnel.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Proxy SSL Passthrough"
                 },
                 "renegotiate_period": {
                     "type": "string",
@@ -3515,14 +3293,9 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/vs_profilesEnableDisableChoice",
                     "x-displayname": "Renegotiation"
                 },
-                "retain_certificate": {
-                    "description": " When true, server certificate is retained in SSL session.",
-                    "$ref": "#/definitions/vs_profilesTrueFalseChoice",
-                    "x-displayname": "Retain Certificate"
-                },
                 "revoked_cert_status_response_control": {
                     "description": " Specifies the system action when the server certificate status is revoked. The default value is drop, which causes the connection to be dropped. You can specify ignore to cause the connection to ignore the error and continue handshake. You can specify mask in case of SSL forward proxy to mask server certificate status error and continue handshake.",
-                    "$ref": "#/definitions/vs_profilesAcceptRejectChoice",
+                    "$ref": "#/definitions/vs_profilesCertResponseControlChoice",
                     "x-displayname": "Revoked Cert Status Response Control"
                 },
                 "secure_renegotiation": {
@@ -3535,81 +3308,43 @@ var APISwaggerJSON string = `{
                     "description": " Name matched to TLS/1.1 and above client SSL requests that support the Server Name Indication extension. The default value is empty, which disables support for this extension.",
                     "x-displayname": "Server Name"
                 },
-                "session_mirroring": {
-                    "description": " Enables or disables session mirroring to the high-availability peer. The default option is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Session Mirroring"
-                },
                 "session_ticket": {
                     "description": " Enables or disables session-ticket. The default option is disabled, see RFC5077.",
                     "$ref": "#/definitions/vs_profilesEnableDisableChoice",
                     "x-displayname": "Session Ticket"
                 },
-                "sni_default": {
-                    "description": " When true, this profile is the default SSL profile when a client connection does not specify a known server name, or does not specify any server name at all. The default value is false.",
-                    "$ref": "#/definitions/vs_profilesTrueFalseChoice",
-                    "x-displayname": "Sni Default"
+                "tm_options": {
+                    "type": "array",
+                    "description": " Enables options, including some industry-related workarounds. Enter options inside braces, for example, { dont-insert-empty-fragments }. The default value is { dont-insert-empty-fragments no-tlsv1.3 }.\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"dont-insert-empty-fragments no-tlsv1.3\\\",\\\"dont-insert-empty-fragments no-dtls\\\",\\\"dont-insert-empty-fragments no-dtlsv1\\\",\\\"dont-insert-empty-fragments no-dtlsv1.2\\\",\\\"dont-insert-empty-fragments no-session-resumption-on-renegotiation\\\",\\\"dont-insert-empty-fragments no-ssl\\\",\\\"dont-insert-empty-fragments no-sslv3\\\",\\\"dont-insert-empty-fragments no-tls\\\",\\\"dont-insert-empty-fragments no-tlsv1\\\",\\\"dont-insert-empty-fragments no-tlsv1.1\\\",\\\"dont-insert-empty-fragments no-tlsv1.2\\\",\\\"dont-insert-empty-fragments no-tlsv1.3\\\",\\\"dont-insert-empty-fragments passive-close\\\",\\\"dont-insert-empty-fragments single-dh-use\\\",\\\"dont-insert-empty-fragments tls-rollback-bug\\\"]\n",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Tm Options",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"dont-insert-empty-fragments no-tlsv1.3\\\",\\\"dont-insert-empty-fragments no-dtls\\\",\\\"dont-insert-empty-fragments no-dtlsv1\\\",\\\"dont-insert-empty-fragments no-dtlsv1.2\\\",\\\"dont-insert-empty-fragments no-session-resumption-on-renegotiation\\\",\\\"dont-insert-empty-fragments no-ssl\\\",\\\"dont-insert-empty-fragments no-sslv3\\\",\\\"dont-insert-empty-fragments no-tls\\\",\\\"dont-insert-empty-fragments no-tlsv1\\\",\\\"dont-insert-empty-fragments no-tlsv1.1\\\",\\\"dont-insert-empty-fragments no-tlsv1.2\\\",\\\"dont-insert-empty-fragments no-tlsv1.3\\\",\\\"dont-insert-empty-fragments passive-close\\\",\\\"dont-insert-empty-fragments single-dh-use\\\",\\\"dont-insert-empty-fragments tls-rollback-bug\\\"]"
+                    }
                 },
-                "sni_require": {
-                    "description": " When true, SNI support is required for the peer. If a client connection does not specify a known server name, or does not specify any server name at all, the connection will be rejected. The default value is false.",
-                    "$ref": "#/definitions/vs_profilesTrueFalseChoice",
-                    "x-displayname": "Sni Require"
-                },
-                "ssl_c3d": {
-                    "description": " Enables or disables SSL client certificate constrained delegation. The default option is disabled. Conversely, you can specify enabled to use the SSL client certificate constrained delegation.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "SSL C3d"
-                },
-                "ssl_forward_proxy": {
-                    "description": " Specifies if the SSL Forward Proxy feature is enabled. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "SSL Forward Proxy"
-                },
-                "ssl_forward_proxy_bypass": {
-                    "description": " Specifies if the SSL Forward Proxy Bypass feature is enabled. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "SSL Forward Proxy Bypass"
-                },
-                "ssl_forward_proxy_verified_handshake": {
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "SSL Forward Proxy Verified Handshake"
-                },
-                "ssl_sign_hash": {
-                    "description": " SSL sign hash algorithm to sign and verify SSL Server Key Exchange and Certificate Verify messages for the specified SSL profiles.",
-                    "$ref": "#/definitions/vs_profilesSslSignHashChoice",
-                    "x-displayname": "SSL Sign Hash"
-                },
-                "strict_resume": {
-                    "description": " You can enable or disable the resumption of SSL sessions after an unclean shutdown. The default value is disabled, which indicates that the SSL profile refuses to resume SSL sessions after an unclean shutdown.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Strict Resume"
-                },
-                "unclean_shutdown": {
-                    "description": " By default, the SSL profile performs unclean shutdowns of all SSL connections, which means that underlying TCP connections are closed without exchanging the required SSL shutdown alerts. If you want to force the SSL profile to perform a clean shutdown of all SSL connections, you can disable this.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Unclean Shutdown"
+                "trusted_ca_list": {
+                    "type": "array",
+                    "description": " Specifies the trusted CA list used to validate client certificates. When authenticating clients,\n the system validates the client certificate against the specified trusted CA list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Trusted CA List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "unknown_cert_status_response_control": {
                     "description": " Specifies the system action when the server certificate status is unknown. The default value is ignore, which causes the connection to ignore the error and continue handshake. You can specify drop which causes the connection to be dropped. You can specify mask in case of SSL forward proxy to mask server certificate status error and continue handshake.",
-                    "$ref": "#/definitions/vs_profilesAcceptRejectChoice",
+                    "$ref": "#/definitions/vs_profilesCertResponseControlChoice",
                     "x-displayname": "Unknown Cert Status Response Control"
                 },
                 "untrusted_cert_response_control": {
                     "description": " Specifies the system action when the server certificate has untrusted CA. The default value is drop, which causes the connection to be dropped. Conversely, you can specify ignore to cause the connection to ignore the error and continue or you can specify mask in case of SSL forward proxy to mask server certificate errors and continue with handshake and forge a good certificate on client-side.",
-                    "$ref": "#/definitions/vs_profilesAcceptRejectChoice",
+                    "$ref": "#/definitions/vs_profilesCertResponseControlChoice",
                     "x-displayname": "Untrusted Cert Response Control"
-                },
-                "user_spec": {
-                    "type": "array",
-                    "description": " User specified properties.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
-                    "maxItems": 50,
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "User Spec",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "50"
-                    }
                 }
             }
         },
@@ -3766,7 +3501,7 @@ var APISwaggerJSON string = `{
             "title": "Replace ServerSsl",
             "x-displayname": "Replace ServerSsl",
             "x-ves-oneof-field-certificates_choice": "[\"certificates\"]",
-            "x-ves-oneof-field-cipher_config": "[\"cipher_group\",\"ciphers\"]",
+            "x-ves-oneof-field-cipher_config": "[\"ciphers\"]",
             "x-ves-proto-message": "ves.io.schema.vs_profiles.ssl.ssl_server_profile.ReplaceSpecType",
             "properties": {
                 "alert_timeout": {
@@ -3780,7 +3515,7 @@ var APISwaggerJSON string = `{
                 "allow_expired_crl": {
                     "description": " Use the specified CRL file even if it has expired.",
                     "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Allow Expired Crl"
+                    "x-displayname": "Allow Expired CRL"
                 },
                 "authenticate": {
                     "description": " Specifies frequency of authentication. The default value is once. Note that if this is set to always session cache and session ticket will be disabled.",
@@ -3802,29 +3537,9 @@ var APISwaggerJSON string = `{
                     "description": " Specifies a Common Name (CN) that is embedded in a server certificate. The system authenticates a server based on the specified CN.",
                     "x-displayname": "Authenticate Name"
                 },
-                "bypass_on_client_cert_fail": {
-                    "description": " Specifies whether bypass SSL forward proxy traffic when fails to retrieve the Client Certificate from the BIGIP that Server ask for. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Bypass On Client Cert Fail"
-                },
-                "bypass_on_handshake_alert": {
-                    "description": " Specifies whether bypass SSL forward proxy traffic when receiving handshake_failure(40) Alert. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Bypass On Handshake Alert"
-                },
-                "c3d_cert_lifespan": {
-                    "type": "integer",
-                    "description": " Specifies the lifespan of the certificate generated using SSL client certificate constrained delegation. The default value is 24 hours.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 24\n  ves.io.schema.rules.uint32.lte: 720\n",
-                    "format": "int64",
-                    "x-displayname": "C3d Cert Lifespan",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "24",
-                        "ves.io.schema.rules.uint32.lte": "720"
-                    }
-                },
                 "cache_size": {
                     "type": "integer",
-                    "description": " Specifies the SSL session cache size. For client-side profiles only, you can configure timeout and size values for the SSL session cache. Because each profile maintains a separate SSL session cache, you can configure the values on a per-profile basis.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 262144\n",
+                    "description": " Specifies the SSL session cache size in number of sessions. For client-side profiles only, you can configure timeout and size values for the SSL session cache. Because each profile maintains a separate SSL session cache, you can configure the values on a per-profile basis.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 262144\n",
                     "format": "int64",
                     "x-displayname": "Cache Size",
                     "x-ves-validation-rules": {
@@ -3832,45 +3547,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "262144"
                     }
                 },
-                "cache_timeout": {
-                    "type": "integer",
-                    "description": " Specifies the SSL session cache timeout value, which is the usable lifetime seconds of negotiated SSL session IDs. The default value is 3600 seconds. Acceptable values are integers greater than or equal to 0 and less than or equal to 86400.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 86400\n",
-                    "format": "int64",
-                    "x-displayname": "Cache Timeout",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "86400"
-                    }
-                },
                 "certificates": {
                     "description": "Exclusive with []\n Select one or more certificates with any domain names.",
                     "$ref": "#/definitions/ssl_server_profileCertificateList",
                     "x-displayname": "Certificates"
                 },
-                "cipher_group": {
-                    "type": "string",
-                    "description": "Exclusive with [ciphers]\n Specifies an associated cipher group.",
-                    "x-displayname": "Cipher Group"
-                },
                 "ciphers": {
                     "type": "string",
-                    "description": "Exclusive with [cipher_group]\n Specifies a cipher name.",
+                    "description": "Exclusive with []\n Specifies a cipher name.",
                     "x-displayname": "Ciphers"
-                },
-                "data_0rtt": {
-                    "description": " Specifies if TLSv1.3 should send 0-RTT early data when available. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Data 0-RTT"
                 },
                 "expire_cert_response_control": {
                     "description": " Specifies the action for the BIG-IP system to take when the server certificate has expired. The default value is drop, which causes the connection to be dropped. Conversely, you can specify ignore to cause the connection to ignore the error and continue or you can specify mask in case of SSL forward proxy to mask server certificate errors and continue with handshake and forge a good certificate on client-side. Note that drop works only if the certificate is trusted.",
-                    "$ref": "#/definitions/vs_profilesAcceptRejectChoice",
+                    "$ref": "#/definitions/vs_profilesCertResponseControlChoice",
                     "x-displayname": "Expire Cert Response Control"
-                },
-                "generic_alert": {
-                    "description": " Enables or disables generic-alert which if use generic alert number in Alert message. The default option is enabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Generic Alert"
                 },
                 "handshake_timeout": {
                     "type": "integer",
@@ -3882,52 +3572,10 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "30"
                     }
                 },
-                "max_active_handshakes": {
-                    "type": "integer",
-                    "description": " Specifies the maximum allowed active handshakes. The default value is 0.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 4294967295\n",
-                    "format": "int64",
-                    "x-displayname": "Max Active Handshakes",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "4294967295"
-                    }
-                },
-                "mod_ssl_methods": {
-                    "description": " Enables or disables ModSSL method emulation. Use enabled when OpenSSL methods are inadequate. For example, you can enable ModSSL method emulation when you want to use SSL compression over TLSv1.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Mod SSL Methods"
-                },
-                "mode": {
-                    "description": " Enables or disables SSL processing. The default value is enabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Mode"
-                },
-                "ocsp": {
-                    "type": "array",
-                    "description": " Specifies the name of ocsp profile for purpose of validating status of server certificate. Specifying none disables ocsp validation of server certificate. The default value is none.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "Ocsp",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
                 "peer_cert_mode": {
                     "description": " Specifies the peer certificate mode.",
                     "$ref": "#/definitions/vs_profilesPeerCertModeChoice",
                     "x-displayname": "Peer Cert Mode"
-                },
-                "proxy_ssl": {
-                    "description": " Enables proxy SSL mode, which requires a corresponding client SSL profile with proxy-ssl enabled to allow for modification of application data within an SSL tunnel.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Proxy SSL"
-                },
-                "proxy_ssl_passthrough": {
-                    "description": " Enables proxy SSL passthrough mode, which requires a corresponding client SSL profile with proxy-ssl-passthrough enabled to allow for modification of application data within an SSL tunnel.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Proxy SSL Passthrough"
                 },
                 "renegotiate_period": {
                     "type": "string",
@@ -3950,14 +3598,9 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/vs_profilesEnableDisableChoice",
                     "x-displayname": "Renegotiation"
                 },
-                "retain_certificate": {
-                    "description": " When true, server certificate is retained in SSL session.",
-                    "$ref": "#/definitions/vs_profilesTrueFalseChoice",
-                    "x-displayname": "Retain Certificate"
-                },
                 "revoked_cert_status_response_control": {
                     "description": " Specifies the system action when the server certificate status is revoked. The default value is drop, which causes the connection to be dropped. You can specify ignore to cause the connection to ignore the error and continue handshake. You can specify mask in case of SSL forward proxy to mask server certificate status error and continue handshake.",
-                    "$ref": "#/definitions/vs_profilesAcceptRejectChoice",
+                    "$ref": "#/definitions/vs_profilesCertResponseControlChoice",
                     "x-displayname": "Revoked Cert Status Response Control"
                 },
                 "secure_renegotiation": {
@@ -3970,81 +3613,43 @@ var APISwaggerJSON string = `{
                     "description": " Name matched to TLS/1.1 and above client SSL requests that support the Server Name Indication extension. The default value is empty, which disables support for this extension.",
                     "x-displayname": "Server Name"
                 },
-                "session_mirroring": {
-                    "description": " Enables or disables session mirroring to the high-availability peer. The default option is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Session Mirroring"
-                },
                 "session_ticket": {
                     "description": " Enables or disables session-ticket. The default option is disabled, see RFC5077.",
                     "$ref": "#/definitions/vs_profilesEnableDisableChoice",
                     "x-displayname": "Session Ticket"
                 },
-                "sni_default": {
-                    "description": " When true, this profile is the default SSL profile when a client connection does not specify a known server name, or does not specify any server name at all. The default value is false.",
-                    "$ref": "#/definitions/vs_profilesTrueFalseChoice",
-                    "x-displayname": "Sni Default"
+                "tm_options": {
+                    "type": "array",
+                    "description": " Enables options, including some industry-related workarounds. Enter options inside braces, for example, { dont-insert-empty-fragments }. The default value is { dont-insert-empty-fragments no-tlsv1.3 }.\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"dont-insert-empty-fragments no-tlsv1.3\\\",\\\"dont-insert-empty-fragments no-dtls\\\",\\\"dont-insert-empty-fragments no-dtlsv1\\\",\\\"dont-insert-empty-fragments no-dtlsv1.2\\\",\\\"dont-insert-empty-fragments no-session-resumption-on-renegotiation\\\",\\\"dont-insert-empty-fragments no-ssl\\\",\\\"dont-insert-empty-fragments no-sslv3\\\",\\\"dont-insert-empty-fragments no-tls\\\",\\\"dont-insert-empty-fragments no-tlsv1\\\",\\\"dont-insert-empty-fragments no-tlsv1.1\\\",\\\"dont-insert-empty-fragments no-tlsv1.2\\\",\\\"dont-insert-empty-fragments no-tlsv1.3\\\",\\\"dont-insert-empty-fragments passive-close\\\",\\\"dont-insert-empty-fragments single-dh-use\\\",\\\"dont-insert-empty-fragments tls-rollback-bug\\\"]\n",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Tm Options",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"dont-insert-empty-fragments no-tlsv1.3\\\",\\\"dont-insert-empty-fragments no-dtls\\\",\\\"dont-insert-empty-fragments no-dtlsv1\\\",\\\"dont-insert-empty-fragments no-dtlsv1.2\\\",\\\"dont-insert-empty-fragments no-session-resumption-on-renegotiation\\\",\\\"dont-insert-empty-fragments no-ssl\\\",\\\"dont-insert-empty-fragments no-sslv3\\\",\\\"dont-insert-empty-fragments no-tls\\\",\\\"dont-insert-empty-fragments no-tlsv1\\\",\\\"dont-insert-empty-fragments no-tlsv1.1\\\",\\\"dont-insert-empty-fragments no-tlsv1.2\\\",\\\"dont-insert-empty-fragments no-tlsv1.3\\\",\\\"dont-insert-empty-fragments passive-close\\\",\\\"dont-insert-empty-fragments single-dh-use\\\",\\\"dont-insert-empty-fragments tls-rollback-bug\\\"]"
+                    }
                 },
-                "sni_require": {
-                    "description": " When true, SNI support is required for the peer. If a client connection does not specify a known server name, or does not specify any server name at all, the connection will be rejected. The default value is false.",
-                    "$ref": "#/definitions/vs_profilesTrueFalseChoice",
-                    "x-displayname": "Sni Require"
-                },
-                "ssl_c3d": {
-                    "description": " Enables or disables SSL client certificate constrained delegation. The default option is disabled. Conversely, you can specify enabled to use the SSL client certificate constrained delegation.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "SSL C3d"
-                },
-                "ssl_forward_proxy": {
-                    "description": " Specifies if the SSL Forward Proxy feature is enabled. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "SSL Forward Proxy"
-                },
-                "ssl_forward_proxy_bypass": {
-                    "description": " Specifies if the SSL Forward Proxy Bypass feature is enabled. The default value is disabled.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "SSL Forward Proxy Bypass"
-                },
-                "ssl_forward_proxy_verified_handshake": {
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "SSL Forward Proxy Verified Handshake"
-                },
-                "ssl_sign_hash": {
-                    "description": " SSL sign hash algorithm to sign and verify SSL Server Key Exchange and Certificate Verify messages for the specified SSL profiles.",
-                    "$ref": "#/definitions/vs_profilesSslSignHashChoice",
-                    "x-displayname": "SSL Sign Hash"
-                },
-                "strict_resume": {
-                    "description": " You can enable or disable the resumption of SSL sessions after an unclean shutdown. The default value is disabled, which indicates that the SSL profile refuses to resume SSL sessions after an unclean shutdown.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Strict Resume"
-                },
-                "unclean_shutdown": {
-                    "description": " By default, the SSL profile performs unclean shutdowns of all SSL connections, which means that underlying TCP connections are closed without exchanging the required SSL shutdown alerts. If you want to force the SSL profile to perform a clean shutdown of all SSL connections, you can disable this.",
-                    "$ref": "#/definitions/vs_profilesEnableDisableChoice",
-                    "x-displayname": "Unclean Shutdown"
+                "trusted_ca_list": {
+                    "type": "array",
+                    "description": " Specifies the trusted CA list used to validate client certificates. When authenticating clients,\n the system validates the client certificate against the specified trusted CA list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Trusted CA List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "unknown_cert_status_response_control": {
                     "description": " Specifies the system action when the server certificate status is unknown. The default value is ignore, which causes the connection to ignore the error and continue handshake. You can specify drop which causes the connection to be dropped. You can specify mask in case of SSL forward proxy to mask server certificate status error and continue handshake.",
-                    "$ref": "#/definitions/vs_profilesAcceptRejectChoice",
+                    "$ref": "#/definitions/vs_profilesCertResponseControlChoice",
                     "x-displayname": "Unknown Cert Status Response Control"
                 },
                 "untrusted_cert_response_control": {
                     "description": " Specifies the system action when the server certificate has untrusted CA. The default value is drop, which causes the connection to be dropped. Conversely, you can specify ignore to cause the connection to ignore the error and continue or you can specify mask in case of SSL forward proxy to mask server certificate errors and continue with handshake and forge a good certificate on client-side.",
-                    "$ref": "#/definitions/vs_profilesAcceptRejectChoice",
+                    "$ref": "#/definitions/vs_profilesCertResponseControlChoice",
                     "x-displayname": "Untrusted Cert Response Control"
-                },
-                "user_spec": {
-                    "type": "array",
-                    "description": " User specified properties.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
-                    "maxItems": 50,
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "User Spec",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "50"
-                    }
                 }
             }
         },
@@ -4087,18 +3692,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "vs_profilesAcceptRejectChoice": {
-            "type": "string",
-            "description": "\n - REJECT: Reject\n - ACCEPT: Accept",
-            "title": "AcceptRejectChoice",
-            "enum": [
-                "REJECT",
-                "ACCEPT"
-            ],
-            "default": "REJECT",
-            "x-displayname": "Accept or Reject choice",
-            "x-ves-proto-enum": "ves.io.schema.vs_profiles.AcceptRejectChoice"
-        },
         "vs_profilesAllowOnceChoice": {
             "type": "string",
             "description": "\n - ALLOW_ONCE: Allow\n - ONCE: Once",
@@ -4110,6 +3703,19 @@ var APISwaggerJSON string = `{
             "default": "ALLOW_ONCE",
             "x-displayname": "AllowOnceChoice",
             "x-ves-proto-enum": "ves.io.schema.vs_profiles.AllowOnceChoice"
+        },
+        "vs_profilesCertResponseControlChoice": {
+            "type": "string",
+            "description": "Action to take in response to certificate validation errors.\n\n - CERT_RESPONSE_CONTROL_DROP: Drop\nDrop the connection.\n - CERT_RESPONSE_CONTROL_IGNORE: Ignore\nIgnore the error and continue the handshake.\n - CERT_RESPONSE_CONTROL_MASK: Mask\nMask the server certificate error and continue with handshake (SSL forward proxy).",
+            "title": "CertResponseControlChoice",
+            "enum": [
+                "CERT_RESPONSE_CONTROL_DROP",
+                "CERT_RESPONSE_CONTROL_IGNORE",
+                "CERT_RESPONSE_CONTROL_MASK"
+            ],
+            "default": "CERT_RESPONSE_CONTROL_DROP",
+            "x-displayname": "Certificate Response Control Choice",
+            "x-ves-proto-enum": "ves.io.schema.vs_profiles.CertResponseControlChoice"
         },
         "vs_profilesEnableDisableChoice": {
             "type": "string",
@@ -4125,15 +3731,14 @@ var APISwaggerJSON string = `{
         },
         "vs_profilesPeerCertModeChoice": {
             "type": "string",
-            "description": "\n - PEER_CERT_MODE_UNSPECIFIED: Unspecified\n - PEER_CERT_MODE_IGNORE: Ignore\n - PEER_CERT_MODE_REQUIRE: Require\n - PEER_CERT_MODE_REQUEST: Request",
+            "description": "\n - PEER_CERT_MODE_IGNORE: Ignore\n - PEER_CERT_MODE_REQUIRE: Require\n - PEER_CERT_MODE_REQUEST: Request",
             "title": "PeerCertModeChoice",
             "enum": [
-                "PEER_CERT_MODE_UNSPECIFIED",
                 "PEER_CERT_MODE_IGNORE",
                 "PEER_CERT_MODE_REQUIRE",
                 "PEER_CERT_MODE_REQUEST"
             ],
-            "default": "PEER_CERT_MODE_UNSPECIFIED",
+            "default": "PEER_CERT_MODE_IGNORE",
             "x-displayname": "Peer Cert Mode Choice",
             "x-ves-proto-enum": "ves.io.schema.vs_profiles.PeerCertModeChoice"
         },
@@ -4150,33 +3755,6 @@ var APISwaggerJSON string = `{
             "default": "SECURE_RENEGOTIATION_UNSPECIFIED",
             "x-displayname": "Secure Renegotiation Choice",
             "x-ves-proto-enum": "ves.io.schema.vs_profiles.SecureRenegotiationChoice"
-        },
-        "vs_profilesSslSignHashChoice": {
-            "type": "string",
-            "description": "\n - SSL_SIGN_HASH_UNSPECIFIED: Unspecified\n - SSL_SIGN_HASH_ANY: Any\n - SSL_SIGN_HASH_SHA1: Sha1\n - SSL_SIGN_HASH_SHA256: Sha256\n - SSL_SIGN_HASH_SHA384: Sha384",
-            "title": "SslSignHashChoice",
-            "enum": [
-                "SSL_SIGN_HASH_UNSPECIFIED",
-                "SSL_SIGN_HASH_ANY",
-                "SSL_SIGN_HASH_SHA1",
-                "SSL_SIGN_HASH_SHA256",
-                "SSL_SIGN_HASH_SHA384"
-            ],
-            "default": "SSL_SIGN_HASH_UNSPECIFIED",
-            "x-displayname": "SSL Sign Hash Choice",
-            "x-ves-proto-enum": "ves.io.schema.vs_profiles.SslSignHashChoice"
-        },
-        "vs_profilesTrueFalseChoice": {
-            "type": "string",
-            "description": "\n - FALSE: False\n - TRUE: True",
-            "title": "TrueFalseChoice",
-            "enum": [
-                "FALSE",
-                "TRUE"
-            ],
-            "default": "FALSE",
-            "x-displayname": "True or False choice",
-            "x-ves-proto-enum": "ves.io.schema.vs_profiles.TrueFalseChoice"
         }
     },
     "x-displayname": "Virtual server server-side proxy SSL profile",

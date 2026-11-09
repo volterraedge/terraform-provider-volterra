@@ -82,6 +82,13 @@ func (m *CookieParams) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSecretChoiceDRefInfo()
 }
+func (m *CookieParams) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSecretChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CookieParams) GetSecretChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -95,6 +102,29 @@ func (m *CookieParams) GetSecretChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetKmsKeyHmac().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetKmsKeyHmac().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "kms_key_hmac." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CookieParams) GetSecretChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSecretChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSecretChoice().(type) {
+	case *CookieParams_AuthHmac:
+		return nil, nil
+	case *CookieParams_KmsKeyHmac:
+		drInfos, err := m.GetKmsKeyHmac().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetKmsKeyHmac().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -307,6 +337,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCookieParamsDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCookieParamsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
@@ -316,6 +353,22 @@ func (m *CreateSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetCookieParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cookie_params." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetCookieParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCookieParams() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCookieParams().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -499,6 +552,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCookieParamsDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCookieParamsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
@@ -508,6 +568,22 @@ func (m *GetSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetCookieParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cookie_params." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetCookieParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCookieParams() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCookieParams().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -691,6 +767,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCookieParamsDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCookieParamsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
@@ -700,6 +783,22 @@ func (m *GlobalSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetCookieParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cookie_params." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetCookieParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCookieParams() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCookieParams().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1103,8 +1202,32 @@ func (m *KMSKeyRefType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAuthHmacKmsDRefInfo()
 }
+func (m *KMSKeyRefType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAuthHmacKmsDRefInfoForOverlay(generateHash)
+}
 
 func (m *KMSKeyRefType) GetAuthHmacKmsDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAuthHmacKms()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("kms_key.Object")
+	dri := db.DRefInfo{
+		RefdType:   "kms_key.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "auth_hmac_kms",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *KMSKeyRefType) GetAuthHmacKmsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetAuthHmacKms()
 	if vref == nil {
 		return nil, nil
@@ -1630,6 +1753,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCookieParamsDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCookieParamsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
@@ -1639,6 +1769,22 @@ func (m *ReplaceSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetCookieParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cookie_params." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetCookieParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCookieParams() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCookieParams().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

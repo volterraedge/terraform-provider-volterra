@@ -2616,12 +2616,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/app_settingBusinessLogicMarkupSetting",
                     "x-displayname": "API Discovery"
                 },
-                "timeseries_analyses_setting": {
-                    "description": " Time series anomaly detection is performed using advanced machine learning based on metrics\n such as request rate, error rate, latency, throughput etc.\n The clients are flagged if anomalies are observed",
-                    "title": "DDoS Detection Settings",
-                    "$ref": "#/definitions/app_settingTimeseriesAnalysesSetting",
-                    "x-displayname": "DDoS Detection"
-                },
                 "user_behavior_analysis_setting": {
                     "description": " Malicious User Detection performs user behavior analysis and assigns a risk score and\n threat level of low, medium, or high based on suspicious activity of the user.\n The risk score of the user decays over time, if no further suspicious activity is noted",
                     "title": "Malicious User Detection Settings",
@@ -2867,7 +2861,7 @@ var APISwaggerJSON string = `{
         },
         "app_settingMetric": {
             "type": "string",
-            "description": "Supported metrics that can be selected for timeseries analyses\n",
+            "description": "x-displayName: \"Metric\"\nSupported metrics that can be selected for timeseries analyses\n\n - NO_METRICS: x-displayName: \"No Metrics\"\n - REQUEST_RATE: x-displayName: \"Request Rate\"\n - ERROR_RATE: x-displayName: \"Error Rate\"\n - LATENCY: x-displayName: \"Latency\"\n - THROUGHPUT: x-displayName: \"Response Throughput\"",
             "title": "Metric",
             "enum": [
                 "NO_METRICS",
@@ -2876,40 +2870,31 @@ var APISwaggerJSON string = `{
                 "LATENCY",
                 "THROUGHPUT"
             ],
-            "default": "NO_METRICS",
-            "x-displayname": "Metric",
-            "x-ves-proto-enum": "ves.io.schema.app_setting.Metric"
+            "default": "NO_METRICS"
         },
         "app_settingMetricSelector": {
             "type": "object",
-            "description": "Specifies which metrics are selected to be analyzed",
+            "description": "x-displayName: \"Metric Selector\"\nSpecifies which metrics are selected to be analyzed",
             "title": "Metric Selector",
-            "x-displayname": "Metric Selector",
-            "x-ves-proto-message": "ves.io.schema.app_setting.MetricSelector",
             "properties": {
                 "metric": {
                     "type": "array",
-                    "description": " Choose one or more metrics to be included in the detection logic\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "x-displayName: \"Metrics\"\nChoose one or more metrics to be included in the detection logic",
                     "title": "Metrics",
                     "items": {
                         "$ref": "#/definitions/app_settingMetric"
-                    },
-                    "x-displayname": "Metrics",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "metrics_source": {
-                    "description": " Choose the source for the metrics to be included in the detection logic",
+                    "description": "x-displayName: \"Metrics Source\"\nChoose the source for the metrics to be included in the detection logic",
                     "title": "Metrics Sources",
-                    "$ref": "#/definitions/app_settingMetricsSource",
-                    "x-displayname": "Metrics Source"
+                    "$ref": "#/definitions/app_settingMetricsSource"
                 }
             }
         },
         "app_settingMetricsSource": {
             "type": "string",
-            "description": "Supported sources from which Metrics can be analyzed\n\nAll edges in the service mesh graph. Metrics are analyzed separately between all source and destination service combinations",
+            "description": "x-displayName: \"Metrics Source\"\nSupported sources from which Metrics can be analyzed\n\n - NONE: x-displayName: \"None\"\n - NODES: x-displayName: \"All Services\"\n - EDGES: x-displayName: \"All Service Interactions\"\nAll edges in the service mesh graph. Metrics are analyzed separately between all source and destination service combinations\n - VIRTUAL_HOSTS: x-displayName: \"All Virtual Hosts\"",
             "title": "Metrics Source",
             "enum": [
                 "NONE",
@@ -2917,9 +2902,7 @@ var APISwaggerJSON string = `{
                 "EDGES",
                 "VIRTUAL_HOSTS"
             ],
-            "default": "NONE",
-            "x-displayname": "Metrics Source",
-            "x-ves-proto-enum": "ves.io.schema.app_setting.MetricsSource"
+            "default": "NONE"
         },
         "app_settingNonexistentUrlAutomaticActivitySetting": {
             "type": "object",
@@ -3019,21 +3002,15 @@ var APISwaggerJSON string = `{
         },
         "app_settingTimeseriesAnalysesSetting": {
             "type": "object",
-            "description": "Configuration for DDoS Detection",
+            "description": "x-displayName: \"DDoS Settings\"\nConfiguration for DDoS Detection",
             "title": "DDoS Detection Settings",
-            "x-displayname": "DDoS Settings",
-            "x-ves-proto-message": "ves.io.schema.app_setting.TimeseriesAnalysesSetting",
             "properties": {
                 "metric_selectors": {
                     "type": "array",
-                    "description": " Define the metric selection criteria, i.e. the metrics source and the actual metrics that should\n be included in the detection logic\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "x-displayName: \"Metric Selectors\"\nDefine the metric selection criteria, i.e. the metrics source and the actual metrics that should\nbe included in the detection logic",
                     "title": "Metric Selector",
                     "items": {
                         "$ref": "#/definitions/app_settingMetricSelector"
-                    },
-                    "x-displayname": "Metric Selectors",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -3383,12 +3360,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {

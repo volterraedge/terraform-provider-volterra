@@ -87,6 +87,29 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginPoolsWeightsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolsWeightsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -147,6 +170,65 @@ func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetAdvertiseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *CreateSpecType_DoNotAdvertise:
+		return nil, nil
+	case *CreateSpecType_AdvertiseOnPublicDefaultVip:
+		return nil, nil
+	case *CreateSpecType_AdvertiseOnPublic:
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_AdvertiseCustom:
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_AdvertiseOnPublicDefaultIpv6Vip:
+		return nil, nil
+	case *CreateSpecType_AdvertiseOnPublicDefaultDualstackVip:
+		return nil, nil
+	case *CreateSpecType_AdvertiseV6OnPublic:
+		drInfos, err := m.GetAdvertiseV6OnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseV6OnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_v6_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_AdvertiseDualstackOnPublic:
+		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_dualstack_on_public." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginPoolsWeights() == nil {
@@ -157,6 +239,26 @@ func (m *CreateSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) 
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOriginPoolsWeights() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("origin_pools_weights[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetOriginPoolsWeightsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginPoolsWeights() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetOriginPoolsWeights() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOriginPoolsWeights() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -181,6 +283,31 @@ func (m *CreateSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetServicePolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServicePolicyChoice().(type) {
+	case *CreateSpecType_ServicePoliciesFromNamespace:
+		return nil, nil
+	case *CreateSpecType_NoServicePolicies:
+		return nil, nil
+	case *CreateSpecType_ActiveServicePolicies:
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -868,6 +995,29 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginPoolsWeightsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolsWeightsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -928,6 +1078,65 @@ func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetAdvertiseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *GetSpecType_DoNotAdvertise:
+		return nil, nil
+	case *GetSpecType_AdvertiseOnPublicDefaultVip:
+		return nil, nil
+	case *GetSpecType_AdvertiseOnPublic:
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_AdvertiseCustom:
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_AdvertiseOnPublicDefaultIpv6Vip:
+		return nil, nil
+	case *GetSpecType_AdvertiseOnPublicDefaultDualstackVip:
+		return nil, nil
+	case *GetSpecType_AdvertiseV6OnPublic:
+		drInfos, err := m.GetAdvertiseV6OnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseV6OnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_v6_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_AdvertiseDualstackOnPublic:
+		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_dualstack_on_public." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginPoolsWeights() == nil {
@@ -938,6 +1147,26 @@ func (m *GetSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOriginPoolsWeights() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("origin_pools_weights[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetOriginPoolsWeightsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginPoolsWeights() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetOriginPoolsWeights() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOriginPoolsWeights() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -962,6 +1191,31 @@ func (m *GetSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetServicePolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServicePolicyChoice().(type) {
+	case *GetSpecType_ServicePoliciesFromNamespace:
+		return nil, nil
+	case *GetSpecType_NoServicePolicies:
+		return nil, nil
+	case *GetSpecType_ActiveServicePolicies:
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1679,6 +1933,34 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginPoolsWeightsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolsWeightsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1739,6 +2021,65 @@ func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *GlobalSpecType_DoNotAdvertise:
+		return nil, nil
+	case *GlobalSpecType_AdvertiseOnPublicDefaultVip:
+		return nil, nil
+	case *GlobalSpecType_AdvertiseOnPublic:
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_AdvertiseCustom:
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_AdvertiseOnPublicDefaultIpv6Vip:
+		return nil, nil
+	case *GlobalSpecType_AdvertiseOnPublicDefaultDualstackVip:
+		return nil, nil
+	case *GlobalSpecType_AdvertiseV6OnPublic:
+		drInfos, err := m.GetAdvertiseV6OnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseV6OnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_v6_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_AdvertiseDualstackOnPublic:
+		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_dualstack_on_public." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginPoolsWeights() == nil {
@@ -1749,6 +2090,26 @@ func (m *GlobalSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) 
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOriginPoolsWeights() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("origin_pools_weights[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetOriginPoolsWeightsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginPoolsWeights() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetOriginPoolsWeights() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOriginPoolsWeights() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1784,7 +2145,49 @@ func (m *GlobalSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetServicePolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServicePolicyChoice().(type) {
+	case *GlobalSpecType_ServicePoliciesFromNamespace:
+		return nil, nil
+	case *GlobalSpecType_NoServicePolicies:
+		return nil, nil
+	case *GlobalSpecType_ActiveServicePolicies:
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -2537,6 +2940,29 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginPoolsWeightsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolsWeightsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2597,6 +3023,65 @@ func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *ReplaceSpecType_DoNotAdvertise:
+		return nil, nil
+	case *ReplaceSpecType_AdvertiseOnPublicDefaultVip:
+		return nil, nil
+	case *ReplaceSpecType_AdvertiseOnPublic:
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_AdvertiseCustom:
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_AdvertiseOnPublicDefaultIpv6Vip:
+		return nil, nil
+	case *ReplaceSpecType_AdvertiseOnPublicDefaultDualstackVip:
+		return nil, nil
+	case *ReplaceSpecType_AdvertiseV6OnPublic:
+		drInfos, err := m.GetAdvertiseV6OnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseV6OnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_v6_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_AdvertiseDualstackOnPublic:
+		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_dualstack_on_public." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginPoolsWeights() == nil {
@@ -2607,6 +3092,26 @@ func (m *ReplaceSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error)
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOriginPoolsWeights() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("origin_pools_weights[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetOriginPoolsWeightsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginPoolsWeights() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetOriginPoolsWeights() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOriginPoolsWeights() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -2631,6 +3136,31 @@ func (m *ReplaceSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetServicePolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServicePolicyChoice().(type) {
+	case *ReplaceSpecType_ServicePoliciesFromNamespace:
+		return nil, nil
+	case *ReplaceSpecType_NoServicePolicies:
+		return nil, nil
+	case *ReplaceSpecType_ActiveServicePolicies:
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

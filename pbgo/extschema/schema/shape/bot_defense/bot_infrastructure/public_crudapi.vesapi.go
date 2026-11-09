@@ -2145,6 +2145,62 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "bot_infrastructureActiveActiveRegion": {
+            "type": "object",
+            "title": "Active - Active",
+            "x-displayname": "Active - Active",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_infrastructure.ActiveActiveRegion",
+            "properties": {
+                "region_1": {
+                    "type": "string",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Bot Infrastructure Regions",
+                    "x-displayname": "Active",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "region_2": {
+                    "type": "string",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Bot Infrastructure Regions",
+                    "x-displayname": "Active",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "bot_infrastructureActivePassiveRegion": {
+            "type": "object",
+            "title": "Active - Passive",
+            "x-displayname": "Active - Passive",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_infrastructure.ActivePassiveRegion",
+            "properties": {
+                "region_1": {
+                    "type": "string",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Bot Infrastructure Regions",
+                    "x-displayname": "Active",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "region_2": {
+                    "type": "string",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Bot Infrastructure Regions",
+                    "x-displayname": "Passive",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "bot_infrastructureCertificateStatus": {
             "type": "string",
             "description": "The status of certificate application to the ingress\n\nCertificate status is undefined (initial state, before first sync)\nCertificate has been successfully applied to the ingress\nCertificate is not applied",
@@ -2229,36 +2285,40 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "F5 Cloud Hosted - for creating a new object",
             "x-displayname": "F5 Cloud Hosted",
-            "x-ves-oneof-field-type_choice": "[\"production\",\"testing\"]",
+            "x-ves-oneof-field-type_choice": "[\"production_v2\",\"testing_v2\"]",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_infrastructure.CreateSpecInfraCloudHosted",
             "properties": {
-                "ip_addresses": {
-                    "type": "array",
-                    "description": " Only traffic from these IP addresses is allowed to access this Bot Defense infrastructure.\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "IP Allowlist",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Ingress IP Access Control List",
+                "host_name_list": {
+                    "description": " Access Control List - Host Names",
+                    "title": "Host Names",
+                    "$ref": "#/definitions/bot_infrastructureHostNameList",
+                    "x-displayname": "Access Control List - Host Names"
+                },
+                "ip_address_list": {
+                    "description": " Access Control List - IP Addresses\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "IP Addresses",
+                    "$ref": "#/definitions/bot_infrastructureIPAddressList",
+                    "x-displayname": "Access Control List - IP Addresses",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "production": {
-                    "description": "Exclusive with [testing]\n Production Protect live production applications and services from automated attacks.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                "production_v2": {
+                    "description": "Exclusive with [testing_v2]\n Production Protect live production applications and services from automated attacks.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Production",
-                    "$ref": "#/definitions/bot_infrastructureProduction",
+                    "$ref": "#/definitions/bot_infrastructureProductionV2",
                     "x-displayname": "Production",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "testing": {
-                    "description": "Exclusive with [production]\n Test Evaluate new features, settings, and system performance.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                "testing_v2": {
+                    "description": "Exclusive with [production_v2]\n Test Evaluate new features, settings, and system performance.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Testing",
-                    "$ref": "#/definitions/bot_infrastructureTesting",
-                    "x-displayname": "Testing",
+                    "$ref": "#/definitions/bot_infrastructureTestingV2",
+                    "x-displayname": "Test",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -2274,6 +2334,18 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-create_bot_infra_choice": "[\"create_cloud_hosted\"]",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_infrastructure.CreateSpecType",
             "properties": {
+                "bot_allowlist_policy_metadata": {
+                    "$ref": "#/definitions/bot_infrastructurePolicyMetadata",
+                    "x-displayname": "Bot Allowlist Policy Metadata"
+                },
+                "bot_endpoint_policy_metadata": {
+                    "$ref": "#/definitions/bot_infrastructureEndpointPolicyMetadata",
+                    "x-displayname": "Bot Endpoint Policy Metadata"
+                },
+                "bot_network_policy_metadata": {
+                    "$ref": "#/definitions/bot_infrastructurePolicyMetadata",
+                    "x-displayname": "Bot Network Policy Metadata"
+                },
                 "create_cloud_hosted": {
                     "description": "Exclusive with []\n Associates an F5 Cloud Hosted service node to the Bot Defense infrastructure",
                     "$ref": "#/definitions/bot_infrastructureCreateSpecInfraCloudHosted",
@@ -2481,6 +2553,50 @@ var APISwaggerJSON string = `{
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
+        "bot_infrastructureHostNameList": {
+            "type": "object",
+            "description": "Access Control List - Host Names",
+            "title": "Host Names",
+            "x-displayname": "Access Control List - Host Names",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_infrastructure.HostNameList",
+            "properties": {
+                "host_names": {
+                    "type": "array",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
+                    "title": "HostNames List",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Allowed Host Names",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true"
+                    }
+                }
+            }
+        },
+        "bot_infrastructureIPAddressList": {
+            "type": "object",
+            "description": "Access Control List - IP Addresses",
+            "title": "IP Addresses",
+            "x-displayname": "Access Control List - IP Addresses",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_infrastructure.IPAddressList",
+            "properties": {
+                "ip_addresses": {
+                    "type": "array",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "IP Allowlist",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Ingress IP Address Control List",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                }
+            }
+        },
         "bot_infrastructureIPInfo": {
             "type": "object",
             "description": "The IP address information for the device",
@@ -2523,6 +2639,19 @@ var APISwaggerJSON string = `{
             "x-displayname": "F5 Cloud Hosted",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_infrastructure.InfraCloudHosted",
             "properties": {
+                "active_regions": {
+                    "type": "array",
+                    "description": " Bot Infrastructure Active Regions\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Bot Infrastructure Active Regions",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Active Region",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
                 "egress": {
                     "type": "array",
                     "description": " Egress IP Addresses\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -2582,9 +2711,22 @@ var APISwaggerJSON string = `{
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Ingress IP Access Control List",
+                    "x-displayname": "Ingress IP Address Control List",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "passive_regions": {
+                    "type": "array",
+                    "description": " Bot Infrastructure Passive Regions\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Bot Infrastructure Passive Regions",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Passive Region",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
@@ -2919,25 +3061,53 @@ var APISwaggerJSON string = `{
         },
         "bot_infrastructureProduction": {
             "type": "object",
+            "description": "x-displayName: \"Production\"",
             "title": "Production",
-            "x-displayname": "Production",
-            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_infrastructure.Production",
             "properties": {
                 "region_1": {
                     "type": "string",
-                    "description": " This is an Active-Active Infrastructure configuration where traffic is routed equally between the two regions.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Bot Infrastructure Regions",
-                    "x-displayname": "Ingress Region 1",
+                    "description": "x-displayName: \"Ingress Region 1\"\nx-required\nTraffic is routed equally between the two regions.",
+                    "title": "Bot Infrastructure Regions"
+                },
+                "region_2": {
+                    "type": "string",
+                    "description": "x-displayName: \"Ingress Region 2\"\nx-required\nTraffic is routed equally between the two regions.",
+                    "title": "Bot Infrastructure Regions"
+                }
+            }
+        },
+        "bot_infrastructureProductionV2": {
+            "type": "object",
+            "title": "Production",
+            "x-displayname": "Production",
+            "x-ves-oneof-field-type_choice_production": "[\"active_active_region\",\"active_passive_region\",\"single_active_region\"]",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_infrastructure.ProductionV2",
+            "properties": {
+                "active_active_region": {
+                    "description": "Exclusive with [active_passive_region single_active_region]\n Traffic routed equally to both regions.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Active - Active",
+                    "$ref": "#/definitions/bot_infrastructureActiveActiveRegion",
+                    "x-displayname": "Active - Active",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "region_2": {
-                    "type": "string",
-                    "description": " This is an Active-Active Infrastructure configuration where traffic is routed equally between the two regions.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Bot Infrastructure Regions",
-                    "x-displayname": "Ingress Region 2",
+                "active_passive_region": {
+                    "description": "Exclusive with [active_active_region single_active_region]\n Traffic routed to Active region with failover to Passive on health failure.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Active - Passive",
+                    "$ref": "#/definitions/bot_infrastructureActivePassiveRegion",
+                    "x-displayname": "Active - Passive",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "single_active_region": {
+                    "description": "Exclusive with [active_active_region active_passive_region]\n Only one region serves traffic.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Single Active",
+                    "$ref": "#/definitions/bot_infrastructureSingleActiveRegion",
+                    "x-displayname": "Single Active",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -2969,6 +3139,24 @@ var APISwaggerJSON string = `{
         "bot_infrastructureReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_infrastructure.ReplaceResponse"
+        },
+        "bot_infrastructureSingleActiveRegion": {
+            "type": "object",
+            "title": "Single - Active",
+            "x-displayname": "Single Active",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_infrastructure.SingleActiveRegion",
+            "properties": {
+                "region_1": {
+                    "type": "string",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Bot Infrastructure Regions",
+                    "x-displayname": "Active",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
         },
         "bot_infrastructureStatusObject": {
             "type": "object",
@@ -3036,15 +3224,28 @@ var APISwaggerJSON string = `{
         },
         "bot_infrastructureTesting": {
             "type": "object",
+            "description": "x-displayName: \"Testing\"",
             "title": "Testing",
-            "x-displayname": "Testing",
-            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_infrastructure.Testing",
             "properties": {
                 "region_1": {
                     "type": "string",
-                    "description": " This is an Active-Passive Infrastructure configuration where traffic is routed to a single region.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Bot Infrastructure Regions",
-                    "x-displayname": "Ingress Region 1",
+                    "description": "x-displayName: \"Ingress Region 1\"\nx-required\nTraffic is routed to a single region.",
+                    "title": "Bot Infrastructure Regions"
+                }
+            }
+        },
+        "bot_infrastructureTestingV2": {
+            "type": "object",
+            "title": "Testing",
+            "x-displayname": "Test",
+            "x-ves-oneof-field-type_choice_testing": "[\"single_active_region\"]",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.bot_infrastructure.TestingV2",
+            "properties": {
+                "single_active_region": {
+                    "description": "Exclusive with []\n This is a single-active infrastructure configuration where traffic is routed to one region.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Single Active",
+                    "$ref": "#/definitions/bot_infrastructureSingleActiveRegion",
+                    "x-displayname": "Single Active",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3158,12 +3359,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {

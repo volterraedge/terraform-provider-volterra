@@ -98,31 +98,35 @@ func resourceVolterraExternalConnector() *schema.Resource {
 
 			"gre": {
 
-				Type:     schema.TypeList,
-				MaxItems: 1,
-				Optional: true,
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"gre_parameters": {
 
-							Type:     schema.TypeList,
-							MaxItems: 1,
-							Optional: true,
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"peer_ip_address": {
 
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Optional: true,
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"addr": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -130,69 +134,81 @@ func resourceVolterraExternalConnector() *schema.Resource {
 
 									"tunnel_eps": {
 
-										Type:     schema.TypeList,
-										Required: true,
+										Type:       schema.TypeList,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"interface": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"local_tunnel_ip": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"node": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"remote_tunnel_ip": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
 									},
 
 									"tunnel_mtu": {
-										Type:     schema.TypeInt,
-										Optional: true,
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"segment": {
 
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Optional: true,
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"refs": {
-													Type:     schema.TypeList,
-													Required: true,
+													Type:       schema.TypeList,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
+																Type:       schema.TypeString,
+																Computed:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -235,14 +251,16 @@ func resourceVolterraExternalConnector() *schema.Resource {
 
 									"site_local_inside_network": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"site_local_network": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -582,8 +600,9 @@ func resourceVolterraExternalConnector() *schema.Resource {
 									},
 
 									"psk": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:      schema.TypeString,
+										Required:  true,
+										Sensitive: true,
 									},
 
 									"tunnel_eps": {

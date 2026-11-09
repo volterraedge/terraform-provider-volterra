@@ -69,6 +69,13 @@ func (m *CustomCacheRule) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCdnCacheRulesDRefInfo()
 }
+func (m *CustomCacheRule) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCdnCacheRulesDRefInfoForOverlay(generateHash)
+}
 
 func (m *CustomCacheRule) GetCdnCacheRulesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetCdnCacheRules()
@@ -83,6 +90,30 @@ func (m *CustomCacheRule) GetCdnCacheRulesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("cdn_cache_rule.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cdn_cache_rule.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "cdn_cache_rules",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CustomCacheRule) GetCdnCacheRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetCdnCacheRules()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("CustomCacheRule.cdn_cache_rules[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cdn_cache_rule.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "cdn_cache_rule.Object",
 			RefdTenant: vref.Tenant,

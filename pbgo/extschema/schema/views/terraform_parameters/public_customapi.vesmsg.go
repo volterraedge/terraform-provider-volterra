@@ -152,6 +152,13 @@ func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTerraformParametersDRefInfo()
 }
+func (m *GetResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTerraformParametersDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetResponse) GetTerraformParametersDRefInfo() ([]db.DRefInfo, error) {
@@ -161,6 +168,22 @@ func (m *GetResponse) GetTerraformParametersDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetTerraformParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTerraformParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "terraform_parameters." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetResponse) GetTerraformParametersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTerraformParameters() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTerraformParameters().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTerraformParameters().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -244,6 +267,13 @@ func (m *GetStatusResponse) Validate(ctx context.Context, opts ...db.ValidateOpt
 }
 
 func (m *GetStatusResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
+func (m *GetStatusResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	if m == nil {
 		return nil, nil
 	}

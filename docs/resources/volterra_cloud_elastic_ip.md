@@ -26,7 +26,6 @@ resource "volterra_cloud_elastic_ip" "example" {
     tenant    = "acmecorp"
   }
 }
-
 ```
 
 Argument Reference
@@ -48,7 +47,7 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`count_cloud_elastic_ip` - (Optional) number of Elastic Ips / Public Ips associated with this object per Node (`Int`).
+`count` - (Optional) number of Elastic Ips / Public Ips associated with this object per Node (`Int`).
 
 `site_ref` - (Required) Site to which this cloud elastic ip object is attached. See [ref](#ref) below for details.
 
@@ -65,4 +64,4 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured cloud_elastic_ip.
+*   `id` - This is the id of the configured cloud_elastic_ip.

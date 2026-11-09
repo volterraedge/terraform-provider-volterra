@@ -2493,6 +2493,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-dns_type": "[\"primary\",\"secondary\"]",
             "x-ves-proto-message": "ves.io.schema.dns_zone.CreateSpecType",
             "properties": {
+                "namespace_rbac": {
+                    "description": " Namespace-based access control configuration for the DNS zone.\n Updates require a role that carries the f5xc-dns-standard-admin API group,\n such as f5xc-dns-management-admin.",
+                    "title": "Namespace RBAC",
+                    "$ref": "#/definitions/dns_zoneNamespaceRBAC",
+                    "x-displayname": "Namespace access for this DNS zone"
+                },
                 "primary": {
                     "description": "Exclusive with [secondary]\n Primary DNS",
                     "$ref": "#/definitions/dns_zonePrimaryDNSCreateSpecType",
@@ -3524,6 +3530,12 @@ var APISwaggerJSON string = `{
                 "domain": {
                     "type": "string"
                 },
+                "namespace_rbac": {
+                    "description": " Namespace-based access control configuration for the DNS zone.\n Updates require a role that carries the f5xc-dns-standard-admin API group,\n such as f5xc-dns-management-admin.",
+                    "title": "Namespace RBAC",
+                    "$ref": "#/definitions/dns_zoneNamespaceRBAC",
+                    "x-displayname": "Namespace access for this DNS zone"
+                },
                 "num_of_dns_records": {
                     "type": "integer",
                     "description": " Number of DNS records displays number of dns records for each zone",
@@ -3950,6 +3962,58 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneNamespaceRBAC": {
+            "type": "object",
+            "description": "Namespace-based access control configuration for a DNS zone.\nOnly users with a role that carries the f5xc-dns-standard-admin API group,\nsuch as f5xc-dns-management-admin, can configure this block.\nAuthorization is enforced by the API service.\nx-textBlockContent:\nControl which namespaces can use this zone for HTTP Load\nBalancer domains and auto-cert. Changes are restricted to DNS\nadministrators. When disabled, any namespace can use this zone.\nx-textBlockPosition: \"inside\"",
+            "title": "Namespace RBAC",
+            "x-displayname": "Namespace access for this DNS Zone",
+            "x-ves-oneof-field-mode": "[\"disabled\",\"enabled\"]",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.NamespaceRBAC",
+            "properties": {
+                "disabled": {
+                    "description": "Exclusive with [enabled]\n Any namespace can use this DNS zone for HTTP Load Balancer\n domains and auto-cert. DNS records can be managed based on\n existing DNS permissions",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "enabled": {
+                    "description": "Exclusive with [disabled]\n Map this DNS zone to authorized namespaces (up to 64). Only\n mapped namespaces can use this zone for HTTP Load Balancer\n domains and auto-cert, and manage DNS records in this zone.",
+                    "title": "Enabled",
+                    "$ref": "#/definitions/dns_zoneNamespaceRBACEnabled",
+                    "x-displayname": "Enabled"
+                }
+            }
+        },
+        "dns_zoneNamespaceRBACEnabled": {
+            "type": "object",
+            "title": "Enabled",
+            "x-displayname": "Enabled",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.NamespaceRBACEnabled",
+            "properties": {
+                "namespaces": {
+                    "type": "array",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Authorized namespaces",
+                    "minItems": 1,
+                    "maxItems": 64,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Authorized namespaces",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "dns_zonePrimaryDNSCreateSpecType": {
             "type": "object",
             "title": "PrimaryDNSCreateSpecType",
@@ -3959,7 +4023,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "allow_http_lb_managed_records": {
                     "type": "boolean",
-                    "description": " Option to allow user-created HTTP, TCP, and CDN load balancer related resource records to be automatically managed in a protected RRset.",
+                    "description": " Allow F5 Distributed Cloud services to automatically create and manage resource records in a protected RRset.",
                     "format": "boolean"
                 },
                 "default_rr_set_group": {
@@ -4011,7 +4075,7 @@ var APISwaggerJSON string = `{
                 },
                 "allow_http_lb_managed_records": {
                     "type": "boolean",
-                    "description": " Option to allow user-created HTTP, TCP, and CDN load balancer related resource records to be automatically managed in a protected RRset.",
+                    "description": " Allow F5 Distributed Cloud services to automatically create and manage resource records in a protected RRset.",
                     "format": "boolean"
                 },
                 "default_rr_set_group": {
@@ -4273,6 +4337,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-dns_type": "[\"primary\",\"secondary\"]",
             "x-ves-proto-message": "ves.io.schema.dns_zone.ReplaceSpecType",
             "properties": {
+                "namespace_rbac": {
+                    "description": " Namespace-based access control configuration for the DNS zone.\n Updates require a role that carries the f5xc-dns-standard-admin API group,\n such as f5xc-dns-management-admin.",
+                    "title": "Namespace RBAC",
+                    "$ref": "#/definitions/dns_zoneNamespaceRBAC",
+                    "x-displayname": "Namespace access for this DNS zone"
+                },
                 "primary": {
                     "description": "Exclusive with [secondary]\n Primary DNS",
                     "$ref": "#/definitions/dns_zonePrimaryDNSCreateSpecType",
@@ -5068,12 +5138,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -5416,20 +5486,26 @@ var APISwaggerJSON string = `{
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"none\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info none]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info none]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType",
                     "x-displayname": "Clear Secret"
+                },
+                "none": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info]\n No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.",
+                    "title": "None",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
                 }
             }
         },

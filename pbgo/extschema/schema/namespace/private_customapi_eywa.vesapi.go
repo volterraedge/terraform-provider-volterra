@@ -34,6 +34,14 @@ type CustomPrivateAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *CustomPrivateAPIGrpcClient) doRPCEvaluateBatchAPIAccessForUser(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &EvaluateBatchAPIAccessForUserRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.EvaluateBatchAPIAccessForUserRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.EvaluateBatchAPIAccessForUser(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomPrivateAPIGrpcClient) doRPCNamespaceStatus(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &NamespaceStatusRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -81,6 +89,7 @@ func NewCustomPrivateAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomPrivateAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["EvaluateBatchAPIAccessForUser"] = ccl.doRPCEvaluateBatchAPIAccessForUser
 	rpcFns["NamespaceStatus"] = ccl.doRPCNamespaceStatus
 	rpcFns["RemoveNamespaceFinalizerRestricted"] = ccl.doRPCRemoveNamespaceFinalizerRestricted
 	ccl.rpcFns = rpcFns
@@ -95,6 +104,92 @@ type CustomPrivateAPIRestClient struct {
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
 }
 
+func (c *CustomPrivateAPIRestClient) doRPCEvaluateBatchAPIAccessForUser(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &EvaluateBatchAPIAccessForUserRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.EvaluateBatchAPIAccessForUserRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		for _, item := range req.BatchNamespaceApiList {
+			q.Add("batch_namespace_api_list", fmt.Sprintf("%v", item))
+		}
+		q.Add("original_tenant", fmt.Sprintf("%v", req.OriginalTenant))
+		q.Add("tenant", fmt.Sprintf("%v", req.Tenant))
+		q.Add("user", fmt.Sprintf("%v", req.User))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &EvaluateBatchAPIAccessForUserResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.EvaluateBatchAPIAccessForUserResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomPrivateAPIRestClient) doRPCNamespaceStatus(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -286,6 +381,7 @@ func NewCustomPrivateAPIRestClient(baseURL string, hc http.Client) server.Custom
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["EvaluateBatchAPIAccessForUser"] = ccl.doRPCEvaluateBatchAPIAccessForUser
 	rpcFns["NamespaceStatus"] = ccl.doRPCNamespaceStatus
 	rpcFns["RemoveNamespaceFinalizerRestricted"] = ccl.doRPCRemoveNamespaceFinalizerRestricted
 	ccl.rpcFns = rpcFns
@@ -299,6 +395,10 @@ type customPrivateAPIInprocClient struct {
 	CustomPrivateAPIServer
 }
 
+func (c *customPrivateAPIInprocClient) EvaluateBatchAPIAccessForUser(ctx context.Context, in *EvaluateBatchAPIAccessForUserRequest, opts ...grpc.CallOption) (*EvaluateBatchAPIAccessForUserResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.CustomPrivateAPI.EvaluateBatchAPIAccessForUser")
+	return c.CustomPrivateAPIServer.EvaluateBatchAPIAccessForUser(ctx, in)
+}
 func (c *customPrivateAPIInprocClient) NamespaceStatus(ctx context.Context, in *NamespaceStatusRequest, opts ...grpc.CallOption) (*NamespaceStatusResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.CustomPrivateAPI.NamespaceStatus")
 	return c.CustomPrivateAPIServer.NamespaceStatus(ctx, in)
@@ -329,6 +429,39 @@ type customPrivateAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *customPrivateAPISrv) EvaluateBatchAPIAccessForUser(ctx context.Context, in *EvaluateBatchAPIAccessForUserRequest) (*EvaluateBatchAPIAccessForUserResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.CustomPrivateAPI")
+	cah, ok := ah.(CustomPrivateAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomPrivateAPIServer", ah)
+	}
+
+	var (
+		rsp *EvaluateBatchAPIAccessForUserResponse
+		err error
+	)
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.CustomPrivateAPI.EvaluateBatchAPIAccessForUser"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.EvaluateBatchAPIAccessForUser(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	return rsp, nil
+}
 func (s *customPrivateAPISrv) NamespaceStatus(ctx context.Context, in *NamespaceStatusRequest) (*NamespaceStatusResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.CustomPrivateAPI")
 	cah, ok := ah.(CustomPrivateAPIServer)
@@ -419,6 +552,98 @@ var CustomPrivateAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/ves.io.schema/introspect/read/tenant/{tenant}/evaluate-batch-api-access-for-user": {
+            "post": {
+                "summary": "Evaluate Batch API Access For User",
+                "description": "EvaluateBatchAPIAccessForUser is a custom private API that evaluates the access of a user to a batch of APIs.",
+                "operationId": "ves.io.schema.namespace.CustomPrivateAPI.EvaluateBatchAPIAccessForUser",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceEvaluateBatchAPIAccessForUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant",
+                        "description": "tenant\n\nx-example: \"acmecorp-ydqeaq\"\nThe tenant for which the API access is being evaluated.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Tenant"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceEvaluateBatchAPIAccessForUserRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomPrivateAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-customprivateapi-evaluatebatchapiaccessforuser"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.CustomPrivateAPI.EvaluateBatchAPIAccessForUser"
+            },
+            "x-displayname": "Custom Private APIs",
+            "x-ves-proto-service": "ves.io.schema.namespace.CustomPrivateAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
         "/ves.io.schema/introspect/read/tenant/{tenant}/namespace/{namespace}/status": {
             "get": {
                 "summary": "Namespace Status",
@@ -505,7 +730,6 @@ var CustomPrivateAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-customprivateapi-namespacestatus"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.namespace.CustomPrivateAPI.NamespaceStatus"
             },
             "x-displayname": "Custom Private APIs",
@@ -598,6 +822,234 @@ var CustomPrivateAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
+        },
+        "namespaceAPIItemListReq": {
+            "type": "object",
+            "description": "A request API item list.",
+            "title": "APIItemListReq",
+            "x-displayname": "API Item List Req",
+            "x-ves-proto-message": "ves.io.schema.namespace.APIItemListReq",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " A list of request API items.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n",
+                    "title": "items",
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/namespaceAPIItemReq"
+                    },
+                    "x-displayname": "Items",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "100"
+                    }
+                },
+                "list_id": {
+                    "type": "string",
+                    "description": " API item list identifier\n\nExample: - \"value\"-",
+                    "title": "list_id",
+                    "x-displayname": "List ID",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "namespaceAPIItemListResp": {
+            "type": "object",
+            "description": "A response API item list.\nresult will show combined AND output from the result of individual api items.",
+            "title": "APIItemListResp",
+            "x-displayname": "API Item List Resp",
+            "x-ves-proto-message": "ves.io.schema.namespace.APIItemListResp",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " A list of response API item lists.",
+                    "title": "items",
+                    "items": {
+                        "$ref": "#/definitions/namespaceAPIItemResp"
+                    },
+                    "x-displayname": "Items"
+                },
+                "list_id": {
+                    "type": "string",
+                    "description": " API item list identifier\n\nExample: - \"value\"-",
+                    "title": "list_id",
+                    "x-displayname": "List ID",
+                    "x-ves-example": "value"
+                },
+                "result": {
+                    "type": "boolean",
+                    "description": " Combined result after evaluation of items",
+                    "title": "result",
+                    "format": "boolean",
+                    "x-displayname": "Result"
+                }
+            }
+        },
+        "namespaceAPIItemReq": {
+            "type": "object",
+            "description": "A request API item.",
+            "title": "APIItemReq",
+            "x-displayname": "API Item Req",
+            "x-ves-proto-message": "ves.io.schema.namespace.APIItemReq",
+            "properties": {
+                "method": {
+                    "type": "string",
+                    "description": " HTTP request method\n\nExample: - \"GET\"-",
+                    "title": "method",
+                    "x-displayname": "Method",
+                    "x-ves-example": "GET"
+                },
+                "path": {
+                    "type": "string",
+                    "description": " HTTP request URL path\n\nExample: - \"/api/web/namespaces\"-",
+                    "title": "path",
+                    "x-displayname": "Path",
+                    "x-ves-example": "/api/web/namespaces"
+                }
+            }
+        },
+        "namespaceAPIItemResp": {
+            "type": "object",
+            "description": "A response API item.",
+            "title": "APIItemResp",
+            "x-displayname": "API Item Resp",
+            "x-ves-oneof-field-access_enablers": "[\"addon_services\",\"none\"]",
+            "x-ves-proto-message": "ves.io.schema.namespace.APIItemResp",
+            "properties": {
+                "addon_services": {
+                    "description": "Exclusive with [none]\n List of addon services API is part of.",
+                    "title": "addon_services",
+                    "$ref": "#/definitions/namespaceAccessEnablerAddonService",
+                    "x-displayname": "Addon Services"
+                },
+                "method": {
+                    "type": "string",
+                    "description": " HTTP request method\n\nExample: - \"GET\"-",
+                    "title": "method",
+                    "x-displayname": "Method",
+                    "x-ves-example": "GET"
+                },
+                "none": {
+                    "description": "Exclusive with [addon_services]\n Default value, when there's no other access enabler choice populated.",
+                    "title": "none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
+                },
+                "path": {
+                    "type": "string",
+                    "description": " HTTP request URL path\n\nExample: - \"/api/web/namespaces\"-",
+                    "title": "path",
+                    "x-displayname": "Path",
+                    "x-ves-example": "/api/web/namespaces"
+                },
+                "result": {
+                    "type": "boolean",
+                    "description": " Result after evaluation",
+                    "title": "result",
+                    "format": "boolean",
+                    "x-displayname": "Result"
+                }
+            }
+        },
+        "namespaceAccessEnablerAddonService": {
+            "type": "object",
+            "description": "An addon service details schema",
+            "title": "AccessEnablerAddonService",
+            "x-displayname": "Access Enabler Addon Service",
+            "x-ves-proto-message": "ves.io.schema.namespace.AccessEnablerAddonService",
+            "properties": {
+                "addon_service_names": {
+                    "type": "array",
+                    "description": " List of addon service names.",
+                    "title": "addon_service_names",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Addon Service Names"
+                }
+            }
+        },
+        "namespaceEvaluateBatchAPIAccessForUserRequest": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.namespace.EvaluateBatchAPIAccessForUserRequest",
+            "properties": {
+                "batch_namespace_api_list": {
+                    "type": "array",
+                    "description": " List of namespaces and associated API list entries to evaluate.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 75\n",
+                    "title": "batch_namespace_api_list",
+                    "maxItems": 75,
+                    "items": {
+                        "$ref": "#/definitions/namespaceNamespaceAPIListReq"
+                    },
+                    "x-displayname": "Batch Namespace API List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "75"
+                    }
+                },
+                "original_tenant": {
+                    "type": "string",
+                    "description": " Original_tenant is the Tenant ID that the user belongs to. In delegated access (DA) and child-tenant flows, this is set to the parent tenant. Otherwise, this value must be equal to tenant.\n\nExample: - \"acmecorp-ydqeaq\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "original_tenant",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Original Tenant",
+                    "x-ves-example": "acmecorp-ydqeaq",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " The tenant for which the API access is being evaluated.\n\nExample: - \"acmecorp-ydqeaq\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "tenant",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp-ydqeaq",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "user": {
+                    "type": "string",
+                    "description": " The user for which the API access is being evaluated.\n\nExample: - \"joe.doe@acme.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "user",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "User",
+                    "x-ves-example": "joe.doe@acme.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                }
+            }
+        },
+        "namespaceEvaluateBatchAPIAccessForUserResponse": {
+            "type": "object",
+            "description": "Response body containing evaluated API access per namespace.",
+            "title": "EvaluateBatchAPIAccessForUserResponse",
+            "x-displayname": "Evaluate Batch API Access For User Response",
+            "x-ves-proto-message": "ves.io.schema.namespace.EvaluateBatchAPIAccessForUserResponse",
+            "properties": {
+                "batch_namespace_api_list": {
+                    "type": "array",
+                    "description": " Evaluated results for each namespace and associated API item lists.",
+                    "title": "batch_namespace_api_list",
+                    "items": {
+                        "$ref": "#/definitions/namespaceNamespaceAPIListResp"
+                    },
+                    "x-displayname": "Batch Namespace API List"
+                }
+            }
+        },
         "namespaceFinalizerStatus": {
             "type": "string",
             "description": "x-displayName: \"Finalizer Status\"\nIt specifies the deletion status in remote service\n\n - FINALIZER_UNKNOWN: FINALIZER UNKNOWN\n\nx-displayName: \"FINALIZER UNKNOWN\"\nUnknown state\n - REMOVING_REF_OBJECTS: Removing Namespace Reference Objects\n\nx-displayName: \"Remove Namespace Reference Objects\"\nIt means that namespace reference objects are getting removed from remote service\n - REF_OBJECTS_REMOVED: Namespace Reference Removed\n\nx-displayName: \"Namespace Reference Removed\"\nIt means that namespace reference objects are successfully removed from remote service\n - DELETION_IN_PROGRESS: Deleting\n\nx-displayName: \"Deleting\"\nIt means that namespace is deleting from remote service or in retry mode.\n - DELETED: Deleted\n\nx-displayName: \"Deleted\"\nIt means that object is successfully deleted in the remote service\n - DELETE_FAILED: Delete Failed\n\nx-displayName: \"Delete Failed\"\nIt means that object is failed to delete in the remote service. All retries are exhausted",
@@ -624,20 +1076,75 @@ var CustomPrivateAPISwaggerJSON string = `{
             ],
             "default": "INITIALIZER_UNKNOWN"
         },
-        "namespaceNamespaceState": {
+        "namespaceNamespaceAPIListReq": {
+            "type": "object",
+            "description": "NamespaceAPIListReq holds the namespace and its associated APIs",
+            "title": "NamespaceAPIListReq",
+            "x-displayname": "Namespace API List",
+            "x-ves-proto-message": "ves.io.schema.namespace.NamespaceAPIListReq",
+            "properties": {
+                "item_lists": {
+                    "type": "array",
+                    "description": " A list of request API item lists.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 15\n",
+                    "title": "item_lists",
+                    "maxItems": 15,
+                    "items": {
+                        "$ref": "#/definitions/namespaceAPIItemListReq"
+                    },
+                    "x-displayname": "Item Lists",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "15"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Name of the namespace under which all the URLs in APIItems will be evaluated\n\nExample: - \"value\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "namespaceNamespaceAPIListResp": {
+            "type": "object",
+            "description": "NamespaceAPIListResp holds the namespace and its associated APIs",
+            "title": "NamespaceAPIListResp",
+            "x-displayname": "Namespace API List Resp",
+            "x-ves-proto-message": "ves.io.schema.namespace.NamespaceAPIListResp",
+            "properties": {
+                "item_lists": {
+                    "type": "array",
+                    "description": " A list of response API item lists.",
+                    "title": "item_lists",
+                    "items": {
+                        "$ref": "#/definitions/namespaceAPIItemListResp"
+                    },
+                    "x-displayname": "Item Lists"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Name of the namespace under which all the URLs in item lists were evaluated\n\nExample: - \"value\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "namespaceNamespaceObjectStatus": {
             "type": "string",
-            "description": "It specifies the state of namespace\n\n - UNKNOWN: UNKNOWN\n\nUNKNOWN state\n - CREATING: CREATING\n\nIt means that namespace is in creation process and creation is pending in some remote services.\n - ACTIVE: ACTIVE\n\nIt means that namespace is active\n - PREPARING_DELETION: PREPARING DELETION\n\nIt means that it is preparing for delete by first removing the ref objects in remote services\n - DELETING: DELETING\n\nIt means that namespace is in deletion process and deletion is pending in some remote services.",
-            "title": "Namespace State",
+            "description": "Represents the final calculated status for the namespace across all remote services\n\n - NAMESPACE_STATUS_UNKNOWN: NAMESPACE STATUS UNKNOWN\n\nUnknown or unspecified status\n - NAMESPACE_CREATING: NAMESPACE CREATING\n\nNamespace is being created across remote services\n - NAMESPACE_CREATE_FAILED: NAMESPACE CREATE FAILED\n\nNamespace creation failed in one or more remote services\n - NAMESPACE_ACTIVE: NAMESPACE ACTIVE\n\nNamespace is active and successfully created across all remote services\n - NAMESPACE_DELETING: NAMESPACE DELETING\n\nNamespace is being deleted across remote services\n - NAMESPACE_DELETE_FAILED: NAMESPACE DELETE FAILED\n\nNamespace deletion failed in one or more remote services",
+            "title": "Namespace Object Status",
             "enum": [
-                "UNKNOWN",
-                "CREATING",
-                "ACTIVE",
-                "PREPARING_DELETION",
-                "DELETING"
+                "NAMESPACE_STATUS_UNKNOWN",
+                "NAMESPACE_CREATING",
+                "NAMESPACE_CREATE_FAILED",
+                "NAMESPACE_ACTIVE",
+                "NAMESPACE_DELETING",
+                "NAMESPACE_DELETE_FAILED"
             ],
-            "default": "UNKNOWN",
-            "x-displayname": "Namespace State",
-            "x-ves-proto-enum": "ves.io.schema.namespace.NamespaceState"
+            "default": "NAMESPACE_STATUS_UNKNOWN",
+            "x-displayname": "Namespace Object Status",
+            "x-ves-proto-enum": "ves.io.schema.namespace.NamespaceObjectStatus"
         },
         "namespaceNamespaceStatusResponse": {
             "type": "object",
@@ -652,11 +1159,11 @@ var CustomPrivateAPISwaggerJSON string = `{
                     "title": "Message",
                     "x-displayname": "Message"
                 },
-                "namespace_state": {
-                    "description": " It specifies the namespace state",
-                    "title": "Namespace State",
-                    "$ref": "#/definitions/namespaceNamespaceState",
-                    "x-displayname": "Namespace State"
+                "namespace_status": {
+                    "description": " Represents the final calculated status for the namespace across all remote services",
+                    "title": "Namespace Status",
+                    "$ref": "#/definitions/namespaceNamespaceObjectStatus",
+                    "x-displayname": "Namespace Status"
                 },
                 "pending_finalizers": {
                     "description": "Exclusive with [pending_initializers]\n It specifies the pending finalizers",

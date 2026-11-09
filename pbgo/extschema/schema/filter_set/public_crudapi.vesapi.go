@@ -2214,6 +2214,25 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "filter_setAdvancedFilterExpressionField": {
+            "type": "object",
+            "title": "AdvancedFilterExpressionField",
+            "x-displayname": "Advanced Filter Expression Field",
+            "x-ves-proto-message": "ves.io.schema.filter_set.AdvancedFilterExpressionField",
+            "properties": {
+                "expression": {
+                    "type": "string",
+                    "description": " A JSON-encoded advanced filter expression for a query builder. Supports recursive groups, where each group can contain any number of queries or nested groups,\n combined with logical operators (AND/OR). This allows users to build complex, nested filter logic.\n\nExample: - \"{\\\"filters\\\":{\\\"advancedFilters\\\":{\\\"type\\\":\\\"group\\\",\\\"group\\\":[{\\\"type\\\":\\\"query\\\",\\\"key\\\":\\\"COUNTRY\\\",\\\"op\\\":\\\"in\\\",\\\"values\\\":[\\\"US\\\",\\\"CA\\\"]},{\\\"type\\\":\\\"logical_operator\\\",\\\"operator\\\":\\\"OR\\\"},{\\\"type\\\":\\\"query\\\",\\\"key\\\":\\\"IP_ADDRESS\\\",\\\"op\\\":\\\"matchesRegex\\\",\\\"values\\\":[\\\"192.168.23.23\\\"]}]}}}\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "expression",
+                    "x-displayname": "Expression Value",
+                    "x-ves-example": "{\\\"filters\\\":{\\\"advancedFilters\\\":{\\\"type\\\":\\\"group\\\",\\\"group\\\":[{\\\"type\\\":\\\"query\\\",\\\"key\\\":\\\"COUNTRY\\\",\\\"op\\\":\\\"in\\\",\\\"values\\\":[\\\"US\\\",\\\"CA\\\"]},{\\\"type\\\":\\\"logical_operator\\\",\\\"operator\\\":\\\"OR\\\"},{\\\"type\\\":\\\"query\\\",\\\"key\\\":\\\"IP_ADDRESS\\\",\\\"op\\\":\\\"matchesRegex\\\",\\\"values\\\":[\\\"192.168.23.23\\\"]}]}}}",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "filter_setCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -2346,11 +2365,21 @@ var APISwaggerJSON string = `{
             "description": "a field ID and its value selected by the user",
             "title": "FilterSetField",
             "x-displayname": "Filter Set Field",
-            "x-ves-oneof-field-field_value": "[\"date_field\",\"filter_expression_field\",\"string_field\"]",
+            "x-ves-oneof-field-field_value": "[\"advanced_filter_expression_field\",\"date_field\",\"filter_expression_field\",\"string_field\"]",
             "x-ves-proto-message": "ves.io.schema.filter_set.FilterSetField",
             "properties": {
+                "advanced_filter_expression_field": {
+                    "description": "Exclusive with [date_field filter_expression_field string_field]\n\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "filter_label advanced selector expression field",
+                    "$ref": "#/definitions/filter_setAdvancedFilterExpressionField",
+                    "x-displayname": "Group \u0026 Query Selector Expression",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
                 "date_field": {
-                    "description": "Exclusive with [filter_expression_field string_field]\n",
+                    "description": "Exclusive with [advanced_filter_expression_field filter_expression_field string_field]\n",
                     "title": "date_field",
                     "$ref": "#/definitions/filter_setFilterTimeRangeField",
                     "x-displayname": "Date/Time Range"
@@ -2366,13 +2395,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "filter_expression_field": {
-                    "description": "Exclusive with [date_field string_field]\n",
+                    "description": "Exclusive with [advanced_filter_expression_field date_field string_field]\n",
                     "title": "filter_label selector expression field",
                     "$ref": "#/definitions/filter_setFilterExpressionField",
                     "x-displayname": "Key/Value Selector Expression"
                 },
                 "string_field": {
-                    "description": "Exclusive with [date_field filter_expression_field]\n",
+                    "description": "Exclusive with [advanced_filter_expression_field date_field filter_expression_field]\n",
                     "title": "string_field",
                     "$ref": "#/definitions/filter_setFilterStringField",
                     "x-displayname": "String"
@@ -2808,12 +2837,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {

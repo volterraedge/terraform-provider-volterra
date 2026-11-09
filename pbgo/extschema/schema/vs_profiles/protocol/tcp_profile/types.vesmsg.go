@@ -32,6 +32,18 @@ func (m *CreateSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.Md5SignaturePassphrase = ""
+
+	return nil
+}
+
 func (m *CreateSpecType) DeepCopy() *CreateSpecType {
 	if m == nil {
 		return nil
@@ -1224,6 +1236,18 @@ func (m *GetSpecType) ToJSON() (string, error) {
 
 func (m *GetSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GetSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.Md5SignaturePassphrase = ""
+
+	return nil
 }
 
 func (m *GetSpecType) DeepCopy() *GetSpecType {
@@ -2419,6 +2443,32 @@ func (m *GlobalSpecType) ToJSON() (string, error) {
 func (m *GlobalSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
+func (m *GlobalSpecType) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.string()
+}
+
+func (m *GlobalSpecType) GoString() string {
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.Md5SignaturePassphrase = ""
+
+	return nil
+}
 
 func (m *GlobalSpecType) DeepCopy() *GlobalSpecType {
 	if m == nil {
@@ -3612,6 +3662,18 @@ func (m *ReplaceSpecType) ToJSON() (string, error) {
 
 func (m *ReplaceSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.Md5SignaturePassphrase = ""
+
+	return nil
 }
 
 func (m *ReplaceSpecType) DeepCopy() *ReplaceSpecType {

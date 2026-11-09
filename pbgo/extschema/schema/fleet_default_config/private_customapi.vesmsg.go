@@ -66,6 +66,13 @@ func (m *FDCRefList) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetFdcRefListDRefInfo()
 }
+func (m *FDCRefList) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetFdcRefListDRefInfoForOverlay(generateHash)
+}
 
 func (m *FDCRefList) GetFdcRefListDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetFdcRefList()
@@ -78,6 +85,34 @@ func (m *FDCRefList) GetFdcRefListDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("FDCRefList.fdc_ref_list[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "fleet_default_config.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "fdc_ref_list",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *FDCRefList) GetFdcRefListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetFdcRefList()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("FDCRefList.fdc_ref_list[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "fleet_default_config.Object",
 			RefdUID:    ref.Uid,
@@ -328,6 +363,13 @@ func (m *FleetDefaultConfigDependencyMapRsp) GetDRefInfo() ([]db.DRefInfo, error
 
 	return m.GetRefMapDRefInfo()
 }
+func (m *FleetDefaultConfigDependencyMapRsp) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRefMapDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *FleetDefaultConfigDependencyMapRsp) GetRefMapDRefInfo() ([]db.DRefInfo, error) {
@@ -339,6 +381,26 @@ func (m *FleetDefaultConfigDependencyMapRsp) GetRefMapDRefInfo() ([]db.DRefInfo,
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRefMap() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("ref_map[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *FleetDefaultConfigDependencyMapRsp) GetRefMapDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRefMap() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRefMap() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRefMap() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]

@@ -24,7 +24,7 @@ resource "volterra_bgp_routing_policy" "example" {
     action {
       // One of the arguments from this list "allow as_path community deny local_preference metric" can be set
 
-      deny = true
+      allow = true
     }
 
     match {

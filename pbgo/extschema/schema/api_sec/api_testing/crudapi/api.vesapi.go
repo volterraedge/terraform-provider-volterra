@@ -2584,19 +2584,20 @@ var APISwaggerJSON string = `{
             "properties": {
                 "key": {
                     "type": "string",
-                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.pattern: ^[a-zA-Z0-9][a-zA-Z0-9_.-]*$\n",
                     "title": "Api Key",
                     "maxLength": 128,
                     "x-displayname": "Key",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "128"
+                        "ves.io.schema.rules.string.max_len": "128",
+                        "ves.io.schema.rules.string.pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]*$"
                     }
                 },
                 "value": {
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n",
-                    "title": "Api Key Value",
+                    "title": "API Key Value",
                     "$ref": "#/definitions/schemaSecretType",
                     "maximum": 128,
                     "x-displayname": "Value",
@@ -2605,6 +2606,95 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "128"
                     }
+                }
+            }
+        },
+        "api_testingApiTestScanInfo": {
+            "type": "object",
+            "description": "ApiTestScanInfo represents the status and metadata of a single domain's API test scan",
+            "title": "API Test Scan Information",
+            "x-displayname": "API Test Scan Information",
+            "x-ves-proto-message": "ves.io.schema.api_sec.api_testing.ApiTestScanInfo",
+            "properties": {
+                "completed_at": {
+                    "type": "string",
+                    "description": " Timestamp when the scan completed",
+                    "title": "completed_at",
+                    "format": "date-time",
+                    "x-displayname": "Completed At"
+                },
+                "created_at": {
+                    "type": "string",
+                    "description": " Timestamp when the scan was created/queued",
+                    "title": "created_at",
+                    "format": "date-time",
+                    "x-displayname": "Created At"
+                },
+                "domain": {
+                    "type": "string",
+                    "description": " The domain being tested\n\nExample: - \"example1.com\"-",
+                    "title": "domain",
+                    "x-displayname": "Domain",
+                    "x-ves-example": "example1.com"
+                },
+                "error": {
+                    "type": "string",
+                    "description": " Error message if the scan encountered any issues\n\nExample: - \"Authentication failed\"-",
+                    "title": "error",
+                    "x-displayname": "Error Message",
+                    "x-ves-example": "Authentication failed"
+                },
+                "last_status_update": {
+                    "type": "string",
+                    "description": " Timestamp of the last status update",
+                    "title": "last_status_update",
+                    "format": "date-time",
+                    "x-displayname": "Last Status Updated"
+                },
+                "started_at": {
+                    "type": "string",
+                    "description": " Timestamp when the scan started processing",
+                    "title": "started_at",
+                    "format": "date-time",
+                    "x-displayname": "Started At"
+                },
+                "status": {
+                    "description": " Current status of the scan\n\nExample: - \"In Progress\"-",
+                    "title": "status",
+                    "$ref": "#/definitions/api_testingApiTestingScanStatus",
+                    "x-displayname": "Status",
+                    "x-ves-example": "In Progress"
+                }
+            }
+        },
+        "api_testingApiTestingScanStatus": {
+            "type": "string",
+            "description": "Represents the current status of an API testing scan for a domain\n\nDefault unspecified status\nScan is queued and waiting to start\nScan is currently in progress\nScan has successfully completed\nScan has failed",
+            "title": "API Testing Scan Status",
+            "enum": [
+                "UNSPECIFIED",
+                "PENDING",
+                "IN_PROGRESS",
+                "DONE",
+                "FAILED"
+            ],
+            "default": "UNSPECIFIED",
+            "x-displayname": "API Testing Scan Status",
+            "x-ves-proto-enum": "ves.io.schema.api_sec.api_testing.ApiTestingScanStatus"
+        },
+        "api_testingApiTestingStatus": {
+            "type": "object",
+            "description": "Contains aggregate status information for API testing of this load balancer",
+            "title": "API Testing Status",
+            "x-displayname": "API Testing Status",
+            "x-ves-proto-message": "ves.io.schema.api_sec.api_testing.ApiTestingStatus",
+            "properties": {
+                "last_updated": {
+                    "type": "string",
+                    "description": " Timestamp of the most recent scan status change across all tested domains",
+                    "title": "last_updated",
+                    "format": "date-time",
+                    "x-displayname": "Last Updated"
                 }
             }
         },
@@ -2695,14 +2785,15 @@ var APISwaggerJSON string = `{
                 },
                 "credential_name": {
                     "type": "string",
-                    "description": " Enter a unique name for the credentials used in API testing\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Enter a unique name for the credentials used in API testing\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^[a-zA-Z0-9][a-zA-Z0-9_.-]*$\n",
                     "title": "Credential Name",
                     "maxLength": 64,
                     "x-displayname": "Name",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "64"
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]*$"
                     }
                 },
                 "login_endpoint": {
@@ -2770,12 +2861,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "custom_header_value": {
                     "type": "string",
-                    "description": " Add x-f5-api-testing-identifier header value to prevent security flags on API testing traffic\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "description": " Add x-f5-api-testing-identifier header value to prevent security flags on API testing traffic\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.pattern: ^[^\\\\x00-\\\\x08\\\\x0A-\\\\x1F\\\\x7F]*$\n",
                     "title": "Custom Header Value",
                     "maxLength": 128,
                     "x-displayname": "Custom Header",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "128"
+                        "ves.io.schema.rules.string.max_len": "128",
+                        "ves.io.schema.rules.string.pattern": "^[^\\\\x00-\\\\x08\\\\x0A-\\\\x1F\\\\x7F]*$"
                     }
                 },
                 "domains": {
@@ -2887,6 +2979,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Status Object",
             "x-ves-proto-message": "ves.io.schema.api_sec.api_testing.StatusObject",
             "properties": {
+                "api_testing_status": {
+                    "description": " Aggregate status information for API testing including last update timestamp",
+                    "title": "api_testing_status",
+                    "$ref": "#/definitions/api_testingApiTestingStatus",
+                    "x-displayname": "API Testing Status"
+                },
                 "conditions": {
                     "type": "array",
                     "description": " Conditions reported by various component of the system.",
@@ -2894,7 +2992,8 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/schemaConditionType"
                     },
-                    "x-displayname": "Conditions"
+                    "x-displayname": "Conditions",
+                    "x-ves-deprecated": "Unused"
                 },
                 "metadata": {
                     "description": " Standard status's metadata",
@@ -2910,6 +3009,15 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                },
+                "scans": {
+                    "type": "array",
+                    "description": " List of current scanning status for all domains configured for API Testing",
+                    "title": "scans",
+                    "items": {
+                        "$ref": "#/definitions/api_testingApiTestScanInfo"
+                    },
+                    "x-displayname": "Scans Status"
                 }
             }
         },
@@ -3290,12 +3398,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -3472,20 +3580,26 @@ var APISwaggerJSON string = `{
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"none\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info none]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info none]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType",
                     "x-displayname": "Clear Secret"
+                },
+                "none": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info]\n No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.",
+                    "title": "None",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "None"
                 }
             }
         },

@@ -246,6 +246,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDnsLbPoolsDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDnsLbPoolsDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetSpecType) GetDnsLbPoolsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetDnsLbPools()
@@ -260,6 +267,30 @@ func (m *GetSpecType) GetDnsLbPoolsDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dns_lb_pool.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_lb_pool.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_lb_pools",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetDnsLbPoolsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsLbPools()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.dns_lb_pools[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_lb_pool.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "dns_lb_pool.Object",
 			RefdTenant: vref.Tenant,
@@ -494,6 +525,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDnsLbPoolsDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDnsLbPoolsDRefInfoForOverlay(generateHash)
+}
 
 func (m *GlobalSpecType) GetDnsLbPoolsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetDnsLbPools()
@@ -508,6 +546,30 @@ func (m *GlobalSpecType) GetDnsLbPoolsDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dns_lb_pool.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_lb_pool.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_lb_pools",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetDnsLbPoolsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsLbPools()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dns_lb_pools[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_lb_pool.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "dns_lb_pool.Object",
 			RefdTenant: vref.Tenant,
@@ -947,8 +1009,7 @@ var DefaultHttpHealthCheckValidator = func() *ValidateHttpHealthCheck {
 	v.FldValidators["virtual_host_choice"] = vFn
 	vrhVirtualHostChoiceVirtualHost := v.VirtualHostChoiceVirtualHostValidationRuleHandler
 	rulesVirtualHostChoiceVirtualHost := map[string]string{
-		"ves.io.schema.rules.string.hostname": "true",
-		"ves.io.schema.rules.string.max_len":  "2048",
+		"ves.io.schema.rules.string.max_len": "2048",
 	}
 	vFnMap["virtual_host_choice.virtual_host"], err = vrhVirtualHostChoiceVirtualHost(rulesVirtualHostChoiceVirtualHost)
 	if err != nil {

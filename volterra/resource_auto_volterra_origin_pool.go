@@ -1482,10 +1482,21 @@ func resourceVolterraOriginPool() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -3996,6 +4007,15 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 													}
 
+													if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -4425,6 +4445,7 @@ func setOriginPoolFields(client *APIClient, d *schema.ResourceData, resp vesapi.
 	d.Set("disable", metadata.GetDisable())
 
 	d.Set("labels", metadata.GetLabels())
+
 	d.Set("name", metadata.GetName())
 
 	d.Set("namespace", metadata.GetNamespace())
@@ -6674,6 +6695,15 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 															}
 														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
 
 													}
 

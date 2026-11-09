@@ -81,8 +81,43 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFallbackPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFallbackPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRuleListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRuleListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *CreateSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetFallbackPool()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("dns_lb_pool.Object")
+	dri := db.DRefInfo{
+		RefdType:   "dns_lb_pool.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "fallback_pool",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *CreateSpecType) GetFallbackPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetFallbackPool()
 	if vref == nil {
 		return nil, nil
@@ -135,6 +170,22 @@ func (m *CreateSpecType) GetRuleListDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetRuleList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "rule_list." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetRuleListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRuleList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRuleList().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRuleList().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -321,6 +372,29 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDnsZonesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDnsZonesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetFallbackPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFallbackPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRuleListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRuleListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetDnsZonesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetDnsZones()
@@ -335,6 +409,30 @@ func (m *GetSpecType) GetDnsZonesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dns_zone.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_zone.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_zones",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetDnsZonesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsZones()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.dns_zones[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_zone.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "dns_zone.Object",
 			RefdTenant: vref.Tenant,
@@ -392,6 +490,23 @@ func (m *GetSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return []db.DRefInfo{dri}, nil
 }
+func (m *GetSpecType) GetFallbackPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vref := m.GetFallbackPool()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("dns_lb_pool.Object")
+	dri := db.DRefInfo{
+		RefdType:   "dns_lb_pool.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "fallback_pool",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
 
 // GetFallbackPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GetSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -428,6 +543,22 @@ func (m *GetSpecType) GetRuleListDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetRuleList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "rule_list." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetRuleListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRuleList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRuleList().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRuleList().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -624,6 +755,29 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDnsZonesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDnsZonesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetFallbackPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFallbackPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRuleListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRuleListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetDnsZonesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetDnsZones()
@@ -638,6 +792,30 @@ func (m *GlobalSpecType) GetDnsZonesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dns_zone.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_zone.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_zones",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetDnsZonesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsZones()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dns_zones[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_zone.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "dns_zone.Object",
 			RefdTenant: vref.Tenant,
@@ -695,6 +873,23 @@ func (m *GlobalSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return []db.DRefInfo{dri}, nil
 }
+func (m *GlobalSpecType) GetFallbackPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vref := m.GetFallbackPool()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("dns_lb_pool.Object")
+	dri := db.DRefInfo{
+		RefdType:   "dns_lb_pool.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "fallback_pool",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
 
 // GetFallbackPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -731,6 +926,22 @@ func (m *GlobalSpecType) GetRuleListDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetRuleList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "rule_list." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetRuleListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRuleList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRuleList().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRuleList().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -922,8 +1133,50 @@ func (m *LoadBalancingRule) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *LoadBalancingRule) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetActionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetActionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetClientChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClientChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *LoadBalancingRule) GetActionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetActionChoice().(type) {
+	case *LoadBalancingRule_Pool:
+		vref := m.GetPool()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_lb_pool.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dns_lb_pool.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "pool",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *LoadBalancingRule_Nxdomain:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *LoadBalancingRule) GetActionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetActionChoice().(type) {
 	case *LoadBalancingRule_Pool:
 		vref := m.GetPool()
@@ -1023,6 +1276,59 @@ func (m *LoadBalancingRule) GetClientChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ip_prefix_set." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *LoadBalancingRule) GetClientChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetClientChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetClientChoice().(type) {
+	case *LoadBalancingRule_GeoLocationLabelSelector:
+		return nil, nil
+	case *LoadBalancingRule_GeoLocationSet:
+		vref := m.GetGeoLocationSet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("geo_location_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "geo_location_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "geo_location_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *LoadBalancingRule_AsnList:
+		return nil, nil
+	case *LoadBalancingRule_AsnMatcher:
+		drInfos, err := m.GetAsnMatcher().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "asn_matcher." + dri.DRField
+		}
+		return drInfos, err
+	case *LoadBalancingRule_IpPrefixList:
+		return nil, nil
+	case *LoadBalancingRule_IpPrefixSet:
+		drInfos, err := m.GetIpPrefixSet().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1298,6 +1604,13 @@ func (m *LoadBalancingRuleList) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRulesDRefInfo()
 }
+func (m *LoadBalancingRuleList) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRulesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *LoadBalancingRuleList) GetRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -1309,6 +1622,26 @@ func (m *LoadBalancingRuleList) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *LoadBalancingRuleList) GetRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRules() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRules() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRules() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1479,8 +1812,43 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFallbackPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFallbackPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRuleListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRuleListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ReplaceSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetFallbackPool()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("dns_lb_pool.Object")
+	dri := db.DRefInfo{
+		RefdType:   "dns_lb_pool.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "fallback_pool",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ReplaceSpecType) GetFallbackPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetFallbackPool()
 	if vref == nil {
 		return nil, nil
@@ -1533,6 +1901,22 @@ func (m *ReplaceSpecType) GetRuleListDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetRuleList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "rule_list." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetRuleListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRuleList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRuleList().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRuleList().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

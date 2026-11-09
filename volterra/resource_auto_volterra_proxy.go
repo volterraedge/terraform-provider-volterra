@@ -302,6 +302,18 @@ func resourceVolterraProxy() *schema.Resource {
 													Optional: true,
 												},
 
+												"disable_http10": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"enable_http10": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"idle_timeout": {
 													Type:     schema.TypeInt,
 													Optional: true,
@@ -495,10 +507,21 @@ func resourceVolterraProxy() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -684,10 +707,21 @@ func resourceVolterraProxy() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -987,10 +1021,21 @@ func resourceVolterraProxy() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -1176,10 +1221,21 @@ func resourceVolterraProxy() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -1488,6 +1544,18 @@ func resourceVolterraProxy() *schema.Resource {
 													Optional: true,
 												},
 
+												"disable_http10": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"enable_http10": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"idle_timeout": {
 													Type:     schema.TypeInt,
 													Optional: true,
@@ -1681,10 +1749,21 @@ func resourceVolterraProxy() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -1870,10 +1949,21 @@ func resourceVolterraProxy() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -2173,10 +2263,21 @@ func resourceVolterraProxy() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -2362,10 +2463,21 @@ func resourceVolterraProxy() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -2739,10 +2851,21 @@ func resourceVolterraProxy() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -3213,11 +3336,23 @@ func resourceVolterraProxy() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:       schema.TypeString,
 																						Required:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -3541,6 +3676,18 @@ func resourceVolterraProxy() *schema.Resource {
 										Optional: true,
 									},
 
+									"disable_http10": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable_http10": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
 									"idle_timeout": {
 										Type:     schema.TypeInt,
 										Optional: true,
@@ -3734,10 +3881,21 @@ func resourceVolterraProxy() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -3923,10 +4081,21 @@ func resourceVolterraProxy() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -4226,10 +4395,21 @@ func resourceVolterraProxy() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -4415,10 +4595,21 @@ func resourceVolterraProxy() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -4928,10 +5119,21 @@ func resourceVolterraProxy() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:     schema.TypeString,
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -5450,6 +5652,32 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 											moreOption.DisableDefaultErrorPages = w.(bool)
 										}
 
+										http10ChoiceTypeFound := false
+
+										if v, ok := moreOptionMapStrToI["disable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+											http10ChoiceTypeFound = true
+
+											if v.(bool) {
+												http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_DisableHttp10{}
+												http10ChoiceInt.DisableHttp10 = &ves_io_schema.Empty{}
+												moreOption.Http10Choice = http10ChoiceInt
+											}
+
+										}
+
+										if v, ok := moreOptionMapStrToI["enable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+											http10ChoiceTypeFound = true
+
+											if v.(bool) {
+												http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_EnableHttp10{}
+												http10ChoiceInt.EnableHttp10 = &ves_io_schema.Empty{}
+												moreOption.Http10Choice = http10ChoiceInt
+											}
+
+										}
+
 										if w, ok := moreOptionMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
 											moreOption.IdleTimeout = uint32(w.(int))
 										}
@@ -5694,6 +5922,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 																}
 
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -5925,6 +6162,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -6402,6 +6648,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 																}
 
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -6633,6 +6888,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -7073,6 +7337,32 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 											moreOption.DisableDefaultErrorPages = w.(bool)
 										}
 
+										http10ChoiceTypeFound := false
+
+										if v, ok := moreOptionMapStrToI["disable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+											http10ChoiceTypeFound = true
+
+											if v.(bool) {
+												http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_DisableHttp10{}
+												http10ChoiceInt.DisableHttp10 = &ves_io_schema.Empty{}
+												moreOption.Http10Choice = http10ChoiceInt
+											}
+
+										}
+
+										if v, ok := moreOptionMapStrToI["enable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+											http10ChoiceTypeFound = true
+
+											if v.(bool) {
+												http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_EnableHttp10{}
+												http10ChoiceInt.EnableHttp10 = &ves_io_schema.Empty{}
+												moreOption.Http10Choice = http10ChoiceInt
+											}
+
+										}
+
 										if w, ok := moreOptionMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
 											moreOption.IdleTimeout = uint32(w.(int))
 										}
@@ -7317,6 +7607,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 																}
 
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -7548,6 +7847,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -8025,6 +8333,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 																}
 
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -8256,6 +8573,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -8773,6 +9099,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 																		}
 																	}
+
+																}
+
+																if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	privateKey.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -9396,6 +9731,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 																}
 
+																if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -9847,6 +10191,32 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 								moreOption.DisableDefaultErrorPages = w.(bool)
 							}
 
+							http10ChoiceTypeFound := false
+
+							if v, ok := moreOptionMapStrToI["disable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+								http10ChoiceTypeFound = true
+
+								if v.(bool) {
+									http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_DisableHttp10{}
+									http10ChoiceInt.DisableHttp10 = &ves_io_schema.Empty{}
+									moreOption.Http10Choice = http10ChoiceInt
+								}
+
+							}
+
+							if v, ok := moreOptionMapStrToI["enable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+								http10ChoiceTypeFound = true
+
+								if v.(bool) {
+									http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_EnableHttp10{}
+									http10ChoiceInt.EnableHttp10 = &ves_io_schema.Empty{}
+									moreOption.Http10Choice = http10ChoiceInt
+								}
+
+							}
+
 							if w, ok := moreOptionMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
 								moreOption.IdleTimeout = uint32(w.(int))
 							}
@@ -10091,6 +10461,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 													}
 
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -10322,6 +10701,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 															}
 														}
+
+													}
+
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -10799,6 +11187,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 													}
 
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -11030,6 +11427,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 															}
 														}
+
+													}
+
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -11767,6 +12173,15 @@ func resourceVolterraProxyCreate(d *schema.ResourceData, meta interface{}) error
 
 										}
 
+										if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											privateKey.SecretInfoOneof = secretInfoOneofInt
+
+										}
+
 										if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
@@ -12356,6 +12771,32 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 											moreOption.DisableDefaultErrorPages = w.(bool)
 										}
 
+										http10ChoiceTypeFound := false
+
+										if v, ok := moreOptionMapStrToI["disable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+											http10ChoiceTypeFound = true
+
+											if v.(bool) {
+												http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_DisableHttp10{}
+												http10ChoiceInt.DisableHttp10 = &ves_io_schema.Empty{}
+												moreOption.Http10Choice = http10ChoiceInt
+											}
+
+										}
+
+										if v, ok := moreOptionMapStrToI["enable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+											http10ChoiceTypeFound = true
+
+											if v.(bool) {
+												http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_EnableHttp10{}
+												http10ChoiceInt.EnableHttp10 = &ves_io_schema.Empty{}
+												moreOption.Http10Choice = http10ChoiceInt
+											}
+
+										}
+
 										if w, ok := moreOptionMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
 											moreOption.IdleTimeout = uint32(w.(int))
 										}
@@ -12600,6 +13041,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 																}
 
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -12831,6 +13281,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -13308,6 +13767,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 																}
 
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -13539,6 +14007,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -13979,6 +14456,32 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 											moreOption.DisableDefaultErrorPages = w.(bool)
 										}
 
+										http10ChoiceTypeFound := false
+
+										if v, ok := moreOptionMapStrToI["disable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+											http10ChoiceTypeFound = true
+
+											if v.(bool) {
+												http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_DisableHttp10{}
+												http10ChoiceInt.DisableHttp10 = &ves_io_schema.Empty{}
+												moreOption.Http10Choice = http10ChoiceInt
+											}
+
+										}
+
+										if v, ok := moreOptionMapStrToI["enable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+											http10ChoiceTypeFound = true
+
+											if v.(bool) {
+												http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_EnableHttp10{}
+												http10ChoiceInt.EnableHttp10 = &ves_io_schema.Empty{}
+												moreOption.Http10Choice = http10ChoiceInt
+											}
+
+										}
+
 										if w, ok := moreOptionMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
 											moreOption.IdleTimeout = uint32(w.(int))
 										}
@@ -14223,6 +14726,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 																}
 
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -14454,6 +14966,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -14931,6 +15452,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 																}
 
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -15162,6 +15692,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -15679,6 +16218,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 																		}
 																	}
+
+																}
+
+																if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	privateKey.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -16302,6 +16850,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 																}
 
+																if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -16753,6 +17310,32 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 								moreOption.DisableDefaultErrorPages = w.(bool)
 							}
 
+							http10ChoiceTypeFound := false
+
+							if v, ok := moreOptionMapStrToI["disable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+								http10ChoiceTypeFound = true
+
+								if v.(bool) {
+									http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_DisableHttp10{}
+									http10ChoiceInt.DisableHttp10 = &ves_io_schema.Empty{}
+									moreOption.Http10Choice = http10ChoiceInt
+								}
+
+							}
+
+							if v, ok := moreOptionMapStrToI["enable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+								http10ChoiceTypeFound = true
+
+								if v.(bool) {
+									http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_EnableHttp10{}
+									http10ChoiceInt.EnableHttp10 = &ves_io_schema.Empty{}
+									moreOption.Http10Choice = http10ChoiceInt
+								}
+
+							}
+
 							if w, ok := moreOptionMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
 								moreOption.IdleTimeout = uint32(w.(int))
 							}
@@ -16997,6 +17580,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 													}
 
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -17228,6 +17820,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 															}
 														}
+
+													}
+
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -17705,6 +18306,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 													}
 
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -17936,6 +18546,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 															}
 														}
+
+													}
+
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -18664,6 +19283,15 @@ func resourceVolterraProxyUpdate(d *schema.ResourceData, meta interface{}) error
 
 												}
 											}
+
+										}
+
+										if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											privateKey.SecretInfoOneof = secretInfoOneofInt
 
 										}
 

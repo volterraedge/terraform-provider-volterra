@@ -210,10 +210,21 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 												},
 
 												"url": {
+													Sensitive: true,
 													Type:     schema.TypeString,
 													Required: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -380,10 +391,21 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 												},
 
 												"url": {
+													Sensitive: true,
 													Type:     schema.TypeString,
 													Required: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -565,10 +587,21 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 												},
 
 												"url": {
+													Sensitive: true,
 													Type:     schema.TypeString,
 													Required: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -740,10 +773,21 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 												},
 
 												"url": {
+													Sensitive: true,
 													Type:     schema.TypeString,
 													Required: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -1079,6 +1123,15 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := secretKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								secretKey.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := secretKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -1281,6 +1334,15 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 
 									}
 								}
+
+							}
+
+							if v, ok := clientSecretMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								clientSecret.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -1507,6 +1569,15 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								password.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -1715,6 +1786,15 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 
 									}
 								}
+
+							}
+
+							if v, ok := credentialFileMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								credentialFile.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -2106,6 +2186,15 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := secretKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								secretKey.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := secretKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -2308,6 +2397,15 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 
 									}
 								}
+
+							}
+
+							if v, ok := clientSecretMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								clientSecret.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -2534,6 +2632,15 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								password.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -2742,6 +2849,15 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 
 									}
 								}
+
+							}
+
+							if v, ok := credentialFileMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								credentialFile.SecretInfoOneof = secretInfoOneofInt
 
 							}
 

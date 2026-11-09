@@ -697,6 +697,202 @@ func CodeBaseIntegrationValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CodeScanInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CodeScanInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CodeScanInfo) DeepCopy() *CodeScanInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CodeScanInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CodeScanInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CodeScanInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CodeScanInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCodeScanInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCodeScanInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CodeScanInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CodeScanInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["api_endpoints_found"]; exists {
+		vOpts := append(opts, db.WithValidateField("api_endpoints_found"))
+		if err := fv(ctx, m.GetApiEndpointsFound(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["completed_at"]; exists {
+		vOpts := append(opts, db.WithValidateField("completed_at"))
+		if err := fv(ctx, m.GetCompletedAt(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["error"]; exists {
+		vOpts := append(opts, db.WithValidateField("error"))
+		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["kafka_message_created_at"]; exists {
+		vOpts := append(opts, db.WithValidateField("kafka_message_created_at"))
+		if err := fv(ctx, m.GetKafkaMessageCreatedAt(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["last_status_update"]; exists {
+		vOpts := append(opts, db.WithValidateField("last_status_update"))
+		if err := fv(ctx, m.GetLastStatusUpdate(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["progress"]; exists {
+		vOpts := append(opts, db.WithValidateField("progress"))
+		if err := fv(ctx, m.GetProgress(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["project_name"]; exists {
+		vOpts := append(opts, db.WithValidateField("project_name"))
+		if err := fv(ctx, m.GetProjectName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["started_at"]; exists {
+		vOpts := append(opts, db.WithValidateField("started_at"))
+		if err := fv(ctx, m.GetStartedAt(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["status"]; exists {
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCodeScanInfoValidator = func() *ValidateCodeScanInfo {
+	v := &ValidateCodeScanInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CodeScanInfoValidator() db.Validator {
+	return DefaultCodeScanInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CodeScanningStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CodeScanningStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CodeScanningStatus) DeepCopy() *CodeScanningStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CodeScanningStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CodeScanningStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CodeScanningStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CodeScanningStatusValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCodeScanningStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCodeScanningStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CodeScanningStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CodeScanningStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["last_updated"]; exists {
+		vOpts := append(opts, db.WithValidateField("last_updated"))
+		if err := fv(ctx, m.GetLastUpdated(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCodeScanningStatusValidator = func() *ValidateCodeScanningStatus {
+	v := &ValidateCodeScanningStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CodeScanningStatusValidator() db.Validator {
+	return DefaultCodeScanningStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

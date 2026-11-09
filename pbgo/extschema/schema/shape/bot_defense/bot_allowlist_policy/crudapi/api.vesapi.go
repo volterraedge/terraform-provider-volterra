@@ -2722,7 +2722,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip_allowlist": {
                     "type": "array",
-                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " IP addresses and IP prefixes added to the allow list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "IP \u0026 IP Prefix List",
                     "items": {
                         "$ref": "#/definitions/bot_defenseIPAllowlistDetail"
@@ -2734,7 +2734,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip_range_allowlist": {
                     "type": "array",
-                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Ranges of IP addresses added to the allowlist.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "IP Range List",
                     "items": {
                         "$ref": "#/definitions/bot_defenseIPRangeAllowlistDetail"
@@ -2755,13 +2755,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip_description": {
                     "type": "string",
-                    "description": " The description for ip address",
+                    "description": " Information to help identify the IP allowlist entry.",
                     "title": "ip description",
                     "x-displayname": "Description"
                 },
                 "ip_value": {
                     "type": "string",
-                    "description": " A single Ip address\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The IP address or IP prefix you want to add.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "ip value",
                     "x-displayname": "Value",
                     "x-ves-required": "true",
@@ -2804,12 +2804,12 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "IP Range Allowlist value",
             "title": "IP Range Allowlist Detail",
-            "x-displayname": "IP Range Allowlist",
+            "x-displayname": "IP Range",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.IPRangeAllowlistDetail",
             "properties": {
                 "end_with": {
                     "type": "string",
-                    "description": " IP range end with\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The end of the IP address range.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "IP end with value",
                     "x-displayname": "End With",
                     "x-ves-required": "true",
@@ -2821,13 +2821,12 @@ var APISwaggerJSON string = `{
                 },
                 "ip_description": {
                     "type": "string",
-                    "description": " The description for IP range",
                     "title": "ip description",
                     "x-displayname": "Description"
                 },
                 "start_with": {
                     "type": "string",
-                    "description": " IP range start with\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The beginning of the IP address range.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "IP start with value",
                     "x-displayname": "Start With",
                     "x-ves-required": "true",
@@ -3215,12 +3214,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {

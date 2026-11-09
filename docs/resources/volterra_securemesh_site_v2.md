@@ -28,10 +28,11 @@ resource "volterra_securemesh_site_v2" "example" {
 
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "aws azure baremetal eks_k8s equinix gcp kvm nutanix oci openshift_virtualization openstack rseries vmware" must be set
+  // One of the arguments from this list "aks_k8s aws azure baremetal eks_k8s equinix gcp gke_k8s hyper_v kvm nutanix oci oci_k8s openshift_virtualization openstack rseries vmware" must be set
 
   gcp {
-    // "not_managed" must be set
+    // One of the arguments from this list "not_managed" must be set
+
     not_managed {
       node_list {
         hostname = "control"
@@ -54,16 +55,16 @@ resource "volterra_securemesh_site_v2" "example" {
           // One of the arguments from this list "ipv6_auto_config no_ipv6_address static_ipv6_address" can be set
 
           no_ipv6_address = true
-          is_management   = true
-          is_primary      = true
+          is_management = true
+          is_primary = true
           labels = {
             "key1" = "value1"
           }
 
           // One of the arguments from this list "monitor monitor_disabled" can be set
 
-          monitor {}
-          mtu  = "1450"
+          monitor_disabled = true
+          mtu = "1450"
           name = "value"
           network_option {
             // One of the arguments from this list "segment_network site_local_inside_network site_local_network" can be set
@@ -74,7 +75,7 @@ resource "volterra_securemesh_site_v2" "example" {
 
           // One of the arguments from this list "site_to_site_connectivity_interface_disabled site_to_site_connectivity_interface_enabled" can be set
 
-          site_to_site_connectivity_interface_disabled = true
+          site_to_site_connectivity_interface_enabled = true
         }
 
         public_ip = "1.1.1.1"
@@ -91,6 +92,7 @@ resource "volterra_securemesh_site_v2" "example" {
     ]
   }
 }
+
 ```
 
 Argument Reference
@@ -128,11 +130,13 @@ Argument Reference
 
 `dns_ntp_config` - (Optional) Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site.. See [Dns Ntp Config ](#dns-ntp-config) below for details.
 
-###### One of the arguments from this list "custom_proxy, f5_proxy" can be set
+###### One of the arguments from this list "custom_proxy, f5_proxy, private_adn" can be set
 
 `custom_proxy` - (Optional) Use the customer provided internal Enterprise Proxy. See [Enterprise Proxy Choice Custom Proxy ](#enterprise-proxy-choice-custom-proxy) below for details.
 
 `f5_proxy` - (Optional) Use the F5 Enterprise Proxy hosted on the F5 Global Network (`Bool`).
+
+`private_adn` - (Optional) Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support.. See [Enterprise Proxy Choice Private Adn ](#enterprise-proxy-choice-private-adn) below for details.
 
 ###### One of the arguments from this list "active_forward_proxy_policies, no_forward_proxy" can be set
 
@@ -180,7 +184,9 @@ Argument Reference
 
 `performance_enhancement_mode` - (Optional) Optimize the site for L3 or L7 traffic processing. By default, the site is optimized for L7 traffic processing.. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
-###### One of the arguments from this list "aws, azure, baremetal, eks_k8s, equinix, gcp, kvm, nutanix, oci, openshift_virtualization, openstack, rseries, vmware" must be set
+###### One of the arguments from this list "aks_k8s, aws, azure, baremetal, eks_k8s, equinix, gcp, gke_k8s, hyper_v, kvm, nutanix, oci, oci_k8s, openshift_virtualization, openstack, rseries, vmware" must be set
+
+`aks_k8s` - (Optional) x-displayName: "Microsoft AKS". See [Provider Choice Aks K8s ](#provider-choice-aks-k8s) below for details.
 
 `aws` - (Optional) x-displayName: "AWS". See [Provider Choice Aws ](#provider-choice-aws) below for details.
 
@@ -188,17 +194,23 @@ Argument Reference
 
 `baremetal` - (Optional) x-displayName: "Baremetal". See [Provider Choice Baremetal ](#provider-choice-baremetal) below for details.
 
-`eks_k8s` - (Optional) x-displayName: "EKS (AWS Based Kubernetes)". See [Provider Choice Eks K8s ](#provider-choice-eks-k8s) below for details.
+`eks_k8s` - (Optional) x-displayName: "Amazon EKS". See [Provider Choice Eks K8s ](#provider-choice-eks-k8s) below for details.
 
 `equinix` - (Optional) x-displayName: "Equinix". See [Provider Choice Equinix ](#provider-choice-equinix) below for details.
 
 `gcp` - (Optional) x-displayName: "GCP". See [Provider Choice Gcp ](#provider-choice-gcp) below for details.
+
+`gke_k8s` - (Optional) x-displayName: "Google GKE". See [Provider Choice Gke K8s ](#provider-choice-gke-k8s) below for details.
+
+`hyper_v` - (Optional) x-displayName: "Hyper-V". See [Provider Choice Hyper V ](#provider-choice-hyper-v) below for details.
 
 `kvm` - (Optional) x-displayName: "KVM (EA)". See [Provider Choice Kvm ](#provider-choice-kvm) below for details.
 
 `nutanix` - (Optional) x-displayName: "Nutanix". See [Provider Choice Nutanix ](#provider-choice-nutanix) below for details.
 
 `oci` - (Optional) x-displayName: "OCI". See [Provider Choice Oci ](#provider-choice-oci) below for details.
+
+`oci_k8s` - (Optional) x-displayName: "Openshift Kubernetes Engine". See [Provider Choice Oci K8s ](#provider-choice-oci-k8s) below for details.
 
 `openshift_virtualization` - (Optional) x-displayName: "OpenShift Virtualization". See [Provider Choice Openshift Virtualization ](#provider-choice-openshift-virtualization) below for details.
 
@@ -257,6 +269,12 @@ either the node local WebUI or via SSH to access shell/CLI.
 ### Dns Ntp Config
 
 Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site..
+
+###### One of the arguments from this list "disable_cedns_record, enable_cedns_record" can be set
+
+`disable_cedns_record` - (Optional) Disable publishing external DNS for this Site (`Bool`).
+
+`enable_cedns_record` - (Optional) Enable publishing external DNS for this Site (`Bool`).
 
 ###### One of the arguments from this list "custom_dns, f5_dns_default" can be set
 
@@ -426,15 +444,23 @@ When provided, customers can either ssh to the nodes of this Customer Edge site 
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
 
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
+
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Aks K8s Not Managed
+
+At this time, Secure Mesh Site only supports the 'Not Managed by F5XC' mode..
+
+`node_list` - (Optional) Once a node is created and registers with the site, it will be shown in this section.. See [Not Managed Node List ](#not-managed-node-list) below for details.
 
 ### Anti Affinity Choice Disable Anti Affinity
 
@@ -523,6 +549,14 @@ x-displayName: "SSH".
 ### Blocked Services Value Type Choice Web User Interface
 
 x-displayName: "Web UI".
+
+### Cedns Record Choice Disable Cedns Record
+
+Disable publishing external DNS for this Site.
+
+### Cedns Record Choice Enable Cedns Record
+
+Enable publishing external DNS for this Site.
 
 ### Choice Existing Subnet
 
@@ -620,11 +654,13 @@ Note: To protect the password, it is recommended to blindfold it..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -770,11 +806,11 @@ At this time, Secure Mesh Site only supports the 'Not Managed by F5XC' mode..
 
 Example: Rule 1 - Distribute VPM pods across nodes, Rule 2 - Distribute Prometheus pods across zones..
 
-`label_key` - (Required) Example: "app" to match pods with the app label. (`String`).
+`label_key` - (Required) Combined with the label value below, this identifies the target pods. (`String`).
 
-`label_value` - (Required) Example: "vpm" to match pods with app=vpm label. (`String`).
+`label_value` - (Required) Specify the label value that, together with the label key, identifies the customer pods to avoid. (`String`).
 
-`topology_keys` - (Required) Example: ["kubernetes.io/hostname"] ensures VPM pods run on different nodes. (`String`).
+`topology_keys` - (Required) Example: with kubernetes.io/hostname, CE pods are kept off any node running the matching customer pod. (`String`).
 
 ### Enable Private Workload Routing List Enable Private Workload Routing To Ce
 
@@ -832,6 +868,12 @@ Use the customer provided internal Enterprise Proxy.
 
 `username` - (Optional) If the internal Enterprise Proxy is using basic authentication, specify the username. This is an optional field. (`String`).
 
+### Enterprise Proxy Choice Private Adn
+
+Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support..
+
+`private_adn` - (Required) Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support. (`String`).
+
 ### Force Update Routing Choice Force Route Update Disabled
 
 Do not force update routing..
@@ -853,6 +895,12 @@ First usable address from the network prefix is chosen as default gateway.
 ### Gateway Choice Last Address
 
 Last usable address from the network prefix is chosen as default gateway.
+
+### Gke K8s Not Managed
+
+At this time, Secure Mesh Site only supports the 'Not Managed by F5XC' mode..
+
+`node_list` - (Optional) Once a node is created and registers with the site, it will be shown in this section.. See [Not Managed Node List ](#not-managed-node-list) below for details.
 
 ### Interface Choice Bond Interface
 
@@ -1342,6 +1390,12 @@ User specified NTP Servers.
 
 F5 default will use time.google.com during registration.
 
+### Oci K8s Not Managed
+
+At this time, Secure Mesh Site only supports the 'Not Managed by F5XC' mode..
+
+`node_list` - (Optional) Once a node is created and registers with the site, it will be shown in this section.. See [Not Managed Node List ](#not-managed-node-list) below for details.
+
 ### Offline Survivability Mode Choice Enable Offline Survivability Mode
 
 x-displayName: "Enabled".
@@ -1566,11 +1620,27 @@ Enable Private Workload Routing to CE.
 
 `enable_private_workload_routing_to_ce` - (Required) Enable Private Workload Routing to CE. See [Enable Private Workload Routing List Enable Private Workload Routing To Ce ](#enable-private-workload-routing-list-enable-private-workload-routing-to-ce) below for details.
 
+### Provider Choice Aks K8s
+
+x-displayName: "Microsoft AKS".
+
+###### One of the arguments from this list "disable_anti_affinity, enable_anti_affinity" must be set
+
+`disable_anti_affinity` - (Optional) Pod anti-affinity is disabled. Pods may run on the same node. (`Bool`).
+
+`enable_anti_affinity` - (Optional) Pod anti-affinity is enabled. Kubernetes scheduler will distribute pods across different nodes.. See [Anti Affinity Choice Enable Anti Affinity ](#anti-affinity-choice-enable-anti-affinity) below for details.
+
+`deployment_size` - (Required) Medium (8 vCPU, 24 GB memory) is suitable for most deployments, Large (12 vCPU, 48 GB memory) for workloads requiring additional resources. (`String`).
+
+`labels` - (Optional) This uses Kubernetes nodeSelector to schedule pods only on nodes with matching labels. (`String`).
+
+`not_managed` - (Required) At this time, Secure Mesh Site only supports the 'Not Managed by F5XC' mode.. See [Aks K8s Not Managed ](#aks-k8s-not-managed) below for details.
+
 ### Provider Choice Aws
 
 x-displayName: "AWS".
 
-###### One of the arguments from this list "not_managed" must be set
+###### One of the arguments from this list "not_managed" can be set
 
 `not_managed` - (Optional) or by using automation tools such as Terraform.. See [Orchestration Choice Not Managed ](#orchestration-choice-not-managed) below for details.
 
@@ -1578,7 +1648,7 @@ x-displayName: "AWS".
 
 x-displayName: "Azure".
 
-###### One of the arguments from this list "not_managed" must be set
+###### One of the arguments from this list "not_managed" can be set
 
 `not_managed` - (Optional) or by using automation tools such as Terraform.. See [Orchestration Choice Not Managed ](#orchestration-choice-not-managed) below for details.
 
@@ -1592,7 +1662,7 @@ x-displayName: "Baremetal".
 
 ### Provider Choice Eks K8s
 
-x-displayName: "EKS (AWS Based Kubernetes)".
+x-displayName: "Amazon EKS".
 
 ###### One of the arguments from this list "disable_anti_affinity, enable_anti_affinity" must be set
 
@@ -1618,7 +1688,33 @@ x-displayName: "Equinix".
 
 x-displayName: "GCP".
 
-###### One of the arguments from this list "not_managed" must be set
+###### One of the arguments from this list "managed, not_managed" must be set
+
+`managed` - (Optional) F5 Distributed Cloud will automate provisioning (ex: node bringup) for this site.. See [Orchestration Choice Managed ](#orchestration-choice-managed) below for details.
+
+`not_managed` - (Optional) or by using automation tools such as Terraform.. See [Orchestration Choice Not Managed ](#orchestration-choice-not-managed) below for details.
+
+### Provider Choice Gke K8s
+
+x-displayName: "Google GKE".
+
+###### One of the arguments from this list "disable_anti_affinity, enable_anti_affinity" must be set
+
+`disable_anti_affinity` - (Optional) Pod anti-affinity is disabled. Pods may run on the same node. (`Bool`).
+
+`enable_anti_affinity` - (Optional) Pod anti-affinity is enabled. Kubernetes scheduler will distribute pods across different nodes.. See [Anti Affinity Choice Enable Anti Affinity ](#anti-affinity-choice-enable-anti-affinity) below for details.
+
+`deployment_size` - (Required) Medium (8 vCPU, 24 GB memory) is suitable for most deployments, Large (12 vCPU, 48 GB memory) for workloads requiring additional resources. (`String`).
+
+`labels` - (Optional) This uses Kubernetes nodeSelector to schedule pods only on nodes with matching labels. (`String`).
+
+`not_managed` - (Required) At this time, Secure Mesh Site only supports the 'Not Managed by F5XC' mode.. See [Gke K8s Not Managed ](#gke-k8s-not-managed) below for details.
+
+### Provider Choice Hyper V
+
+x-displayName: "Hyper-V".
+
+###### One of the arguments from this list "not_managed" can be set
 
 `not_managed` - (Optional) or by using automation tools such as Terraform.. See [Orchestration Choice Not Managed ](#orchestration-choice-not-managed) below for details.
 
@@ -1645,6 +1741,22 @@ x-displayName: "OCI".
 ###### One of the arguments from this list "not_managed" can be set
 
 `not_managed` - (Optional) or by using automation tools such as Terraform.. See [Orchestration Choice Not Managed ](#orchestration-choice-not-managed) below for details.
+
+### Provider Choice Oci K8s
+
+x-displayName: "Openshift Kubernetes Engine".
+
+###### One of the arguments from this list "disable_anti_affinity, enable_anti_affinity" must be set
+
+`disable_anti_affinity` - (Optional) Pod anti-affinity is disabled. Pods may run on the same node. (`Bool`).
+
+`enable_anti_affinity` - (Optional) Pod anti-affinity is enabled. Kubernetes scheduler will distribute pods across different nodes.. See [Anti Affinity Choice Enable Anti Affinity ](#anti-affinity-choice-enable-anti-affinity) below for details.
+
+`deployment_size` - (Required) Medium (8 vCPU, 24 GB memory) is suitable for most deployments, Large (12 vCPU, 48 GB memory) for workloads requiring additional resources. (`String`).
+
+`labels` - (Optional) This uses Kubernetes nodeSelector to schedule pods only on nodes with matching labels. (`String`).
+
+`not_managed` - (Required) At this time, Secure Mesh Site only supports the 'Not Managed by F5XC' mode.. See [Oci K8s Not Managed ](#oci-k8s-not-managed) below for details.
 
 ### Provider Choice Openshift Virtualization
 
@@ -1761,6 +1873,10 @@ Clear Secret is used for the secrets that are not encrypted.
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
 
 ### Secret Info Oneof Vault Secret Info
 
@@ -1972,7 +2088,7 @@ Refer to release notes to find required released SW versions..
 
 Select WAF Signatures Update Mode for the site. By default, new signatures will be applied manually..
 
-###### One of the arguments from this list "automatic, manual" can be set
+###### One of the arguments from this list "automatic, manual" must be set
 
 `automatic` - (Optional) New WAF signatures will be applied automatically as soon as they are released. (`Bool`).
 

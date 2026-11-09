@@ -679,12 +679,13 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "app_firewallMetricLabel": {
             "type": "string",
-            "description": "Labels in the  Application Firewall metrics.\n\nRule hits counter and the security events counter can be sliced and diced based\non one or more labels listed below.\n\nNamespace in which this App Firewall instance is running\nVirtual host under which this App Firewall instance is running\nName of the BOT CLASSIFICATION\nName of the EVENT TYPE",
+            "description": "Labels in the  Application Firewall metrics.\n\nRule hits counter and the security events counter can be sliced and diced based\non one or more labels listed below.\n\nNamespace in which this App Firewall instance is running\nVirtual host under which this App Firewall instance is running\nName of the BOT CLASSIFICATION\nName of the EVENT TYPE\nName of the BOT ENGINE",
             "enum": [
                 "NAMESPACE",
                 "VIRTUAL_HOST",
                 "BOT_CLASSIFICATION",
-                "EVENT_TYPE"
+                "EVENT_TYPE",
+                "BOT_ENGINE"
             ],
             "default": "NAMESPACE",
             "x-displayname": "Application Firewall Metric Label",
@@ -927,7 +928,8 @@ var CustomDataAPISwaggerJSON string = `{
                 "UNIT_REQUESTS_PER_SECOND",
                 "UNIT_PACKETS",
                 "UNIT_PERCENTAGE",
-                "UNIT_COUNT"
+                "UNIT_COUNT",
+                "UNIT_SESSIONS"
             ],
             "default": "UNIT_MILLISECONDS",
             "x-displayname": "Unit",

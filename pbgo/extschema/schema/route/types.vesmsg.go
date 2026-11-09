@@ -718,6 +718,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRoutesDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRoutesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
@@ -729,6 +736,26 @@ func (m *CreateSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetRoutesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRoutes() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutes() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -901,6 +928,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRoutesDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRoutesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
@@ -912,6 +946,26 @@ func (m *GetSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetRoutesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRoutes() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutes() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1084,6 +1138,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRoutesDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRoutesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
@@ -1095,6 +1156,26 @@ func (m *GlobalSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetRoutesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRoutes() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutes() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1584,6 +1665,13 @@ func (m *MirrorPolicyType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetClusterDRefInfo()
 }
+func (m *MirrorPolicyType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetClusterDRefInfoForOverlay(generateHash)
+}
 
 func (m *MirrorPolicyType) GetClusterDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetCluster()
@@ -1596,6 +1684,34 @@ func (m *MirrorPolicyType) GetClusterDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("MirrorPolicyType.cluster[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cluster.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "cluster",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *MirrorPolicyType) GetClusterDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCluster()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("MirrorPolicyType.cluster[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "cluster.Object",
 			RefdUID:    ref.Uid,
@@ -1955,6 +2071,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRoutesDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRoutesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
@@ -1966,6 +2089,26 @@ func (m *ReplaceSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetRoutesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRoutes() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutes() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -2123,6 +2266,13 @@ func (m *RouteDestination) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetClusterDRefInfo()
 }
+func (m *RouteDestination) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetClusterDRefInfoForOverlay(generateHash)
+}
 
 func (m *RouteDestination) GetClusterDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetCluster()
@@ -2135,6 +2285,34 @@ func (m *RouteDestination) GetClusterDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("RouteDestination.cluster[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cluster.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "cluster",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *RouteDestination) GetClusterDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCluster()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("RouteDestination.cluster[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "cluster.Object",
 			RefdUID:    ref.Uid,
@@ -2435,6 +2613,24 @@ func (m *RouteDestinationList) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *RouteDestinationList) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDestinationsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDestinationsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMirrorPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMirrorPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *RouteDestinationList) GetDestinationsDRefInfo() ([]db.DRefInfo, error) {
@@ -2456,6 +2652,26 @@ func (m *RouteDestinationList) GetDestinationsDRefInfo() ([]db.DRefInfo, error) 
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *RouteDestinationList) GetDestinationsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDestinations() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDestinations() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDestinations() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("destinations[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *RouteDestinationList) GetMirrorPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetMirrorPolicy() == nil {
@@ -2464,6 +2680,22 @@ func (m *RouteDestinationList) GetMirrorPolicyDRefInfo() ([]db.DRefInfo, error) 
 	drInfos, err := m.GetMirrorPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetMirrorPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "mirror_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RouteDestinationList) GetMirrorPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMirrorPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetMirrorPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMirrorPolicy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3602,6 +3834,34 @@ func (m *RouteType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *RouteType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRouteActionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRouteActionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWafExclusionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWafExclusionServicePolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusionServicePolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWafTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWafTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *RouteType) GetRouteActionDRefInfo() ([]db.DRefInfo, error) {
@@ -3628,7 +3888,56 @@ func (m *RouteType) GetRouteActionDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *RouteType) GetRouteActionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRouteAction() == nil {
+		return nil, nil
+	}
+	switch m.GetRouteAction().(type) {
+	case *RouteType_RouteDestination:
+		drInfos, err := m.GetRouteDestination().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRouteDestination().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "route_destination." + dri.DRField
+		}
+		return drInfos, err
+	case *RouteType_RouteRedirect:
+		return nil, nil
+	case *RouteType_RouteDirectResponse:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 func (m *RouteType) GetWafExclusionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetWafExclusionChoice().(type) {
+	case *RouteType_InheritedWafExclusion:
+		return nil, nil
+	case *RouteType_WafExclusionPolicy:
+		vref := m.GetWafExclusionPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("waf_exclusion_policy.Object")
+		dri := db.DRefInfo{
+			RefdType:   "waf_exclusion_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "waf_exclusion_policy",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *RouteType) GetWafExclusionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetWafExclusionChoice().(type) {
 	case *RouteType_InheritedWafExclusion:
 		return nil, nil
@@ -3709,6 +4018,34 @@ func (m *RouteType) GetWafExclusionServicePolicyDRefInfo() ([]db.DRefInfo, error
 	}
 	return drInfos, nil
 }
+func (m *RouteType) GetWafExclusionServicePolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetWafExclusionServicePolicy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("RouteType.waf_exclusion_service_policy[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "waf_exclusion_service_policy",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetWafExclusionServicePolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *RouteType) GetWafExclusionServicePolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -3737,6 +4074,22 @@ func (m *RouteType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetWafType().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWafType().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "waf_type." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RouteType) GetWafTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWafType() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWafType().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWafType().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

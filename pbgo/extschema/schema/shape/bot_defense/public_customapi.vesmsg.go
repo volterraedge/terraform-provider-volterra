@@ -26,6 +26,86 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *FeatureFlag) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FeatureFlag) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FeatureFlag) DeepCopy() *FeatureFlag {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FeatureFlag{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FeatureFlag) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FeatureFlag) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FeatureFlagValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFeatureFlag struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFeatureFlag) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FeatureFlag)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FeatureFlag got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["disabled"]; exists {
+		vOpts := append(opts, db.WithValidateField("disabled"))
+		if err := fv(ctx, m.GetDisabled(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFeatureFlagValidator = func() *ValidateFeatureFlag {
+	v := &ValidateFeatureFlag{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FeatureFlagValidator() db.Validator {
+	return DefaultFeatureFlagValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetArtifactRegistryTokenReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -203,6 +283,184 @@ var DefaultGetArtifactRegistryTokenRespValidator = func() *ValidateGetArtifactRe
 
 func GetArtifactRegistryTokenRespValidator() db.Validator {
 	return DefaultGetArtifactRegistryTokenRespValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetFeatureFlagsReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetFeatureFlagsReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetFeatureFlagsReq) DeepCopy() *GetFeatureFlagsReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetFeatureFlagsReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetFeatureFlagsReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetFeatureFlagsReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetFeatureFlagsReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetFeatureFlagsReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetFeatureFlagsReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetFeatureFlagsReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetFeatureFlagsReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetFeatureFlagsReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetFeatureFlagsReqValidator = func() *ValidateGetFeatureFlagsReq {
+	v := &ValidateGetFeatureFlagsReq{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetFeatureFlagsReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	return v
+}()
+
+func GetFeatureFlagsReqValidator() db.Validator {
+	return DefaultGetFeatureFlagsReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetFeatureFlagsResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetFeatureFlagsResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetFeatureFlagsResp) DeepCopy() *GetFeatureFlagsResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetFeatureFlagsResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetFeatureFlagsResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetFeatureFlagsResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetFeatureFlagsRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetFeatureFlagsResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetFeatureFlagsResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetFeatureFlagsResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetFeatureFlagsResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["feature_flags"]; exists {
+		vOpts := append(opts, db.WithValidateField("feature_flags"))
+		for idx, item := range m.GetFeatureFlags() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetFeatureFlagsRespValidator = func() *ValidateGetFeatureFlagsResp {
+	v := &ValidateGetFeatureFlagsResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetFeatureFlagsRespValidator() db.Validator {
+	return DefaultGetFeatureFlagsRespValidator
 }
 
 // augmented methods on protoc/std generated struct

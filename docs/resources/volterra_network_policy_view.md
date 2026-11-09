@@ -23,11 +23,7 @@ resource "volterra_network_policy_view" "example" {
   endpoint {
     // One of the arguments from this list "any inside_endpoints interface label_selector namespace outside_endpoints prefix_list" must be set
 
-    interface {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
+    outside_endpoints = true
   }
 }
 

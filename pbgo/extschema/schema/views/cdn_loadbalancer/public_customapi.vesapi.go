@@ -2041,7 +2041,7 @@ var CustomAPISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string",
-                        "x-displayname": "Name of the CDN distrubition"
+                        "x-displayname": "Name of the CDN distribution"
                     },
                     {
                         "name": "body",
@@ -2990,6 +2990,35 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Unsubscribe Response",
             "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.UnsubscribeResponse"
         },
+        "cdn_purge_commandHostnameList": {
+            "type": "object",
+            "description": "Hostnames associated with the CDN distribution",
+            "title": "Hostname List",
+            "x-displayname": "Hostname List",
+            "x-ves-proto-message": "ves.io.schema.cdn_purge_command.HostnameList",
+            "properties": {
+                "hostnames": {
+                    "type": "array",
+                    "description": " Hostnames associated with the CDN distribution\n\nExample: - \"www.xyz.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Hostnames",
+                    "minItems": 1,
+                    "maxItems": 50,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Hostnames",
+                    "x-ves-example": "www.xyz.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
+                        "ves.io.schema.rules.repeated.max_items": "50",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "common_cdnGetServiceOperationReq": {
             "type": "object",
             "description": "Get Service Operation Request",
@@ -3062,7 +3091,7 @@ var CustomAPISwaggerJSON string = `{
             "description": "CDN Cache Purge",
             "title": "Cache Purge Request",
             "x-displayname": "Cache Purge",
-            "x-ves-oneof-field-pattern_type": "[\"hostname\",\"pattern\",\"purge_all\",\"url\"]",
+            "x-ves-oneof-field-pattern_type": "[\"hostname\",\"hostname_list\",\"pattern\",\"purge_all\",\"url\"]",
             "x-ves-oneof-field-purge_type": "[\"hard_purge\",\"soft_purge\"]",
             "x-ves-proto-message": "ves.io.schema.views.common_cdn.LilacCDNCachePurgeRequest",
             "properties": {
@@ -3074,17 +3103,25 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "hostname": {
                     "type": "string",
-                    "description": "Exclusive with [pattern purge_all url]\n Purge cached content by Hostname.\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.vh_domain: true\n",
+                    "description": "Exclusive with [hostname_list pattern purge_all url]\n Purge cached content by Hostname.\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.vh_domain: true\n",
                     "title": "Hostname",
                     "x-displayname": "Hostname",
+                    "x-ves-deprecated": "Replaced by hostname_list field to support multiple hostnames in purge request",
                     "x-ves-example": "xyz.com",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.vh_domain": "true"
                     }
                 },
+                "hostname_list": {
+                    "description": "Exclusive with [hostname pattern purge_all url]\n Purge cached content by Hostnames.\n\nExample: - \"xyz.com\"-",
+                    "title": "Hostnames",
+                    "$ref": "#/definitions/cdn_purge_commandHostnameList",
+                    "x-displayname": "Hostnames",
+                    "x-ves-example": "xyz.com"
+                },
                 "pattern": {
                     "type": "string",
-                    "description": "Exclusive with [hostname purge_all url]\n Purge cached content using PCRE 1 compliant regular expression.\n\nExample: - \".*\\\\.ts\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": "Exclusive with [hostname hostname_list purge_all url]\n Purge cached content using PCRE 1 compliant regular expression.\n\nExample: - \".*\\\\.ts\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Regex Pattern to match",
                     "minLength": 1,
                     "maxLength": 256,
@@ -3096,7 +3133,7 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "purge_all": {
-                    "description": "Exclusive with [hostname pattern url]\n Purge all cached content.",
+                    "description": "Exclusive with [hostname hostname_list pattern url]\n Purge all cached content.",
                     "title": "Purge All",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "All"
@@ -3109,7 +3146,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": "Exclusive with [hostname pattern purge_all]\n Purge cache by using a URL path\n\nExample: - \"/path1\"-",
+                    "description": "Exclusive with [hostname hostname_list pattern purge_all]\n Purge cache by using a URL path\n\nExample: - \"/path1\"-",
                     "title": "URL",
                     "x-displayname": "URL",
                     "x-ves-example": "/path1"

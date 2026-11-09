@@ -68,6 +68,13 @@ func (m *AppVIPPool) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetIpaddressTypeDRefInfo()
 }
+func (m *AppVIPPool) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIpaddressTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AppVIPPool) GetIpaddressTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -99,6 +106,47 @@ func (m *AppVIPPool) GetIpaddressTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetIpv4Ipv6AppVipPool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpv4Ipv6AppVipPool().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipv4_ipv6_app_vip_pool." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AppVIPPool) GetIpaddressTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIpaddressType() == nil {
+		return nil, nil
+	}
+	switch m.GetIpaddressType().(type) {
+	case *AppVIPPool_Ipv4AppVipPool:
+		drInfos, err := m.GetIpv4AppVipPool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpv4AppVipPool().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipv4_app_vip_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *AppVIPPool_Ipv6AppVipPool:
+		drInfos, err := m.GetIpv6AppVipPool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpv6AppVipPool().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipv6_app_vip_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *AppVIPPool_Ipv4Ipv6AppVipPool:
+		drInfos, err := m.GetIpv4Ipv6AppVipPool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpv4Ipv6AppVipPool().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -257,6 +305,13 @@ func (m *Certificate) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCertificateDRefInfo()
 }
+func (m *Certificate) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCertificateDRefInfoForOverlay(generateHash)
+}
 
 func (m *Certificate) GetCertificateDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetCertificate()
@@ -269,6 +324,34 @@ func (m *Certificate) GetCertificateDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("Certificate.certificate[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "certificate.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "certificate",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *Certificate) GetCertificateDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCertificate()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("Certificate.certificate[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "certificate.Object",
 			RefdUID:    ref.Uid,
@@ -447,6 +530,13 @@ func (m *CloudGatewayAdvertisement) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCloudGatewayChoiceDRefInfo()
 }
+func (m *CloudGatewayAdvertisement) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudGatewayChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CloudGatewayAdvertisement) GetCloudGatewayChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -460,6 +550,29 @@ func (m *CloudGatewayAdvertisement) GetCloudGatewayChoiceDRefInfo() ([]db.DRefIn
 		drInfos, err := m.GetReSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetReSites().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "re_sites." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CloudGatewayAdvertisement) GetCloudGatewayChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCloudGatewayChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetCloudGatewayChoice().(type) {
+	case *CloudGatewayAdvertisement_AllCloud:
+		return nil, nil
+	case *CloudGatewayAdvertisement_ReSites:
+		drInfos, err := m.GetReSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetReSites().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -571,6 +684,13 @@ func (m *CloudGateways) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCloudGatewayDRefInfo()
 }
+func (m *CloudGateways) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudGatewayDRefInfoForOverlay(generateHash)
+}
 
 func (m *CloudGateways) GetCloudGatewayDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetCloudGateway()
@@ -583,6 +703,34 @@ func (m *CloudGateways) GetCloudGatewayDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("CloudGateways.cloud_gateway[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "cloud_gateway",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CloudGateways) GetCloudGatewayDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCloudGateway()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CloudGateways.cloud_gateway[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
@@ -730,6 +878,44 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppVipPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCdnCeVhApiGwDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCdnCeVhApiGwDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCertDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetGatewaysDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGatewaysDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLeasePoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLeasePoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
@@ -739,6 +925,22 @@ func (m *CreateSpecType) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAppVipPool().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAppVipPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_vip_pool." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetAppVipPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAppVipPool() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAppVipPool().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPool().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -758,6 +960,34 @@ func (m *CreateSpecType) GetCdnCeVhApiGwDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("CreateSpecType.cdn_ce_vh_api_gw[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_host.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "cdn_ce_vh_api_gw",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetCdnCeVhApiGwDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCdnCeVhApiGw()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.cdn_ce_vh_api_gw[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_host.Object",
 			RefdUID:    ref.Uid,
@@ -806,6 +1036,22 @@ func (m *CreateSpecType) GetCertDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetCertDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCert() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCert().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCert().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cert." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetGatewaysDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGateways() == nil {
@@ -814,6 +1060,22 @@ func (m *CreateSpecType) GetGatewaysDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetGateways().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGateways().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "gateways." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetGatewaysDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGateways() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetGateways().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetGateways().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -838,6 +1100,22 @@ func (m *CreateSpecType) GetLeasePoolDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetLeasePoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetLeasePool() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetLeasePool().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetLeasePool().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "lease_pool." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPolicy() == nil {
@@ -846,6 +1124,22 @@ func (m *CreateSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetPolicy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1272,6 +1566,24 @@ func (m *DualStackAppVipPool) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *DualStackAppVipPool) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIpv4AppVipPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIpv4AppVipPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIpv6AppVipPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIpv6AppVipPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *DualStackAppVipPool) GetIpv4AppVipPoolDRefInfo() ([]db.DRefInfo, error) {
@@ -1289,6 +1601,22 @@ func (m *DualStackAppVipPool) GetIpv4AppVipPoolDRefInfo() ([]db.DRefInfo, error)
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *DualStackAppVipPool) GetIpv4AppVipPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIpv4AppVipPool() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetIpv4AppVipPool().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIpv4AppVipPool().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ipv4_app_vip_pool." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *DualStackAppVipPool) GetIpv6AppVipPoolDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetIpv6AppVipPool() == nil {
@@ -1297,6 +1625,22 @@ func (m *DualStackAppVipPool) GetIpv6AppVipPoolDRefInfo() ([]db.DRefInfo, error)
 	drInfos, err := m.GetIpv6AppVipPool().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetIpv6AppVipPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ipv6_app_vip_pool." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DualStackAppVipPool) GetIpv6AppVipPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIpv6AppVipPool() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetIpv6AppVipPool().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIpv6AppVipPool().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1467,6 +1811,24 @@ func (m *DualStackLeasePool) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *DualStackLeasePool) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIpv4LeasepoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIpv4LeasepoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIpv6LeasepoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIpv6LeasepoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *DualStackLeasePool) GetIpv4LeasepoolDRefInfo() ([]db.DRefInfo, error) {
@@ -1484,6 +1846,22 @@ func (m *DualStackLeasePool) GetIpv4LeasepoolDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *DualStackLeasePool) GetIpv4LeasepoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIpv4Leasepool() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetIpv4Leasepool().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIpv4Leasepool().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ipv4_leasepool." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *DualStackLeasePool) GetIpv6LeasepoolDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetIpv6Leasepool() == nil {
@@ -1492,6 +1870,22 @@ func (m *DualStackLeasePool) GetIpv6LeasepoolDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetIpv6Leasepool().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetIpv6Leasepool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ipv6_leasepool." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DualStackLeasePool) GetIpv6LeasepoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIpv6Leasepool() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetIpv6Leasepool().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIpv6Leasepool().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1662,6 +2056,24 @@ func (m *Gateways) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *Gateways) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetBigipSiteDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBigipSiteDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPerimeterReDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPerimeterReDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *Gateways) GetBigipSiteDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetBigipSite()
@@ -1674,6 +2086,34 @@ func (m *Gateways) GetBigipSiteDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("Gateways.bigip_site[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_gateway.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "bigip_site",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *Gateways) GetBigipSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetBigipSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("Gateways.bigip_site[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_gateway.Object",
 			RefdUID:    ref.Uid,
@@ -1714,6 +2154,22 @@ func (m *Gateways) GetPerimeterReDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetPerimeterRe().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetPerimeterRe().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "perimeter_re." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *Gateways) GetPerimeterReDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPerimeterRe() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetPerimeterRe().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetPerimeterRe().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1843,6 +2299,44 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppVipPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCdnCeVhApiGwDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCdnCeVhApiGwDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCertDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetGatewaysDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGatewaysDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLeasePoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLeasePoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
@@ -1852,6 +2346,22 @@ func (m *GetSpecType) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAppVipPool().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAppVipPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_vip_pool." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetAppVipPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAppVipPool() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAppVipPool().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPool().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1871,6 +2381,34 @@ func (m *GetSpecType) GetCdnCeVhApiGwDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.cdn_ce_vh_api_gw[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_host.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "cdn_ce_vh_api_gw",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetCdnCeVhApiGwDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCdnCeVhApiGw()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.cdn_ce_vh_api_gw[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_host.Object",
 			RefdUID:    ref.Uid,
@@ -1919,6 +2457,22 @@ func (m *GetSpecType) GetCertDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetCertDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCert() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCert().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCert().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cert." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetGatewaysDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGateways() == nil {
@@ -1927,6 +2481,22 @@ func (m *GetSpecType) GetGatewaysDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetGateways().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGateways().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "gateways." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetGatewaysDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGateways() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetGateways().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetGateways().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1951,6 +2521,22 @@ func (m *GetSpecType) GetLeasePoolDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetLeasePoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetLeasePool() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetLeasePool().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetLeasePool().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "lease_pool." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPolicy() == nil {
@@ -1959,6 +2545,22 @@ func (m *GetSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetPolicy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2405,6 +3007,44 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppVipPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCdnCeVhApiGwDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCdnCeVhApiGwDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCertDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetGatewaysDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGatewaysDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLeasePoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLeasePoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
@@ -2414,6 +3054,22 @@ func (m *GlobalSpecType) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAppVipPool().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAppVipPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_vip_pool." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetAppVipPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAppVipPool() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAppVipPool().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPool().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2433,6 +3089,34 @@ func (m *GlobalSpecType) GetCdnCeVhApiGwDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.cdn_ce_vh_api_gw[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_host.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "cdn_ce_vh_api_gw",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetCdnCeVhApiGwDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCdnCeVhApiGw()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.cdn_ce_vh_api_gw[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_host.Object",
 			RefdUID:    ref.Uid,
@@ -2481,6 +3165,22 @@ func (m *GlobalSpecType) GetCertDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetCertDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCert() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCert().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCert().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cert." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetGatewaysDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGateways() == nil {
@@ -2489,6 +3189,22 @@ func (m *GlobalSpecType) GetGatewaysDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetGateways().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGateways().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "gateways." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetGatewaysDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGateways() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetGateways().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetGateways().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2513,6 +3229,22 @@ func (m *GlobalSpecType) GetLeasePoolDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetLeasePoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetLeasePool() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetLeasePool().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetLeasePool().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "lease_pool." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPolicy() == nil {
@@ -2521,6 +3253,22 @@ func (m *GlobalSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetPolicy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2936,6 +3684,13 @@ func (m *IPv4AppVipPool) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetIpv4AppVipPoolDRefInfo()
 }
+func (m *IPv4AppVipPool) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIpv4AppVipPoolDRefInfoForOverlay(generateHash)
+}
 
 func (m *IPv4AppVipPool) GetIpv4AppVipPoolDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetIpv4AppVipPool()
@@ -2948,6 +3703,34 @@ func (m *IPv4AppVipPool) GetIpv4AppVipPoolDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("IPv4AppVipPool.ipv4_app_vip_pool[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_app_vip_pool.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ipv4_app_vip_pool",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *IPv4AppVipPool) GetIpv4AppVipPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIpv4AppVipPool()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("IPv4AppVipPool.ipv4_app_vip_pool[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_app_vip_pool.Object",
 			RefdUID:    ref.Uid,
@@ -3127,6 +3910,13 @@ func (m *IPv4Leasepool) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetIpv4LeasepoolDRefInfo()
 }
+func (m *IPv4Leasepool) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIpv4LeasepoolDRefInfoForOverlay(generateHash)
+}
 
 func (m *IPv4Leasepool) GetIpv4LeasepoolDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetIpv4Leasepool()
@@ -3139,6 +3929,34 @@ func (m *IPv4Leasepool) GetIpv4LeasepoolDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("IPv4Leasepool.ipv4_leasepool[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_leasepool.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ipv4_leasepool",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *IPv4Leasepool) GetIpv4LeasepoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIpv4Leasepool()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("IPv4Leasepool.ipv4_leasepool[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_leasepool.Object",
 			RefdUID:    ref.Uid,
@@ -3318,6 +4136,13 @@ func (m *IPv6AppVipPool) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetIpv6AppVipPoolDRefInfo()
 }
+func (m *IPv6AppVipPool) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIpv6AppVipPoolDRefInfoForOverlay(generateHash)
+}
 
 func (m *IPv6AppVipPool) GetIpv6AppVipPoolDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetIpv6AppVipPool()
@@ -3330,6 +4155,34 @@ func (m *IPv6AppVipPool) GetIpv6AppVipPoolDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("IPv6AppVipPool.ipv6_app_vip_pool[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_app_vip_pool.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ipv6_app_vip_pool",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *IPv6AppVipPool) GetIpv6AppVipPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIpv6AppVipPool()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("IPv6AppVipPool.ipv6_app_vip_pool[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_app_vip_pool.Object",
 			RefdUID:    ref.Uid,
@@ -3509,6 +4362,13 @@ func (m *IPv6Leasepool) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetIpv6LeasepoolDRefInfo()
 }
+func (m *IPv6Leasepool) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIpv6LeasepoolDRefInfoForOverlay(generateHash)
+}
 
 func (m *IPv6Leasepool) GetIpv6LeasepoolDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetIpv6Leasepool()
@@ -3521,6 +4381,34 @@ func (m *IPv6Leasepool) GetIpv6LeasepoolDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("IPv6Leasepool.ipv6_leasepool[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_leasepool.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ipv6_leasepool",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *IPv6Leasepool) GetIpv6LeasepoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIpv6Leasepool()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("IPv6Leasepool.ipv6_leasepool[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_leasepool.Object",
 			RefdUID:    ref.Uid,
@@ -3700,6 +4588,13 @@ func (m *LeasePoolList) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetIpaddressTypeDRefInfo()
 }
+func (m *LeasePoolList) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIpaddressTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *LeasePoolList) GetIpaddressTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -3731,6 +4626,47 @@ func (m *LeasePoolList) GetIpaddressTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetIpv4Ipv6Leasepool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpv4Ipv6Leasepool().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipv4_ipv6_leasepool." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *LeasePoolList) GetIpaddressTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIpaddressType() == nil {
+		return nil, nil
+	}
+	switch m.GetIpaddressType().(type) {
+	case *LeasePoolList_Ipv4Leasepool:
+		drInfos, err := m.GetIpv4Leasepool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpv4Leasepool().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipv4_leasepool." + dri.DRField
+		}
+		return drInfos, err
+	case *LeasePoolList_Ipv6Leasepool:
+		drInfos, err := m.GetIpv6Leasepool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpv6Leasepool().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipv6_leasepool." + dri.DRField
+		}
+		return drInfos, err
+	case *LeasePoolList_Ipv4Ipv6Leasepool:
+		drInfos, err := m.GetIpv4Ipv6Leasepool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpv4Ipv6Leasepool().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -3917,6 +4853,13 @@ func (m *Policy) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPolicyDRefInfo()
 }
+func (m *Policy) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPolicyDRefInfoForOverlay(generateHash)
+}
 
 func (m *Policy) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetPolicy()
@@ -3929,6 +4872,34 @@ func (m *Policy) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("Policy.policy[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_policy_template.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "policy",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *Policy) GetPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetPolicy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("Policy.policy[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_policy_template.Object",
 			RefdUID:    ref.Uid,
@@ -4139,6 +5110,44 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppVipPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCdnCeVhApiGwDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCdnCeVhApiGwDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCertDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetGatewaysDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGatewaysDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLeasePoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLeasePoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
@@ -4148,6 +5157,22 @@ func (m *ReplaceSpecType) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAppVipPool().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAppVipPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_vip_pool." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetAppVipPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAppVipPool() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAppVipPool().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPool().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -4167,6 +5192,34 @@ func (m *ReplaceSpecType) GetCdnCeVhApiGwDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("ReplaceSpecType.cdn_ce_vh_api_gw[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_host.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "cdn_ce_vh_api_gw",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetCdnCeVhApiGwDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCdnCeVhApiGw()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.cdn_ce_vh_api_gw[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_host.Object",
 			RefdUID:    ref.Uid,
@@ -4215,6 +5268,22 @@ func (m *ReplaceSpecType) GetCertDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetCertDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCert() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCert().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCert().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cert." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetGatewaysDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGateways() == nil {
@@ -4223,6 +5292,22 @@ func (m *ReplaceSpecType) GetGatewaysDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetGateways().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGateways().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "gateways." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetGatewaysDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGateways() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetGateways().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetGateways().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -4247,6 +5332,22 @@ func (m *ReplaceSpecType) GetLeasePoolDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetLeasePoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetLeasePool() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetLeasePool().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetLeasePool().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "lease_pool." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPolicy() == nil {
@@ -4255,6 +5356,22 @@ func (m *ReplaceSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetPolicy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

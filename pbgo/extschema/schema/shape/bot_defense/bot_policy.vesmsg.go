@@ -93,6 +93,18 @@ func (v *ValidateBotInfraWithVersion) Validate(ctx context.Context, pm interface
 			return err
 		}
 	}
+	if fv, exists := v.FldValidators["deployment_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("deployment_status"))
+		if err := fv(ctx, m.GetDeploymentStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["environment_type"]; exists {
+		vOpts := append(opts, db.WithValidateField("environment_type"))
+		if err := fv(ctx, m.GetEnvironmentType(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["in_use_version"]; exists {
 		vOpts := append(opts, db.WithValidateField("in_use_version"))
 		if err := fv(ctx, m.GetInUseVersion(), vOpts...); err != nil {
@@ -3922,6 +3934,135 @@ var DefaultKnownBotAllowDenyActionTypeValidator = func() *ValidateKnownBotAllowD
 
 func KnownBotAllowDenyActionTypeValidator() db.Validator {
 	return DefaultKnownBotAllowDenyActionTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *KnownBotControlsActionTypeHolder) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *KnownBotControlsActionTypeHolder) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *KnownBotControlsActionTypeHolder) DeepCopy() *KnownBotControlsActionTypeHolder {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &KnownBotControlsActionTypeHolder{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *KnownBotControlsActionTypeHolder) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *KnownBotControlsActionTypeHolder) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return KnownBotControlsActionTypeHolderValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateKnownBotControlsActionTypeHolder struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateKnownBotControlsActionTypeHolder) KnownBotControlsActionTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for known_bot_controls_action_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateKnownBotControlsActionTypeHolder) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*KnownBotControlsActionTypeHolder)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *KnownBotControlsActionTypeHolder got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["known_bot_controls_action_type"]; exists {
+		val := m.GetKnownBotControlsActionType()
+		vOpts := append(opts,
+			db.WithValidateField("known_bot_controls_action_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetKnownBotControlsActionType().(type) {
+	case *KnownBotControlsActionTypeHolder_RegularRequest:
+		if fv, exists := v.FldValidators["known_bot_controls_action_type.regular_request"]; exists {
+			val := m.GetKnownBotControlsActionType().(*KnownBotControlsActionTypeHolder_RegularRequest).RegularRequest
+			vOpts := append(opts,
+				db.WithValidateField("known_bot_controls_action_type"),
+				db.WithValidateField("regular_request"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *KnownBotControlsActionTypeHolder_AllowDeny:
+		if fv, exists := v.FldValidators["known_bot_controls_action_type.allow_deny"]; exists {
+			val := m.GetKnownBotControlsActionType().(*KnownBotControlsActionTypeHolder_AllowDeny).AllowDeny
+			vOpts := append(opts,
+				db.WithValidateField("known_bot_controls_action_type"),
+				db.WithValidateField("allow_deny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultKnownBotControlsActionTypeHolderValidator = func() *ValidateKnownBotControlsActionTypeHolder {
+	v := &ValidateKnownBotControlsActionTypeHolder{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+	vrhKnownBotControlsActionType := v.KnownBotControlsActionTypeValidationRuleHandler
+	rulesKnownBotControlsActionType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhKnownBotControlsActionType(rulesKnownBotControlsActionType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for KnownBotControlsActionTypeHolder.known_bot_controls_action_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["known_bot_controls_action_type"] = vFn
+	v.FldValidators["known_bot_controls_action_type.allow_deny"] = KnownBotAllowDenyActionTypeValidator().Validate
+
+	return v
+}()
+
+func KnownBotControlsActionTypeHolderValidator() db.Validator {
+	return DefaultKnownBotControlsActionTypeHolderValidator
 }
 
 // augmented methods on protoc/std generated struct

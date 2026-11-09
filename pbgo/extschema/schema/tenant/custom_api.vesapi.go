@@ -5329,6 +5329,13 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -5416,6 +5423,12 @@ var CustomAPISwaggerJSON string = `{
                     "format": "int32",
                     "x-displayname": "Kubeconfig expiry period",
                     "x-ves-example": "90"
+                },
+                "retention_policy": {
+                    "description": " Defines the retention policy for expired credentials.",
+                    "title": "Retention Policy",
+                    "$ref": "#/definitions/tenantRetentionPolicy",
+                    "x-displayname": "Retention Policy"
                 }
             }
         },
@@ -5669,6 +5682,29 @@ var CustomAPISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "uppercase_characters",
                     "x-ves-example": "1"
+                }
+            }
+        },
+        "tenantRetentionPolicy": {
+            "type": "object",
+            "description": "Defines the retention policy for expired credentials.",
+            "title": "Retention Policy",
+            "x-displayname": "Retention Policy",
+            "x-ves-oneof-field-retention_policy_choice": "[\"retain_indefinitely\",\"retention_days\"]",
+            "x-ves-proto-message": "ves.io.schema.tenant.RetentionPolicy",
+            "properties": {
+                "retain_indefinitely": {
+                    "description": "Exclusive with [retention_days]\n Expired credentials are retained indefinitely and are not automatically deleted.",
+                    "title": "retain_indefinitely",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Retain Indefinitely"
+                },
+                "retention_days": {
+                    "type": "integer",
+                    "description": "Exclusive with [retain_indefinitely]\n Expired credentials are retained for the specified number of days after expiration,\n after which they are automatically deleted.",
+                    "title": "Retention Days",
+                    "format": "int32",
+                    "x-displayname": "Retention Days"
                 }
             }
         },

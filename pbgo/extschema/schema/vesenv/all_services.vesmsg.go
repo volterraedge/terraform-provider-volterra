@@ -1090,6 +1090,39 @@ func (v *ValidateServiceChoice) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
+	case *ServiceChoice_Vyomagent:
+		if fv, exists := v.FldValidators["choice.vyomagent"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Vyomagent).Vyomagent
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("vyomagent"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceChoice_Vyom:
+		if fv, exists := v.FldValidators["choice.vyom"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Vyom).Vyom
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("vyom"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceChoice_Arceus:
+		if fv, exists := v.FldValidators["choice.arceus"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Arceus).Arceus
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("arceus"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 	if fv, exists := v.FldValidators["device_intelligence"]; exists {
 		vOpts := append(opts, db.WithValidateField("device_intelligence"))

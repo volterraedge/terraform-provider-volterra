@@ -157,6 +157,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
+	if fv, exists := v.FldValidators["preferred_lma_region"]; exists {
+		vOpts := append(opts, db.WithValidateField("preferred_lma_region"))
+		if err := fv(ctx, m.GetPreferredLmaRegion(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["tenant_type"]; exists {
 		vOpts := append(opts, db.WithValidateField("tenant_type"))
 		if err := fv(ctx, m.GetTenantType(), vOpts...); err != nil {

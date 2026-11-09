@@ -729,6 +729,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDnsTypeDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDnsTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetDnsTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -740,6 +747,29 @@ func (m *CreateSpecType) GetDnsTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetPrimary().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrimary().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "primary." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_Secondary:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetDnsTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDnsType() == nil {
+		return nil, nil
+	}
+	switch m.GetDnsType().(type) {
+	case *CreateSpecType_Primary:
+		drInfos, err := m.GetPrimary().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrimary().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -813,6 +843,12 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			}
 		}
 	}
+	if fv, exists := v.FldValidators["namespace_rbac"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace_rbac"))
+		if err := fv(ctx, m.GetNamespaceRbac(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -838,6 +874,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["dns_type"] = vFn
 	v.FldValidators["dns_type.primary"] = PrimaryDNSCreateSpecTypeValidator().Validate
 	v.FldValidators["dns_type.secondary"] = SecondaryDNSCreateSpecTypeValidator().Validate
+	v.FldValidators["namespace_rbac"] = NamespaceRBACValidator().Validate
 
 	return v
 }()
@@ -2555,8 +2592,32 @@ func (m *DNSLBResourceRecord) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValueDRefInfo()
 }
+func (m *DNSLBResourceRecord) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValueDRefInfoForOverlay(generateHash)
+}
 
 func (m *DNSLBResourceRecord) GetValueDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetValue()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("dns_load_balancer.Object")
+	dri := db.DRefInfo{
+		RefdType:   "dns_load_balancer.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "value",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *DNSLBResourceRecord) GetValueDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetValue()
 	if vref == nil {
 		return nil, nil
@@ -4080,6 +4141,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDnsTypeDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDnsTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetDnsTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -4091,6 +4159,29 @@ func (m *GetSpecType) GetDnsTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetPrimary().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrimary().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "primary." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_Secondary:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetDnsTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDnsType() == nil {
+		return nil, nil
+	}
+	switch m.GetDnsType().(type) {
+	case *GetSpecType_Primary:
+		drInfos, err := m.GetPrimary().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrimary().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4170,6 +4261,12 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			return err
 		}
 	}
+	if fv, exists := v.FldValidators["namespace_rbac"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace_rbac"))
+		if err := fv(ctx, m.GetNamespaceRbac(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["num_of_dns_records"]; exists {
 		vOpts := append(opts, db.WithValidateField("num_of_dns_records"))
 		if err := fv(ctx, m.GetNumOfDnsRecords(), vOpts...); err != nil {
@@ -4201,6 +4298,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["dns_type"] = vFn
 	v.FldValidators["dns_type.primary"] = PrimaryDNSGetSpecTypeValidator().Validate
 	v.FldValidators["dns_type.secondary"] = SecondaryDNSGetSpecTypeValidator().Validate
+	v.FldValidators["namespace_rbac"] = NamespaceRBACValidator().Validate
 
 	return v
 }()
@@ -4266,6 +4364,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDnsTypeDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDnsTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDnsTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -4277,6 +4382,29 @@ func (m *GlobalSpecType) GetDnsTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetPrimary().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrimary().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "primary." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_Secondary:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetDnsTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDnsType() == nil {
+		return nil, nil
+	}
+	switch m.GetDnsType().(type) {
+	case *GlobalSpecType_Primary:
+		drInfos, err := m.GetPrimary().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrimary().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4397,6 +4525,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			}
 		}
 	}
+	if fv, exists := v.FldValidators["namespace_rbac"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace_rbac"))
+		if err := fv(ctx, m.GetNamespaceRbac(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["num_of_dns_records"]; exists {
 		vOpts := append(opts, db.WithValidateField("num_of_dns_records"))
 		if err := fv(ctx, m.GetNumOfDnsRecords(), vOpts...); err != nil {
@@ -4440,6 +4574,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["dns_type"] = vFn
 	v.FldValidators["dns_type.primary"] = PrimaryDNSConfigValidator().Validate
 	v.FldValidators["dns_type.secondary"] = SecondaryDNSConfigValidator().Validate
+	v.FldValidators["namespace_rbac"] = NamespaceRBACValidator().Validate
 
 	return v
 }()
@@ -5192,6 +5327,238 @@ func NAPTRValueValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *NamespaceRBAC) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NamespaceRBAC) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NamespaceRBAC) DeepCopy() *NamespaceRBAC {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NamespaceRBAC{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NamespaceRBAC) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NamespaceRBAC) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NamespaceRBACValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNamespaceRBAC struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNamespaceRBAC) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NamespaceRBAC)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NamespaceRBAC got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetMode().(type) {
+	case *NamespaceRBAC_Disabled:
+		if fv, exists := v.FldValidators["mode.disabled"]; exists {
+			val := m.GetMode().(*NamespaceRBAC_Disabled).Disabled
+			vOpts := append(opts,
+				db.WithValidateField("mode"),
+				db.WithValidateField("disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NamespaceRBAC_Enabled:
+		if fv, exists := v.FldValidators["mode.enabled"]; exists {
+			val := m.GetMode().(*NamespaceRBAC_Enabled).Enabled
+			vOpts := append(opts,
+				db.WithValidateField("mode"),
+				db.WithValidateField("enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNamespaceRBACValidator = func() *ValidateNamespaceRBAC {
+	v := &ValidateNamespaceRBAC{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["mode.enabled"] = NamespaceRBACEnabledValidator().Validate
+
+	return v
+}()
+
+func NamespaceRBACValidator() db.Validator {
+	return DefaultNamespaceRBACValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NamespaceRBACEnabled) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NamespaceRBACEnabled) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NamespaceRBACEnabled) DeepCopy() *NamespaceRBACEnabled {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NamespaceRBACEnabled{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NamespaceRBACEnabled) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NamespaceRBACEnabled) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NamespaceRBACEnabledValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNamespaceRBACEnabled struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNamespaceRBACEnabled) NamespacesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for namespaces")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for namespaces")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated namespaces")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items namespaces")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNamespaceRBACEnabled) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NamespaceRBACEnabled)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NamespaceRBACEnabled got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["namespaces"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespaces"))
+		if err := fv(ctx, m.GetNamespaces(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNamespaceRBACEnabledValidator = func() *ValidateNamespaceRBACEnabled {
+	v := &ValidateNamespaceRBACEnabled{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespaces := v.NamespacesValidationRuleHandler
+	rulesNamespaces := map[string]string{
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.repeated.items.string.max_len": "256",
+		"ves.io.schema.rules.repeated.items.string.min_len": "1",
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.min_items":            "1",
+		"ves.io.schema.rules.repeated.unique":               "true",
+	}
+	vFn, err = vrhNamespaces(rulesNamespaces)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NamespaceRBACEnabled.namespaces: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespaces"] = vFn
+
+	return v
+}()
+
+func NamespaceRBACEnabledValidator() db.Validator {
+	return DefaultNamespaceRBACEnabledValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *PrimaryDNSConfig) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5245,6 +5612,24 @@ func (m *PrimaryDNSConfig) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *PrimaryDNSConfig) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDefaultRrSetGroupDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultRrSetGroupDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRrSetGroupDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRrSetGroupDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *PrimaryDNSConfig) GetDefaultRrSetGroupDRefInfo() ([]db.DRefInfo, error) {
@@ -5266,6 +5651,26 @@ func (m *PrimaryDNSConfig) GetDefaultRrSetGroupDRefInfo() ([]db.DRefInfo, error)
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *PrimaryDNSConfig) GetDefaultRrSetGroupDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDefaultRrSetGroup() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDefaultRrSetGroup() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultRrSetGroup() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("default_rr_set_group[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *PrimaryDNSConfig) GetRrSetGroupDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRrSetGroup() == nil {
@@ -5276,6 +5681,26 @@ func (m *PrimaryDNSConfig) GetRrSetGroupDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRrSetGroup() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("rr_set_group[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *PrimaryDNSConfig) GetRrSetGroupDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRrSetGroup() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRrSetGroup() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRrSetGroup() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -5585,6 +6010,24 @@ func (m *PrimaryDNSCreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *PrimaryDNSCreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDefaultRrSetGroupDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultRrSetGroupDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRrSetGroupDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRrSetGroupDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *PrimaryDNSCreateSpecType) GetDefaultRrSetGroupDRefInfo() ([]db.DRefInfo, error) {
@@ -5606,6 +6049,26 @@ func (m *PrimaryDNSCreateSpecType) GetDefaultRrSetGroupDRefInfo() ([]db.DRefInfo
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *PrimaryDNSCreateSpecType) GetDefaultRrSetGroupDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDefaultRrSetGroup() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDefaultRrSetGroup() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultRrSetGroup() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("default_rr_set_group[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *PrimaryDNSCreateSpecType) GetRrSetGroupDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRrSetGroup() == nil {
@@ -5616,6 +6079,26 @@ func (m *PrimaryDNSCreateSpecType) GetRrSetGroupDRefInfo() ([]db.DRefInfo, error
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRrSetGroup() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("rr_set_group[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *PrimaryDNSCreateSpecType) GetRrSetGroupDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRrSetGroup() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRrSetGroup() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRrSetGroup() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -5886,6 +6369,24 @@ func (m *PrimaryDNSGetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *PrimaryDNSGetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDefaultRrSetGroupDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultRrSetGroupDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRrSetGroupDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRrSetGroupDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *PrimaryDNSGetSpecType) GetDefaultRrSetGroupDRefInfo() ([]db.DRefInfo, error) {
@@ -5907,6 +6408,26 @@ func (m *PrimaryDNSGetSpecType) GetDefaultRrSetGroupDRefInfo() ([]db.DRefInfo, e
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *PrimaryDNSGetSpecType) GetDefaultRrSetGroupDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDefaultRrSetGroup() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDefaultRrSetGroup() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultRrSetGroup() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("default_rr_set_group[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *PrimaryDNSGetSpecType) GetRrSetGroupDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRrSetGroup() == nil {
@@ -5917,6 +6438,26 @@ func (m *PrimaryDNSGetSpecType) GetRrSetGroupDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRrSetGroup() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("rr_set_group[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *PrimaryDNSGetSpecType) GetRrSetGroupDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRrSetGroup() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRrSetGroup() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRrSetGroup() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -6188,6 +6729,13 @@ func (m *RRSet) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTypeRecordSetDRefInfo()
 }
+func (m *RRSet) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTypeRecordSetDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *RRSet) GetTypeRecordSetDRefInfo() ([]db.DRefInfo, error) {
@@ -6219,6 +6767,69 @@ func (m *RRSet) GetTypeRecordSetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetLbRecord().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLbRecord().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "lb_record." + dri.DRField
+		}
+		return drInfos, err
+	case *RRSet_NaptrRecord:
+		return nil, nil
+	case *RRSet_DsRecord:
+		return nil, nil
+	case *RRSet_CdsRecord:
+		return nil, nil
+	case *RRSet_AfsdbRecord:
+		return nil, nil
+	case *RRSet_Eui48Record:
+		return nil, nil
+	case *RRSet_Eui64Record:
+		return nil, nil
+	case *RRSet_LocRecord:
+		return nil, nil
+	case *RRSet_SshfpRecord:
+		return nil, nil
+	case *RRSet_TlsaRecord:
+		return nil, nil
+	case *RRSet_CertRecord:
+		return nil, nil
+	case *RRSet_DlvRecord:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RRSet) GetTypeRecordSetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTypeRecordSet() == nil {
+		return nil, nil
+	}
+	switch m.GetTypeRecordSet().(type) {
+	case *RRSet_ARecord:
+		return nil, nil
+	case *RRSet_AaaaRecord:
+		return nil, nil
+	case *RRSet_AliasRecord:
+		return nil, nil
+	case *RRSet_CaaRecord:
+		return nil, nil
+	case *RRSet_CnameRecord:
+		return nil, nil
+	case *RRSet_MxRecord:
+		return nil, nil
+	case *RRSet_NsRecord:
+		return nil, nil
+	case *RRSet_PtrRecord:
+		return nil, nil
+	case *RRSet_SrvRecord:
+		return nil, nil
+	case *RRSet_TxtRecord:
+		return nil, nil
+	case *RRSet_LbRecord:
+		drInfos, err := m.GetLbRecord().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLbRecord().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -6661,6 +7272,13 @@ func (m *RRSetGroup) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRrSetDRefInfo()
 }
+func (m *RRSetGroup) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRrSetDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *RRSetGroup) GetRrSetDRefInfo() ([]db.DRefInfo, error) {
@@ -6672,6 +7290,26 @@ func (m *RRSetGroup) GetRrSetDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRrSet() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("rr_set[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RRSetGroup) GetRrSetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRrSet() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRrSet() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRrSet() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -6875,6 +7513,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDnsTypeDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDnsTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetDnsTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -6886,6 +7531,29 @@ func (m *ReplaceSpecType) GetDnsTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetPrimary().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrimary().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "primary." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_Secondary:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetDnsTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDnsType() == nil {
+		return nil, nil
+	}
+	switch m.GetDnsType().(type) {
+	case *ReplaceSpecType_Primary:
+		drInfos, err := m.GetPrimary().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrimary().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -6959,6 +7627,12 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			}
 		}
 	}
+	if fv, exists := v.FldValidators["namespace_rbac"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace_rbac"))
+		if err := fv(ctx, m.GetNamespaceRbac(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -6984,6 +7658,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["dns_type"] = vFn
 	v.FldValidators["dns_type.primary"] = PrimaryDNSCreateSpecTypeValidator().Validate
 	v.FldValidators["dns_type.secondary"] = SecondaryDNSCreateSpecTypeValidator().Validate
+	v.FldValidators["namespace_rbac"] = NamespaceRBACValidator().Validate
 
 	return v
 }()
@@ -9206,6 +9881,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 		return
 	}
 	m.GetDnsTypeFromGlobalSpecType(f)
+	m.NamespaceRbac = f.GetNamespaceRbac()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -9224,6 +9900,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	_ = m1
 
 	m1.SetDnsTypeToGlobalSpecType(f)
+	f.NamespaceRbac = m1.NamespaceRbac
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -9293,6 +9970,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	m.GetDnsTypeFromGlobalSpecType(f)
 
+	m.NamespaceRbac = f.GetNamespaceRbac()
 	m.NumOfDnsRecords = f.GetNumOfDnsRecords()
 }
 
@@ -9313,6 +9991,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	m1.SetDnsTypeToGlobalSpecType(f)
 
+	f.NamespaceRbac = m1.NamespaceRbac
 	f.NumOfDnsRecords = m1.NumOfDnsRecords
 }
 
@@ -9538,6 +10217,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 		return
 	}
 	m.GetDnsTypeFromGlobalSpecType(f)
+	m.NamespaceRbac = f.GetNamespaceRbac()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -9556,6 +10236,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	_ = m1
 
 	m1.SetDnsTypeToGlobalSpecType(f)
+	f.NamespaceRbac = m1.NamespaceRbac
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

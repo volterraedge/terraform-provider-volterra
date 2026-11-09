@@ -77,6 +77,24 @@ func (m *AWSNetworkMetaData) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *AWSNetworkMetaData) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetMetadataDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMetadataDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTransitGatewayDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTransitGatewayDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *AWSNetworkMetaData) GetMetadataDRefInfo() ([]db.DRefInfo, error) {
@@ -94,6 +112,22 @@ func (m *AWSNetworkMetaData) GetMetadataDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AWSNetworkMetaData) GetMetadataDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMetadata() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetMetadata().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMetadata().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "metadata." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *AWSNetworkMetaData) GetTransitGatewayDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTransitGateway() == nil {
@@ -102,6 +136,22 @@ func (m *AWSNetworkMetaData) GetTransitGatewayDRefInfo() ([]db.DRefInfo, error) 
 	drInfos, err := m.GetTransitGateway().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTransitGateway().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "transit_gateway." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AWSNetworkMetaData) GetTransitGatewayDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTransitGateway() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTransitGateway().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTransitGateway().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1325,6 +1375,24 @@ func (m *NetworkRouteTableData) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *NetworkRouteTableData) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRouteTableDataDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRouteTableDataDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSubnetDataDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSubnetDataDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *NetworkRouteTableData) GetRouteTableDataDRefInfo() ([]db.DRefInfo, error) {
@@ -1334,6 +1402,22 @@ func (m *NetworkRouteTableData) GetRouteTableDataDRefInfo() ([]db.DRefInfo, erro
 	drInfos, err := m.GetRouteTableData().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRouteTableData().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "route_table_data." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *NetworkRouteTableData) GetRouteTableDataDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRouteTableData() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRouteTableData().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRouteTableData().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1352,6 +1436,26 @@ func (m *NetworkRouteTableData) GetSubnetDataDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSubnetData() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("subnet_data[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *NetworkRouteTableData) GetSubnetDataDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSubnetData() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSubnetData() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSubnetData() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1678,6 +1782,13 @@ func (m *NetworkRouteTablesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRoutesDataDRefInfo()
 }
+func (m *NetworkRouteTablesResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRoutesDataDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *NetworkRouteTablesResponse) GetRoutesDataDRefInfo() ([]db.DRefInfo, error) {
@@ -1689,6 +1800,26 @@ func (m *NetworkRouteTablesResponse) GetRoutesDataDRefInfo() ([]db.DRefInfo, err
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoutesData() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("routes_data[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *NetworkRouteTablesResponse) GetRoutesDataDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRoutesData() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutesData() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutesData() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1783,6 +1914,13 @@ func (m *NetworkRoutesData) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRouteTablesDataDRefInfo()
 }
+func (m *NetworkRoutesData) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRouteTablesDataDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *NetworkRoutesData) GetRouteTablesDataDRefInfo() ([]db.DRefInfo, error) {
@@ -1794,6 +1932,26 @@ func (m *NetworkRoutesData) GetRouteTablesDataDRefInfo() ([]db.DRefInfo, error) 
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRouteTablesData() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("route_tables_data[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *NetworkRoutesData) GetRouteTablesDataDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRouteTablesData() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRouteTablesData() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRouteTablesData() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -2081,6 +2239,13 @@ func (m *Node) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNodeTypeDRefInfo()
 }
+func (m *Node) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNodeTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -2142,6 +2307,79 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetSiteMeshGroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteMeshGroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_mesh_group." + dri.DRField
+		}
+		return drInfos, err
+	case *Node_DcClusterGroup:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *Node) GetNodeTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNodeType() == nil {
+		return nil, nil
+	}
+	switch m.GetNodeType().(type) {
+	case *Node_Site:
+		drInfos, err := m.GetSite().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSite().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site." + dri.DRField
+		}
+		return drInfos, err
+	case *Node_TransitGateway:
+		drInfos, err := m.GetTransitGateway().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTransitGateway().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "transit_gateway." + dri.DRField
+		}
+		return drInfos, err
+	case *Node_Network:
+		drInfos, err := m.GetNetwork().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNetwork().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "network." + dri.DRField
+		}
+		return drInfos, err
+	case *Node_Subnet:
+		drInfos, err := m.GetSubnet().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSubnet().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "subnet." + dri.DRField
+		}
+		return drInfos, err
+	case *Node_Instance:
+		drInfos, err := m.GetInstance().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInstance().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "instance." + dri.DRField
+		}
+		return drInfos, err
+	case *Node_SiteMeshGroup:
+		drInfos, err := m.GetSiteMeshGroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteMeshGroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2523,6 +2761,13 @@ func (m *NodeTypeInstance) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetInfoDRefInfo()
 }
+func (m *NodeTypeInstance) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInfoDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *NodeTypeInstance) GetInfoDRefInfo() ([]db.DRefInfo, error) {
@@ -2532,6 +2777,22 @@ func (m *NodeTypeInstance) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInfo().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "info." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *NodeTypeInstance) GetInfoDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInfo() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetInfo().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetInfo().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2631,6 +2892,13 @@ func (m *NodeTypeNetwork) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetInfoDRefInfo()
 }
+func (m *NodeTypeNetwork) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInfoDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *NodeTypeNetwork) GetInfoDRefInfo() ([]db.DRefInfo, error) {
@@ -2640,6 +2908,22 @@ func (m *NodeTypeNetwork) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInfo().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "info." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *NodeTypeNetwork) GetInfoDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInfo() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetInfo().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetInfo().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2744,6 +3028,13 @@ func (m *NodeTypeSite) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetInfoDRefInfo()
 }
+func (m *NodeTypeSite) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInfoDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *NodeTypeSite) GetInfoDRefInfo() ([]db.DRefInfo, error) {
@@ -2753,6 +3044,22 @@ func (m *NodeTypeSite) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInfo().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "info." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *NodeTypeSite) GetInfoDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInfo() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetInfo().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetInfo().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2857,6 +3164,13 @@ func (m *NodeTypeSiteMeshGroup) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetInfoDRefInfo()
 }
+func (m *NodeTypeSiteMeshGroup) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInfoDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *NodeTypeSiteMeshGroup) GetInfoDRefInfo() ([]db.DRefInfo, error) {
@@ -2866,6 +3180,22 @@ func (m *NodeTypeSiteMeshGroup) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInfo().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "info." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *NodeTypeSiteMeshGroup) GetInfoDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInfo() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetInfo().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetInfo().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2962,6 +3292,13 @@ func (m *NodeTypeSubnet) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetInfoDRefInfo()
 }
+func (m *NodeTypeSubnet) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInfoDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *NodeTypeSubnet) GetInfoDRefInfo() ([]db.DRefInfo, error) {
@@ -2971,6 +3308,22 @@ func (m *NodeTypeSubnet) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInfo().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "info." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *NodeTypeSubnet) GetInfoDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInfo() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetInfo().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetInfo().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3075,6 +3428,13 @@ func (m *NodeTypeTransitGateway) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetInfoDRefInfo()
 }
+func (m *NodeTypeTransitGateway) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInfoDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *NodeTypeTransitGateway) GetInfoDRefInfo() ([]db.DRefInfo, error) {
@@ -3084,6 +3444,22 @@ func (m *NodeTypeTransitGateway) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetInfo().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInfo().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "info." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *NodeTypeTransitGateway) GetInfoDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInfo() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetInfo().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetInfo().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3182,6 +3558,13 @@ func (m *RouteTableData) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRouteTableDRefInfo()
 }
+func (m *RouteTableData) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRouteTableDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *RouteTableData) GetRouteTableDRefInfo() ([]db.DRefInfo, error) {
@@ -3191,6 +3574,22 @@ func (m *RouteTableData) GetRouteTableDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetRouteTable().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRouteTable().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "route_table." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RouteTableData) GetRouteTableDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRouteTable() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRouteTable().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRouteTable().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3476,6 +3875,13 @@ func (m *RouteTableResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRouteTableDRefInfo()
 }
+func (m *RouteTableResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRouteTableDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *RouteTableResponse) GetRouteTableDRefInfo() ([]db.DRefInfo, error) {
@@ -3485,6 +3891,22 @@ func (m *RouteTableResponse) GetRouteTableDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetRouteTable().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRouteTable().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "route_table." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RouteTableResponse) GetRouteTableDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRouteTable() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRouteTable().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRouteTable().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3928,6 +4350,13 @@ func (m *SiteNetworksResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCloudNetworkMetaDataDRefInfo()
 }
+func (m *SiteNetworksResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudNetworkMetaDataDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SiteNetworksResponse) GetCloudNetworkMetaDataDRefInfo() ([]db.DRefInfo, error) {
@@ -3939,6 +4368,27 @@ func (m *SiteNetworksResponse) GetCloudNetworkMetaDataDRefInfo() ([]db.DRefInfo,
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SiteNetworksResponse) GetCloudNetworkMetaDataDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCloudNetworkMetaData() == nil {
+		return nil, nil
+	}
+	switch m.GetCloudNetworkMetaData().(type) {
+	case *SiteNetworksResponse_Aws:
+		drInfos, err := m.GetAws().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAws().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4245,6 +4695,13 @@ func (m *SubnetData) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSubnetDRefInfo()
 }
+func (m *SubnetData) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSubnetDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SubnetData) GetSubnetDRefInfo() ([]db.DRefInfo, error) {
@@ -4254,6 +4711,22 @@ func (m *SubnetData) GetSubnetDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetSubnet().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSubnet().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "subnet." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SubnetData) GetSubnetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSubnet() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetSubnet().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSubnet().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -4649,6 +5122,13 @@ func (m *TGWRouteTablesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRoutesDataDRefInfo()
 }
+func (m *TGWRouteTablesResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRoutesDataDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TGWRouteTablesResponse) GetRoutesDataDRefInfo() ([]db.DRefInfo, error) {
@@ -4660,6 +5140,26 @@ func (m *TGWRouteTablesResponse) GetRoutesDataDRefInfo() ([]db.DRefInfo, error) 
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoutesData() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("routes_data[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TGWRouteTablesResponse) GetRoutesDataDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRoutesData() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutesData() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutesData() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -4754,6 +5254,13 @@ func (m *TopologyResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNodesDRefInfo()
 }
+func (m *TopologyResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNodesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TopologyResponse) GetNodesDRefInfo() ([]db.DRefInfo, error) {
@@ -4765,6 +5272,26 @@ func (m *TopologyResponse) GetNodesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNodes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("nodes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TopologyResponse) GetNodesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNodes() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetNodes() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodes() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]

@@ -19,6 +19,7 @@ import (
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views_common_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
 )
 
 var (
@@ -453,8 +454,86 @@ func (m *AzureVnetIngressEgressGwARReplaceType) GetDRefInfo() ([]db.DRefInfo, er
 	}
 	return drInfos, nil
 }
+func (m *AzureVnetIngressEgressGwARReplaceType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *AzureVnetIngressEgressGwARReplaceType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDcClusterGroupChoice().(type) {
+	case *AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup:
+		return nil, nil
+	case *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupOutsideVn:
+		vref := m.GetDcClusterGroupOutsideVn()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_outside_vn",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *AzureVnetIngressEgressGwARReplaceType_DcClusterGroupInsideVn:
+		vref := m.GetDcClusterGroupInsideVn()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_inside_vn",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *AzureVnetIngressEgressGwARReplaceType) GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *AzureVnetIngressEgressGwARReplaceType_NoDcClusterGroup:
 		return nil, nil
@@ -575,6 +654,31 @@ func (m *AzureVnetIngressEgressGwARReplaceType) GetForwardProxyChoiceDRefInfo() 
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwARReplaceType) GetForwardProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyChoice().(type) {
+	case *AzureVnetIngressEgressGwARReplaceType_NoForwardProxy:
+		return nil, nil
+	case *AzureVnetIngressEgressGwARReplaceType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetIngressEgressGwARReplaceType_ForwardProxyAllowAll:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetIngressEgressGwARReplaceType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGlobalNetworkChoice() == nil {
@@ -598,6 +702,29 @@ func (m *AzureVnetIngressEgressGwARReplaceType) GetGlobalNetworkChoiceDRefInfo()
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwARReplaceType) GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGlobalNetworkChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetGlobalNetworkChoice().(type) {
+	case *AzureVnetIngressEgressGwARReplaceType_NoGlobalNetwork:
+		return nil, nil
+	case *AzureVnetIngressEgressGwARReplaceType_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetIngressEgressGwARReplaceType) GetInsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInsideStaticRouteChoice() == nil {
@@ -610,6 +737,29 @@ func (m *AzureVnetIngressEgressGwARReplaceType) GetInsideStaticRouteChoiceDRefIn
 		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "inside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwARReplaceType) GetInsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetInsideStaticRouteChoice().(type) {
+	case *AzureVnetIngressEgressGwARReplaceType_NoInsideStaticRoutes:
+		return nil, nil
+	case *AzureVnetIngressEgressGwARReplaceType_InsideStaticRoutes:
+		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -654,6 +804,39 @@ func (m *AzureVnetIngressEgressGwARReplaceType) GetNetworkPolicyChoiceDRefInfo()
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwARReplaceType) GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *AzureVnetIngressEgressGwARReplaceType_NoNetworkPolicy:
+		return nil, nil
+	case *AzureVnetIngressEgressGwARReplaceType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetIngressEgressGwARReplaceType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetIngressEgressGwARReplaceType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOutsideStaticRouteChoice() == nil {
@@ -666,6 +849,29 @@ func (m *AzureVnetIngressEgressGwARReplaceType) GetOutsideStaticRouteChoiceDRefI
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwARReplaceType) GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOutsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOutsideStaticRouteChoice().(type) {
+	case *AzureVnetIngressEgressGwARReplaceType_NoOutsideStaticRoutes:
+		return nil, nil
+	case *AzureVnetIngressEgressGwARReplaceType_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1279,8 +1485,86 @@ func (m *AzureVnetIngressEgressGwARType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *AzureVnetIngressEgressGwARType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *AzureVnetIngressEgressGwARType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDcClusterGroupChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoDcClusterGroup:
+		return nil, nil
+	case *AzureVnetIngressEgressGwARType_DcClusterGroupOutsideVn:
+		vref := m.GetDcClusterGroupOutsideVn()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_outside_vn",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *AzureVnetIngressEgressGwARType_DcClusterGroupInsideVn:
+		vref := m.GetDcClusterGroupInsideVn()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_inside_vn",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *AzureVnetIngressEgressGwARType) GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *AzureVnetIngressEgressGwARType_NoDcClusterGroup:
 		return nil, nil
@@ -1401,6 +1685,31 @@ func (m *AzureVnetIngressEgressGwARType) GetForwardProxyChoiceDRefInfo() ([]db.D
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwARType) GetForwardProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoForwardProxy:
+		return nil, nil
+	case *AzureVnetIngressEgressGwARType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetIngressEgressGwARType_ForwardProxyAllowAll:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetIngressEgressGwARType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGlobalNetworkChoice() == nil {
@@ -1424,6 +1733,29 @@ func (m *AzureVnetIngressEgressGwARType) GetGlobalNetworkChoiceDRefInfo() ([]db.
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwARType) GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGlobalNetworkChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetGlobalNetworkChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoGlobalNetwork:
+		return nil, nil
+	case *AzureVnetIngressEgressGwARType_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetIngressEgressGwARType) GetInsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInsideStaticRouteChoice() == nil {
@@ -1436,6 +1768,29 @@ func (m *AzureVnetIngressEgressGwARType) GetInsideStaticRouteChoiceDRefInfo() ([
 		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "inside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwARType) GetInsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetInsideStaticRouteChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoInsideStaticRoutes:
+		return nil, nil
+	case *AzureVnetIngressEgressGwARType_InsideStaticRoutes:
+		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1480,6 +1835,39 @@ func (m *AzureVnetIngressEgressGwARType) GetNetworkPolicyChoiceDRefInfo() ([]db.
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwARType) GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoNetworkPolicy:
+		return nil, nil
+	case *AzureVnetIngressEgressGwARType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetIngressEgressGwARType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetIngressEgressGwARType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOutsideStaticRouteChoice() == nil {
@@ -1492,6 +1880,29 @@ func (m *AzureVnetIngressEgressGwARType) GetOutsideStaticRouteChoiceDRefInfo() (
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwARType) GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOutsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOutsideStaticRouteChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoOutsideStaticRoutes:
+		return nil, nil
+	case *AzureVnetIngressEgressGwARType_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2139,8 +2550,86 @@ func (m *AzureVnetIngressEgressGwReplaceType) GetDRefInfo() ([]db.DRefInfo, erro
 	}
 	return drInfos, nil
 }
+func (m *AzureVnetIngressEgressGwReplaceType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *AzureVnetIngressEgressGwReplaceType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDcClusterGroupChoice().(type) {
+	case *AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup:
+		return nil, nil
+	case *AzureVnetIngressEgressGwReplaceType_DcClusterGroupOutsideVn:
+		vref := m.GetDcClusterGroupOutsideVn()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_outside_vn",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *AzureVnetIngressEgressGwReplaceType_DcClusterGroupInsideVn:
+		vref := m.GetDcClusterGroupInsideVn()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_inside_vn",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *AzureVnetIngressEgressGwReplaceType) GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *AzureVnetIngressEgressGwReplaceType_NoDcClusterGroup:
 		return nil, nil
@@ -2261,6 +2750,31 @@ func (m *AzureVnetIngressEgressGwReplaceType) GetForwardProxyChoiceDRefInfo() ([
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwReplaceType) GetForwardProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyChoice().(type) {
+	case *AzureVnetIngressEgressGwReplaceType_NoForwardProxy:
+		return nil, nil
+	case *AzureVnetIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetIngressEgressGwReplaceType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGlobalNetworkChoice() == nil {
@@ -2284,6 +2798,29 @@ func (m *AzureVnetIngressEgressGwReplaceType) GetGlobalNetworkChoiceDRefInfo() (
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwReplaceType) GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGlobalNetworkChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetGlobalNetworkChoice().(type) {
+	case *AzureVnetIngressEgressGwReplaceType_NoGlobalNetwork:
+		return nil, nil
+	case *AzureVnetIngressEgressGwReplaceType_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetIngressEgressGwReplaceType) GetInsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInsideStaticRouteChoice() == nil {
@@ -2296,6 +2833,29 @@ func (m *AzureVnetIngressEgressGwReplaceType) GetInsideStaticRouteChoiceDRefInfo
 		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "inside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwReplaceType) GetInsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetInsideStaticRouteChoice().(type) {
+	case *AzureVnetIngressEgressGwReplaceType_NoInsideStaticRoutes:
+		return nil, nil
+	case *AzureVnetIngressEgressGwReplaceType_InsideStaticRoutes:
+		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2340,6 +2900,39 @@ func (m *AzureVnetIngressEgressGwReplaceType) GetNetworkPolicyChoiceDRefInfo() (
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwReplaceType) GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *AzureVnetIngressEgressGwReplaceType_NoNetworkPolicy:
+		return nil, nil
+	case *AzureVnetIngressEgressGwReplaceType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetIngressEgressGwReplaceType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetIngressEgressGwReplaceType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOutsideStaticRouteChoice() == nil {
@@ -2352,6 +2945,29 @@ func (m *AzureVnetIngressEgressGwReplaceType) GetOutsideStaticRouteChoiceDRefInf
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwReplaceType) GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOutsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOutsideStaticRouteChoice().(type) {
+	case *AzureVnetIngressEgressGwReplaceType_NoOutsideStaticRoutes:
+		return nil, nil
+	case *AzureVnetIngressEgressGwReplaceType_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -3022,8 +3638,86 @@ func (m *AzureVnetIngressEgressGwType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *AzureVnetIngressEgressGwType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *AzureVnetIngressEgressGwType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDcClusterGroupChoice().(type) {
+	case *AzureVnetIngressEgressGwType_NoDcClusterGroup:
+		return nil, nil
+	case *AzureVnetIngressEgressGwType_DcClusterGroupOutsideVn:
+		vref := m.GetDcClusterGroupOutsideVn()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_outside_vn",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *AzureVnetIngressEgressGwType_DcClusterGroupInsideVn:
+		vref := m.GetDcClusterGroupInsideVn()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_inside_vn",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *AzureVnetIngressEgressGwType) GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *AzureVnetIngressEgressGwType_NoDcClusterGroup:
 		return nil, nil
@@ -3144,6 +3838,31 @@ func (m *AzureVnetIngressEgressGwType) GetForwardProxyChoiceDRefInfo() ([]db.DRe
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwType) GetForwardProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyChoice().(type) {
+	case *AzureVnetIngressEgressGwType_NoForwardProxy:
+		return nil, nil
+	case *AzureVnetIngressEgressGwType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetIngressEgressGwType_ForwardProxyAllowAll:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetIngressEgressGwType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGlobalNetworkChoice() == nil {
@@ -3167,6 +3886,29 @@ func (m *AzureVnetIngressEgressGwType) GetGlobalNetworkChoiceDRefInfo() ([]db.DR
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwType) GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGlobalNetworkChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetGlobalNetworkChoice().(type) {
+	case *AzureVnetIngressEgressGwType_NoGlobalNetwork:
+		return nil, nil
+	case *AzureVnetIngressEgressGwType_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetIngressEgressGwType) GetInsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInsideStaticRouteChoice() == nil {
@@ -3179,6 +3921,29 @@ func (m *AzureVnetIngressEgressGwType) GetInsideStaticRouteChoiceDRefInfo() ([]d
 		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "inside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwType) GetInsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetInsideStaticRouteChoice().(type) {
+	case *AzureVnetIngressEgressGwType_NoInsideStaticRoutes:
+		return nil, nil
+	case *AzureVnetIngressEgressGwType_InsideStaticRoutes:
+		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -3223,6 +3988,39 @@ func (m *AzureVnetIngressEgressGwType) GetNetworkPolicyChoiceDRefInfo() ([]db.DR
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwType) GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *AzureVnetIngressEgressGwType_NoNetworkPolicy:
+		return nil, nil
+	case *AzureVnetIngressEgressGwType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetIngressEgressGwType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetIngressEgressGwType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOutsideStaticRouteChoice() == nil {
@@ -3235,6 +4033,29 @@ func (m *AzureVnetIngressEgressGwType) GetOutsideStaticRouteChoiceDRefInfo() ([]
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetIngressEgressGwType) GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOutsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOutsideStaticRouteChoice().(type) {
+	case *AzureVnetIngressEgressGwType_NoOutsideStaticRoutes:
+		return nil, nil
+	case *AzureVnetIngressEgressGwType_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4737,8 +5558,70 @@ func (m *AzureVnetVoltstackClusterARReplaceType) GetDRefInfo() ([]db.DRefInfo, e
 	}
 	return drInfos, nil
 }
+func (m *AzureVnetVoltstackClusterARReplaceType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetK8SClusterChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetK8SClusterChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *AzureVnetVoltstackClusterARReplaceType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDcClusterGroupChoice().(type) {
+	case *AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup:
+		return nil, nil
+	case *AzureVnetVoltstackClusterARReplaceType_DcClusterGroup:
+		vref := m.GetDcClusterGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *AzureVnetVoltstackClusterARReplaceType) GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *AzureVnetVoltstackClusterARReplaceType_NoDcClusterGroup:
 		return nil, nil
@@ -4821,6 +5704,31 @@ func (m *AzureVnetVoltstackClusterARReplaceType) GetForwardProxyChoiceDRefInfo()
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterARReplaceType) GetForwardProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyChoice().(type) {
+	case *AzureVnetVoltstackClusterARReplaceType_NoForwardProxy:
+		return nil, nil
+	case *AzureVnetVoltstackClusterARReplaceType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetVoltstackClusterARReplaceType_ForwardProxyAllowAll:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetVoltstackClusterARReplaceType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGlobalNetworkChoice() == nil {
@@ -4844,7 +5752,54 @@ func (m *AzureVnetVoltstackClusterARReplaceType) GetGlobalNetworkChoiceDRefInfo(
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterARReplaceType) GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGlobalNetworkChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetGlobalNetworkChoice().(type) {
+	case *AzureVnetVoltstackClusterARReplaceType_NoGlobalNetwork:
+		return nil, nil
+	case *AzureVnetVoltstackClusterARReplaceType_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *AzureVnetVoltstackClusterARReplaceType) GetK8SClusterChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetK8SClusterChoice().(type) {
+	case *AzureVnetVoltstackClusterARReplaceType_NoK8SCluster:
+		return nil, nil
+	case *AzureVnetVoltstackClusterARReplaceType_K8SCluster:
+		vref := m.GetK8SCluster()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_cluster.Object")
+		dri := db.DRefInfo{
+			RefdType:   "k8s_cluster.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "k8s_cluster",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *AzureVnetVoltstackClusterARReplaceType) GetK8SClusterChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetK8SClusterChoice().(type) {
 	case *AzureVnetVoltstackClusterARReplaceType_NoK8SCluster:
 		return nil, nil
@@ -4935,6 +5890,39 @@ func (m *AzureVnetVoltstackClusterARReplaceType) GetNetworkPolicyChoiceDRefInfo(
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterARReplaceType) GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *AzureVnetVoltstackClusterARReplaceType_NoNetworkPolicy:
+		return nil, nil
+	case *AzureVnetVoltstackClusterARReplaceType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetVoltstackClusterARReplaceType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetVoltstackClusterARReplaceType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOutsideStaticRouteChoice() == nil {
@@ -4947,6 +5935,29 @@ func (m *AzureVnetVoltstackClusterARReplaceType) GetOutsideStaticRouteChoiceDRef
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterARReplaceType) GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOutsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOutsideStaticRouteChoice().(type) {
+	case *AzureVnetVoltstackClusterARReplaceType_NoOutsideStaticRoutes:
+		return nil, nil
+	case *AzureVnetVoltstackClusterARReplaceType_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -5485,8 +6496,70 @@ func (m *AzureVnetVoltstackClusterARType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *AzureVnetVoltstackClusterARType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetK8SClusterChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetK8SClusterChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *AzureVnetVoltstackClusterARType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDcClusterGroupChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoDcClusterGroup:
+		return nil, nil
+	case *AzureVnetVoltstackClusterARType_DcClusterGroup:
+		vref := m.GetDcClusterGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *AzureVnetVoltstackClusterARType) GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *AzureVnetVoltstackClusterARType_NoDcClusterGroup:
 		return nil, nil
@@ -5569,6 +6642,31 @@ func (m *AzureVnetVoltstackClusterARType) GetForwardProxyChoiceDRefInfo() ([]db.
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterARType) GetForwardProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoForwardProxy:
+		return nil, nil
+	case *AzureVnetVoltstackClusterARType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetVoltstackClusterARType_ForwardProxyAllowAll:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetVoltstackClusterARType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGlobalNetworkChoice() == nil {
@@ -5592,7 +6690,54 @@ func (m *AzureVnetVoltstackClusterARType) GetGlobalNetworkChoiceDRefInfo() ([]db
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterARType) GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGlobalNetworkChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetGlobalNetworkChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoGlobalNetwork:
+		return nil, nil
+	case *AzureVnetVoltstackClusterARType_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *AzureVnetVoltstackClusterARType) GetK8SClusterChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetK8SClusterChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoK8SCluster:
+		return nil, nil
+	case *AzureVnetVoltstackClusterARType_K8SCluster:
+		vref := m.GetK8SCluster()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_cluster.Object")
+		dri := db.DRefInfo{
+			RefdType:   "k8s_cluster.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "k8s_cluster",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *AzureVnetVoltstackClusterARType) GetK8SClusterChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetK8SClusterChoice().(type) {
 	case *AzureVnetVoltstackClusterARType_NoK8SCluster:
 		return nil, nil
@@ -5683,6 +6828,39 @@ func (m *AzureVnetVoltstackClusterARType) GetNetworkPolicyChoiceDRefInfo() ([]db
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterARType) GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoNetworkPolicy:
+		return nil, nil
+	case *AzureVnetVoltstackClusterARType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetVoltstackClusterARType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetVoltstackClusterARType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOutsideStaticRouteChoice() == nil {
@@ -5695,6 +6873,29 @@ func (m *AzureVnetVoltstackClusterARType) GetOutsideStaticRouteChoiceDRefInfo() 
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterARType) GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOutsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOutsideStaticRouteChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoOutsideStaticRoutes:
+		return nil, nil
+	case *AzureVnetVoltstackClusterARType_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -6320,8 +7521,70 @@ func (m *AzureVnetVoltstackClusterReplaceType) GetDRefInfo() ([]db.DRefInfo, err
 	}
 	return drInfos, nil
 }
+func (m *AzureVnetVoltstackClusterReplaceType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetK8SClusterChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetK8SClusterChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *AzureVnetVoltstackClusterReplaceType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDcClusterGroupChoice().(type) {
+	case *AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup:
+		return nil, nil
+	case *AzureVnetVoltstackClusterReplaceType_DcClusterGroup:
+		vref := m.GetDcClusterGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *AzureVnetVoltstackClusterReplaceType) GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *AzureVnetVoltstackClusterReplaceType_NoDcClusterGroup:
 		return nil, nil
@@ -6404,6 +7667,31 @@ func (m *AzureVnetVoltstackClusterReplaceType) GetForwardProxyChoiceDRefInfo() (
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterReplaceType) GetForwardProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyChoice().(type) {
+	case *AzureVnetVoltstackClusterReplaceType_NoForwardProxy:
+		return nil, nil
+	case *AzureVnetVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetVoltstackClusterReplaceType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGlobalNetworkChoice() == nil {
@@ -6427,7 +7715,54 @@ func (m *AzureVnetVoltstackClusterReplaceType) GetGlobalNetworkChoiceDRefInfo() 
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterReplaceType) GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGlobalNetworkChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetGlobalNetworkChoice().(type) {
+	case *AzureVnetVoltstackClusterReplaceType_NoGlobalNetwork:
+		return nil, nil
+	case *AzureVnetVoltstackClusterReplaceType_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *AzureVnetVoltstackClusterReplaceType) GetK8SClusterChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetK8SClusterChoice().(type) {
+	case *AzureVnetVoltstackClusterReplaceType_NoK8SCluster:
+		return nil, nil
+	case *AzureVnetVoltstackClusterReplaceType_K8SCluster:
+		vref := m.GetK8SCluster()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_cluster.Object")
+		dri := db.DRefInfo{
+			RefdType:   "k8s_cluster.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "k8s_cluster",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *AzureVnetVoltstackClusterReplaceType) GetK8SClusterChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetK8SClusterChoice().(type) {
 	case *AzureVnetVoltstackClusterReplaceType_NoK8SCluster:
 		return nil, nil
@@ -6518,6 +7853,39 @@ func (m *AzureVnetVoltstackClusterReplaceType) GetNetworkPolicyChoiceDRefInfo() 
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterReplaceType) GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *AzureVnetVoltstackClusterReplaceType_NoNetworkPolicy:
+		return nil, nil
+	case *AzureVnetVoltstackClusterReplaceType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetVoltstackClusterReplaceType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetVoltstackClusterReplaceType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOutsideStaticRouteChoice() == nil {
@@ -6530,6 +7898,29 @@ func (m *AzureVnetVoltstackClusterReplaceType) GetOutsideStaticRouteChoiceDRefIn
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterReplaceType) GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOutsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOutsideStaticRouteChoice().(type) {
+	case *AzureVnetVoltstackClusterReplaceType_NoOutsideStaticRoutes:
+		return nil, nil
+	case *AzureVnetVoltstackClusterReplaceType_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -7125,8 +8516,70 @@ func (m *AzureVnetVoltstackClusterType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *AzureVnetVoltstackClusterType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetK8SClusterChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetK8SClusterChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *AzureVnetVoltstackClusterType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDcClusterGroupChoice().(type) {
+	case *AzureVnetVoltstackClusterType_NoDcClusterGroup:
+		return nil, nil
+	case *AzureVnetVoltstackClusterType_DcClusterGroup:
+		vref := m.GetDcClusterGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *AzureVnetVoltstackClusterType) GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *AzureVnetVoltstackClusterType_NoDcClusterGroup:
 		return nil, nil
@@ -7209,6 +8662,31 @@ func (m *AzureVnetVoltstackClusterType) GetForwardProxyChoiceDRefInfo() ([]db.DR
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterType) GetForwardProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyChoice().(type) {
+	case *AzureVnetVoltstackClusterType_NoForwardProxy:
+		return nil, nil
+	case *AzureVnetVoltstackClusterType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetVoltstackClusterType_ForwardProxyAllowAll:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetVoltstackClusterType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGlobalNetworkChoice() == nil {
@@ -7232,7 +8710,54 @@ func (m *AzureVnetVoltstackClusterType) GetGlobalNetworkChoiceDRefInfo() ([]db.D
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterType) GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGlobalNetworkChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetGlobalNetworkChoice().(type) {
+	case *AzureVnetVoltstackClusterType_NoGlobalNetwork:
+		return nil, nil
+	case *AzureVnetVoltstackClusterType_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *AzureVnetVoltstackClusterType) GetK8SClusterChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetK8SClusterChoice().(type) {
+	case *AzureVnetVoltstackClusterType_NoK8SCluster:
+		return nil, nil
+	case *AzureVnetVoltstackClusterType_K8SCluster:
+		vref := m.GetK8SCluster()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_cluster.Object")
+		dri := db.DRefInfo{
+			RefdType:   "k8s_cluster.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "k8s_cluster",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *AzureVnetVoltstackClusterType) GetK8SClusterChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetK8SClusterChoice().(type) {
 	case *AzureVnetVoltstackClusterType_NoK8SCluster:
 		return nil, nil
@@ -7323,6 +8848,39 @@ func (m *AzureVnetVoltstackClusterType) GetNetworkPolicyChoiceDRefInfo() ([]db.D
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterType) GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *AzureVnetVoltstackClusterType_NoNetworkPolicy:
+		return nil, nil
+	case *AzureVnetVoltstackClusterType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *AzureVnetVoltstackClusterType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AzureVnetVoltstackClusterType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOutsideStaticRouteChoice() == nil {
@@ -7335,6 +8893,29 @@ func (m *AzureVnetVoltstackClusterType) GetOutsideStaticRouteChoiceDRefInfo() ([
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AzureVnetVoltstackClusterType) GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOutsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOutsideStaticRouteChoice().(type) {
+	case *AzureVnetVoltstackClusterType_NoOutsideStaticRoutes:
+		return nil, nil
+	case *AzureVnetVoltstackClusterType_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -8014,8 +9595,53 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDeploymentDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDeploymentDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *CreateSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDeployment().(type) {
+	case *CreateSpecType_AzureCred:
+		vref := m.GetAzureCred()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_credentials.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_credentials.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "azure_cred",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *CreateSpecType) GetDeploymentDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDeployment().(type) {
 	case *CreateSpecType_AzureCred:
 		vref := m.GetAzureCred()
@@ -8071,6 +9697,30 @@ func (m *CreateSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Interf
 }
 
 func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetLogsReceiverChoice().(type) {
+	case *CreateSpecType_LogsStreamingDisabled:
+		return nil, nil
+	case *CreateSpecType_LogReceiver:
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		dri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *CreateSpecType_LogsStreamingDisabled:
 		return nil, nil
@@ -8172,6 +9822,61 @@ func (m *CreateSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetVoltstackClusterAr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVoltstackClusterAr().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "voltstack_cluster_ar." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetSiteTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteType() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteType().(type) {
+	case *CreateSpecType_IngressGw:
+		return nil, nil
+	case *CreateSpecType_IngressEgressGw:
+		drInfos, err := m.GetIngressEgressGw().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIngressEgressGw().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ingress_egress_gw." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_VoltstackCluster:
+		drInfos, err := m.GetVoltstackCluster().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVoltstackCluster().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "voltstack_cluster." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_IngressGwAr:
+		return nil, nil
+	case *CreateSpecType_IngressEgressGwAr:
+		drInfos, err := m.GetIngressEgressGwAr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIngressEgressGwAr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ingress_egress_gw_ar." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_VoltstackClusterAr:
+		drInfos, err := m.GetVoltstackClusterAr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVoltstackClusterAr().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -8970,6 +10675,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
+	v.FldValidators["waf_signatures"] = ves_io_schema_views_common_waf.LiveSignaturesUpdateValidator().Validate
 	v.FldValidators["admin_password"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
@@ -9780,8 +11486,55 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDeploymentDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDeploymentDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDeployment().(type) {
+	case *GetSpecType_AzureCred:
+		vref := m.GetAzureCred()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_credentials.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_credentials.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "azure_cred",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *GetSpecType_Assisted:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GetSpecType) GetDeploymentDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDeployment().(type) {
 	case *GetSpecType_AzureCred:
 		vref := m.GetAzureCred()
@@ -9840,6 +11593,30 @@ func (m *GetSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Interface
 }
 
 func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetLogsReceiverChoice().(type) {
+	case *GetSpecType_LogsStreamingDisabled:
+		return nil, nil
+	case *GetSpecType_LogReceiver:
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		dri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GetSpecType) GetLogsReceiverChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GetSpecType_LogsStreamingDisabled:
 		return nil, nil
@@ -9941,6 +11718,61 @@ func (m *GetSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetVoltstackClusterAr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVoltstackClusterAr().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "voltstack_cluster_ar." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetSiteTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteType() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteType().(type) {
+	case *GetSpecType_IngressGw:
+		return nil, nil
+	case *GetSpecType_IngressEgressGw:
+		drInfos, err := m.GetIngressEgressGw().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIngressEgressGw().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ingress_egress_gw." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_VoltstackCluster:
+		drInfos, err := m.GetVoltstackCluster().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVoltstackCluster().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "voltstack_cluster." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_IngressGwAr:
+		return nil, nil
+	case *GetSpecType_IngressEgressGwAr:
+		drInfos, err := m.GetIngressEgressGwAr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIngressEgressGwAr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ingress_egress_gw_ar." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_VoltstackClusterAr:
+		drInfos, err := m.GetVoltstackClusterAr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVoltstackClusterAr().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -10869,6 +12701,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
+	v.FldValidators["waf_signatures"] = ves_io_schema_views_common_waf.LiveSignaturesUpdateValidator().Validate
 	v.FldValidators["admin_password"] = ves_io_schema.SecretTypeValidator().Validate
 	v.FldValidators["cloud_site_info"] = AzureVnetSiteInfoTypeValidator().Validate
 
@@ -10974,8 +12807,65 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDeploymentDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDeploymentDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTfParamsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTfParamsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDeployment().(type) {
+	case *GlobalSpecType_AzureCred:
+		vref := m.GetAzureCred()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_credentials.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_credentials.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "azure_cred",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *GlobalSpecType_Assisted:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GlobalSpecType) GetDeploymentDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDeployment().(type) {
 	case *GlobalSpecType_AzureCred:
 		vref := m.GetAzureCred()
@@ -11034,6 +12924,30 @@ func (m *GlobalSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Interf
 }
 
 func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetLogsReceiverChoice().(type) {
+	case *GlobalSpecType_LogsStreamingDisabled:
+		return nil, nil
+	case *GlobalSpecType_LogReceiver:
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		dri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GlobalSpecType_LogsStreamingDisabled:
 		return nil, nil
@@ -11146,7 +13060,79 @@ func (m *GlobalSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetSiteTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteType() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteType().(type) {
+	case *GlobalSpecType_IngressGw:
+		return nil, nil
+	case *GlobalSpecType_IngressEgressGw:
+		drInfos, err := m.GetIngressEgressGw().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIngressEgressGw().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ingress_egress_gw." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_VoltstackCluster:
+		drInfos, err := m.GetVoltstackCluster().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVoltstackCluster().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "voltstack_cluster." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_IngressGwAr:
+		return nil, nil
+	case *GlobalSpecType_IngressEgressGwAr:
+		drInfos, err := m.GetIngressEgressGwAr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIngressEgressGwAr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ingress_egress_gw_ar." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_VoltstackClusterAr:
+		drInfos, err := m.GetVoltstackClusterAr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVoltstackClusterAr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "voltstack_cluster_ar." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetTfParamsDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetTfParams()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("terraform_parameters.Object")
+	dri := db.DRefInfo{
+		RefdType:   "terraform_parameters.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "tf_params",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetTfParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetTfParams()
 	if vref == nil {
 		return nil, nil
@@ -11192,6 +13178,23 @@ func (m *GlobalSpecType) GetTfParamsDBEntries(ctx context.Context, d db.Interfac
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -12205,6 +14208,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
+	v.FldValidators["waf_signatures"] = ves_io_schema_views_common_waf.LiveSignaturesUpdateValidator().Validate
 	v.FldValidators["admin_password"] = ves_io_schema.SecretTypeValidator().Validate
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -12428,8 +14432,53 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDeploymentDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDeploymentDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ReplaceSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDeployment().(type) {
+	case *ReplaceSpecType_AzureCred:
+		vref := m.GetAzureCred()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_credentials.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_credentials.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "azure_cred",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ReplaceSpecType) GetDeploymentDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDeployment().(type) {
 	case *ReplaceSpecType_AzureCred:
 		vref := m.GetAzureCred()
@@ -12485,6 +14534,30 @@ func (m *ReplaceSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Inter
 }
 
 func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetLogsReceiverChoice().(type) {
+	case *ReplaceSpecType_LogsStreamingDisabled:
+		return nil, nil
+	case *ReplaceSpecType_LogReceiver:
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		dri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *ReplaceSpecType_LogsStreamingDisabled:
 		return nil, nil
@@ -12586,6 +14659,61 @@ func (m *ReplaceSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetVoltstackClusterAr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVoltstackClusterAr().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "voltstack_cluster_ar." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetSiteTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteType() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteType().(type) {
+	case *ReplaceSpecType_IngressGw:
+		return nil, nil
+	case *ReplaceSpecType_IngressEgressGw:
+		drInfos, err := m.GetIngressEgressGw().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIngressEgressGw().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ingress_egress_gw." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_VoltstackCluster:
+		drInfos, err := m.GetVoltstackCluster().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVoltstackCluster().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "voltstack_cluster." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_IngressGwAr:
+		return nil, nil
+	case *ReplaceSpecType_IngressEgressGwAr:
+		drInfos, err := m.GetIngressEgressGwAr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIngressEgressGwAr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ingress_egress_gw_ar." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_VoltstackClusterAr:
+		drInfos, err := m.GetVoltstackClusterAr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVoltstackClusterAr().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -13276,6 +15404,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
+	v.FldValidators["waf_signatures"] = ves_io_schema_views_common_waf.LiveSignaturesUpdateValidator().Validate
 
 	return v
 }()

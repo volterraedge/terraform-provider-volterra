@@ -45,6 +45,10 @@ resource "volterra_bgp" "example" {
 
     bfd_disabled = true
 
+    // One of the arguments from this list "ebgp_multihop_disabled ebgp_multihop_enabled" can be set
+
+    ebgp_multihop_enabled = true
+
     // One of the arguments from this list "disable routing_policies" must be set
 
     disable = true
@@ -67,11 +71,11 @@ resource "volterra_bgp" "example" {
     external {
       // One of the arguments from this list "address default_gateway disable external_connector from_site subnet_begin_offset subnet_end_offset" must be set
 
-      subnet_begin_offset = "subnet_begin_offset"
+      address = "address"
 
       // One of the arguments from this list "address_ipv6 default_gateway_v6 disable_v6 from_site_v6 subnet_begin_offset_v6 subnet_end_offset_v6" must be set
 
-      address_ipv6 = "address_ipv6"
+      subnet_end_offset_v6 = "subnet_end_offset_v6"
       asn = "64512"
 
       // One of the arguments from this list "md5_auth_key no_authentication" can be set
@@ -110,7 +114,11 @@ resource "volterra_bgp" "example" {
 
       // One of the arguments from this list "inside_interfaces interface interface_list outside_interfaces" must be set
 
-      outside_interfaces = true
+      interface {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
       port = "179"
     }
   }
@@ -196,6 +204,12 @@ List of peers.
 `bfd_disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
 
 `bfd_enabled` - (Optional) x-displayName: "Enabled". See [Bfd Choice Bfd Enabled ](#bfd-choice-bfd-enabled) below for details.
+
+###### One of the arguments from this list "ebgp_multihop_disabled, ebgp_multihop_enabled" can be set
+
+`ebgp_multihop_disabled` - (Optional) ebgp-multihop is not configured on the BGP speaker. (`Bool`).
+
+`ebgp_multihop_enabled` - (Optional) and BFD runs in multihop mode (port 4784). (`Bool`).
 
 ###### One of the arguments from this list "disable, routing_policies" must be set
 
@@ -320,6 +334,14 @@ IPv4 Address.
 IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
+
+### Ebgp Multihop Choice Ebgp Multihop Disabled
+
+ebgp-multihop is not configured on the BGP speaker..
+
+### Ebgp Multihop Choice Ebgp Multihop Enabled
+
+and BFD runs in multihop mode (port 4784)..
 
 ### Enable Aggregation
 

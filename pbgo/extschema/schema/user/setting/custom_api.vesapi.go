@@ -131,6 +131,14 @@ func (c *CustomAPIGrpcClient) doRPCResetOtpDeviceByAdmin(ctx context.Context, ya
 	rsp, err := c.grpcClient.ResetOtpDeviceByAdmin(ctx, req, opts...)
 	return rsp, err
 }
+func (c *CustomAPIGrpcClient) doRPCSetTimeZone(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &SetTimeZoneRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.setting.SetTimeZoneRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.SetTimeZone(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCSetViewPreference(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetViewPreferenceRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -238,6 +246,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["GetViewPreference"] = ccl.doRPCGetViewPreference
 	rpcFns["RequestInitialAccess"] = ccl.doRPCRequestInitialAccess
 	rpcFns["ResetOtpDeviceByAdmin"] = ccl.doRPCResetOtpDeviceByAdmin
+	rpcFns["SetTimeZone"] = ccl.doRPCSetTimeZone
 	rpcFns["SetViewPreference"] = ccl.doRPCSetViewPreference
 	rpcFns["UnsetAdminNtfnPreference"] = ccl.doRPCUnsetAdminNtfnPreference
 	rpcFns["UnsetNtfnPreference"] = ccl.doRPCUnsetNtfnPreference
@@ -1223,6 +1232,87 @@ func (c *CustomAPIRestClient) doRPCResetOtpDeviceByAdmin(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCSetTimeZone(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &SetTimeZoneRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.setting.SetTimeZoneRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("time_zone", fmt.Sprintf("%v", req.TimeZone))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &Empty{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.setting.Empty", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomAPIRestClient) doRPCSetViewPreference(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1917,6 +2007,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns["GetViewPreference"] = ccl.doRPCGetViewPreference
 	rpcFns["RequestInitialAccess"] = ccl.doRPCRequestInitialAccess
 	rpcFns["ResetOtpDeviceByAdmin"] = ccl.doRPCResetOtpDeviceByAdmin
+	rpcFns["SetTimeZone"] = ccl.doRPCSetTimeZone
 	rpcFns["SetViewPreference"] = ccl.doRPCSetViewPreference
 	rpcFns["UnsetAdminNtfnPreference"] = ccl.doRPCUnsetAdminNtfnPreference
 	rpcFns["UnsetNtfnPreference"] = ccl.doRPCUnsetNtfnPreference
@@ -1983,6 +2074,10 @@ func (c *customAPIInprocClient) RequestInitialAccess(ctx context.Context, in *Em
 func (c *customAPIInprocClient) ResetOtpDeviceByAdmin(ctx context.Context, in *UserEmail, opts ...grpc.CallOption) (*Empty, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.ResetOtpDeviceByAdmin")
 	return c.CustomAPIServer.ResetOtpDeviceByAdmin(ctx, in)
+}
+func (c *customAPIInprocClient) SetTimeZone(ctx context.Context, in *SetTimeZoneRequest, opts ...grpc.CallOption) (*Empty, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.SetTimeZone")
+	return c.CustomAPIServer.SetTimeZone(ctx, in)
 }
 func (c *customAPIInprocClient) SetViewPreference(ctx context.Context, in *SetViewPreferenceRequest, opts ...grpc.CallOption) (*Empty, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.SetViewPreference")
@@ -2607,6 +2702,54 @@ func (s *customAPISrv) ResetOtpDeviceByAdmin(ctx context.Context, in *UserEmail)
 	}
 
 	rsp, err = cah.ResetOtpDeviceByAdmin(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.user.setting.Empty", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) SetTimeZone(ctx context.Context, in *SetTimeZoneRequest) (*Empty, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.setting.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *Empty
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.user.setting.SetTimeZoneRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.SetTimeZone' operation on 'setting'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.setting.CustomAPI.SetTimeZone"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.SetTimeZone(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -4434,6 +4577,90 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.user.setting.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/system/user/settings/time_zone": {
+            "put": {
+                "summary": "Set time zone",
+                "description": "Sets the time zone in the user settings for the calling user.",
+                "operationId": "ves.io.schema.user.setting.CustomAPI.SetTimeZone",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/usersettingEmpty"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/settingSetTimeZoneRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-settimezone"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.SetTimeZone"
+            },
+            "x-displayname": "Custom API",
+            "x-ves-proto-service": "ves.io.schema.user.setting.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/system/user/settings/view_preference": {
             "get": {
                 "summary": "Get view preference",
@@ -4783,6 +5010,28 @@ var CustomAPISwaggerJSON string = `{
                     "description": "x-displayName: \"SecOps\"\nAudience is SecOps",
                     "title": "SecOps",
                     "format": "boolean"
+                }
+            }
+        },
+        "settingSetTimeZoneRequest": {
+            "type": "object",
+            "description": "Contains the time zone value that should be persisted into the calling user's\nuser_settings object.",
+            "title": "SetTimeZoneRequest",
+            "x-displayname": " Set time zone request",
+            "x-ves-proto-message": "ves.io.schema.user.setting.SetTimeZoneRequest",
+            "properties": {
+                "time_zone": {
+                    "type": "string",
+                    "description": " IANA time zone name (e.g. \"America/Los_Angeles\", \"Europe/Prague\", \"UTC\").\n\nExample: - \"America/Los_Angeles\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "TimeZone",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Time zone",
+                    "x-ves-example": "America/Los_Angeles",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },

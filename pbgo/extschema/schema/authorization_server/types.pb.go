@@ -97,6 +97,15 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Key IDs"
 	KeyIds []string `protobuf:"bytes,5,rep,name=key_ids,json=keyIds,proto3" json:"key_ids,omitempty"`
+	// issuer_validation
+	//
+	// x-displayName: "Issuer (iss)"
+	// Configure issuer validation for tokens issued by this Authorization Server.
+	//
+	// Types that are valid to be assigned to IssuerValidation:
+	//	*GlobalSpecType_IssuerDisable
+	//	*GlobalSpecType_Issuer
+	IssuerValidation isGlobalSpecType_IssuerValidation `protobuf_oneof:"issuer_validation"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -126,6 +135,30 @@ func (m *GlobalSpecType) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
+
+type isGlobalSpecType_IssuerValidation interface {
+	isGlobalSpecType_IssuerValidation()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GlobalSpecType_IssuerDisable struct {
+	IssuerDisable *schema.Empty `protobuf:"bytes,7,opt,name=issuer_disable,json=issuerDisable,proto3,oneof" json:"issuer_disable,omitempty"`
+}
+type GlobalSpecType_Issuer struct {
+	Issuer string `protobuf:"bytes,8,opt,name=issuer,proto3,oneof" json:"issuer,omitempty"`
+}
+
+func (*GlobalSpecType_IssuerDisable) isGlobalSpecType_IssuerValidation() {}
+func (*GlobalSpecType_Issuer) isGlobalSpecType_IssuerValidation()        {}
+
+func (m *GlobalSpecType) GetIssuerValidation() isGlobalSpecType_IssuerValidation {
+	if m != nil {
+		return m.IssuerValidation
+	}
+	return nil
+}
 
 func (m *GlobalSpecType) GetJwksUri() string {
 	if m != nil {
@@ -162,12 +195,41 @@ func (m *GlobalSpecType) GetKeyIds() []string {
 	return nil
 }
 
+func (m *GlobalSpecType) GetIssuerDisable() *schema.Empty {
+	if x, ok := m.GetIssuerValidation().(*GlobalSpecType_IssuerDisable); ok {
+		return x.IssuerDisable
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetIssuer() string {
+	if x, ok := m.GetIssuerValidation().(*GlobalSpecType_Issuer); ok {
+		return x.Issuer
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GlobalSpecType_IssuerDisable)(nil),
+		(*GlobalSpecType_Issuer)(nil),
+	}
+}
+
 // Create authorization server
 //
 // x-displayName: "Create Authorization Server"
 // Create authorization_server creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
 	JwksUri string `protobuf:"bytes,1,opt,name=jwks_uri,json=jwksUri,proto3" json:"jwks_uri,omitempty"`
+	// issuer_validation
+	// Configure issuer for created Authorization Server
+	//
+	// Types that are valid to be assigned to IssuerValidation:
+	//	*CreateSpecType_IssuerDisable
+	//	*CreateSpecType_Issuer
+	IssuerValidation isCreateSpecType_IssuerValidation `protobuf_oneof:"issuer_validation"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -198,11 +260,57 @@ func (m *CreateSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
+type isCreateSpecType_IssuerValidation interface {
+	isCreateSpecType_IssuerValidation()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CreateSpecType_IssuerDisable struct {
+	IssuerDisable *schema.Empty `protobuf:"bytes,7,opt,name=issuer_disable,json=issuerDisable,proto3,oneof" json:"issuer_disable,omitempty"`
+}
+type CreateSpecType_Issuer struct {
+	Issuer string `protobuf:"bytes,8,opt,name=issuer,proto3,oneof" json:"issuer,omitempty"`
+}
+
+func (*CreateSpecType_IssuerDisable) isCreateSpecType_IssuerValidation() {}
+func (*CreateSpecType_Issuer) isCreateSpecType_IssuerValidation()        {}
+
+func (m *CreateSpecType) GetIssuerValidation() isCreateSpecType_IssuerValidation {
+	if m != nil {
+		return m.IssuerValidation
+	}
+	return nil
+}
+
 func (m *CreateSpecType) GetJwksUri() string {
 	if m != nil {
 		return m.JwksUri
 	}
 	return ""
+}
+
+func (m *CreateSpecType) GetIssuerDisable() *schema.Empty {
+	if x, ok := m.GetIssuerValidation().(*CreateSpecType_IssuerDisable); ok {
+		return x.IssuerDisable
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetIssuer() string {
+	if x, ok := m.GetIssuerValidation().(*CreateSpecType_Issuer); ok {
+		return x.Issuer
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CreateSpecType_IssuerDisable)(nil),
+		(*CreateSpecType_Issuer)(nil),
+	}
 }
 
 // Replace authorization server
@@ -211,6 +319,13 @@ func (m *CreateSpecType) GetJwksUri() string {
 // Replace authorization_server replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
 	JwksUri string `protobuf:"bytes,1,opt,name=jwks_uri,json=jwksUri,proto3" json:"jwks_uri,omitempty"`
+	// issuer_validation
+	// Configure issuer for created Authorization Server
+	//
+	// Types that are valid to be assigned to IssuerValidation:
+	//	*ReplaceSpecType_IssuerDisable
+	//	*ReplaceSpecType_Issuer
+	IssuerValidation isReplaceSpecType_IssuerValidation `protobuf_oneof:"issuer_validation"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
@@ -241,11 +356,57 @@ func (m *ReplaceSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
+type isReplaceSpecType_IssuerValidation interface {
+	isReplaceSpecType_IssuerValidation()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ReplaceSpecType_IssuerDisable struct {
+	IssuerDisable *schema.Empty `protobuf:"bytes,7,opt,name=issuer_disable,json=issuerDisable,proto3,oneof" json:"issuer_disable,omitempty"`
+}
+type ReplaceSpecType_Issuer struct {
+	Issuer string `protobuf:"bytes,8,opt,name=issuer,proto3,oneof" json:"issuer,omitempty"`
+}
+
+func (*ReplaceSpecType_IssuerDisable) isReplaceSpecType_IssuerValidation() {}
+func (*ReplaceSpecType_Issuer) isReplaceSpecType_IssuerValidation()        {}
+
+func (m *ReplaceSpecType) GetIssuerValidation() isReplaceSpecType_IssuerValidation {
+	if m != nil {
+		return m.IssuerValidation
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) GetJwksUri() string {
 	if m != nil {
 		return m.JwksUri
 	}
 	return ""
+}
+
+func (m *ReplaceSpecType) GetIssuerDisable() *schema.Empty {
+	if x, ok := m.GetIssuerValidation().(*ReplaceSpecType_IssuerDisable); ok {
+		return x.IssuerDisable
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetIssuer() string {
+	if x, ok := m.GetIssuerValidation().(*ReplaceSpecType_Issuer); ok {
+		return x.Issuer
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ReplaceSpecType_IssuerDisable)(nil),
+		(*ReplaceSpecType_Issuer)(nil),
+	}
 }
 
 // Get authorization server
@@ -256,6 +417,13 @@ type GetSpecType struct {
 	JwksUri             string           `protobuf:"bytes,1,opt,name=jwks_uri,json=jwksUri,proto3" json:"jwks_uri,omitempty"`
 	LastFetchStatus     Status           `protobuf:"varint,2,opt,name=last_fetch_status,json=lastFetchStatus,proto3,enum=ves.io.schema.authorization_server.Status" json:"last_fetch_status,omitempty"`
 	LastSuccessfulFetch *types.Timestamp `protobuf:"bytes,3,opt,name=last_successful_fetch,json=lastSuccessfulFetch,proto3" json:"last_successful_fetch,omitempty"`
+	// issuer_validation
+	// Configure issuer for created Authorization Server
+	//
+	// Types that are valid to be assigned to IssuerValidation:
+	//	*GetSpecType_IssuerDisable
+	//	*GetSpecType_Issuer
+	IssuerValidation isGetSpecType_IssuerValidation `protobuf_oneof:"issuer_validation"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -286,6 +454,30 @@ func (m *GetSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
+type isGetSpecType_IssuerValidation interface {
+	isGetSpecType_IssuerValidation()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GetSpecType_IssuerDisable struct {
+	IssuerDisable *schema.Empty `protobuf:"bytes,7,opt,name=issuer_disable,json=issuerDisable,proto3,oneof" json:"issuer_disable,omitempty"`
+}
+type GetSpecType_Issuer struct {
+	Issuer string `protobuf:"bytes,8,opt,name=issuer,proto3,oneof" json:"issuer,omitempty"`
+}
+
+func (*GetSpecType_IssuerDisable) isGetSpecType_IssuerValidation() {}
+func (*GetSpecType_Issuer) isGetSpecType_IssuerValidation()        {}
+
+func (m *GetSpecType) GetIssuerValidation() isGetSpecType_IssuerValidation {
+	if m != nil {
+		return m.IssuerValidation
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetJwksUri() string {
 	if m != nil {
 		return m.JwksUri
@@ -307,6 +499,28 @@ func (m *GetSpecType) GetLastSuccessfulFetch() *types.Timestamp {
 	return nil
 }
 
+func (m *GetSpecType) GetIssuerDisable() *schema.Empty {
+	if x, ok := m.GetIssuerValidation().(*GetSpecType_IssuerDisable); ok {
+		return x.IssuerDisable
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetIssuer() string {
+	if x, ok := m.GetIssuerValidation().(*GetSpecType_Issuer); ok {
+		return x.Issuer
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GetSpecType_IssuerDisable)(nil),
+		(*GetSpecType_Issuer)(nil),
+	}
+}
+
 func init() {
 	proto.RegisterEnum("ves.io.schema.authorization_server.Status", Status_name, Status_value)
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.authorization_server.GlobalSpecType")
@@ -320,47 +534,55 @@ func init() {
 }
 
 var fileDescriptor_1c147d22adfa4282 = []byte{
-	// 638 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x54, 0x4d, 0x4f, 0xdb, 0x48,
-	0x18, 0xce, 0x24, 0x6c, 0x80, 0x41, 0x84, 0xe0, 0xdd, 0xd5, 0x86, 0x80, 0x06, 0x2b, 0xa7, 0x2c,
-	0x12, 0xb6, 0x4a, 0xa5, 0x1e, 0x38, 0x50, 0xf1, 0x11, 0x28, 0x50, 0x05, 0xc9, 0x4e, 0x9a, 0xaa,
-	0x17, 0xcb, 0x71, 0xde, 0x38, 0x6e, 0x9c, 0x8e, 0x35, 0x33, 0x0e, 0x4d, 0xa5, 0x4a, 0x1c, 0x7b,
-	0xac, 0xfa, 0x2b, 0xfa, 0x1b, 0xca, 0xa5, 0xea, 0xa9, 0xea, 0x89, 0x63, 0x8e, 0xe0, 0x5c, 0xe8,
-	0x8d, 0x9f, 0x50, 0xd9, 0x31, 0xd0, 0x44, 0xa8, 0xad, 0x7a, 0xeb, 0x6d, 0x66, 0x9e, 0x8f, 0xf7,
-	0x99, 0x67, 0x64, 0x63, 0xa5, 0x0b, 0x5c, 0x71, 0xa8, 0xca, 0xad, 0x16, 0x74, 0x4c, 0xd5, 0xf4,
-	0x45, 0x8b, 0x32, 0xe7, 0x95, 0x29, 0x1c, 0xfa, 0xc2, 0xe0, 0xc0, 0xba, 0xc0, 0x54, 0xd1, 0xf3,
-	0x80, 0x2b, 0x1e, 0xa3, 0x82, 0x4a, 0x85, 0x21, 0x5f, 0x19, 0xf2, 0x95, 0xbb, 0xf8, 0xf9, 0x55,
-	0xdb, 0x11, 0x2d, 0xbf, 0xae, 0x58, 0xb4, 0xa3, 0xda, 0xd4, 0xa6, 0x6a, 0x24, 0xad, 0xfb, 0xcd,
-	0x68, 0x17, 0x6d, 0xa2, 0xd5, 0xd0, 0x32, 0xbf, 0x6c, 0x53, 0x6a, 0xbb, 0x70, 0xcb, 0x12, 0x4e,
-	0x07, 0xb8, 0x30, 0x3b, 0x5e, 0x4c, 0x58, 0x1c, 0xcd, 0x48, 0xbd, 0x70, 0x58, 0x1c, 0x28, 0xbf,
-	0x30, 0x0a, 0x7e, 0x97, 0x35, 0xbf, 0x34, 0x0a, 0x75, 0x4d, 0xd7, 0x69, 0x98, 0x02, 0x62, 0x54,
-	0x1e, 0x43, 0x1d, 0x38, 0x36, 0x46, 0xac, 0x0b, 0xe7, 0x49, 0x9c, 0xd9, 0x73, 0x69, 0xdd, 0x74,
-	0x75, 0x0f, 0xac, 0x4a, 0xcf, 0x03, 0xa9, 0x88, 0xa7, 0x9e, 0x1f, 0xb7, 0xb9, 0xe1, 0x33, 0x27,
-	0x87, 0x64, 0x54, 0x9c, 0xde, 0x9a, 0xfd, 0xf0, 0xf5, 0x63, 0x6a, 0x8a, 0xa5, 0x73, 0x27, 0xc9,
-	0x37, 0x08, 0x69, 0x93, 0x21, 0x5c, 0x65, 0x8e, 0xf4, 0x04, 0xcf, 0xbb, 0x26, 0x17, 0x46, 0x13,
-	0x84, 0xd5, 0x32, 0xb8, 0x30, 0x85, 0xcf, 0x73, 0x49, 0x19, 0x15, 0x33, 0x6b, 0x2b, 0xca, 0xcf,
-	0x4b, 0x54, 0xf4, 0x48, 0xa1, 0xcd, 0x85, 0x26, 0xbb, 0xa1, 0xc7, 0xf0, 0x40, 0x2a, 0xe3, 0x7f,
-	0x23, 0x5f, 0xee, 0x5b, 0x16, 0x70, 0xde, 0xf4, 0xdd, 0xe1, 0x88, 0x5c, 0x4a, 0x46, 0xc5, 0x99,
-	0xb5, 0xbc, 0x32, 0x6c, 0x53, 0xb9, 0x6e, 0x53, 0xa9, 0x5c, 0xb7, 0xa9, 0xfd, 0x1d, 0x0a, 0xf5,
-	0x1b, 0x5d, 0xe4, 0x2a, 0x3d, 0xc0, 0x13, 0x61, 0xe4, 0xdc, 0x44, 0x24, 0x5f, 0x18, 0x8b, 0xa6,
-	0x83, 0xc5, 0x40, 0x84, 0x57, 0xdf, 0x9a, 0xec, 0xbf, 0x46, 0x97, 0xa7, 0x08, 0x69, 0x11, 0x5f,
-	0x92, 0xf1, 0x64, 0x1b, 0x7a, 0x86, 0xd3, 0xe0, 0xb9, 0xbf, 0xe4, 0x54, 0x71, 0xfa, 0x16, 0x4f,
-	0xb7, 0xa1, 0xb7, 0xdf, 0xe0, 0xeb, 0x85, 0x4f, 0xa7, 0x88, 0xe0, 0x25, 0xfc, 0xdf, 0x81, 0x7e,
-	0x54, 0x96, 0x6b, 0x50, 0x97, 0x0f, 0xa1, 0x27, 0xeb, 0x20, 0xe4, 0xe2, 0x41, 0xed, 0x50, 0xff,
-	0x5f, 0x42, 0xf7, 0x0a, 0x1b, 0x38, 0xb3, 0xcd, 0xc0, 0x14, 0x70, 0xd3, 0xf0, 0xc2, 0x78, 0xc3,
-	0x37, 0x95, 0xae, 0xcf, 0x7f, 0xd9, 0x18, 0x7b, 0x8f, 0xc2, 0x43, 0x3c, 0xa7, 0x81, 0xe7, 0x9a,
-	0xd6, 0xef, 0x1a, 0x0c, 0x10, 0x9e, 0xd9, 0x03, 0xf1, 0x0b, 0xea, 0x3f, 0xe5, 0x45, 0xef, 0xb8,
-	0xe5, 0x4a, 0x13, 0xa7, 0xe3, 0x61, 0x12, 0xce, 0xe8, 0x95, 0xcd, 0x4a, 0x55, 0x37, 0xaa, 0xe5,
-	0xc3, 0xf2, 0x51, 0xad, 0x9c, 0x4d, 0x48, 0xff, 0xe0, 0x6c, 0x7c, 0xa6, 0x57, 0xb7, 0xb7, 0x4b,
-	0xa5, 0x9d, 0xd2, 0x4e, 0x16, 0x49, 0xf3, 0x78, 0x36, 0x3e, 0xdd, 0xdd, 0xdc, 0x7f, 0x5c, 0xda,
-	0xc9, 0x26, 0xa5, 0x65, 0xbc, 0x38, 0x4e, 0x34, 0x6a, 0xfb, 0x95, 0x47, 0x46, 0x49, 0xd3, 0x8e,
-	0xb4, 0x6c, 0x6a, 0xeb, 0x1d, 0x3a, 0xbb, 0x20, 0x89, 0xfe, 0x05, 0x49, 0x5c, 0x5d, 0x10, 0x74,
-	0x12, 0x10, 0xf4, 0x3e, 0x20, 0xe8, 0x73, 0x40, 0xd0, 0x59, 0x40, 0x50, 0x3f, 0x20, 0xe8, 0x3c,
-	0x20, 0xe8, 0x32, 0x20, 0x89, 0xab, 0x80, 0xa0, 0xb7, 0x03, 0x92, 0x38, 0x1b, 0x90, 0x44, 0x7f,
-	0x40, 0x12, 0xcf, 0x9e, 0xda, 0xd4, 0x6b, 0xdb, 0x4a, 0x97, 0xba, 0x02, 0x18, 0x33, 0x15, 0x9f,
-	0xab, 0xd1, 0xa2, 0x49, 0x59, 0x67, 0xd5, 0x63, 0xb4, 0xeb, 0x34, 0x80, 0xad, 0x5e, 0xc3, 0xaa,
-	0x57, 0xb7, 0xa9, 0x0a, 0x2f, 0x45, 0xfc, 0xf5, 0xfe, 0xe0, 0xf7, 0x55, 0x4f, 0x47, 0xc5, 0xdd,
-	0xff, 0x16, 0x00, 0x00, 0xff, 0xff, 0x4c, 0x9b, 0x67, 0xb0, 0xeb, 0x04, 0x00, 0x00,
+	// 754 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x55, 0x3d, 0x6f, 0xdb, 0x46,
+	0x18, 0xe6, 0x49, 0xaa, 0x24, 0x9f, 0x61, 0x59, 0x62, 0x6d, 0x94, 0x96, 0x0b, 0x9a, 0x30, 0x0c,
+	0x54, 0x35, 0x6c, 0x12, 0x75, 0x01, 0xb7, 0x28, 0xd0, 0x02, 0x96, 0x25, 0x7f, 0x16, 0x32, 0x40,
+	0x4a, 0x55, 0xd1, 0x85, 0xa0, 0xa8, 0x13, 0xc5, 0x8a, 0xf2, 0x11, 0xbc, 0xa3, 0x5c, 0x15, 0x08,
+	0x60, 0x64, 0xca, 0x18, 0xe4, 0x57, 0xe4, 0x37, 0x44, 0x8b, 0x91, 0x29, 0xf1, 0xa4, 0x51, 0x63,
+	0x4c, 0x2f, 0xce, 0x12, 0x78, 0xca, 0x90, 0x29, 0x10, 0x49, 0x7f, 0x48, 0x31, 0x92, 0x00, 0x59,
+	0x92, 0x6c, 0x77, 0xef, 0xf3, 0xbc, 0x1f, 0xcf, 0xf3, 0x9e, 0x44, 0x28, 0x76, 0x10, 0x11, 0x4d,
+	0x2c, 0x11, 0xbd, 0x89, 0xda, 0x9a, 0xa4, 0xb9, 0xb4, 0x89, 0x1d, 0xf3, 0x7f, 0x8d, 0x9a, 0xf8,
+	0x50, 0x25, 0xc8, 0xe9, 0x20, 0x47, 0xa2, 0x5d, 0x1b, 0x11, 0xd1, 0x76, 0x30, 0xc5, 0xec, 0x62,
+	0xc0, 0x17, 0x03, 0xbe, 0x78, 0x17, 0x3f, 0xbb, 0x6a, 0x98, 0xb4, 0xe9, 0xd6, 0x44, 0x1d, 0xb7,
+	0x25, 0x03, 0x1b, 0x58, 0xf2, 0x53, 0x6b, 0x6e, 0xc3, 0xbf, 0xf9, 0x17, 0xff, 0x14, 0x94, 0xcc,
+	0x2e, 0x18, 0x18, 0x1b, 0x16, 0xba, 0x61, 0x51, 0xb3, 0x8d, 0x08, 0xd5, 0xda, 0x76, 0x48, 0x98,
+	0x1f, 0x9d, 0x11, 0xdb, 0xc3, 0x66, 0xe1, 0x40, 0xd9, 0xb9, 0x51, 0xf0, 0xd6, 0xac, 0xd9, 0xef,
+	0x47, 0xa1, 0x8e, 0x66, 0x99, 0x75, 0x8d, 0xa2, 0x10, 0x15, 0xc6, 0x50, 0x13, 0x1d, 0xa9, 0x23,
+	0xa5, 0x17, 0x5f, 0x47, 0x61, 0x6a, 0xdb, 0xc2, 0x35, 0xcd, 0x52, 0x6c, 0xa4, 0x97, 0xbb, 0x36,
+	0x62, 0x73, 0x30, 0xf9, 0xef, 0x51, 0x8b, 0xa8, 0xae, 0x63, 0x72, 0x40, 0x00, 0xb9, 0x89, 0xfc,
+	0xd4, 0x93, 0x97, 0x27, 0xd1, 0xa4, 0x13, 0xe7, 0x8e, 0x23, 0x0f, 0x00, 0x90, 0x13, 0x43, 0xb8,
+	0xe2, 0x98, 0xec, 0x5f, 0x30, 0x63, 0x69, 0x84, 0xaa, 0x0d, 0x44, 0xf5, 0xa6, 0x4a, 0xa8, 0x46,
+	0x5d, 0xc2, 0x45, 0x04, 0x90, 0x4b, 0xad, 0x2d, 0x8b, 0x1f, 0x36, 0x51, 0x54, 0xfc, 0x0c, 0x79,
+	0x7a, 0x58, 0x64, 0x6b, 0x58, 0x23, 0x08, 0xb0, 0x25, 0x38, 0xeb, 0xd7, 0x25, 0xae, 0xae, 0x23,
+	0x42, 0x1a, 0xae, 0x15, 0xb4, 0xe0, 0xa2, 0x02, 0xc8, 0x4d, 0xae, 0x65, 0xc5, 0xc0, 0x4d, 0xf1,
+	0xca, 0x4d, 0xb1, 0x7c, 0xe5, 0xa6, 0xfc, 0xed, 0x30, 0x51, 0xb9, 0xce, 0xf3, 0xab, 0xb2, 0xeb,
+	0x30, 0x36, 0x1c, 0x99, 0x8b, 0xf9, 0xe9, 0x73, 0x63, 0xa3, 0x29, 0x48, 0x77, 0x10, 0x1d, 0x4a,
+	0xcf, 0x27, 0x06, 0xf7, 0xc0, 0x45, 0x0f, 0x00, 0xd9, 0xe7, 0xb3, 0x02, 0x4c, 0xb4, 0x50, 0x57,
+	0x35, 0xeb, 0x84, 0xfb, 0x46, 0x88, 0xe6, 0x26, 0x6e, 0xf0, 0x78, 0x0b, 0x75, 0x77, 0xeb, 0x84,
+	0xfd, 0x1d, 0xa6, 0x4c, 0x42, 0x5c, 0xe4, 0xa8, 0x75, 0x93, 0x68, 0x35, 0x0b, 0x71, 0x09, 0xbf,
+	0xc7, 0xcc, 0x58, 0x8f, 0x62, 0xdb, 0xa6, 0xdd, 0x1d, 0x46, 0x9e, 0x0a, 0xd8, 0x85, 0x80, 0xcc,
+	0xfe, 0x00, 0xe3, 0x41, 0x80, 0x4b, 0x8e, 0x19, 0x1d, 0x1b, 0x00, 0xb0, 0xc3, 0xc8, 0x21, 0xfc,
+	0xdb, 0xd2, 0xd3, 0x1e, 0x10, 0x20, 0x0f, 0xbf, 0xdb, 0x53, 0x0e, 0x4a, 0x42, 0x15, 0xd5, 0x84,
+	0x7d, 0xd4, 0x15, 0x14, 0x44, 0x85, 0xdc, 0x5e, 0x75, 0x5f, 0xf9, 0x91, 0x8d, 0xfe, 0xb4, 0xb2,
+	0x9e, 0x5f, 0x82, 0x99, 0x70, 0x9a, 0xf0, 0x1d, 0x98, 0xf8, 0x90, 0x9d, 0x3e, 0xe9, 0x81, 0x44,
+	0xbf, 0x07, 0xe2, 0x5e, 0x0f, 0x44, 0x7f, 0x59, 0xf9, 0x75, 0x2f, 0x96, 0x8c, 0xa7, 0x13, 0x8b,
+	0xcf, 0x01, 0x4c, 0x6d, 0x3a, 0x48, 0xa3, 0xe8, 0x7a, 0xf1, 0x73, 0xe3, 0x8b, 0xbf, 0xd9, 0xf4,
+	0x27, 0xea, 0xe4, 0x46, 0x75, 0xde, 0x12, 0x96, 0x39, 0xfd, 0x63, 0xec, 0xfd, 0xe5, 0x97, 0xef,
+	0x52, 0x31, 0x7b, 0xff, 0x0d, 0x78, 0x37, 0x1c, 0x6a, 0x39, 0x05, 0x70, 0x5a, 0x46, 0xb6, 0xa5,
+	0xe9, 0x5f, 0x81, 0x98, 0x57, 0x11, 0x38, 0xb9, 0x8d, 0xe8, 0xc7, 0x08, 0xf9, 0x52, 0x7e, 0x7f,
+	0x9f, 0xb5, 0xe1, 0xcb, 0x0d, 0x18, 0x0f, 0x75, 0xb3, 0x30, 0xa5, 0x94, 0x37, 0xca, 0x15, 0x45,
+	0xad, 0x94, 0xf6, 0x4b, 0x07, 0xd5, 0x52, 0x9a, 0x61, 0x67, 0x60, 0x3a, 0x8c, 0x29, 0x95, 0xcd,
+	0xcd, 0x62, 0xb1, 0x50, 0x2c, 0xa4, 0x01, 0x9b, 0x81, 0x53, 0x61, 0x74, 0x6b, 0x63, 0xf7, 0xcf,
+	0x62, 0x21, 0x1d, 0x61, 0x17, 0xe0, 0xfc, 0x38, 0x51, 0xad, 0xee, 0x96, 0x77, 0xd4, 0xa2, 0x2c,
+	0x1f, 0xc8, 0xe9, 0x68, 0xfe, 0x11, 0xe8, 0x9f, 0xf1, 0xcc, 0xe0, 0x8c, 0x67, 0x2e, 0xcf, 0x78,
+	0x70, 0xec, 0xf1, 0xe0, 0xb1, 0xc7, 0x83, 0x67, 0x1e, 0x0f, 0xfa, 0x1e, 0x0f, 0x06, 0x1e, 0x0f,
+	0x5e, 0x78, 0x3c, 0xb8, 0xf0, 0x78, 0xe6, 0xd2, 0xe3, 0xc1, 0xc3, 0x73, 0x9e, 0xe9, 0x9f, 0xf3,
+	0xcc, 0xe0, 0x9c, 0x67, 0xfe, 0xf9, 0xdb, 0xc0, 0x76, 0xcb, 0x10, 0x3b, 0xd8, 0xa2, 0xc8, 0x71,
+	0x34, 0xd1, 0x25, 0x92, 0x7f, 0x68, 0x60, 0xa7, 0xbd, 0x6a, 0x3b, 0xb8, 0x63, 0xd6, 0x91, 0xb3,
+	0x7a, 0x05, 0x4b, 0x76, 0xcd, 0xc0, 0x12, 0xfa, 0x8f, 0x86, 0x7f, 0xfb, 0xef, 0xf9, 0xee, 0xd5,
+	0xe2, 0xfe, 0x0e, 0x7f, 0x7e, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x6d, 0xfe, 0x77, 0xcf, 0x24, 0x07,
+	0x00, 0x00,
 }
 
 func (x Status) String() string {
@@ -409,6 +631,63 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if that1.IssuerValidation == nil {
+		if this.IssuerValidation != nil {
+			return false
+		}
+	} else if this.IssuerValidation == nil {
+		return false
+	} else if !this.IssuerValidation.Equal(that1.IssuerValidation) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_IssuerDisable) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_IssuerDisable)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_IssuerDisable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.IssuerDisable.Equal(that1.IssuerDisable) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_Issuer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_Issuer)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_Issuer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Issuer != that1.Issuer {
+		return false
+	}
 	return true
 }
 func (this *CreateSpecType) Equal(that interface{}) bool {
@@ -433,6 +712,63 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if this.JwksUri != that1.JwksUri {
 		return false
 	}
+	if that1.IssuerValidation == nil {
+		if this.IssuerValidation != nil {
+			return false
+		}
+	} else if this.IssuerValidation == nil {
+		return false
+	} else if !this.IssuerValidation.Equal(that1.IssuerValidation) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_IssuerDisable) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_IssuerDisable)
+	if !ok {
+		that2, ok := that.(CreateSpecType_IssuerDisable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.IssuerDisable.Equal(that1.IssuerDisable) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_Issuer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_Issuer)
+	if !ok {
+		that2, ok := that.(CreateSpecType_Issuer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Issuer != that1.Issuer {
+		return false
+	}
 	return true
 }
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
@@ -455,6 +791,63 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if this.JwksUri != that1.JwksUri {
+		return false
+	}
+	if that1.IssuerValidation == nil {
+		if this.IssuerValidation != nil {
+			return false
+		}
+	} else if this.IssuerValidation == nil {
+		return false
+	} else if !this.IssuerValidation.Equal(that1.IssuerValidation) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_IssuerDisable) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_IssuerDisable)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_IssuerDisable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.IssuerDisable.Equal(that1.IssuerDisable) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_Issuer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_Issuer)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_Issuer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Issuer != that1.Issuer {
 		return false
 	}
 	return true
@@ -487,13 +880,70 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if !this.LastSuccessfulFetch.Equal(that1.LastSuccessfulFetch) {
 		return false
 	}
+	if that1.IssuerValidation == nil {
+		if this.IssuerValidation != nil {
+			return false
+		}
+	} else if this.IssuerValidation == nil {
+		return false
+	} else if !this.IssuerValidation.Equal(that1.IssuerValidation) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_IssuerDisable) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_IssuerDisable)
+	if !ok {
+		that2, ok := that.(GetSpecType_IssuerDisable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.IssuerDisable.Equal(that1.IssuerDisable) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_Issuer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_Issuer)
+	if !ok {
+		that2, ok := that.(GetSpecType_Issuer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Issuer != that1.Issuer {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 11)
 	s = append(s, "&authorization_server.GlobalSpecType{")
 	s = append(s, "JwksUri: "+fmt.Sprintf("%#v", this.JwksUri)+",\n")
 	s = append(s, "LastFetchStatus: "+fmt.Sprintf("%#v", this.LastFetchStatus)+",\n")
@@ -504,42 +954,118 @@ func (this *GlobalSpecType) GoString() string {
 		s = append(s, "Jwks: "+fmt.Sprintf("%#v", this.Jwks)+",\n")
 	}
 	s = append(s, "KeyIds: "+fmt.Sprintf("%#v", this.KeyIds)+",\n")
+	if this.IssuerValidation != nil {
+		s = append(s, "IssuerValidation: "+fmt.Sprintf("%#v", this.IssuerValidation)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *GlobalSpecType_IssuerDisable) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&authorization_server.GlobalSpecType_IssuerDisable{` +
+		`IssuerDisable:` + fmt.Sprintf("%#v", this.IssuerDisable) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_Issuer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&authorization_server.GlobalSpecType_Issuer{` +
+		`Issuer:` + fmt.Sprintf("%#v", this.Issuer) + `}`}, ", ")
+	return s
 }
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 7)
 	s = append(s, "&authorization_server.CreateSpecType{")
 	s = append(s, "JwksUri: "+fmt.Sprintf("%#v", this.JwksUri)+",\n")
+	if this.IssuerValidation != nil {
+		s = append(s, "IssuerValidation: "+fmt.Sprintf("%#v", this.IssuerValidation)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *CreateSpecType_IssuerDisable) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&authorization_server.CreateSpecType_IssuerDisable{` +
+		`IssuerDisable:` + fmt.Sprintf("%#v", this.IssuerDisable) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_Issuer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&authorization_server.CreateSpecType_Issuer{` +
+		`Issuer:` + fmt.Sprintf("%#v", this.Issuer) + `}`}, ", ")
+	return s
 }
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 7)
 	s = append(s, "&authorization_server.ReplaceSpecType{")
 	s = append(s, "JwksUri: "+fmt.Sprintf("%#v", this.JwksUri)+",\n")
+	if this.IssuerValidation != nil {
+		s = append(s, "IssuerValidation: "+fmt.Sprintf("%#v", this.IssuerValidation)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *ReplaceSpecType_IssuerDisable) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&authorization_server.ReplaceSpecType_IssuerDisable{` +
+		`IssuerDisable:` + fmt.Sprintf("%#v", this.IssuerDisable) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_Issuer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&authorization_server.ReplaceSpecType_Issuer{` +
+		`Issuer:` + fmt.Sprintf("%#v", this.Issuer) + `}`}, ", ")
+	return s
 }
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 9)
 	s = append(s, "&authorization_server.GetSpecType{")
 	s = append(s, "JwksUri: "+fmt.Sprintf("%#v", this.JwksUri)+",\n")
 	s = append(s, "LastFetchStatus: "+fmt.Sprintf("%#v", this.LastFetchStatus)+",\n")
 	if this.LastSuccessfulFetch != nil {
 		s = append(s, "LastSuccessfulFetch: "+fmt.Sprintf("%#v", this.LastSuccessfulFetch)+",\n")
 	}
+	if this.IssuerValidation != nil {
+		s = append(s, "IssuerValidation: "+fmt.Sprintf("%#v", this.IssuerValidation)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *GetSpecType_IssuerDisable) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&authorization_server.GetSpecType_IssuerDisable{` +
+		`IssuerDisable:` + fmt.Sprintf("%#v", this.IssuerDisable) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_Issuer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&authorization_server.GetSpecType_Issuer{` +
+		`Issuer:` + fmt.Sprintf("%#v", this.Issuer) + `}`}, ", ")
+	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
@@ -569,6 +1095,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.IssuerValidation != nil {
+		{
+			size := m.IssuerValidation.Size()
+			i -= size
+			if _, err := m.IssuerValidation.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.KeyIds) > 0 {
 		for iNdEx := len(m.KeyIds) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.KeyIds[iNdEx])
@@ -617,6 +1152,41 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GlobalSpecType_IssuerDisable) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_IssuerDisable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.IssuerDisable != nil {
+		{
+			size, err := m.IssuerDisable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_Issuer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Issuer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Issuer)
+	copy(dAtA[i:], m.Issuer)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Issuer)))
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -637,6 +1207,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.IssuerValidation != nil {
+		{
+			size := m.IssuerValidation.Size()
+			i -= size
+			if _, err := m.IssuerValidation.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.JwksUri) > 0 {
 		i -= len(m.JwksUri)
 		copy(dAtA[i:], m.JwksUri)
@@ -647,6 +1226,41 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *CreateSpecType_IssuerDisable) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_IssuerDisable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.IssuerDisable != nil {
+		{
+			size, err := m.IssuerDisable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_Issuer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Issuer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Issuer)
+	copy(dAtA[i:], m.Issuer)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Issuer)))
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -667,6 +1281,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.IssuerValidation != nil {
+		{
+			size := m.IssuerValidation.Size()
+			i -= size
+			if _, err := m.IssuerValidation.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.JwksUri) > 0 {
 		i -= len(m.JwksUri)
 		copy(dAtA[i:], m.JwksUri)
@@ -677,6 +1300,41 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ReplaceSpecType_IssuerDisable) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_IssuerDisable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.IssuerDisable != nil {
+		{
+			size, err := m.IssuerDisable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_Issuer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Issuer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Issuer)
+	copy(dAtA[i:], m.Issuer)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Issuer)))
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -697,6 +1355,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.IssuerValidation != nil {
+		{
+			size := m.IssuerValidation.Size()
+			i -= size
+			if _, err := m.IssuerValidation.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.LastSuccessfulFetch != nil {
 		{
 			size, err := m.LastSuccessfulFetch.MarshalToSizedBuffer(dAtA[:i])
@@ -724,6 +1391,41 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GetSpecType_IssuerDisable) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_IssuerDisable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.IssuerDisable != nil {
+		{
+			size, err := m.IssuerDisable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_Issuer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Issuer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Issuer)
+	copy(dAtA[i:], m.Issuer)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Issuer)))
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -762,9 +1464,34 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if m.IssuerValidation != nil {
+		n += m.IssuerValidation.Size()
+	}
 	return n
 }
 
+func (m *GlobalSpecType_IssuerDisable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.IssuerDisable != nil {
+		l = m.IssuerDisable.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_Issuer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Issuer)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -775,9 +1502,34 @@ func (m *CreateSpecType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.IssuerValidation != nil {
+		n += m.IssuerValidation.Size()
+	}
 	return n
 }
 
+func (m *CreateSpecType_IssuerDisable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.IssuerDisable != nil {
+		l = m.IssuerDisable.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_Issuer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Issuer)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -788,9 +1540,34 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.IssuerValidation != nil {
+		n += m.IssuerValidation.Size()
+	}
 	return n
 }
 
+func (m *ReplaceSpecType_IssuerDisable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.IssuerDisable != nil {
+		l = m.IssuerDisable.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_Issuer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Issuer)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -808,6 +1585,32 @@ func (m *GetSpecType) Size() (n int) {
 		l = m.LastSuccessfulFetch.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.IssuerValidation != nil {
+		n += m.IssuerValidation.Size()
+	}
+	return n
+}
+
+func (m *GetSpecType_IssuerDisable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.IssuerDisable != nil {
+		l = m.IssuerDisable.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_Issuer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Issuer)
+	n += 1 + l + sovTypes(uint64(l))
 	return n
 }
 
@@ -827,6 +1630,27 @@ func (this *GlobalSpecType) String() string {
 		`LastSuccessfulFetch:` + strings.Replace(fmt.Sprintf("%v", this.LastSuccessfulFetch), "Timestamp", "types.Timestamp", 1) + `,`,
 		`Jwks:` + strings.Replace(fmt.Sprintf("%v", this.Jwks), "SecretType", "schema.SecretType", 1) + `,`,
 		`KeyIds:` + fmt.Sprintf("%v", this.KeyIds) + `,`,
+		`IssuerValidation:` + fmt.Sprintf("%v", this.IssuerValidation) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_IssuerDisable) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_IssuerDisable{`,
+		`IssuerDisable:` + strings.Replace(fmt.Sprintf("%v", this.IssuerDisable), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_Issuer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_Issuer{`,
+		`Issuer:` + fmt.Sprintf("%v", this.Issuer) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -837,6 +1661,27 @@ func (this *CreateSpecType) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`JwksUri:` + fmt.Sprintf("%v", this.JwksUri) + `,`,
+		`IssuerValidation:` + fmt.Sprintf("%v", this.IssuerValidation) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_IssuerDisable) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_IssuerDisable{`,
+		`IssuerDisable:` + strings.Replace(fmt.Sprintf("%v", this.IssuerDisable), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_Issuer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_Issuer{`,
+		`Issuer:` + fmt.Sprintf("%v", this.Issuer) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -847,6 +1692,27 @@ func (this *ReplaceSpecType) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`JwksUri:` + fmt.Sprintf("%v", this.JwksUri) + `,`,
+		`IssuerValidation:` + fmt.Sprintf("%v", this.IssuerValidation) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_IssuerDisable) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_IssuerDisable{`,
+		`IssuerDisable:` + strings.Replace(fmt.Sprintf("%v", this.IssuerDisable), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_Issuer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_Issuer{`,
+		`Issuer:` + fmt.Sprintf("%v", this.Issuer) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -859,6 +1725,27 @@ func (this *GetSpecType) String() string {
 		`JwksUri:` + fmt.Sprintf("%v", this.JwksUri) + `,`,
 		`LastFetchStatus:` + fmt.Sprintf("%v", this.LastFetchStatus) + `,`,
 		`LastSuccessfulFetch:` + strings.Replace(fmt.Sprintf("%v", this.LastSuccessfulFetch), "Timestamp", "types.Timestamp", 1) + `,`,
+		`IssuerValidation:` + fmt.Sprintf("%v", this.IssuerValidation) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_IssuerDisable) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_IssuerDisable{`,
+		`IssuerDisable:` + strings.Replace(fmt.Sprintf("%v", this.IssuerDisable), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_Issuer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_Issuer{`,
+		`Issuer:` + fmt.Sprintf("%v", this.Issuer) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1055,6 +1942,73 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.KeyIds = append(m.KeyIds, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IssuerDisable", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IssuerValidation = &GlobalSpecType_IssuerDisable{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Issuer", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IssuerValidation = &GlobalSpecType_Issuer{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1140,6 +2094,73 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.JwksUri = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IssuerDisable", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IssuerValidation = &CreateSpecType_IssuerDisable{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Issuer", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IssuerValidation = &CreateSpecType_Issuer{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1224,6 +2245,73 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.JwksUri = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IssuerDisable", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IssuerValidation = &ReplaceSpecType_IssuerDisable{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Issuer", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IssuerValidation = &ReplaceSpecType_Issuer{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1364,6 +2452,73 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.LastSuccessfulFetch.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IssuerDisable", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IssuerValidation = &GetSpecType_IssuerDisable{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Issuer", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IssuerValidation = &GetSpecType_Issuer{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

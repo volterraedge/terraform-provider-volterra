@@ -107,6 +107,13 @@ func (m *AdvancedOptionsType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetJwtDRefInfo()
 }
+func (m *AdvancedOptionsType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetJwtDRefInfoForOverlay(generateHash)
+}
 
 func (m *AdvancedOptionsType) GetJwtDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetJwt()
@@ -121,6 +128,30 @@ func (m *AdvancedOptionsType) GetJwtDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("jwt.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "jwt.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "jwt",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *AdvancedOptionsType) GetJwtDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetJwt()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("AdvancedOptionsType.jwt[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("jwt.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "jwt.Object",
 			RefdTenant: vref.Tenant,
@@ -165,6 +196,13 @@ type ValidateAdvancedOptionsType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAdvancedOptionsType) Http10ChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for http10_choice")
+	}
+	return validatorFn, nil
+}
 func (v *ValidateAdvancedOptionsType) MaxRequestsPerConnectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -719,6 +757,41 @@ func (v *ValidateAdvancedOptionsType) Validate(ctx context.Context, pm interface
 			return err
 		}
 	}
+
+	if fv, exists := v.FldValidators["http10_choice"]; exists {
+		val := m.GetHttp10Choice()
+		vOpts := append(opts,
+			db.WithValidateField("http10_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHttp10Choice().(type) {
+	case *AdvancedOptionsType_EnableHttp10:
+		if fv, exists := v.FldValidators["http10_choice.enable_http10"]; exists {
+			val := m.GetHttp10Choice().(*AdvancedOptionsType_EnableHttp10).EnableHttp10
+			vOpts := append(opts,
+				db.WithValidateField("http10_choice"),
+				db.WithValidateField("enable_http10"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AdvancedOptionsType_DisableHttp10:
+		if fv, exists := v.FldValidators["http10_choice.disable_http10"]; exists {
+			val := m.GetHttp10Choice().(*AdvancedOptionsType_DisableHttp10).DisableHttp10
+			vOpts := append(opts,
+				db.WithValidateField("http10_choice"),
+				db.WithValidateField("disable_http10"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["idle_timeout"]; exists {
 		vOpts := append(opts, db.WithValidateField("idle_timeout"))
 		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
@@ -889,6 +962,16 @@ var DefaultAdvancedOptionsTypeValidator = func() *ValidateAdvancedOptionsType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+	vrhHttp10Choice := v.Http10ChoiceValidationRuleHandler
+	rulesHttp10Choice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhHttp10Choice(rulesHttp10Choice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AdvancedOptionsType.http10_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["http10_choice"] = vFn
 	vrhMaxRequestsPerConnectionChoice := v.MaxRequestsPerConnectionChoiceValidationRuleHandler
 	rulesMaxRequestsPerConnectionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1895,6 +1978,174 @@ func BodySectionMaskingOptionsValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CDNConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CDNConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CDNConfig) DeepCopy() *CDNConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CDNConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CDNConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CDNConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CDNConfigValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CDNConfig) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCachingPolicyDRefInfo()
+}
+func (m *CDNConfig) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCachingPolicyDRefInfoForOverlay(generateHash)
+}
+
+// GetDRefInfo for the field's type
+func (m *CDNConfig) GetCachingPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetCachingPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCachingPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCachingPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "caching_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CDNConfig) GetCachingPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCachingPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCachingPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCachingPolicy().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "caching_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+type ValidateCDNConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCDNConfig) CachingPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for caching_policy")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCDNConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CDNConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CDNConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["caching_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("caching_policy"))
+		if err := fv(ctx, m.GetCachingPolicy(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["compression_params"]; exists {
+		vOpts := append(opts, db.WithValidateField("compression_params"))
+		if err := fv(ctx, m.GetCompressionParams(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["image_optimization_config"]; exists {
+		vOpts := append(opts, db.WithValidateField("image_optimization_config"))
+		if err := fv(ctx, m.GetImageOptimizationConfig(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCDNConfigValidator = func() *ValidateCDNConfig {
+	v := &ValidateCDNConfig{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCachingPolicy := v.CachingPolicyValidationRuleHandler
+	rulesCachingPolicy := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCachingPolicy(rulesCachingPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNConfig.caching_policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["caching_policy"] = vFn
+	v.FldValidators["image_optimization_config"] = ImageOptimizationConfigValidator().Validate
+	v.FldValidators["compression_params"] = ves_io_schema_virtual_host.CompressionTypeValidator().Validate
+
+	return v
+}()
+
+func CDNConfigValidator() db.Validator {
+	return DefaultCDNConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CachingPolicy) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1937,6 +2188,13 @@ func (m *CachingPolicy) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCustomCacheRuleDRefInfo()
 }
+func (m *CachingPolicy) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCustomCacheRuleDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CachingPolicy) GetCustomCacheRuleDRefInfo() ([]db.DRefInfo, error) {
@@ -1946,6 +2204,22 @@ func (m *CachingPolicy) GetCustomCacheRuleDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetCustomCacheRule().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCustomCacheRule().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "custom_cache_rule." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CachingPolicy) GetCustomCacheRuleDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCustomCacheRule() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCustomCacheRule().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCustomCacheRule().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2108,6 +2382,11 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
+	if fdrInfos, err := m.GetBotProtectionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetBotProtectionChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 	if fdrInfos, err := m.GetCacheOptionsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCacheOptionsDRefInfo() FAILED")
 	} else {
@@ -2200,6 +2479,139 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiDefinitionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDefinitionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiProtectionRulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiRateLimitLegacyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiRateLimitLegacyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBotDefenseChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetBotProtectionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBotProtectionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCacheOptionsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCacheOptionsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetChallengeTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDefaultRoutePoolsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultRoutePoolsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetJwtValidationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetJwtValidationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetL7DdosProtectionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetL7DdosProtectionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMaliciousUserMitigationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMaliciousUserMitigationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMlConfigChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMlConfigChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMoreOptionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMoreOptionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginPoolChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginServerSubsetRuleListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginServerSubsetRuleListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRateLimitChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRateLimitChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRoutesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRoutesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUserIdChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUserIdChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWafChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWafChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWafExclusionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2245,6 +2657,65 @@ func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_dualstack_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_AdvertiseOnPublicDefaultIpv6Vip:
+		return nil, nil
+	case *CreateSpecType_AdvertiseOnPublicDefaultDualstackVip:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetAdvertiseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *CreateSpecType_AdvertiseOnPublic:
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_AdvertiseCustom:
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_DoNotAdvertise:
+		return nil, nil
+	case *CreateSpecType_AdvertiseOnPublicDefaultVip:
+		return nil, nil
+	case *CreateSpecType_AdvertiseV6OnPublic:
+		drInfos, err := m.GetAdvertiseV6OnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseV6OnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_v6_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_AdvertiseDualstackOnPublic:
+		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2309,6 +2780,55 @@ func (m *CreateSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetApiDefinitionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDefinitionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDefinitionChoice().(type) {
+	case *CreateSpecType_ApiDefinitions:
+		drInfos, err := m.GetApiDefinitions().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDefinitions().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_definitions." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_ApiSpecification:
+		drInfos, err := m.GetApiSpecification().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_DisableApiDefinition:
+		return nil, nil
+	case *CreateSpecType_ApiDefinition:
+		vref := m.GetApiDefinition()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("api_definition.Object")
+		dri := db.DRefInfo{
+			RefdType:   "api_definition.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "api_definition",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApiDiscoveryChoice() == nil {
@@ -2319,6 +2839,29 @@ func (m *CreateSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) 
 		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_DisableApiDiscovery:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *CreateSpecType_EnableApiDiscovery:
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2348,6 +2891,22 @@ func (m *CreateSpecType) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error) 
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetApiProtectionRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiProtectionRules() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApiProtectionRules().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRules().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection_rules." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetApiRateLimitLegacyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApiRateLimitLegacy() == nil {
@@ -2356,6 +2915,22 @@ func (m *CreateSpecType) GetApiRateLimitLegacyDRefInfo() ([]db.DRefInfo, error) 
 	drInfos, err := m.GetApiRateLimitLegacy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApiRateLimitLegacy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_rate_limit_legacy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetApiRateLimitLegacyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiRateLimitLegacy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApiRateLimitLegacy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiRateLimitLegacy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2399,6 +2974,87 @@ func (m *CreateSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetBotDefenseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBotDefenseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotDefenseChoice().(type) {
+	case *CreateSpecType_DisableBotDefense:
+		return nil, nil
+	case *CreateSpecType_BotDefense:
+		return nil, nil
+	case *CreateSpecType_BotDefenseAdvanced:
+		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense_advanced." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_BotDefenseAdvancedProtection:
+		drInfos, err := m.GetBotDefenseAdvancedProtection().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefenseAdvancedProtection().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense_advanced_protection." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetBotProtectionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBotProtectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotProtectionChoice().(type) {
+	case *CreateSpecType_DisableBotProtection:
+		return nil, nil
+	case *CreateSpecType_BotProtection:
+		drInfos, err := m.GetBotProtection().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotProtection().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_protection." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetBotProtectionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBotProtectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotProtectionChoice().(type) {
+	case *CreateSpecType_DisableBotProtection:
+		return nil, nil
+	case *CreateSpecType_BotProtection:
+		drInfos, err := m.GetBotProtection().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotProtection().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_protection." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetCacheOptionsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCacheOptions() == nil {
@@ -2417,6 +3073,49 @@ func (m *CreateSpecType) GetCacheOptionsDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 	case *CreateSpecType_DisableCaching:
 		return nil, nil
+	case *CreateSpecType_EnableCdn:
+		drInfos, err := m.GetEnableCdn().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableCdn().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_cdn." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetCacheOptionsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCacheOptions() == nil {
+		return nil, nil
+	}
+	switch m.GetCacheOptions().(type) {
+	case *CreateSpecType_CachingPolicy:
+		drInfos, err := m.GetCachingPolicy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCachingPolicy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "caching_policy." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_DisableCaching:
+		return nil, nil
+	case *CreateSpecType_EnableCdn:
+		drInfos, err := m.GetEnableCdn().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableCdn().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_cdn." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
@@ -2459,6 +3158,43 @@ func (m *CreateSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetChallengeTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetChallengeType() == nil {
+		return nil, nil
+	}
+	switch m.GetChallengeType().(type) {
+	case *CreateSpecType_JsChallenge:
+		return nil, nil
+	case *CreateSpecType_CaptchaChallenge:
+		return nil, nil
+	case *CreateSpecType_NoChallenge:
+		return nil, nil
+	case *CreateSpecType_PolicyBasedChallenge:
+		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_EnableChallenge:
+		drInfos, err := m.GetEnableChallenge().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableChallenge().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_challenge." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetDefaultRoutePoolsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDefaultRoutePools() == nil {
@@ -2469,6 +3205,26 @@ func (m *CreateSpecType) GetDefaultRoutePoolsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDefaultRoutePools() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("default_route_pools[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetDefaultRoutePoolsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDefaultRoutePools() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDefaultRoutePools() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultRoutePools() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -2495,6 +3251,22 @@ func (m *CreateSpecType) GetJwtValidationDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetJwtValidationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetJwtValidation() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetJwtValidation().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetJwtValidation().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "jwt_validation." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetL7DdosProtectionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetL7DdosProtection() == nil {
@@ -2503,6 +3275,22 @@ func (m *CreateSpecType) GetL7DdosProtectionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetL7DdosProtection().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetL7DdosProtection().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "l7_ddos_protection." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetL7DdosProtectionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetL7DdosProtection() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetL7DdosProtection().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetL7DdosProtection().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2544,7 +3332,57 @@ func (m *CreateSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetLoadbalancerTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *CreateSpecType_Http:
+		return nil, nil
+	case *CreateSpecType_Https:
+		drInfos, err := m.GetHttps().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_HttpsAutoCert:
+		drInfos, err := m.GetHttpsAutoCert().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpsAutoCert().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https_auto_cert." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *CreateSpecType) GetMaliciousUserMitigationDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetMaliciousUserMitigation()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("malicious_user_mitigation.Object")
+	dri := db.DRefInfo{
+		RefdType:   "malicious_user_mitigation.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "malicious_user_mitigation",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *CreateSpecType) GetMaliciousUserMitigationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetMaliciousUserMitigation()
 	if vref == nil {
 		return nil, nil
@@ -2612,6 +3450,29 @@ func (m *CreateSpecType) GetMlConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetMlConfigChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMlConfigChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMlConfigChoice().(type) {
+	case *CreateSpecType_SingleLbApp:
+		drInfos, err := m.GetSingleLbApp().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSingleLbApp().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "single_lb_app." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_MultiLbApp:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetMoreOption() == nil {
@@ -2620,6 +3481,22 @@ func (m *CreateSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetMoreOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "more_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetMoreOptionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMoreOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetMoreOption().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2659,6 +3536,37 @@ func (m *CreateSpecType) GetOriginPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetOriginPoolChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginPoolChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOriginPoolChoice().(type) {
+	case *CreateSpecType_DefaultPool:
+		drInfos, err := m.GetDefaultPool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultPool().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "default_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_DefaultPoolList:
+		drInfos, err := m.GetDefaultPoolList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultPoolList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "default_pool_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetOriginServerSubsetRuleListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginServerSubsetRuleList() == nil {
@@ -2667,6 +3575,22 @@ func (m *CreateSpecType) GetOriginServerSubsetRuleListDRefInfo() ([]db.DRefInfo,
 	drInfos, err := m.GetOriginServerSubsetRuleList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOriginServerSubsetRuleList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "origin_server_subset_rule_list." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetOriginServerSubsetRuleListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginServerSubsetRuleList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetOriginServerSubsetRuleList().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOriginServerSubsetRuleList().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2708,6 +3632,39 @@ func (m *CreateSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetRateLimitChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRateLimitChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRateLimitChoice().(type) {
+	case *CreateSpecType_DisableRateLimit:
+		return nil, nil
+	case *CreateSpecType_RateLimit:
+		drInfos, err := m.GetRateLimit().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRateLimit().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rate_limit." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_ApiRateLimit:
+		drInfos, err := m.GetApiRateLimit().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiRateLimit().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_rate_limit." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRoutes() == nil {
@@ -2718,6 +3675,26 @@ func (m *CreateSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetRoutesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRoutes() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutes() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -2740,6 +3717,29 @@ func (m *CreateSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, 
 		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sensitive_data_policy." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSensitiveDataPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *CreateSpecType_DefaultSensitiveDataPolicy:
+		return nil, nil
+	case *CreateSpecType_SensitiveDataPolicy:
+		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2776,7 +3776,56 @@ func (m *CreateSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetServicePolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServicePolicyChoice().(type) {
+	case *CreateSpecType_ServicePoliciesFromNamespace:
+		return nil, nil
+	case *CreateSpecType_NoServicePolicies:
+		return nil, nil
+	case *CreateSpecType_ActiveServicePolicies:
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *CreateSpecType) GetUserIdChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUserIdChoice().(type) {
+	case *CreateSpecType_UserIdentification:
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("user_identification.Object")
+		dri := db.DRefInfo{
+			RefdType:   "user_identification.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "user_identification",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *CreateSpecType_UserIdClientIp:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *CreateSpecType) GetUserIdChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetUserIdChoice().(type) {
 	case *CreateSpecType_UserIdentification:
 		vref := m.GetUserIdentification()
@@ -2858,6 +3907,30 @@ func (m *CreateSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 }
+func (m *CreateSpecType) GetWafChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	switch m.GetWafChoice().(type) {
+	case *CreateSpecType_DisableWaf:
+		return nil, nil
+	case *CreateSpecType_AppFirewall:
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
 
 // GetWafChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *CreateSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -2908,6 +3981,22 @@ func (m *CreateSpecType) GetWafExclusionDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetWafExclusionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWafExclusion() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWafExclusion().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusion().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "waf_exclusion." + dri.DRField
+	}
+	return drInfos, err
+}
+
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -2941,8 +4030,8 @@ func (v *ValidateCreateSpecType) ApiTestingChoiceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) CacheOptionsCachingPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return CachingPolicyValidator().Validate, nil
+func (v *ValidateCreateSpecType) CacheOptionsEnableCdnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return CDNConfigValidator().Validate, nil
 }
 func (v *ValidateCreateSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -3796,6 +4885,31 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		}
 	}
 
+	switch m.GetBotProtectionChoice().(type) {
+	case *CreateSpecType_DisableBotProtection:
+		if fv, exists := v.FldValidators["bot_protection_choice.disable_bot_protection"]; exists {
+			val := m.GetBotProtectionChoice().(*CreateSpecType_DisableBotProtection).DisableBotProtection
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("disable_bot_protection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_BotProtection:
+		if fv, exists := v.FldValidators["bot_protection_choice.bot_protection"]; exists {
+			val := m.GetBotProtectionChoice().(*CreateSpecType_BotProtection).BotProtection
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("bot_protection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+
 	switch m.GetCacheOptions().(type) {
 	case *CreateSpecType_CachingPolicy:
 		if fv, exists := v.FldValidators["cache_options.caching_policy"]; exists {
@@ -3814,6 +4928,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("cache_options"),
 				db.WithValidateField("disable_caching"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableCdn:
+		if fv, exists := v.FldValidators["cache_options.enable_cdn"]; exists {
+			val := m.GetCacheOptions().(*CreateSpecType_EnableCdn).EnableCdn
+			vOpts := append(opts,
+				db.WithValidateField("cache_options"),
+				db.WithValidateField("enable_cdn"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -4683,16 +5808,16 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["api_testing_choice"] = vFn
-	vrhCacheOptionsCachingPolicy := v.CacheOptionsCachingPolicyValidationRuleHandler
-	rulesCacheOptionsCachingPolicy := map[string]string{
+	vrhCacheOptionsEnableCdn := v.CacheOptionsEnableCdnValidationRuleHandler
+	rulesCacheOptionsEnableCdn := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFnMap["cache_options.caching_policy"], err = vrhCacheOptionsCachingPolicy(rulesCacheOptionsCachingPolicy)
+	vFnMap["cache_options.enable_cdn"], err = vrhCacheOptionsEnableCdn(rulesCacheOptionsEnableCdn)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.cache_options_caching_policy: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.cache_options_enable_cdn: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["cache_options.caching_policy"] = vFnMap["cache_options.caching_policy"]
+	v.FldValidators["cache_options.enable_cdn"] = vFnMap["cache_options.enable_cdn"]
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4950,6 +6075,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["bot_defense_choice.bot_defense"] = ves_io_schema_views_common_security.ShapeBotDefenseTypeValidator().Validate
 	v.FldValidators["bot_defense_choice.bot_defense_advanced"] = ves_io_schema_views_common_security.BotDefenseAdvancedTypeValidator().Validate
 	v.FldValidators["bot_defense_choice.bot_defense_advanced_protection"] = ves_io_schema_views_common_security.BotDefenseAdvancedProtectionValidator().Validate
+	v.FldValidators["bot_protection_choice.bot_protection"] = ves_io_schema_views_common_security.BotDefenseBasicTypeValidator().Validate
+	v.FldValidators["cache_options.caching_policy"] = CachingPolicyValidator().Validate
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.policy_based_challenge"] = ves_io_schema_views_common_waf.PolicyBasedChallengeValidator().Validate
@@ -5538,8 +6665,18 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
+	if fdrInfos, err := m.GetAutoCertInfoDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAutoCertInfoDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetBotDefenseChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetBotProtectionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetBotProtectionChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -5635,6 +6772,144 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiDefinitionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDefinitionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiProtectionRulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiRateLimitLegacyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiRateLimitLegacyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetAutoCertInfoDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAutoCertInfoDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBotDefenseChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetBotProtectionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBotProtectionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCacheOptionsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCacheOptionsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetChallengeTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDefaultRoutePoolsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultRoutePoolsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetJwtValidationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetJwtValidationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetL7DdosProtectionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetL7DdosProtectionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMaliciousUserMitigationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMaliciousUserMitigationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMlConfigChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMlConfigChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMoreOptionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMoreOptionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginPoolChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginServerSubsetRuleListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginServerSubsetRuleListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRateLimitChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRateLimitChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRoutesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRoutesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUserIdChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUserIdChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWafChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWafChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWafExclusionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -5680,6 +6955,65 @@ func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_dualstack_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_AdvertiseOnPublicDefaultIpv6Vip:
+		return nil, nil
+	case *GetSpecType_AdvertiseOnPublicDefaultDualstackVip:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetAdvertiseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *GetSpecType_AdvertiseOnPublic:
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_AdvertiseCustom:
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_DoNotAdvertise:
+		return nil, nil
+	case *GetSpecType_AdvertiseOnPublicDefaultVip:
+		return nil, nil
+	case *GetSpecType_AdvertiseV6OnPublic:
+		drInfos, err := m.GetAdvertiseV6OnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseV6OnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_v6_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_AdvertiseDualstackOnPublic:
+		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -5744,6 +7078,55 @@ func (m *GetSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetApiDefinitionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDefinitionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDefinitionChoice().(type) {
+	case *GetSpecType_ApiDefinitions:
+		drInfos, err := m.GetApiDefinitions().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDefinitions().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_definitions." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_ApiSpecification:
+		drInfos, err := m.GetApiSpecification().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_DisableApiDefinition:
+		return nil, nil
+	case *GetSpecType_ApiDefinition:
+		vref := m.GetApiDefinition()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("api_definition.Object")
+		dri := db.DRefInfo{
+			RefdType:   "api_definition.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "api_definition",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApiDiscoveryChoice() == nil {
@@ -5754,6 +7137,29 @@ func (m *GetSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_DisableApiDiscovery:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *GetSpecType_EnableApiDiscovery:
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -5783,6 +7189,22 @@ func (m *GetSpecType) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetApiProtectionRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiProtectionRules() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApiProtectionRules().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRules().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection_rules." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetApiRateLimitLegacyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApiRateLimitLegacy() == nil {
@@ -5795,6 +7217,54 @@ func (m *GetSpecType) GetApiRateLimitLegacyDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "api_rate_limit_legacy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetApiRateLimitLegacyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiRateLimitLegacy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApiRateLimitLegacy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiRateLimitLegacy().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_rate_limit_legacy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetAutoCertInfoDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAutoCertInfo() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAutoCertInfo().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAutoCertInfo().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "auto_cert_info." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetAutoCertInfoDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAutoCertInfo() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAutoCertInfo().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAutoCertInfo().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "auto_cert_info." + dri.DRField
 	}
 	return drInfos, err
 }
@@ -5834,6 +7304,87 @@ func (m *GetSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetBotDefenseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBotDefenseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotDefenseChoice().(type) {
+	case *GetSpecType_DisableBotDefense:
+		return nil, nil
+	case *GetSpecType_BotDefense:
+		return nil, nil
+	case *GetSpecType_BotDefenseAdvanced:
+		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense_advanced." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_BotDefenseAdvancedProtection:
+		drInfos, err := m.GetBotDefenseAdvancedProtection().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefenseAdvancedProtection().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense_advanced_protection." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetBotProtectionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBotProtectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotProtectionChoice().(type) {
+	case *GetSpecType_DisableBotProtection:
+		return nil, nil
+	case *GetSpecType_BotProtection:
+		drInfos, err := m.GetBotProtection().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotProtection().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_protection." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetBotProtectionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBotProtectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotProtectionChoice().(type) {
+	case *GetSpecType_DisableBotProtection:
+		return nil, nil
+	case *GetSpecType_BotProtection:
+		drInfos, err := m.GetBotProtection().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotProtection().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_protection." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetCacheOptionsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCacheOptions() == nil {
@@ -5852,6 +7403,49 @@ func (m *GetSpecType) GetCacheOptionsDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 	case *GetSpecType_DisableCaching:
 		return nil, nil
+	case *GetSpecType_EnableCdn:
+		drInfos, err := m.GetEnableCdn().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableCdn().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_cdn." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetCacheOptionsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCacheOptions() == nil {
+		return nil, nil
+	}
+	switch m.GetCacheOptions().(type) {
+	case *GetSpecType_CachingPolicy:
+		drInfos, err := m.GetCachingPolicy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCachingPolicy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "caching_policy." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_DisableCaching:
+		return nil, nil
+	case *GetSpecType_EnableCdn:
+		drInfos, err := m.GetEnableCdn().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableCdn().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_cdn." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
@@ -5894,6 +7488,43 @@ func (m *GetSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetChallengeTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetChallengeType() == nil {
+		return nil, nil
+	}
+	switch m.GetChallengeType().(type) {
+	case *GetSpecType_JsChallenge:
+		return nil, nil
+	case *GetSpecType_CaptchaChallenge:
+		return nil, nil
+	case *GetSpecType_NoChallenge:
+		return nil, nil
+	case *GetSpecType_PolicyBasedChallenge:
+		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_EnableChallenge:
+		drInfos, err := m.GetEnableChallenge().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableChallenge().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_challenge." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetDefaultRoutePoolsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDefaultRoutePools() == nil {
@@ -5904,6 +7535,26 @@ func (m *GetSpecType) GetDefaultRoutePoolsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDefaultRoutePools() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("default_route_pools[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetDefaultRoutePoolsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDefaultRoutePools() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDefaultRoutePools() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultRoutePools() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -5930,6 +7581,22 @@ func (m *GetSpecType) GetJwtValidationDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetJwtValidationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetJwtValidation() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetJwtValidation().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetJwtValidation().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "jwt_validation." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetL7DdosProtectionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetL7DdosProtection() == nil {
@@ -5938,6 +7605,22 @@ func (m *GetSpecType) GetL7DdosProtectionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetL7DdosProtection().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetL7DdosProtection().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "l7_ddos_protection." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetL7DdosProtectionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetL7DdosProtection() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetL7DdosProtection().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetL7DdosProtection().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -5979,7 +7662,57 @@ func (m *GetSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetLoadbalancerTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *GetSpecType_Http:
+		return nil, nil
+	case *GetSpecType_Https:
+		drInfos, err := m.GetHttps().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_HttpsAutoCert:
+		drInfos, err := m.GetHttpsAutoCert().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpsAutoCert().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https_auto_cert." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GetSpecType) GetMaliciousUserMitigationDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetMaliciousUserMitigation()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("malicious_user_mitigation.Object")
+	dri := db.DRefInfo{
+		RefdType:   "malicious_user_mitigation.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "malicious_user_mitigation",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GetSpecType) GetMaliciousUserMitigationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetMaliciousUserMitigation()
 	if vref == nil {
 		return nil, nil
@@ -6047,6 +7780,29 @@ func (m *GetSpecType) GetMlConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetMlConfigChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMlConfigChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMlConfigChoice().(type) {
+	case *GetSpecType_SingleLbApp:
+		drInfos, err := m.GetSingleLbApp().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSingleLbApp().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "single_lb_app." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_MultiLbApp:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetMoreOption() == nil {
@@ -6055,6 +7811,22 @@ func (m *GetSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetMoreOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "more_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetMoreOptionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMoreOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetMoreOption().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -6094,6 +7866,37 @@ func (m *GetSpecType) GetOriginPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetOriginPoolChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginPoolChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOriginPoolChoice().(type) {
+	case *GetSpecType_DefaultPool:
+		drInfos, err := m.GetDefaultPool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultPool().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "default_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_DefaultPoolList:
+		drInfos, err := m.GetDefaultPoolList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultPoolList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "default_pool_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetOriginServerSubsetRuleListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginServerSubsetRuleList() == nil {
@@ -6102,6 +7905,22 @@ func (m *GetSpecType) GetOriginServerSubsetRuleListDRefInfo() ([]db.DRefInfo, er
 	drInfos, err := m.GetOriginServerSubsetRuleList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOriginServerSubsetRuleList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "origin_server_subset_rule_list." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetOriginServerSubsetRuleListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginServerSubsetRuleList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetOriginServerSubsetRuleList().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOriginServerSubsetRuleList().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -6143,6 +7962,39 @@ func (m *GetSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetRateLimitChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRateLimitChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRateLimitChoice().(type) {
+	case *GetSpecType_DisableRateLimit:
+		return nil, nil
+	case *GetSpecType_RateLimit:
+		drInfos, err := m.GetRateLimit().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRateLimit().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rate_limit." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_ApiRateLimit:
+		drInfos, err := m.GetApiRateLimit().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiRateLimit().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_rate_limit." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRoutes() == nil {
@@ -6153,6 +8005,26 @@ func (m *GetSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetRoutesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRoutes() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutes() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -6175,6 +8047,29 @@ func (m *GetSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, err
 		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sensitive_data_policy." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSensitiveDataPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *GetSpecType_DefaultSensitiveDataPolicy:
+		return nil, nil
+	case *GetSpecType_SensitiveDataPolicy:
+		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -6211,7 +8106,56 @@ func (m *GetSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetServicePolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServicePolicyChoice().(type) {
+	case *GetSpecType_ServicePoliciesFromNamespace:
+		return nil, nil
+	case *GetSpecType_NoServicePolicies:
+		return nil, nil
+	case *GetSpecType_ActiveServicePolicies:
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GetSpecType) GetUserIdChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUserIdChoice().(type) {
+	case *GetSpecType_UserIdentification:
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("user_identification.Object")
+		dri := db.DRefInfo{
+			RefdType:   "user_identification.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "user_identification",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *GetSpecType_UserIdClientIp:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GetSpecType) GetUserIdChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetUserIdChoice().(type) {
 	case *GetSpecType_UserIdentification:
 		vref := m.GetUserIdentification()
@@ -6293,6 +8237,30 @@ func (m *GetSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 }
+func (m *GetSpecType) GetWafChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	switch m.GetWafChoice().(type) {
+	case *GetSpecType_DisableWaf:
+		return nil, nil
+	case *GetSpecType_AppFirewall:
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
 
 // GetWafChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GetSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -6343,6 +8311,22 @@ func (m *GetSpecType) GetWafExclusionDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetWafExclusionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWafExclusion() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWafExclusion().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusion().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "waf_exclusion." + dri.DRField
+	}
+	return drInfos, err
+}
+
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -6376,8 +8360,8 @@ func (v *ValidateGetSpecType) ApiTestingChoiceValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) CacheOptionsCachingPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return CachingPolicyValidator().Validate, nil
+func (v *ValidateGetSpecType) CacheOptionsEnableCdnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return CDNConfigValidator().Validate, nil
 }
 func (v *ValidateGetSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -7237,6 +9221,31 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		}
 	}
 
+	switch m.GetBotProtectionChoice().(type) {
+	case *GetSpecType_DisableBotProtection:
+		if fv, exists := v.FldValidators["bot_protection_choice.disable_bot_protection"]; exists {
+			val := m.GetBotProtectionChoice().(*GetSpecType_DisableBotProtection).DisableBotProtection
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("disable_bot_protection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_BotProtection:
+		if fv, exists := v.FldValidators["bot_protection_choice.bot_protection"]; exists {
+			val := m.GetBotProtectionChoice().(*GetSpecType_BotProtection).BotProtection
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("bot_protection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+
 	switch m.GetCacheOptions().(type) {
 	case *GetSpecType_CachingPolicy:
 		if fv, exists := v.FldValidators["cache_options.caching_policy"]; exists {
@@ -7255,6 +9264,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("cache_options"),
 				db.WithValidateField("disable_caching"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableCdn:
+		if fv, exists := v.FldValidators["cache_options.enable_cdn"]; exists {
+			val := m.GetCacheOptions().(*GetSpecType_EnableCdn).EnableCdn
+			vOpts := append(opts,
+				db.WithValidateField("cache_options"),
+				db.WithValidateField("enable_cdn"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -8169,16 +10189,16 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["api_testing_choice"] = vFn
-	vrhCacheOptionsCachingPolicy := v.CacheOptionsCachingPolicyValidationRuleHandler
-	rulesCacheOptionsCachingPolicy := map[string]string{
+	vrhCacheOptionsEnableCdn := v.CacheOptionsEnableCdnValidationRuleHandler
+	rulesCacheOptionsEnableCdn := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFnMap["cache_options.caching_policy"], err = vrhCacheOptionsCachingPolicy(rulesCacheOptionsCachingPolicy)
+	vFnMap["cache_options.enable_cdn"], err = vrhCacheOptionsEnableCdn(rulesCacheOptionsEnableCdn)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.cache_options_caching_policy: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.cache_options_enable_cdn: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["cache_options.caching_policy"] = vFnMap["cache_options.caching_policy"]
+	v.FldValidators["cache_options.enable_cdn"] = vFnMap["cache_options.enable_cdn"]
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8436,6 +10456,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["bot_defense_choice.bot_defense"] = ves_io_schema_views_common_security.ShapeBotDefenseTypeValidator().Validate
 	v.FldValidators["bot_defense_choice.bot_defense_advanced"] = ves_io_schema_views_common_security.BotDefenseAdvancedTypeValidator().Validate
 	v.FldValidators["bot_defense_choice.bot_defense_advanced_protection"] = ves_io_schema_views_common_security.BotDefenseAdvancedProtectionValidator().Validate
+	v.FldValidators["bot_protection_choice.bot_protection"] = ves_io_schema_views_common_security.BotDefenseBasicTypeValidator().Validate
+	v.FldValidators["cache_options.caching_policy"] = CachingPolicyValidator().Validate
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.policy_based_challenge"] = ves_io_schema_views_common_waf.PolicyBasedChallengeValidator().Validate
@@ -8472,6 +10494,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["l7_ddos_protection"] = L7DDoSProtectionSettingsValidator().Validate
 	v.FldValidators["waf_exclusion"] = ves_io_schema_views_common_waf.WafExclusionValidator().Validate
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
+	v.FldValidators["auto_cert_info"] = ves_io_schema_virtual_host.AutoCertInfoTypeValidator().Validate
 
 	return v
 }()
@@ -8584,8 +10607,18 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
+	if fdrInfos, err := m.GetAutoCertInfoDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAutoCertInfoDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetBotDefenseChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetBotProtectionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetBotProtectionChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -8686,6 +10719,149 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiDefinitionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDefinitionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiProtectionRulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiRateLimitLegacyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiRateLimitLegacyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetAutoCertInfoDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAutoCertInfoDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBotDefenseChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetBotProtectionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBotProtectionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCacheOptionsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCacheOptionsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetChallengeTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDefaultRoutePoolsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultRoutePoolsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetJwtValidationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetJwtValidationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetL7DdosProtectionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetL7DdosProtectionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMaliciousUserMitigationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMaliciousUserMitigationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMlConfigChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMlConfigChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMoreOptionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMoreOptionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginPoolChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginServerSubsetRuleListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginServerSubsetRuleListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRateLimitChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRateLimitChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRoutesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRoutesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUserIdChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUserIdChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWafChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWafChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWafExclusionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -8731,6 +10907,65 @@ func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_dualstack_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_AdvertiseOnPublicDefaultIpv6Vip:
+		return nil, nil
+	case *GlobalSpecType_AdvertiseOnPublicDefaultDualstackVip:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *GlobalSpecType_AdvertiseOnPublic:
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_AdvertiseCustom:
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_DoNotAdvertise:
+		return nil, nil
+	case *GlobalSpecType_AdvertiseOnPublicDefaultVip:
+		return nil, nil
+	case *GlobalSpecType_AdvertiseV6OnPublic:
+		drInfos, err := m.GetAdvertiseV6OnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseV6OnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_v6_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_AdvertiseDualstackOnPublic:
+		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -8795,6 +11030,55 @@ func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDefinitionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDefinitionChoice().(type) {
+	case *GlobalSpecType_ApiDefinitions:
+		drInfos, err := m.GetApiDefinitions().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDefinitions().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_definitions." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_ApiSpecification:
+		drInfos, err := m.GetApiSpecification().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_DisableApiDefinition:
+		return nil, nil
+	case *GlobalSpecType_ApiDefinition:
+		vref := m.GetApiDefinition()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("api_definition.Object")
+		dri := db.DRefInfo{
+			RefdType:   "api_definition.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "api_definition",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApiDiscoveryChoice() == nil {
@@ -8805,6 +11089,29 @@ func (m *GlobalSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) 
 		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_DisableApiDiscovery:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *GlobalSpecType_EnableApiDiscovery:
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -8834,6 +11141,22 @@ func (m *GlobalSpecType) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error) 
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetApiProtectionRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiProtectionRules() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApiProtectionRules().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRules().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection_rules." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetApiRateLimitLegacyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApiRateLimitLegacy() == nil {
@@ -8846,6 +11169,54 @@ func (m *GlobalSpecType) GetApiRateLimitLegacyDRefInfo() ([]db.DRefInfo, error) 
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "api_rate_limit_legacy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetApiRateLimitLegacyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiRateLimitLegacy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApiRateLimitLegacy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiRateLimitLegacy().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_rate_limit_legacy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetAutoCertInfoDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAutoCertInfo() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAutoCertInfo().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAutoCertInfo().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "auto_cert_info." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetAutoCertInfoDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAutoCertInfo() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAutoCertInfo().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAutoCertInfo().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "auto_cert_info." + dri.DRField
 	}
 	return drInfos, err
 }
@@ -8885,6 +11256,87 @@ func (m *GlobalSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetBotDefenseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBotDefenseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotDefenseChoice().(type) {
+	case *GlobalSpecType_DisableBotDefense:
+		return nil, nil
+	case *GlobalSpecType_BotDefense:
+		return nil, nil
+	case *GlobalSpecType_BotDefenseAdvanced:
+		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense_advanced." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_BotDefenseAdvancedProtection:
+		drInfos, err := m.GetBotDefenseAdvancedProtection().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefenseAdvancedProtection().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense_advanced_protection." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetBotProtectionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBotProtectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotProtectionChoice().(type) {
+	case *GlobalSpecType_DisableBotProtection:
+		return nil, nil
+	case *GlobalSpecType_BotProtection:
+		drInfos, err := m.GetBotProtection().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotProtection().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_protection." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetBotProtectionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBotProtectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotProtectionChoice().(type) {
+	case *GlobalSpecType_DisableBotProtection:
+		return nil, nil
+	case *GlobalSpecType_BotProtection:
+		drInfos, err := m.GetBotProtection().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotProtection().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_protection." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetCacheOptionsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCacheOptions() == nil {
@@ -8903,6 +11355,49 @@ func (m *GlobalSpecType) GetCacheOptionsDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 	case *GlobalSpecType_DisableCaching:
 		return nil, nil
+	case *GlobalSpecType_EnableCdn:
+		drInfos, err := m.GetEnableCdn().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableCdn().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_cdn." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetCacheOptionsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCacheOptions() == nil {
+		return nil, nil
+	}
+	switch m.GetCacheOptions().(type) {
+	case *GlobalSpecType_CachingPolicy:
+		drInfos, err := m.GetCachingPolicy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCachingPolicy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "caching_policy." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_DisableCaching:
+		return nil, nil
+	case *GlobalSpecType_EnableCdn:
+		drInfos, err := m.GetEnableCdn().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableCdn().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_cdn." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
@@ -8945,6 +11440,43 @@ func (m *GlobalSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetChallengeTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetChallengeType() == nil {
+		return nil, nil
+	}
+	switch m.GetChallengeType().(type) {
+	case *GlobalSpecType_JsChallenge:
+		return nil, nil
+	case *GlobalSpecType_CaptchaChallenge:
+		return nil, nil
+	case *GlobalSpecType_NoChallenge:
+		return nil, nil
+	case *GlobalSpecType_PolicyBasedChallenge:
+		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_EnableChallenge:
+		drInfos, err := m.GetEnableChallenge().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableChallenge().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_challenge." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDefaultRoutePoolsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDefaultRoutePools() == nil {
@@ -8955,6 +11487,26 @@ func (m *GlobalSpecType) GetDefaultRoutePoolsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDefaultRoutePools() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("default_route_pools[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetDefaultRoutePoolsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDefaultRoutePools() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDefaultRoutePools() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultRoutePools() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -8981,6 +11533,22 @@ func (m *GlobalSpecType) GetJwtValidationDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetJwtValidationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetJwtValidation() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetJwtValidation().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetJwtValidation().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "jwt_validation." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetL7DdosProtectionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetL7DdosProtection() == nil {
@@ -8989,6 +11557,22 @@ func (m *GlobalSpecType) GetL7DdosProtectionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetL7DdosProtection().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetL7DdosProtection().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "l7_ddos_protection." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetL7DdosProtectionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetL7DdosProtection() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetL7DdosProtection().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetL7DdosProtection().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -9030,7 +11614,57 @@ func (m *GlobalSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetLoadbalancerTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *GlobalSpecType_Http:
+		return nil, nil
+	case *GlobalSpecType_Https:
+		drInfos, err := m.GetHttps().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_HttpsAutoCert:
+		drInfos, err := m.GetHttpsAutoCert().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpsAutoCert().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https_auto_cert." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetMaliciousUserMitigationDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetMaliciousUserMitigation()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("malicious_user_mitigation.Object")
+	dri := db.DRefInfo{
+		RefdType:   "malicious_user_mitigation.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "malicious_user_mitigation",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetMaliciousUserMitigationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetMaliciousUserMitigation()
 	if vref == nil {
 		return nil, nil
@@ -9098,6 +11732,29 @@ func (m *GlobalSpecType) GetMlConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetMlConfigChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMlConfigChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMlConfigChoice().(type) {
+	case *GlobalSpecType_SingleLbApp:
+		drInfos, err := m.GetSingleLbApp().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSingleLbApp().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "single_lb_app." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_MultiLbApp:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetMoreOption() == nil {
@@ -9106,6 +11763,22 @@ func (m *GlobalSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetMoreOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "more_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetMoreOptionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMoreOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetMoreOption().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -9145,6 +11818,37 @@ func (m *GlobalSpecType) GetOriginPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetOriginPoolChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginPoolChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOriginPoolChoice().(type) {
+	case *GlobalSpecType_DefaultPool:
+		drInfos, err := m.GetDefaultPool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultPool().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "default_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_DefaultPoolList:
+		drInfos, err := m.GetDefaultPoolList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultPoolList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "default_pool_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetOriginServerSubsetRuleListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginServerSubsetRuleList() == nil {
@@ -9153,6 +11857,22 @@ func (m *GlobalSpecType) GetOriginServerSubsetRuleListDRefInfo() ([]db.DRefInfo,
 	drInfos, err := m.GetOriginServerSubsetRuleList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOriginServerSubsetRuleList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "origin_server_subset_rule_list." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetOriginServerSubsetRuleListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginServerSubsetRuleList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetOriginServerSubsetRuleList().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOriginServerSubsetRuleList().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -9194,6 +11914,39 @@ func (m *GlobalSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetRateLimitChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRateLimitChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRateLimitChoice().(type) {
+	case *GlobalSpecType_DisableRateLimit:
+		return nil, nil
+	case *GlobalSpecType_RateLimit:
+		drInfos, err := m.GetRateLimit().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRateLimit().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rate_limit." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_ApiRateLimit:
+		drInfos, err := m.GetApiRateLimit().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiRateLimit().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_rate_limit." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRoutes() == nil {
@@ -9204,6 +11957,26 @@ func (m *GlobalSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetRoutesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRoutes() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutes() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -9226,6 +11999,29 @@ func (m *GlobalSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, 
 		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sensitive_data_policy." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSensitiveDataPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *GlobalSpecType_DefaultSensitiveDataPolicy:
+		return nil, nil
+	case *GlobalSpecType_SensitiveDataPolicy:
+		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -9262,7 +12058,56 @@ func (m *GlobalSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetServicePolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServicePolicyChoice().(type) {
+	case *GlobalSpecType_ServicePoliciesFromNamespace:
+		return nil, nil
+	case *GlobalSpecType_NoServicePolicies:
+		return nil, nil
+	case *GlobalSpecType_ActiveServicePolicies:
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetUserIdChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUserIdChoice().(type) {
+	case *GlobalSpecType_UserIdentification:
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("user_identification.Object")
+		dri := db.DRefInfo{
+			RefdType:   "user_identification.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "user_identification",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *GlobalSpecType_UserIdClientIp:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GlobalSpecType) GetUserIdChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetUserIdChoice().(type) {
 	case *GlobalSpecType_UserIdentification:
 		vref := m.GetUserIdentification()
@@ -9337,6 +12182,23 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return []db.DRefInfo{dri}, nil
 }
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -9366,6 +12228,30 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 }
 
 func (m *GlobalSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetWafChoice().(type) {
+	case *GlobalSpecType_DisableWaf:
+		return nil, nil
+	case *GlobalSpecType_AppFirewall:
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GlobalSpecType) GetWafChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetWafChoice().(type) {
 	case *GlobalSpecType_DisableWaf:
 		return nil, nil
@@ -9439,6 +12325,22 @@ func (m *GlobalSpecType) GetWafExclusionDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetWafExclusionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWafExclusion() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWafExclusion().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusion().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "waf_exclusion." + dri.DRField
+	}
+	return drInfos, err
+}
+
 type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -9472,8 +12374,8 @@ func (v *ValidateGlobalSpecType) ApiTestingChoiceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) CacheOptionsCachingPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return CachingPolicyValidator().Validate, nil
+func (v *ValidateGlobalSpecType) CacheOptionsEnableCdnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return CDNConfigValidator().Validate, nil
 }
 func (v *ValidateGlobalSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -10347,6 +13249,31 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		}
 	}
 
+	switch m.GetBotProtectionChoice().(type) {
+	case *GlobalSpecType_DisableBotProtection:
+		if fv, exists := v.FldValidators["bot_protection_choice.disable_bot_protection"]; exists {
+			val := m.GetBotProtectionChoice().(*GlobalSpecType_DisableBotProtection).DisableBotProtection
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("disable_bot_protection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_BotProtection:
+		if fv, exists := v.FldValidators["bot_protection_choice.bot_protection"]; exists {
+			val := m.GetBotProtectionChoice().(*GlobalSpecType_BotProtection).BotProtection
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("bot_protection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+
 	switch m.GetCacheOptions().(type) {
 	case *GlobalSpecType_CachingPolicy:
 		if fv, exists := v.FldValidators["cache_options.caching_policy"]; exists {
@@ -10365,6 +13292,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("cache_options"),
 				db.WithValidateField("disable_caching"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableCdn:
+		if fv, exists := v.FldValidators["cache_options.enable_cdn"]; exists {
+			val := m.GetCacheOptions().(*GlobalSpecType_EnableCdn).EnableCdn
+			vOpts := append(opts,
+				db.WithValidateField("cache_options"),
+				db.WithValidateField("enable_cdn"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -11321,16 +14259,16 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["api_testing_choice"] = vFn
-	vrhCacheOptionsCachingPolicy := v.CacheOptionsCachingPolicyValidationRuleHandler
-	rulesCacheOptionsCachingPolicy := map[string]string{
+	vrhCacheOptionsEnableCdn := v.CacheOptionsEnableCdnValidationRuleHandler
+	rulesCacheOptionsEnableCdn := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFnMap["cache_options.caching_policy"], err = vrhCacheOptionsCachingPolicy(rulesCacheOptionsCachingPolicy)
+	vFnMap["cache_options.enable_cdn"], err = vrhCacheOptionsEnableCdn(rulesCacheOptionsEnableCdn)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.cache_options_caching_policy: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.cache_options_enable_cdn: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["cache_options.caching_policy"] = vFnMap["cache_options.caching_policy"]
+	v.FldValidators["cache_options.enable_cdn"] = vFnMap["cache_options.enable_cdn"]
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -11598,6 +14536,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["bot_defense_choice.bot_defense"] = ves_io_schema_views_common_security.ShapeBotDefenseTypeValidator().Validate
 	v.FldValidators["bot_defense_choice.bot_defense_advanced"] = ves_io_schema_views_common_security.BotDefenseAdvancedTypeValidator().Validate
 	v.FldValidators["bot_defense_choice.bot_defense_advanced_protection"] = ves_io_schema_views_common_security.BotDefenseAdvancedProtectionValidator().Validate
+	v.FldValidators["bot_protection_choice.bot_protection"] = ves_io_schema_views_common_security.BotDefenseBasicTypeValidator().Validate
+	v.FldValidators["cache_options.caching_policy"] = CachingPolicyValidator().Validate
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.policy_based_challenge"] = ves_io_schema_views_common_waf.PolicyBasedChallengeValidator().Validate
@@ -11635,6 +14575,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["waf_exclusion"] = ves_io_schema_views_common_waf.WafExclusionValidator().Validate
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
+	v.FldValidators["auto_cert_info"] = ves_io_schema_virtual_host.AutoCertInfoTypeValidator().Validate
 
 	return v
 }()
@@ -11786,6 +14727,146 @@ func HashPolicyListTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ImageOptimizationConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ImageOptimizationConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ImageOptimizationConfig) DeepCopy() *ImageOptimizationConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ImageOptimizationConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ImageOptimizationConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ImageOptimizationConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ImageOptimizationConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateImageOptimizationConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateImageOptimizationConfig) ImageOptimizationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for image_optimizations")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_virtual_host.VHImageOptimizationSettings, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_virtual_host.VHImageOptimizationSettingsValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for image_optimizations")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_virtual_host.VHImageOptimizationSettings)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_virtual_host.VHImageOptimizationSettings, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated image_optimizations")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items image_optimizations")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateImageOptimizationConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ImageOptimizationConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ImageOptimizationConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["image_optimizations"]; exists {
+		vOpts := append(opts, db.WithValidateField("image_optimizations"))
+		if err := fv(ctx, m.GetImageOptimizations(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultImageOptimizationConfigValidator = func() *ValidateImageOptimizationConfig {
+	v := &ValidateImageOptimizationConfig{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhImageOptimizations := v.ImageOptimizationsValidationRuleHandler
+	rulesImageOptimizations := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "64",
+	}
+	vFn, err = vrhImageOptimizations(rulesImageOptimizations)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ImageOptimizationConfig.image_optimizations: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["image_optimizations"] = vFn
+
+	return v
+}()
+
+func ImageOptimizationConfigValidator() db.Validator {
+	return DefaultImageOptimizationConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *L7DDoSProtectionSettings) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -11828,8 +14909,39 @@ func (m *L7DDoSProtectionSettings) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDdosPolicyChoiceDRefInfo()
 }
+func (m *L7DDoSProtectionSettings) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDdosPolicyChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *L7DDoSProtectionSettings) GetDdosPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDdosPolicyChoice().(type) {
+	case *L7DDoSProtectionSettings_DdosPolicyNone:
+		return nil, nil
+	case *L7DDoSProtectionSettings_DdosPolicyCustom:
+		vref := m.GetDdosPolicyCustom()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy.Object")
+		dri := db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ddos_policy_custom",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *L7DDoSProtectionSettings) GetDdosPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDdosPolicyChoice().(type) {
 	case *L7DDoSProtectionSettings_DdosPolicyNone:
 		return nil, nil
@@ -12444,8 +15556,32 @@ func (m *MirrorPolicyType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetOriginPoolDRefInfo()
 }
+func (m *MirrorPolicyType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetOriginPoolDRefInfoForOverlay(generateHash)
+}
 
 func (m *MirrorPolicyType) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetOriginPool()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("origin_pool.Object")
+	dri := db.DRefInfo{
+		RefdType:   "origin_pool.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "origin_pool",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *MirrorPolicyType) GetOriginPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetOriginPool()
 	if vref == nil {
 		return nil, nil
@@ -12641,6 +15777,13 @@ func (m *OriginServerSubsetRuleListType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetOriginServerSubsetRulesDRefInfo()
 }
+func (m *OriginServerSubsetRuleListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetOriginServerSubsetRulesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *OriginServerSubsetRuleListType) GetOriginServerSubsetRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -12652,6 +15795,26 @@ func (m *OriginServerSubsetRuleListType) GetOriginServerSubsetRulesDRefInfo() ([
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOriginServerSubsetRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("origin_server_subset_rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *OriginServerSubsetRuleListType) GetOriginServerSubsetRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginServerSubsetRules() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetOriginServerSubsetRules() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOriginServerSubsetRules() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -12995,6 +16158,13 @@ func (m *ProxyTypeHttps) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTlsCertificatesChoiceDRefInfo()
 }
+func (m *ProxyTypeHttps) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTlsCertificatesChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ProxyTypeHttps) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -13016,6 +16186,37 @@ func (m *ProxyTypeHttps) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, erro
 		drInfos, err := m.GetTlsCertParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsCertParams().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tls_cert_params." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ProxyTypeHttps) GetTlsCertificatesChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTlsCertificatesChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetTlsCertificatesChoice().(type) {
+	case *ProxyTypeHttps_TlsParameters:
+		drInfos, err := m.GetTlsParameters().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tls_parameters." + dri.DRField
+		}
+		return drInfos, err
+	case *ProxyTypeHttps_TlsCertParams:
+		drInfos, err := m.GetTlsCertParams().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTlsCertParams().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -13473,6 +16674,13 @@ func (m *ProxyTypeHttpsAutoCerts) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetMtlsChoiceDRefInfo()
 }
+func (m *ProxyTypeHttpsAutoCerts) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetMtlsChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ProxyTypeHttpsAutoCerts) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -13486,6 +16694,29 @@ func (m *ProxyTypeHttpsAutoCerts) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error)
 		drInfos, err := m.GetUseMtls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_mtls." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ProxyTypeHttpsAutoCerts) GetMtlsChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMtlsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMtlsChoice().(type) {
+	case *ProxyTypeHttpsAutoCerts_NoMtls:
+		return nil, nil
+	case *ProxyTypeHttpsAutoCerts_UseMtls:
+		drInfos, err := m.GetUseMtls().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -13987,6 +17218,11 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
+	if fdrInfos, err := m.GetBotProtectionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetBotProtectionChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 	if fdrInfos, err := m.GetCacheOptionsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCacheOptionsDRefInfo() FAILED")
 	} else {
@@ -14079,6 +17315,139 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiDefinitionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDefinitionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiProtectionRulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiRateLimitLegacyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiRateLimitLegacyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBotDefenseChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetBotProtectionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBotProtectionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCacheOptionsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCacheOptionsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetChallengeTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDefaultRoutePoolsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultRoutePoolsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetJwtValidationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetJwtValidationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetL7DdosProtectionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetL7DdosProtectionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMaliciousUserMitigationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMaliciousUserMitigationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMlConfigChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMlConfigChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMoreOptionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMoreOptionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginPoolChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginServerSubsetRuleListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginServerSubsetRuleListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRateLimitChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRateLimitChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRoutesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRoutesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUserIdChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUserIdChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWafChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWafChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWafExclusionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -14124,6 +17493,65 @@ func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_dualstack_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_AdvertiseOnPublicDefaultIpv6Vip:
+		return nil, nil
+	case *ReplaceSpecType_AdvertiseOnPublicDefaultDualstackVip:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *ReplaceSpecType_AdvertiseOnPublic:
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_AdvertiseCustom:
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_DoNotAdvertise:
+		return nil, nil
+	case *ReplaceSpecType_AdvertiseOnPublicDefaultVip:
+		return nil, nil
+	case *ReplaceSpecType_AdvertiseV6OnPublic:
+		drInfos, err := m.GetAdvertiseV6OnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseV6OnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_v6_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_AdvertiseDualstackOnPublic:
+		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -14188,6 +17616,55 @@ func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDefinitionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDefinitionChoice().(type) {
+	case *ReplaceSpecType_ApiDefinitions:
+		drInfos, err := m.GetApiDefinitions().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDefinitions().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_definitions." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_ApiSpecification:
+		drInfos, err := m.GetApiSpecification().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_DisableApiDefinition:
+		return nil, nil
+	case *ReplaceSpecType_ApiDefinition:
+		vref := m.GetApiDefinition()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("api_definition.Object")
+		dri := db.DRefInfo{
+			RefdType:   "api_definition.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "api_definition",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApiDiscoveryChoice() == nil {
@@ -14198,6 +17675,29 @@ func (m *ReplaceSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error)
 		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_DisableApiDiscovery:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *ReplaceSpecType_EnableApiDiscovery:
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -14227,6 +17727,22 @@ func (m *ReplaceSpecType) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error)
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetApiProtectionRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiProtectionRules() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApiProtectionRules().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRules().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection_rules." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetApiRateLimitLegacyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApiRateLimitLegacy() == nil {
@@ -14235,6 +17751,22 @@ func (m *ReplaceSpecType) GetApiRateLimitLegacyDRefInfo() ([]db.DRefInfo, error)
 	drInfos, err := m.GetApiRateLimitLegacy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApiRateLimitLegacy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_rate_limit_legacy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetApiRateLimitLegacyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiRateLimitLegacy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApiRateLimitLegacy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiRateLimitLegacy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -14278,6 +17810,87 @@ func (m *ReplaceSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetBotDefenseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBotDefenseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotDefenseChoice().(type) {
+	case *ReplaceSpecType_DisableBotDefense:
+		return nil, nil
+	case *ReplaceSpecType_BotDefense:
+		return nil, nil
+	case *ReplaceSpecType_BotDefenseAdvanced:
+		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense_advanced." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_BotDefenseAdvancedProtection:
+		drInfos, err := m.GetBotDefenseAdvancedProtection().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefenseAdvancedProtection().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense_advanced_protection." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetBotProtectionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBotProtectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotProtectionChoice().(type) {
+	case *ReplaceSpecType_DisableBotProtection:
+		return nil, nil
+	case *ReplaceSpecType_BotProtection:
+		drInfos, err := m.GetBotProtection().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotProtection().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_protection." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetBotProtectionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBotProtectionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotProtectionChoice().(type) {
+	case *ReplaceSpecType_DisableBotProtection:
+		return nil, nil
+	case *ReplaceSpecType_BotProtection:
+		drInfos, err := m.GetBotProtection().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotProtection().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_protection." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetCacheOptionsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetCacheOptions() == nil {
@@ -14296,6 +17909,49 @@ func (m *ReplaceSpecType) GetCacheOptionsDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 	case *ReplaceSpecType_DisableCaching:
 		return nil, nil
+	case *ReplaceSpecType_EnableCdn:
+		drInfos, err := m.GetEnableCdn().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableCdn().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_cdn." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetCacheOptionsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCacheOptions() == nil {
+		return nil, nil
+	}
+	switch m.GetCacheOptions().(type) {
+	case *ReplaceSpecType_CachingPolicy:
+		drInfos, err := m.GetCachingPolicy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCachingPolicy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "caching_policy." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_DisableCaching:
+		return nil, nil
+	case *ReplaceSpecType_EnableCdn:
+		drInfos, err := m.GetEnableCdn().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableCdn().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_cdn." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
@@ -14338,6 +17994,43 @@ func (m *ReplaceSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetChallengeTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetChallengeType() == nil {
+		return nil, nil
+	}
+	switch m.GetChallengeType().(type) {
+	case *ReplaceSpecType_JsChallenge:
+		return nil, nil
+	case *ReplaceSpecType_CaptchaChallenge:
+		return nil, nil
+	case *ReplaceSpecType_NoChallenge:
+		return nil, nil
+	case *ReplaceSpecType_PolicyBasedChallenge:
+		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_EnableChallenge:
+		drInfos, err := m.GetEnableChallenge().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableChallenge().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_challenge." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetDefaultRoutePoolsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDefaultRoutePools() == nil {
@@ -14348,6 +18041,26 @@ func (m *ReplaceSpecType) GetDefaultRoutePoolsDRefInfo() ([]db.DRefInfo, error) 
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDefaultRoutePools() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("default_route_pools[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetDefaultRoutePoolsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDefaultRoutePools() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDefaultRoutePools() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultRoutePools() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -14374,6 +18087,22 @@ func (m *ReplaceSpecType) GetJwtValidationDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetJwtValidationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetJwtValidation() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetJwtValidation().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetJwtValidation().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "jwt_validation." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetL7DdosProtectionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetL7DdosProtection() == nil {
@@ -14382,6 +18111,22 @@ func (m *ReplaceSpecType) GetL7DdosProtectionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetL7DdosProtection().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetL7DdosProtection().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "l7_ddos_protection." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetL7DdosProtectionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetL7DdosProtection() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetL7DdosProtection().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetL7DdosProtection().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -14423,7 +18168,57 @@ func (m *ReplaceSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetLoadbalancerTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *ReplaceSpecType_Http:
+		return nil, nil
+	case *ReplaceSpecType_Https:
+		drInfos, err := m.GetHttps().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_HttpsAutoCert:
+		drInfos, err := m.GetHttpsAutoCert().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpsAutoCert().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https_auto_cert." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *ReplaceSpecType) GetMaliciousUserMitigationDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetMaliciousUserMitigation()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("malicious_user_mitigation.Object")
+	dri := db.DRefInfo{
+		RefdType:   "malicious_user_mitigation.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "malicious_user_mitigation",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ReplaceSpecType) GetMaliciousUserMitigationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetMaliciousUserMitigation()
 	if vref == nil {
 		return nil, nil
@@ -14491,6 +18286,29 @@ func (m *ReplaceSpecType) GetMlConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetMlConfigChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMlConfigChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMlConfigChoice().(type) {
+	case *ReplaceSpecType_SingleLbApp:
+		drInfos, err := m.GetSingleLbApp().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSingleLbApp().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "single_lb_app." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_MultiLbApp:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetMoreOption() == nil {
@@ -14499,6 +18317,22 @@ func (m *ReplaceSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetMoreOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "more_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetMoreOptionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMoreOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetMoreOption().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -14538,6 +18372,37 @@ func (m *ReplaceSpecType) GetOriginPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetOriginPoolChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginPoolChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOriginPoolChoice().(type) {
+	case *ReplaceSpecType_DefaultPool:
+		drInfos, err := m.GetDefaultPool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultPool().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "default_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_DefaultPoolList:
+		drInfos, err := m.GetDefaultPoolList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDefaultPoolList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "default_pool_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetOriginServerSubsetRuleListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginServerSubsetRuleList() == nil {
@@ -14546,6 +18411,22 @@ func (m *ReplaceSpecType) GetOriginServerSubsetRuleListDRefInfo() ([]db.DRefInfo
 	drInfos, err := m.GetOriginServerSubsetRuleList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOriginServerSubsetRuleList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "origin_server_subset_rule_list." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetOriginServerSubsetRuleListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginServerSubsetRuleList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetOriginServerSubsetRuleList().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOriginServerSubsetRuleList().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -14587,6 +18468,39 @@ func (m *ReplaceSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetRateLimitChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRateLimitChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRateLimitChoice().(type) {
+	case *ReplaceSpecType_DisableRateLimit:
+		return nil, nil
+	case *ReplaceSpecType_RateLimit:
+		drInfos, err := m.GetRateLimit().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRateLimit().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rate_limit." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_ApiRateLimit:
+		drInfos, err := m.GetApiRateLimit().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiRateLimit().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_rate_limit." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRoutes() == nil {
@@ -14597,6 +18511,26 @@ func (m *ReplaceSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetRoutesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRoutes() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutes() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -14619,6 +18553,29 @@ func (m *ReplaceSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo,
 		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sensitive_data_policy." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSensitiveDataPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *ReplaceSpecType_DefaultSensitiveDataPolicy:
+		return nil, nil
+	case *ReplaceSpecType_SensitiveDataPolicy:
+		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -14655,7 +18612,56 @@ func (m *ReplaceSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetServicePolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServicePolicyChoice().(type) {
+	case *ReplaceSpecType_ServicePoliciesFromNamespace:
+		return nil, nil
+	case *ReplaceSpecType_NoServicePolicies:
+		return nil, nil
+	case *ReplaceSpecType_ActiveServicePolicies:
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *ReplaceSpecType) GetUserIdChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUserIdChoice().(type) {
+	case *ReplaceSpecType_UserIdentification:
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("user_identification.Object")
+		dri := db.DRefInfo{
+			RefdType:   "user_identification.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "user_identification",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *ReplaceSpecType_UserIdClientIp:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ReplaceSpecType) GetUserIdChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetUserIdChoice().(type) {
 	case *ReplaceSpecType_UserIdentification:
 		vref := m.GetUserIdentification()
@@ -14737,6 +18743,30 @@ func (m *ReplaceSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 }
+func (m *ReplaceSpecType) GetWafChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	switch m.GetWafChoice().(type) {
+	case *ReplaceSpecType_DisableWaf:
+		return nil, nil
+	case *ReplaceSpecType_AppFirewall:
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
 
 // GetWafChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *ReplaceSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -14787,6 +18817,22 @@ func (m *ReplaceSpecType) GetWafExclusionDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetWafExclusionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWafExclusion() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWafExclusion().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusion().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "waf_exclusion." + dri.DRField
+	}
+	return drInfos, err
+}
+
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -14820,8 +18866,8 @@ func (v *ValidateReplaceSpecType) ApiTestingChoiceValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) CacheOptionsCachingPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return CachingPolicyValidator().Validate, nil
+func (v *ValidateReplaceSpecType) CacheOptionsEnableCdnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return CDNConfigValidator().Validate, nil
 }
 func (v *ValidateReplaceSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -15675,6 +19721,31 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		}
 	}
 
+	switch m.GetBotProtectionChoice().(type) {
+	case *ReplaceSpecType_DisableBotProtection:
+		if fv, exists := v.FldValidators["bot_protection_choice.disable_bot_protection"]; exists {
+			val := m.GetBotProtectionChoice().(*ReplaceSpecType_DisableBotProtection).DisableBotProtection
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("disable_bot_protection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_BotProtection:
+		if fv, exists := v.FldValidators["bot_protection_choice.bot_protection"]; exists {
+			val := m.GetBotProtectionChoice().(*ReplaceSpecType_BotProtection).BotProtection
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("bot_protection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+
 	switch m.GetCacheOptions().(type) {
 	case *ReplaceSpecType_CachingPolicy:
 		if fv, exists := v.FldValidators["cache_options.caching_policy"]; exists {
@@ -15693,6 +19764,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("cache_options"),
 				db.WithValidateField("disable_caching"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EnableCdn:
+		if fv, exists := v.FldValidators["cache_options.enable_cdn"]; exists {
+			val := m.GetCacheOptions().(*ReplaceSpecType_EnableCdn).EnableCdn
+			vOpts := append(opts,
+				db.WithValidateField("cache_options"),
+				db.WithValidateField("enable_cdn"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -16562,16 +20644,16 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["api_testing_choice"] = vFn
-	vrhCacheOptionsCachingPolicy := v.CacheOptionsCachingPolicyValidationRuleHandler
-	rulesCacheOptionsCachingPolicy := map[string]string{
+	vrhCacheOptionsEnableCdn := v.CacheOptionsEnableCdnValidationRuleHandler
+	rulesCacheOptionsEnableCdn := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFnMap["cache_options.caching_policy"], err = vrhCacheOptionsCachingPolicy(rulesCacheOptionsCachingPolicy)
+	vFnMap["cache_options.enable_cdn"], err = vrhCacheOptionsEnableCdn(rulesCacheOptionsEnableCdn)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.cache_options_caching_policy: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.cache_options_enable_cdn: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["cache_options.caching_policy"] = vFnMap["cache_options.caching_policy"]
+	v.FldValidators["cache_options.enable_cdn"] = vFnMap["cache_options.enable_cdn"]
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -16829,6 +20911,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["bot_defense_choice.bot_defense"] = ves_io_schema_views_common_security.ShapeBotDefenseTypeValidator().Validate
 	v.FldValidators["bot_defense_choice.bot_defense_advanced"] = ves_io_schema_views_common_security.BotDefenseAdvancedTypeValidator().Validate
 	v.FldValidators["bot_defense_choice.bot_defense_advanced_protection"] = ves_io_schema_views_common_security.BotDefenseAdvancedProtectionValidator().Validate
+	v.FldValidators["bot_protection_choice.bot_protection"] = ves_io_schema_views_common_security.BotDefenseBasicTypeValidator().Validate
+	v.FldValidators["cache_options.caching_policy"] = CachingPolicyValidator().Validate
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.policy_based_challenge"] = ves_io_schema_views_common_waf.PolicyBasedChallengeValidator().Validate
@@ -16962,6 +21046,29 @@ func (m *RouteSimpleAdvancedOptions) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *RouteSimpleAdvancedOptions) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetMirroringChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMirroringChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWafChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWafChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWafExclusionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *RouteSimpleAdvancedOptions) GetMirroringChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -16986,7 +21093,56 @@ func (m *RouteSimpleAdvancedOptions) GetMirroringChoiceDRefInfo() ([]db.DRefInfo
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *RouteSimpleAdvancedOptions) GetMirroringChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMirroringChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMirroringChoice().(type) {
+	case *RouteSimpleAdvancedOptions_DisableMirroring:
+		return nil, nil
+	case *RouteSimpleAdvancedOptions_MirrorPolicy:
+		drInfos, err := m.GetMirrorPolicy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetMirrorPolicy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "mirror_policy." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *RouteSimpleAdvancedOptions) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetWafChoice().(type) {
+	case *RouteSimpleAdvancedOptions_InheritedWaf:
+		return nil, nil
+	case *RouteSimpleAdvancedOptions_DisableWaf:
+		return nil, nil
+	case *RouteSimpleAdvancedOptions_AppFirewall:
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *RouteSimpleAdvancedOptions) GetWafChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetWafChoice().(type) {
 	case *RouteSimpleAdvancedOptions_InheritedWaf:
 		return nil, nil
@@ -17048,6 +21204,30 @@ func (m *RouteSimpleAdvancedOptions) GetWafChoiceDBEntries(ctx context.Context, 
 }
 
 func (m *RouteSimpleAdvancedOptions) GetWafExclusionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetWafExclusionChoice().(type) {
+	case *RouteSimpleAdvancedOptions_InheritedWafExclusion:
+		return nil, nil
+	case *RouteSimpleAdvancedOptions_WafExclusionPolicy:
+		vref := m.GetWafExclusionPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("waf_exclusion_policy.Object")
+		dri := db.DRefInfo{
+			RefdType:   "waf_exclusion_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "waf_exclusion_policy",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *RouteSimpleAdvancedOptions) GetWafExclusionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetWafExclusionChoice().(type) {
 	case *RouteSimpleAdvancedOptions_InheritedWafExclusion:
 		return nil, nil
@@ -18372,6 +22552,13 @@ func (m *RouteType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetChoiceDRefInfo()
 }
+func (m *RouteType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *RouteType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -18397,6 +22584,41 @@ func (m *RouteType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetCustomRouteObject().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomRouteObject().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "custom_route_object." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RouteType) GetChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetChoice().(type) {
+	case *RouteType_SimpleRoute:
+		drInfos, err := m.GetSimpleRoute().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSimpleRoute().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "simple_route." + dri.DRField
+		}
+		return drInfos, err
+	case *RouteType_RedirectRoute:
+		return nil, nil
+	case *RouteType_DirectResponseRoute:
+		return nil, nil
+	case *RouteType_CustomRouteObject:
+		drInfos, err := m.GetCustomRouteObject().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCustomRouteObject().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -18621,8 +22843,32 @@ func (m *RouteTypeCustomRoute) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRouteRefDRefInfo()
 }
+func (m *RouteTypeCustomRoute) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRouteRefDRefInfoForOverlay(generateHash)
+}
 
 func (m *RouteTypeCustomRoute) GetRouteRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetRouteRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("route.Object")
+	dri := db.DRefInfo{
+		RefdType:   "route.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "route_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *RouteTypeCustomRoute) GetRouteRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetRouteRef()
 	if vref == nil {
 		return nil, nil
@@ -19186,6 +23432,24 @@ func (m *RouteTypeSimple) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *RouteTypeSimple) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvancedOptionsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvancedOptionsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginPoolsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *RouteTypeSimple) GetAdvancedOptionsDRefInfo() ([]db.DRefInfo, error) {
@@ -19195,6 +23459,22 @@ func (m *RouteTypeSimple) GetAdvancedOptionsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAdvancedOptions().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAdvancedOptions().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "advanced_options." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RouteTypeSimple) GetAdvancedOptionsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvancedOptions() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAdvancedOptions().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAdvancedOptions().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -19213,6 +23493,26 @@ func (m *RouteTypeSimple) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOriginPools() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("origin_pools[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RouteTypeSimple) GetOriginPoolsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginPools() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetOriginPools() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOriginPools() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -20187,6 +24487,13 @@ func (m *SingleLoadBalancerAppSetting) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetApiDiscoveryChoiceDRefInfo()
 }
+func (m *SingleLoadBalancerAppSetting) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SingleLoadBalancerAppSetting) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -20198,6 +24505,29 @@ func (m *SingleLoadBalancerAppSetting) GetApiDiscoveryChoiceDRefInfo() ([]db.DRe
 		drInfos, err := m.GetEnableDiscovery().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_discovery." + dri.DRField
+		}
+		return drInfos, err
+	case *SingleLoadBalancerAppSetting_DisableDiscovery:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SingleLoadBalancerAppSetting) GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *SingleLoadBalancerAppSetting_EnableDiscovery:
+		drInfos, err := m.GetEnableDiscovery().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableDiscovery().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -20591,6 +24921,41 @@ func (r *CreateSpecType) GetBotDefenseChoiceFromGlobalSpecType(o *GlobalSpecType
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetBotProtectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BotProtectionChoice.(type) {
+	case nil:
+		o.BotProtectionChoice = nil
+
+	case *CreateSpecType_BotProtection:
+		o.BotProtectionChoice = &GlobalSpecType_BotProtection{BotProtection: of.BotProtection}
+
+	case *CreateSpecType_DisableBotProtection:
+		o.BotProtectionChoice = &GlobalSpecType_DisableBotProtection{DisableBotProtection: of.DisableBotProtection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetBotProtectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BotProtectionChoice.(type) {
+	case nil:
+		r.BotProtectionChoice = nil
+
+	case *GlobalSpecType_BotProtection:
+		r.BotProtectionChoice = &CreateSpecType_BotProtection{BotProtection: of.BotProtection}
+
+	case *GlobalSpecType_DisableBotProtection:
+		r.BotProtectionChoice = &CreateSpecType_DisableBotProtection{DisableBotProtection: of.DisableBotProtection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetCacheOptionsToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.CacheOptions.(type) {
 	case nil:
@@ -20601,6 +24966,9 @@ func (r *CreateSpecType) SetCacheOptionsToGlobalSpecType(o *GlobalSpecType) erro
 
 	case *CreateSpecType_DisableCaching:
 		o.CacheOptions = &GlobalSpecType_DisableCaching{DisableCaching: of.DisableCaching}
+
+	case *CreateSpecType_EnableCdn:
+		o.CacheOptions = &GlobalSpecType_EnableCdn{EnableCdn: of.EnableCdn}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -20618,6 +24986,9 @@ func (r *CreateSpecType) GetCacheOptionsFromGlobalSpecType(o *GlobalSpecType) er
 
 	case *GlobalSpecType_DisableCaching:
 		r.CacheOptions = &CreateSpecType_DisableCaching{DisableCaching: of.DisableCaching}
+
+	case *GlobalSpecType_EnableCdn:
+		r.CacheOptions = &CreateSpecType_EnableCdn{EnableCdn: of.EnableCdn}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -21340,6 +25711,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetApiTestingChoiceFromGlobalSpecType(f)
 	m.BlockedClients = f.GetBlockedClients()
 	m.GetBotDefenseChoiceFromGlobalSpecType(f)
+	m.GetBotProtectionChoiceFromGlobalSpecType(f)
 	m.GetCacheOptionsFromGlobalSpecType(f)
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.GetClientSideDefenseChoiceFromGlobalSpecType(f)
@@ -21403,6 +25775,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetApiTestingChoiceToGlobalSpecType(f)
 	f.BlockedClients = m1.BlockedClients
 	m1.SetBotDefenseChoiceToGlobalSpecType(f)
+	m1.SetBotProtectionChoiceToGlobalSpecType(f)
 	m1.SetCacheOptionsToGlobalSpecType(f)
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	m1.SetClientSideDefenseChoiceToGlobalSpecType(f)
@@ -21686,6 +26059,41 @@ func (r *GetSpecType) GetBotDefenseChoiceFromGlobalSpecType(o *GlobalSpecType) e
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetBotProtectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BotProtectionChoice.(type) {
+	case nil:
+		o.BotProtectionChoice = nil
+
+	case *GetSpecType_BotProtection:
+		o.BotProtectionChoice = &GlobalSpecType_BotProtection{BotProtection: of.BotProtection}
+
+	case *GetSpecType_DisableBotProtection:
+		o.BotProtectionChoice = &GlobalSpecType_DisableBotProtection{DisableBotProtection: of.DisableBotProtection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetBotProtectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BotProtectionChoice.(type) {
+	case nil:
+		r.BotProtectionChoice = nil
+
+	case *GlobalSpecType_BotProtection:
+		r.BotProtectionChoice = &GetSpecType_BotProtection{BotProtection: of.BotProtection}
+
+	case *GlobalSpecType_DisableBotProtection:
+		r.BotProtectionChoice = &GetSpecType_DisableBotProtection{DisableBotProtection: of.DisableBotProtection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetCacheOptionsToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.CacheOptions.(type) {
 	case nil:
@@ -21696,6 +26104,9 @@ func (r *GetSpecType) SetCacheOptionsToGlobalSpecType(o *GlobalSpecType) error {
 
 	case *GetSpecType_DisableCaching:
 		o.CacheOptions = &GlobalSpecType_DisableCaching{DisableCaching: of.DisableCaching}
+
+	case *GetSpecType_EnableCdn:
+		o.CacheOptions = &GlobalSpecType_EnableCdn{EnableCdn: of.EnableCdn}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -21713,6 +26124,9 @@ func (r *GetSpecType) GetCacheOptionsFromGlobalSpecType(o *GlobalSpecType) error
 
 	case *GlobalSpecType_DisableCaching:
 		r.CacheOptions = &GetSpecType_DisableCaching{DisableCaching: of.DisableCaching}
+
+	case *GlobalSpecType_EnableCdn:
+		r.CacheOptions = &GetSpecType_EnableCdn{EnableCdn: of.EnableCdn}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -22436,6 +26850,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.AutoCertInfo = f.GetAutoCertInfo()
 	m.BlockedClients = f.GetBlockedClients()
 	m.GetBotDefenseChoiceFromGlobalSpecType(f)
+	m.GetBotProtectionChoiceFromGlobalSpecType(f)
 	m.GetCacheOptionsFromGlobalSpecType(f)
 	m.CertState = f.GetCertState()
 	m.GetChallengeTypeFromGlobalSpecType(f)
@@ -22506,6 +26921,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.AutoCertInfo = m1.AutoCertInfo
 	f.BlockedClients = m1.BlockedClients
 	m1.SetBotDefenseChoiceToGlobalSpecType(f)
+	m1.SetBotProtectionChoiceToGlobalSpecType(f)
 	m1.SetCacheOptionsToGlobalSpecType(f)
 	f.CertState = m1.CertState
 	m1.SetChallengeTypeToGlobalSpecType(f)
@@ -22795,6 +27211,41 @@ func (r *ReplaceSpecType) GetBotDefenseChoiceFromGlobalSpecType(o *GlobalSpecTyp
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetBotProtectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BotProtectionChoice.(type) {
+	case nil:
+		o.BotProtectionChoice = nil
+
+	case *ReplaceSpecType_BotProtection:
+		o.BotProtectionChoice = &GlobalSpecType_BotProtection{BotProtection: of.BotProtection}
+
+	case *ReplaceSpecType_DisableBotProtection:
+		o.BotProtectionChoice = &GlobalSpecType_DisableBotProtection{DisableBotProtection: of.DisableBotProtection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetBotProtectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BotProtectionChoice.(type) {
+	case nil:
+		r.BotProtectionChoice = nil
+
+	case *GlobalSpecType_BotProtection:
+		r.BotProtectionChoice = &ReplaceSpecType_BotProtection{BotProtection: of.BotProtection}
+
+	case *GlobalSpecType_DisableBotProtection:
+		r.BotProtectionChoice = &ReplaceSpecType_DisableBotProtection{DisableBotProtection: of.DisableBotProtection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetCacheOptionsToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.CacheOptions.(type) {
 	case nil:
@@ -22805,6 +27256,9 @@ func (r *ReplaceSpecType) SetCacheOptionsToGlobalSpecType(o *GlobalSpecType) err
 
 	case *ReplaceSpecType_DisableCaching:
 		o.CacheOptions = &GlobalSpecType_DisableCaching{DisableCaching: of.DisableCaching}
+
+	case *ReplaceSpecType_EnableCdn:
+		o.CacheOptions = &GlobalSpecType_EnableCdn{EnableCdn: of.EnableCdn}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -22822,6 +27276,9 @@ func (r *ReplaceSpecType) GetCacheOptionsFromGlobalSpecType(o *GlobalSpecType) e
 
 	case *GlobalSpecType_DisableCaching:
 		r.CacheOptions = &ReplaceSpecType_DisableCaching{DisableCaching: of.DisableCaching}
+
+	case *GlobalSpecType_EnableCdn:
+		r.CacheOptions = &ReplaceSpecType_EnableCdn{EnableCdn: of.EnableCdn}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -23544,6 +28001,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetApiTestingChoiceFromGlobalSpecType(f)
 	m.BlockedClients = f.GetBlockedClients()
 	m.GetBotDefenseChoiceFromGlobalSpecType(f)
+	m.GetBotProtectionChoiceFromGlobalSpecType(f)
 	m.GetCacheOptionsFromGlobalSpecType(f)
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.GetClientSideDefenseChoiceFromGlobalSpecType(f)
@@ -23607,6 +28065,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetApiTestingChoiceToGlobalSpecType(f)
 	f.BlockedClients = m1.BlockedClients
 	m1.SetBotDefenseChoiceToGlobalSpecType(f)
+	m1.SetBotProtectionChoiceToGlobalSpecType(f)
 	m1.SetCacheOptionsToGlobalSpecType(f)
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	m1.SetClientSideDefenseChoiceToGlobalSpecType(f)

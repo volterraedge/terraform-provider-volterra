@@ -19,6 +19,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.common_security.BotDefenseAdvancedPolicyType"] = BotDefenseAdvancedPolicyTypeValidator()
 	vr["ves.io.schema.views.common_security.BotDefenseAdvancedProtection"] = BotDefenseAdvancedProtectionValidator()
 	vr["ves.io.schema.views.common_security.BotDefenseAdvancedType"] = BotDefenseAdvancedTypeValidator()
+	vr["ves.io.schema.views.common_security.BotDefenseBasicType"] = BotDefenseBasicTypeValidator()
 	vr["ves.io.schema.views.common_security.BothWebAndMobileType"] = BothWebAndMobileTypeValidator()
 	vr["ves.io.schema.views.common_security.CSDJavaScriptInsertAllWithExceptionsType"] = CSDJavaScriptInsertAllWithExceptionsTypeValidator()
 	vr["ves.io.schema.views.common_security.CSDJavaScriptInsertType"] = CSDJavaScriptInsertTypeValidator()

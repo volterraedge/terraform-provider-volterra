@@ -69,6 +69,13 @@ func (m *ActiveEnhancedFirewallPoliciesType) GetDRefInfo() ([]db.DRefInfo, error
 
 	return m.GetEnhancedFirewallPoliciesDRefInfo()
 }
+func (m *ActiveEnhancedFirewallPoliciesType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetEnhancedFirewallPoliciesDRefInfoForOverlay(generateHash)
+}
 
 func (m *ActiveEnhancedFirewallPoliciesType) GetEnhancedFirewallPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetEnhancedFirewallPolicies()
@@ -83,6 +90,30 @@ func (m *ActiveEnhancedFirewallPoliciesType) GetEnhancedFirewallPoliciesDRefInfo
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("enhanced_firewall_policy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "enhanced_firewall_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "enhanced_firewall_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ActiveEnhancedFirewallPoliciesType) GetEnhancedFirewallPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetEnhancedFirewallPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveEnhancedFirewallPoliciesType.enhanced_firewall_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("enhanced_firewall_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "enhanced_firewall_policy.Object",
 			RefdTenant: vref.Tenant,
@@ -271,6 +302,13 @@ func (m *ActiveFastACLsType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetFastAclsDRefInfo()
 }
+func (m *ActiveFastACLsType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetFastAclsDRefInfoForOverlay(generateHash)
+}
 
 func (m *ActiveFastACLsType) GetFastAclsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetFastAcls()
@@ -285,6 +323,30 @@ func (m *ActiveFastACLsType) GetFastAclsDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("fast_acl.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "fast_acl.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "fast_acls",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ActiveFastACLsType) GetFastAclsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetFastAcls()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveFastACLsType.fast_acls[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("fast_acl.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "fast_acl.Object",
 			RefdTenant: vref.Tenant,
@@ -473,6 +535,13 @@ func (m *ActiveForwardProxyPoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetForwardProxyPoliciesDRefInfo()
 }
+func (m *ActiveForwardProxyPoliciesType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetForwardProxyPoliciesDRefInfoForOverlay(generateHash)
+}
 
 func (m *ActiveForwardProxyPoliciesType) GetForwardProxyPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetForwardProxyPolicies()
@@ -487,6 +556,30 @@ func (m *ActiveForwardProxyPoliciesType) GetForwardProxyPoliciesDRefInfo() ([]db
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("forward_proxy_policy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "forward_proxy_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forward_proxy_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ActiveForwardProxyPoliciesType) GetForwardProxyPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetForwardProxyPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveForwardProxyPoliciesType.forward_proxy_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("forward_proxy_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "forward_proxy_policy.Object",
 			RefdTenant: vref.Tenant,
@@ -675,6 +768,13 @@ func (m *ActiveNetworkPoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNetworkPoliciesDRefInfo()
 }
+func (m *ActiveNetworkPoliciesType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkPoliciesDRefInfoForOverlay(generateHash)
+}
 
 func (m *ActiveNetworkPoliciesType) GetNetworkPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetNetworkPolicies()
@@ -689,6 +789,30 @@ func (m *ActiveNetworkPoliciesType) GetNetworkPoliciesDRefInfo() ([]db.DRefInfo,
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("network_policy_view.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_policy_view.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ActiveNetworkPoliciesType) GetNetworkPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetNetworkPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveNetworkPoliciesType.network_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_policy_view.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_policy_view.Object",
 			RefdTenant: vref.Tenant,
@@ -893,6 +1017,29 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFastAclChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFastAclChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -906,6 +1053,45 @@ func (m *CreateSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetActiveFastAcls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_fast_acls." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_FastAclSet:
+		vref := m.GetFastAclSet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("fast_acl_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "fast_acl_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "fast_acl_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetFastAclChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFastAclChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetFastAclChoice().(type) {
+	case *CreateSpecType_DisableFastAcl:
+		return nil, nil
+	case *CreateSpecType_ActiveFastAcls:
+		drInfos, err := m.GetActiveFastAcls().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -972,6 +1158,45 @@ func (m *CreateSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, e
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetForwardProxyPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyPolicyChoice().(type) {
+	case *CreateSpecType_DisableForwardProxyPolicy:
+		return nil, nil
+	case *CreateSpecType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_ForwardProxyPolicySet:
+		vref := m.GetForwardProxyPolicySet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "service_policy_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forward_proxy_policy_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNetworkPolicyChoice() == nil {
@@ -1010,6 +1235,55 @@ func (m *CreateSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *CreateSpecType_DisableNetworkPolicy:
+		return nil, nil
+	case *CreateSpecType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_NetworkPolicySet:
+		vref := m.GetNetworkPolicySet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_policy_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_policy_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_policy_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *CreateSpecType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1366,6 +1640,29 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFastAclChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFastAclChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1379,6 +1676,45 @@ func (m *GetSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetActiveFastAcls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_fast_acls." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_FastAclSet:
+		vref := m.GetFastAclSet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("fast_acl_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "fast_acl_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "fast_acl_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetFastAclChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFastAclChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetFastAclChoice().(type) {
+	case *GetSpecType_DisableFastAcl:
+		return nil, nil
+	case *GetSpecType_ActiveFastAcls:
+		drInfos, err := m.GetActiveFastAcls().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1445,6 +1781,45 @@ func (m *GetSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetForwardProxyPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyPolicyChoice().(type) {
+	case *GetSpecType_DisableForwardProxyPolicy:
+		return nil, nil
+	case *GetSpecType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_ForwardProxyPolicySet:
+		vref := m.GetForwardProxyPolicySet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "service_policy_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forward_proxy_policy_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNetworkPolicyChoice() == nil {
@@ -1483,6 +1858,55 @@ func (m *GetSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *GetSpecType_DisableNetworkPolicy:
+		return nil, nil
+	case *GetSpecType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_NetworkPolicySet:
+		vref := m.GetNetworkPolicySet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_policy_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_policy_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_policy_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *GetSpecType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1864,6 +2288,54 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEnhancedFirewallPoliciesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetEnhancedFirewallPoliciesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetFastAclConfigModeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFastAclConfigModeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetFastAclSetDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFastAclSetDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyPolicyConfigModeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyPolicyConfigModeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyPolicySetDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyPolicySetDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicyConfigModeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicyConfigModeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicySetDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicySetDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetEnhancedFirewallPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetEnhancedFirewallPolicies()
@@ -1876,6 +2348,34 @@ func (m *GlobalSpecType) GetEnhancedFirewallPoliciesDRefInfo() ([]db.DRefInfo, e
 			return nil, fmt.Errorf("GlobalSpecType.enhanced_firewall_policies[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "enhanced_firewall_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "enhanced_firewall_policies",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetEnhancedFirewallPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetEnhancedFirewallPolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.enhanced_firewall_policies[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "enhanced_firewall_policy.Object",
 			RefdUID:    ref.Uid,
@@ -1933,6 +2433,31 @@ func (m *GlobalSpecType) GetFastAclConfigModeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetFastAclConfigModeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFastAclConfigMode() == nil {
+		return nil, nil
+	}
+	switch m.GetFastAclConfigMode().(type) {
+	case *GlobalSpecType_DisableFastAcl:
+		return nil, nil
+	case *GlobalSpecType_ActiveFastAcls:
+		drInfos, err := m.GetActiveFastAcls().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_fast_acls." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_FastAclLegacyMode:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetFastAclSetDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetFastAclSet()
 	if len(refs) == 0 {
@@ -1944,6 +2469,34 @@ func (m *GlobalSpecType) GetFastAclSetDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.fast_acl_set[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "fast_acl_set.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "fast_acl_set",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetFastAclSetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetFastAclSet()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.fast_acl_set[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "fast_acl_set.Object",
 			RefdUID:    ref.Uid,
@@ -2001,6 +2554,31 @@ func (m *GlobalSpecType) GetForwardProxyPolicyConfigModeDRefInfo() ([]db.DRefInf
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetForwardProxyPolicyConfigModeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyPolicyConfigMode() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyPolicyConfigMode().(type) {
+	case *GlobalSpecType_DisableForwardProxyPolicy:
+		return nil, nil
+	case *GlobalSpecType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_ForwardProxyPolicyLegacyMode:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetForwardProxyPolicySetDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetForwardProxyPolicySet()
 	if len(refs) == 0 {
@@ -2012,6 +2590,34 @@ func (m *GlobalSpecType) GetForwardProxyPolicySetDRefInfo() ([]db.DRefInfo, erro
 			return nil, fmt.Errorf("GlobalSpecType.forward_proxy_policy_set[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy_set.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "forward_proxy_policy_set",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetForwardProxyPolicySetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetForwardProxyPolicySet()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.forward_proxy_policy_set[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "service_policy_set.Object",
 			RefdUID:    ref.Uid,
@@ -2079,6 +2685,41 @@ func (m *GlobalSpecType) GetNetworkPolicyConfigModeDRefInfo() ([]db.DRefInfo, er
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetNetworkPolicyConfigModeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPolicyConfigMode() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkPolicyConfigMode().(type) {
+	case *GlobalSpecType_DisableNetworkPolicy:
+		return nil, nil
+	case *GlobalSpecType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_NetworkPolicyLegacyMode:
+		return nil, nil
+	case *GlobalSpecType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetNetworkPolicySetDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetNetworkPolicySet()
 	if len(refs) == 0 {
@@ -2090,6 +2731,34 @@ func (m *GlobalSpecType) GetNetworkPolicySetDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.network_policy_set[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_policy_set.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "network_policy_set",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetNetworkPolicySetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNetworkPolicySet()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.network_policy_set[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_policy_set.Object",
 			RefdUID:    ref.Uid,
@@ -2123,6 +2792,23 @@ func (m *GlobalSpecType) GetNetworkPolicySetDBEntries(ctx context.Context, d db.
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -2722,6 +3408,29 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFastAclChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFastAclChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2735,6 +3444,45 @@ func (m *ReplaceSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetActiveFastAcls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_fast_acls." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_FastAclSet:
+		vref := m.GetFastAclSet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("fast_acl_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "fast_acl_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "fast_acl_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetFastAclChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFastAclChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetFastAclChoice().(type) {
+	case *ReplaceSpecType_DisableFastAcl:
+		return nil, nil
+	case *ReplaceSpecType_ActiveFastAcls:
+		drInfos, err := m.GetActiveFastAcls().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2801,6 +3549,45 @@ func (m *ReplaceSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, 
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetForwardProxyPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyPolicyChoice().(type) {
+	case *ReplaceSpecType_DisableForwardProxyPolicy:
+		return nil, nil
+	case *ReplaceSpecType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_ForwardProxyPolicySet:
+		vref := m.GetForwardProxyPolicySet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "service_policy_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forward_proxy_policy_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNetworkPolicyChoice() == nil {
@@ -2839,6 +3626,55 @@ func (m *ReplaceSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *ReplaceSpecType_DisableNetworkPolicy:
+		return nil, nil
+	case *ReplaceSpecType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_NetworkPolicySet:
+		vref := m.GetNetworkPolicySet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_policy_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_policy_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_policy_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *ReplaceSpecType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

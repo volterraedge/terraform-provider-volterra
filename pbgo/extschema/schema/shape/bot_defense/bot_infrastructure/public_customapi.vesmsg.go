@@ -13,6 +13,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -348,6 +350,86 @@ func ApplyCertificateRequestValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *BotInfraDeploymentStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotInfraDeploymentStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotInfraDeploymentStatus) DeepCopy() *BotInfraDeploymentStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotInfraDeploymentStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotInfraDeploymentStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotInfraDeploymentStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotInfraDeploymentStatusValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotInfraDeploymentStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotInfraDeploymentStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotInfraDeploymentStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotInfraDeploymentStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["deploy_status"]; exists {
+		vOpts := append(opts, db.WithValidateField("deploy_status"))
+		if err := fv(ctx, m.GetDeployStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotInfraDeploymentStatusValidator = func() *ValidateBotInfraDeploymentStatus {
+	v := &ValidateBotInfraDeploymentStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func BotInfraDeploymentStatusValidator() db.Validator {
+	return DefaultBotInfraDeploymentStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CertificateOperationRegion) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -513,6 +595,419 @@ var DefaultCertificateOperationResponseValidator = func() *ValidateCertificateOp
 
 func CertificateOperationResponseValidator() db.Validator {
 	return DefaultCertificateOperationResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomListBotInfrastructuresRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomListBotInfrastructuresRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomListBotInfrastructuresRequest) DeepCopy() *CustomListBotInfrastructuresRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomListBotInfrastructuresRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomListBotInfrastructuresRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomListBotInfrastructuresRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomListBotInfrastructuresRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomListBotInfrastructuresRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomListBotInfrastructuresRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomListBotInfrastructuresRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomListBotInfrastructuresRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["label_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("label_filter"))
+		if err := fv(ctx, m.GetLabelFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["report_fields"]; exists {
+		vOpts := append(opts, db.WithValidateField("report_fields"))
+		for idx, item := range m.GetReportFields() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["report_status_fields"]; exists {
+		vOpts := append(opts, db.WithValidateField("report_status_fields"))
+		for idx, item := range m.GetReportStatusFields() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomListBotInfrastructuresRequestValidator = func() *ValidateCustomListBotInfrastructuresRequest {
+	v := &ValidateCustomListBotInfrastructuresRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CustomListBotInfrastructuresRequestValidator() db.Validator {
+	return DefaultCustomListBotInfrastructuresRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomListBotInfrastructuresResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomListBotInfrastructuresResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomListBotInfrastructuresResponse) DeepCopy() *CustomListBotInfrastructuresResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomListBotInfrastructuresResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomListBotInfrastructuresResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomListBotInfrastructuresResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomListBotInfrastructuresResponseValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CustomListBotInfrastructuresResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetItemsDRefInfo()
+}
+func (m *CustomListBotInfrastructuresResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetItemsDRefInfoForOverlay(generateHash)
+}
+
+// GetDRefInfo for the field's type
+func (m *CustomListBotInfrastructuresResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetItems() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetItems() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetItems() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("items[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CustomListBotInfrastructuresResponse) GetItemsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetItems() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetItems() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetItems() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("items[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+type ValidateCustomListBotInfrastructuresResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomListBotInfrastructuresResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomListBotInfrastructuresResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomListBotInfrastructuresResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["errors"]; exists {
+		vOpts := append(opts, db.WithValidateField("errors"))
+		for idx, item := range m.GetErrors() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["items"]; exists {
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomListBotInfrastructuresResponseValidator = func() *ValidateCustomListBotInfrastructuresResponse {
+	v := &ValidateCustomListBotInfrastructuresResponse{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["items"] = CustomListBotInfrastructuresResponseItemValidator().Validate
+
+	return v
+}()
+
+func CustomListBotInfrastructuresResponseValidator() db.Validator {
+	return DefaultCustomListBotInfrastructuresResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomListBotInfrastructuresResponseItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomListBotInfrastructuresResponseItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomListBotInfrastructuresResponseItem) DeepCopy() *CustomListBotInfrastructuresResponseItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomListBotInfrastructuresResponseItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomListBotInfrastructuresResponseItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomListBotInfrastructuresResponseItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomListBotInfrastructuresResponseItemValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CustomListBotInfrastructuresResponseItem) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
+func (m *CustomListBotInfrastructuresResponseItem) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
+
+type ValidateCustomListBotInfrastructuresResponseItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomListBotInfrastructuresResponseItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomListBotInfrastructuresResponseItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomListBotInfrastructuresResponseItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["annotations"]; exists {
+		vOpts := append(opts, db.WithValidateField("annotations"))
+		for key, value := range m.GetAnnotations() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["description"]; exists {
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["disabled"]; exists {
+		vOpts := append(opts, db.WithValidateField("disabled"))
+		if err := fv(ctx, m.GetDisabled(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["get_spec"]; exists {
+		vOpts := append(opts, db.WithValidateField("get_spec"))
+		if err := fv(ctx, m.GetGetSpec(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["labels"]; exists {
+		vOpts := append(opts, db.WithValidateField("labels"))
+		for key, value := range m.GetLabels() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["metadata"]; exists {
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["owner_view"]; exists {
+		vOpts := append(opts, db.WithValidateField("owner_view"))
+		if err := fv(ctx, m.GetOwnerView(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["status_set"]; exists {
+		vOpts := append(opts, db.WithValidateField("status_set"))
+		for idx, item := range m.GetStatusSet() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["system_metadata"]; exists {
+		vOpts := append(opts, db.WithValidateField("system_metadata"))
+		if err := fv(ctx, m.GetSystemMetadata(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["tenant"]; exists {
+		vOpts := append(opts, db.WithValidateField("tenant"))
+		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["uid"]; exists {
+		vOpts := append(opts, db.WithValidateField("uid"))
+		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomListBotInfrastructuresResponseItemValidator = func() *ValidateCustomListBotInfrastructuresResponseItem {
+	v := &ValidateCustomListBotInfrastructuresResponseItem{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["metadata"] = ves_io_schema.ObjectGetMetaTypeValidator().Validate
+	v.FldValidators["get_spec"] = GetSpecTypeValidator().Validate
+	v.FldValidators["status_set"] = StatusObjectValidator().Validate
+
+	return v
+}()
+
+func CustomListBotInfrastructuresResponseItemValidator() db.Validator {
+	return DefaultCustomListBotInfrastructuresResponseItemValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1806,6 +2301,246 @@ var DefaultDeploymentStatusResponseValidator = func() *ValidateDeploymentStatusR
 
 func DeploymentStatusResponseValidator() db.Validator {
 	return DefaultDeploymentStatusResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetInfraDeploymentStatusRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetInfraDeploymentStatusRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetInfraDeploymentStatusRequest) DeepCopy() *GetInfraDeploymentStatusRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetInfraDeploymentStatusRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetInfraDeploymentStatusRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetInfraDeploymentStatusRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetInfraDeploymentStatusRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetInfraDeploymentStatusRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetInfraDeploymentStatusRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateGetInfraDeploymentStatusRequest) BotInfraNamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for bot_infra_names")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for bot_infra_names")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated bot_infra_names")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items bot_infra_names")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetInfraDeploymentStatusRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetInfraDeploymentStatusRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetInfraDeploymentStatusRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["bot_infra_names"]; exists {
+		vOpts := append(opts, db.WithValidateField("bot_infra_names"))
+		if err := fv(ctx, m.GetBotInfraNames(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetInfraDeploymentStatusRequestValidator = func() *ValidateGetInfraDeploymentStatusRequest {
+	v := &ValidateGetInfraDeploymentStatusRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetInfraDeploymentStatusRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhBotInfraNames := v.BotInfraNamesValidationRuleHandler
+	rulesBotInfraNames := map[string]string{
+		"ves.io.schema.rules.message.required":                      "true",
+		"ves.io.schema.rules.repeated.items.string.min_len":         "1",
+		"ves.io.schema.rules.repeated.items.string.ves_object_name": "true",
+		"ves.io.schema.rules.repeated.max_items":                    "128",
+		"ves.io.schema.rules.repeated.min_items":                    "1",
+		"ves.io.schema.rules.repeated.unique":                       "true",
+	}
+	vFn, err = vrhBotInfraNames(rulesBotInfraNames)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetInfraDeploymentStatusRequest.bot_infra_names: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_infra_names"] = vFn
+
+	return v
+}()
+
+func GetInfraDeploymentStatusRequestValidator() db.Validator {
+	return DefaultGetInfraDeploymentStatusRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetInfraDeploymentStatusResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetInfraDeploymentStatusResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetInfraDeploymentStatusResponse) DeepCopy() *GetInfraDeploymentStatusResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetInfraDeploymentStatusResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetInfraDeploymentStatusResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetInfraDeploymentStatusResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetInfraDeploymentStatusResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetInfraDeploymentStatusResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetInfraDeploymentStatusResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetInfraDeploymentStatusResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetInfraDeploymentStatusResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["bot_infra_statuses"]; exists {
+		vOpts := append(opts, db.WithValidateField("bot_infra_statuses"))
+		for idx, item := range m.GetBotInfraStatuses() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetInfraDeploymentStatusResponseValidator = func() *ValidateGetInfraDeploymentStatusResponse {
+	v := &ValidateGetInfraDeploymentStatusResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetInfraDeploymentStatusResponseValidator() db.Validator {
+	return DefaultGetInfraDeploymentStatusResponseValidator
 }
 
 // augmented methods on protoc/std generated struct

@@ -367,6 +367,69 @@ func (e *DBObject) GetDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+func (e *DBObject) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if e == nil {
+		return nil, nil
+	}
+	refrUID, err := e.Key()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDRefInfo, error in key")
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := e.GetSpecDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSpecDRefInfoForOverlay() FAILED")
+	} else {
+		for i := range fdrInfos {
+			dri := &fdrInfos[i]
+			// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
+			dri.DRField = "ves.io.schema.network_firewall.Object." + dri.DRField
+			dri.RefrType = e.Type()
+			dri.RefrUID = refrUID
+
+			// convert any ref_to schema annotation specified by kind value to type value
+			if !strings.HasPrefix(dri.RefdType, "ves.io") {
+				d, err := e.GetDB()
+				if err != nil {
+					return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+				}
+				refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
+				if err != nil {
+					return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
+				}
+				dri.RefdType = refdType
+			}
+		}
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := e.GetSystemMetadataDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfoForOverlay() FAILED")
+	} else {
+		for i := range fdrInfos {
+			dri := &fdrInfos[i]
+			// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
+			dri.DRField = "ves.io.schema.network_firewall.Object." + dri.DRField
+			dri.RefrType = e.Type()
+			dri.RefrUID = refrUID
+
+			// convert any ref_to schema annotation specified by kind value to type value
+			if !strings.HasPrefix(dri.RefdType, "ves.io") {
+				d, err := e.GetDB()
+				if err != nil {
+					return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+				}
+				refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
+				if err != nil {
+					return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
+				}
+				dri.RefdType = refdType
+			}
+		}
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+
 func (e *DBObject) ToStore() store.Entry {
 	return e.Object
 }
@@ -424,6 +487,22 @@ func (e *DBObject) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 }
 
 // GetDRefInfo for the field's type
+func (e *DBObject) GetSpecDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if e.GetSpec() == nil {
+		return nil, nil
+	}
+	drInfos, err := e.GetSpec().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "spec." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
 func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if e.GetSystemMetadata() == nil {
 		return nil, nil
@@ -431,6 +510,22 @@ func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := e.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "system_metadata." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (e *DBObject) GetSystemMetadataDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if e.GetSystemMetadata() == nil {
+		return nil, nil
+	}
+	drInfos, err := e.GetSystemMetadata().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1150,6 +1245,42 @@ func (e *DBStatusObject) GetDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+func (e *DBStatusObject) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if e == nil {
+		return nil, nil
+	}
+	refrUID, err := e.Key()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDRefInfo, error in key")
+	}
+
+	drInfos, err := e.GetObjectRefsDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetObjectRefsDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
+		dri.DRField = "ves.io.schema.network_firewall.StatusObject." + dri.DRField
+		dri.RefrType = e.Type()
+		dri.RefrUID = refrUID
+
+		// convert any ref_to schema annotation specified by kind value to type value
+		if !strings.HasPrefix(dri.RefdType, "ves.io") {
+			d, err := e.GetDB()
+			if err != nil {
+				return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+			}
+			refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
+			if err != nil {
+				return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
+			}
+			dri.RefdType = refdType
+		}
+	}
+	return drInfos, nil
+}
+
 func (e *DBStatusObject) ToStore() store.Entry {
 	return e.StatusObject
 }
@@ -1205,6 +1336,40 @@ func (e *DBStatusObject) GetObjectRefsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("StatusObject.object_refs[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_firewall.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			RefrType:   e.Type(),
+			RefrUID:    refrUID,
+			DRField:    "object_refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (e *DBStatusObject) GetObjectRefsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refrUID, err := e.Key()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDRefInfoForOverlay, error in key")
+	}
+	refs := e.GetObjectRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("StatusObject.object_refs[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_firewall.Object",
 			RefdUID:    ref.Uid,

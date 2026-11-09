@@ -82,6 +82,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetConnectorChoiceDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetConnectorChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -135,6 +142,69 @@ func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_snat." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetConnectorChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectorChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectorChoice().(type) {
+	case *CreateSpecType_SliToSloSnat:
+		drInfos, err := m.GetSliToSloSnat().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSliToSloSnat().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_slo_snat." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_SliToSloDr:
+		return nil, nil
+	case *CreateSpecType_SliToGlobalDr:
+		drInfos, err := m.GetSliToGlobalDr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_dr." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_SliToGlobalSnat:
+		drInfos, err := m.GetSliToGlobalSnat().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSliToGlobalSnat().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_snat." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_SloToGlobalDr:
+		drInfos, err := m.GetSloToGlobalDr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_dr." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_SloToGlobalSnat:
+		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -383,6 +453,13 @@ func (m *DynamicReverseProxyListType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDrpsDRefInfo()
 }
+func (m *DynamicReverseProxyListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDrpsDRefInfoForOverlay(generateHash)
+}
 
 func (m *DynamicReverseProxyListType) GetDrpsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetDrps()
@@ -397,6 +474,30 @@ func (m *DynamicReverseProxyListType) GetDrpsDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("virtual_host.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_host.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "drps",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *DynamicReverseProxyListType) GetDrpsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetDrps()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("DynamicReverseProxyListType.drps[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_host.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_host.Object",
 			RefdTenant: vref.Tenant,
@@ -598,6 +699,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetConnectorChoiceDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetConnectorChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -651,6 +759,69 @@ func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_snat." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetConnectorChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectorChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectorChoice().(type) {
+	case *GetSpecType_SliToSloSnat:
+		drInfos, err := m.GetSliToSloSnat().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSliToSloSnat().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_slo_snat." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_SliToSloDr:
+		return nil, nil
+	case *GetSpecType_SliToGlobalDr:
+		drInfos, err := m.GetSliToGlobalDr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_dr." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_SliToGlobalSnat:
+		drInfos, err := m.GetSliToGlobalSnat().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSliToGlobalSnat().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_snat." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_SloToGlobalDr:
+		drInfos, err := m.GetSloToGlobalDr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_dr." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_SloToGlobalSnat:
+		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -910,8 +1081,43 @@ func (m *GlobalSnatConnectorType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSnatConnectorType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetGlobalVnDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGlobalVnDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSnatConfigDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSnatConfigDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSnatConnectorType) GetGlobalVnDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetGlobalVn()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_network.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_network.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "global_vn",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSnatConnectorType) GetGlobalVnDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetGlobalVn()
 	if vref == nil {
 		return nil, nil
@@ -964,6 +1170,22 @@ func (m *GlobalSnatConnectorType) GetSnatConfigDRefInfo() ([]db.DRefInfo, error)
 	drInfos, err := m.GetSnatConfig().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSnatConfig().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "snat_config." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSnatConnectorType) GetSnatConfigDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSnatConfig() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetSnatConfig().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSnatConfig().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1125,6 +1347,29 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDynamicReverseProxyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDynamicReverseProxyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInsideNetworkDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInsideNetworkDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideNetworkDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideNetworkDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetDynamicReverseProxy()
@@ -1137,6 +1382,34 @@ func (m *GlobalSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error)
 			return nil, fmt.Errorf("GlobalSpecType.dynamic_reverse_proxy[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_host.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "dynamic_reverse_proxy",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetDynamicReverseProxyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetDynamicReverseProxy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dynamic_reverse_proxy[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_host.Object",
 			RefdUID:    ref.Uid,
@@ -1192,6 +1465,34 @@ func (m *GlobalSpecType) GetInsideNetworkDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetInsideNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetInsideNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.inside_network[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "inside_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetInsideNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetInsideNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1223,6 +1524,34 @@ func (m *GlobalSpecType) GetOutsideNetworkDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.outside_network[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "outside_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetOutsideNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetOutsideNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.outside_network[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_network.Object",
 			RefdUID:    ref.Uid,
@@ -1818,6 +2147,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetConnectorChoiceDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetConnectorChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1871,6 +2207,69 @@ func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_snat." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetConnectorChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectorChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectorChoice().(type) {
+	case *ReplaceSpecType_SliToSloSnat:
+		drInfos, err := m.GetSliToSloSnat().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSliToSloSnat().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_slo_snat." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_SliToSloDr:
+		return nil, nil
+	case *ReplaceSpecType_SliToGlobalDr:
+		drInfos, err := m.GetSliToGlobalDr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_dr." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_SliToGlobalSnat:
+		drInfos, err := m.GetSliToGlobalSnat().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSliToGlobalSnat().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_snat." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_SloToGlobalDr:
+		drInfos, err := m.GetSloToGlobalDr().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_dr." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_SloToGlobalSnat:
+		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2119,8 +2518,39 @@ func (m *SnatConnectorType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPoolChoiceDRefInfo()
 }
+func (m *SnatConnectorType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPoolChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *SnatConnectorType) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPoolChoice().(type) {
+	case *SnatConnectorType_InterfaceIp:
+		return nil, nil
+	case *SnatConnectorType_SnatPoolAllocator:
+		vref := m.GetSnatPoolAllocator()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("address_allocator.Object")
+		dri := db.DRefInfo{
+			RefdType:   "address_allocator.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "snat_pool_allocator",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *SnatConnectorType) GetPoolChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetPoolChoice().(type) {
 	case *SnatConnectorType_InterfaceIp:
 		return nil, nil

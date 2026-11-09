@@ -68,6 +68,13 @@ func (m *ApplicationTags) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetApptagListDRefInfo()
 }
+func (m *ApplicationTags) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApptagListDRefInfoForOverlay(generateHash)
+}
 
 func (m *ApplicationTags) GetApptagListDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetApptagList()
@@ -80,6 +87,34 @@ func (m *ApplicationTags) GetApptagListDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("ApplicationTags.apptag_list[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_application_tag.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "apptag_list",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ApplicationTags) GetApptagListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetApptagList()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ApplicationTags.apptag_list[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_application_tag.Object",
 			RefdUID:    ref.Uid,
@@ -260,6 +295,13 @@ func (m *Applications) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAppListDRefInfo()
 }
+func (m *Applications) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAppListDRefInfoForOverlay(generateHash)
+}
 
 func (m *Applications) GetAppListDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetAppList()
@@ -272,6 +314,34 @@ func (m *Applications) GetAppListDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("Applications.app_list[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_application_view.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "app_list",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *Applications) GetAppListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetAppList()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("Applications.app_list[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_application_view.Object",
 			RefdUID:    ref.Uid,
@@ -463,6 +533,24 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppTagsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppTagsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetAppsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
@@ -480,6 +568,22 @@ func (m *CreateSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetAppTagsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAppTags() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAppTags().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppTags().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_tags." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApps() == nil {
@@ -488,6 +592,22 @@ func (m *CreateSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetApps().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApps().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "apps." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetAppsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApps() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApps().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApps().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -658,6 +778,24 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppTagsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppTagsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetAppsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
@@ -675,6 +813,22 @@ func (m *GetSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetAppTagsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAppTags() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAppTags().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppTags().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_tags." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApps() == nil {
@@ -683,6 +837,22 @@ func (m *GetSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetApps().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApps().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "apps." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetAppsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApps() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApps().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApps().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -853,6 +1023,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppTagsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppTagsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetAppsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
@@ -870,6 +1058,22 @@ func (m *GlobalSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetAppTagsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAppTags() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAppTags().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppTags().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_tags." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApps() == nil {
@@ -878,6 +1082,22 @@ func (m *GlobalSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetApps().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApps().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "apps." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetAppsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApps() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApps().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApps().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1048,6 +1268,24 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppTagsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppTagsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetAppsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
@@ -1065,6 +1303,22 @@ func (m *ReplaceSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetAppTagsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAppTags() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAppTags().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppTags().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_tags." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetApps() == nil {
@@ -1073,6 +1327,22 @@ func (m *ReplaceSpecType) GetAppsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetApps().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetApps().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "apps." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetAppsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApps() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetApps().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApps().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

@@ -1866,10 +1866,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																								},
 
 																								"url": {
+																									Sensitive: true,
 																									Type:     schema.TypeString,
 																									Required: true,
 																								},
 																							},
+																						},
+																					},
+
+																					"none": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
 																						},
 																					},
 
@@ -6158,10 +6169,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -6323,10 +6345,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -6493,10 +6526,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -6658,10 +6702,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -9878,7 +9933,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Optional: true,
 			},
 
-			"caching_policy": {
+			"bot_protection": {
 
 				Type:     schema.TypeList,
 				MaxItems: 1,
@@ -9886,7 +9941,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"custom_cache_rule": {
+						"disable_js_insert": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"js_insert_all_pages": {
 
 							Type:     schema.TypeList,
 							MaxItems: 1,
@@ -9894,23 +9955,420 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"cdn_cache_rules": {
+									"javascript_location": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"js_insert_all_pages_except": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"exclude_list": {
+
 										Type:     schema.TypeList,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"name": {
+												"any_domain": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"domain": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"exact_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"suffix_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"metadata": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"disable": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"path": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"path": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"prefix": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"javascript_location": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"js_insertion_rules": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"exclude_list": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"any_domain": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"domain": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"exact_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"suffix_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"metadata": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"disable": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"path": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"path": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"prefix": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"rules": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"any_domain": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"domain": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"exact_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"suffix_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"javascript_location": {
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+
+												"metadata": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"disable": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"path": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"path": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"prefix": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"policy": {
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"disable_bot_protection": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"caching_policy": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"custom_cache_rule": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"cdn_cache_rules": {
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -9921,28 +10379,32 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 						"default_cache_action": {
 
-							Type:     schema.TypeList,
-							MaxItems: 1,
-							Optional: true,
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"cache_disabled": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"cache_ttl_default": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"cache_ttl_override": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"eligible_for_cache": {
@@ -9973,6 +10435,230 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 				Type:     schema.TypeBool,
 				Optional: true,
+			},
+
+			"enable_cdn": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"caching_policy": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"custom_cache_rule": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cdn_cache_rules": {
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"default_cache_action": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cache_disabled": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"cache_ttl_default": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"cache_ttl_override": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"eligible_for_cache": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"cache_ttl": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"compression_params": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"content_length": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"content_type": {
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"disable_on_etag_header": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"remove_accept_encoding_header": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"image_optimization_config": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"image_optimizations": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"all_domains": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"select_domains": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"domains": {
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"express": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"path": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"path": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"prefix": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 
 			"captcha_challenge": {
@@ -12378,8 +13064,9 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"cleartext": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:      schema.TypeString,
+										Optional:  true,
+										Sensitive: true,
 									},
 								},
 							},
@@ -13481,10 +14168,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -14378,11 +15076,23 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																											},
 
 																											"url": {
+																												Sensitive: true,
 																												Type:       schema.TypeString,
 																												Required:   true,
 																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
+																									},
+																								},
+
+																								"none": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
 																									},
 																								},
 
@@ -15154,6 +15864,18 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
+						"disable_http10": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_http10": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"idle_timeout": {
 							Type:     schema.TypeInt,
 							Optional: true,
@@ -15347,10 +16069,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:     schema.TypeString,
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -15536,10 +16269,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:     schema.TypeString,
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -15839,10 +16583,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:     schema.TypeString,
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -16028,10 +16783,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:     schema.TypeString,
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -17751,11 +18517,23 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:       schema.TypeString,
 																						Required:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -21745,10 +22523,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -21934,10 +22723,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -22237,10 +23037,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -22426,10 +23237,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -23236,6 +24058,18 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
+						},
+
+						"xff_num_trusted_hops_custom": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"xff_num_trusted_hops_default": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 					},
 				},
@@ -26410,6 +27244,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 																					}
 																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				password.SecretInfoOneof = secretInfoOneofInt
 
 																			}
 
@@ -32390,6 +33233,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 																}
 
+																if v, ok := valueMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	value.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := valueMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -32586,6 +33438,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 																		}
 																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	password.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -32794,6 +33655,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 																}
 
+																if v, ok := tokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	token.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := tokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -32990,6 +33860,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 																		}
 																	}
+
+																}
+
+																if v, ok := jsonPayloadMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	jsonPayload.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -37758,6 +38637,614 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 	}
 
+	//bot_protection_choice
+
+	botProtectionChoiceTypeFound := false
+
+	if v, ok := d.GetOk("bot_protection"); ok && !isIntfNil(v) && !botProtectionChoiceTypeFound {
+
+		botProtectionChoiceTypeFound = true
+		botProtectionChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_BotProtection{}
+		botProtectionChoiceInt.BotProtection = &ves_io_schema_views_common_security.BotDefenseBasicType{}
+		createSpec.BotProtectionChoice = botProtectionChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				javaScriptChoiceTypeFound := false
+
+				if v, ok := cs["disable_js_insert"]; ok && !isIntfNil(v) && !javaScriptChoiceTypeFound {
+
+					javaScriptChoiceTypeFound = true
+
+					if v.(bool) {
+						javaScriptChoiceInt := &ves_io_schema_views_common_security.BotDefenseBasicType_DisableJsInsert{}
+						javaScriptChoiceInt.DisableJsInsert = &ves_io_schema.Empty{}
+						botProtectionChoiceInt.BotProtection.JavaScriptChoice = javaScriptChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["js_insert_all_pages"]; ok && !isIntfNil(v) && !javaScriptChoiceTypeFound {
+
+					javaScriptChoiceTypeFound = true
+					javaScriptChoiceInt := &ves_io_schema_views_common_security.BotDefenseBasicType_JsInsertAllPages{}
+					javaScriptChoiceInt.JsInsertAllPages = &ves_io_schema_views_common_security.ShapeJavaScriptInsertAllType{}
+					botProtectionChoiceInt.BotProtection.JavaScriptChoice = javaScriptChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["javascript_location"]; ok && !isIntfNil(v) {
+
+								javaScriptChoiceInt.JsInsertAllPages.JavascriptLocation = ves_io_schema_views_common_security.JavaScriptLocation(ves_io_schema_views_common_security.JavaScriptLocation_value[v.(string)])
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["js_insert_all_pages_except"]; ok && !isIntfNil(v) && !javaScriptChoiceTypeFound {
+
+					javaScriptChoiceTypeFound = true
+					javaScriptChoiceInt := &ves_io_schema_views_common_security.BotDefenseBasicType_JsInsertAllPagesExcept{}
+					javaScriptChoiceInt.JsInsertAllPagesExcept = &ves_io_schema_views_common_security.ShapeJavaScriptInsertAllWithExceptionsType{}
+					botProtectionChoiceInt.BotProtection.JavaScriptChoice = javaScriptChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["exclude_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								excludeList := make([]*ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule, len(sl))
+								javaScriptChoiceInt.JsInsertAllPagesExcept.ExcludeList = excludeList
+								for i, set := range sl {
+									if set != nil {
+										excludeList[i] = &ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule{}
+										excludeListMapStrToI := set.(map[string]interface{})
+
+										domainMatcherChoiceTypeFound := false
+
+										if v, ok := excludeListMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainMatcherChoiceTypeFound {
+
+											domainMatcherChoiceTypeFound = true
+
+											if v.(bool) {
+												domainMatcherChoiceInt := &ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule_AnyDomain{}
+												domainMatcherChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+												excludeList[i].DomainMatcherChoice = domainMatcherChoiceInt
+											}
+
+										}
+
+										if v, ok := excludeListMapStrToI["domain"]; ok && !isIntfNil(v) && !domainMatcherChoiceTypeFound {
+
+											domainMatcherChoiceTypeFound = true
+											domainMatcherChoiceInt := &ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule_Domain{}
+											domainMatcherChoiceInt.Domain = &ves_io_schema.DomainType{}
+											excludeList[i].DomainMatcherChoice = domainMatcherChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													domainChoiceTypeFound := false
+
+													if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.RegexValue = v.(string)
+
+													}
+
+													if v, ok := cs["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.SuffixValue = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := excludeListMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											metadata := &ves_io_schema.MessageMetaType{}
+											excludeList[i].Metadata = metadata
+											for _, set := range sl {
+												if set != nil {
+													metadataMapStrToI := set.(map[string]interface{})
+
+													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+														metadata.Description = w.(string)
+													}
+
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
+
+													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+														metadata.Name = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := excludeListMapStrToI["path"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											path := &ves_io_schema.PathMatcherType{}
+											excludeList[i].Path = path
+											for _, set := range sl {
+												if set != nil {
+													pathMapStrToI := set.(map[string]interface{})
+
+													pathMatchTypeFound := false
+
+													if v, ok := pathMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Path = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Prefix = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Regex = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["javascript_location"]; ok && !isIntfNil(v) {
+
+								javaScriptChoiceInt.JsInsertAllPagesExcept.JavascriptLocation = ves_io_schema_views_common_security.JavaScriptLocation(ves_io_schema_views_common_security.JavaScriptLocation_value[v.(string)])
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["js_insertion_rules"]; ok && !isIntfNil(v) && !javaScriptChoiceTypeFound {
+
+					javaScriptChoiceTypeFound = true
+					javaScriptChoiceInt := &ves_io_schema_views_common_security.BotDefenseBasicType_JsInsertionRules{}
+					javaScriptChoiceInt.JsInsertionRules = &ves_io_schema_views_common_security.ShapeJavaScriptInsertType{}
+					botProtectionChoiceInt.BotProtection.JavaScriptChoice = javaScriptChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["exclude_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								excludeList := make([]*ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule, len(sl))
+								javaScriptChoiceInt.JsInsertionRules.ExcludeList = excludeList
+								for i, set := range sl {
+									if set != nil {
+										excludeList[i] = &ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule{}
+										excludeListMapStrToI := set.(map[string]interface{})
+
+										domainMatcherChoiceTypeFound := false
+
+										if v, ok := excludeListMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainMatcherChoiceTypeFound {
+
+											domainMatcherChoiceTypeFound = true
+
+											if v.(bool) {
+												domainMatcherChoiceInt := &ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule_AnyDomain{}
+												domainMatcherChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+												excludeList[i].DomainMatcherChoice = domainMatcherChoiceInt
+											}
+
+										}
+
+										if v, ok := excludeListMapStrToI["domain"]; ok && !isIntfNil(v) && !domainMatcherChoiceTypeFound {
+
+											domainMatcherChoiceTypeFound = true
+											domainMatcherChoiceInt := &ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule_Domain{}
+											domainMatcherChoiceInt.Domain = &ves_io_schema.DomainType{}
+											excludeList[i].DomainMatcherChoice = domainMatcherChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													domainChoiceTypeFound := false
+
+													if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.RegexValue = v.(string)
+
+													}
+
+													if v, ok := cs["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.SuffixValue = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := excludeListMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											metadata := &ves_io_schema.MessageMetaType{}
+											excludeList[i].Metadata = metadata
+											for _, set := range sl {
+												if set != nil {
+													metadataMapStrToI := set.(map[string]interface{})
+
+													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+														metadata.Description = w.(string)
+													}
+
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
+
+													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+														metadata.Name = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := excludeListMapStrToI["path"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											path := &ves_io_schema.PathMatcherType{}
+											excludeList[i].Path = path
+											for _, set := range sl {
+												if set != nil {
+													pathMapStrToI := set.(map[string]interface{})
+
+													pathMatchTypeFound := false
+
+													if v, ok := pathMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Path = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Prefix = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Regex = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								rules := make([]*ves_io_schema_views_common_security.ShapeJavaScriptInsertionRule, len(sl))
+								javaScriptChoiceInt.JsInsertionRules.Rules = rules
+								for i, set := range sl {
+									if set != nil {
+										rules[i] = &ves_io_schema_views_common_security.ShapeJavaScriptInsertionRule{}
+										rulesMapStrToI := set.(map[string]interface{})
+
+										domainMatcherChoiceTypeFound := false
+
+										if v, ok := rulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainMatcherChoiceTypeFound {
+
+											domainMatcherChoiceTypeFound = true
+
+											if v.(bool) {
+												domainMatcherChoiceInt := &ves_io_schema_views_common_security.ShapeJavaScriptInsertionRule_AnyDomain{}
+												domainMatcherChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+												rules[i].DomainMatcherChoice = domainMatcherChoiceInt
+											}
+
+										}
+
+										if v, ok := rulesMapStrToI["domain"]; ok && !isIntfNil(v) && !domainMatcherChoiceTypeFound {
+
+											domainMatcherChoiceTypeFound = true
+											domainMatcherChoiceInt := &ves_io_schema_views_common_security.ShapeJavaScriptInsertionRule_Domain{}
+											domainMatcherChoiceInt.Domain = &ves_io_schema.DomainType{}
+											rules[i].DomainMatcherChoice = domainMatcherChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													domainChoiceTypeFound := false
+
+													if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.RegexValue = v.(string)
+
+													}
+
+													if v, ok := cs["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.SuffixValue = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rulesMapStrToI["javascript_location"]; ok && !isIntfNil(v) {
+
+											rules[i].JavascriptLocation = ves_io_schema_views_common_security.JavaScriptLocation(ves_io_schema_views_common_security.JavaScriptLocation_value[v.(string)])
+
+										}
+
+										if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											metadata := &ves_io_schema.MessageMetaType{}
+											rules[i].Metadata = metadata
+											for _, set := range sl {
+												if set != nil {
+													metadataMapStrToI := set.(map[string]interface{})
+
+													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+														metadata.Description = w.(string)
+													}
+
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
+
+													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+														metadata.Name = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rulesMapStrToI["path"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											path := &ves_io_schema.PathMatcherType{}
+											rules[i].Path = path
+											for _, set := range sl {
+												if set != nil {
+													pathMapStrToI := set.(map[string]interface{})
+
+													pathMatchTypeFound := false
+
+													if v, ok := pathMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Path = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Prefix = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Regex = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["policy"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					policyInt := &ves_io_schema_views.ObjectRefType{}
+					botProtectionChoiceInt.BotProtection.Policy = policyInt
+
+					for _, set := range sl {
+						if set != nil {
+							pMapToStrVal := set.(map[string]interface{})
+							if val, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
+								policyInt.Name = val.(string)
+							}
+							if val, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								policyInt.Namespace = val.(string)
+							}
+
+							if val, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								policyInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("disable_bot_protection"); ok && !botProtectionChoiceTypeFound {
+
+		botProtectionChoiceTypeFound = true
+
+		if v.(bool) {
+			botProtectionChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_DisableBotProtection{}
+			botProtectionChoiceInt.DisableBotProtection = &ves_io_schema.Empty{}
+			createSpec.BotProtectionChoice = botProtectionChoiceInt
+		}
+
+	}
+
 	//cache_options
 
 	cacheOptionsTypeFound := false
@@ -37901,6 +39388,332 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			cacheOptionsInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_DisableCaching{}
 			cacheOptionsInt.DisableCaching = &ves_io_schema.Empty{}
 			createSpec.CacheOptions = cacheOptionsInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_cdn"); ok && !isIntfNil(v) && !cacheOptionsTypeFound {
+
+		cacheOptionsTypeFound = true
+		cacheOptionsInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_EnableCdn{}
+		cacheOptionsInt.EnableCdn = &ves_io_schema_views_http_loadbalancer.CDNConfig{}
+		createSpec.CacheOptions = cacheOptionsInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["caching_policy"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					cachingPolicy := &ves_io_schema_views_http_loadbalancer.CachingPolicy{}
+					cacheOptionsInt.EnableCdn.CachingPolicy = cachingPolicy
+					for _, set := range sl {
+						if set != nil {
+							cachingPolicyMapStrToI := set.(map[string]interface{})
+
+							if v, ok := cachingPolicyMapStrToI["custom_cache_rule"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								customCacheRule := &ves_io_schema_views_common_cache_rule.CustomCacheRule{}
+								cachingPolicy.CustomCacheRule = customCacheRule
+								for _, set := range sl {
+									if set != nil {
+										customCacheRuleMapStrToI := set.(map[string]interface{})
+
+										if v, ok := customCacheRuleMapStrToI["cdn_cache_rules"]; ok && !isIntfNil(v) {
+											sl := v.([]interface{})
+											cdnCacheRulesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+											customCacheRule.CdnCacheRules = cdnCacheRulesInt
+											for i, ps := range sl {
+												if ps != nil {
+
+													ccrMapToStrVal := ps.(map[string]interface{})
+													cdnCacheRulesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+													if v, ok := ccrMapToStrVal["name"]; ok && !isIntfNil(v) {
+														cdnCacheRulesInt[i].Name = v.(string)
+													}
+
+													if v, ok := ccrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														cdnCacheRulesInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := ccrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														cdnCacheRulesInt[i].Tenant = v.(string)
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cachingPolicyMapStrToI["default_cache_action"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								defaultCacheAction := &ves_io_schema_views_common_cache_rule.DefaultCacheAction{}
+								cachingPolicy.DefaultCacheAction = defaultCacheAction
+								for _, set := range sl {
+									if set != nil {
+										defaultCacheActionMapStrToI := set.(map[string]interface{})
+
+										cacheActionsTypeFound := false
+
+										if v, ok := defaultCacheActionMapStrToI["cache_disabled"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+											cacheActionsTypeFound = true
+
+											if v.(bool) {
+												cacheActionsInt := &ves_io_schema_views_common_cache_rule.DefaultCacheAction_CacheDisabled{}
+												cacheActionsInt.CacheDisabled = &ves_io_schema.Empty{}
+												defaultCacheAction.CacheActions = cacheActionsInt
+											}
+
+										}
+
+										if v, ok := defaultCacheActionMapStrToI["cache_ttl_default"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+											cacheActionsTypeFound = true
+											cacheActionsInt := &ves_io_schema_views_common_cache_rule.DefaultCacheAction_CacheTtlDefault{}
+
+											defaultCacheAction.CacheActions = cacheActionsInt
+
+											cacheActionsInt.CacheTtlDefault = v.(string)
+
+										}
+
+										if v, ok := defaultCacheActionMapStrToI["cache_ttl_override"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+											cacheActionsTypeFound = true
+											cacheActionsInt := &ves_io_schema_views_common_cache_rule.DefaultCacheAction_CacheTtlOverride{}
+
+											defaultCacheAction.CacheActions = cacheActionsInt
+
+											cacheActionsInt.CacheTtlOverride = v.(string)
+
+										}
+
+										if v, ok := defaultCacheActionMapStrToI["eligible_for_cache"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+											cacheActionsTypeFound = true
+											cacheActionsInt := &ves_io_schema_views_common_cache_rule.DefaultCacheAction_EligibleForCache{}
+											cacheActionsInt.EligibleForCache = &ves_io_schema_views_common_cache_rule.DefaultCacheTTLProps{}
+											defaultCacheAction.CacheActions = cacheActionsInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+														cacheActionsInt.EligibleForCache.CacheTtl = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["compression_params"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					compressionParams := &ves_io_schema_virtual_host.CompressionType{}
+					cacheOptionsInt.EnableCdn.CompressionParams = compressionParams
+					for _, set := range sl {
+						if set != nil {
+							compressionParamsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := compressionParamsMapStrToI["content_length"]; ok && !isIntfNil(w) {
+								compressionParams.ContentLength = uint32(w.(int))
+							}
+
+							if w, ok := compressionParamsMapStrToI["content_type"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field content_type")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								compressionParams.ContentType = ls
+							}
+
+							if w, ok := compressionParamsMapStrToI["disable_on_etag_header"]; ok && !isIntfNil(w) {
+								compressionParams.DisableOnEtagHeader = w.(bool)
+							}
+
+							if w, ok := compressionParamsMapStrToI["remove_accept_encoding_header"]; ok && !isIntfNil(w) {
+								compressionParams.RemoveAcceptEncodingHeader = w.(bool)
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["image_optimization_config"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					imageOptimizationConfig := &ves_io_schema_views_http_loadbalancer.ImageOptimizationConfig{}
+					cacheOptionsInt.EnableCdn.ImageOptimizationConfig = imageOptimizationConfig
+					for _, set := range sl {
+						if set != nil {
+							imageOptimizationConfigMapStrToI := set.(map[string]interface{})
+
+							if v, ok := imageOptimizationConfigMapStrToI["image_optimizations"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								imageOptimizations := make([]*ves_io_schema_virtual_host.VHImageOptimizationSettings, len(sl))
+								imageOptimizationConfig.ImageOptimizations = imageOptimizations
+								for i, set := range sl {
+									if set != nil {
+										imageOptimizations[i] = &ves_io_schema_virtual_host.VHImageOptimizationSettings{}
+										imageOptimizationsMapStrToI := set.(map[string]interface{})
+
+										appliedDomainsChoiceTypeFound := false
+
+										if v, ok := imageOptimizationsMapStrToI["all_domains"]; ok && !isIntfNil(v) && !appliedDomainsChoiceTypeFound {
+
+											appliedDomainsChoiceTypeFound = true
+
+											if v.(bool) {
+												appliedDomainsChoiceInt := &ves_io_schema_virtual_host.VHImageOptimizationSettings_AllDomains{}
+												appliedDomainsChoiceInt.AllDomains = &ves_io_schema.Empty{}
+												imageOptimizations[i].AppliedDomainsChoice = appliedDomainsChoiceInt
+											}
+
+										}
+
+										if v, ok := imageOptimizationsMapStrToI["select_domains"]; ok && !isIntfNil(v) && !appliedDomainsChoiceTypeFound {
+
+											appliedDomainsChoiceTypeFound = true
+											appliedDomainsChoiceInt := &ves_io_schema_virtual_host.VHImageOptimizationSettings_SelectDomains{}
+											appliedDomainsChoiceInt.SelectDomains = &ves_io_schema_virtual_host.VHSelectDomainsType{}
+											imageOptimizations[i].AppliedDomainsChoice = appliedDomainsChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["domains"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field domains")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														appliedDomainsChoiceInt.SelectDomains.Domains = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										imageOptimizationMethodTypeFound := false
+
+										if v, ok := imageOptimizationsMapStrToI["express"]; ok && !isIntfNil(v) && !imageOptimizationMethodTypeFound {
+
+											imageOptimizationMethodTypeFound = true
+
+											if v.(bool) {
+												imageOptimizationMethodInt := &ves_io_schema_virtual_host.VHImageOptimizationSettings_Express{}
+												imageOptimizationMethodInt.Express = &ves_io_schema.Empty{}
+												imageOptimizations[i].ImageOptimizationMethod = imageOptimizationMethodInt
+											}
+
+										}
+
+										if w, ok := imageOptimizationsMapStrToI["name"]; ok && !isIntfNil(w) {
+											imageOptimizations[i].Name = w.(string)
+										}
+
+										if v, ok := imageOptimizationsMapStrToI["path"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											path := &ves_io_schema.PathMatcherType{}
+											imageOptimizations[i].Path = path
+											for _, set := range sl {
+												if set != nil {
+													pathMapStrToI := set.(map[string]interface{})
+
+													pathMatchTypeFound := false
+
+													if v, ok := pathMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Path = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Prefix = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Regex = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
 		}
 
 	}
@@ -43336,6 +45149,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 													}
 
+													if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -44699,6 +46521,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 																						}
 
+																						if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																							secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																							password.SecretInfoOneof = secretInfoOneofInt
+
+																						}
+
 																						if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																							secretInfoOneofTypeFound = true
@@ -45758,6 +47589,32 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					moreOption.DisableDefaultErrorPages = w.(bool)
 				}
 
+				http10ChoiceTypeFound := false
+
+				if v, ok := moreOptionMapStrToI["disable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+					http10ChoiceTypeFound = true
+
+					if v.(bool) {
+						http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_DisableHttp10{}
+						http10ChoiceInt.DisableHttp10 = &ves_io_schema.Empty{}
+						moreOption.Http10Choice = http10ChoiceInt
+					}
+
+				}
+
+				if v, ok := moreOptionMapStrToI["enable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+					http10ChoiceTypeFound = true
+
+					if v.(bool) {
+						http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_EnableHttp10{}
+						http10ChoiceInt.EnableHttp10 = &ves_io_schema.Empty{}
+						moreOption.Http10Choice = http10ChoiceInt
+					}
+
+				}
+
 				if w, ok := moreOptionMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
 					moreOption.IdleTimeout = uint32(w.(int))
 				}
@@ -46002,6 +47859,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 										}
 
+										if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+										}
+
 										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
@@ -46233,6 +48099,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 												}
 											}
+
+										}
+
+										if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 										}
 
@@ -46710,6 +48585,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 										}
 
+										if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+										}
+
 										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
@@ -46941,6 +48825,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 												}
 											}
+
+										}
+
+										if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 										}
 
@@ -49303,6 +51196,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 																		}
 																	}
+
+																}
+
+																if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	privateKey.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -55243,6 +57145,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 																}
 
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -55474,6 +57385,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -55951,6 +57871,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 																}
 
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -56182,6 +58111,15 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -57460,6 +59398,31 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						}
 					}
 					trustClientIpHeadersChoiceInt.EnableTrustClientIpHeaders.ClientIpHeaders = ls
+
+				}
+
+				xffNumTrustedHopsChoiceTypeFound := false
+
+				if v, ok := cs["xff_num_trusted_hops_custom"]; ok && !isIntfNil(v) && !xffNumTrustedHopsChoiceTypeFound {
+
+					xffNumTrustedHopsChoiceTypeFound = true
+					xffNumTrustedHopsChoiceInt := &ves_io_schema_virtual_host.ClientIPHeaders_XffNumTrustedHopsCustom{}
+
+					trustClientIpHeadersChoiceInt.EnableTrustClientIpHeaders.XffNumTrustedHopsChoice = xffNumTrustedHopsChoiceInt
+
+					xffNumTrustedHopsChoiceInt.XffNumTrustedHopsCustom = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["xff_num_trusted_hops_default"]; ok && !isIntfNil(v) && !xffNumTrustedHopsChoiceTypeFound {
+
+					xffNumTrustedHopsChoiceTypeFound = true
+
+					if v.(bool) {
+						xffNumTrustedHopsChoiceInt := &ves_io_schema_virtual_host.ClientIPHeaders_XffNumTrustedHopsDefault{}
+						xffNumTrustedHopsChoiceInt.XffNumTrustedHopsDefault = &ves_io_schema.Empty{}
+						trustClientIpHeadersChoiceInt.EnableTrustClientIpHeaders.XffNumTrustedHopsChoice = xffNumTrustedHopsChoiceInt
+					}
 
 				}
 
@@ -60955,6 +62918,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 																					}
 																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				password.SecretInfoOneof = secretInfoOneofInt
 
 																			}
 
@@ -66931,6 +68903,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 																}
 
+																if v, ok := valueMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	value.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := valueMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -67127,6 +69108,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 																		}
 																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	password.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -67335,6 +69325,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 																}
 
+																if v, ok := tokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	token.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := tokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -67531,6 +69530,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 																		}
 																	}
+
+																}
+
+																if v, ok := jsonPayloadMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	jsonPayload.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -72296,6 +74304,612 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
+	botProtectionChoiceTypeFound := false
+
+	if v, ok := d.GetOk("bot_protection"); ok && !isIntfNil(v) && !botProtectionChoiceTypeFound {
+
+		botProtectionChoiceTypeFound = true
+		botProtectionChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_BotProtection{}
+		botProtectionChoiceInt.BotProtection = &ves_io_schema_views_common_security.BotDefenseBasicType{}
+		updateSpec.BotProtectionChoice = botProtectionChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				javaScriptChoiceTypeFound := false
+
+				if v, ok := cs["disable_js_insert"]; ok && !isIntfNil(v) && !javaScriptChoiceTypeFound {
+
+					javaScriptChoiceTypeFound = true
+
+					if v.(bool) {
+						javaScriptChoiceInt := &ves_io_schema_views_common_security.BotDefenseBasicType_DisableJsInsert{}
+						javaScriptChoiceInt.DisableJsInsert = &ves_io_schema.Empty{}
+						botProtectionChoiceInt.BotProtection.JavaScriptChoice = javaScriptChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["js_insert_all_pages"]; ok && !isIntfNil(v) && !javaScriptChoiceTypeFound {
+
+					javaScriptChoiceTypeFound = true
+					javaScriptChoiceInt := &ves_io_schema_views_common_security.BotDefenseBasicType_JsInsertAllPages{}
+					javaScriptChoiceInt.JsInsertAllPages = &ves_io_schema_views_common_security.ShapeJavaScriptInsertAllType{}
+					botProtectionChoiceInt.BotProtection.JavaScriptChoice = javaScriptChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["javascript_location"]; ok && !isIntfNil(v) {
+
+								javaScriptChoiceInt.JsInsertAllPages.JavascriptLocation = ves_io_schema_views_common_security.JavaScriptLocation(ves_io_schema_views_common_security.JavaScriptLocation_value[v.(string)])
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["js_insert_all_pages_except"]; ok && !isIntfNil(v) && !javaScriptChoiceTypeFound {
+
+					javaScriptChoiceTypeFound = true
+					javaScriptChoiceInt := &ves_io_schema_views_common_security.BotDefenseBasicType_JsInsertAllPagesExcept{}
+					javaScriptChoiceInt.JsInsertAllPagesExcept = &ves_io_schema_views_common_security.ShapeJavaScriptInsertAllWithExceptionsType{}
+					botProtectionChoiceInt.BotProtection.JavaScriptChoice = javaScriptChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["exclude_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								excludeList := make([]*ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule, len(sl))
+								javaScriptChoiceInt.JsInsertAllPagesExcept.ExcludeList = excludeList
+								for i, set := range sl {
+									if set != nil {
+										excludeList[i] = &ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule{}
+										excludeListMapStrToI := set.(map[string]interface{})
+
+										domainMatcherChoiceTypeFound := false
+
+										if v, ok := excludeListMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainMatcherChoiceTypeFound {
+
+											domainMatcherChoiceTypeFound = true
+
+											if v.(bool) {
+												domainMatcherChoiceInt := &ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule_AnyDomain{}
+												domainMatcherChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+												excludeList[i].DomainMatcherChoice = domainMatcherChoiceInt
+											}
+
+										}
+
+										if v, ok := excludeListMapStrToI["domain"]; ok && !isIntfNil(v) && !domainMatcherChoiceTypeFound {
+
+											domainMatcherChoiceTypeFound = true
+											domainMatcherChoiceInt := &ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule_Domain{}
+											domainMatcherChoiceInt.Domain = &ves_io_schema.DomainType{}
+											excludeList[i].DomainMatcherChoice = domainMatcherChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													domainChoiceTypeFound := false
+
+													if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.RegexValue = v.(string)
+
+													}
+
+													if v, ok := cs["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.SuffixValue = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := excludeListMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											metadata := &ves_io_schema.MessageMetaType{}
+											excludeList[i].Metadata = metadata
+											for _, set := range sl {
+												if set != nil {
+													metadataMapStrToI := set.(map[string]interface{})
+
+													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+														metadata.Description = w.(string)
+													}
+
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
+
+													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+														metadata.Name = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := excludeListMapStrToI["path"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											path := &ves_io_schema.PathMatcherType{}
+											excludeList[i].Path = path
+											for _, set := range sl {
+												if set != nil {
+													pathMapStrToI := set.(map[string]interface{})
+
+													pathMatchTypeFound := false
+
+													if v, ok := pathMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Path = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Prefix = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Regex = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["javascript_location"]; ok && !isIntfNil(v) {
+
+								javaScriptChoiceInt.JsInsertAllPagesExcept.JavascriptLocation = ves_io_schema_views_common_security.JavaScriptLocation(ves_io_schema_views_common_security.JavaScriptLocation_value[v.(string)])
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["js_insertion_rules"]; ok && !isIntfNil(v) && !javaScriptChoiceTypeFound {
+
+					javaScriptChoiceTypeFound = true
+					javaScriptChoiceInt := &ves_io_schema_views_common_security.BotDefenseBasicType_JsInsertionRules{}
+					javaScriptChoiceInt.JsInsertionRules = &ves_io_schema_views_common_security.ShapeJavaScriptInsertType{}
+					botProtectionChoiceInt.BotProtection.JavaScriptChoice = javaScriptChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["exclude_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								excludeList := make([]*ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule, len(sl))
+								javaScriptChoiceInt.JsInsertionRules.ExcludeList = excludeList
+								for i, set := range sl {
+									if set != nil {
+										excludeList[i] = &ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule{}
+										excludeListMapStrToI := set.(map[string]interface{})
+
+										domainMatcherChoiceTypeFound := false
+
+										if v, ok := excludeListMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainMatcherChoiceTypeFound {
+
+											domainMatcherChoiceTypeFound = true
+
+											if v.(bool) {
+												domainMatcherChoiceInt := &ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule_AnyDomain{}
+												domainMatcherChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+												excludeList[i].DomainMatcherChoice = domainMatcherChoiceInt
+											}
+
+										}
+
+										if v, ok := excludeListMapStrToI["domain"]; ok && !isIntfNil(v) && !domainMatcherChoiceTypeFound {
+
+											domainMatcherChoiceTypeFound = true
+											domainMatcherChoiceInt := &ves_io_schema_views_common_security.ShapeJavaScriptExclusionRule_Domain{}
+											domainMatcherChoiceInt.Domain = &ves_io_schema.DomainType{}
+											excludeList[i].DomainMatcherChoice = domainMatcherChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													domainChoiceTypeFound := false
+
+													if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.RegexValue = v.(string)
+
+													}
+
+													if v, ok := cs["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.SuffixValue = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := excludeListMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											metadata := &ves_io_schema.MessageMetaType{}
+											excludeList[i].Metadata = metadata
+											for _, set := range sl {
+												if set != nil {
+													metadataMapStrToI := set.(map[string]interface{})
+
+													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+														metadata.Description = w.(string)
+													}
+
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
+
+													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+														metadata.Name = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := excludeListMapStrToI["path"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											path := &ves_io_schema.PathMatcherType{}
+											excludeList[i].Path = path
+											for _, set := range sl {
+												if set != nil {
+													pathMapStrToI := set.(map[string]interface{})
+
+													pathMatchTypeFound := false
+
+													if v, ok := pathMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Path = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Prefix = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Regex = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								rules := make([]*ves_io_schema_views_common_security.ShapeJavaScriptInsertionRule, len(sl))
+								javaScriptChoiceInt.JsInsertionRules.Rules = rules
+								for i, set := range sl {
+									if set != nil {
+										rules[i] = &ves_io_schema_views_common_security.ShapeJavaScriptInsertionRule{}
+										rulesMapStrToI := set.(map[string]interface{})
+
+										domainMatcherChoiceTypeFound := false
+
+										if v, ok := rulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainMatcherChoiceTypeFound {
+
+											domainMatcherChoiceTypeFound = true
+
+											if v.(bool) {
+												domainMatcherChoiceInt := &ves_io_schema_views_common_security.ShapeJavaScriptInsertionRule_AnyDomain{}
+												domainMatcherChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+												rules[i].DomainMatcherChoice = domainMatcherChoiceInt
+											}
+
+										}
+
+										if v, ok := rulesMapStrToI["domain"]; ok && !isIntfNil(v) && !domainMatcherChoiceTypeFound {
+
+											domainMatcherChoiceTypeFound = true
+											domainMatcherChoiceInt := &ves_io_schema_views_common_security.ShapeJavaScriptInsertionRule_Domain{}
+											domainMatcherChoiceInt.Domain = &ves_io_schema.DomainType{}
+											rules[i].DomainMatcherChoice = domainMatcherChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													domainChoiceTypeFound := false
+
+													if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.RegexValue = v.(string)
+
+													}
+
+													if v, ok := cs["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+														domainMatcherChoiceInt.Domain.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.SuffixValue = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rulesMapStrToI["javascript_location"]; ok && !isIntfNil(v) {
+
+											rules[i].JavascriptLocation = ves_io_schema_views_common_security.JavaScriptLocation(ves_io_schema_views_common_security.JavaScriptLocation_value[v.(string)])
+
+										}
+
+										if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											metadata := &ves_io_schema.MessageMetaType{}
+											rules[i].Metadata = metadata
+											for _, set := range sl {
+												if set != nil {
+													metadataMapStrToI := set.(map[string]interface{})
+
+													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+														metadata.Description = w.(string)
+													}
+
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
+
+													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+														metadata.Name = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rulesMapStrToI["path"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											path := &ves_io_schema.PathMatcherType{}
+											rules[i].Path = path
+											for _, set := range sl {
+												if set != nil {
+													pathMapStrToI := set.(map[string]interface{})
+
+													pathMatchTypeFound := false
+
+													if v, ok := pathMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Path = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Prefix = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Regex = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["policy"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					policyInt := &ves_io_schema_views.ObjectRefType{}
+					botProtectionChoiceInt.BotProtection.Policy = policyInt
+
+					for _, set := range sl {
+						if set != nil {
+							pMapToStrVal := set.(map[string]interface{})
+							if val, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
+								policyInt.Name = val.(string)
+							}
+							if val, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								policyInt.Namespace = val.(string)
+							}
+
+							if val, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								policyInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("disable_bot_protection"); ok && !botProtectionChoiceTypeFound {
+
+		botProtectionChoiceTypeFound = true
+
+		if v.(bool) {
+			botProtectionChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DisableBotProtection{}
+			botProtectionChoiceInt.DisableBotProtection = &ves_io_schema.Empty{}
+			updateSpec.BotProtectionChoice = botProtectionChoiceInt
+		}
+
+	}
+
 	cacheOptionsTypeFound := false
 
 	if v, ok := d.GetOk("caching_policy"); ok && !isIntfNil(v) && !cacheOptionsTypeFound {
@@ -72437,6 +75051,332 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			cacheOptionsInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DisableCaching{}
 			cacheOptionsInt.DisableCaching = &ves_io_schema.Empty{}
 			updateSpec.CacheOptions = cacheOptionsInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_cdn"); ok && !isIntfNil(v) && !cacheOptionsTypeFound {
+
+		cacheOptionsTypeFound = true
+		cacheOptionsInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_EnableCdn{}
+		cacheOptionsInt.EnableCdn = &ves_io_schema_views_http_loadbalancer.CDNConfig{}
+		updateSpec.CacheOptions = cacheOptionsInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["caching_policy"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					cachingPolicy := &ves_io_schema_views_http_loadbalancer.CachingPolicy{}
+					cacheOptionsInt.EnableCdn.CachingPolicy = cachingPolicy
+					for _, set := range sl {
+						if set != nil {
+							cachingPolicyMapStrToI := set.(map[string]interface{})
+
+							if v, ok := cachingPolicyMapStrToI["custom_cache_rule"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								customCacheRule := &ves_io_schema_views_common_cache_rule.CustomCacheRule{}
+								cachingPolicy.CustomCacheRule = customCacheRule
+								for _, set := range sl {
+									if set != nil {
+										customCacheRuleMapStrToI := set.(map[string]interface{})
+
+										if v, ok := customCacheRuleMapStrToI["cdn_cache_rules"]; ok && !isIntfNil(v) {
+											sl := v.([]interface{})
+											cdnCacheRulesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+											customCacheRule.CdnCacheRules = cdnCacheRulesInt
+											for i, ps := range sl {
+												if ps != nil {
+
+													ccrMapToStrVal := ps.(map[string]interface{})
+													cdnCacheRulesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+													if v, ok := ccrMapToStrVal["name"]; ok && !isIntfNil(v) {
+														cdnCacheRulesInt[i].Name = v.(string)
+													}
+
+													if v, ok := ccrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														cdnCacheRulesInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := ccrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														cdnCacheRulesInt[i].Tenant = v.(string)
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cachingPolicyMapStrToI["default_cache_action"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								defaultCacheAction := &ves_io_schema_views_common_cache_rule.DefaultCacheAction{}
+								cachingPolicy.DefaultCacheAction = defaultCacheAction
+								for _, set := range sl {
+									if set != nil {
+										defaultCacheActionMapStrToI := set.(map[string]interface{})
+
+										cacheActionsTypeFound := false
+
+										if v, ok := defaultCacheActionMapStrToI["cache_disabled"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+											cacheActionsTypeFound = true
+
+											if v.(bool) {
+												cacheActionsInt := &ves_io_schema_views_common_cache_rule.DefaultCacheAction_CacheDisabled{}
+												cacheActionsInt.CacheDisabled = &ves_io_schema.Empty{}
+												defaultCacheAction.CacheActions = cacheActionsInt
+											}
+
+										}
+
+										if v, ok := defaultCacheActionMapStrToI["cache_ttl_default"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+											cacheActionsTypeFound = true
+											cacheActionsInt := &ves_io_schema_views_common_cache_rule.DefaultCacheAction_CacheTtlDefault{}
+
+											defaultCacheAction.CacheActions = cacheActionsInt
+
+											cacheActionsInt.CacheTtlDefault = v.(string)
+
+										}
+
+										if v, ok := defaultCacheActionMapStrToI["cache_ttl_override"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+											cacheActionsTypeFound = true
+											cacheActionsInt := &ves_io_schema_views_common_cache_rule.DefaultCacheAction_CacheTtlOverride{}
+
+											defaultCacheAction.CacheActions = cacheActionsInt
+
+											cacheActionsInt.CacheTtlOverride = v.(string)
+
+										}
+
+										if v, ok := defaultCacheActionMapStrToI["eligible_for_cache"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+											cacheActionsTypeFound = true
+											cacheActionsInt := &ves_io_schema_views_common_cache_rule.DefaultCacheAction_EligibleForCache{}
+											cacheActionsInt.EligibleForCache = &ves_io_schema_views_common_cache_rule.DefaultCacheTTLProps{}
+											defaultCacheAction.CacheActions = cacheActionsInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+														cacheActionsInt.EligibleForCache.CacheTtl = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["compression_params"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					compressionParams := &ves_io_schema_virtual_host.CompressionType{}
+					cacheOptionsInt.EnableCdn.CompressionParams = compressionParams
+					for _, set := range sl {
+						if set != nil {
+							compressionParamsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := compressionParamsMapStrToI["content_length"]; ok && !isIntfNil(w) {
+								compressionParams.ContentLength = uint32(w.(int))
+							}
+
+							if w, ok := compressionParamsMapStrToI["content_type"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field content_type")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								compressionParams.ContentType = ls
+							}
+
+							if w, ok := compressionParamsMapStrToI["disable_on_etag_header"]; ok && !isIntfNil(w) {
+								compressionParams.DisableOnEtagHeader = w.(bool)
+							}
+
+							if w, ok := compressionParamsMapStrToI["remove_accept_encoding_header"]; ok && !isIntfNil(w) {
+								compressionParams.RemoveAcceptEncodingHeader = w.(bool)
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["image_optimization_config"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					imageOptimizationConfig := &ves_io_schema_views_http_loadbalancer.ImageOptimizationConfig{}
+					cacheOptionsInt.EnableCdn.ImageOptimizationConfig = imageOptimizationConfig
+					for _, set := range sl {
+						if set != nil {
+							imageOptimizationConfigMapStrToI := set.(map[string]interface{})
+
+							if v, ok := imageOptimizationConfigMapStrToI["image_optimizations"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								imageOptimizations := make([]*ves_io_schema_virtual_host.VHImageOptimizationSettings, len(sl))
+								imageOptimizationConfig.ImageOptimizations = imageOptimizations
+								for i, set := range sl {
+									if set != nil {
+										imageOptimizations[i] = &ves_io_schema_virtual_host.VHImageOptimizationSettings{}
+										imageOptimizationsMapStrToI := set.(map[string]interface{})
+
+										appliedDomainsChoiceTypeFound := false
+
+										if v, ok := imageOptimizationsMapStrToI["all_domains"]; ok && !isIntfNil(v) && !appliedDomainsChoiceTypeFound {
+
+											appliedDomainsChoiceTypeFound = true
+
+											if v.(bool) {
+												appliedDomainsChoiceInt := &ves_io_schema_virtual_host.VHImageOptimizationSettings_AllDomains{}
+												appliedDomainsChoiceInt.AllDomains = &ves_io_schema.Empty{}
+												imageOptimizations[i].AppliedDomainsChoice = appliedDomainsChoiceInt
+											}
+
+										}
+
+										if v, ok := imageOptimizationsMapStrToI["select_domains"]; ok && !isIntfNil(v) && !appliedDomainsChoiceTypeFound {
+
+											appliedDomainsChoiceTypeFound = true
+											appliedDomainsChoiceInt := &ves_io_schema_virtual_host.VHImageOptimizationSettings_SelectDomains{}
+											appliedDomainsChoiceInt.SelectDomains = &ves_io_schema_virtual_host.VHSelectDomainsType{}
+											imageOptimizations[i].AppliedDomainsChoice = appliedDomainsChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["domains"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field domains")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														appliedDomainsChoiceInt.SelectDomains.Domains = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										imageOptimizationMethodTypeFound := false
+
+										if v, ok := imageOptimizationsMapStrToI["express"]; ok && !isIntfNil(v) && !imageOptimizationMethodTypeFound {
+
+											imageOptimizationMethodTypeFound = true
+
+											if v.(bool) {
+												imageOptimizationMethodInt := &ves_io_schema_virtual_host.VHImageOptimizationSettings_Express{}
+												imageOptimizationMethodInt.Express = &ves_io_schema.Empty{}
+												imageOptimizations[i].ImageOptimizationMethod = imageOptimizationMethodInt
+											}
+
+										}
+
+										if w, ok := imageOptimizationsMapStrToI["name"]; ok && !isIntfNil(w) {
+											imageOptimizations[i].Name = w.(string)
+										}
+
+										if v, ok := imageOptimizationsMapStrToI["path"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											path := &ves_io_schema.PathMatcherType{}
+											imageOptimizations[i].Path = path
+											for _, set := range sl {
+												if set != nil {
+													pathMapStrToI := set.(map[string]interface{})
+
+													pathMatchTypeFound := false
+
+													if v, ok := pathMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Path = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Prefix = v.(string)
+
+													}
+
+													if v, ok := pathMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+
+														path.PathMatch = pathMatchInt
+
+														pathMatchInt.Regex = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
 		}
 
 	}
@@ -77851,6 +80791,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 													}
 
+													if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -79207,6 +82156,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 																						}
 
+																						if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																							secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																							password.SecretInfoOneof = secretInfoOneofInt
+
+																						}
+
 																						if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																							secretInfoOneofTypeFound = true
@@ -80265,6 +83223,32 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					moreOption.DisableDefaultErrorPages = w.(bool)
 				}
 
+				http10ChoiceTypeFound := false
+
+				if v, ok := moreOptionMapStrToI["disable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+					http10ChoiceTypeFound = true
+
+					if v.(bool) {
+						http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_DisableHttp10{}
+						http10ChoiceInt.DisableHttp10 = &ves_io_schema.Empty{}
+						moreOption.Http10Choice = http10ChoiceInt
+					}
+
+				}
+
+				if v, ok := moreOptionMapStrToI["enable_http10"]; ok && !isIntfNil(v) && !http10ChoiceTypeFound {
+
+					http10ChoiceTypeFound = true
+
+					if v.(bool) {
+						http10ChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_EnableHttp10{}
+						http10ChoiceInt.EnableHttp10 = &ves_io_schema.Empty{}
+						moreOption.Http10Choice = http10ChoiceInt
+					}
+
+				}
+
 				if w, ok := moreOptionMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
 					moreOption.IdleTimeout = uint32(w.(int))
 				}
@@ -80509,6 +83493,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 										}
 
+										if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+										}
+
 										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
@@ -80740,6 +83733,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 												}
 											}
+
+										}
+
+										if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 										}
 
@@ -81217,6 +84219,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 										}
 
+										if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+										}
+
 										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
@@ -81448,6 +84459,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 												}
 											}
+
+										}
+
+										if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 										}
 
@@ -83808,6 +86828,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 																		}
 																	}
+
+																}
+
+																if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	privateKey.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -89743,6 +92772,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 																}
 
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -89974,6 +93012,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -90451,6 +93498,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 																}
 
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -90682,6 +93738,15 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -91949,6 +95014,31 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						}
 					}
 					trustClientIpHeadersChoiceInt.EnableTrustClientIpHeaders.ClientIpHeaders = ls
+
+				}
+
+				xffNumTrustedHopsChoiceTypeFound := false
+
+				if v, ok := cs["xff_num_trusted_hops_custom"]; ok && !isIntfNil(v) && !xffNumTrustedHopsChoiceTypeFound {
+
+					xffNumTrustedHopsChoiceTypeFound = true
+					xffNumTrustedHopsChoiceInt := &ves_io_schema_virtual_host.ClientIPHeaders_XffNumTrustedHopsCustom{}
+
+					trustClientIpHeadersChoiceInt.EnableTrustClientIpHeaders.XffNumTrustedHopsChoice = xffNumTrustedHopsChoiceInt
+
+					xffNumTrustedHopsChoiceInt.XffNumTrustedHopsCustom = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["xff_num_trusted_hops_default"]; ok && !isIntfNil(v) && !xffNumTrustedHopsChoiceTypeFound {
+
+					xffNumTrustedHopsChoiceTypeFound = true
+
+					if v.(bool) {
+						xffNumTrustedHopsChoiceInt := &ves_io_schema_virtual_host.ClientIPHeaders_XffNumTrustedHopsDefault{}
+						xffNumTrustedHopsChoiceInt.XffNumTrustedHopsDefault = &ves_io_schema.Empty{}
+						trustClientIpHeadersChoiceInt.EnableTrustClientIpHeaders.XffNumTrustedHopsChoice = xffNumTrustedHopsChoiceInt
+					}
 
 				}
 

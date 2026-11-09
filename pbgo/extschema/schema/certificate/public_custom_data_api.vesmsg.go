@@ -481,8 +481,11 @@ func (v *ValidateCertificateHealthStatusListResponseItem) Validate(ctx context.C
 	}
 	if fv, exists := v.FldValidators["sslprofile_type"]; exists {
 		vOpts := append(opts, db.WithValidateField("sslprofile_type"))
-		if err := fv(ctx, m.GetSslprofileType(), vOpts...); err != nil {
-			return err
+		for idx, item := range m.GetSslprofileType() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 	}
 	if fv, exists := v.FldValidators["status"]; exists {
@@ -534,4 +537,398 @@ var DefaultCertificateHealthStatusListResponseItemValidator = func() *ValidateCe
 
 func CertificateHealthStatusListResponseItemValidator() db.Validator {
 	return DefaultCertificateHealthStatusListResponseItemValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RetryIssuanceRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RetryIssuanceRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RetryIssuanceRequest) DeepCopy() *RetryIssuanceRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RetryIssuanceRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RetryIssuanceRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RetryIssuanceRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RetryIssuanceRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRetryIssuanceRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRetryIssuanceRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateRetryIssuanceRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRetryIssuanceRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RetryIssuanceRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RetryIssuanceRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["force_renew"]; exists {
+		vOpts := append(opts, db.WithValidateField("force_renew"))
+		if err := fv(ctx, m.GetForceRenew(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRetryIssuanceRequestValidator = func() *ValidateRetryIssuanceRequest {
+	v := &ValidateRetryIssuanceRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RetryIssuanceRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RetryIssuanceRequest.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func RetryIssuanceRequestValidator() db.Validator {
+	return DefaultRetryIssuanceRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RetryIssuanceResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RetryIssuanceResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RetryIssuanceResponse) DeepCopy() *RetryIssuanceResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RetryIssuanceResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RetryIssuanceResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RetryIssuanceResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RetryIssuanceResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRetryIssuanceResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRetryIssuanceResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RetryIssuanceResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RetryIssuanceResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRetryIssuanceResponseValidator = func() *ValidateRetryIssuanceResponse {
+	v := &ValidateRetryIssuanceResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func RetryIssuanceResponseValidator() db.Validator {
+	return DefaultRetryIssuanceResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RevokeCertificateRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RevokeCertificateRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RevokeCertificateRequest) DeepCopy() *RevokeCertificateRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RevokeCertificateRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RevokeCertificateRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RevokeCertificateRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RevokeCertificateRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRevokeCertificateRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRevokeCertificateRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateRevokeCertificateRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRevokeCertificateRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RevokeCertificateRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RevokeCertificateRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRevokeCertificateRequestValidator = func() *ValidateRevokeCertificateRequest {
+	v := &ValidateRevokeCertificateRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RevokeCertificateRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RevokeCertificateRequest.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func RevokeCertificateRequestValidator() db.Validator {
+	return DefaultRevokeCertificateRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RevokeCertificateResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RevokeCertificateResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RevokeCertificateResponse) DeepCopy() *RevokeCertificateResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RevokeCertificateResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RevokeCertificateResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RevokeCertificateResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RevokeCertificateResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRevokeCertificateResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRevokeCertificateResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RevokeCertificateResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RevokeCertificateResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRevokeCertificateResponseValidator = func() *ValidateRevokeCertificateResponse {
+	v := &ValidateRevokeCertificateResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func RevokeCertificateResponseValidator() db.Validator {
+	return DefaultRevokeCertificateResponseValidator
 }

@@ -190,11 +190,23 @@ func resourceVolterraLogReceiver() *schema.Resource {
 												},
 
 												"url": {
+													Sensitive: true,
 													Type:       schema.TypeString,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -485,11 +497,23 @@ func resourceVolterraLogReceiver() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:       schema.TypeString,
 																			Required:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -680,11 +704,23 @@ func resourceVolterraLogReceiver() *schema.Resource {
 												},
 
 												"url": {
+													Sensitive: true,
 													Type:       schema.TypeString,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -919,10 +955,21 @@ func resourceVolterraLogReceiver() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -1322,6 +1369,15 @@ func resourceVolterraLogReceiverCreate(d *schema.ResourceData, meta interface{})
 
 							}
 
+							if v, ok := datadogApiKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								datadogApiKey.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := datadogApiKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -1700,6 +1756,15 @@ func resourceVolterraLogReceiverCreate(d *schema.ResourceData, meta interface{})
 
 													}
 
+													if v, ok := keyUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -1932,6 +1997,15 @@ func resourceVolterraLogReceiverCreate(d *schema.ResourceData, meta interface{})
 
 									}
 								}
+
+							}
+
+							if v, ok := splunkHecTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								splunkHecToken.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -2255,6 +2329,15 @@ func resourceVolterraLogReceiverCreate(d *schema.ResourceData, meta interface{})
 
 															}
 														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -2759,6 +2842,15 @@ func resourceVolterraLogReceiverUpdate(d *schema.ResourceData, meta interface{})
 
 							}
 
+							if v, ok := datadogApiKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								datadogApiKey.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := datadogApiKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -3137,6 +3229,15 @@ func resourceVolterraLogReceiverUpdate(d *schema.ResourceData, meta interface{})
 
 													}
 
+													if v, ok := keyUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -3369,6 +3470,15 @@ func resourceVolterraLogReceiverUpdate(d *schema.ResourceData, meta interface{})
 
 									}
 								}
+
+							}
+
+							if v, ok := splunkHecTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								splunkHecToken.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -3692,6 +3802,15 @@ func resourceVolterraLogReceiverUpdate(d *schema.ResourceData, meta interface{})
 
 															}
 														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
 
 													}
 

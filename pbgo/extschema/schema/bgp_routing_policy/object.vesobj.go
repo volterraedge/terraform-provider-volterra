@@ -336,6 +336,42 @@ func (e *DBObject) GetDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+func (e *DBObject) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if e == nil {
+		return nil, nil
+	}
+	refrUID, err := e.Key()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDRefInfo, error in key")
+	}
+
+	drInfos, err := e.GetSystemMetadataDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
+		dri.DRField = "ves.io.schema.bgp_routing_policy.Object." + dri.DRField
+		dri.RefrType = e.Type()
+		dri.RefrUID = refrUID
+
+		// convert any ref_to schema annotation specified by kind value to type value
+		if !strings.HasPrefix(dri.RefdType, "ves.io") {
+			d, err := e.GetDB()
+			if err != nil {
+				return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+			}
+			refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
+			if err != nil {
+				return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
+			}
+			dri.RefdType = refdType
+		}
+	}
+	return drInfos, nil
+}
+
 func (e *DBObject) ToStore() store.Entry {
 	return e.Object
 }
@@ -384,6 +420,22 @@ func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := e.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "system_metadata." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (e *DBObject) GetSystemMetadataDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if e.GetSystemMetadata() == nil {
+		return nil, nil
+	}
+	drInfos, err := e.GetSystemMetadata().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

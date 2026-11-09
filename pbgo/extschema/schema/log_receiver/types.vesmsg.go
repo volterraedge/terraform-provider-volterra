@@ -88,6 +88,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetWhereChoiceDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWhereChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -101,6 +108,29 @@ func (m *CreateSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetLogReceiverSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "log_receiver_sites." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetWhereChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhereChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetWhereChoice().(type) {
+	case *CreateSpecType_SiteLocal:
+		return nil, nil
+	case *CreateSpecType_LogReceiverSites:
+		drInfos, err := m.GetLogReceiverSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -694,6 +724,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetWhereChoiceDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWhereChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -707,6 +744,29 @@ func (m *GetSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetLogReceiverSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "log_receiver_sites." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetWhereChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhereChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetWhereChoice().(type) {
+	case *GetSpecType_SiteLocal:
+		return nil, nil
+	case *GetSpecType_LogReceiverSites:
+		drInfos, err := m.GetLogReceiverSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -950,8 +1010,43 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWhereChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWhereChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1008,6 +1103,29 @@ func (m *GlobalSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetLogReceiverSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "log_receiver_sites." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetWhereChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhereChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetWhereChoice().(type) {
+	case *GlobalSpecType_SiteLocal:
+		return nil, nil
+	case *GlobalSpecType_LogReceiverSites:
+		drInfos, err := m.GetLogReceiverSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1506,6 +1624,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetWhereChoiceDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWhereChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1519,6 +1644,29 @@ func (m *ReplaceSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetLogReceiverSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "log_receiver_sites." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetWhereChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhereChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetWhereChoice().(type) {
+	case *ReplaceSpecType_SiteLocal:
+		return nil, nil
+	case *ReplaceSpecType_LogReceiverSites:
+		drInfos, err := m.GetLogReceiverSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2846,6 +2994,13 @@ func (m *WhereSites) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSiteDRefInfo()
 }
+func (m *WhereSites) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteDRefInfoForOverlay(generateHash)
+}
 
 func (m *WhereSites) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetSite()
@@ -2860,6 +3015,30 @@ func (m *WhereSites) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("site.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "site",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *WhereSites) GetSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSite()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("WhereSites.site[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("site.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdTenant: vref.Tenant,

@@ -19,6 +19,7 @@ import (
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views_common_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
 )
 
 var (
@@ -892,6 +893,13 @@ func (m *ActiveServicePoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetServicePoliciesDRefInfo()
 }
+func (m *ActiveServicePoliciesType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetServicePoliciesDRefInfoForOverlay(generateHash)
+}
 
 func (m *ActiveServicePoliciesType) GetServicePoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetServicePolicies()
@@ -906,6 +914,30 @@ func (m *ActiveServicePoliciesType) GetServicePoliciesDRefInfo() ([]db.DRefInfo,
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("service_policy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "service_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ActiveServicePoliciesType) GetServicePoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetServicePolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveServicePoliciesType.service_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "service_policy.Object",
 			RefdTenant: vref.Tenant,
@@ -1135,6 +1167,39 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAwsParametersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAwsParametersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDirectConnectChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDirectConnectChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTgwSecurityDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTgwSecurityDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVnConfigDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVnConfigDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
@@ -1144,6 +1209,22 @@ func (m *CreateSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAwsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAwsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "aws_parameters." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetAwsParametersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAwsParameters() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAwsParameters().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAwsParameters().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1177,7 +1258,56 @@ func (m *CreateSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetDirectConnectChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDirectConnectChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDirectConnectChoice().(type) {
+	case *CreateSpecType_DirectConnectDisabled:
+		return nil, nil
+	case *CreateSpecType_DirectConnectEnabled:
+		return nil, nil
+	case *CreateSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetLogsReceiverChoice().(type) {
+	case *CreateSpecType_LogsStreamingDisabled:
+		return nil, nil
+	case *CreateSpecType_LogReceiver:
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		dri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *CreateSpecType_LogsStreamingDisabled:
 		return nil, nil
@@ -1251,6 +1381,22 @@ func (m *CreateSpecType) GetTgwSecurityDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetTgwSecurityDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTgwSecurity() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTgwSecurity().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTgwSecurity().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tgw_security." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetVnConfig() == nil {
@@ -1259,6 +1405,22 @@ func (m *CreateSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetVnConfig().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetVnConfig().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "vn_config." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetVnConfigDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVnConfig() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetVnConfig().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetVnConfig().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1652,6 +1814,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
+	v.FldValidators["waf_signatures"] = ves_io_schema_views_common_waf.LiveSignaturesUpdateValidator().Validate
 
 	return v
 }()
@@ -1746,6 +1909,39 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAwsParametersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAwsParametersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDirectConnectChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDirectConnectChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTgwSecurityDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTgwSecurityDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVnConfigDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVnConfigDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
@@ -1755,6 +1951,22 @@ func (m *GetSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAwsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAwsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "aws_parameters." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetAwsParametersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAwsParameters() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAwsParameters().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAwsParameters().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1788,7 +2000,56 @@ func (m *GetSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetDirectConnectChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDirectConnectChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDirectConnectChoice().(type) {
+	case *GetSpecType_DirectConnectDisabled:
+		return nil, nil
+	case *GetSpecType_DirectConnectEnabled:
+		return nil, nil
+	case *GetSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetLogsReceiverChoice().(type) {
+	case *GetSpecType_LogsStreamingDisabled:
+		return nil, nil
+	case *GetSpecType_LogReceiver:
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		dri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GetSpecType) GetLogsReceiverChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GetSpecType_LogsStreamingDisabled:
 		return nil, nil
@@ -1862,6 +2123,22 @@ func (m *GetSpecType) GetTgwSecurityDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetTgwSecurityDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTgwSecurity() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTgwSecurity().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTgwSecurity().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tgw_security." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetVnConfig() == nil {
@@ -1870,6 +2147,22 @@ func (m *GetSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetVnConfig().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetVnConfig().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "vn_config." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetVnConfigDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVnConfig() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetVnConfig().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetVnConfig().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2495,6 +2788,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
+	v.FldValidators["waf_signatures"] = ves_io_schema_views_common_waf.LiveSignaturesUpdateValidator().Validate
 	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
 
 	return v
@@ -2595,6 +2889,44 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAwsParametersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAwsParametersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDirectConnectChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDirectConnectChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTfParamsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTfParamsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTgwSecurityDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTgwSecurityDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVnConfigDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVnConfigDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
@@ -2604,6 +2936,22 @@ func (m *GlobalSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAwsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAwsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "aws_parameters." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetAwsParametersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAwsParameters() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAwsParameters().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAwsParameters().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2637,7 +2985,49 @@ func (m *GlobalSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetDirectConnectChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDirectConnectChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDirectConnectChoice().(type) {
+	case *GlobalSpecType_DirectConnectDisabled:
+		return nil, nil
+	case *GlobalSpecType_DirectConnectEnabled:
+		return nil, nil
+	case *GlobalSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetTfParamsDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetTfParams()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("terraform_parameters.Object")
+	dri := db.DRefInfo{
+		RefdType:   "terraform_parameters.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "tf_params",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetTfParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetTfParams()
 	if vref == nil {
 		return nil, nil
@@ -2698,7 +3088,40 @@ func (m *GlobalSpecType) GetTgwSecurityDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetTgwSecurityDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTgwSecurity() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTgwSecurity().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTgwSecurity().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tgw_security." + dri.DRField
+	}
+	return drInfos, err
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -2751,6 +3174,22 @@ func (m *GlobalSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetVnConfig().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetVnConfig().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "vn_config." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetVnConfigDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVnConfig() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetVnConfig().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetVnConfig().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3433,6 +3872,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
+	v.FldValidators["waf_signatures"] = ves_io_schema_views_common_waf.LiveSignaturesUpdateValidator().Validate
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
@@ -3530,6 +3970,39 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAwsParametersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAwsParametersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDirectConnectChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDirectConnectChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTgwSecurityDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTgwSecurityDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVnConfigDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVnConfigDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
@@ -3539,6 +4012,22 @@ func (m *ReplaceSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAwsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAwsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "aws_parameters." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetAwsParametersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAwsParameters() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAwsParameters().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAwsParameters().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3572,7 +4061,56 @@ func (m *ReplaceSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetDirectConnectChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDirectConnectChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDirectConnectChoice().(type) {
+	case *ReplaceSpecType_DirectConnectDisabled:
+		return nil, nil
+	case *ReplaceSpecType_DirectConnectEnabled:
+		return nil, nil
+	case *ReplaceSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetLogsReceiverChoice().(type) {
+	case *ReplaceSpecType_LogsStreamingDisabled:
+		return nil, nil
+	case *ReplaceSpecType_LogReceiver:
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		dri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *ReplaceSpecType_LogsStreamingDisabled:
 		return nil, nil
@@ -3646,6 +4184,22 @@ func (m *ReplaceSpecType) GetTgwSecurityDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetTgwSecurityDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTgwSecurity() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTgwSecurity().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTgwSecurity().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tgw_security." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetVnConfig() == nil {
@@ -3654,6 +4208,22 @@ func (m *ReplaceSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetVnConfig().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetVnConfig().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "vn_config." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetVnConfigDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVnConfig() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetVnConfig().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetVnConfig().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3971,6 +4541,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
+	v.FldValidators["waf_signatures"] = ves_io_schema_views_common_waf.LiveSignaturesUpdateValidator().Validate
 
 	return v
 }()
@@ -4039,6 +4610,29 @@ func (m *SecurityConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *SecurityConfigType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEastWestServicePolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetEastWestServicePolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *SecurityConfigType) GetEastWestServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -4052,6 +4646,31 @@ func (m *SecurityConfigType) GetEastWestServicePolicyChoiceDRefInfo() ([]db.DRef
 		drInfos, err := m.GetActiveEastWestServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEastWestServicePolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_east_west_service_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *SecurityConfigType_EastWestServicePolicyAllowAll:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SecurityConfigType) GetEastWestServicePolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetEastWestServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetEastWestServicePolicyChoice().(type) {
+	case *SecurityConfigType_NoEastWestPolicy:
+		return nil, nil
+	case *SecurityConfigType_ActiveEastWestServicePolicies:
+		drInfos, err := m.GetActiveEastWestServicePolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEastWestServicePolicies().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4090,6 +4709,31 @@ func (m *SecurityConfigType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *SecurityConfigType) GetForwardProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyChoice().(type) {
+	case *SecurityConfigType_NoForwardProxy:
+		return nil, nil
+	case *SecurityConfigType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *SecurityConfigType_ForwardProxyAllowAll:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *SecurityConfigType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNetworkPolicyChoice() == nil {
@@ -4112,6 +4756,39 @@ func (m *SecurityConfigType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SecurityConfigType) GetNetworkPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *SecurityConfigType_NoNetworkPolicy:
+		return nil, nil
+	case *SecurityConfigType_ActiveNetworkPolicies:
+		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_network_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *SecurityConfigType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4409,8 +5086,39 @@ func (m *ServicesVPCReplaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDeploymentDRefInfo()
 }
+func (m *ServicesVPCReplaceType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDeploymentDRefInfoForOverlay(generateHash)
+}
 
 func (m *ServicesVPCReplaceType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDeployment().(type) {
+	case *ServicesVPCReplaceType_AwsCred:
+		vref := m.GetAwsCred()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_credentials.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_credentials.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "aws_cred",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *ServicesVPCReplaceType_Assisted:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ServicesVPCReplaceType) GetDeploymentDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDeployment().(type) {
 	case *ServicesVPCReplaceType_AwsCred:
 		vref := m.GetAwsCred()
@@ -5114,8 +5822,39 @@ func (m *ServicesVPCType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDeploymentDRefInfo()
 }
+func (m *ServicesVPCType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDeploymentDRefInfoForOverlay(generateHash)
+}
 
 func (m *ServicesVPCType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDeployment().(type) {
+	case *ServicesVPCType_AwsCred:
+		vref := m.GetAwsCred()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_credentials.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_credentials.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "aws_cred",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *ServicesVPCType_Assisted:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ServicesVPCType) GetDeploymentDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDeployment().(type) {
 	case *ServicesVPCType_AwsCred:
 		vref := m.GetAwsCred()
@@ -6321,8 +7060,76 @@ func (m *VnConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *VnConfiguration) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGlobalNetworkChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideStaticRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *VnConfiguration) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDcClusterGroupChoice().(type) {
+	case *VnConfiguration_NoDcClusterGroup:
+		return nil, nil
+	case *VnConfiguration_DcClusterGroupOutsideVn:
+		vref := m.GetDcClusterGroupOutsideVn()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_outside_vn",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *VnConfiguration_DcClusterGroupInsideVn:
+		vref := m.GetDcClusterGroupInsideVn()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_inside_vn",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *VnConfiguration) GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *VnConfiguration_NoDcClusterGroup:
 		return nil, nil
@@ -6441,6 +7248,29 @@ func (m *VnConfiguration) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *VnConfiguration) GetGlobalNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGlobalNetworkChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetGlobalNetworkChoice().(type) {
+	case *VnConfiguration_NoGlobalNetwork:
+		return nil, nil
+	case *VnConfiguration_GlobalNetworkList:
+		drInfos, err := m.GetGlobalNetworkList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "global_network_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *VnConfiguration) GetInsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInsideStaticRouteChoice() == nil {
@@ -6464,6 +7294,29 @@ func (m *VnConfiguration) GetInsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, e
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *VnConfiguration) GetInsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetInsideStaticRouteChoice().(type) {
+	case *VnConfiguration_NoInsideStaticRoutes:
+		return nil, nil
+	case *VnConfiguration_InsideStaticRoutes:
+		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "inside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *VnConfiguration) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOutsideStaticRouteChoice() == nil {
@@ -6476,6 +7329,29 @@ func (m *VnConfiguration) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, 
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "outside_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *VnConfiguration) GetOutsideStaticRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOutsideStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOutsideStaticRouteChoice().(type) {
+	case *VnConfiguration_NoOutsideStaticRoutes:
+		return nil, nil
+	case *VnConfiguration_OutsideStaticRoutes:
+		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

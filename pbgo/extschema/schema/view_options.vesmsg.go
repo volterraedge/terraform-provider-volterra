@@ -401,6 +401,18 @@ func (v *ValidateColumn) Validate(ctx context.Context, pm interface{}, opts ...d
 			}
 		}
 	}
+	if fv, exists := v.FldValidators["frozen_left"]; exists {
+		vOpts := append(opts, db.WithValidateField("frozen_left"))
+		if err := fv(ctx, m.GetFrozenLeft(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["frozen_right"]; exists {
+		vOpts := append(opts, db.WithValidateField("frozen_right"))
+		if err := fv(ctx, m.GetFrozenRight(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["hidden_conditions"]; exists {
 		vOpts := append(opts, db.WithValidateField("hidden_conditions"))
 		if err := fv(ctx, m.GetHiddenConditions(), vOpts...); err != nil {
@@ -3332,6 +3344,157 @@ var DefaultTilesValidator = func() *ValidateTiles {
 
 func TilesValidator() db.Validator {
 	return DefaultTilesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UnitConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UnitConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UnitConfiguration) DeepCopy() *UnitConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UnitConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UnitConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UnitConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UnitConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUnitConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUnitConfiguration) AllowedUnitsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(UnitType)
+		return int32(i)
+	}
+	// UnitType_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, UnitType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for allowed_units")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []UnitType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for allowed_units")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]UnitType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []UnitType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated allowed_units")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items allowed_units")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUnitConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UnitConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UnitConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["allowed_units"]; exists {
+		vOpts := append(opts, db.WithValidateField("allowed_units"))
+		if err := fv(ctx, m.GetAllowedUnits(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["default_unit"]; exists {
+		vOpts := append(opts, db.WithValidateField("default_unit"))
+		if err := fv(ctx, m.GetDefaultUnit(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["step"]; exists {
+		vOpts := append(opts, db.WithValidateField("step"))
+		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUnitConfigurationValidator = func() *ValidateUnitConfiguration {
+	v := &ValidateUnitConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAllowedUnits := v.AllowedUnitsValidationRuleHandler
+	rulesAllowedUnits := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAllowedUnits(rulesAllowedUnits)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UnitConfiguration.allowed_units: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["allowed_units"] = vFn
+
+	return v
+}()
+
+func UnitConfigurationValidator() db.Validator {
+	return DefaultUnitConfigurationValidator
 }
 
 // augmented methods on protoc/std generated struct

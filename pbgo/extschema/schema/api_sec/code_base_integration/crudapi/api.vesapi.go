@@ -2718,6 +2718,104 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "code_base_integrationCodeScanInfo": {
+            "type": "object",
+            "description": "CodeScanInfo represents the status and metadata of a single project's code scan",
+            "title": "Code Scan Information",
+            "x-displayname": "Code Scan Information",
+            "x-ves-proto-message": "ves.io.schema.api_sec.code_base_integration.CodeScanInfo",
+            "properties": {
+                "api_endpoints_found": {
+                    "type": "integer",
+                    "description": " The total count of unique API endpoints discovered during the scan\n\nExample: - 12-",
+                    "title": "api_endpoints_found",
+                    "format": "int32",
+                    "x-displayname": "API Endpoints Found"
+                },
+                "completed_at": {
+                    "type": "string",
+                    "description": " Timestamp when the scan completed, failed, or timed out",
+                    "title": "completed_at",
+                    "format": "date-time",
+                    "x-displayname": "Completed At"
+                },
+                "error": {
+                    "type": "string",
+                    "description": " Error or cancellation/timeout reason if the scan did not complete successfully\n\nExample: - \"Authentication failed\"-",
+                    "title": "error",
+                    "x-displayname": "Error Message",
+                    "x-ves-example": "Authentication failed"
+                },
+                "last_status_update": {
+                    "type": "string",
+                    "description": " Timestamp of the last status update",
+                    "title": "last_status_update",
+                    "format": "date-time",
+                    "x-displayname": "Last Status Updated"
+                },
+                "progress": {
+                    "type": "integer",
+                    "description": " Percentage completion of a scan that is currently in progress\n\nExample: - 42-",
+                    "title": "progress",
+                    "format": "int32",
+                    "x-displayname": "Progress"
+                },
+                "project_name": {
+                    "type": "string",
+                    "description": " The project being scanned\n\nExample: - \"org/repo\"-",
+                    "title": "project_name",
+                    "x-displayname": "Project",
+                    "x-ves-example": "org/repo"
+                },
+                "started_at": {
+                    "type": "string",
+                    "description": " Timestamp when the scan started processing",
+                    "title": "started_at",
+                    "format": "date-time",
+                    "x-displayname": "Started At"
+                },
+                "status": {
+                    "description": " Current status of the scan\n\nExample: - \"In Progress\"-",
+                    "title": "status",
+                    "$ref": "#/definitions/code_base_integrationCodeScanStatus",
+                    "x-displayname": "Status",
+                    "x-ves-example": "In Progress"
+                }
+            }
+        },
+        "code_base_integrationCodeScanStatus": {
+            "type": "string",
+            "description": "Represents the current status of a code base integration's project scan\n\nDefault unspecified status\nScan is pending; source code is being uploaded\nScan is currently in progress\nScan has successfully completed\nScan has failed\nScan was cancelled\nScan timed out before completion",
+            "title": "Code Scan Status",
+            "enum": [
+                "UNSPECIFIED",
+                "UPLOADING",
+                "IN_PROGRESS",
+                "DONE",
+                "FAILED",
+                "CANCELLED",
+                "TIMED_OUT"
+            ],
+            "default": "UNSPECIFIED",
+            "x-displayname": "Code Scan Status",
+            "x-ves-proto-enum": "ves.io.schema.api_sec.code_base_integration.CodeScanStatus"
+        },
+        "code_base_integrationCodeScanningStatus": {
+            "type": "object",
+            "description": "Contains aggregate status information for the code scanning of this integration",
+            "title": "Code Scanning Status",
+            "x-displayname": "Code Scanning Status",
+            "x-ves-proto-message": "ves.io.schema.api_sec.code_base_integration.CodeScanningStatus",
+            "properties": {
+                "last_updated": {
+                    "type": "string",
+                    "description": " Timestamp of the most recent scan status change for this integration",
+                    "title": "last_updated",
+                    "format": "date-time",
+                    "x-displayname": "Last Updated"
+                }
+            }
+        },
         "code_base_integrationGithubEnterpriseIntegration": {
             "type": "object",
             "title": "Github Enterprise Integration",
@@ -2940,6 +3038,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Code Base Integration object status",
             "x-ves-proto-message": "ves.io.schema.api_sec.code_base_integration.StatusObject",
             "properties": {
+                "code_scanning_status": {
+                    "description": " Aggregate status information for code scanning including last update timestamp",
+                    "title": "code_scanning_status",
+                    "$ref": "#/definitions/code_base_integrationCodeScanningStatus",
+                    "x-displayname": "Code Scanning Status"
+                },
                 "conditions": {
                     "type": "array",
                     "description": " Conditions",
@@ -2947,7 +3051,8 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/schemaConditionType"
                     },
-                    "x-displayname": "Conditions"
+                    "x-displayname": "Conditions",
+                    "x-ves-deprecated": "Unused"
                 },
                 "metadata": {
                     "description": " Standard status's metadata",
@@ -2963,6 +3068,15 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                },
+                "scans": {
+                    "type": "array",
+                    "description": " List of current scanning status for all projects discovered in this integration",
+                    "title": "scans",
+                    "items": {
+                        "$ref": "#/definitions/code_base_integrationCodeScanInfo"
+                    },
+                    "x-displayname": "Scans Status"
                 }
             }
         },
@@ -3299,12 +3413,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -3318,6 +3432,13 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "schemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "schemaInitializerType": {
             "type": "object",
@@ -3497,20 +3618,26 @@ var APISwaggerJSON string = `{
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"none\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info none]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info none]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType",
                     "x-displayname": "Clear Secret"
+                },
+                "none": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info]\n No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.",
+                    "title": "None",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "None"
                 }
             }
         },

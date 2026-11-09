@@ -66,6 +66,13 @@ func (m *SpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetGcSpecDRefInfo()
 }
+func (m *SpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGcSpecDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
@@ -75,6 +82,22 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "gc_spec." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SpecType) GetGcSpecDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGcSpec() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetGcSpec().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetGcSpec().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -112,6 +135,7 @@ func (v *ValidateSpecType) Validate(ctx context.Context, pm interface{}, opts ..
 // Well-known symbol for default validator implementation
 var DefaultSpecTypeValidator = func() *ValidateSpecType {
 	v := &ValidateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["gc_spec"] = GlobalSpecTypeValidator().Validate
 
 	return v
 }()

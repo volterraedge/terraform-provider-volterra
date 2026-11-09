@@ -79,6 +79,24 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetContinuousFlowDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetContinuousFlowDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOnStartFlowDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOnStartFlowDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetContinuousFlowDRefInfo() ([]db.DRefInfo, error) {
@@ -96,6 +114,22 @@ func (m *CreateSpecType) GetContinuousFlowDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetContinuousFlowDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetContinuousFlow() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetContinuousFlow().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetContinuousFlow().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "continuous_flow." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetOnStartFlowDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOnStartFlow() == nil {
@@ -104,6 +138,22 @@ func (m *CreateSpecType) GetOnStartFlowDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetOnStartFlow().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOnStartFlow().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "on_start_flow." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetOnStartFlowDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOnStartFlow() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetOnStartFlow().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOnStartFlow().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -236,6 +286,13 @@ func (m *Flows) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetFlowTypeDRefInfo()
 }
+func (m *Flows) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetFlowTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *Flows) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -259,6 +316,39 @@ func (m *Flows) GetFlowTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetGeolocationMatch().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGeolocationMatch().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "geolocation_match." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *Flows) GetFlowTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFlowType() == nil {
+		return nil, nil
+	}
+	switch m.GetFlowType().(type) {
+	case *Flows_AllowAll:
+		return nil, nil
+	case *Flows_SamlFederation:
+		drInfos, err := m.GetSamlFederation().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSamlFederation().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "saml_federation." + dri.DRField
+		}
+		return drInfos, err
+	case *Flows_GeolocationMatch:
+		drInfos, err := m.GetGeolocationMatch().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGeolocationMatch().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -416,6 +506,13 @@ func (m *GeoLocationMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetGeomatchDRefInfo()
 }
+func (m *GeoLocationMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGeomatchDRefInfoForOverlay(generateHash)
+}
 
 func (m *GeoLocationMatch) GetGeomatchDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetGeomatch()
@@ -428,6 +525,34 @@ func (m *GeoLocationMatch) GetGeomatchDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GeoLocationMatch.geomatch[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_flow.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "geomatch",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GeoLocationMatch) GetGeomatchDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetGeomatch()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GeoLocationMatch.geomatch[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_flow.Object",
 			RefdUID:    ref.Uid,
@@ -618,6 +743,24 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetContinuousFlowDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetContinuousFlowDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOnStartFlowDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOnStartFlowDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetContinuousFlowDRefInfo() ([]db.DRefInfo, error) {
@@ -635,6 +778,22 @@ func (m *GetSpecType) GetContinuousFlowDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetContinuousFlowDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetContinuousFlow() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetContinuousFlow().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetContinuousFlow().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "continuous_flow." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetOnStartFlowDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOnStartFlow() == nil {
@@ -643,6 +802,22 @@ func (m *GetSpecType) GetOnStartFlowDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetOnStartFlow().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOnStartFlow().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "on_start_flow." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetOnStartFlowDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOnStartFlow() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetOnStartFlow().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOnStartFlow().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -786,6 +961,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetContinuousFlowDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetContinuousFlowDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOnStartFlowDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOnStartFlowDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetContinuousFlowDRefInfo() ([]db.DRefInfo, error) {
@@ -803,6 +996,22 @@ func (m *GlobalSpecType) GetContinuousFlowDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetContinuousFlowDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetContinuousFlow() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetContinuousFlow().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetContinuousFlow().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "continuous_flow." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetOnStartFlowDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOnStartFlow() == nil {
@@ -811,6 +1020,22 @@ func (m *GlobalSpecType) GetOnStartFlowDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetOnStartFlow().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOnStartFlow().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "on_start_flow." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetOnStartFlowDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOnStartFlow() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetOnStartFlow().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOnStartFlow().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -954,6 +1179,24 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetContinuousFlowDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetContinuousFlowDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOnStartFlowDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOnStartFlowDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetContinuousFlowDRefInfo() ([]db.DRefInfo, error) {
@@ -971,6 +1214,22 @@ func (m *ReplaceSpecType) GetContinuousFlowDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetContinuousFlowDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetContinuousFlow() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetContinuousFlow().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetContinuousFlow().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "continuous_flow." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetOnStartFlowDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOnStartFlow() == nil {
@@ -979,6 +1238,22 @@ func (m *ReplaceSpecType) GetOnStartFlowDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetOnStartFlow().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOnStartFlow().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "on_start_flow." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetOnStartFlowDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOnStartFlow() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetOnStartFlow().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOnStartFlow().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1111,6 +1386,13 @@ func (m *SAMLFederation) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSamlDRefInfo()
 }
+func (m *SAMLFederation) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSamlDRefInfoForOverlay(generateHash)
+}
 
 func (m *SAMLFederation) GetSamlDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetSaml()
@@ -1123,6 +1405,34 @@ func (m *SAMLFederation) GetSamlDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("SAMLFederation.saml[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_flow.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "saml",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *SAMLFederation) GetSamlDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetSaml()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SAMLFederation.saml[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_flow.Object",
 			RefdUID:    ref.Uid,
@@ -1302,6 +1612,13 @@ func (m *SimpleTemplate) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetFlowsDRefInfo()
 }
+func (m *SimpleTemplate) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetFlowsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SimpleTemplate) GetFlowsDRefInfo() ([]db.DRefInfo, error) {
@@ -1313,6 +1630,26 @@ func (m *SimpleTemplate) GetFlowsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetFlows() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("flows[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SimpleTemplate) GetFlowsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFlows() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetFlows() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetFlows() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1472,6 +1809,13 @@ func (m *TemplateType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTemplateTypeDRefInfo()
 }
+func (m *TemplateType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTemplateTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TemplateType) GetTemplateTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -1485,6 +1829,29 @@ func (m *TemplateType) GetTemplateTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetSimple().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSimple().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "simple." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TemplateType) GetTemplateTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTemplateType() == nil {
+		return nil, nil
+	}
+	switch m.GetTemplateType().(type) {
+	case *TemplateType_DenyAll:
+		return nil, nil
+	case *TemplateType_Simple:
+		drInfos, err := m.GetSimple().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSimple().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

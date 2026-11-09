@@ -497,6 +497,13 @@ func (m *ClusterRoleBindingListType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetClusterRoleBindingsDRefInfo()
 }
+func (m *ClusterRoleBindingListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetClusterRoleBindingsDRefInfoForOverlay(generateHash)
+}
 
 func (m *ClusterRoleBindingListType) GetClusterRoleBindingsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetClusterRoleBindings()
@@ -511,6 +518,30 @@ func (m *ClusterRoleBindingListType) GetClusterRoleBindingsDRefInfo() ([]db.DRef
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("k8s_cluster_role_binding.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "k8s_cluster_role_binding.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "cluster_role_bindings",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ClusterRoleBindingListType) GetClusterRoleBindingsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetClusterRoleBindings()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ClusterRoleBindingListType.cluster_role_bindings[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_cluster_role_binding.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "k8s_cluster_role_binding.Object",
 			RefdTenant: vref.Tenant,
@@ -700,6 +731,13 @@ func (m *ClusterRoleListType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetClusterRolesDRefInfo()
 }
+func (m *ClusterRoleListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetClusterRolesDRefInfoForOverlay(generateHash)
+}
 
 func (m *ClusterRoleListType) GetClusterRolesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetClusterRoles()
@@ -714,6 +752,30 @@ func (m *ClusterRoleListType) GetClusterRolesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("k8s_cluster_role.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "k8s_cluster_role.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "cluster_roles",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ClusterRoleListType) GetClusterRolesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetClusterRoles()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ClusterRoleListType.cluster_roles[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_cluster_role.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "k8s_cluster_role.Object",
 			RefdTenant: vref.Tenant,
@@ -1260,6 +1322,34 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetClusterRoleBindingsChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClusterRoleBindingsChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetClusterRoleChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClusterRoleChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPodSecurityAdmissionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPodSecurityAdmissionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1273,6 +1363,29 @@ func (m *CreateSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, 
 		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_bindings." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetClusterRoleBindingsChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetClusterRoleBindingsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetClusterRoleBindingsChoice().(type) {
+	case *CreateSpecType_UseDefaultClusterRoleBindings:
+		return nil, nil
+	case *CreateSpecType_UseCustomClusterRoleBindings:
+		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1307,7 +1420,54 @@ func (m *CreateSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetClusterRoleChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetClusterRoleChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetClusterRoleChoice().(type) {
+	case *CreateSpecType_UseDefaultClusterRoles:
+		return nil, nil
+	case *CreateSpecType_UseCustomClusterRoleList:
+		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *CreateSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *CreateSpecType_UseDefaultPodSecurityAdmission:
+		return nil, nil
+	case *CreateSpecType_UseCustomPodSecurityAdmission:
+		vref := m.GetUseCustomPodSecurityAdmission()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_pod_security_admission.Object")
+		dri := db.DRefInfo{
+			RefdType:   "k8s_pod_security_admission.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "use_custom_pod_security_admission",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *CreateSpecType) GetPodSecurityAdmissionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetPodSecurityAdmissionChoice().(type) {
 	case *CreateSpecType_UseDefaultPodSecurityAdmission:
 		return nil, nil
@@ -1377,6 +1537,29 @@ func (m *CreateSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_psp_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetPodSecurityPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPodSecurityPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPodSecurityPolicyChoice().(type) {
+	case *CreateSpecType_UseDefaultPsp:
+		return nil, nil
+	case *CreateSpecType_UseCustomPspList:
+		drInfos, err := m.GetUseCustomPspList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2032,6 +2215,34 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetClusterRoleBindingsChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClusterRoleBindingsChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetClusterRoleChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClusterRoleChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPodSecurityAdmissionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPodSecurityAdmissionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2045,6 +2256,29 @@ func (m *GetSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, err
 		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_bindings." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetClusterRoleBindingsChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetClusterRoleBindingsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetClusterRoleBindingsChoice().(type) {
+	case *GetSpecType_UseDefaultClusterRoleBindings:
+		return nil, nil
+	case *GetSpecType_UseCustomClusterRoleBindings:
+		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2079,7 +2313,54 @@ func (m *GetSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetClusterRoleChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetClusterRoleChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetClusterRoleChoice().(type) {
+	case *GetSpecType_UseDefaultClusterRoles:
+		return nil, nil
+	case *GetSpecType_UseCustomClusterRoleList:
+		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GetSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *GetSpecType_UseDefaultPodSecurityAdmission:
+		return nil, nil
+	case *GetSpecType_UseCustomPodSecurityAdmission:
+		vref := m.GetUseCustomPodSecurityAdmission()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_pod_security_admission.Object")
+		dri := db.DRefInfo{
+			RefdType:   "k8s_pod_security_admission.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "use_custom_pod_security_admission",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GetSpecType) GetPodSecurityAdmissionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetPodSecurityAdmissionChoice().(type) {
 	case *GetSpecType_UseDefaultPodSecurityAdmission:
 		return nil, nil
@@ -2149,6 +2430,29 @@ func (m *GetSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_psp_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetPodSecurityPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPodSecurityPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPodSecurityPolicyChoice().(type) {
+	case *GetSpecType_UseDefaultPsp:
+		return nil, nil
+	case *GetSpecType_UseCustomPspList:
+		drInfos, err := m.GetUseCustomPspList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2829,6 +3133,59 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetClusterRoleBindingsChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClusterRoleBindingsChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetClusterRoleChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClusterRoleChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetFinalClusterRoleBindingsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFinalClusterRoleBindingsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetFinalClusterRolesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFinalClusterRolesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetFinalPodSecurityAdmissionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFinalPodSecurityAdmissionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetFinalPodSecurityPoliciesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFinalPodSecurityPoliciesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPodSecurityAdmissionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPodSecurityAdmissionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2842,6 +3199,29 @@ func (m *GlobalSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, 
 		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_bindings." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetClusterRoleBindingsChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetClusterRoleBindingsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetClusterRoleBindingsChoice().(type) {
+	case *GlobalSpecType_UseDefaultClusterRoleBindings:
+		return nil, nil
+	case *GlobalSpecType_UseCustomClusterRoleBindings:
+		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2876,6 +3256,29 @@ func (m *GlobalSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetClusterRoleChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetClusterRoleChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetClusterRoleChoice().(type) {
+	case *GlobalSpecType_UseDefaultClusterRoles:
+		return nil, nil
+	case *GlobalSpecType_UseCustomClusterRoleList:
+		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetFinalClusterRoleBindingsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetFinalClusterRoleBindings()
 	if len(vrefs) == 0 {
@@ -2889,6 +3292,30 @@ func (m *GlobalSpecType) GetFinalClusterRoleBindingsDRefInfo() ([]db.DRefInfo, e
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("k8s_cluster_role_binding.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "k8s_cluster_role_binding.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "final_cluster_role_bindings",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetFinalClusterRoleBindingsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetFinalClusterRoleBindings()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.final_cluster_role_bindings[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_cluster_role_binding.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "k8s_cluster_role_binding.Object",
 			RefdTenant: vref.Tenant,
@@ -2953,6 +3380,30 @@ func (m *GlobalSpecType) GetFinalClusterRolesDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetFinalClusterRolesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetFinalClusterRoles()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.final_cluster_roles[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_cluster_role.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "k8s_cluster_role.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "final_cluster_roles",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetFinalClusterRolesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetFinalClusterRolesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -2983,6 +3434,23 @@ func (m *GlobalSpecType) GetFinalClusterRolesDBEntries(ctx context.Context, d db
 }
 
 func (m *GlobalSpecType) GetFinalPodSecurityAdmissionDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetFinalPodSecurityAdmission()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("k8s_pod_security_admission.Object")
+	dri := db.DRefInfo{
+		RefdType:   "k8s_pod_security_admission.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "final_pod_security_admission",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetFinalPodSecurityAdmissionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetFinalPodSecurityAdmission()
 	if vref == nil {
 		return nil, nil
@@ -3051,6 +3519,30 @@ func (m *GlobalSpecType) GetFinalPodSecurityPoliciesDRefInfo() ([]db.DRefInfo, e
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetFinalPodSecurityPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetFinalPodSecurityPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.final_pod_security_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_pod_security_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "k8s_pod_security_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "final_pod_security_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetFinalPodSecurityPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetFinalPodSecurityPoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -3081,6 +3573,30 @@ func (m *GlobalSpecType) GetFinalPodSecurityPoliciesDBEntries(ctx context.Contex
 }
 
 func (m *GlobalSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *GlobalSpecType_UseDefaultPodSecurityAdmission:
+		return nil, nil
+	case *GlobalSpecType_UseCustomPodSecurityAdmission:
+		vref := m.GetUseCustomPodSecurityAdmission()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_pod_security_admission.Object")
+		dri := db.DRefInfo{
+			RefdType:   "k8s_pod_security_admission.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "use_custom_pod_security_admission",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GlobalSpecType) GetPodSecurityAdmissionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetPodSecurityAdmissionChoice().(type) {
 	case *GlobalSpecType_UseDefaultPodSecurityAdmission:
 		return nil, nil
@@ -3161,7 +3677,47 @@ func (m *GlobalSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetPodSecurityPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPodSecurityPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPodSecurityPolicyChoice().(type) {
+	case *GlobalSpecType_UseDefaultPsp:
+		return nil, nil
+	case *GlobalSpecType_UseCustomPspList:
+		drInfos, err := m.GetUseCustomPspList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_psp_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -4555,6 +5111,13 @@ func (m *PodSecurityPolicyListType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPodSecurityPoliciesDRefInfo()
 }
+func (m *PodSecurityPolicyListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPodSecurityPoliciesDRefInfoForOverlay(generateHash)
+}
 
 func (m *PodSecurityPolicyListType) GetPodSecurityPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetPodSecurityPolicies()
@@ -4569,6 +5132,30 @@ func (m *PodSecurityPolicyListType) GetPodSecurityPoliciesDRefInfo() ([]db.DRefI
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("k8s_pod_security_policy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "k8s_pod_security_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "pod_security_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *PodSecurityPolicyListType) GetPodSecurityPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetPodSecurityPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("PodSecurityPolicyListType.pod_security_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_pod_security_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "k8s_pod_security_policy.Object",
 			RefdTenant: vref.Tenant,
@@ -4792,6 +5379,34 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetClusterRoleBindingsChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClusterRoleBindingsChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetClusterRoleChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClusterRoleChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPodSecurityAdmissionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPodSecurityAdmissionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -4805,6 +5420,29 @@ func (m *ReplaceSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo,
 		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_bindings." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetClusterRoleBindingsChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetClusterRoleBindingsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetClusterRoleBindingsChoice().(type) {
+	case *ReplaceSpecType_UseDefaultClusterRoleBindings:
+		return nil, nil
+	case *ReplaceSpecType_UseCustomClusterRoleBindings:
+		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4839,7 +5477,54 @@ func (m *ReplaceSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetClusterRoleChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetClusterRoleChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetClusterRoleChoice().(type) {
+	case *ReplaceSpecType_UseDefaultClusterRoles:
+		return nil, nil
+	case *ReplaceSpecType_UseCustomClusterRoleList:
+		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_cluster_role_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *ReplaceSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *ReplaceSpecType_UseDefaultPodSecurityAdmission:
+		return nil, nil
+	case *ReplaceSpecType_UseCustomPodSecurityAdmission:
+		vref := m.GetUseCustomPodSecurityAdmission()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_pod_security_admission.Object")
+		dri := db.DRefInfo{
+			RefdType:   "k8s_pod_security_admission.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "use_custom_pod_security_admission",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ReplaceSpecType) GetPodSecurityAdmissionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetPodSecurityAdmissionChoice().(type) {
 	case *ReplaceSpecType_UseDefaultPodSecurityAdmission:
 		return nil, nil
@@ -4909,6 +5594,29 @@ func (m *ReplaceSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, e
 		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_custom_psp_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetPodSecurityPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPodSecurityPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPodSecurityPolicyChoice().(type) {
+	case *ReplaceSpecType_UseDefaultPsp:
+		return nil, nil
+	case *ReplaceSpecType_UseCustomPspList:
+		drInfos, err := m.GetUseCustomPspList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

@@ -45,31 +45,17 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.vs_profiles.ssl.ssl_client_profile.API.Create"] = []string{
-		"spec.app_service",
-		"spec.cert_extension_includes.#",
 		"spec.crl",
 		"spec.crl_file",
-		"spec.log_ssl_c3d_events",
-		"spec.log_ssl_client_authentication_events",
-		"spec.log_ssl_forward_proxy_events",
-		"spec.log_ssl_handshake_events",
-		"spec.proxy_ca_cert",
-		"spec.proxy_ca_key",
 		"spec.proxy_ca_passphrase",
 	}
+	mdr.RPCConfidentialRequestRegistry["ves.io.schema.vs_profiles.ssl.ssl_client_profile.API.Create"] = "ves.io.schema.vs_profiles.ssl.ssl_client_profile.CreateRequest"
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.vs_profiles.ssl.ssl_client_profile.API.Replace"] = []string{
-		"spec.app_service",
-		"spec.cert_extension_includes.#",
 		"spec.crl",
 		"spec.crl_file",
-		"spec.log_ssl_c3d_events",
-		"spec.log_ssl_client_authentication_events",
-		"spec.log_ssl_forward_proxy_events",
-		"spec.log_ssl_handshake_events",
-		"spec.proxy_ca_cert",
-		"spec.proxy_ca_key",
 		"spec.proxy_ca_passphrase",
 	}
+	mdr.RPCConfidentialRequestRegistry["ves.io.schema.vs_profiles.ssl.ssl_client_profile.API.Replace"] = "ves.io.schema.vs_profiles.ssl.ssl_client_profile.ReplaceRequest"
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

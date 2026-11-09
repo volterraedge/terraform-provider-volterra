@@ -26,6 +26,107 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AdvancedFilterExpressionField) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AdvancedFilterExpressionField) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AdvancedFilterExpressionField) DeepCopy() *AdvancedFilterExpressionField {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AdvancedFilterExpressionField{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AdvancedFilterExpressionField) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AdvancedFilterExpressionField) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AdvancedFilterExpressionFieldValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAdvancedFilterExpressionField struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAdvancedFilterExpressionField) ExpressionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for expression")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAdvancedFilterExpressionField) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AdvancedFilterExpressionField)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AdvancedFilterExpressionField got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["expression"]; exists {
+		vOpts := append(opts, db.WithValidateField("expression"))
+		if err := fv(ctx, m.GetExpression(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAdvancedFilterExpressionFieldValidator = func() *ValidateAdvancedFilterExpressionField {
+	v := &ValidateAdvancedFilterExpressionField{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhExpression := v.ExpressionValidationRuleHandler
+	rulesExpression := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhExpression(rulesExpression)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AdvancedFilterExpressionField.expression: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["expression"] = vFn
+
+	return v
+}()
+
+func AdvancedFilterExpressionFieldValidator() db.Validator {
+	return DefaultAdvancedFilterExpressionFieldValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -339,6 +440,10 @@ func (v *ValidateFilterSetField) FieldValueValidationRuleHandler(rules map[strin
 	}
 	return validatorFn, nil
 }
+
+func (v *ValidateFilterSetField) FieldValueAdvancedFilterExpressionFieldValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return AdvancedFilterExpressionFieldValidator().Validate, nil
+}
 func (v *ValidateFilterSetField) FieldIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -423,6 +528,17 @@ func (v *ValidateFilterSetField) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *FilterSetField_AdvancedFilterExpressionField:
+		if fv, exists := v.FldValidators["field_value.advanced_filter_expression_field"]; exists {
+			val := m.GetFieldValue().(*FilterSetField_AdvancedFilterExpressionField).AdvancedFilterExpressionField
+			vOpts := append(opts,
+				db.WithValidateField("field_value"),
+				db.WithValidateField("advanced_filter_expression_field"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 	return nil
 }
@@ -447,6 +563,16 @@ var DefaultFilterSetFieldValidator = func() *ValidateFilterSetField {
 		panic(errMsg)
 	}
 	v.FldValidators["field_value"] = vFn
+	vrhFieldValueAdvancedFilterExpressionField := v.FieldValueAdvancedFilterExpressionFieldValidationRuleHandler
+	rulesFieldValueAdvancedFilterExpressionField := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["field_value.advanced_filter_expression_field"], err = vrhFieldValueAdvancedFilterExpressionField(rulesFieldValueAdvancedFilterExpressionField)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field FilterSetField.field_value_advanced_filter_expression_field: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["field_value.advanced_filter_expression_field"] = vFnMap["field_value.advanced_filter_expression_field"]
 
 	vrhFieldId := v.FieldIdValidationRuleHandler
 	rulesFieldId := map[string]string{
