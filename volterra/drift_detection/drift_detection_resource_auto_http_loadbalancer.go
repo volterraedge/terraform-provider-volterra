@@ -1419,6 +1419,7 @@ func FlattenAuthentication(x *ves_io_schema.BotDefenseFlowLabelAuthenticationCho
 	authValue := make([]interface{}, 0)
 	if x != nil {
 		authVal := map[string]interface{}{
+			"login":         FlattenLogin(x.GetLogin()),
 			"login_mfa":     isEmpty(x.GetLoginMfa()),
 			"login_partner": isEmpty(x.GetLoginPartner()),
 			"logout":        isEmpty(x.GetLogout()),
