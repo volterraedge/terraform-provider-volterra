@@ -69,8 +69,32 @@ func (m *GetAWSTransitGatewayRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCredDRefInfo()
 }
+func (m *GetAWSTransitGatewayRequest) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCredDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetAWSTransitGatewayRequest) GetCredDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCred()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_user_account.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_user_account.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cred",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GetAWSTransitGatewayRequest) GetCredDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCred()
 	if vref == nil {
 		return nil, nil

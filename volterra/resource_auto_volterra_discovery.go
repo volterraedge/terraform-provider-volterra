@@ -181,10 +181,21 @@ func resourceVolterraDiscovery() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -299,7 +310,6 @@ func resourceVolterraDiscovery() *schema.Resource {
 											},
 										},
 									},
-
 
 									"cbip_mgmt_ips": {
 										Type: schema.TypeList,
@@ -632,11 +642,23 @@ func resourceVolterraDiscovery() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:       schema.TypeString,
 																						Required:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -799,11 +821,23 @@ func resourceVolterraDiscovery() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:       schema.TypeString,
 																						Required:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -954,10 +988,21 @@ func resourceVolterraDiscovery() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -1132,10 +1177,21 @@ func resourceVolterraDiscovery() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -1415,11 +1471,23 @@ func resourceVolterraDiscovery() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:       schema.TypeString,
 																						Required:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -1582,11 +1650,23 @@ func resourceVolterraDiscovery() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:       schema.TypeString,
 																						Required:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -1737,10 +1817,21 @@ func resourceVolterraDiscovery() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -1914,10 +2005,21 @@ func resourceVolterraDiscovery() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:     schema.TypeString,
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -2582,6 +2684,15 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 
 													}
 
+													if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														password.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -2728,7 +2839,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 								}
 
 							}
-
 
 							if w, ok := cbipClustersMapStrToI["cbip_mgmt_ips"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
@@ -3136,6 +3246,15 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 
 																}
 
+																if v, ok := caCertificateUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	caCertificateUrl.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := caCertificateUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -3322,6 +3441,15 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 
 																}
 
+																if v, ok := certificateUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	certificateUrl.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := certificateUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -3501,6 +3629,15 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 
 																		}
 																	}
+
+																}
+
+																if v, ok := keyUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	keyUrl.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -3710,6 +3847,15 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 
 															}
 														}
+
+													}
+
+													if v, ok := passwdUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														passwdUrl.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -4064,6 +4210,15 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 
 																}
 
+																if v, ok := caCertificateUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	caCertificateUrl.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := caCertificateUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -4250,6 +4405,15 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 
 																}
 
+																if v, ok := certificateUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	certificateUrl.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := certificateUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -4429,6 +4593,15 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 
 																		}
 																	}
+
+																}
+
+																if v, ok := keyUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	keyUrl.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -4643,6 +4816,15 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 
 												}
 											}
+
+										}
+
+										if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											configTypeInt.KubeconfigUrl.SecretInfoOneof = secretInfoOneofInt
 
 										}
 
@@ -5526,6 +5708,15 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 
 													}
 
+													if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														password.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -5672,7 +5863,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 								}
 
 							}
-
 
 							if w, ok := cbipClustersMapStrToI["cbip_mgmt_ips"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
@@ -6080,6 +6270,15 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 
 																}
 
+																if v, ok := caCertificateUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	caCertificateUrl.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := caCertificateUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -6266,6 +6465,15 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 
 																}
 
+																if v, ok := certificateUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	certificateUrl.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := certificateUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -6445,6 +6653,15 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 
 																		}
 																	}
+
+																}
+
+																if v, ok := keyUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	keyUrl.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -6654,6 +6871,15 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 
 															}
 														}
+
+													}
+
+													if v, ok := passwdUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														passwdUrl.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -7008,6 +7234,15 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 
 																}
 
+																if v, ok := caCertificateUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	caCertificateUrl.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := caCertificateUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -7194,6 +7429,15 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 
 																}
 
+																if v, ok := certificateUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	certificateUrl.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := certificateUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -7373,6 +7617,15 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 
 																		}
 																	}
+
+																}
+
+																if v, ok := keyUrlMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	keyUrl.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -7587,6 +7840,15 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 
 												}
 											}
+
+										}
+
+										if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											configTypeInt.KubeconfigUrl.SecretInfoOneof = secretInfoOneofInt
 
 										}
 

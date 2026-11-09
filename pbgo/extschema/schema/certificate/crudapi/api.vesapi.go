@@ -2576,15 +2576,253 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "certificateAutoCertConfig": {
+            "type": "object",
+            "description": "Configuration for automated ACME certificate issuance and lifecycle management.",
+            "title": "Auto Certificate Configuration",
+            "x-displayname": "Auto Certificate Configuration",
+            "x-ves-oneof-field-challenge_choice": "[\"dns_01\",\"pre_validated\"]",
+            "x-ves-oneof-field-issuer_choice": "[\"custom_issuer\",\"default\"]",
+            "x-ves-proto-message": "ves.io.schema.certificate.AutoCertConfig",
+            "properties": {
+                "custom_issuer": {
+                    "description": "Exclusive with [default]\n Use a custom ACME issuer.",
+                    "title": "Custom Issuer",
+                    "$ref": "#/definitions/certificateCustomIssuer",
+                    "x-displayname": "Custom Issuer"
+                },
+                "default": {
+                    "description": "Exclusive with [custom_issuer]\n Use the built-in Let's Encrypt issuer managed by F5 Distributed Cloud.",
+                    "title": "Default",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default"
+                },
+                "dns_01": {
+                    "description": "Exclusive with [pre_validated]\n DNS-01 challenge validation is performed when required to prove domain control.\n A TXT record is created at _acme-challenge.\u003cdomain\u003e. This method works for all\n domain types. Domains reported as already validated are skipped.",
+                    "title": "DNS-01 Challenge",
+                    "$ref": "#/definitions/certificateDNS01ChallengeConfig",
+                    "x-displayname": "DNS-01"
+                },
+                "domains": {
+                    "type": "array",
+                    "description": " Domains this certificate covers. These are used as Subject Alternative Names (SANs)\n in the ACME certificate order. At least one domain is required.\n\nExample: - \"example.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 253\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Domains",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 253
+                    },
+                    "x-displayname": "Domains",
+                    "x-ves-example": "example.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "253",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "key_algorithm": {
+                    "description": " Preferred key algorithm for certificate key pair generation.",
+                    "title": "Key Algorithm",
+                    "$ref": "#/definitions/certificateKeyAlgorithm",
+                    "x-displayname": "Key Algorithm"
+                },
+                "pre_validated": {
+                    "description": "Exclusive with [dns_01]\n Domains are validated directly with the certificate authority. No challenge\n method is configured. All domains must remain validated for initial issuance and\n renewal. If any domain requires validation, issuance cannot continue.",
+                    "title": "Pre-Validated Domains",
+                    "$ref": "#/definitions/certificatePreValidatedConfig",
+                    "x-displayname": "Pre-Validated Domains"
+                },
+                "renew_before_days": {
+                    "type": "integer",
+                    "description": " Days before certificate expiration to trigger renewal. Recommended: two-thirds of the\n certificate lifespan.\n If this value is greater than or nearly equal to the certificate's actual lifetime,\n such that renewal would occur less than 24 hours after its validity begins, renewal\n will default to two-thirds through its actual lifetime.\n\nExample: - \"15\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 90\n",
+                    "title": "Renew Before Days",
+                    "format": "int64",
+                    "x-displayname": "Renew Before Expiry (Days)",
+                    "x-ves-example": "15",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "90"
+                    }
+                }
+            }
+        },
+        "certificateCertLifecycleState": {
+            "type": "string",
+            "description": "Lifecycle state of an auto-managed certificate\n\nCertificate object created, issuance not yet started\nACME order created, issuance in progress\nACME challenge (DNS-01 or HTTP-01) is being processed\nCertificate has been issued and is valid\nCertificate renewal is in progress\nCertificate has expired without successful renewal\nCertificate has been revoked\nCertificate issuance or renewal encountered an error\nCertificate revocation is in progress\nWaiting for customer to create required DNS records for certificate validation\nThe last certificate revocation attempt failed and requires an explicit retry.",
+            "title": "Certificate Lifecycle State",
+            "enum": [
+                "CERT_PENDING",
+                "CERT_ISSUING",
+                "CERT_CHALLENGE_IN_PROGRESS",
+                "CERT_VALID",
+                "CERT_RENEWING",
+                "CERT_EXPIRED",
+                "CERT_REVOKED",
+                "CERT_ERROR",
+                "CERT_REVOKING",
+                "CERT_WAITING_FOR_DNS",
+                "CERT_REVOKE_FAILED"
+            ],
+            "default": "CERT_PENDING",
+            "x-displayname": "Certificate Lifecycle State",
+            "x-ves-proto-enum": "ves.io.schema.certificate.CertLifecycleState"
+        },
+        "certificateCertificateLifecycleStatus": {
+            "type": "object",
+            "description": "Lifecycle status for auto-managed certificates.",
+            "title": "Certificate Lifecycle Status",
+            "x-displayname": "Certificate Lifecycle Status",
+            "x-ves-proto-message": "ves.io.schema.certificate.CertificateLifecycleStatus",
+            "properties": {
+                "dns_instructions": {
+                    "type": "array",
+                    "description": " DNS records the customer must create for non-delegated DNS-01 validation.\n Populated when the certificate uses DNS-01 with a non-delegated domain\n (CNAME delegation mode). Empty for delegated domains where DNS is managed directly.",
+                    "title": "DNS Instructions",
+                    "items": {
+                        "$ref": "#/definitions/certificateDNSInstruction"
+                    },
+                    "x-displayname": "DNS Instructions"
+                },
+                "error_message": {
+                    "type": "string",
+                    "description": " Error message if the certificate is in an error state",
+                    "title": "Error Message",
+                    "x-displayname": "Error Message"
+                },
+                "next_renewal_time": {
+                    "type": "string",
+                    "description": " Time (UTC) when the next certificate renewal is scheduled.",
+                    "title": "Next Renewal Time",
+                    "format": "date-time",
+                    "x-displayname": "Next Renewal Time"
+                },
+                "state": {
+                    "description": " Current lifecycle state of the certificate",
+                    "title": "State",
+                    "$ref": "#/definitions/certificateCertLifecycleState",
+                    "x-displayname": "Lifecycle State"
+                }
+            }
+        },
+        "certificateCustomIssuer": {
+            "type": "object",
+            "description": "User-selected ACME issuer configuration.",
+            "title": "Custom Issuer",
+            "x-displayname": "Custom Issuer",
+            "x-ves-proto-message": "ves.io.schema.certificate.CustomIssuer",
+            "properties": {
+                "issuer_ref": {
+                    "type": "array",
+                    "description": " Select an existing ACME issuer or create a new one.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "Issuer Reference",
+                    "minItems": 1,
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "ACME Issuer",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                }
+            }
+        },
+        "certificateDNS01ChallengeConfig": {
+            "type": "object",
+            "description": "Configuration for ACME DNS-01 challenge validation.",
+            "title": "DNS-01 Challenge Configuration",
+            "x-displayname": "DNS-01 Challenge Configuration",
+            "x-ves-oneof-field-dns_provider_choice": "[\"cname_delegation\",\"delegated\"]",
+            "x-ves-proto-message": "ves.io.schema.certificate.DNS01ChallengeConfig",
+            "properties": {
+                "cname_delegation": {
+                    "description": "Exclusive with [delegated]\n DNS-01 validation for domains not managed by F5 Distributed Cloud is performed\n through CNAME delegation. When validation is required, _acme-challenge.\u003cdomain\u003e\n must point to the target provided in the certificate status. Challenge TXT\n records are created automatically at the CNAME target.",
+                    "title": "Non-Managed DNS (CNAME Delegation)",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Non-Managed DNS (CNAME Delegation)"
+                },
+                "delegated": {
+                    "description": "Exclusive with [cname_delegation]\n F5 Distributed Cloud managed DNS zones provide DNS-01 challenge validation.\n The system automatically resolves which dns_zone(s) cover domains that require\n validation. Each zone must have 'Allow Application Managed Records' enabled.",
+                    "title": "Managed DNS",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Managed DNS"
+                }
+            }
+        },
+        "certificateDNSInstruction": {
+            "type": "object",
+            "description": "A DNS record that the customer must create for non-delegated DNS-01 challenge validation.\nDisplayed in the dashboard/UI to guide the customer through CNAME setup.",
+            "title": "DNS Instruction",
+            "x-displayname": "DNS Instruction",
+            "x-ves-proto-message": "ves.io.schema.certificate.DNSInstruction",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Full DNS record name that the customer must create at their DNS registrar.\n\nExample: - \"_acme-challenge.app.example.com\"-",
+                    "title": "Name",
+                    "x-displayname": "DNS Record Name",
+                    "x-ves-example": "_acme-challenge.app.example.com"
+                },
+                "record_type": {
+                    "type": "string",
+                    "description": " DNS record type. Always \"CNAME\" for non-delegated DNS-01.",
+                    "title": "Record Type",
+                    "x-displayname": "Record Type"
+                },
+                "status": {
+                    "description": " Current verification status of this DNS record.",
+                    "title": "Status",
+                    "$ref": "#/definitions/certificateDNSInstructionStatus",
+                    "x-displayname": "Verification Status"
+                },
+                "value": {
+                    "type": "string",
+                    "description": " Target value for the DNS record.\n\nExample: - \"abc123.ves.io\"-",
+                    "title": "Value",
+                    "x-displayname": "DNS Record Value",
+                    "x-ves-example": "abc123.ves.io"
+                }
+            }
+        },
+        "certificateDNSInstructionStatus": {
+            "type": "string",
+            "description": "Verification status for a DNS instruction\n\nThe DNS record has not been created yet. Customer action required.\nThe DNS record has been verified.\nVerification of the DNS record timed out or failed.",
+            "title": "DNS Instruction Status",
+            "enum": [
+                "DNS_INSTRUCTION_PENDING",
+                "DNS_INSTRUCTION_VERIFIED",
+                "DNS_INSTRUCTION_FAILED"
+            ],
+            "default": "DNS_INSTRUCTION_PENDING",
+            "x-displayname": "DNS Instruction Status",
+            "x-ves-proto-enum": "ves.io.schema.certificate.DNSInstructionStatus"
+        },
         "certificateGlobalSpecType": {
             "type": "object",
             "description": "Desired state for Certificate",
             "title": "Certificate specification",
             "x-displayname": "Specification",
+            "x-ves-displayorder": "1003,1,2,3,7,1000,1001,1006,1002",
             "x-ves-oneof-field-ocsp_stapling_choice": "[\"custom_hash_algorithms\",\"disable_ocsp_stapling\",\"use_system_defaults\"]",
-            "x-ves-oneof-field-provider": "[\"manual\",\"virtual_host_auto_cert\"]",
+            "x-ves-oneof-field-provider": "[\"auto_cert\",\"manual\",\"virtual_host_auto_cert\"]",
             "x-ves-proto-message": "ves.io.schema.certificate.GlobalSpecType",
             "properties": {
+                "auto_cert": {
+                    "description": "Exclusive with [manual virtual_host_auto_cert]\n Automated certificate issuance and renewal using the ACME protocol.",
+                    "title": "Automatic",
+                    "$ref": "#/definitions/certificateAutoCertConfig",
+                    "x-displayname": "Automatic"
+                },
                 "certificate_chain": {
                     "description": " Intermediate Certificate Chain is used to establish the chain of trust. Intermediate Certificate Chain contains the list of intermediate certificates, excluding the end-entity certificate.",
                     "title": "certificate_chain",
@@ -2593,18 +2831,14 @@ var APISwaggerJSON string = `{
                 },
                 "certificate_url": {
                     "type": "string",
-                    "description": " Certificate.\n Certificate or certificate chain in PEM format including the PEM headers.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.certificate_url: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": " Certificate.\n Certificate or certificate chain in PEM format including the PEM headers.\n Required unless this is an Automatic type certificate (certificate URL will be added once provisioned).\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.certificate_url: true\n  ves.io.schema.rules.string.max_bytes: 131072\n",
                     "title": "certificate_url",
-                    "minLength": 1,
                     "maxLength": 131072,
                     "x-displayname": "Certificate",
                     "x-ves-example": "value",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.certificate_url": "true",
-                        "ves.io.schema.rules.string.max_bytes": "131072",
-                        "ves.io.schema.rules.string.min_bytes": "1"
+                        "ves.io.schema.rules.string.max_bytes": "131072"
                     }
                 },
                 "custom_hash_algorithms": {
@@ -2638,20 +2872,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Certificate Information"
                 },
                 "manual": {
-                    "description": "Exclusive with [virtual_host_auto_cert]\n",
-                    "title": "Manual",
+                    "description": "Exclusive with [auto_cert virtual_host_auto_cert]\n Certificate PEM and private key are uploaded by the user.",
+                    "title": "Custom",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Manual"
+                    "x-displayname": "Custom"
                 },
                 "private_key": {
-                    "description": " Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. Key has to match the accompanying certificate.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. Key has to match the accompanying certificate.\n Required unless this is an Automatic type certificate (private key will be generated).",
                     "title": "private_key",
                     "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Private Key",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Private Key"
                 },
                 "tcp_loadbalancers": {
                     "type": "array",
@@ -2669,7 +2899,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable"
                 },
                 "virtual_host_auto_cert": {
-                    "description": "Exclusive with [manual]\n",
+                    "description": "Exclusive with [auto_cert manual]\n",
                     "title": "Virtual Host Auto Cert",
                     "$ref": "#/definitions/certificateVirtualHostAutoCert",
                     "x-displayname": "Virtual Host Auto Cert"
@@ -2684,6 +2914,38 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Virtual Servers"
                 }
             }
+        },
+        "certificateHTTP01ChallengeConfig": {
+            "type": "object",
+            "description": "x-displayName: \"HTTP-01 Challenge Configuration\"\nConfiguration for ACME HTTP-01 challenge validation.\nHTTP-01 challenge validation serves a token at\nhttp://\u003cdomain\u003e/.well-known/acme-challenge/\u003ctoken\u003e. This method supports only\nnon-wildcard domains. A temporary route in the virtual host's redirect listener\nserves the challenge through the data plane pipeline.",
+            "title": "HTTP-01 Challenge Configuration",
+            "properties": {
+                "virtual_host_ref": {
+                    "description": "x-displayName: \"Virtual Host\"\nx-required\nReference to the virtual_host that serves the domain(s) in this certificate.\nA temporary /.well-known/acme-challenge/\u003ctoken\u003e route is injected into this\nvirtual host's redirect listener during ACME HTTP-01 validation.\nThe route is removed after validation completes.",
+                    "title": "Virtual Host Reference",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                }
+            }
+        },
+        "certificateKeyAlgorithm": {
+            "type": "string",
+            "description": "Cryptographic key algorithm for certificate key pair generation\n\nRSA key with 2048-bit modulus\nRSA key with 4096-bit modulus\nECDSA key using NIST P-256 curve\nECDSA key using NIST P-384 curve",
+            "title": "Key Algorithm",
+            "enum": [
+                "RSA_2048",
+                "RSA_4096",
+                "ECDSA_P256"
+            ],
+            "default": "RSA_2048",
+            "x-displayname": "Key Algorithm",
+            "x-ves-proto-enum": "ves.io.schema.certificate.KeyAlgorithm"
+        },
+        "certificatePreValidatedConfig": {
+            "type": "object",
+            "description": "Configuration for domains validated directly with the certificate authority.",
+            "title": "Pre-Validated Configuration",
+            "x-displayname": "Pre-Validated Configuration",
+            "x-ves-proto-message": "ves.io.schema.certificate.PreValidatedConfig"
         },
         "certificateSpecType": {
             "type": "object",
@@ -2715,6 +2977,12 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Conditions"
                 },
+                "lifecycle_status": {
+                    "description": " Lifecycle status for Arceus-managed certificates. This field is populated by the\n Arceus controller and provides current lifecycle state, parsed certificate details,\n error information, and back-references to consuming Load Balancers.\n This field is empty for legacy (akar-dnsdomain managed) and manually uploaded certificates.",
+                    "title": "lifecycle_status",
+                    "$ref": "#/definitions/certificateCertificateLifecycleStatus",
+                    "x-displayname": "Lifecycle Status"
+                },
                 "metadata": {
                     "description": " Standard status's metadata",
                     "title": "metadata",
@@ -2734,7 +3002,7 @@ var APISwaggerJSON string = `{
         },
         "certificateVirtualHostAutoCert": {
             "type": "object",
-            "description": "AutoCert provider information",
+            "description": "AutoCert provider set by the system when a virtual host manages\nthe certificate. Not user-configurable.",
             "title": "Virtual Host Auto Cert",
             "x-displayname": "Virtual Host Auto Cert",
             "x-ves-proto-message": "ves.io.schema.certificate.VirtualHostAutoCert",
@@ -3180,12 +3448,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -3381,20 +3649,26 @@ var APISwaggerJSON string = `{
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"none\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info none]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info none]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType",
                     "x-displayname": "Clear Secret"
+                },
+                "none": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info]\n No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.",
+                    "title": "None",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "None"
                 }
             }
         },

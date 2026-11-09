@@ -69,8 +69,32 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetReportConfigDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReportConfigDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetSpecType) GetReportConfigDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetReportConfig()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("report_config.Object")
+	dri := db.DRefInfo{
+		RefdType:   "report_config.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "report_config",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GetSpecType) GetReportConfigDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetReportConfig()
 	if vref == nil {
 		return nil, nil
@@ -380,8 +404,32 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetReportConfigDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReportConfigDRefInfoForOverlay(generateHash)
+}
 
 func (m *GlobalSpecType) GetReportConfigDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetReportConfig()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("report_config.Object")
+	dri := db.DRefInfo{
+		RefdType:   "report_config.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "report_config",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetReportConfigDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetReportConfig()
 	if vref == nil {
 		return nil, nil

@@ -154,12 +154,28 @@ func (c *CustomAPIGrpcClient) doRPCListBehaviorsByScript(ctx context.Context, ya
 	rsp, err := c.grpcClient.ListBehaviorsByScript(ctx, req, opts...)
 	return rsp, err
 }
+func (c *CustomAPIGrpcClient) doRPCListCookieOperationsByScript(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ListCookieOperationsByScriptRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.client_side_defense.ListCookieOperationsByScriptRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ListCookieOperationsByScript(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCListDetectedDomains(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListDetectedDomainsRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.client_side_defense.ListDetectedDomainsRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.ListDetectedDomains(ctx, req, opts...)
+	return rsp, err
+}
+func (c *CustomAPIGrpcClient) doRPCListDomMutationsByScript(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ListDomMutationsByScriptRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.client_side_defense.ListDomMutationsByScriptRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ListDomMutationsByScript(ctx, req, opts...)
 	return rsp, err
 }
 func (c *CustomAPIGrpcClient) doRPCListFormFields(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
@@ -224,6 +240,14 @@ func (c *CustomAPIGrpcClient) doRPCListScriptsLegacy(ctx context.Context, yamlRe
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.client_side_defense.ListScriptsLegacyRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.ListScriptsLegacy(ctx, req, opts...)
+	return rsp, err
+}
+func (c *CustomAPIGrpcClient) doRPCListStorageOperationsByScript(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ListStorageOperationsByScriptRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.client_side_defense.ListStorageOperationsByScriptRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ListStorageOperationsByScript(ctx, req, opts...)
 	return rsp, err
 }
 func (c *CustomAPIGrpcClient) doRPCTestJS(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
@@ -320,7 +344,9 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["Init"] = ccl.doRPCInit
 	rpcFns["ListAffectedUsers"] = ccl.doRPCListAffectedUsers
 	rpcFns["ListBehaviorsByScript"] = ccl.doRPCListBehaviorsByScript
+	rpcFns["ListCookieOperationsByScript"] = ccl.doRPCListCookieOperationsByScript
 	rpcFns["ListDetectedDomains"] = ccl.doRPCListDetectedDomains
+	rpcFns["ListDomMutationsByScript"] = ccl.doRPCListDomMutationsByScript
 	rpcFns["ListFormFields"] = ccl.doRPCListFormFields
 	rpcFns["ListFormFieldsByScript"] = ccl.doRPCListFormFieldsByScript
 	rpcFns["ListFormFieldsGet"] = ccl.doRPCListFormFieldsGet
@@ -329,6 +355,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["ListReportsWithHistory"] = ccl.doRPCListReportsWithHistory
 	rpcFns["ListScripts"] = ccl.doRPCListScripts
 	rpcFns["ListScriptsLegacy"] = ccl.doRPCListScriptsLegacy
+	rpcFns["ListStorageOperationsByScript"] = ccl.doRPCListStorageOperationsByScript
 	rpcFns["TestJS"] = ccl.doRPCTestJS
 	rpcFns["UpdateDomains"] = ccl.doRPCUpdateDomains
 	rpcFns["UpdateFieldAnalysis"] = ccl.doRPCUpdateFieldAnalysis
@@ -1607,6 +1634,97 @@ func (c *CustomAPIRestClient) doRPCListBehaviorsByScript(ctx context.Context, ca
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCListCookieOperationsByScript(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ListCookieOperationsByScriptRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.client_side_defense.ListCookieOperationsByScriptRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		q.Add("filters", fmt.Sprintf("%v", req.Filters))
+		q.Add("id", fmt.Sprintf("%v", req.Id))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("page_number", fmt.Sprintf("%v", req.PageNumber))
+		q.Add("page_size", fmt.Sprintf("%v", req.PageSize))
+		q.Add("page_token", fmt.Sprintf("%v", req.PageToken))
+		for _, item := range req.Sorts {
+			q.Add("sorts", fmt.Sprintf("%v", item))
+		}
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ListCookieOperationsByScriptResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.ListCookieOperationsByScriptResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomAPIRestClient) doRPCListDetectedDomains(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1648,6 +1766,7 @@ func (c *CustomAPIRestClient) doRPCListDetectedDomains(ctx context.Context, call
 		_ = q
 		q.Add("duration", fmt.Sprintf("%v", req.Duration))
 		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		q.Add("filters", fmt.Sprintf("%v", req.Filters))
 		q.Add("locations", fmt.Sprintf("%v", req.Locations))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("page_number", fmt.Sprintf("%v", req.PageNumber))
@@ -1692,6 +1811,97 @@ func (c *CustomAPIRestClient) doRPCListDetectedDomains(ctx context.Context, call
 	pbRsp := &ListDetectedDomainsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.ListDetectedDomainsResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+func (c *CustomAPIRestClient) doRPCListDomMutationsByScript(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ListDomMutationsByScriptRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.client_side_defense.ListDomMutationsByScriptRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		q.Add("filters", fmt.Sprintf("%v", req.Filters))
+		q.Add("id", fmt.Sprintf("%v", req.Id))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("page_number", fmt.Sprintf("%v", req.PageNumber))
+		q.Add("page_size", fmt.Sprintf("%v", req.PageSize))
+		q.Add("page_token", fmt.Sprintf("%v", req.PageToken))
+		for _, item := range req.Sorts {
+			q.Add("sorts", fmt.Sprintf("%v", item))
+		}
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ListDomMutationsByScriptResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.ListDomMutationsByScriptResponse", body)
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2381,6 +2591,97 @@ func (c *CustomAPIRestClient) doRPCListScriptsLegacy(ctx context.Context, callOp
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCListStorageOperationsByScript(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ListStorageOperationsByScriptRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.client_side_defense.ListStorageOperationsByScriptRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		q.Add("filters", fmt.Sprintf("%v", req.Filters))
+		q.Add("id", fmt.Sprintf("%v", req.Id))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("page_number", fmt.Sprintf("%v", req.PageNumber))
+		q.Add("page_size", fmt.Sprintf("%v", req.PageSize))
+		q.Add("page_token", fmt.Sprintf("%v", req.PageToken))
+		for _, item := range req.Sorts {
+			q.Add("sorts", fmt.Sprintf("%v", item))
+		}
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ListStorageOperationsByScriptResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.client_side_defense.ListStorageOperationsByScriptResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *CustomAPIRestClient) doRPCTestJS(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2920,7 +3221,9 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns["Init"] = ccl.doRPCInit
 	rpcFns["ListAffectedUsers"] = ccl.doRPCListAffectedUsers
 	rpcFns["ListBehaviorsByScript"] = ccl.doRPCListBehaviorsByScript
+	rpcFns["ListCookieOperationsByScript"] = ccl.doRPCListCookieOperationsByScript
 	rpcFns["ListDetectedDomains"] = ccl.doRPCListDetectedDomains
+	rpcFns["ListDomMutationsByScript"] = ccl.doRPCListDomMutationsByScript
 	rpcFns["ListFormFields"] = ccl.doRPCListFormFields
 	rpcFns["ListFormFieldsByScript"] = ccl.doRPCListFormFieldsByScript
 	rpcFns["ListFormFieldsGet"] = ccl.doRPCListFormFieldsGet
@@ -2929,6 +3232,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns["ListReportsWithHistory"] = ccl.doRPCListReportsWithHistory
 	rpcFns["ListScripts"] = ccl.doRPCListScripts
 	rpcFns["ListScriptsLegacy"] = ccl.doRPCListScriptsLegacy
+	rpcFns["ListStorageOperationsByScript"] = ccl.doRPCListStorageOperationsByScript
 	rpcFns["TestJS"] = ccl.doRPCTestJS
 	rpcFns["UpdateDomains"] = ccl.doRPCUpdateDomains
 	rpcFns["UpdateFieldAnalysis"] = ccl.doRPCUpdateFieldAnalysis
@@ -3006,9 +3310,17 @@ func (c *customAPIInprocClient) ListBehaviorsByScript(ctx context.Context, in *L
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.client_side_defense.CustomAPI.ListBehaviorsByScript")
 	return c.CustomAPIServer.ListBehaviorsByScript(ctx, in)
 }
+func (c *customAPIInprocClient) ListCookieOperationsByScript(ctx context.Context, in *ListCookieOperationsByScriptRequest, opts ...grpc.CallOption) (*ListCookieOperationsByScriptResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.client_side_defense.CustomAPI.ListCookieOperationsByScript")
+	return c.CustomAPIServer.ListCookieOperationsByScript(ctx, in)
+}
 func (c *customAPIInprocClient) ListDetectedDomains(ctx context.Context, in *ListDetectedDomainsRequest, opts ...grpc.CallOption) (*ListDetectedDomainsResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.client_side_defense.CustomAPI.ListDetectedDomains")
 	return c.CustomAPIServer.ListDetectedDomains(ctx, in)
+}
+func (c *customAPIInprocClient) ListDomMutationsByScript(ctx context.Context, in *ListDomMutationsByScriptRequest, opts ...grpc.CallOption) (*ListDomMutationsByScriptResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.client_side_defense.CustomAPI.ListDomMutationsByScript")
+	return c.CustomAPIServer.ListDomMutationsByScript(ctx, in)
 }
 func (c *customAPIInprocClient) ListFormFields(ctx context.Context, in *ListFormFieldsRequest, opts ...grpc.CallOption) (*ListFormFieldsResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.client_side_defense.CustomAPI.ListFormFields")
@@ -3041,6 +3353,10 @@ func (c *customAPIInprocClient) ListScripts(ctx context.Context, in *ListScripts
 func (c *customAPIInprocClient) ListScriptsLegacy(ctx context.Context, in *ListScriptsLegacyRequest, opts ...grpc.CallOption) (*ListScriptsLegacyResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.client_side_defense.CustomAPI.ListScriptsLegacy")
 	return c.CustomAPIServer.ListScriptsLegacy(ctx, in)
+}
+func (c *customAPIInprocClient) ListStorageOperationsByScript(ctx context.Context, in *ListStorageOperationsByScriptRequest, opts ...grpc.CallOption) (*ListStorageOperationsByScriptResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.client_side_defense.CustomAPI.ListStorageOperationsByScript")
+	return c.CustomAPIServer.ListStorageOperationsByScript(ctx, in)
 }
 func (c *customAPIInprocClient) TestJS(ctx context.Context, in *TestJSRequest, opts ...grpc.CallOption) (*TestJSResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.client_side_defense.CustomAPI.TestJS")
@@ -3808,6 +4124,54 @@ func (s *customAPISrv) ListBehaviorsByScript(ctx context.Context, in *ListBehavi
 
 	return rsp, nil
 }
+func (s *customAPISrv) ListCookieOperationsByScript(ctx context.Context, in *ListCookieOperationsByScriptRequest) (*ListCookieOperationsByScriptResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.shape.client_side_defense.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ListCookieOperationsByScriptResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListCookieOperationsByScriptRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ListCookieOperationsByScript' operation on 'client_side_defense'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.shape.client_side_defense.CustomAPI.ListCookieOperationsByScript"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ListCookieOperationsByScript(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListCookieOperationsByScriptResponse", rsp)...)
+
+	return rsp, nil
+}
 func (s *customAPISrv) ListDetectedDomains(ctx context.Context, in *ListDetectedDomainsRequest) (*ListDetectedDomainsResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.shape.client_side_defense.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -3853,6 +4217,54 @@ func (s *customAPISrv) ListDetectedDomains(ctx context.Context, in *ListDetected
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListDetectedDomainsResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) ListDomMutationsByScript(ctx context.Context, in *ListDomMutationsByScriptRequest) (*ListDomMutationsByScriptResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.shape.client_side_defense.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ListDomMutationsByScriptResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListDomMutationsByScriptRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ListDomMutationsByScript' operation on 'client_side_defense'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.shape.client_side_defense.CustomAPI.ListDomMutationsByScript"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ListDomMutationsByScript(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListDomMutationsByScriptResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -4237,6 +4649,54 @@ func (s *customAPISrv) ListScriptsLegacy(ctx context.Context, in *ListScriptsLeg
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListScriptsLegacyResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) ListStorageOperationsByScript(ctx context.Context, in *ListStorageOperationsByScriptRequest) (*ListStorageOperationsByScriptResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.shape.client_side_defense.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ListStorageOperationsByScriptResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListStorageOperationsByScriptRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ListStorageOperationsByScript' operation on 'client_side_defense'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.shape.client_side_defense.CustomAPI.ListStorageOperationsByScript"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ListStorageOperationsByScript(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.client_side_defense.ListStorageOperationsByScriptResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -6420,6 +6880,106 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.shape.client_side_defense.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/{namespace}/scripts/{id}/cookie-operations": {
+            "post": {
+                "summary": "List Cookie Operations By Script",
+                "description": "List all the cookie operations for a script depending on start time and end time",
+                "operationId": "ves.io.schema.shape.client_side_defense.CustomAPI.ListCookieOperationsByScript",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/client_side_defenseListCookieOperationsByScriptResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"default\"\nNamespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "id",
+                        "description": "id\n\nx-example: \"s-1234567\"\nx-required\nscript id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Script ID"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/client_side_defenseListCookieOperationsByScriptRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-shape-client_side_defense-customapi-listcookieoperationsbyscript"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.shape.client_side_defense.CustomAPI.ListCookieOperationsByScript"
+            },
+            "x-displayname": "CustomAPI",
+            "x-ves-proto-service": "ves.io.schema.shape.client_side_defense.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/scripts/{id}/dashboard": {
             "get": {
                 "summary": "Get Script Overview",
@@ -6536,6 +7096,106 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-shape-client_side_defense-customapi-getscriptoverview"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.shape.client_side_defense.CustomAPI.GetScriptOverview"
+            },
+            "x-displayname": "CustomAPI",
+            "x-ves-proto-service": "ves.io.schema.shape.client_side_defense.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/scripts/{id}/dom-mutations": {
+            "post": {
+                "summary": "List DOM Mutations By Script",
+                "description": "List all the DOM mutations for a script depending on start time and end time",
+                "operationId": "ves.io.schema.shape.client_side_defense.CustomAPI.ListDomMutationsByScript",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/client_side_defenseListDomMutationsByScriptResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"default\"\nNamespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "id",
+                        "description": "id\n\nx-example: \"s-1234567\"\nx-required\nscript id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Script ID"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/client_side_defenseListDomMutationsByScriptRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-shape-client_side_defense-customapi-listdommutationsbyscript"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.shape.client_side_defense.CustomAPI.ListDomMutationsByScript"
             },
             "x-displayname": "CustomAPI",
             "x-ves-proto-service": "ves.io.schema.shape.client_side_defense.CustomAPI",
@@ -6852,6 +7512,106 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-shape-client_side_defense-customapi-updatescriptreadstatus"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.shape.client_side_defense.CustomAPI.UpdateScriptReadStatus"
+            },
+            "x-displayname": "CustomAPI",
+            "x-ves-proto-service": "ves.io.schema.shape.client_side_defense.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/scripts/{id}/storage-operations": {
+            "post": {
+                "summary": "List Storage Operations By Script",
+                "description": "List all the web storage operations for a script depending on start time and end time",
+                "operationId": "ves.io.schema.shape.client_side_defense.CustomAPI.ListStorageOperationsByScript",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/client_side_defenseListStorageOperationsByScriptResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"default\"\nNamespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "id",
+                        "description": "id\n\nx-example: \"s-1234567\"\nx-required\nscript id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Script ID"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/client_side_defenseListStorageOperationsByScriptRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-shape-client_side_defense-customapi-liststorageoperationsbyscript"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.shape.client_side_defense.CustomAPI.ListStorageOperationsByScript"
             },
             "x-displayname": "CustomAPI",
             "x-ves-proto-service": "ves.io.schema.shape.client_side_defense.CustomAPI",
@@ -8013,6 +8773,22 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Behavior Metrics",
             "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.BehaviorMetrics",
             "properties": {
+                "scripts_with_cookie_operations": {
+                    "type": "integer",
+                    "description": " Number of scripts that performed cookie operations\n\nExample: - \"12\"-",
+                    "title": "scripts_with_cookie_operations",
+                    "format": "int32",
+                    "x-displayname": "Scripts With Cookie Operations",
+                    "x-ves-example": "12"
+                },
+                "scripts_with_dom_mutations": {
+                    "type": "integer",
+                    "description": " Number of scripts that performed DOM mutations\n\nExample: - \"10\"-",
+                    "title": "scripts_with_dom_mutations",
+                    "format": "int32",
+                    "x-displayname": "Scripts With DOM Mutations",
+                    "x-ves-example": "10"
+                },
                 "scripts_with_form_field_reads": {
                     "type": "integer",
                     "description": " Number of scripts that read form fields\n\nExample: - \"25\"-",
@@ -8036,6 +8812,53 @@ var CustomAPISwaggerJSON string = `{
                     "format": "int32",
                     "x-displayname": "Scripts With New Behaviors",
                     "x-ves-example": "15"
+                },
+                "scripts_with_storage_operations": {
+                    "type": "integer",
+                    "description": " Number of scripts that performed web storage operations\n\nExample: - \"8\"-",
+                    "title": "scripts_with_storage_operations",
+                    "format": "int32",
+                    "x-displayname": "Scripts With Storage Operations",
+                    "x-ves-example": "8"
+                }
+            }
+        },
+        "client_side_defenseBoolFilter": {
+            "type": "object",
+            "description": "Generic filter for boolean values",
+            "title": "BoolFilter",
+            "x-displayname": "Bool Filter",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.BoolFilter",
+            "properties": {
+                "op": {
+                    "description": " Specify filter operator\n\nExample: - \"IN\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "op",
+                    "$ref": "#/definitions/client_side_defenseFilterOperator",
+                    "x-displayname": "Filter Operator",
+                    "x-ves-example": "IN",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "description": " An unordered list of boolean values\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 2\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "values",
+                    "minItems": 1,
+                    "maxItems": 2,
+                    "items": {
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    "x-displayname": "Values",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "2",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -8097,6 +8920,131 @@ var CustomAPISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Deleted",
                     "x-ves-example": "true"
+                }
+            }
+        },
+        "client_side_defenseCookieOperation": {
+            "type": "object",
+            "description": "Cookie operation performed by a script",
+            "title": "CookieOperation",
+            "x-displayname": "Cookie Operation",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.CookieOperation",
+            "properties": {
+                "api": {
+                    "type": "string",
+                    "description": " API used to perform the cookie operation\n\nExample: - \"document.cookie\"-",
+                    "title": "api",
+                    "x-displayname": "API",
+                    "x-ves-example": "document.cookie"
+                },
+                "cookie_name": {
+                    "type": "string",
+                    "description": " Name of the cookie\n\nExample: - \"session_id\"-",
+                    "title": "cookie_name",
+                    "x-displayname": "Cookie Name",
+                    "x-ves-example": "session_id"
+                },
+                "domain": {
+                    "type": "string",
+                    "description": " Domain attribute of the cookie\n\nExample: - \"example.com\"-",
+                    "title": "domain",
+                    "x-displayname": "Domain",
+                    "x-ves-example": "example.com"
+                },
+                "first_seen": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in milliseconds\n First seen time\n\nExample: - \"1650603600000\"-",
+                    "title": "first_seen",
+                    "format": "int64",
+                    "x-displayname": "First Seen",
+                    "x-ves-example": "1650603600000"
+                },
+                "last_seen": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in milliseconds\n Last seen time\n\nExample: - \"1650609600000\"-",
+                    "title": "last_seen",
+                    "format": "int64",
+                    "x-displayname": "Last Seen",
+                    "x-ves-example": "1650609600000"
+                },
+                "operation": {
+                    "type": "string",
+                    "description": " Operation performed on the cookie\n\nExample: - \"write\"-",
+                    "title": "operation",
+                    "x-displayname": "Operation",
+                    "x-ves-example": "write"
+                },
+                "path": {
+                    "type": "string",
+                    "description": " Path attribute of the cookie\n\nExample: - \"/\"-",
+                    "title": "path",
+                    "x-displayname": "Path",
+                    "x-ves-example": "/"
+                },
+                "same_site": {
+                    "type": "string",
+                    "description": " SameSite attribute of the cookie\n\nExample: - \"Lax\"-",
+                    "title": "same_site",
+                    "x-displayname": "SameSite",
+                    "x-ves-example": "Lax"
+                },
+                "secure": {
+                    "type": "boolean",
+                    "description": " Whether the cookie has the Secure attribute set\n\nExample: - true-",
+                    "title": "secure",
+                    "format": "boolean",
+                    "x-displayname": "Secure"
+                }
+            }
+        },
+        "client_side_defenseCookieOperationsFilters": {
+            "type": "object",
+            "description": "ListCookieOperationsByScript API query filters",
+            "title": "CookieOperationsFilters",
+            "x-displayname": "Cookie Operations Filters",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.CookieOperationsFilters",
+            "properties": {
+                "api_filter": {
+                    "description": " Query filter by the API used to perform the cookie operation",
+                    "title": "api_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "API Filter"
+                },
+                "cookie_name_filter": {
+                    "description": " Query filter by cookie name",
+                    "title": "cookie_name_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "Cookie Name Filter"
+                },
+                "domain_filter": {
+                    "description": " Query filter by domain",
+                    "title": "domain_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "Domain Filter"
+                },
+                "operation_filter": {
+                    "description": " Query filter by operation",
+                    "title": "operation_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "Operation Filter"
+                },
+                "path_filter": {
+                    "description": " Query filter by path",
+                    "title": "path_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "Path Filter"
+                },
+                "same_site_filter": {
+                    "description": " Query filter by same_site",
+                    "title": "same_site_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "SameSite Filter"
+                },
+                "secure_filter": {
+                    "description": " Query filter by secure flag",
+                    "title": "secure_filter",
+                    "$ref": "#/definitions/client_side_defenseBoolFilter",
+                    "x-displayname": "Secure Filter"
                 }
             }
         },
@@ -8183,6 +9131,27 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Delete script justification response",
             "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.DeleteScriptJustificationResponse"
         },
+        "client_side_defenseDetectedDomainsFilters": {
+            "type": "object",
+            "description": "ListDetectedDomains API query filters",
+            "title": "DetectedDomainsFilters",
+            "x-displayname": "Detected Domains Filters",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.DetectedDomainsFilters",
+            "properties": {
+                "category_filter": {
+                    "description": " Query filter by domain category",
+                    "title": "category_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "Category Filter"
+                },
+                "domain_filter": {
+                    "description": " Query filter by domain name",
+                    "title": "domain_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "Domain Filter"
+                }
+            }
+        },
         "client_side_defenseDeviceIDFilter": {
             "type": "object",
             "description": "Query Filter by device id filter strings",
@@ -8221,6 +9190,79 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                }
+            }
+        },
+        "client_side_defenseDomMutation": {
+            "type": "object",
+            "description": "DOM mutation performed by a script",
+            "title": "DomMutation",
+            "x-displayname": "DOM Mutation",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.DomMutation",
+            "properties": {
+                "api": {
+                    "type": "string",
+                    "description": " API used to perform the DOM mutation\n\nExample: - \"appendChild\"-",
+                    "title": "api",
+                    "x-displayname": "API",
+                    "x-ves-example": "appendChild"
+                },
+                "element": {
+                    "type": "string",
+                    "description": " DOM element involved in the mutation\n\nExample: - \"script\"-",
+                    "title": "element",
+                    "x-displayname": "Element",
+                    "x-ves-example": "script"
+                },
+                "first_seen": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in milliseconds\n First seen time\n\nExample: - \"1650603600000\"-",
+                    "title": "first_seen",
+                    "format": "int64",
+                    "x-displayname": "First Seen",
+                    "x-ves-example": "1650603600000"
+                },
+                "last_seen": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in milliseconds\n Last seen time\n\nExample: - \"1650609600000\"-",
+                    "title": "last_seen",
+                    "format": "int64",
+                    "x-displayname": "Last Seen",
+                    "x-ves-example": "1650609600000"
+                },
+                "operation": {
+                    "type": "string",
+                    "description": " Operation performed on the element\n\nExample: - \"add\"-",
+                    "title": "operation",
+                    "x-displayname": "Operation",
+                    "x-ves-example": "add"
+                }
+            }
+        },
+        "client_side_defenseDomMutationsFilters": {
+            "type": "object",
+            "description": "ListDomMutationsByScript API query filters",
+            "title": "DomMutationsFilters",
+            "x-displayname": "DOM Mutations Filters",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.DomMutationsFilters",
+            "properties": {
+                "api_filter": {
+                    "description": " Query filter by the API used to perform the DOM mutation",
+                    "title": "api_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "API Filter"
+                },
+                "element_filter": {
+                    "description": " Query filter by element",
+                    "title": "element_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "Element Filter"
+                },
+                "operation_filter": {
+                    "description": " Query filter by operation",
+                    "title": "operation_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "Operation Filter"
                 }
             }
         },
@@ -9371,11 +10413,176 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "client_side_defenseListCookieOperationsByScriptRequest": {
+            "type": "object",
+            "description": "Request to list cookie operations for a script",
+            "title": "ListCookieOperationsByScriptRequest",
+            "x-displayname": "List Cookie Operations By Script Request",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.ListCookieOperationsByScriptRequest",
+            "properties": {
+                "end_time": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in seconds\n fetch cookie operations whose timestamp \u003c= end_time\n\nExample: - \"1570194300\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "end_time",
+                    "x-displayname": "End Time",
+                    "x-ves-example": "1570194300",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                },
+                "filters": {
+                    "description": " Additional filters for the query",
+                    "title": "filters",
+                    "$ref": "#/definitions/client_side_defenseCookieOperationsFilters",
+                    "x-displayname": "Filters"
+                },
+                "id": {
+                    "type": "string",
+                    "description": " script id\n\nExample: - \"s-1234567\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "id",
+                    "x-displayname": "Script ID",
+                    "x-ves-example": "s-1234567",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace\n\nExample: - \"default\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "default"
+                },
+                "page_number": {
+                    "type": "integer",
+                    "description": " One-indexed page number (starts from 1), page_number and page_size are optional when page_token is specified\n\nExample: - \"10\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "title": "page_number",
+                    "format": "int32",
+                    "x-displayname": "Page Number",
+                    "x-ves-example": "10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
+                "page_size": {
+                    "type": "integer",
+                    "description": " The maximum number of cookie operations to return per page\n\nExample: - \"500\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1000\n",
+                    "title": "page_size",
+                    "format": "int32",
+                    "x-displayname": "Page Size",
+                    "x-ves-example": "500",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "1000"
+                    }
+                },
+                "page_token": {
+                    "type": "string",
+                    "description": " page_token is the value of ListCookieOperationsByScriptResponse.next_page_token from previous request\n\nExample: - \"cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
+                    "title": "page_token",
+                    "maxLength": 512,
+                    "x-displayname": "Page Token",
+                    "x-ves-example": "cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
+                },
+                "sorts": {
+                    "type": "array",
+                    "description": " Additional sort criteria",
+                    "title": "sorts",
+                    "items": {
+                        "$ref": "#/definitions/client_side_defenseSort"
+                    },
+                    "x-displayname": "Sorts"
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in seconds\n fetch cookie operations whose timestamp \u003e= start_time\n\nExample: - \"1570194000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "start_time",
+                    "x-displayname": "Start Time",
+                    "x-ves-example": "1570194000",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                }
+            }
+        },
+        "client_side_defenseListCookieOperationsByScriptResponse": {
+            "type": "object",
+            "description": "Response to list cookie operations for a script",
+            "title": "ListCookieOperationsByScriptResponse",
+            "x-displayname": "List Cookie Operations By Script Response",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.ListCookieOperationsByScriptResponse",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " List of cookie operations for the script",
+                    "title": "items",
+                    "items": {
+                        "$ref": "#/definitions/client_side_defenseCookieOperation"
+                    },
+                    "x-displayname": "Cookie Operations"
+                },
+                "next_page_token": {
+                    "type": "string",
+                    "description": " Opaque value passed back along with additional calls. All filtering will stay the same\n\nExample: - \"cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y\"-",
+                    "title": "next_page_token",
+                    "x-displayname": "Next Page Token",
+                    "x-ves-example": "cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y"
+                },
+                "page_number": {
+                    "type": "integer",
+                    "description": " One-indexed page number\n\nExample: - \"2\"-",
+                    "title": "page_number",
+                    "format": "int32",
+                    "x-displayname": "Page Number",
+                    "x-ves-example": "2"
+                },
+                "page_size": {
+                    "type": "integer",
+                    "description": " The maximum number of cookie operations returned per page\n\nExample: - \"500\"-",
+                    "title": "page_size",
+                    "format": "int32",
+                    "x-displayname": "Page Size",
+                    "x-ves-example": "500"
+                },
+                "total_count": {
+                    "type": "integer",
+                    "description": " Total count of cookie operations available at time of query, and subject to change across queries\n\nExample: - \"1000\"-",
+                    "title": "total_count",
+                    "format": "int32",
+                    "x-displayname": "Total Count",
+                    "x-ves-example": "1000"
+                },
+                "total_pages": {
+                    "type": "integer",
+                    "description": " Total number of pages available depending upon requested page_size\n\nExample: - \"2\"-",
+                    "title": "total_pages",
+                    "format": "int32",
+                    "x-displayname": "Total Pages",
+                    "x-ves-example": "2"
+                },
+                "total_size": {
+                    "type": "integer",
+                    "description": " Total size of cookie operations\n\nExample: - 10-",
+                    "title": "total_size",
+                    "format": "int32",
+                    "x-displayname": "Total Size"
+                }
+            }
+        },
         "client_side_defenseListDetectedDomainsRequest": {
             "type": "object",
-            "description": "Any payload to be passed on the Get Provision API",
-            "title": "GetDetectedDomainsRequest",
-            "x-displayname": "Get Domains Request",
+            "description": "Request body for the ListDetectedDomains API",
+            "title": "ListDetectedDomainsRequest",
+            "x-displayname": "List Domains Request",
             "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.ListDetectedDomainsRequest",
             "properties": {
                 "duration": {
@@ -9391,6 +10598,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "End time",
                     "x-displayname": "End Time",
                     "x-ves-example": "1570194300"
+                },
+                "filters": {
+                    "description": " Additional filters for the query.",
+                    "title": "filters",
+                    "$ref": "#/definitions/client_side_defenseDetectedDomainsFilters",
+                    "x-displayname": "Filters"
                 },
                 "locations": {
                     "type": "string",
@@ -9460,9 +10673,9 @@ var CustomAPISwaggerJSON string = `{
         },
         "client_side_defenseListDetectedDomainsResponse": {
             "type": "object",
-            "description": "Get detected domains monitoring data",
-            "title": "GetDetectedDomainsResponse",
-            "x-displayname": "Get Domains Response",
+            "description": "List detected domains monitoring data",
+            "title": "ListDetectedDomainsResponse",
+            "x-displayname": "List Domains Response",
             "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.ListDetectedDomainsResponse",
             "properties": {
                 "customer": {
@@ -9531,6 +10744,171 @@ var CustomAPISwaggerJSON string = `{
                     "format": "int32",
                     "x-displayname": "Total Pages",
                     "x-ves-example": "2"
+                }
+            }
+        },
+        "client_side_defenseListDomMutationsByScriptRequest": {
+            "type": "object",
+            "description": "Request to list DOM mutations for a script",
+            "title": "ListDomMutationsByScriptRequest",
+            "x-displayname": "List DOM Mutations By Script Request",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.ListDomMutationsByScriptRequest",
+            "properties": {
+                "end_time": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in seconds\n fetch DOM mutations whose timestamp \u003c= end_time\n\nExample: - \"1570194300\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "end_time",
+                    "x-displayname": "End Time",
+                    "x-ves-example": "1570194300",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                },
+                "filters": {
+                    "description": " Additional filters for the query",
+                    "title": "filters",
+                    "$ref": "#/definitions/client_side_defenseDomMutationsFilters",
+                    "x-displayname": "Filters"
+                },
+                "id": {
+                    "type": "string",
+                    "description": " script id\n\nExample: - \"s-1234567\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "id",
+                    "x-displayname": "Script ID",
+                    "x-ves-example": "s-1234567",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace\n\nExample: - \"default\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "default"
+                },
+                "page_number": {
+                    "type": "integer",
+                    "description": " One-indexed page number (starts from 1), page_number and page_size are optional when page_token is specified\n\nExample: - \"10\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "title": "page_number",
+                    "format": "int32",
+                    "x-displayname": "Page Number",
+                    "x-ves-example": "10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
+                "page_size": {
+                    "type": "integer",
+                    "description": " The maximum number of DOM mutations to return per page\n\nExample: - \"500\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1000\n",
+                    "title": "page_size",
+                    "format": "int32",
+                    "x-displayname": "Page Size",
+                    "x-ves-example": "500",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "1000"
+                    }
+                },
+                "page_token": {
+                    "type": "string",
+                    "description": " page_token is the value of ListDomMutationsByScriptResponse.next_page_token from previous request\n\nExample: - \"cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
+                    "title": "page_token",
+                    "maxLength": 512,
+                    "x-displayname": "Page Token",
+                    "x-ves-example": "cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
+                },
+                "sorts": {
+                    "type": "array",
+                    "description": " Additional sort criteria",
+                    "title": "sorts",
+                    "items": {
+                        "$ref": "#/definitions/client_side_defenseSort"
+                    },
+                    "x-displayname": "Sorts"
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in seconds\n fetch DOM mutations whose timestamp \u003e= start_time\n\nExample: - \"1570194000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "start_time",
+                    "x-displayname": "Start Time",
+                    "x-ves-example": "1570194000",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                }
+            }
+        },
+        "client_side_defenseListDomMutationsByScriptResponse": {
+            "type": "object",
+            "description": "Response to list DOM mutations for a script",
+            "title": "ListDomMutationsByScriptResponse",
+            "x-displayname": "List DOM Mutations By Script Response",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.ListDomMutationsByScriptResponse",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " List of DOM mutations for the script",
+                    "title": "items",
+                    "items": {
+                        "$ref": "#/definitions/client_side_defenseDomMutation"
+                    },
+                    "x-displayname": "DOM Mutations"
+                },
+                "next_page_token": {
+                    "type": "string",
+                    "description": " Opaque value passed back along with additional calls. All filtering will stay the same\n\nExample: - \"cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y\"-",
+                    "title": "next_page_token",
+                    "x-displayname": "Next Page Token",
+                    "x-ves-example": "cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y"
+                },
+                "page_number": {
+                    "type": "integer",
+                    "description": " One-indexed page number\n\nExample: - \"2\"-",
+                    "title": "page_number",
+                    "format": "int32",
+                    "x-displayname": "Page Number",
+                    "x-ves-example": "2"
+                },
+                "page_size": {
+                    "type": "integer",
+                    "description": " The maximum number of DOM mutations returned per page\n\nExample: - \"500\"-",
+                    "title": "page_size",
+                    "format": "int32",
+                    "x-displayname": "Page Size",
+                    "x-ves-example": "500"
+                },
+                "total_count": {
+                    "type": "integer",
+                    "description": " Total count of DOM mutations available at time of query, and subject to change across queries\n\nExample: - \"1000\"-",
+                    "title": "total_count",
+                    "format": "int32",
+                    "x-displayname": "Total Count",
+                    "x-ves-example": "1000"
+                },
+                "total_pages": {
+                    "type": "integer",
+                    "description": " Total number of pages available depending upon requested page_size\n\nExample: - \"2\"-",
+                    "title": "total_pages",
+                    "format": "int32",
+                    "x-displayname": "Total Pages",
+                    "x-ves-example": "2"
+                },
+                "total_size": {
+                    "type": "integer",
+                    "description": " Total size of DOM mutations\n\nExample: - 10-",
+                    "title": "total_size",
+                    "format": "int32",
+                    "x-displayname": "Total Size"
                 }
             }
         },
@@ -9982,6 +11360,171 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "client_side_defenseListStorageOperationsByScriptRequest": {
+            "type": "object",
+            "description": "Request to list storage operations for a script",
+            "title": "ListStorageOperationsByScriptRequest",
+            "x-displayname": "List Storage Operations By Script Request",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.ListStorageOperationsByScriptRequest",
+            "properties": {
+                "end_time": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in seconds\n fetch storage operations whose timestamp \u003c= end_time\n\nExample: - \"1570194300\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "end_time",
+                    "x-displayname": "End Time",
+                    "x-ves-example": "1570194300",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                },
+                "filters": {
+                    "description": " Additional filters for the query",
+                    "title": "filters",
+                    "$ref": "#/definitions/client_side_defenseStorageOperationsFilters",
+                    "x-displayname": "Filters"
+                },
+                "id": {
+                    "type": "string",
+                    "description": " script id\n\nExample: - \"s-1234567\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "id",
+                    "x-displayname": "Script ID",
+                    "x-ves-example": "s-1234567",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace\n\nExample: - \"default\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "default"
+                },
+                "page_number": {
+                    "type": "integer",
+                    "description": " One-indexed page number (starts from 1), page_number and page_size are optional when page_token is specified\n\nExample: - \"10\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "title": "page_number",
+                    "format": "int32",
+                    "x-displayname": "Page Number",
+                    "x-ves-example": "10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
+                "page_size": {
+                    "type": "integer",
+                    "description": " The maximum number of storage operations to return per page\n\nExample: - \"500\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1000\n",
+                    "title": "page_size",
+                    "format": "int32",
+                    "x-displayname": "Page Size",
+                    "x-ves-example": "500",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "1000"
+                    }
+                },
+                "page_token": {
+                    "type": "string",
+                    "description": " page_token is the value of ListStorageOperationsByScriptResponse.next_page_token from previous request\n\nExample: - \"cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
+                    "title": "page_token",
+                    "maxLength": 512,
+                    "x-displayname": "Page Token",
+                    "x-ves-example": "cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
+                },
+                "sorts": {
+                    "type": "array",
+                    "description": " Additional sort criteria",
+                    "title": "sorts",
+                    "items": {
+                        "$ref": "#/definitions/client_side_defenseSort"
+                    },
+                    "x-displayname": "Sorts"
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in seconds\n fetch storage operations whose timestamp \u003e= start_time\n\nExample: - \"1570194000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "start_time",
+                    "x-displayname": "Start Time",
+                    "x-ves-example": "1570194000",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                }
+            }
+        },
+        "client_side_defenseListStorageOperationsByScriptResponse": {
+            "type": "object",
+            "description": "Response to list storage operations for a script",
+            "title": "ListStorageOperationsByScriptResponse",
+            "x-displayname": "List Storage Operations By Script Response",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.ListStorageOperationsByScriptResponse",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " List of storage operations for the script",
+                    "title": "items",
+                    "items": {
+                        "$ref": "#/definitions/client_side_defenseStorageOperation"
+                    },
+                    "x-displayname": "Storage Operations"
+                },
+                "next_page_token": {
+                    "type": "string",
+                    "description": " Opaque value passed back along with additional calls. All filtering will stay the same\n\nExample: - \"cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y\"-",
+                    "title": "next_page_token",
+                    "x-displayname": "Next Page Token",
+                    "x-ves-example": "cGFnZV9zaXplPTUwMCZwYWdlX251bWJlcj0y"
+                },
+                "page_number": {
+                    "type": "integer",
+                    "description": " One-indexed page number\n\nExample: - \"2\"-",
+                    "title": "page_number",
+                    "format": "int32",
+                    "x-displayname": "Page Number",
+                    "x-ves-example": "2"
+                },
+                "page_size": {
+                    "type": "integer",
+                    "description": " The maximum number of storage operations returned per page\n\nExample: - \"500\"-",
+                    "title": "page_size",
+                    "format": "int32",
+                    "x-displayname": "Page Size",
+                    "x-ves-example": "500"
+                },
+                "total_count": {
+                    "type": "integer",
+                    "description": " Total count of storage operations available at time of query, and subject to change across queries\n\nExample: - \"1000\"-",
+                    "title": "total_count",
+                    "format": "int32",
+                    "x-displayname": "Total Count",
+                    "x-ves-example": "1000"
+                },
+                "total_pages": {
+                    "type": "integer",
+                    "description": " Total number of pages available depending upon requested page_size\n\nExample: - \"2\"-",
+                    "title": "total_pages",
+                    "format": "int32",
+                    "x-displayname": "Total Pages",
+                    "x-ves-example": "2"
+                },
+                "total_size": {
+                    "type": "integer",
+                    "description": " Total size of storage operations\n\nExample: - 10-",
+                    "title": "total_size",
+                    "format": "int32",
+                    "x-displayname": "Total Size"
+                }
+            }
+        },
         "client_side_defenseMitigationStatusCounts": {
             "type": "object",
             "description": "Count of scripts by mitigation status",
@@ -10410,6 +11953,20 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Approval Status",
                     "x-ves-example": "Approved"
                 },
+                "cookie_operations": {
+                    "type": "integer",
+                    "description": " Number of cookie operations performed by the script\n\nExample: - 5-",
+                    "title": "cookie_operations",
+                    "format": "int32",
+                    "x-displayname": "Cookie Operations"
+                },
+                "dom_mutations": {
+                    "type": "integer",
+                    "description": " Number of DOM mutations performed by the script\n\nExample: - 6-",
+                    "title": "dom_mutations",
+                    "format": "int32",
+                    "x-displayname": "DOM Mutations"
+                },
                 "first_seen": {
                     "type": "string",
                     "description": " format: unix epoch timestamp in milliseconds\n First seen time\n\nExample: - \"1650603600000\"-",
@@ -10498,6 +12055,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "status",
                     "x-displayname": "Script Status",
                     "x-ves-example": "Action Needed"
+                },
+                "storage_operations": {
+                    "type": "integer",
+                    "description": " Number of web storage operations performed by the script\n\nExample: - 4-",
+                    "title": "storage_operations",
+                    "format": "int32",
+                    "x-displayname": "Storage Operations"
                 }
             }
         },
@@ -10641,6 +12205,119 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaSortOrder",
                     "x-displayname": "order",
                     "x-ves-example": "['ASCENDING', 'DESCENDING']"
+                }
+            }
+        },
+        "client_side_defenseStorageOperation": {
+            "type": "object",
+            "description": "Storage operation performed by a script",
+            "title": "StorageOperation",
+            "x-displayname": "Storage Operation",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.StorageOperation",
+            "properties": {
+                "first_seen": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in milliseconds\n First seen time\n\nExample: - \"1650603600000\"-",
+                    "title": "first_seen",
+                    "format": "int64",
+                    "x-displayname": "First Seen",
+                    "x-ves-example": "1650603600000"
+                },
+                "key_name": {
+                    "type": "string",
+                    "description": " Name of the storage key\n\nExample: - \"user_token\"-",
+                    "title": "key_name",
+                    "x-displayname": "Key Name",
+                    "x-ves-example": "user_token"
+                },
+                "last_seen": {
+                    "type": "string",
+                    "description": " format: unix epoch timestamp in milliseconds\n Last seen time\n\nExample: - \"1650609600000\"-",
+                    "title": "last_seen",
+                    "format": "int64",
+                    "x-displayname": "Last Seen",
+                    "x-ves-example": "1650609600000"
+                },
+                "operation": {
+                    "type": "string",
+                    "description": " Operation performed on the storage key\n\nExample: - \"set\"-",
+                    "title": "operation",
+                    "x-displayname": "Operation",
+                    "x-ves-example": "set"
+                },
+                "storage_type": {
+                    "type": "string",
+                    "description": " Type of web storage (localStorage / sessionStorage)\n\nExample: - \"localStorage\"-",
+                    "title": "storage_type",
+                    "x-displayname": "Storage Type",
+                    "x-ves-example": "localStorage"
+                }
+            }
+        },
+        "client_side_defenseStorageOperationsFilters": {
+            "type": "object",
+            "description": "ListStorageOperationsByScript API query filters",
+            "title": "StorageOperationsFilters",
+            "x-displayname": "Storage Operations Filters",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.StorageOperationsFilters",
+            "properties": {
+                "key_name_filter": {
+                    "description": " Query filter by key name",
+                    "title": "key_name_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "Key Name Filter"
+                },
+                "operation_filter": {
+                    "description": " Query filter by operation",
+                    "title": "operation_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "Operation Filter"
+                },
+                "storage_type_filter": {
+                    "description": " Query filter by storage type",
+                    "title": "storage_type_filter",
+                    "$ref": "#/definitions/client_side_defenseStringFilter",
+                    "x-displayname": "Storage Type Filter"
+                }
+            }
+        },
+        "client_side_defenseStringFilter": {
+            "type": "object",
+            "description": "Generic filter for string values",
+            "title": "StringFilter",
+            "x-displayname": "String Filter",
+            "x-ves-proto-message": "ves.io.schema.shape.client_side_defense.StringFilter",
+            "properties": {
+                "op": {
+                    "description": " Specify filter operator\n\nExample: - \"IN\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "op",
+                    "$ref": "#/definitions/client_side_defenseFilterOperator",
+                    "x-displayname": "Filter Operator",
+                    "x-ves-example": "IN",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "description": " An unordered list of string values\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "values",
+                    "minItems": 1,
+                    "maxItems": 64,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Values",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },

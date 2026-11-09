@@ -30,11 +30,7 @@ resource "volterra_securemesh_site" "example" {
 
   // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
 
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  logs_streaming_disabled = true
   master_node_configuration {
     name = "master-0"
 
@@ -43,44 +39,8 @@ resource "volterra_securemesh_site" "example" {
 
   // One of the arguments from this list "custom_network_config default_network_config" must be set
 
-  custom_network_config {
-    bgp_peer_address = "10.1.1.1"
-
-    bgp_peer_address_v6 = "3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326"
-
-    bgp_router_id = "10.1.1.1"
-
-    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
-
-    no_forward_proxy = true
-
-    // One of the arguments from this list "global_network_list no_global_network" must be set
-
-    no_global_network = true
-
-    // One of the arguments from this list "default_interface_config interface_list" must be set
-
-    default_interface_config = true
-
-    // One of the arguments from this list "active_enhanced_firewall_policies active_network_policies no_network_policy" must be set
-
-    no_network_policy = true
-
-    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
-
-    sm_connection_public_ip = true
-
-    // One of the arguments from this list "default_sli_config sli_config" can be set
-
-    default_sli_config = true
-
-    // One of the arguments from this list "default_config slo_config" must be set
-
-    default_config = true
-    tunnel_dead_timeout = "0"
-    vip_vrrp_mode = "vip_vrrp_mode"
-  }
-  volterra_certified_hw = ["isv-8000-series-voltmesh"]
+  default_network_config = true
+  volterra_certified_hw  = ["isv-8000-series-voltmesh"]
 }
 
 ```
@@ -220,7 +180,7 @@ F5XC Software Details.
 
 Select WAF Signatures Update Mode for the site. By default, new signatures will be applied manually..
 
-###### One of the arguments from this list "automatic, manual" can be set
+###### One of the arguments from this list "automatic, manual" must be set
 
 `automatic` - (Optional) New WAF signatures will be applied automatically as soon as they are released. (`Bool`).
 
@@ -378,11 +338,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -582,7 +544,7 @@ Networking configuration for dedicated interface is configured locally on site e
 
 `monitor_disabled` - (Optional) Link quality monitoring disabled on the interface. (`Bool`).
 
-`mtu` - (Optional) When configured, mtu must be between 512 and 8000 (`Int`).
+`mtu` - (Optional) When configured, mtu must be between 512 and 9000 (`Int`).
 
 ###### One of the arguments from this list "cluster, node" must be set
 
@@ -604,7 +566,7 @@ Fallback management interfaces can be made into dedicated management interface.
 
 `device` - (Required) Name of the device for which interface is configured (`String`).
 
-`mtu` - (Optional) When configured, mtu must be between 512 and 8000 (`Int`).
+`mtu` - (Optional) When configured, mtu must be between 512 and 9000 (`Int`).
 
 ###### One of the arguments from this list "cluster, node" must be set
 
@@ -644,7 +606,7 @@ Ethernet interface configuration..
 
 `monitor_disabled` - (Optional) Link quality monitoring disabled on the interface. (`Bool`).
 
-`mtu` - (Optional) When configured, mtu must be between 512 and 8000 (`Int`).
+`mtu` - (Optional) When configured, mtu must be between 512 and 9000 (`Int`).
 
 ###### One of the arguments from this list "inside_network, ip_fabric_network, segment_network, site_local_inside_network, site_local_network, srv6_network, storage_network" must be set
 
@@ -708,7 +670,7 @@ Loopback device..
 
 `static_ipv6_address` - (Optional) Interface IP is configured statically. See [Ipv6 Address Choice Static Ipv6 Address ](#ipv6-address-choice-static-ipv6-address) below for details.
 
-`mtu` - (Optional) When configured, mtu must be between 512 and 8000 (`Int`).
+`mtu` - (Optional) When configured, mtu must be between 512 and 9000 (`Int`).
 
 ###### One of the arguments from this list "ip_fabric_network, site_local_inside_network, site_local_network" must be set
 
@@ -1111,6 +1073,10 @@ Clear Secret is used for the secrets that are not encrypted.
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
 
 ### Secret Info Oneof Vault Secret Info
 

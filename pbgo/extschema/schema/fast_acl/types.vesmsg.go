@@ -80,8 +80,43 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProtocolPolicerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolPolicerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *CreateSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetProtocolPolicer()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("protocol_policer.Object")
+	dri := db.DRefInfo{
+		RefdType:   "protocol_policer.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "protocol_policer",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *CreateSpecType) GetProtocolPolicerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetProtocolPolicer()
 	if vref == nil {
 		return nil, nil
@@ -156,6 +191,47 @@ func (m *CreateSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetLegacyAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyAcl().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "legacy_acl." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetSiteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteChoice().(type) {
+	case *CreateSpecType_SiteAcl:
+		drInfos, err := m.GetSiteAcl().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteAcl().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_acl." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_ReAcl:
+		drInfos, err := m.GetReAcl().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetReAcl().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "re_acl." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_LegacyAcl:
+		drInfos, err := m.GetLegacyAcl().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLegacyAcl().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -712,6 +788,24 @@ func (m *FastACLRuleType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *FastACLRuleType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetActionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetActionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSourceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSourceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *FastACLRuleType) GetActionDRefInfo() ([]db.DRefInfo, error) {
@@ -721,6 +815,22 @@ func (m *FastACLRuleType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAction().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "action." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *FastACLRuleType) GetActionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAction() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAction().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAction().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -741,6 +851,29 @@ func (m *FastACLRuleType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ip_prefix_set." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *FastACLRuleType) GetSourceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSource() == nil {
+		return nil, nil
+	}
+	switch m.GetSource().(type) {
+	case *FastACLRuleType_Prefix:
+		return nil, nil
+	case *FastACLRuleType_IpPrefixSet:
+		drInfos, err := m.GetIpPrefixSet().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1034,8 +1167,43 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProtocolPolicerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolPolicerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetProtocolPolicer()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("protocol_policer.Object")
+	dri := db.DRefInfo{
+		RefdType:   "protocol_policer.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "protocol_policer",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GetSpecType) GetProtocolPolicerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetProtocolPolicer()
 	if vref == nil {
 		return nil, nil
@@ -1110,6 +1278,47 @@ func (m *GetSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetLegacyAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyAcl().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "legacy_acl." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetSiteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteChoice().(type) {
+	case *GetSpecType_SiteAcl:
+		drInfos, err := m.GetSiteAcl().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteAcl().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_acl." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_ReAcl:
+		drInfos, err := m.GetReAcl().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetReAcl().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "re_acl." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_LegacyAcl:
+		drInfos, err := m.GetLegacyAcl().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLegacyAcl().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1303,6 +1512,39 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetConfigChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetConfigChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDefaultProtocolPolicerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultProtocolPolicerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProtocolPolicerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolPolicerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSourceRulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSourceRulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1324,6 +1566,39 @@ func (m *GlobalSpecType) GetConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetReAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetReAcl().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "re_acl." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_LegacyAcl:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetConfigChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConfigChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetConfigChoice().(type) {
+	case *GlobalSpecType_SiteAcl:
+		drInfos, err := m.GetSiteAcl().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteAcl().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_acl." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_ReAcl:
+		drInfos, err := m.GetReAcl().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetReAcl().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1360,6 +1635,34 @@ func (m *GlobalSpecType) GetDefaultProtocolPolicerDRefInfo() ([]db.DRefInfo, err
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDefaultProtocolPolicerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetDefaultProtocolPolicer()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.default_protocol_policer[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "protocol_policer.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "default_protocol_policer",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetDefaultProtocolPolicerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetDefaultProtocolPolicerDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1381,6 +1684,23 @@ func (m *GlobalSpecType) GetDefaultProtocolPolicerDBEntries(ctx context.Context,
 }
 
 func (m *GlobalSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetProtocolPolicer()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("protocol_policer.Object")
+	dri := db.DRefInfo{
+		RefdType:   "protocol_policer.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "protocol_policer",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetProtocolPolicerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetProtocolPolicer()
 	if vref == nil {
 		return nil, nil
@@ -1448,6 +1768,34 @@ func (m *GlobalSpecType) GetSourceRulesDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetSourceRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetSourceRules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.source_rules[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "fast_acl_rule.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "source_rules",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetSourceRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetSourceRulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1469,6 +1817,23 @@ func (m *GlobalSpecType) GetSourceRulesDBEntries(ctx context.Context, d db.Inter
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1863,6 +2228,13 @@ func (m *LegacyACLType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSourceRulesDRefInfo()
 }
+func (m *LegacyACLType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSourceRulesDRefInfoForOverlay(generateHash)
+}
 
 func (m *LegacyACLType) GetSourceRulesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetSourceRules()
@@ -1877,6 +2249,30 @@ func (m *LegacyACLType) GetSourceRulesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("fast_acl_rule.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "fast_acl_rule.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "source_rules",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *LegacyACLType) GetSourceRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSourceRules()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("LegacyACLType.source_rules[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("fast_acl_rule.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "fast_acl_rule.Object",
 			RefdTenant: vref.Tenant,
@@ -2136,6 +2532,24 @@ func (m *ReACLType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReACLType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFastAclRulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFastAclRulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVipChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVipChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReACLType) GetFastAclRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -2147,6 +2561,26 @@ func (m *ReACLType) GetFastAclRulesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetFastAclRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("fast_acl_rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReACLType) GetFastAclRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFastAclRules() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetFastAclRules() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetFastAclRules() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -2171,6 +2605,31 @@ func (m *ReACLType) GetVipChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetSelectedTenantVip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSelectedTenantVip().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "selected_tenant_vip." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReACLType) GetVipChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVipChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetVipChoice().(type) {
+	case *ReACLType_AllPublicVips:
+		return nil, nil
+	case *ReACLType_DefaultTenantVip:
+		return nil, nil
+	case *ReACLType_SelectedTenantVip:
+		drInfos, err := m.GetSelectedTenantVip().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSelectedTenantVip().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2404,8 +2863,43 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProtocolPolicerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolPolicerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ReplaceSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetProtocolPolicer()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("protocol_policer.Object")
+	dri := db.DRefInfo{
+		RefdType:   "protocol_policer.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "protocol_policer",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ReplaceSpecType) GetProtocolPolicerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetProtocolPolicer()
 	if vref == nil {
 		return nil, nil
@@ -2480,6 +2974,47 @@ func (m *ReplaceSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetLegacyAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyAcl().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "legacy_acl." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetSiteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteChoice().(type) {
+	case *ReplaceSpecType_SiteAcl:
+		drInfos, err := m.GetSiteAcl().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteAcl().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_acl." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_ReAcl:
+		drInfos, err := m.GetReAcl().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetReAcl().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "re_acl." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_LegacyAcl:
+		drInfos, err := m.GetLegacyAcl().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLegacyAcl().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2647,6 +3182,13 @@ func (m *SelectedTenantVIPsType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPublicIpRefsDRefInfo()
 }
+func (m *SelectedTenantVIPsType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPublicIpRefsDRefInfoForOverlay(generateHash)
+}
 
 func (m *SelectedTenantVIPsType) GetPublicIpRefsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetPublicIpRefs()
@@ -2661,6 +3203,30 @@ func (m *SelectedTenantVIPsType) GetPublicIpRefsDRefInfo() ([]db.DRefInfo, error
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("public_ip.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "public_ip.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "public_ip_refs",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *SelectedTenantVIPsType) GetPublicIpRefsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetPublicIpRefs()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("SelectedTenantVIPsType.public_ip_refs[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("public_ip.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "public_ip.Object",
 			RefdTenant: vref.Tenant,
@@ -2994,6 +3560,13 @@ func (m *SiteACLType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetFastAclRulesDRefInfo()
 }
+func (m *SiteACLType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetFastAclRulesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SiteACLType) GetFastAclRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -3005,6 +3578,26 @@ func (m *SiteACLType) GetFastAclRulesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetFastAclRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("fast_acl_rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SiteACLType) GetFastAclRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFastAclRules() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetFastAclRules() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetFastAclRules() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]

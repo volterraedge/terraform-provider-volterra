@@ -34,6 +34,19 @@ func (m *CreateRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateRequest) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+	if err := m.GetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateRequest.spec")
+	}
+
+	return nil
+}
+
 func (m *CreateRequest) DeepCopy() *CreateRequest {
 	if m == nil {
 		return nil
@@ -114,6 +127,19 @@ func (m *CreateResponse) ToJSON() (string, error) {
 
 func (m *CreateResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateResponse) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+	if err := m.GetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateResponse.spec")
+	}
+
+	return nil
 }
 
 func (m *CreateResponse) DeepCopy() *CreateResponse {
@@ -376,6 +402,25 @@ func (m *GetResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *GetResponse) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+	if err := m.GetCreateForm().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetResponse.create_form")
+	}
+	if err := m.GetReplaceForm().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetResponse.replace_form")
+	}
+	if err := m.GetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetResponse.spec")
+	}
+
+	return nil
+}
+
 func (m *GetResponse) DeepCopy() *GetResponse {
 	if m == nil {
 		return nil
@@ -404,6 +449,13 @@ func (m *GetResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
+func (m *GetResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -627,6 +679,21 @@ func (m *ListResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *ListResponse) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+	for idx, e := range m.GetItems() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting ListResponse.items idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
 func (m *ListResponse) DeepCopy() *ListResponse {
 	if m == nil {
 		return nil
@@ -661,6 +728,13 @@ func (m *ListResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetItemsDRefInfo()
 }
+func (m *ListResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetItemsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ListResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
@@ -672,6 +746,26 @@ func (m *ListResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetItems() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("items[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ListResponse) GetItemsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetItems() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetItems() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetItems() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -742,6 +836,19 @@ func (m *ListResponseItem) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *ListResponseItem) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+	if err := m.GetGetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ListResponseItem.get_spec")
+	}
+
+	return nil
+}
+
 func (m *ListResponseItem) DeepCopy() *ListResponseItem {
 	if m == nil {
 		return nil
@@ -770,6 +877,13 @@ func (m *ListResponseItem) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *ListResponseItem) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
+func (m *ListResponseItem) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -906,6 +1020,19 @@ func (m *ReplaceRequest) ToJSON() (string, error) {
 
 func (m *ReplaceRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceRequest) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+	if err := m.GetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceRequest.spec")
+	}
+
+	return nil
 }
 
 func (m *ReplaceRequest) DeepCopy() *ReplaceRequest {

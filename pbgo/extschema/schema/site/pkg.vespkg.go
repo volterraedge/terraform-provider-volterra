@@ -127,6 +127,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.PublishVIPParamsPerAz"] = PublishVIPParamsPerAzValidator()
 	vr["ves.io.schema.site.ReMeshGroup"] = ReMeshGroupValidator()
 	vr["ves.io.schema.site.ReplaceSpecType"] = ReplaceSpecTypeValidator()
+	vr["ves.io.schema.site.RevokeK8SServerSubCARequest"] = RevokeK8SServerSubCARequestValidator()
+	vr["ves.io.schema.site.RevokeK8SServerSubCAResponse"] = RevokeK8SServerSubCAResponseValidator()
 	vr["ves.io.schema.site.RevokeKubeConfigReq"] = RevokeKubeConfigReqValidator()
 	vr["ves.io.schema.site.RouteServerPeeringStatusType"] = RouteServerPeeringStatusTypeValidator()
 	vr["ves.io.schema.site.RouteServerStatusType"] = RouteServerStatusTypeValidator()

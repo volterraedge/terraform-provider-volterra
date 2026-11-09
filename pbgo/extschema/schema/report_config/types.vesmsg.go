@@ -69,6 +69,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetReportRecipientsDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReportRecipientsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetReportRecipientsDRefInfo() ([]db.DRefInfo, error) {
@@ -78,6 +85,22 @@ func (m *CreateSpecType) GetReportRecipientsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetReportRecipients().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetReportRecipients().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "report_recipients." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetReportRecipientsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReportRecipients() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetReportRecipients().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetReportRecipients().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -230,6 +253,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetReportRecipientsDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReportRecipientsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetReportRecipientsDRefInfo() ([]db.DRefInfo, error) {
@@ -239,6 +269,22 @@ func (m *GetSpecType) GetReportRecipientsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetReportRecipients().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetReportRecipients().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "report_recipients." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetReportRecipientsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReportRecipients() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetReportRecipients().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetReportRecipients().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -391,6 +437,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetReportRecipientsDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReportRecipientsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetReportRecipientsDRefInfo() ([]db.DRefInfo, error) {
@@ -400,6 +453,22 @@ func (m *GlobalSpecType) GetReportRecipientsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetReportRecipients().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetReportRecipients().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "report_recipients." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetReportRecipientsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReportRecipients() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetReportRecipients().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetReportRecipients().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -687,6 +756,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetReportRecipientsDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReportRecipientsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetReportRecipientsDRefInfo() ([]db.DRefInfo, error) {
@@ -696,6 +772,22 @@ func (m *ReplaceSpecType) GetReportRecipientsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetReportRecipients().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetReportRecipients().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "report_recipients." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetReportRecipientsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReportRecipients() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetReportRecipients().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetReportRecipients().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1218,6 +1310,13 @@ func (m *ReportRecipients) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetUserGroupsDRefInfo()
 }
+func (m *ReportRecipients) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetUserGroupsDRefInfoForOverlay(generateHash)
+}
 
 func (m *ReportRecipients) GetUserGroupsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetUserGroups()
@@ -1232,6 +1331,30 @@ func (m *ReportRecipients) GetUserGroupsDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("user_group.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "user_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "user_groups",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReportRecipients) GetUserGroupsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetUserGroups()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ReportRecipients.user_groups[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("user_group.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "user_group.Object",
 			RefdTenant: vref.Tenant,

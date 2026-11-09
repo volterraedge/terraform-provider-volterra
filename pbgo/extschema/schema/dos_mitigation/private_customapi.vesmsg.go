@@ -66,6 +66,13 @@ func (m *CreateBulkRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return nil, nil
 }
+func (m *CreateBulkRequest) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
 
 type ValidateCreateBulkRequest struct {
 	FldValidators map[string]db.ValidatorFunc

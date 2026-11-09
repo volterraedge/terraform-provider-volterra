@@ -105,6 +105,11 @@ func resourceVolterraCdnCacheRule() *schema.Resource {
 													Type:     schema.TypeBool,
 													Optional: true,
 												},
+
+												"serve_stale": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
 											},
 										},
 									},
@@ -128,6 +133,11 @@ func resourceVolterraCdnCacheRule() *schema.Resource {
 												},
 
 												"ignore_response_cookie": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"serve_stale": {
 													Type:     schema.TypeBool,
 													Optional: true,
 												},
@@ -611,6 +621,12 @@ func resourceVolterraCdnCacheRuleCreate(d *schema.ResourceData, meta interface{}
 
 										}
 
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeProxyHostRequestUri.ServeStale = v.(bool)
+
+										}
+
 									}
 								}
 
@@ -643,6 +659,12 @@ func resourceVolterraCdnCacheRuleCreate(d *schema.ResourceData, meta interface{}
 										if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 											eligibleForCacheInt.SchemeProxyHostUri.IgnoreResponseCookie = v.(bool)
+
+										}
+
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeProxyHostUri.ServeStale = v.(bool)
 
 										}
 
@@ -1399,6 +1421,12 @@ func resourceVolterraCdnCacheRuleUpdate(d *schema.ResourceData, meta interface{}
 
 										}
 
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeProxyHostRequestUri.ServeStale = v.(bool)
+
+										}
+
 									}
 								}
 
@@ -1431,6 +1459,12 @@ func resourceVolterraCdnCacheRuleUpdate(d *schema.ResourceData, meta interface{}
 										if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 											eligibleForCacheInt.SchemeProxyHostUri.IgnoreResponseCookie = v.(bool)
+
+										}
+
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeProxyHostUri.ServeStale = v.(bool)
 
 										}
 

@@ -238,8 +238,39 @@ func (m *APool) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetHealthCheckChoiceDRefInfo()
 }
+func (m *APool) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHealthCheckChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *APool) GetHealthCheckChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetHealthCheckChoice().(type) {
+	case *APool_DisableHealthCheck:
+		return nil, nil
+	case *APool_HealthCheck:
+		vref := m.GetHealthCheck()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_lb_health_check.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dns_lb_health_check.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "health_check",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *APool) GetHealthCheckChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetHealthCheckChoice().(type) {
 	case *APool_DisableHealthCheck:
 		return nil, nil
@@ -896,8 +927,39 @@ func (m *CNAMEPool) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetHealthCheckChoiceDRefInfo()
 }
+func (m *CNAMEPool) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHealthCheckChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *CNAMEPool) GetHealthCheckChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetHealthCheckChoice().(type) {
+	case *CNAMEPool_DisableHealthCheck:
+		return nil, nil
+	case *CNAMEPool_HealthCheck:
+		vref := m.GetHealthCheck()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_lb_health_check.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dns_lb_health_check.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "health_check",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *CNAMEPool) GetHealthCheckChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetHealthCheckChoice().(type) {
 	case *CNAMEPool_DisableHealthCheck:
 		return nil, nil
@@ -1157,6 +1219,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPoolTypeChoiceDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPoolTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1180,6 +1249,43 @@ func (m *CreateSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetCnamePool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCnamePool().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cname_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_MxPool:
+		return nil, nil
+	case *CreateSpecType_SrvPool:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetPoolTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPoolTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPoolTypeChoice().(type) {
+	case *CreateSpecType_APool:
+		drInfos, err := m.GetAPool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAPool().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "a_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_AaaaPool:
+		return nil, nil
+	case *CreateSpecType_CnamePool:
+		drInfos, err := m.GetCnamePool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCnamePool().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1394,7 +1500,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhTtlChoiceTtl := v.TtlChoiceTtlValidationRuleHandler
 	rulesTtlChoiceTtl := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "2147483647",
+		"ves.io.schema.rules.uint32.lte": "86400",
 	}
 	vFnMap["ttl_choice.ttl"], err = vrhTtlChoiceTtl(rulesTtlChoiceTtl)
 	if err != nil {
@@ -1481,6 +1587,24 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDnsLoadBalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDnsLoadBalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPoolTypeChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPoolTypeChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetDnsLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetDnsLoadBalancers()
@@ -1495,6 +1619,30 @@ func (m *GetSpecType) GetDnsLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dns_load_balancer.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_load_balancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_load_balancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetDnsLoadBalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsLoadBalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.dns_load_balancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_load_balancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "dns_load_balancer.Object",
 			RefdTenant: vref.Tenant,
@@ -1557,6 +1705,43 @@ func (m *GetSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetCnamePool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCnamePool().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cname_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_MxPool:
+		return nil, nil
+	case *GetSpecType_SrvPool:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetPoolTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPoolTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPoolTypeChoice().(type) {
+	case *GetSpecType_APool:
+		drInfos, err := m.GetAPool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAPool().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "a_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_AaaaPool:
+		return nil, nil
+	case *GetSpecType_CnamePool:
+		drInfos, err := m.GetCnamePool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCnamePool().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1780,7 +1965,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhTtlChoiceTtl := v.TtlChoiceTtlValidationRuleHandler
 	rulesTtlChoiceTtl := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "2147483647",
+		"ves.io.schema.rules.uint32.lte": "86400",
 	}
 	vFnMap["ttl_choice.ttl"], err = vrhTtlChoiceTtl(rulesTtlChoiceTtl)
 	if err != nil {
@@ -1868,6 +2053,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDnsLoadBalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDnsLoadBalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPoolTypeChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPoolTypeChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetDnsLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetDnsLoadBalancers()
@@ -1882,6 +2085,30 @@ func (m *GlobalSpecType) GetDnsLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dns_load_balancer.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_load_balancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_load_balancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetDnsLoadBalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsLoadBalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dns_load_balancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_load_balancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "dns_load_balancer.Object",
 			RefdTenant: vref.Tenant,
@@ -1944,6 +2171,43 @@ func (m *GlobalSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetCnamePool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCnamePool().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cname_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_MxPool:
+		return nil, nil
+	case *GlobalSpecType_SrvPool:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetPoolTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPoolTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPoolTypeChoice().(type) {
+	case *GlobalSpecType_APool:
+		drInfos, err := m.GetAPool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAPool().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "a_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_AaaaPool:
+		return nil, nil
+	case *GlobalSpecType_CnamePool:
+		drInfos, err := m.GetCnamePool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCnamePool().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2167,7 +2431,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhTtlChoiceTtl := v.TtlChoiceTtlValidationRuleHandler
 	rulesTtlChoiceTtl := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "2147483647",
+		"ves.io.schema.rules.uint32.lte": "86400",
 	}
 	vFnMap["ttl_choice.ttl"], err = vrhTtlChoiceTtl(rulesTtlChoiceTtl)
 	if err != nil {
@@ -2592,6 +2856,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPoolTypeChoiceDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPoolTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2615,6 +2886,43 @@ func (m *ReplaceSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetCnamePool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCnamePool().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cname_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_MxPool:
+		return nil, nil
+	case *ReplaceSpecType_SrvPool:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetPoolTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPoolTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPoolTypeChoice().(type) {
+	case *ReplaceSpecType_APool:
+		drInfos, err := m.GetAPool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAPool().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "a_pool." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_AaaaPool:
+		return nil, nil
+	case *ReplaceSpecType_CnamePool:
+		drInfos, err := m.GetCnamePool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCnamePool().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2829,7 +3137,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhTtlChoiceTtl := v.TtlChoiceTtlValidationRuleHandler
 	rulesTtlChoiceTtl := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "2147483647",
+		"ves.io.schema.rules.uint32.lte": "86400",
 	}
 	vFnMap["ttl_choice.ttl"], err = vrhTtlChoiceTtl(rulesTtlChoiceTtl)
 	if err != nil {

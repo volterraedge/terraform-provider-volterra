@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/store"
 	"gopkg.volterra.us/stdlib/svcfw"
 )
@@ -15,6 +16,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.api_testing.SpecType"] = SpecTypeValidator()
 	vr["ves.io.schema.api_sec.api_testing.Object"] = ObjectValidator()
 	vr["ves.io.schema.api_sec.api_testing.StatusObject"] = StatusObjectValidator()
+	vr["ves.io.schema.api_sec.api_testing.StatusDone"] = StatusDoneValidator()
+	vr["ves.io.schema.api_sec.api_testing.StatusFailed"] = StatusFailedValidator()
+	vr["ves.io.schema.api_sec.api_testing.StatusInProgress"] = StatusInProgressValidator()
+	vr["ves.io.schema.api_sec.api_testing.StatusPending"] = StatusPendingValidator()
+	vr["ves.io.schema.api_sec.api_testing.UpdateScanStatusReq"] = UpdateScanStatusReqValidator()
+	vr["ves.io.schema.api_sec.api_testing.UpdateScanStatusResp"] = UpdateScanStatusRespValidator()
 	vr["ves.io.schema.api_sec.api_testing.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.api_sec.api_testing.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.api_sec.api_testing.DeleteRequest"] = DeleteRequestValidator()
@@ -26,6 +33,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.api_testing.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.api_sec.api_testing.ReplaceResponse"] = ReplaceResponseValidator()
 	vr["ves.io.schema.api_sec.api_testing.ApiKey"] = ApiKeyValidator()
+	vr["ves.io.schema.api_sec.api_testing.ApiTestScanInfo"] = ApiTestScanInfoValidator()
+	vr["ves.io.schema.api_sec.api_testing.ApiTestingStatus"] = ApiTestingStatusValidator()
 	vr["ves.io.schema.api_sec.api_testing.BasicAuthentication"] = BasicAuthenticationValidator()
 	vr["ves.io.schema.api_sec.api_testing.Bearer"] = BearerValidator()
 	vr["ves.io.schema.api_sec.api_testing.CreateSpecType"] = CreateSpecTypeValidator()
@@ -68,6 +77,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.domains.#.credentials.#.login_endpoint.json_payload.wingman_secret_info",
 	}
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_sec.api_testing.API.Create"] = "ves.io.schema.api_sec.api_testing.CreateRequest"
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.api_testing.API.Get"] = []string{
+		"status.#.conditions.#",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.api_testing.API.List"] = []string{
+		"items.#.status_set.#.conditions.#",
+	}
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.api_sec.api_testing.API.Replace"] = []string{
 		"spec.domains.#.credentials.#.api_key.value.blindfold_secret_info_internal",
 		"spec.domains.#.credentials.#.api_key.value.secret_encoding_type",
@@ -106,6 +121,21 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
+	customCSR = mdr.PvtCustomServiceRegistry
+	func() {
+		// set swagger jsons for our and external schemas
+		customCSR.SwaggerRegistry["ves.io.schema.api_sec.api_testing.Object"] = PrivateCustomAPISwaggerJSON
+		customCSR.GrpcClientRegistry["ves.io.schema.api_sec.api_testing.PrivateCustomAPI"] = NewPrivateCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.api_sec.api_testing.PrivateCustomAPI"] = NewPrivateCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.api_sec.api_testing.PrivateCustomAPI"] = RegisterPrivateCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.api_sec.api_testing.PrivateCustomAPI"] = RegisterGwPrivateCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.api_sec.api_testing.PrivateCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewPrivateCustomAPIServer(svc)
+		}
+	}()
 	csr = mdr.PubCRUDServiceRegistry
 	func() {
 		// set swagger jsons for our and external schemas

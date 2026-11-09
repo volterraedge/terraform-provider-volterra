@@ -2800,7 +2800,7 @@ var APISwaggerJSON string = `{
                 },
                 "origin": {
                     "description": " origin of the signup, from which platform signup is originated, example f5xc, aws..etc\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Origin",
+                    "title": "origin",
                     "$ref": "#/definitions/schemaSignupOrigin",
                     "x-displayname": "Origin",
                     "x-ves-required": "true",
@@ -2814,9 +2814,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaPlanType",
                     "x-displayname": "Plan Type"
                 },
+                "preferred_lma_region": {
+                    "type": "string",
+                    "description": " Preferred LMA region is used to determine which LMA instance is assigned to the tenant during sign-up.",
+                    "title": "preferred_lma_region",
+                    "x-displayname": "Preferred LMA Region"
+                },
                 "tenant_type": {
                     "description": " Type of the tenant (FREEMIUM, ENTERPRISE)\n Freemium type includes Free or individual account signups and\n Enterprise type includes all tenants signed up for a team account with a team plan or organizational plan",
-                    "title": "Tenant Type",
+                    "title": "tenant_type",
                     "$ref": "#/definitions/schemaTenantType",
                     "x-displayname": "Tenant Type"
                 }

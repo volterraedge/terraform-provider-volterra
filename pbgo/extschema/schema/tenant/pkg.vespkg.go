@@ -50,6 +50,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.tenant.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.tenant.PrivateDeactivateTenantRequest"] = PrivateDeactivateTenantRequestValidator()
 	vr["ves.io.schema.tenant.PrivateDeactivateTenantResponse"] = PrivateDeactivateTenantResponseValidator()
+	vr["ves.io.schema.tenant.RetentionPolicy"] = RetentionPolicyValidator()
 	vr["ves.io.schema.tenant.SubCA"] = SubCAValidator()
 	vr["ves.io.schema.tenant.TenantControlConfig"] = TenantControlConfigValidator()
 }

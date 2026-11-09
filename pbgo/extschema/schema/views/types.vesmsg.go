@@ -317,6 +317,13 @@ func (m *AdvertiseCustom) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAdvertiseWhereDRefInfo()
 }
+func (m *AdvertiseCustom) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAdvertiseWhereDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseCustom) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) {
@@ -328,6 +335,26 @@ func (m *AdvertiseCustom) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseWhere() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("advertise_where[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AdvertiseCustom) GetAdvertiseWhereDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseWhere() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetAdvertiseWhere() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseWhere() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -487,8 +514,32 @@ func (m *AdvertisePublic) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPublicIpDRefInfo()
 }
+func (m *AdvertisePublic) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPublicIpDRefInfoForOverlay(generateHash)
+}
 
 func (m *AdvertisePublic) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetPublicIp()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("public_ip.Object")
+	dri := db.DRefInfo{
+		RefdType:   "public_ip.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "public_ip",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *AdvertisePublic) GetPublicIpDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetPublicIp()
 	if vref == nil {
 		return nil, nil
@@ -650,6 +701,13 @@ func (m *AdvertiseSiteVsite) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAdvertiseWhereDRefInfo()
 }
+func (m *AdvertiseSiteVsite) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAdvertiseWhereDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseSiteVsite) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) {
@@ -661,6 +719,26 @@ func (m *AdvertiseSiteVsite) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) 
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseWhere() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("advertise_where[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AdvertiseSiteVsite) GetAdvertiseWhereDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseWhere() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetAdvertiseWhere() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseWhere() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1427,6 +1505,24 @@ func (m *DownstreamTLSCertsParams) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *DownstreamTLSCertsParams) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificatesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertificatesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMtlsChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMtlsChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *DownstreamTLSCertsParams) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetCertificates()
@@ -1441,6 +1537,30 @@ func (m *DownstreamTLSCertsParams) GetCertificatesDRefInfo() ([]db.DRefInfo, err
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("certificate.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "certificate.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "certificates",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *DownstreamTLSCertsParams) GetCertificatesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetCertificates()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("DownstreamTLSCertsParams.certificates[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("certificate.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "certificate.Object",
 			RefdTenant: vref.Tenant,
@@ -1493,6 +1613,29 @@ func (m *DownstreamTLSCertsParams) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error
 		drInfos, err := m.GetUseMtls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_mtls." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DownstreamTLSCertsParams) GetMtlsChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMtlsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMtlsChoice().(type) {
+	case *DownstreamTLSCertsParams_NoMtls:
+		return nil, nil
+	case *DownstreamTLSCertsParams_UseMtls:
+		drInfos, err := m.GetUseMtls().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1727,6 +1870,13 @@ func (m *DownstreamTlsParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetMtlsChoiceDRefInfo()
 }
+func (m *DownstreamTlsParamsType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetMtlsChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *DownstreamTlsParamsType) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1740,6 +1890,29 @@ func (m *DownstreamTlsParamsType) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error)
 		drInfos, err := m.GetUseMtls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_mtls." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DownstreamTlsParamsType) GetMtlsChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMtlsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMtlsChoice().(type) {
+	case *DownstreamTlsParamsType_NoMtls:
+		return nil, nil
+	case *DownstreamTlsParamsType_UseMtls:
+		drInfos, err := m.GetUseMtls().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1970,8 +2143,50 @@ func (m *DownstreamTlsValidationContext) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *DownstreamTlsValidationContext) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCrlChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCrlChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTrustedCaChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTrustedCaChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *DownstreamTlsValidationContext) GetCrlChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetCrlChoice().(type) {
+	case *DownstreamTlsValidationContext_NoCrl:
+		return nil, nil
+	case *DownstreamTlsValidationContext_Crl:
+		vref := m.GetCrl()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("crl.Object")
+		dri := db.DRefInfo{
+			RefdType:   "crl.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "crl",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *DownstreamTlsValidationContext) GetCrlChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetCrlChoice().(type) {
 	case *DownstreamTlsValidationContext_NoCrl:
 		return nil, nil
@@ -2030,6 +2245,28 @@ func (m *DownstreamTlsValidationContext) GetCrlChoiceDBEntries(ctx context.Conte
 }
 
 func (m *DownstreamTlsValidationContext) GetTrustedCaChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetTrustedCaChoice().(type) {
+	case *DownstreamTlsValidationContext_TrustedCa:
+		vref := m.GetTrustedCa()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("trusted_ca_list.Object")
+		dri := db.DRefInfo{
+			RefdType:   "trusted_ca_list.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "trusted_ca",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *DownstreamTlsValidationContext) GetTrustedCaChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetTrustedCaChoice().(type) {
 	case *DownstreamTlsValidationContext_TrustedCa:
 		vref := m.GetTrustedCa()
@@ -2452,8 +2689,32 @@ func (m *GlobalConnectorType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetGlobalVnDRefInfo()
 }
+func (m *GlobalConnectorType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGlobalVnDRefInfoForOverlay(generateHash)
+}
 
 func (m *GlobalConnectorType) GetGlobalVnDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetGlobalVn()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_network.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_network.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "global_vn",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalConnectorType) GetGlobalVnDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetGlobalVn()
 	if vref == nil {
 		return nil, nil
@@ -3897,8 +4158,41 @@ func (m *NetworkSelectType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNetworkChoiceDRefInfo()
 }
+func (m *NetworkSelectType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *NetworkSelectType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetNetworkChoice().(type) {
+	case *NetworkSelectType_SiteLocalNetwork:
+		return nil, nil
+	case *NetworkSelectType_SiteLocalInsideNetwork:
+		return nil, nil
+	case *NetworkSelectType_SegmentNetwork:
+		vref := m.GetSegmentNetwork()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("segment.Object")
+		dri := db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "segment_network",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *NetworkSelectType) GetNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetNetworkChoice().(type) {
 	case *NetworkSelectType_SiteLocalNetwork:
 		return nil, nil
@@ -4385,6 +4679,13 @@ func (m *OriginPoolListType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPoolsDRefInfo()
 }
+func (m *OriginPoolListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPoolsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *OriginPoolListType) GetPoolsDRefInfo() ([]db.DRefInfo, error) {
@@ -4396,6 +4697,26 @@ func (m *OriginPoolListType) GetPoolsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPools() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("pools[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *OriginPoolListType) GetPoolsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPools() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetPools() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPools() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -4553,8 +4874,53 @@ func (m *OriginPoolWithWeight) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPoolChoiceDRefInfo()
 }
+func (m *OriginPoolWithWeight) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPoolChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *OriginPoolWithWeight) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPoolChoice().(type) {
+	case *OriginPoolWithWeight_Pool:
+		vref := m.GetPool()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("origin_pool.Object")
+		dri := db.DRefInfo{
+			RefdType:   "origin_pool.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "pool",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *OriginPoolWithWeight_Cluster:
+		vref := m.GetCluster()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cluster.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cluster.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "cluster",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *OriginPoolWithWeight) GetPoolChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetPoolChoice().(type) {
 	case *OriginPoolWithWeight_Pool:
 		vref := m.GetPool()
@@ -5397,6 +5763,13 @@ func (m *SegmentRefList) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSegmentsDRefInfo()
 }
+func (m *SegmentRefList) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSegmentsDRefInfoForOverlay(generateHash)
+}
 
 func (m *SegmentRefList) GetSegmentsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetSegments()
@@ -5411,6 +5784,30 @@ func (m *SegmentRefList) GetSegmentsDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("segment.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "segments",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *SegmentRefList) GetSegmentsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSegments()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("SegmentRefList.segments[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("segment.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "segment.Object",
 			RefdTenant: vref.Tenant,
@@ -5597,8 +5994,53 @@ func (m *SiteLocator) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetChoiceDRefInfo()
 }
+func (m *SiteLocator) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *SiteLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetChoice().(type) {
+	case *SiteLocator_Site:
+		vref := m.GetSite()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("site.Object")
+		dri := db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "site",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *SiteLocator_VirtualSite:
+		vref := m.GetVirtualSite()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_site.Object")
+		dri := db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_site",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *SiteLocator) GetChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetChoice().(type) {
 	case *SiteLocator_Site:
 		vref := m.GetSite()
@@ -5828,6 +6270,13 @@ func (m *SiteReferenceListType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRefsDRefInfo()
 }
+func (m *SiteReferenceListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRefsDRefInfoForOverlay(generateHash)
+}
 
 func (m *SiteReferenceListType) GetRefsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetRefs()
@@ -5842,6 +6291,30 @@ func (m *SiteReferenceListType) GetRefsDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("site.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "refs",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *SiteReferenceListType) GetRefsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetRefs()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("SiteReferenceListType.refs[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("site.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdTenant: vref.Tenant,
@@ -6028,8 +6501,69 @@ func (m *SiteRegionLocator) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetChoiceDRefInfo()
 }
+func (m *SiteRegionLocator) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *SiteRegionLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetChoice().(type) {
+	case *SiteRegionLocator_Site:
+		vref := m.GetSite()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("site.Object")
+		dri := db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "site",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *SiteRegionLocator_CloudReRegion:
+		vref := m.GetCloudReRegion()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_region.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_region.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "cloud_re_region",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *SiteRegionLocator_VirtualSite:
+		vref := m.GetVirtualSite()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_site.Object")
+		dri := db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_site",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *SiteRegionLocator) GetChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetChoice().(type) {
 	case *SiteRegionLocator_Site:
 		vref := m.GetSite()
@@ -7252,8 +7786,43 @@ func (m *WhereCloudEdgeSegment) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *WhereCloudEdgeSegment) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCloudEdgeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCloudEdgeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSegmentDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *WhereCloudEdgeSegment) GetCloudEdgeDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCloudEdge()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_region.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_region.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cloud_edge",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *WhereCloudEdgeSegment) GetCloudEdgeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCloudEdge()
 	if vref == nil {
 		return nil, nil
@@ -7299,6 +7868,23 @@ func (m *WhereCloudEdgeSegment) GetCloudEdgeDBEntries(ctx context.Context, d db.
 }
 
 func (m *WhereCloudEdgeSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *WhereCloudEdgeSegment) GetSegmentDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -7545,8 +8131,32 @@ func (m *WhereSegment) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSegmentDRefInfo()
 }
+func (m *WhereSegment) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSegmentDRefInfoForOverlay(generateHash)
+}
 
 func (m *WhereSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *WhereSegment) GetSegmentDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -7759,8 +8369,32 @@ func (m *WhereSite) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSiteDRefInfo()
 }
+func (m *WhereSite) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteDRefInfoForOverlay(generateHash)
+}
 
 func (m *WhereSite) GetSiteDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *WhereSite) GetSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -8014,8 +8648,43 @@ func (m *WhereSiteSegment) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *WhereSiteSegment) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSegmentDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *WhereSiteSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *WhereSiteSegment) GetSegmentDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -8061,6 +8730,23 @@ func (m *WhereSiteSegment) GetSegmentDBEntries(ctx context.Context, d db.Interfa
 }
 
 func (m *WhereSiteSegment) GetSiteDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *WhereSiteSegment) GetSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSite()
 	if vref == nil {
 		return nil, nil
@@ -8307,6 +8993,13 @@ func (m *WhereType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetChoiceDRefInfo()
 }
+func (m *WhereType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -8428,6 +9121,137 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_dualstack_on_public." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *WhereType) GetChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetChoice().(type) {
+	case *WhereType_Site:
+		drInfos, err := m.GetSite().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSite().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site." + dri.DRField
+		}
+		return drInfos, err
+	case *WhereType_VirtualSite:
+		drInfos, err := m.GetVirtualSite().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site." + dri.DRField
+		}
+		return drInfos, err
+	case *WhereType_Vk8SService:
+		drInfos, err := m.GetVk8SService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVk8SService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "vk8s_service." + dri.DRField
+		}
+		return drInfos, err
+	case *WhereType_VirtualNetwork:
+		drInfos, err := m.GetVirtualNetwork().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualNetwork().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_network." + dri.DRField
+		}
+		return drInfos, err
+	case *WhereType_SiteSegment:
+		drInfos, err := m.GetSiteSegment().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteSegment().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_segment." + dri.DRField
+		}
+		return drInfos, err
+	case *WhereType_VirtualSiteSegment:
+		drInfos, err := m.GetVirtualSiteSegment().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualSiteSegment().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site_segment." + dri.DRField
+		}
+		return drInfos, err
+	case *WhereType_Segment:
+		drInfos, err := m.GetSegment().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegment().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "segment." + dri.DRField
+		}
+		return drInfos, err
+	case *WhereType_CloudEdgeSegment:
+		drInfos, err := m.GetCloudEdgeSegment().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCloudEdgeSegment().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cloud_edge_segment." + dri.DRField
+		}
+		return drInfos, err
+	case *WhereType_VirtualSiteWithVip:
+		drInfos, err := m.GetVirtualSiteWithVip().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualSiteWithVip().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site_with_vip." + dri.DRField
+		}
+		return drInfos, err
+	case *WhereType_AdvertiseOnPublic:
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *WhereType_AdvertiseV6OnPublic:
+		drInfos, err := m.GetAdvertiseV6OnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseV6OnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_v6_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *WhereType_AdvertiseDualstackOnPublic:
+		drInfos, err := m.GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseDualstackOnPublic().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -8799,6 +9623,13 @@ func (m *WhereTypeSiteVsite) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetChoiceDRefInfo()
 }
+func (m *WhereTypeSiteVsite) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *WhereTypeSiteVsite) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -8820,6 +9651,37 @@ func (m *WhereTypeSiteVsite) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetVirtualSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *WhereTypeSiteVsite) GetChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetChoice().(type) {
+	case *WhereTypeSiteVsite_Site:
+		drInfos, err := m.GetSite().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSite().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site." + dri.DRField
+		}
+		return drInfos, err
+	case *WhereTypeSiteVsite_VirtualSite:
+		drInfos, err := m.GetVirtualSite().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -9012,8 +9874,53 @@ func (m *WhereVK8SService) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetChoiceDRefInfo()
 }
+func (m *WhereVK8SService) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *WhereVK8SService) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetChoice().(type) {
+	case *WhereVK8SService_Site:
+		vref := m.GetSite()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("site.Object")
+		dri := db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "site",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *WhereVK8SService_VirtualSite:
+		vref := m.GetVirtualSite()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_site.Object")
+		dri := db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_site",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *WhereVK8SService) GetChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetChoice().(type) {
 	case *WhereVK8SService_Site:
 		vref := m.GetSite()
@@ -9243,8 +10150,32 @@ func (m *WhereVirtualNetwork) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetVirtualNetworkDRefInfo()
 }
+func (m *WhereVirtualNetwork) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualNetworkDRefInfoForOverlay(generateHash)
+}
 
 func (m *WhereVirtualNetwork) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetVirtualNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_network.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_network.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "virtual_network",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *WhereVirtualNetwork) GetVirtualNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetVirtualNetwork()
 	if vref == nil {
 		return nil, nil
@@ -9491,8 +10422,32 @@ func (m *WhereVirtualSite) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetVirtualSiteDRefInfo()
 }
+func (m *WhereVirtualSite) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualSiteDRefInfoForOverlay(generateHash)
+}
 
 func (m *WhereVirtualSite) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetVirtualSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "virtual_site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *WhereVirtualSite) GetVirtualSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetVirtualSite()
 	if vref == nil {
 		return nil, nil
@@ -9696,8 +10651,43 @@ func (m *WhereVirtualSiteSegment) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *WhereVirtualSiteSegment) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSegmentDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualSiteDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *WhereVirtualSiteSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *WhereVirtualSiteSegment) GetSegmentDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSegment()
 	if vref == nil {
 		return nil, nil
@@ -9743,6 +10733,23 @@ func (m *WhereVirtualSiteSegment) GetSegmentDBEntries(ctx context.Context, d db.
 }
 
 func (m *WhereVirtualSiteSegment) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetVirtualSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "virtual_site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *WhereVirtualSiteSegment) GetVirtualSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetVirtualSite()
 	if vref == nil {
 		return nil, nil
@@ -9989,8 +10996,32 @@ func (m *WhereVirtualSiteSpecifiedVIP) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetVirtualSiteDRefInfo()
 }
+func (m *WhereVirtualSiteSpecifiedVIP) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualSiteDRefInfoForOverlay(generateHash)
+}
 
 func (m *WhereVirtualSiteSpecifiedVIP) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetVirtualSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "virtual_site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *WhereVirtualSiteSpecifiedVIP) GetVirtualSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetVirtualSite()
 	if vref == nil {
 		return nil, nil

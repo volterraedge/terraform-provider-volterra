@@ -28,11 +28,43 @@ resource "volterra_external_connector" "example" {
 
   // One of the arguments from this list "direct_connection gre ipsec" must be set
 
-  gre {
-    gre_parameters {
+  ipsec {
+    ike_parameters {
+      // One of the arguments from this list "dpd_disabled dpd_keep_alive_timer" can be set
+
+      dpd_disabled = true
+
+      ike_phase1_profile {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+
+      ike_phase2_profile {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+
+      // One of the arguments from this list "lc_hostname lc_ip_address use_default_local_ike_id" can be set
+
+      use_default_local_ike_id = true
+
+      // One of the arguments from this list "initiator responder" must be set
+
+      initiator = true
+
+      // One of the arguments from this list "rm_hostname rm_ip_address use_default_remote_ike_id" can be set
+
+      use_default_remote_ike_id = true
+    }
+
+    ipsec_tunnel_parameters {
       peer_ip_address {
         addr = "192.168.1.1"
       }
+
+      psk = "psk"
 
       tunnel_eps {
         interface = "interface"
@@ -46,9 +78,9 @@ resource "volterra_external_connector" "example" {
 
       tunnel_mtu = "tunnel_mtu"
 
-      // One of the arguments from this list "segment site_local_inside_network site_local_network" can be set
+      // One of the arguments from this list "segment site_local_inside_network site_local_network" must be set
 
-      site_local_inside_network = true
+      site_local_network = true
     }
   }
 }
@@ -80,7 +112,7 @@ Argument Reference
 
 `direct_connection` - (Optional) External Connector with direct connection. See [Connection Type Direct Connection ](#connection-type-direct-connection) below for details.(Deprecated)
 
-`gre` - (Optional) External Connector with GRE tunnel. See [Connection Type Gre ](#connection-type-gre) below for details.
+`gre` - (Optional) External Connector with GRE tunnel. See [Connection Type Gre ](#connection-type-gre) below for details.(Deprecated)
 
 `ipsec` - (Optional) External Connector with IPSec tunnel. See [Connection Type Ipsec ](#connection-type-ipsec) below for details.
 

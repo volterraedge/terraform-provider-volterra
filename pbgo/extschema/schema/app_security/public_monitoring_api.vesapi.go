@@ -34,6 +34,14 @@ type AppSecurityMonitoringAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *AppSecurityMonitoringAPIGrpcClient) doRPCL7DDoSIncidentsQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &SecurityEventsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.app_security.SecurityEventsRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.L7DDoSIncidentsQuery(ctx, req, opts...)
+	return rsp, err
+}
 func (c *AppSecurityMonitoringAPIGrpcClient) doRPCSearchLoadBalancers(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SearchLoadBalancersRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -185,6 +193,7 @@ func NewAppSecurityMonitoringAPIGrpcClient(cc *grpc.ClientConn) server.CustomCli
 		grpcClient: NewAppSecurityMonitoringAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["L7DDoSIncidentsQuery"] = ccl.doRPCL7DDoSIncidentsQuery
 	rpcFns["SearchLoadBalancers"] = ccl.doRPCSearchLoadBalancers
 	rpcFns["SearchLoadBalancersAllNamespaces"] = ccl.doRPCSearchLoadBalancersAllNamespaces
 	rpcFns["SecurityEventsAggregationQuery"] = ccl.doRPCSecurityEventsAggregationQuery
@@ -212,6 +221,97 @@ type AppSecurityMonitoringAPIRestClient struct {
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
 }
 
+func (c *AppSecurityMonitoringAPIRestClient) doRPCL7DDoSIncidentsQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &SecurityEventsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.app_security.SecurityEventsRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("aggs", fmt.Sprintf("%v", req.Aggs))
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		q.Add("limit", fmt.Sprintf("%v", req.Limit))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("query", fmt.Sprintf("%v", req.Query))
+		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("search_after", fmt.Sprintf("%v", req.SearchAfter))
+		q.Add("sort", fmt.Sprintf("%v", req.Sort))
+		q.Add("sort_by", fmt.Sprintf("%v", req.SortBy))
+		q.Add("sort_values", fmt.Sprintf("%v", req.SortValues))
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &SecurityEventsResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_security.SecurityEventsResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 func (c *AppSecurityMonitoringAPIRestClient) doRPCSearchLoadBalancers(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1535,6 +1635,7 @@ func NewAppSecurityMonitoringAPIRestClient(baseURL string, hc http.Client) serve
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["L7DDoSIncidentsQuery"] = ccl.doRPCL7DDoSIncidentsQuery
 	rpcFns["SearchLoadBalancers"] = ccl.doRPCSearchLoadBalancers
 	rpcFns["SearchLoadBalancersAllNamespaces"] = ccl.doRPCSearchLoadBalancersAllNamespaces
 	rpcFns["SecurityEventsAggregationQuery"] = ccl.doRPCSecurityEventsAggregationQuery
@@ -1561,6 +1662,10 @@ type appSecurityMonitoringAPIInprocClient struct {
 	AppSecurityMonitoringAPIServer
 }
 
+func (c *appSecurityMonitoringAPIInprocClient) L7DDoSIncidentsQuery(ctx context.Context, in *SecurityEventsRequest, opts ...grpc.CallOption) (*SecurityEventsResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.app_security.AppSecurityMonitoringAPI.L7DDoSIncidentsQuery")
+	return c.AppSecurityMonitoringAPIServer.L7DDoSIncidentsQuery(ctx, in)
+}
 func (c *appSecurityMonitoringAPIInprocClient) SearchLoadBalancers(ctx context.Context, in *SearchLoadBalancersRequest, opts ...grpc.CallOption) (*SearchLoadBalancersResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.app_security.AppSecurityMonitoringAPI.SearchLoadBalancers")
 	return c.AppSecurityMonitoringAPIServer.SearchLoadBalancers(ctx, in)
@@ -1643,6 +1748,54 @@ type appSecurityMonitoringAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *appSecurityMonitoringAPISrv) L7DDoSIncidentsQuery(ctx context.Context, in *SecurityEventsRequest) (*SecurityEventsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.app_security.AppSecurityMonitoringAPI")
+	cah, ok := ah.(AppSecurityMonitoringAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *AppSecurityMonitoringAPIServer", ah)
+	}
+
+	var (
+		rsp *SecurityEventsResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.app_security.SecurityEventsRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'AppSecurityMonitoringAPI.L7DDoSIncidentsQuery' operation on 'app_security'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.app_security.AppSecurityMonitoringAPI.L7DDoSIncidentsQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.L7DDoSIncidentsQuery(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_security.SecurityEventsResponse", rsp)...)
+
+	return rsp, nil
+}
 func (s *appSecurityMonitoringAPISrv) SearchLoadBalancers(ctx context.Context, in *SearchLoadBalancersRequest) (*SearchLoadBalancersResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.app_security.AppSecurityMonitoringAPI")
 	cah, ok := ah.(AppSecurityMonitoringAPIServer)
@@ -3999,6 +4152,98 @@ var AppSecurityMonitoringAPISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-app_security-appsecuritymonitoringapi-suspicioususerlogsscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_security.AppSecurityMonitoringAPI.SuspiciousUserLogsScrollQuery"
+            },
+            "x-displayname": "Application Security Monitoring APIs",
+            "x-ves-proto-service": "ves.io.schema.app_security.AppSecurityMonitoringAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/l7_ddos/incidents": {
+            "post": {
+                "summary": "L7 DDoS Incidents Query",
+                "description": "Get L7 DDoS incidents for the given namespace. For -system- namespace, all\nL7 DDoS incidents for the tenant matching the query in the request are\nreturned.",
+                "operationId": "ves.io.schema.app_security.AppSecurityMonitoringAPI.L7DDoSIncidentsQuery",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/app_securitySecurityEventsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nfetch security events for a given namespace\nx-example: \"bloggin-app-namespace-1\"",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/app_securitySecurityEventsRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "AppSecurityMonitoringAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-app_security-appsecuritymonitoringapi-l7ddosincidentsquery"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.app_security.AppSecurityMonitoringAPI.L7DDoSIncidentsQuery"
             },
             "x-displayname": "Application Security Monitoring APIs",
             "x-ves-proto-service": "ves.io.schema.app_security.AppSecurityMonitoringAPI",

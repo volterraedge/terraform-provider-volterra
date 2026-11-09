@@ -43,6 +43,12 @@ Argument Reference
 
 ### Spec Argument Reference
 
+###### One of the arguments from this list "issuer, issuer_disable" can be set
+
+`issuer` - (Optional) x-required (`String`).
+
+`issuer_disable` - (Optional) x-displayName: "Disable" (`Bool`).
+
 `jwks_uri` - (Required) x-textBlockPosition: "inside" (`String`).
 
 Attribute Reference

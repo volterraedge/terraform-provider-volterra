@@ -23,7 +23,7 @@ resource "volterra_application_profiles" "example" {
   ddos_profile {
     // One of the arguments from this list "disable_ddos_mitigation enable_ddos_mitigation" can be set
 
-    disable_ddos_mitigation = true
+    enable_ddos_mitigation = true
   }
 }
 

@@ -2762,16 +2762,13 @@ var APISwaggerJSON string = `{
         },
         "external_connectorConnectionTypeGRE": {
             "type": "object",
-            "description": "External Connector with GRE tunnel",
+            "description": "x-displayName: \"GRE\"\nExternal Connector with GRE tunnel",
             "title": "GRE",
-            "x-displayname": "GRE",
-            "x-ves-proto-message": "ves.io.schema.views.external_connector.ConnectionTypeGRE",
             "properties": {
                 "gre_parameters": {
-                    "description": " GRE configuration parameters required for GRE Connection type",
+                    "description": "x-displayName: \"GRE Tunnel Parameters\"\nGRE configuration parameters required for GRE Connection type",
                     "title": "GRE Parameters",
-                    "$ref": "#/definitions/external_connectorGRETunnelParameters",
-                    "x-displayname": "GRE Tunnel Parameters"
+                    "$ref": "#/definitions/external_connectorGRETunnelParameters"
                 }
             }
         },
@@ -2825,63 +2822,42 @@ var APISwaggerJSON string = `{
         },
         "external_connectorGRETunnelParameters": {
             "type": "object",
-            "description": "GRE configuration parameters required for GRE Connection type",
+            "description": "x-displayName: \"GRE Tunnel Parameters\"\nGRE configuration parameters required for GRE Connection type",
             "title": "GRE Tunnel Parameters",
-            "x-displayname": "GRE Tunnel Parameters",
-            "x-ves-oneof-field-tunnel_source_vn": "[\"segment\",\"site_local_inside_network\",\"site_local_network\"]",
-            "x-ves-proto-message": "ves.io.schema.views.external_connector.GRETunnelParameters",
             "properties": {
                 "peer_ip_address": {
-                    "description": " Configure tunnel remote endpoint's IP address",
+                    "description": "x-displayName: \"Peer IP Address\"\nConfigure tunnel remote endpoint's IP address",
                     "title": "Tunnel Peer IP address",
-                    "$ref": "#/definitions/schemaIpv4AddressType",
-                    "x-displayname": "Peer IP Address"
+                    "$ref": "#/definitions/schemaIpv4AddressType"
                 },
                 "segment": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network]\n Interface belongs to user configured inside network segment",
+                    "description": "x-displayName: \"Segment\"\nInterface belongs to user configured inside network segment",
                     "title": "Segment",
-                    "$ref": "#/definitions/schemaSegmentRefType",
-                    "x-displayname": "Segment"
+                    "$ref": "#/definitions/schemaSegmentRefType"
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [segment site_local_network]\n Interface belongs to site local network inside",
+                    "description": "x-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
                     "title": "Site Local Network Inside",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Site Local Network Inside"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [segment site_local_inside_network]\n Interface belongs to site local network (outside)",
+                    "description": "x-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
                     "title": "Site Local Network",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Site Local Network (Outside)"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "tunnel_eps": {
                     "type": "array",
-                    "description": " Configure tunnel parameters, source, destination, IP addresses.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": "x-displayName: \"Tunnel Endpoint\"\nx-required\nConfigure tunnel parameters, source, destination, IP addresses.",
                     "title": "Tunnel Endpoint",
-                    "minItems": 1,
-                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/external_connectorTunnelEndpoint"
-                    },
-                    "x-displayname": "Tunnel Endpoint",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "4",
-                        "ves.io.schema.rules.repeated.min_items": "1"
                     }
                 },
                 "tunnel_mtu": {
                     "type": "integer",
-                    "description": " Configure MTU for the GRE tunnel interface.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 512\n  ves.io.schema.rules.uint32.lte: 1370\n",
+                    "description": "x-displayName: \"Tunnel MTU\"\nConfigure MTU for the GRE tunnel interface.",
                     "title": "Tunnel MTU",
-                    "format": "int64",
-                    "x-displayname": "Tunnel MTU",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "512",
-                        "ves.io.schema.rules.uint32.lte": "1370"
-                    }
+                    "format": "int64"
                 }
             }
         },
@@ -2890,7 +2866,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the External connector configuration specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
-            "x-ves-oneof-field-connection_type": "[\"gre\",\"ipsec\"]",
+            "x-ves-oneof-field-connection_type": "[\"ipsec\"]",
             "x-ves-proto-message": "ves.io.schema.views.external_connector.GlobalSpecType",
             "properties": {
                 "ce_site_reference": {
@@ -2903,14 +2879,8 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "gre": {
-                    "description": "Exclusive with [ipsec]\n External Connector with GRE tunnel",
-                    "title": "GRE",
-                    "$ref": "#/definitions/external_connectorConnectionTypeGRE",
-                    "x-displayname": "GRE"
-                },
                 "ipsec": {
-                    "description": "Exclusive with [gre]\n External Connector with IPSec tunnel",
+                    "description": "Exclusive with []\n External Connector with IPSec tunnel",
                     "title": "IPSec",
                     "$ref": "#/definitions/external_connectorConnectionTypeIPSec",
                     "x-displayname": "IPSec"
@@ -3311,12 +3281,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {

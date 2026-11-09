@@ -444,6 +444,13 @@ func (m *ForwardTrafficAction) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTargetDRefInfo()
 }
+func (m *ForwardTrafficAction) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTargetDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ForwardTrafficAction) GetTargetDRefInfo() ([]db.DRefInfo, error) {
@@ -465,6 +472,37 @@ func (m *ForwardTrafficAction) GetTargetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetPool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPool().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "pool." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ForwardTrafficAction) GetTargetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTarget() == nil {
+		return nil, nil
+	}
+	switch m.GetTarget().(type) {
+	case *ForwardTrafficAction_VirtualServer:
+		drInfos, err := m.GetVirtualServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_server." + dri.DRField
+		}
+		return drInfos, err
+	case *ForwardTrafficAction_Pool:
+		drInfos, err := m.GetPool().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPool().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2395,6 +2433,24 @@ func (m *Pool) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *Pool) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFallbackPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFallbackPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *Pool) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetFallbackPool()
@@ -2409,6 +2465,30 @@ func (m *Pool) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("vs_pool.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "vs_pool.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "fallback_pool",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *Pool) GetFallbackPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetFallbackPool()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("Pool.fallback_pool[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("vs_pool.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "vs_pool.Object",
 			RefdTenant: vref.Tenant,
@@ -2462,6 +2542,30 @@ func (m *Pool) GetPoolDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("vs_pool.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "vs_pool.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "pool",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *Pool) GetPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetPool()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("Pool.pool[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("vs_pool.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "vs_pool.Object",
 			RefdTenant: vref.Tenant,
@@ -4252,6 +4356,13 @@ func (m *VirtualServer) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetVirtualServerDRefInfo()
 }
+func (m *VirtualServer) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualServerDRefInfoForOverlay(generateHash)
+}
 
 func (m *VirtualServer) GetVirtualServerDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetVirtualServer()
@@ -4266,6 +4377,30 @@ func (m *VirtualServer) GetVirtualServerDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("virtual_server.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_server.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_server",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *VirtualServer) GetVirtualServerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetVirtualServer()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("VirtualServer.virtual_server[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_server.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_server.Object",
 			RefdTenant: vref.Tenant,

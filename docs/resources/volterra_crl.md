@@ -21,7 +21,6 @@ resource "volterra_crl" "example" {
   namespace      = "staging"
   server_address = ["mycrl.it.com"]
 }
-
 ```
 
 Argument Reference
@@ -66,4 +65,4 @@ http://<server_address>:<server_port>/<path>.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured crl.
+*   `id` - This is the id of the configured crl.

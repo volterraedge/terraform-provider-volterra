@@ -182,8 +182,32 @@ func (m *UpdateApiDefinitionRefReq) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetApiDefinitionDRefInfo()
 }
+func (m *UpdateApiDefinitionRefReq) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApiDefinitionDRefInfoForOverlay(generateHash)
+}
 
 func (m *UpdateApiDefinitionRefReq) GetApiDefinitionDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetApiDefinition()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("api_definition.Object")
+	dri := db.DRefInfo{
+		RefdType:   "api_definition.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "api_definition",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *UpdateApiDefinitionRefReq) GetApiDefinitionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetApiDefinition()
 	if vref == nil {
 		return nil, nil

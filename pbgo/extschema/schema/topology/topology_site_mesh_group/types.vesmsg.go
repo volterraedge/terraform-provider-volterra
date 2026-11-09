@@ -79,6 +79,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetTopologyMetadataDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTopologyMetadataDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTopologySpecDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTopologySpecDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetTopologyMetadataDRefInfo() ([]db.DRefInfo, error) {
@@ -96,6 +114,22 @@ func (m *GlobalSpecType) GetTopologyMetadataDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetTopologyMetadataDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTopologyMetadata() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTopologyMetadata().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTopologyMetadata().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "topology_metadata." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetTopologySpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTopologySpec() == nil {
@@ -104,6 +138,22 @@ func (m *GlobalSpecType) GetTopologySpecDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetTopologySpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTopologySpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "topology_spec." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetTopologySpecDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTopologySpec() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTopologySpec().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTopologySpec().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

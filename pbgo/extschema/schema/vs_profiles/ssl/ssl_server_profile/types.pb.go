@@ -41,7 +41,7 @@ type GlobalSpecType struct {
 	AlertTimeout string `protobuf:"bytes,1,opt,name=alert_timeout,json=alertTimeout,proto3" json:"alert_timeout,omitempty"`
 	// allow_expired_crl
 	//
-	// x-displayName: "Allow Expired Crl"
+	// x-displayName: "Allow Expired CRL"
 	// Use the specified CRL file even if it has expired.
 	AllowExpiredCrl vs_profiles.EnableDisableChoice `protobuf:"varint,2,opt,name=allow_expired_crl,json=allowExpiredCrl,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"allow_expired_crl,omitempty"`
 	// authenticate
@@ -59,65 +59,34 @@ type GlobalSpecType struct {
 	// x-displayName: "Authenticate Name"
 	// Specifies a Common Name (CN) that is embedded in a server certificate. The system authenticates a server based on the specified CN.
 	AuthenticateName string `protobuf:"bytes,5,opt,name=authenticate_name,json=authenticateName,proto3" json:"authenticate_name,omitempty"`
-	// bypass_on_client_cert_fail
-	//
-	// x-displayName: "Bypass On Client Cert Fail"
-	// Specifies whether bypass SSL forward proxy traffic when fails to retrieve the Client Certificate from the BIGIP that Server ask for. The default value is disabled.
-	BypassOnClientCertFail vs_profiles.EnableDisableChoice `protobuf:"varint,6,opt,name=bypass_on_client_cert_fail,json=bypassOnClientCertFail,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"bypass_on_client_cert_fail,omitempty"`
-	// bypass_on_handshake_alert
-	//
-	// x-displayName: "Bypass On Handshake Alert"
-	// Specifies whether bypass SSL forward proxy traffic when receiving handshake_failure(40) Alert. The default value is disabled.
-	BypassOnHandshakeAlert vs_profiles.EnableDisableChoice `protobuf:"varint,7,opt,name=bypass_on_handshake_alert,json=bypassOnHandshakeAlert,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"bypass_on_handshake_alert,omitempty"`
-	// c3d_cert_lifespan
-	//
-	// x-displayName: "C3d Cert Lifespan"
-	// Specifies the lifespan of the certificate generated using SSL client certificate constrained delegation. The default value is 24 hours.
-	C3DCertLifespan uint32 `protobuf:"varint,8,opt,name=c3d_cert_lifespan,json=c3dCertLifespan,proto3" json:"c3d_cert_lifespan,omitempty"`
 	// cache_size
 	//
 	// x-displayName: "Cache Size"
-	// Specifies the SSL session cache size. For client-side profiles only, you can configure timeout and size values for the SSL session cache. Because each profile maintains a separate SSL session cache, you can configure the values on a per-profile basis.
+	// Specifies the SSL session cache size in number of sessions. For client-side profiles only, you can configure timeout and size values for the SSL session cache. Because each profile maintains a separate SSL session cache, you can configure the values on a per-profile basis.
 	CacheSize uint32 `protobuf:"varint,9,opt,name=cache_size,json=cacheSize,proto3" json:"cache_size,omitempty"`
-	// cache_timeout
-	//
-	// x-displayName: "Cache Timeout"
-	// Specifies the SSL session cache timeout value, which is the usable lifetime seconds of negotiated SSL session IDs. The default value is 3600 seconds. Acceptable values are integers greater than or equal to 0 and less than or equal to 86400.
-	CacheTimeout uint32 `protobuf:"varint,10,opt,name=cache_timeout,json=cacheTimeout,proto3" json:"cache_timeout,omitempty"`
 	// cipher_config
 	//
 	// x-displayName: "Cipher Configuration"
 	// Cipher configuration for SSL profile
 	//
 	// Types that are valid to be assigned to CipherConfig:
-	//	*GlobalSpecType_CipherGroup
 	//	*GlobalSpecType_Ciphers
 	CipherConfig isGlobalSpecType_CipherConfig `protobuf_oneof:"cipher_config"`
 	// crl
 	//
-	// x-displayName: "Crl"
+	// x-displayName: "CRL"
 	// Specifies the name of crl validator for validating status of server certificate.
 	Crl string `protobuf:"bytes,14,opt,name=crl,proto3" json:"crl,omitempty"`
 	// crl_file
 	//
-	// x-displayName: "Crl File"
+	// x-displayName: "CRL File"
 	// Specifies the certificate revocation list file name or indicates the system uses the certificate revocation file name from the parent profile.
 	CrlFile string `protobuf:"bytes,15,opt,name=crl_file,json=crlFile,proto3" json:"crl_file,omitempty"`
-	// data_0rtt
-	//
-	// x-displayName: "Data 0-RTT"
-	// Specifies if TLSv1.3 should send 0-RTT early data when available. The default value is disabled.
-	Data_0Rtt vs_profiles.EnableDisableChoice `protobuf:"varint,16,opt,name=data_0rtt,json=data0rtt,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"data_0rtt,omitempty"`
 	// expire_cert_response_control
 	//
 	// x-displayName: "Expire Cert Response Control"
 	// Specifies the action for the BIG-IP system to take when the server certificate has expired. The default value is drop, which causes the connection to be dropped. Conversely, you can specify ignore to cause the connection to ignore the error and continue or you can specify mask in case of SSL forward proxy to mask server certificate errors and continue with handshake and forge a good certificate on client-side. Note that drop works only if the certificate is trusted.
-	ExpireCertResponseControl vs_profiles.AcceptRejectChoice `protobuf:"varint,17,opt,name=expire_cert_response_control,json=expireCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"expire_cert_response_control,omitempty"`
-	// generic_alert
-	//
-	// x-displayName: "Generic Alert"
-	// Enables or disables generic-alert which if use generic alert number in Alert message. The default option is enabled.
-	GenericAlert vs_profiles.EnableDisableChoice `protobuf:"varint,18,opt,name=generic_alert,json=genericAlert,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"generic_alert,omitempty"`
+	ExpireCertResponseControl vs_profiles.CertResponseControlChoice `protobuf:"varint,17,opt,name=expire_cert_response_control,json=expireCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"expire_cert_response_control,omitempty"`
 	// handshake_timeout
 	//
 	// x-displayName: "Handshake Timeout"
@@ -133,46 +102,16 @@ type GlobalSpecType struct {
 	// x-displayName: "Log Publisher"
 	// Configures the log publisher that handles events logging for this profile.
 	LogPublisher string `protobuf:"bytes,21,opt,name=log_publisher,json=logPublisher,proto3" json:"log_publisher,omitempty"`
-	// log_ssl_c3d_events
-	//
-	// x-displayName: "Log SSL C3d Events"
-	// Configures the log level above which system logs ssl c3d events for this profile.
-	LogSslC3DEvents vs_profiles.LogSslC3DEventsChoice `protobuf:"varint,22,opt,name=log_ssl_c3d_events,json=logSslC3dEvents,proto3,enum=ves.io.schema.vs_profiles.LogSslC3DEventsChoice" json:"log_ssl_c3d_events,omitempty"`
 	// log_ssl_client_authentication_events
 	//
 	// x-displayName: "Log SSL Client Authentication Events"
 	// Configures the log level above which system logs ssl client authentication events for this profile.
 	LogSslClientAuthenticationEvents vs_profiles.LogSslC3DEventsChoice `protobuf:"varint,23,opt,name=log_ssl_client_authentication_events,json=logSslClientAuthenticationEvents,proto3,enum=ves.io.schema.vs_profiles.LogSslC3DEventsChoice" json:"log_ssl_client_authentication_events,omitempty"`
-	// log_ssl_forward_proxy_events
-	//
-	// x-displayName: "Log SSL Forward Proxy Events"
-	// Configures the log level above which system logs ssl forward proxy events for this profile.
-	LogSslForwardProxyEvents vs_profiles.LogSslC3DEventsChoice `protobuf:"varint,24,opt,name=log_ssl_forward_proxy_events,json=logSslForwardProxyEvents,proto3,enum=ves.io.schema.vs_profiles.LogSslC3DEventsChoice" json:"log_ssl_forward_proxy_events,omitempty"`
 	// log_ssl_handshake_events
 	//
 	// x-displayName: "Log SSL Handshake Events"
 	// Configures the log level above which system logs ssl handshake events for this profile.
 	LogSslHandshakeEvents vs_profiles.LogSslC3DEventsChoice `protobuf:"varint,25,opt,name=log_ssl_handshake_events,json=logSslHandshakeEvents,proto3,enum=ves.io.schema.vs_profiles.LogSslC3DEventsChoice" json:"log_ssl_handshake_events,omitempty"`
-	// max_active_handshakes
-	//
-	// x-displayName: "Max Active Handshakes"
-	// Specifies the maximum allowed active handshakes. The default value is 0.
-	MaxActiveHandshakes uint32 `protobuf:"varint,26,opt,name=max_active_handshakes,json=maxActiveHandshakes,proto3" json:"max_active_handshakes,omitempty"`
-	// mod_ssl_methods
-	//
-	// x-displayName: "Mod SSL Methods"
-	// Enables or disables ModSSL method emulation. Use enabled when OpenSSL methods are inadequate. For example, you can enable ModSSL method emulation when you want to use SSL compression over TLSv1.
-	ModSslMethods vs_profiles.EnableDisableChoice `protobuf:"varint,27,opt,name=mod_ssl_methods,json=modSslMethods,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"mod_ssl_methods,omitempty"`
-	// mode
-	//
-	// x-displayName: "Mode"
-	// Enables or disables SSL processing. The default value is enabled.
-	Mode vs_profiles.EnableDisableChoice `protobuf:"varint,28,opt,name=mode,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"mode,omitempty"`
-	// ocsp
-	//
-	// x-displayName: "Ocsp"
-	// Specifies the name of ocsp profile for purpose of validating status of server certificate. Specifying none disables ocsp validation of server certificate. The default value is none.
-	Ocsp []*schema.ObjectRefType `protobuf:"bytes,29,rep,name=ocsp,proto3" json:"ocsp,omitempty"`
 	// passphrase
 	//
 	// x-displayName: "Passphrase"
@@ -183,16 +122,6 @@ type GlobalSpecType struct {
 	// x-displayName: "Peer Cert Mode"
 	// Specifies the peer certificate mode.
 	PeerCertMode vs_profiles.PeerCertModeChoice `protobuf:"varint,31,opt,name=peer_cert_mode,json=peerCertMode,proto3,enum=ves.io.schema.vs_profiles.PeerCertModeChoice" json:"peer_cert_mode,omitempty"`
-	// proxy_ssl
-	//
-	// x-displayName: "Proxy SSL"
-	// Enables proxy SSL mode, which requires a corresponding client SSL profile with proxy-ssl enabled to allow for modification of application data within an SSL tunnel.
-	ProxySsl vs_profiles.EnableDisableChoice `protobuf:"varint,32,opt,name=proxy_ssl,json=proxySsl,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"proxy_ssl,omitempty"`
-	// proxy_ssl_passthrough
-	//
-	// x-displayName: "Proxy SSL Passthrough"
-	// Enables proxy SSL passthrough mode, which requires a corresponding client SSL profile with proxy-ssl-passthrough enabled to allow for modification of application data within an SSL tunnel.
-	ProxySslPassthrough vs_profiles.EnableDisableChoice `protobuf:"varint,33,opt,name=proxy_ssl_passthrough,json=proxySslPassthrough,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"proxy_ssl_passthrough,omitempty"`
 	// renegotiate_period
 	//
 	// x-displayName: "Renegotiate Period"
@@ -208,16 +137,11 @@ type GlobalSpecType struct {
 	// x-displayName: "Renegotiation"
 	// Controls mid-stream renegotiation. The default value is enabled.
 	Renegotiation vs_profiles.EnableDisableChoice `protobuf:"varint,36,opt,name=renegotiation,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"renegotiation,omitempty"`
-	// retain_certificate
-	//
-	// x-displayName: "Retain Certificate"
-	// When true, server certificate is retained in SSL session.
-	RetainCertificate vs_profiles.TrueFalseChoice `protobuf:"varint,37,opt,name=retain_certificate,json=retainCertificate,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"retain_certificate,omitempty"`
 	// revoked_cert_status_response_control
 	//
 	// x-displayName: "Revoked Cert Status Response Control"
 	// Specifies the system action when the server certificate status is revoked. The default value is drop, which causes the connection to be dropped. You can specify ignore to cause the connection to ignore the error and continue handshake. You can specify mask in case of SSL forward proxy to mask server certificate status error and continue handshake.
-	RevokedCertStatusResponseControl vs_profiles.AcceptRejectChoice `protobuf:"varint,38,opt,name=revoked_cert_status_response_control,json=revokedCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"revoked_cert_status_response_control,omitempty"`
+	RevokedCertStatusResponseControl vs_profiles.CertResponseControlChoice `protobuf:"varint,38,opt,name=revoked_cert_status_response_control,json=revokedCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"revoked_cert_status_response_control,omitempty"`
 	// secure_renegotiation
 	//
 	// x-displayName: "Secure Renegotiation"
@@ -228,75 +152,21 @@ type GlobalSpecType struct {
 	// x-displayName: "Server Name"
 	// Name matched to TLS/1.1 and above client SSL requests that support the Server Name Indication extension. The default value is empty, which disables support for this extension.
 	ServerName string `protobuf:"bytes,40,opt,name=server_name,json=serverName,proto3" json:"server_name,omitempty"`
-	// session_mirroring
-	//
-	// x-displayName: "Session Mirroring"
-	// Enables or disables session mirroring to the high-availability peer. The default option is disabled.
-	SessionMirroring vs_profiles.EnableDisableChoice `protobuf:"varint,41,opt,name=session_mirroring,json=sessionMirroring,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"session_mirroring,omitempty"`
 	// session_ticket
 	//
 	// x-displayName: "Session Ticket"
 	// Enables or disables session-ticket. The default option is disabled, see RFC5077.
 	SessionTicket vs_profiles.EnableDisableChoice `protobuf:"varint,42,opt,name=session_ticket,json=sessionTicket,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"session_ticket,omitempty"`
-	// sni_default
-	//
-	// x-displayName: "Sni Default"
-	// When true, this profile is the default SSL profile when a client connection does not specify a known server name, or does not specify any server name at all. The default value is false.
-	SniDefault vs_profiles.TrueFalseChoice `protobuf:"varint,43,opt,name=sni_default,json=sniDefault,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"sni_default,omitempty"`
-	// sni_require
-	//
-	// x-displayName: "Sni Require"
-	// When true, SNI support is required for the peer. If a client connection does not specify a known server name, or does not specify any server name at all, the connection will be rejected. The default value is false.
-	SniRequire vs_profiles.TrueFalseChoice `protobuf:"varint,44,opt,name=sni_require,json=sniRequire,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"sni_require,omitempty"`
-	// ssl_c3d
-	//
-	// x-displayName: "SSL C3d"
-	// Enables or disables SSL client certificate constrained delegation. The default option is disabled. Conversely, you can specify enabled to use the SSL client certificate constrained delegation.
-	SslC3D vs_profiles.EnableDisableChoice `protobuf:"varint,45,opt,name=ssl_c3d,json=sslC3d,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_c3d,omitempty"`
-	// ssl_forward_proxy
-	//
-	// x-displayName: "SSL Forward Proxy"
-	// Specifies if the SSL Forward Proxy feature is enabled. The default value is disabled.
-	SslForwardProxy vs_profiles.EnableDisableChoice `protobuf:"varint,46,opt,name=ssl_forward_proxy,json=sslForwardProxy,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_forward_proxy,omitempty"`
-	// ssl_forward_proxy_bypass
-	//
-	// x-displayName: "SSL Forward Proxy Bypass"
-	// Specifies if the SSL Forward Proxy Bypass feature is enabled. The default value is disabled.
-	SslForwardProxyBypass vs_profiles.EnableDisableChoice `protobuf:"varint,47,opt,name=ssl_forward_proxy_bypass,json=sslForwardProxyBypass,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_forward_proxy_bypass,omitempty"`
-	// ssl_forward_proxy_verified_handshake
-	//
-	// x-displayName: "SSL Forward Proxy Verified Handshake"
-	SslForwardProxyVerifiedHandshake vs_profiles.EnableDisableChoice `protobuf:"varint,48,opt,name=ssl_forward_proxy_verified_handshake,json=sslForwardProxyVerifiedHandshake,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_forward_proxy_verified_handshake,omitempty"`
-	// ssl_sign_hash
-	//
-	// x-displayName: "SSL Sign Hash"
-	// SSL sign hash algorithm to sign and verify SSL Server Key Exchange and Certificate Verify messages for the specified SSL profiles.
-	SslSignHash vs_profiles.SslSignHashChoice `protobuf:"varint,49,opt,name=ssl_sign_hash,json=sslSignHash,proto3,enum=ves.io.schema.vs_profiles.SslSignHashChoice" json:"ssl_sign_hash,omitempty"`
-	// strict_resume
-	//
-	// x-displayName: "Strict Resume"
-	// You can enable or disable the resumption of SSL sessions after an unclean shutdown. The default value is disabled, which indicates that the SSL profile refuses to resume SSL sessions after an unclean shutdown.
-	StrictResume vs_profiles.EnableDisableChoice `protobuf:"varint,50,opt,name=strict_resume,json=strictResume,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"strict_resume,omitempty"`
-	// unclean_shutdown
-	//
-	// x-displayName: "Unclean Shutdown"
-	// By default, the SSL profile performs unclean shutdowns of all SSL connections, which means that underlying TCP connections are closed without exchanging the required SSL shutdown alerts. If you want to force the SSL profile to perform a clean shutdown of all SSL connections, you can disable this.
-	UncleanShutdown vs_profiles.EnableDisableChoice `protobuf:"varint,51,opt,name=unclean_shutdown,json=uncleanShutdown,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"unclean_shutdown,omitempty"`
 	// unknown_cert_status_response_control
 	//
 	// x-displayName: "Unknown Cert Status Response Control"
 	// Specifies the system action when the server certificate status is unknown. The default value is ignore, which causes the connection to ignore the error and continue handshake. You can specify drop which causes the connection to be dropped. You can specify mask in case of SSL forward proxy to mask server certificate status error and continue handshake.
-	UnknownCertStatusResponseControl vs_profiles.AcceptRejectChoice `protobuf:"varint,52,opt,name=unknown_cert_status_response_control,json=unknownCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"unknown_cert_status_response_control,omitempty"`
+	UnknownCertStatusResponseControl vs_profiles.CertResponseControlChoice `protobuf:"varint,52,opt,name=unknown_cert_status_response_control,json=unknownCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"unknown_cert_status_response_control,omitempty"`
 	// untrusted_cert_response_control
 	//
 	// x-displayName: "Untrusted Cert Response Control"
 	// Specifies the system action when the server certificate has untrusted CA. The default value is drop, which causes the connection to be dropped. Conversely, you can specify ignore to cause the connection to ignore the error and continue or you can specify mask in case of SSL forward proxy to mask server certificate errors and continue with handshake and forge a good certificate on client-side.
-	UntrustedCertResponseControl vs_profiles.AcceptRejectChoice `protobuf:"varint,53,opt,name=untrusted_cert_response_control,json=untrustedCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"untrusted_cert_response_control,omitempty"`
-	// user_spec
-	//
-	// x-displayName: "User Spec"
-	// User specified properties.
-	UserSpec []string `protobuf:"bytes,54,rep,name=user_spec,json=userSpec,proto3" json:"user_spec,omitempty"`
+	UntrustedCertResponseControl vs_profiles.CertResponseControlChoice `protobuf:"varint,53,opt,name=untrusted_cert_response_control,json=untrustedCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"untrusted_cert_response_control,omitempty"`
 	// certificates_choice
 	//
 	// x-displayName: "Certificates"
@@ -305,6 +175,17 @@ type GlobalSpecType struct {
 	// Types that are valid to be assigned to CertificatesChoice:
 	//	*GlobalSpecType_Certificates
 	CertificatesChoice isGlobalSpecType_CertificatesChoice `protobuf_oneof:"certificates_choice"`
+	// trusted_ca_list
+	//
+	// x-displayName: "Trusted CA List"
+	// Specifies the trusted CA list used to validate client certificates. When authenticating clients,
+	// the system validates the client certificate against the specified trusted CA list.
+	TrustedCaList []*schema.ObjectRefType `protobuf:"bytes,57,rep,name=trusted_ca_list,json=trustedCaList,proto3" json:"trusted_ca_list,omitempty"`
+	// tm_options
+	//
+	// x-displayName: "Tm Options"
+	// Enables options, including some industry-related workarounds. Enter options inside braces, for example, { dont-insert-empty-fragments }. The default value is { dont-insert-empty-fragments no-tlsv1.3 }.
+	TmOptions []string `protobuf:"bytes,58,rep,name=tm_options,json=tmOptions,proto3" json:"tm_options,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -348,9 +229,6 @@ type isGlobalSpecType_CertificatesChoice interface {
 	Size() int
 }
 
-type GlobalSpecType_CipherGroup struct {
-	CipherGroup string `protobuf:"bytes,12,opt,name=cipher_group,json=cipherGroup,proto3,oneof" json:"cipher_group,omitempty"`
-}
 type GlobalSpecType_Ciphers struct {
 	Ciphers string `protobuf:"bytes,13,opt,name=ciphers,proto3,oneof" json:"ciphers,omitempty"`
 }
@@ -358,7 +236,6 @@ type GlobalSpecType_Certificates struct {
 	Certificates *CertificateList `protobuf:"bytes,56,opt,name=certificates,proto3,oneof" json:"certificates,omitempty"`
 }
 
-func (*GlobalSpecType_CipherGroup) isGlobalSpecType_CipherConfig()        {}
 func (*GlobalSpecType_Ciphers) isGlobalSpecType_CipherConfig()            {}
 func (*GlobalSpecType_Certificates) isGlobalSpecType_CertificatesChoice() {}
 
@@ -410,46 +287,11 @@ func (m *GlobalSpecType) GetAuthenticateName() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetBypassOnClientCertFail() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.BypassOnClientCertFail
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GlobalSpecType) GetBypassOnHandshakeAlert() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.BypassOnHandshakeAlert
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GlobalSpecType) GetC3DCertLifespan() uint32 {
-	if m != nil {
-		return m.C3DCertLifespan
-	}
-	return 0
-}
-
 func (m *GlobalSpecType) GetCacheSize() uint32 {
 	if m != nil {
 		return m.CacheSize
 	}
 	return 0
-}
-
-func (m *GlobalSpecType) GetCacheTimeout() uint32 {
-	if m != nil {
-		return m.CacheTimeout
-	}
-	return 0
-}
-
-func (m *GlobalSpecType) GetCipherGroup() string {
-	if x, ok := m.GetCipherConfig().(*GlobalSpecType_CipherGroup); ok {
-		return x.CipherGroup
-	}
-	return ""
 }
 
 func (m *GlobalSpecType) GetCiphers() string {
@@ -473,25 +315,11 @@ func (m *GlobalSpecType) GetCrlFile() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetData_0Rtt() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.Data_0Rtt
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GlobalSpecType) GetExpireCertResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *GlobalSpecType) GetExpireCertResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.ExpireCertResponseControl
 	}
-	return vs_profiles.REJECT
-}
-
-func (m *GlobalSpecType) GetGenericAlert() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.GenericAlert
-	}
-	return vs_profiles.DISABLED
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
 func (m *GlobalSpecType) GetHandshakeTimeout() uint32 {
@@ -515,23 +343,9 @@ func (m *GlobalSpecType) GetLogPublisher() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetLogSslC3DEvents() vs_profiles.LogSslC3DEventsChoice {
-	if m != nil {
-		return m.LogSslC3DEvents
-	}
-	return vs_profiles.LOG_SSL_C3D_EVENTS_UNSPECIFIED
-}
-
 func (m *GlobalSpecType) GetLogSslClientAuthenticationEvents() vs_profiles.LogSslC3DEventsChoice {
 	if m != nil {
 		return m.LogSslClientAuthenticationEvents
-	}
-	return vs_profiles.LOG_SSL_C3D_EVENTS_UNSPECIFIED
-}
-
-func (m *GlobalSpecType) GetLogSslForwardProxyEvents() vs_profiles.LogSslC3DEventsChoice {
-	if m != nil {
-		return m.LogSslForwardProxyEvents
 	}
 	return vs_profiles.LOG_SSL_C3D_EVENTS_UNSPECIFIED
 }
@@ -541,34 +355,6 @@ func (m *GlobalSpecType) GetLogSslHandshakeEvents() vs_profiles.LogSslC3DEventsC
 		return m.LogSslHandshakeEvents
 	}
 	return vs_profiles.LOG_SSL_C3D_EVENTS_UNSPECIFIED
-}
-
-func (m *GlobalSpecType) GetMaxActiveHandshakes() uint32 {
-	if m != nil {
-		return m.MaxActiveHandshakes
-	}
-	return 0
-}
-
-func (m *GlobalSpecType) GetModSslMethods() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.ModSslMethods
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GlobalSpecType) GetMode() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.Mode
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GlobalSpecType) GetOcsp() []*schema.ObjectRefType {
-	if m != nil {
-		return m.Ocsp
-	}
-	return nil
 }
 
 func (m *GlobalSpecType) GetPassphrase() string {
@@ -582,21 +368,7 @@ func (m *GlobalSpecType) GetPeerCertMode() vs_profiles.PeerCertModeChoice {
 	if m != nil {
 		return m.PeerCertMode
 	}
-	return vs_profiles.PEER_CERT_MODE_UNSPECIFIED
-}
-
-func (m *GlobalSpecType) GetProxySsl() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.ProxySsl
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GlobalSpecType) GetProxySslPassthrough() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.ProxySslPassthrough
-	}
-	return vs_profiles.DISABLED
+	return vs_profiles.PEER_CERT_MODE_IGNORE
 }
 
 func (m *GlobalSpecType) GetRenegotiatePeriod() string {
@@ -620,18 +392,11 @@ func (m *GlobalSpecType) GetRenegotiation() vs_profiles.EnableDisableChoice {
 	return vs_profiles.DISABLED
 }
 
-func (m *GlobalSpecType) GetRetainCertificate() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.RetainCertificate
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *GlobalSpecType) GetRevokedCertStatusResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *GlobalSpecType) GetRevokedCertStatusResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.RevokedCertStatusResponseControl
 	}
-	return vs_profiles.REJECT
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
 func (m *GlobalSpecType) GetSecureRenegotiation() vs_profiles.SecureRenegotiationChoice {
@@ -648,13 +413,6 @@ func (m *GlobalSpecType) GetServerName() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetSessionMirroring() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SessionMirroring
-	}
-	return vs_profiles.DISABLED
-}
-
 func (m *GlobalSpecType) GetSessionTicket() vs_profiles.EnableDisableChoice {
 	if m != nil {
 		return m.SessionTicket
@@ -662,88 +420,18 @@ func (m *GlobalSpecType) GetSessionTicket() vs_profiles.EnableDisableChoice {
 	return vs_profiles.DISABLED
 }
 
-func (m *GlobalSpecType) GetSniDefault() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.SniDefault
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *GlobalSpecType) GetSniRequire() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.SniRequire
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *GlobalSpecType) GetSslC3D() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslC3D
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GlobalSpecType) GetSslForwardProxy() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslForwardProxy
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GlobalSpecType) GetSslForwardProxyBypass() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslForwardProxyBypass
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GlobalSpecType) GetSslForwardProxyVerifiedHandshake() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslForwardProxyVerifiedHandshake
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GlobalSpecType) GetSslSignHash() vs_profiles.SslSignHashChoice {
-	if m != nil {
-		return m.SslSignHash
-	}
-	return vs_profiles.SSL_SIGN_HASH_UNSPECIFIED
-}
-
-func (m *GlobalSpecType) GetStrictResume() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.StrictResume
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GlobalSpecType) GetUncleanShutdown() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.UncleanShutdown
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GlobalSpecType) GetUnknownCertStatusResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *GlobalSpecType) GetUnknownCertStatusResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.UnknownCertStatusResponseControl
 	}
-	return vs_profiles.REJECT
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
-func (m *GlobalSpecType) GetUntrustedCertResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *GlobalSpecType) GetUntrustedCertResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.UntrustedCertResponseControl
 	}
-	return vs_profiles.REJECT
-}
-
-func (m *GlobalSpecType) GetUserSpec() []string {
-	if m != nil {
-		return m.UserSpec
-	}
-	return nil
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
 func (m *GlobalSpecType) GetCertificates() *CertificateList {
@@ -753,10 +441,23 @@ func (m *GlobalSpecType) GetCertificates() *CertificateList {
 	return nil
 }
 
+func (m *GlobalSpecType) GetTrustedCaList() []*schema.ObjectRefType {
+	if m != nil {
+		return m.TrustedCaList
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetTmOptions() []string {
+	if m != nil {
+		return m.TmOptions
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*GlobalSpecType_CipherGroup)(nil),
 		(*GlobalSpecType_Ciphers)(nil),
 		(*GlobalSpecType_Certificates)(nil),
 	}
@@ -814,55 +515,32 @@ func (m *CertificateList) GetCertificates() []*schema.ObjectRefType {
 // x-displayName: "Create Virtual server server-side proxy SSL profile"
 // Virtual server server-side proxy SSL profile configuration
 type CreateSpecType struct {
-	AlertTimeout           string                          `protobuf:"bytes,1,opt,name=alert_timeout,json=alertTimeout,proto3" json:"alert_timeout,omitempty"`
-	AllowExpiredCrl        vs_profiles.EnableDisableChoice `protobuf:"varint,2,opt,name=allow_expired_crl,json=allowExpiredCrl,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"allow_expired_crl,omitempty"`
-	Authenticate           vs_profiles.AllowOnceChoice     `protobuf:"varint,3,opt,name=authenticate,proto3,enum=ves.io.schema.vs_profiles.AllowOnceChoice" json:"authenticate,omitempty"`
-	AuthenticateDepth      uint32                          `protobuf:"varint,4,opt,name=authenticate_depth,json=authenticateDepth,proto3" json:"authenticate_depth,omitempty"`
-	AuthenticateName       string                          `protobuf:"bytes,5,opt,name=authenticate_name,json=authenticateName,proto3" json:"authenticate_name,omitempty"`
-	BypassOnClientCertFail vs_profiles.EnableDisableChoice `protobuf:"varint,6,opt,name=bypass_on_client_cert_fail,json=bypassOnClientCertFail,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"bypass_on_client_cert_fail,omitempty"`
-	BypassOnHandshakeAlert vs_profiles.EnableDisableChoice `protobuf:"varint,7,opt,name=bypass_on_handshake_alert,json=bypassOnHandshakeAlert,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"bypass_on_handshake_alert,omitempty"`
-	C3DCertLifespan        uint32                          `protobuf:"varint,8,opt,name=c3d_cert_lifespan,json=c3dCertLifespan,proto3" json:"c3d_cert_lifespan,omitempty"`
-	CacheSize              uint32                          `protobuf:"varint,9,opt,name=cache_size,json=cacheSize,proto3" json:"cache_size,omitempty"`
-	CacheTimeout           uint32                          `protobuf:"varint,10,opt,name=cache_timeout,json=cacheTimeout,proto3" json:"cache_timeout,omitempty"`
+	AlertTimeout      string                          `protobuf:"bytes,1,opt,name=alert_timeout,json=alertTimeout,proto3" json:"alert_timeout,omitempty"`
+	AllowExpiredCrl   vs_profiles.EnableDisableChoice `protobuf:"varint,2,opt,name=allow_expired_crl,json=allowExpiredCrl,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"allow_expired_crl,omitempty"`
+	Authenticate      vs_profiles.AllowOnceChoice     `protobuf:"varint,3,opt,name=authenticate,proto3,enum=ves.io.schema.vs_profiles.AllowOnceChoice" json:"authenticate,omitempty"`
+	AuthenticateDepth uint32                          `protobuf:"varint,4,opt,name=authenticate_depth,json=authenticateDepth,proto3" json:"authenticate_depth,omitempty"`
+	AuthenticateName  string                          `protobuf:"bytes,5,opt,name=authenticate_name,json=authenticateName,proto3" json:"authenticate_name,omitempty"`
+	CacheSize         uint32                          `protobuf:"varint,9,opt,name=cache_size,json=cacheSize,proto3" json:"cache_size,omitempty"`
 	// Types that are valid to be assigned to CipherConfig:
-	//	*CreateSpecType_CipherGroup
 	//	*CreateSpecType_Ciphers
 	CipherConfig                     isCreateSpecType_CipherConfig         `protobuf_oneof:"cipher_config"`
-	Data_0Rtt                        vs_profiles.EnableDisableChoice       `protobuf:"varint,16,opt,name=data_0rtt,json=data0rtt,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"data_0rtt,omitempty"`
-	ExpireCertResponseControl        vs_profiles.AcceptRejectChoice        `protobuf:"varint,17,opt,name=expire_cert_response_control,json=expireCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"expire_cert_response_control,omitempty"`
-	GenericAlert                     vs_profiles.EnableDisableChoice       `protobuf:"varint,18,opt,name=generic_alert,json=genericAlert,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"generic_alert,omitempty"`
+	ExpireCertResponseControl        vs_profiles.CertResponseControlChoice `protobuf:"varint,17,opt,name=expire_cert_response_control,json=expireCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"expire_cert_response_control,omitempty"`
 	HandshakeTimeout                 uint32                                `protobuf:"varint,19,opt,name=handshake_timeout,json=handshakeTimeout,proto3" json:"handshake_timeout,omitempty"`
-	MaxActiveHandshakes              uint32                                `protobuf:"varint,26,opt,name=max_active_handshakes,json=maxActiveHandshakes,proto3" json:"max_active_handshakes,omitempty"`
-	ModSslMethods                    vs_profiles.EnableDisableChoice       `protobuf:"varint,27,opt,name=mod_ssl_methods,json=modSslMethods,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"mod_ssl_methods,omitempty"`
-	Mode                             vs_profiles.EnableDisableChoice       `protobuf:"varint,28,opt,name=mode,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"mode,omitempty"`
-	Ocsp                             []*schema.ObjectRefType               `protobuf:"bytes,29,rep,name=ocsp,proto3" json:"ocsp,omitempty"`
 	PeerCertMode                     vs_profiles.PeerCertModeChoice        `protobuf:"varint,31,opt,name=peer_cert_mode,json=peerCertMode,proto3,enum=ves.io.schema.vs_profiles.PeerCertModeChoice" json:"peer_cert_mode,omitempty"`
-	ProxySsl                         vs_profiles.EnableDisableChoice       `protobuf:"varint,32,opt,name=proxy_ssl,json=proxySsl,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"proxy_ssl,omitempty"`
-	ProxySslPassthrough              vs_profiles.EnableDisableChoice       `protobuf:"varint,33,opt,name=proxy_ssl_passthrough,json=proxySslPassthrough,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"proxy_ssl_passthrough,omitempty"`
 	RenegotiatePeriod                string                                `protobuf:"bytes,34,opt,name=renegotiate_period,json=renegotiatePeriod,proto3" json:"renegotiate_period,omitempty"`
 	RenegotiateSize                  string                                `protobuf:"bytes,35,opt,name=renegotiate_size,json=renegotiateSize,proto3" json:"renegotiate_size,omitempty"`
 	Renegotiation                    vs_profiles.EnableDisableChoice       `protobuf:"varint,36,opt,name=renegotiation,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"renegotiation,omitempty"`
-	RetainCertificate                vs_profiles.TrueFalseChoice           `protobuf:"varint,37,opt,name=retain_certificate,json=retainCertificate,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"retain_certificate,omitempty"`
-	RevokedCertStatusResponseControl vs_profiles.AcceptRejectChoice        `protobuf:"varint,38,opt,name=revoked_cert_status_response_control,json=revokedCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"revoked_cert_status_response_control,omitempty"`
+	RevokedCertStatusResponseControl vs_profiles.CertResponseControlChoice `protobuf:"varint,38,opt,name=revoked_cert_status_response_control,json=revokedCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"revoked_cert_status_response_control,omitempty"`
 	SecureRenegotiation              vs_profiles.SecureRenegotiationChoice `protobuf:"varint,39,opt,name=secure_renegotiation,json=secureRenegotiation,proto3,enum=ves.io.schema.vs_profiles.SecureRenegotiationChoice" json:"secure_renegotiation,omitempty"`
 	ServerName                       string                                `protobuf:"bytes,40,opt,name=server_name,json=serverName,proto3" json:"server_name,omitempty"`
-	SessionMirroring                 vs_profiles.EnableDisableChoice       `protobuf:"varint,41,opt,name=session_mirroring,json=sessionMirroring,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"session_mirroring,omitempty"`
 	SessionTicket                    vs_profiles.EnableDisableChoice       `protobuf:"varint,42,opt,name=session_ticket,json=sessionTicket,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"session_ticket,omitempty"`
-	SniDefault                       vs_profiles.TrueFalseChoice           `protobuf:"varint,43,opt,name=sni_default,json=sniDefault,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"sni_default,omitempty"`
-	SniRequire                       vs_profiles.TrueFalseChoice           `protobuf:"varint,44,opt,name=sni_require,json=sniRequire,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"sni_require,omitempty"`
-	SslC3D                           vs_profiles.EnableDisableChoice       `protobuf:"varint,45,opt,name=ssl_c3d,json=sslC3d,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_c3d,omitempty"`
-	SslForwardProxy                  vs_profiles.EnableDisableChoice       `protobuf:"varint,46,opt,name=ssl_forward_proxy,json=sslForwardProxy,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_forward_proxy,omitempty"`
-	SslForwardProxyBypass            vs_profiles.EnableDisableChoice       `protobuf:"varint,47,opt,name=ssl_forward_proxy_bypass,json=sslForwardProxyBypass,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_forward_proxy_bypass,omitempty"`
-	SslForwardProxyVerifiedHandshake vs_profiles.EnableDisableChoice       `protobuf:"varint,48,opt,name=ssl_forward_proxy_verified_handshake,json=sslForwardProxyVerifiedHandshake,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_forward_proxy_verified_handshake,omitempty"`
-	SslSignHash                      vs_profiles.SslSignHashChoice         `protobuf:"varint,49,opt,name=ssl_sign_hash,json=sslSignHash,proto3,enum=ves.io.schema.vs_profiles.SslSignHashChoice" json:"ssl_sign_hash,omitempty"`
-	StrictResume                     vs_profiles.EnableDisableChoice       `protobuf:"varint,50,opt,name=strict_resume,json=strictResume,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"strict_resume,omitempty"`
-	UncleanShutdown                  vs_profiles.EnableDisableChoice       `protobuf:"varint,51,opt,name=unclean_shutdown,json=uncleanShutdown,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"unclean_shutdown,omitempty"`
-	UnknownCertStatusResponseControl vs_profiles.AcceptRejectChoice        `protobuf:"varint,52,opt,name=unknown_cert_status_response_control,json=unknownCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"unknown_cert_status_response_control,omitempty"`
-	UntrustedCertResponseControl     vs_profiles.AcceptRejectChoice        `protobuf:"varint,53,opt,name=untrusted_cert_response_control,json=untrustedCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"untrusted_cert_response_control,omitempty"`
-	UserSpec                         []string                              `protobuf:"bytes,54,rep,name=user_spec,json=userSpec,proto3" json:"user_spec,omitempty"`
+	UnknownCertStatusResponseControl vs_profiles.CertResponseControlChoice `protobuf:"varint,52,opt,name=unknown_cert_status_response_control,json=unknownCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"unknown_cert_status_response_control,omitempty"`
+	UntrustedCertResponseControl     vs_profiles.CertResponseControlChoice `protobuf:"varint,53,opt,name=untrusted_cert_response_control,json=untrustedCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"untrusted_cert_response_control,omitempty"`
 	// Types that are valid to be assigned to CertificatesChoice:
 	//	*CreateSpecType_Certificates
 	CertificatesChoice isCreateSpecType_CertificatesChoice `protobuf_oneof:"certificates_choice"`
+	TrustedCaList      []*schema.ObjectRefType             `protobuf:"bytes,57,rep,name=trusted_ca_list,json=trustedCaList,proto3" json:"trusted_ca_list,omitempty"`
+	TmOptions          []string                            `protobuf:"bytes,58,rep,name=tm_options,json=tmOptions,proto3" json:"tm_options,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -906,9 +584,6 @@ type isCreateSpecType_CertificatesChoice interface {
 	Size() int
 }
 
-type CreateSpecType_CipherGroup struct {
-	CipherGroup string `protobuf:"bytes,12,opt,name=cipher_group,json=cipherGroup,proto3,oneof" json:"cipher_group,omitempty"`
-}
 type CreateSpecType_Ciphers struct {
 	Ciphers string `protobuf:"bytes,13,opt,name=ciphers,proto3,oneof" json:"ciphers,omitempty"`
 }
@@ -916,7 +591,6 @@ type CreateSpecType_Certificates struct {
 	Certificates *CertificateList `protobuf:"bytes,56,opt,name=certificates,proto3,oneof" json:"certificates,omitempty"`
 }
 
-func (*CreateSpecType_CipherGroup) isCreateSpecType_CipherConfig()        {}
 func (*CreateSpecType_Ciphers) isCreateSpecType_CipherConfig()            {}
 func (*CreateSpecType_Certificates) isCreateSpecType_CertificatesChoice() {}
 
@@ -968,46 +642,11 @@ func (m *CreateSpecType) GetAuthenticateName() string {
 	return ""
 }
 
-func (m *CreateSpecType) GetBypassOnClientCertFail() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.BypassOnClientCertFail
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *CreateSpecType) GetBypassOnHandshakeAlert() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.BypassOnHandshakeAlert
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *CreateSpecType) GetC3DCertLifespan() uint32 {
-	if m != nil {
-		return m.C3DCertLifespan
-	}
-	return 0
-}
-
 func (m *CreateSpecType) GetCacheSize() uint32 {
 	if m != nil {
 		return m.CacheSize
 	}
 	return 0
-}
-
-func (m *CreateSpecType) GetCacheTimeout() uint32 {
-	if m != nil {
-		return m.CacheTimeout
-	}
-	return 0
-}
-
-func (m *CreateSpecType) GetCipherGroup() string {
-	if x, ok := m.GetCipherConfig().(*CreateSpecType_CipherGroup); ok {
-		return x.CipherGroup
-	}
-	return ""
 }
 
 func (m *CreateSpecType) GetCiphers() string {
@@ -1017,25 +656,11 @@ func (m *CreateSpecType) GetCiphers() string {
 	return ""
 }
 
-func (m *CreateSpecType) GetData_0Rtt() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.Data_0Rtt
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *CreateSpecType) GetExpireCertResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *CreateSpecType) GetExpireCertResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.ExpireCertResponseControl
 	}
-	return vs_profiles.REJECT
-}
-
-func (m *CreateSpecType) GetGenericAlert() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.GenericAlert
-	}
-	return vs_profiles.DISABLED
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
 func (m *CreateSpecType) GetHandshakeTimeout() uint32 {
@@ -1045,53 +670,11 @@ func (m *CreateSpecType) GetHandshakeTimeout() uint32 {
 	return 0
 }
 
-func (m *CreateSpecType) GetMaxActiveHandshakes() uint32 {
-	if m != nil {
-		return m.MaxActiveHandshakes
-	}
-	return 0
-}
-
-func (m *CreateSpecType) GetModSslMethods() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.ModSslMethods
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *CreateSpecType) GetMode() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.Mode
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *CreateSpecType) GetOcsp() []*schema.ObjectRefType {
-	if m != nil {
-		return m.Ocsp
-	}
-	return nil
-}
-
 func (m *CreateSpecType) GetPeerCertMode() vs_profiles.PeerCertModeChoice {
 	if m != nil {
 		return m.PeerCertMode
 	}
-	return vs_profiles.PEER_CERT_MODE_UNSPECIFIED
-}
-
-func (m *CreateSpecType) GetProxySsl() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.ProxySsl
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *CreateSpecType) GetProxySslPassthrough() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.ProxySslPassthrough
-	}
-	return vs_profiles.DISABLED
+	return vs_profiles.PEER_CERT_MODE_IGNORE
 }
 
 func (m *CreateSpecType) GetRenegotiatePeriod() string {
@@ -1115,18 +698,11 @@ func (m *CreateSpecType) GetRenegotiation() vs_profiles.EnableDisableChoice {
 	return vs_profiles.DISABLED
 }
 
-func (m *CreateSpecType) GetRetainCertificate() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.RetainCertificate
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *CreateSpecType) GetRevokedCertStatusResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *CreateSpecType) GetRevokedCertStatusResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.RevokedCertStatusResponseControl
 	}
-	return vs_profiles.REJECT
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
 func (m *CreateSpecType) GetSecureRenegotiation() vs_profiles.SecureRenegotiationChoice {
@@ -1143,13 +719,6 @@ func (m *CreateSpecType) GetServerName() string {
 	return ""
 }
 
-func (m *CreateSpecType) GetSessionMirroring() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SessionMirroring
-	}
-	return vs_profiles.DISABLED
-}
-
 func (m *CreateSpecType) GetSessionTicket() vs_profiles.EnableDisableChoice {
 	if m != nil {
 		return m.SessionTicket
@@ -1157,88 +726,18 @@ func (m *CreateSpecType) GetSessionTicket() vs_profiles.EnableDisableChoice {
 	return vs_profiles.DISABLED
 }
 
-func (m *CreateSpecType) GetSniDefault() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.SniDefault
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *CreateSpecType) GetSniRequire() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.SniRequire
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *CreateSpecType) GetSslC3D() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslC3D
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *CreateSpecType) GetSslForwardProxy() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslForwardProxy
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *CreateSpecType) GetSslForwardProxyBypass() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslForwardProxyBypass
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *CreateSpecType) GetSslForwardProxyVerifiedHandshake() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslForwardProxyVerifiedHandshake
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *CreateSpecType) GetSslSignHash() vs_profiles.SslSignHashChoice {
-	if m != nil {
-		return m.SslSignHash
-	}
-	return vs_profiles.SSL_SIGN_HASH_UNSPECIFIED
-}
-
-func (m *CreateSpecType) GetStrictResume() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.StrictResume
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *CreateSpecType) GetUncleanShutdown() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.UncleanShutdown
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *CreateSpecType) GetUnknownCertStatusResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *CreateSpecType) GetUnknownCertStatusResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.UnknownCertStatusResponseControl
 	}
-	return vs_profiles.REJECT
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
-func (m *CreateSpecType) GetUntrustedCertResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *CreateSpecType) GetUntrustedCertResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.UntrustedCertResponseControl
 	}
-	return vs_profiles.REJECT
-}
-
-func (m *CreateSpecType) GetUserSpec() []string {
-	if m != nil {
-		return m.UserSpec
-	}
-	return nil
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
 func (m *CreateSpecType) GetCertificates() *CertificateList {
@@ -1248,10 +747,23 @@ func (m *CreateSpecType) GetCertificates() *CertificateList {
 	return nil
 }
 
+func (m *CreateSpecType) GetTrustedCaList() []*schema.ObjectRefType {
+	if m != nil {
+		return m.TrustedCaList
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetTmOptions() []string {
+	if m != nil {
+		return m.TmOptions
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*CreateSpecType_CipherGroup)(nil),
 		(*CreateSpecType_Ciphers)(nil),
 		(*CreateSpecType_Certificates)(nil),
 	}
@@ -1262,55 +774,32 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 // x-displayName: "Get Virtual server server-side proxy SSL profile"
 // Virtual server server-side proxy SSL profile configuration
 type GetSpecType struct {
-	AlertTimeout           string                          `protobuf:"bytes,1,opt,name=alert_timeout,json=alertTimeout,proto3" json:"alert_timeout,omitempty"`
-	AllowExpiredCrl        vs_profiles.EnableDisableChoice `protobuf:"varint,2,opt,name=allow_expired_crl,json=allowExpiredCrl,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"allow_expired_crl,omitempty"`
-	Authenticate           vs_profiles.AllowOnceChoice     `protobuf:"varint,3,opt,name=authenticate,proto3,enum=ves.io.schema.vs_profiles.AllowOnceChoice" json:"authenticate,omitempty"`
-	AuthenticateDepth      uint32                          `protobuf:"varint,4,opt,name=authenticate_depth,json=authenticateDepth,proto3" json:"authenticate_depth,omitempty"`
-	AuthenticateName       string                          `protobuf:"bytes,5,opt,name=authenticate_name,json=authenticateName,proto3" json:"authenticate_name,omitempty"`
-	BypassOnClientCertFail vs_profiles.EnableDisableChoice `protobuf:"varint,6,opt,name=bypass_on_client_cert_fail,json=bypassOnClientCertFail,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"bypass_on_client_cert_fail,omitempty"`
-	BypassOnHandshakeAlert vs_profiles.EnableDisableChoice `protobuf:"varint,7,opt,name=bypass_on_handshake_alert,json=bypassOnHandshakeAlert,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"bypass_on_handshake_alert,omitempty"`
-	C3DCertLifespan        uint32                          `protobuf:"varint,8,opt,name=c3d_cert_lifespan,json=c3dCertLifespan,proto3" json:"c3d_cert_lifespan,omitempty"`
-	CacheSize              uint32                          `protobuf:"varint,9,opt,name=cache_size,json=cacheSize,proto3" json:"cache_size,omitempty"`
-	CacheTimeout           uint32                          `protobuf:"varint,10,opt,name=cache_timeout,json=cacheTimeout,proto3" json:"cache_timeout,omitempty"`
+	AlertTimeout      string                          `protobuf:"bytes,1,opt,name=alert_timeout,json=alertTimeout,proto3" json:"alert_timeout,omitempty"`
+	AllowExpiredCrl   vs_profiles.EnableDisableChoice `protobuf:"varint,2,opt,name=allow_expired_crl,json=allowExpiredCrl,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"allow_expired_crl,omitempty"`
+	Authenticate      vs_profiles.AllowOnceChoice     `protobuf:"varint,3,opt,name=authenticate,proto3,enum=ves.io.schema.vs_profiles.AllowOnceChoice" json:"authenticate,omitempty"`
+	AuthenticateDepth uint32                          `protobuf:"varint,4,opt,name=authenticate_depth,json=authenticateDepth,proto3" json:"authenticate_depth,omitempty"`
+	AuthenticateName  string                          `protobuf:"bytes,5,opt,name=authenticate_name,json=authenticateName,proto3" json:"authenticate_name,omitempty"`
+	CacheSize         uint32                          `protobuf:"varint,9,opt,name=cache_size,json=cacheSize,proto3" json:"cache_size,omitempty"`
 	// Types that are valid to be assigned to CipherConfig:
-	//	*GetSpecType_CipherGroup
 	//	*GetSpecType_Ciphers
 	CipherConfig                     isGetSpecType_CipherConfig            `protobuf_oneof:"cipher_config"`
-	Data_0Rtt                        vs_profiles.EnableDisableChoice       `protobuf:"varint,16,opt,name=data_0rtt,json=data0rtt,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"data_0rtt,omitempty"`
-	ExpireCertResponseControl        vs_profiles.AcceptRejectChoice        `protobuf:"varint,17,opt,name=expire_cert_response_control,json=expireCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"expire_cert_response_control,omitempty"`
-	GenericAlert                     vs_profiles.EnableDisableChoice       `protobuf:"varint,18,opt,name=generic_alert,json=genericAlert,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"generic_alert,omitempty"`
+	ExpireCertResponseControl        vs_profiles.CertResponseControlChoice `protobuf:"varint,17,opt,name=expire_cert_response_control,json=expireCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"expire_cert_response_control,omitempty"`
 	HandshakeTimeout                 uint32                                `protobuf:"varint,19,opt,name=handshake_timeout,json=handshakeTimeout,proto3" json:"handshake_timeout,omitempty"`
-	MaxActiveHandshakes              uint32                                `protobuf:"varint,26,opt,name=max_active_handshakes,json=maxActiveHandshakes,proto3" json:"max_active_handshakes,omitempty"`
-	ModSslMethods                    vs_profiles.EnableDisableChoice       `protobuf:"varint,27,opt,name=mod_ssl_methods,json=modSslMethods,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"mod_ssl_methods,omitempty"`
-	Mode                             vs_profiles.EnableDisableChoice       `protobuf:"varint,28,opt,name=mode,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"mode,omitempty"`
-	Ocsp                             []*schema.ObjectRefType               `protobuf:"bytes,29,rep,name=ocsp,proto3" json:"ocsp,omitempty"`
 	PeerCertMode                     vs_profiles.PeerCertModeChoice        `protobuf:"varint,31,opt,name=peer_cert_mode,json=peerCertMode,proto3,enum=ves.io.schema.vs_profiles.PeerCertModeChoice" json:"peer_cert_mode,omitempty"`
-	ProxySsl                         vs_profiles.EnableDisableChoice       `protobuf:"varint,32,opt,name=proxy_ssl,json=proxySsl,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"proxy_ssl,omitempty"`
-	ProxySslPassthrough              vs_profiles.EnableDisableChoice       `protobuf:"varint,33,opt,name=proxy_ssl_passthrough,json=proxySslPassthrough,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"proxy_ssl_passthrough,omitempty"`
 	RenegotiatePeriod                string                                `protobuf:"bytes,34,opt,name=renegotiate_period,json=renegotiatePeriod,proto3" json:"renegotiate_period,omitempty"`
 	RenegotiateSize                  string                                `protobuf:"bytes,35,opt,name=renegotiate_size,json=renegotiateSize,proto3" json:"renegotiate_size,omitempty"`
 	Renegotiation                    vs_profiles.EnableDisableChoice       `protobuf:"varint,36,opt,name=renegotiation,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"renegotiation,omitempty"`
-	RetainCertificate                vs_profiles.TrueFalseChoice           `protobuf:"varint,37,opt,name=retain_certificate,json=retainCertificate,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"retain_certificate,omitempty"`
-	RevokedCertStatusResponseControl vs_profiles.AcceptRejectChoice        `protobuf:"varint,38,opt,name=revoked_cert_status_response_control,json=revokedCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"revoked_cert_status_response_control,omitempty"`
+	RevokedCertStatusResponseControl vs_profiles.CertResponseControlChoice `protobuf:"varint,38,opt,name=revoked_cert_status_response_control,json=revokedCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"revoked_cert_status_response_control,omitempty"`
 	SecureRenegotiation              vs_profiles.SecureRenegotiationChoice `protobuf:"varint,39,opt,name=secure_renegotiation,json=secureRenegotiation,proto3,enum=ves.io.schema.vs_profiles.SecureRenegotiationChoice" json:"secure_renegotiation,omitempty"`
 	ServerName                       string                                `protobuf:"bytes,40,opt,name=server_name,json=serverName,proto3" json:"server_name,omitempty"`
-	SessionMirroring                 vs_profiles.EnableDisableChoice       `protobuf:"varint,41,opt,name=session_mirroring,json=sessionMirroring,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"session_mirroring,omitempty"`
 	SessionTicket                    vs_profiles.EnableDisableChoice       `protobuf:"varint,42,opt,name=session_ticket,json=sessionTicket,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"session_ticket,omitempty"`
-	SniDefault                       vs_profiles.TrueFalseChoice           `protobuf:"varint,43,opt,name=sni_default,json=sniDefault,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"sni_default,omitempty"`
-	SniRequire                       vs_profiles.TrueFalseChoice           `protobuf:"varint,44,opt,name=sni_require,json=sniRequire,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"sni_require,omitempty"`
-	SslC3D                           vs_profiles.EnableDisableChoice       `protobuf:"varint,45,opt,name=ssl_c3d,json=sslC3d,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_c3d,omitempty"`
-	SslForwardProxy                  vs_profiles.EnableDisableChoice       `protobuf:"varint,46,opt,name=ssl_forward_proxy,json=sslForwardProxy,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_forward_proxy,omitempty"`
-	SslForwardProxyBypass            vs_profiles.EnableDisableChoice       `protobuf:"varint,47,opt,name=ssl_forward_proxy_bypass,json=sslForwardProxyBypass,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_forward_proxy_bypass,omitempty"`
-	SslForwardProxyVerifiedHandshake vs_profiles.EnableDisableChoice       `protobuf:"varint,48,opt,name=ssl_forward_proxy_verified_handshake,json=sslForwardProxyVerifiedHandshake,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_forward_proxy_verified_handshake,omitempty"`
-	SslSignHash                      vs_profiles.SslSignHashChoice         `protobuf:"varint,49,opt,name=ssl_sign_hash,json=sslSignHash,proto3,enum=ves.io.schema.vs_profiles.SslSignHashChoice" json:"ssl_sign_hash,omitempty"`
-	StrictResume                     vs_profiles.EnableDisableChoice       `protobuf:"varint,50,opt,name=strict_resume,json=strictResume,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"strict_resume,omitempty"`
-	UncleanShutdown                  vs_profiles.EnableDisableChoice       `protobuf:"varint,51,opt,name=unclean_shutdown,json=uncleanShutdown,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"unclean_shutdown,omitempty"`
-	UnknownCertStatusResponseControl vs_profiles.AcceptRejectChoice        `protobuf:"varint,52,opt,name=unknown_cert_status_response_control,json=unknownCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"unknown_cert_status_response_control,omitempty"`
-	UntrustedCertResponseControl     vs_profiles.AcceptRejectChoice        `protobuf:"varint,53,opt,name=untrusted_cert_response_control,json=untrustedCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"untrusted_cert_response_control,omitempty"`
-	UserSpec                         []string                              `protobuf:"bytes,54,rep,name=user_spec,json=userSpec,proto3" json:"user_spec,omitempty"`
+	UnknownCertStatusResponseControl vs_profiles.CertResponseControlChoice `protobuf:"varint,52,opt,name=unknown_cert_status_response_control,json=unknownCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"unknown_cert_status_response_control,omitempty"`
+	UntrustedCertResponseControl     vs_profiles.CertResponseControlChoice `protobuf:"varint,53,opt,name=untrusted_cert_response_control,json=untrustedCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"untrusted_cert_response_control,omitempty"`
 	// Types that are valid to be assigned to CertificatesChoice:
 	//	*GetSpecType_Certificates
 	CertificatesChoice isGetSpecType_CertificatesChoice `protobuf_oneof:"certificates_choice"`
+	TrustedCaList      []*schema.ObjectRefType          `protobuf:"bytes,57,rep,name=trusted_ca_list,json=trustedCaList,proto3" json:"trusted_ca_list,omitempty"`
+	TmOptions          []string                         `protobuf:"bytes,58,rep,name=tm_options,json=tmOptions,proto3" json:"tm_options,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -1354,9 +843,6 @@ type isGetSpecType_CertificatesChoice interface {
 	Size() int
 }
 
-type GetSpecType_CipherGroup struct {
-	CipherGroup string `protobuf:"bytes,12,opt,name=cipher_group,json=cipherGroup,proto3,oneof" json:"cipher_group,omitempty"`
-}
 type GetSpecType_Ciphers struct {
 	Ciphers string `protobuf:"bytes,13,opt,name=ciphers,proto3,oneof" json:"ciphers,omitempty"`
 }
@@ -1364,7 +850,6 @@ type GetSpecType_Certificates struct {
 	Certificates *CertificateList `protobuf:"bytes,56,opt,name=certificates,proto3,oneof" json:"certificates,omitempty"`
 }
 
-func (*GetSpecType_CipherGroup) isGetSpecType_CipherConfig()        {}
 func (*GetSpecType_Ciphers) isGetSpecType_CipherConfig()            {}
 func (*GetSpecType_Certificates) isGetSpecType_CertificatesChoice() {}
 
@@ -1416,46 +901,11 @@ func (m *GetSpecType) GetAuthenticateName() string {
 	return ""
 }
 
-func (m *GetSpecType) GetBypassOnClientCertFail() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.BypassOnClientCertFail
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GetSpecType) GetBypassOnHandshakeAlert() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.BypassOnHandshakeAlert
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GetSpecType) GetC3DCertLifespan() uint32 {
-	if m != nil {
-		return m.C3DCertLifespan
-	}
-	return 0
-}
-
 func (m *GetSpecType) GetCacheSize() uint32 {
 	if m != nil {
 		return m.CacheSize
 	}
 	return 0
-}
-
-func (m *GetSpecType) GetCacheTimeout() uint32 {
-	if m != nil {
-		return m.CacheTimeout
-	}
-	return 0
-}
-
-func (m *GetSpecType) GetCipherGroup() string {
-	if x, ok := m.GetCipherConfig().(*GetSpecType_CipherGroup); ok {
-		return x.CipherGroup
-	}
-	return ""
 }
 
 func (m *GetSpecType) GetCiphers() string {
@@ -1465,25 +915,11 @@ func (m *GetSpecType) GetCiphers() string {
 	return ""
 }
 
-func (m *GetSpecType) GetData_0Rtt() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.Data_0Rtt
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GetSpecType) GetExpireCertResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *GetSpecType) GetExpireCertResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.ExpireCertResponseControl
 	}
-	return vs_profiles.REJECT
-}
-
-func (m *GetSpecType) GetGenericAlert() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.GenericAlert
-	}
-	return vs_profiles.DISABLED
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
 func (m *GetSpecType) GetHandshakeTimeout() uint32 {
@@ -1493,53 +929,11 @@ func (m *GetSpecType) GetHandshakeTimeout() uint32 {
 	return 0
 }
 
-func (m *GetSpecType) GetMaxActiveHandshakes() uint32 {
-	if m != nil {
-		return m.MaxActiveHandshakes
-	}
-	return 0
-}
-
-func (m *GetSpecType) GetModSslMethods() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.ModSslMethods
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GetSpecType) GetMode() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.Mode
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GetSpecType) GetOcsp() []*schema.ObjectRefType {
-	if m != nil {
-		return m.Ocsp
-	}
-	return nil
-}
-
 func (m *GetSpecType) GetPeerCertMode() vs_profiles.PeerCertModeChoice {
 	if m != nil {
 		return m.PeerCertMode
 	}
-	return vs_profiles.PEER_CERT_MODE_UNSPECIFIED
-}
-
-func (m *GetSpecType) GetProxySsl() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.ProxySsl
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GetSpecType) GetProxySslPassthrough() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.ProxySslPassthrough
-	}
-	return vs_profiles.DISABLED
+	return vs_profiles.PEER_CERT_MODE_IGNORE
 }
 
 func (m *GetSpecType) GetRenegotiatePeriod() string {
@@ -1563,18 +957,11 @@ func (m *GetSpecType) GetRenegotiation() vs_profiles.EnableDisableChoice {
 	return vs_profiles.DISABLED
 }
 
-func (m *GetSpecType) GetRetainCertificate() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.RetainCertificate
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *GetSpecType) GetRevokedCertStatusResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *GetSpecType) GetRevokedCertStatusResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.RevokedCertStatusResponseControl
 	}
-	return vs_profiles.REJECT
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
 func (m *GetSpecType) GetSecureRenegotiation() vs_profiles.SecureRenegotiationChoice {
@@ -1591,13 +978,6 @@ func (m *GetSpecType) GetServerName() string {
 	return ""
 }
 
-func (m *GetSpecType) GetSessionMirroring() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SessionMirroring
-	}
-	return vs_profiles.DISABLED
-}
-
 func (m *GetSpecType) GetSessionTicket() vs_profiles.EnableDisableChoice {
 	if m != nil {
 		return m.SessionTicket
@@ -1605,88 +985,18 @@ func (m *GetSpecType) GetSessionTicket() vs_profiles.EnableDisableChoice {
 	return vs_profiles.DISABLED
 }
 
-func (m *GetSpecType) GetSniDefault() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.SniDefault
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *GetSpecType) GetSniRequire() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.SniRequire
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *GetSpecType) GetSslC3D() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslC3D
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GetSpecType) GetSslForwardProxy() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslForwardProxy
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GetSpecType) GetSslForwardProxyBypass() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslForwardProxyBypass
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GetSpecType) GetSslForwardProxyVerifiedHandshake() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslForwardProxyVerifiedHandshake
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GetSpecType) GetSslSignHash() vs_profiles.SslSignHashChoice {
-	if m != nil {
-		return m.SslSignHash
-	}
-	return vs_profiles.SSL_SIGN_HASH_UNSPECIFIED
-}
-
-func (m *GetSpecType) GetStrictResume() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.StrictResume
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GetSpecType) GetUncleanShutdown() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.UncleanShutdown
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *GetSpecType) GetUnknownCertStatusResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *GetSpecType) GetUnknownCertStatusResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.UnknownCertStatusResponseControl
 	}
-	return vs_profiles.REJECT
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
-func (m *GetSpecType) GetUntrustedCertResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *GetSpecType) GetUntrustedCertResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.UntrustedCertResponseControl
 	}
-	return vs_profiles.REJECT
-}
-
-func (m *GetSpecType) GetUserSpec() []string {
-	if m != nil {
-		return m.UserSpec
-	}
-	return nil
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
 func (m *GetSpecType) GetCertificates() *CertificateList {
@@ -1696,10 +1006,23 @@ func (m *GetSpecType) GetCertificates() *CertificateList {
 	return nil
 }
 
+func (m *GetSpecType) GetTrustedCaList() []*schema.ObjectRefType {
+	if m != nil {
+		return m.TrustedCaList
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetTmOptions() []string {
+	if m != nil {
+		return m.TmOptions
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*GetSpecType_CipherGroup)(nil),
 		(*GetSpecType_Ciphers)(nil),
 		(*GetSpecType_Certificates)(nil),
 	}
@@ -1710,55 +1033,32 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 // x-displayName: "Replace ServerSsl"
 // Virtual server server-side proxy SSL profile configuration
 type ReplaceSpecType struct {
-	AlertTimeout           string                          `protobuf:"bytes,1,opt,name=alert_timeout,json=alertTimeout,proto3" json:"alert_timeout,omitempty"`
-	AllowExpiredCrl        vs_profiles.EnableDisableChoice `protobuf:"varint,2,opt,name=allow_expired_crl,json=allowExpiredCrl,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"allow_expired_crl,omitempty"`
-	Authenticate           vs_profiles.AllowOnceChoice     `protobuf:"varint,3,opt,name=authenticate,proto3,enum=ves.io.schema.vs_profiles.AllowOnceChoice" json:"authenticate,omitempty"`
-	AuthenticateDepth      uint32                          `protobuf:"varint,4,opt,name=authenticate_depth,json=authenticateDepth,proto3" json:"authenticate_depth,omitempty"`
-	AuthenticateName       string                          `protobuf:"bytes,5,opt,name=authenticate_name,json=authenticateName,proto3" json:"authenticate_name,omitempty"`
-	BypassOnClientCertFail vs_profiles.EnableDisableChoice `protobuf:"varint,6,opt,name=bypass_on_client_cert_fail,json=bypassOnClientCertFail,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"bypass_on_client_cert_fail,omitempty"`
-	BypassOnHandshakeAlert vs_profiles.EnableDisableChoice `protobuf:"varint,7,opt,name=bypass_on_handshake_alert,json=bypassOnHandshakeAlert,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"bypass_on_handshake_alert,omitempty"`
-	C3DCertLifespan        uint32                          `protobuf:"varint,8,opt,name=c3d_cert_lifespan,json=c3dCertLifespan,proto3" json:"c3d_cert_lifespan,omitempty"`
-	CacheSize              uint32                          `protobuf:"varint,9,opt,name=cache_size,json=cacheSize,proto3" json:"cache_size,omitempty"`
-	CacheTimeout           uint32                          `protobuf:"varint,10,opt,name=cache_timeout,json=cacheTimeout,proto3" json:"cache_timeout,omitempty"`
+	AlertTimeout      string                          `protobuf:"bytes,1,opt,name=alert_timeout,json=alertTimeout,proto3" json:"alert_timeout,omitempty"`
+	AllowExpiredCrl   vs_profiles.EnableDisableChoice `protobuf:"varint,2,opt,name=allow_expired_crl,json=allowExpiredCrl,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"allow_expired_crl,omitempty"`
+	Authenticate      vs_profiles.AllowOnceChoice     `protobuf:"varint,3,opt,name=authenticate,proto3,enum=ves.io.schema.vs_profiles.AllowOnceChoice" json:"authenticate,omitempty"`
+	AuthenticateDepth uint32                          `protobuf:"varint,4,opt,name=authenticate_depth,json=authenticateDepth,proto3" json:"authenticate_depth,omitempty"`
+	AuthenticateName  string                          `protobuf:"bytes,5,opt,name=authenticate_name,json=authenticateName,proto3" json:"authenticate_name,omitempty"`
+	CacheSize         uint32                          `protobuf:"varint,9,opt,name=cache_size,json=cacheSize,proto3" json:"cache_size,omitempty"`
 	// Types that are valid to be assigned to CipherConfig:
-	//	*ReplaceSpecType_CipherGroup
 	//	*ReplaceSpecType_Ciphers
 	CipherConfig                     isReplaceSpecType_CipherConfig        `protobuf_oneof:"cipher_config"`
-	Data_0Rtt                        vs_profiles.EnableDisableChoice       `protobuf:"varint,16,opt,name=data_0rtt,json=data0rtt,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"data_0rtt,omitempty"`
-	ExpireCertResponseControl        vs_profiles.AcceptRejectChoice        `protobuf:"varint,17,opt,name=expire_cert_response_control,json=expireCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"expire_cert_response_control,omitempty"`
-	GenericAlert                     vs_profiles.EnableDisableChoice       `protobuf:"varint,18,opt,name=generic_alert,json=genericAlert,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"generic_alert,omitempty"`
+	ExpireCertResponseControl        vs_profiles.CertResponseControlChoice `protobuf:"varint,17,opt,name=expire_cert_response_control,json=expireCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"expire_cert_response_control,omitempty"`
 	HandshakeTimeout                 uint32                                `protobuf:"varint,19,opt,name=handshake_timeout,json=handshakeTimeout,proto3" json:"handshake_timeout,omitempty"`
-	MaxActiveHandshakes              uint32                                `protobuf:"varint,26,opt,name=max_active_handshakes,json=maxActiveHandshakes,proto3" json:"max_active_handshakes,omitempty"`
-	ModSslMethods                    vs_profiles.EnableDisableChoice       `protobuf:"varint,27,opt,name=mod_ssl_methods,json=modSslMethods,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"mod_ssl_methods,omitempty"`
-	Mode                             vs_profiles.EnableDisableChoice       `protobuf:"varint,28,opt,name=mode,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"mode,omitempty"`
-	Ocsp                             []*schema.ObjectRefType               `protobuf:"bytes,29,rep,name=ocsp,proto3" json:"ocsp,omitempty"`
 	PeerCertMode                     vs_profiles.PeerCertModeChoice        `protobuf:"varint,31,opt,name=peer_cert_mode,json=peerCertMode,proto3,enum=ves.io.schema.vs_profiles.PeerCertModeChoice" json:"peer_cert_mode,omitempty"`
-	ProxySsl                         vs_profiles.EnableDisableChoice       `protobuf:"varint,32,opt,name=proxy_ssl,json=proxySsl,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"proxy_ssl,omitempty"`
-	ProxySslPassthrough              vs_profiles.EnableDisableChoice       `protobuf:"varint,33,opt,name=proxy_ssl_passthrough,json=proxySslPassthrough,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"proxy_ssl_passthrough,omitempty"`
 	RenegotiatePeriod                string                                `protobuf:"bytes,34,opt,name=renegotiate_period,json=renegotiatePeriod,proto3" json:"renegotiate_period,omitempty"`
 	RenegotiateSize                  string                                `protobuf:"bytes,35,opt,name=renegotiate_size,json=renegotiateSize,proto3" json:"renegotiate_size,omitempty"`
 	Renegotiation                    vs_profiles.EnableDisableChoice       `protobuf:"varint,36,opt,name=renegotiation,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"renegotiation,omitempty"`
-	RetainCertificate                vs_profiles.TrueFalseChoice           `protobuf:"varint,37,opt,name=retain_certificate,json=retainCertificate,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"retain_certificate,omitempty"`
-	RevokedCertStatusResponseControl vs_profiles.AcceptRejectChoice        `protobuf:"varint,38,opt,name=revoked_cert_status_response_control,json=revokedCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"revoked_cert_status_response_control,omitempty"`
+	RevokedCertStatusResponseControl vs_profiles.CertResponseControlChoice `protobuf:"varint,38,opt,name=revoked_cert_status_response_control,json=revokedCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"revoked_cert_status_response_control,omitempty"`
 	SecureRenegotiation              vs_profiles.SecureRenegotiationChoice `protobuf:"varint,39,opt,name=secure_renegotiation,json=secureRenegotiation,proto3,enum=ves.io.schema.vs_profiles.SecureRenegotiationChoice" json:"secure_renegotiation,omitempty"`
 	ServerName                       string                                `protobuf:"bytes,40,opt,name=server_name,json=serverName,proto3" json:"server_name,omitempty"`
-	SessionMirroring                 vs_profiles.EnableDisableChoice       `protobuf:"varint,41,opt,name=session_mirroring,json=sessionMirroring,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"session_mirroring,omitempty"`
 	SessionTicket                    vs_profiles.EnableDisableChoice       `protobuf:"varint,42,opt,name=session_ticket,json=sessionTicket,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"session_ticket,omitempty"`
-	SniDefault                       vs_profiles.TrueFalseChoice           `protobuf:"varint,43,opt,name=sni_default,json=sniDefault,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"sni_default,omitempty"`
-	SniRequire                       vs_profiles.TrueFalseChoice           `protobuf:"varint,44,opt,name=sni_require,json=sniRequire,proto3,enum=ves.io.schema.vs_profiles.TrueFalseChoice" json:"sni_require,omitempty"`
-	SslC3D                           vs_profiles.EnableDisableChoice       `protobuf:"varint,45,opt,name=ssl_c3d,json=sslC3d,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_c3d,omitempty"`
-	SslForwardProxy                  vs_profiles.EnableDisableChoice       `protobuf:"varint,46,opt,name=ssl_forward_proxy,json=sslForwardProxy,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_forward_proxy,omitempty"`
-	SslForwardProxyBypass            vs_profiles.EnableDisableChoice       `protobuf:"varint,47,opt,name=ssl_forward_proxy_bypass,json=sslForwardProxyBypass,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_forward_proxy_bypass,omitempty"`
-	SslForwardProxyVerifiedHandshake vs_profiles.EnableDisableChoice       `protobuf:"varint,48,opt,name=ssl_forward_proxy_verified_handshake,json=sslForwardProxyVerifiedHandshake,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"ssl_forward_proxy_verified_handshake,omitempty"`
-	SslSignHash                      vs_profiles.SslSignHashChoice         `protobuf:"varint,49,opt,name=ssl_sign_hash,json=sslSignHash,proto3,enum=ves.io.schema.vs_profiles.SslSignHashChoice" json:"ssl_sign_hash,omitempty"`
-	StrictResume                     vs_profiles.EnableDisableChoice       `protobuf:"varint,50,opt,name=strict_resume,json=strictResume,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"strict_resume,omitempty"`
-	UncleanShutdown                  vs_profiles.EnableDisableChoice       `protobuf:"varint,51,opt,name=unclean_shutdown,json=uncleanShutdown,proto3,enum=ves.io.schema.vs_profiles.EnableDisableChoice" json:"unclean_shutdown,omitempty"`
-	UnknownCertStatusResponseControl vs_profiles.AcceptRejectChoice        `protobuf:"varint,52,opt,name=unknown_cert_status_response_control,json=unknownCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"unknown_cert_status_response_control,omitempty"`
-	UntrustedCertResponseControl     vs_profiles.AcceptRejectChoice        `protobuf:"varint,53,opt,name=untrusted_cert_response_control,json=untrustedCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.AcceptRejectChoice" json:"untrusted_cert_response_control,omitempty"`
-	UserSpec                         []string                              `protobuf:"bytes,54,rep,name=user_spec,json=userSpec,proto3" json:"user_spec,omitempty"`
+	UnknownCertStatusResponseControl vs_profiles.CertResponseControlChoice `protobuf:"varint,52,opt,name=unknown_cert_status_response_control,json=unknownCertStatusResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"unknown_cert_status_response_control,omitempty"`
+	UntrustedCertResponseControl     vs_profiles.CertResponseControlChoice `protobuf:"varint,53,opt,name=untrusted_cert_response_control,json=untrustedCertResponseControl,proto3,enum=ves.io.schema.vs_profiles.CertResponseControlChoice" json:"untrusted_cert_response_control,omitempty"`
 	// Types that are valid to be assigned to CertificatesChoice:
 	//	*ReplaceSpecType_Certificates
 	CertificatesChoice isReplaceSpecType_CertificatesChoice `protobuf_oneof:"certificates_choice"`
+	TrustedCaList      []*schema.ObjectRefType              `protobuf:"bytes,57,rep,name=trusted_ca_list,json=trustedCaList,proto3" json:"trusted_ca_list,omitempty"`
+	TmOptions          []string                             `protobuf:"bytes,58,rep,name=tm_options,json=tmOptions,proto3" json:"tm_options,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
@@ -1802,9 +1102,6 @@ type isReplaceSpecType_CertificatesChoice interface {
 	Size() int
 }
 
-type ReplaceSpecType_CipherGroup struct {
-	CipherGroup string `protobuf:"bytes,12,opt,name=cipher_group,json=cipherGroup,proto3,oneof" json:"cipher_group,omitempty"`
-}
 type ReplaceSpecType_Ciphers struct {
 	Ciphers string `protobuf:"bytes,13,opt,name=ciphers,proto3,oneof" json:"ciphers,omitempty"`
 }
@@ -1812,7 +1109,6 @@ type ReplaceSpecType_Certificates struct {
 	Certificates *CertificateList `protobuf:"bytes,56,opt,name=certificates,proto3,oneof" json:"certificates,omitempty"`
 }
 
-func (*ReplaceSpecType_CipherGroup) isReplaceSpecType_CipherConfig()        {}
 func (*ReplaceSpecType_Ciphers) isReplaceSpecType_CipherConfig()            {}
 func (*ReplaceSpecType_Certificates) isReplaceSpecType_CertificatesChoice() {}
 
@@ -1864,46 +1160,11 @@ func (m *ReplaceSpecType) GetAuthenticateName() string {
 	return ""
 }
 
-func (m *ReplaceSpecType) GetBypassOnClientCertFail() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.BypassOnClientCertFail
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *ReplaceSpecType) GetBypassOnHandshakeAlert() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.BypassOnHandshakeAlert
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *ReplaceSpecType) GetC3DCertLifespan() uint32 {
-	if m != nil {
-		return m.C3DCertLifespan
-	}
-	return 0
-}
-
 func (m *ReplaceSpecType) GetCacheSize() uint32 {
 	if m != nil {
 		return m.CacheSize
 	}
 	return 0
-}
-
-func (m *ReplaceSpecType) GetCacheTimeout() uint32 {
-	if m != nil {
-		return m.CacheTimeout
-	}
-	return 0
-}
-
-func (m *ReplaceSpecType) GetCipherGroup() string {
-	if x, ok := m.GetCipherConfig().(*ReplaceSpecType_CipherGroup); ok {
-		return x.CipherGroup
-	}
-	return ""
 }
 
 func (m *ReplaceSpecType) GetCiphers() string {
@@ -1913,25 +1174,11 @@ func (m *ReplaceSpecType) GetCiphers() string {
 	return ""
 }
 
-func (m *ReplaceSpecType) GetData_0Rtt() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.Data_0Rtt
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *ReplaceSpecType) GetExpireCertResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *ReplaceSpecType) GetExpireCertResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.ExpireCertResponseControl
 	}
-	return vs_profiles.REJECT
-}
-
-func (m *ReplaceSpecType) GetGenericAlert() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.GenericAlert
-	}
-	return vs_profiles.DISABLED
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
 func (m *ReplaceSpecType) GetHandshakeTimeout() uint32 {
@@ -1941,53 +1188,11 @@ func (m *ReplaceSpecType) GetHandshakeTimeout() uint32 {
 	return 0
 }
 
-func (m *ReplaceSpecType) GetMaxActiveHandshakes() uint32 {
-	if m != nil {
-		return m.MaxActiveHandshakes
-	}
-	return 0
-}
-
-func (m *ReplaceSpecType) GetModSslMethods() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.ModSslMethods
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *ReplaceSpecType) GetMode() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.Mode
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *ReplaceSpecType) GetOcsp() []*schema.ObjectRefType {
-	if m != nil {
-		return m.Ocsp
-	}
-	return nil
-}
-
 func (m *ReplaceSpecType) GetPeerCertMode() vs_profiles.PeerCertModeChoice {
 	if m != nil {
 		return m.PeerCertMode
 	}
-	return vs_profiles.PEER_CERT_MODE_UNSPECIFIED
-}
-
-func (m *ReplaceSpecType) GetProxySsl() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.ProxySsl
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *ReplaceSpecType) GetProxySslPassthrough() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.ProxySslPassthrough
-	}
-	return vs_profiles.DISABLED
+	return vs_profiles.PEER_CERT_MODE_IGNORE
 }
 
 func (m *ReplaceSpecType) GetRenegotiatePeriod() string {
@@ -2011,18 +1216,11 @@ func (m *ReplaceSpecType) GetRenegotiation() vs_profiles.EnableDisableChoice {
 	return vs_profiles.DISABLED
 }
 
-func (m *ReplaceSpecType) GetRetainCertificate() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.RetainCertificate
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *ReplaceSpecType) GetRevokedCertStatusResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *ReplaceSpecType) GetRevokedCertStatusResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.RevokedCertStatusResponseControl
 	}
-	return vs_profiles.REJECT
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
 func (m *ReplaceSpecType) GetSecureRenegotiation() vs_profiles.SecureRenegotiationChoice {
@@ -2039,13 +1237,6 @@ func (m *ReplaceSpecType) GetServerName() string {
 	return ""
 }
 
-func (m *ReplaceSpecType) GetSessionMirroring() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SessionMirroring
-	}
-	return vs_profiles.DISABLED
-}
-
 func (m *ReplaceSpecType) GetSessionTicket() vs_profiles.EnableDisableChoice {
 	if m != nil {
 		return m.SessionTicket
@@ -2053,88 +1244,18 @@ func (m *ReplaceSpecType) GetSessionTicket() vs_profiles.EnableDisableChoice {
 	return vs_profiles.DISABLED
 }
 
-func (m *ReplaceSpecType) GetSniDefault() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.SniDefault
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *ReplaceSpecType) GetSniRequire() vs_profiles.TrueFalseChoice {
-	if m != nil {
-		return m.SniRequire
-	}
-	return vs_profiles.FALSE
-}
-
-func (m *ReplaceSpecType) GetSslC3D() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslC3D
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *ReplaceSpecType) GetSslForwardProxy() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslForwardProxy
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *ReplaceSpecType) GetSslForwardProxyBypass() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslForwardProxyBypass
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *ReplaceSpecType) GetSslForwardProxyVerifiedHandshake() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.SslForwardProxyVerifiedHandshake
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *ReplaceSpecType) GetSslSignHash() vs_profiles.SslSignHashChoice {
-	if m != nil {
-		return m.SslSignHash
-	}
-	return vs_profiles.SSL_SIGN_HASH_UNSPECIFIED
-}
-
-func (m *ReplaceSpecType) GetStrictResume() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.StrictResume
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *ReplaceSpecType) GetUncleanShutdown() vs_profiles.EnableDisableChoice {
-	if m != nil {
-		return m.UncleanShutdown
-	}
-	return vs_profiles.DISABLED
-}
-
-func (m *ReplaceSpecType) GetUnknownCertStatusResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *ReplaceSpecType) GetUnknownCertStatusResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.UnknownCertStatusResponseControl
 	}
-	return vs_profiles.REJECT
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
-func (m *ReplaceSpecType) GetUntrustedCertResponseControl() vs_profiles.AcceptRejectChoice {
+func (m *ReplaceSpecType) GetUntrustedCertResponseControl() vs_profiles.CertResponseControlChoice {
 	if m != nil {
 		return m.UntrustedCertResponseControl
 	}
-	return vs_profiles.REJECT
-}
-
-func (m *ReplaceSpecType) GetUserSpec() []string {
-	if m != nil {
-		return m.UserSpec
-	}
-	return nil
+	return vs_profiles.CERT_RESPONSE_CONTROL_DROP
 }
 
 func (m *ReplaceSpecType) GetCertificates() *CertificateList {
@@ -2144,10 +1265,23 @@ func (m *ReplaceSpecType) GetCertificates() *CertificateList {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetTrustedCaList() []*schema.ObjectRefType {
+	if m != nil {
+		return m.TrustedCaList
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetTmOptions() []string {
+	if m != nil {
+		return m.TmOptions
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*ReplaceSpecType_CipherGroup)(nil),
 		(*ReplaceSpecType_Ciphers)(nil),
 		(*ReplaceSpecType_Certificates)(nil),
 	}
@@ -2174,173 +1308,156 @@ func init() {
 }
 
 var fileDescriptor_2181c4331a6136d6 = []byte{
-	// 2643 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5c, 0xcd, 0x6f, 0xdc, 0xc6,
-	0x15, 0xd7, 0x58, 0xdf, 0xa3, 0x95, 0x25, 0xd1, 0x51, 0x3c, 0x92, 0x95, 0xcd, 0x56, 0x76, 0x6a,
-	0x59, 0xa6, 0x56, 0xda, 0x0f, 0x7d, 0x15, 0x41, 0xd1, 0xd5, 0x8a, 0xfa, 0xb0, 0x65, 0x49, 0xe1,
-	0xae, 0xdd, 0x3a, 0x41, 0xcb, 0x52, 0xdc, 0xd9, 0x5d, 0x46, 0x5c, 0x92, 0xe5, 0x70, 0x25, 0x3b,
-	0xa8, 0x0b, 0x27, 0x68, 0x81, 0x14, 0x6d, 0x81, 0x20, 0xe8, 0x1f, 0x50, 0xa0, 0x39, 0x14, 0xf9,
-	0x13, 0xba, 0x39, 0x18, 0x05, 0x0a, 0x14, 0x3d, 0xe9, 0x68, 0xe8, 0x94, 0xc8, 0x97, 0xf4, 0x96,
-	0x63, 0x91, 0x8b, 0x8b, 0x19, 0x92, 0xd2, 0x7e, 0x49, 0xb1, 0xbd, 0x14, 0x7a, 0x08, 0x0f, 0x86,
-	0x77, 0x39, 0x7c, 0xbf, 0xf7, 0xe6, 0xcd, 0x9b, 0x99, 0xf7, 0xfb, 0xd9, 0x12, 0x7c, 0x7b, 0x0f,
-	0x93, 0xa8, 0x6a, 0x4c, 0x13, 0xa5, 0x88, 0x4b, 0xf2, 0xf4, 0x1e, 0x91, 0x4c, 0xcb, 0xc8, 0xab,
-	0x1a, 0x26, 0xd3, 0x84, 0x68, 0xf4, 0x8f, 0x44, 0xb0, 0xb5, 0x87, 0x2d, 0xef, 0xf9, 0xb4, 0xfd,
-	0xd0, 0xc4, 0x24, 0x6a, 0x5a, 0x86, 0x6d, 0x70, 0x33, 0x8e, 0x75, 0xd4, 0xb1, 0x8e, 0x56, 0x59,
-	0x47, 0x09, 0xd1, 0xa2, 0x8d, 0xd6, 0xa3, 0x53, 0x05, 0xd5, 0x2e, 0x96, 0x77, 0xa2, 0x8a, 0x51,
-	0x9a, 0x2e, 0x18, 0x05, 0x63, 0x9a, 0x01, 0xed, 0x94, 0xf3, 0xec, 0x1b, 0xfb, 0xc2, 0x3e, 0x39,
-	0x0e, 0x46, 0xaf, 0xd4, 0x86, 0x67, 0x98, 0xb6, 0x6a, 0xe8, 0xae, 0xf7, 0xd1, 0x91, 0xda, 0xc1,
-	0xaa, 0xc0, 0x46, 0xc7, 0xea, 0xa6, 0x25, 0x6b, 0x6a, 0x4e, 0xb6, 0xb1, 0x3b, 0x1a, 0xa9, 0x1b,
-	0x55, 0xf1, 0xbe, 0x54, 0x0b, 0xfd, 0xd6, 0xe9, 0x69, 0xa9, 0x72, 0x33, 0xfe, 0xe1, 0x0d, 0x78,
-	0x71, 0x55, 0x33, 0x76, 0x64, 0x2d, 0x63, 0x62, 0x25, 0xfb, 0xd0, 0xc4, 0xdc, 0x3b, 0xb0, 0x5f,
-	0xd6, 0xb0, 0x65, 0x4b, 0xb6, 0x5a, 0xc2, 0x46, 0xd9, 0x46, 0x20, 0x02, 0x26, 0x7a, 0x97, 0xf8,
-	0xc3, 0x0a, 0x80, 0xaa, 0x9e, 0xc3, 0x79, 0x55, 0x57, 0x6d, 0xfc, 0xf7, 0xff, 0x3c, 0x69, 0x1f,
-	0xb1, 0x2e, 0xc7, 0x87, 0x7f, 0x31, 0x71, 0xf2, 0xf0, 0xd7, 0xef, 0xcd, 0x4c, 0x2d, 0xfe, 0xfc,
-	0xe6, 0x8d, 0x6b, 0x62, 0x88, 0x41, 0x64, 0x1d, 0x04, 0xae, 0x08, 0x87, 0x64, 0x4d, 0x33, 0xf6,
-	0x25, 0xfc, 0xc0, 0x54, 0x2d, 0x9c, 0x93, 0x14, 0x4b, 0x43, 0x17, 0x22, 0x60, 0xe2, 0x62, 0x3c,
-	0x1a, 0x3d, 0x7d, 0x05, 0x04, 0x5d, 0xde, 0xd1, 0xf0, 0xb2, 0x4a, 0xe8, 0x5f, 0xe9, 0xa2, 0xa1,
-	0x2a, 0x78, 0x29, 0x74, 0x58, 0x01, 0x3d, 0xcb, 0xeb, 0x99, 0xd4, 0xd2, 0x86, 0xb0, 0x2c, 0x0e,
-	0x30, 0x58, 0xc1, 0x41, 0x4d, 0x5b, 0x1a, 0xf7, 0x33, 0x18, 0x92, 0xcb, 0x76, 0x11, 0xeb, 0xb6,
-	0xaa, 0xc8, 0x36, 0x46, 0xed, 0xcc, 0xc9, 0xe4, 0x19, 0x4e, 0x52, 0x14, 0x61, 0x4b, 0x57, 0x3c,
-	0x07, 0x3d, 0x87, 0x15, 0xd0, 0xb1, 0xb5, 0x99, 0x16, 0xc4, 0x1a, 0x24, 0x2e, 0x05, 0xb9, 0xea,
-	0xef, 0x52, 0x0e, 0x9b, 0x76, 0x11, 0x75, 0x44, 0xc0, 0x44, 0xff, 0x12, 0x77, 0x58, 0x01, 0x60,
-	0xf1, 0xbf, 0x15, 0xd0, 0x46, 0xd3, 0xd2, 0x31, 0x79, 0x01, 0x0d, 0x88, 0x43, 0xd5, 0x6f, 0x2f,
-	0xd3, 0x97, 0xb9, 0x9b, 0xb0, 0xe6, 0xa1, 0xa4, 0xcb, 0x25, 0x8c, 0x3a, 0x69, 0x76, 0xc5, 0xc1,
-	0xea, 0x81, 0x4d, 0xb9, 0x84, 0xb9, 0x07, 0x70, 0x74, 0xe7, 0xa1, 0x29, 0x13, 0x22, 0x19, 0xba,
-	0xa4, 0x68, 0x2a, 0xd6, 0x6d, 0x49, 0xa1, 0xcb, 0x92, 0x97, 0x55, 0x0d, 0x75, 0xf9, 0x90, 0xbc,
-	0xd7, 0x1d, 0xfc, 0x2d, 0x3d, 0xcd, 0xd0, 0xd3, 0xd8, 0xb2, 0x57, 0x64, 0x55, 0xe3, 0xf6, 0xe1,
-	0xc8, 0x89, 0xe7, 0xa2, 0xac, 0xe7, 0x48, 0x51, 0xde, 0xc5, 0x12, 0x5b, 0x51, 0xd4, 0xed, 0xa7,
-	0xe3, 0x35, 0x0f, 0x3c, 0x45, 0xb1, 0xb9, 0x15, 0x38, 0xa4, 0x24, 0x72, 0xce, 0x2c, 0x35, 0x35,
-	0x8f, 0x89, 0x29, 0xeb, 0xa8, 0x87, 0x65, 0x78, 0xf4, 0xb0, 0x02, 0x2e, 0xc4, 0x93, 0x34, 0xc5,
-	0x1f, 0x7f, 0x01, 0xda, 0x69, 0x9a, 0xbb, 0x27, 0x3b, 0xd1, 0x41, 0xe7, 0x04, 0x12, 0x07, 0x94,
-	0x44, 0x8e, 0x06, 0xbf, 0xe1, 0x9a, 0x70, 0x6f, 0x43, 0xa8, 0xc8, 0x4a, 0x11, 0x4b, 0x44, 0xfd,
-	0x00, 0xa3, 0x5e, 0x06, 0xf0, 0xc6, 0x61, 0x05, 0x74, 0xc5, 0xe7, 0xe2, 0xb1, 0xa4, 0x07, 0xd2,
-	0x47, 0x41, 0xba, 0x26, 0x3b, 0xd0, 0xe3, 0xc7, 0x83, 0x62, 0x2f, 0x33, 0xc8, 0xa8, 0x1f, 0x60,
-	0xee, 0x27, 0xb0, 0xdf, 0xb1, 0xf6, 0xea, 0x1f, 0x32, 0x80, 0x2b, 0xb4, 0x2e, 0x12, 0x73, 0x33,
-	0x33, 0xae, 0x39, 0x38, 0x36, 0xff, 0x6b, 0xa7, 0x18, 0x62, 0x16, 0x5e, 0xb9, 0x5f, 0x85, 0x21,
-	0x45, 0x35, 0x8b, 0xd8, 0x92, 0x0a, 0x96, 0x51, 0x36, 0x51, 0x88, 0x2e, 0xf1, 0x5a, 0x9b, 0xd8,
-	0xe7, 0x3c, 0x5d, 0xa5, 0x0f, 0xb9, 0xeb, 0xb0, 0xdb, 0xf9, 0x4a, 0x50, 0x3f, 0xdb, 0x60, 0x7d,
-	0x87, 0x15, 0xd0, 0xbd, 0x2c, 0xac, 0xa4, 0xee, 0x6e, 0x64, 0xd7, 0xda, 0x44, 0x6f, 0x94, 0x1b,
-	0x81, 0xed, 0x74, 0xbb, 0x5c, 0x64, 0x2f, 0x75, 0x3f, 0x7d, 0x04, 0xbe, 0xae, 0x00, 0x20, 0xd2,
-	0x67, 0xdc, 0x38, 0xec, 0x51, 0x2c, 0x4d, 0xa2, 0x79, 0x47, 0x03, 0xb5, 0xe3, 0xdd, 0x8a, 0xa5,
-	0xad, 0xa8, 0x1a, 0xe6, 0xee, 0xc3, 0xde, 0x9c, 0x6c, 0xcb, 0xd2, 0x8c, 0x65, 0xdb, 0x68, 0xd0,
-	0x87, 0xd5, 0xeb, 0xa1, 0x70, 0x14, 0x8d, 0xfb, 0x00, 0x8e, 0x39, 0x1b, 0xda, 0x59, 0x32, 0x0b,
-	0x13, 0xd3, 0xd0, 0x09, 0x96, 0x14, 0x43, 0xb7, 0x2d, 0x43, 0x43, 0x43, 0xcc, 0xdb, 0xd4, 0x59,
-	0x9b, 0x4f, 0x51, 0xb0, 0x69, 0x8b, 0xf8, 0x7d, 0xac, 0xd8, 0xae, 0x33, 0x48, 0x17, 0x4a, 0x14,
-	0x6e, 0x09, 0xe9, 0xac, 0x38, 0xe2, 0xc0, 0xd3, 0xc5, 0x15, 0x5d, 0xf0, 0xb4, 0x83, 0xcd, 0xfd,
-	0x12, 0xf6, 0x17, 0xb0, 0x8e, 0x2d, 0x55, 0x71, 0x0b, 0x93, 0x7b, 0xa5, 0xa9, 0xb1, 0xa4, 0x0b,
-	0x9b, 0xce, 0xcc, 0x42, 0x2e, 0xe2, 0x71, 0x35, 0x9e, 0x14, 0xbf, 0x57, 0x0b, 0x97, 0x58, 0x2d,
-	0x8c, 0xd0, 0x6a, 0x8c, 0x35, 0x54, 0x42, 0x78, 0xa2, 0x53, 0x1c, 0x3c, 0xb6, 0xf1, 0xaa, 0x61,
-	0x04, 0xb6, 0xef, 0xe2, 0x87, 0xe8, 0xb5, 0xba, 0xf5, 0xdb, 0xc5, 0x0f, 0x39, 0x1e, 0xf6, 0x6b,
-	0x46, 0x41, 0x32, 0xcb, 0x3b, 0x9a, 0x4a, 0x8a, 0xd8, 0x42, 0xc3, 0xb5, 0x2f, 0x85, 0x34, 0xa3,
-	0xb0, 0xed, 0x0d, 0x72, 0x1f, 0x02, 0xc8, 0xd1, 0xd7, 0xe9, 0xa5, 0x44, 0xf7, 0x09, 0xde, 0xc3,
-	0xba, 0x4d, 0xd0, 0xeb, 0x6c, 0xe2, 0x33, 0x67, 0x4c, 0x7c, 0xc3, 0x28, 0x64, 0x88, 0x96, 0x4e,
-	0xe4, 0x04, 0x66, 0xe1, 0x4e, 0x7d, 0xfc, 0xe9, 0x23, 0x70, 0x58, 0x01, 0x97, 0x37, 0xb6, 0x56,
-	0xa5, 0x4c, 0x66, 0x43, 0x4a, 0x27, 0x96, 0x25, 0xe1, 0x9e, 0xb0, 0x99, 0xcd, 0x48, 0x3f, 0x4d,
-	0x89, 0x9b, 0x2c, 0x80, 0x01, 0xad, 0xd6, 0x94, 0xfb, 0x0c, 0xc0, 0x6b, 0xc7, 0x31, 0x38, 0x87,
-	0x52, 0xd5, 0xc9, 0xa5, 0x1a, 0xba, 0x17, 0xd5, 0xe5, 0x73, 0x8c, 0x2a, 0xe2, 0x46, 0xc5, 0xfc,
-	0xa7, 0x6a, 0xdc, 0xbb, 0x61, 0xfe, 0x19, 0xc0, 0x31, 0x2f, 0xcc, 0xbc, 0x61, 0xed, 0xcb, 0x56,
-	0x8e, 0x3a, 0x7e, 0xf0, 0xd0, 0x0b, 0x0f, 0x9d, 0x63, 0x78, 0xc8, 0x09, 0x6f, 0xc5, 0xf1, 0xbb,
-	0x4d, 0xdd, 0xba, 0x61, 0xfd, 0x09, 0x40, 0xe4, 0x85, 0x75, 0x52, 0x5b, 0x6e, 0x48, 0x23, 0xe7,
-	0x18, 0xd2, 0xb0, 0x13, 0xd2, 0xf1, 0x79, 0xeb, 0xc6, 0x73, 0x0b, 0x0e, 0x97, 0xe4, 0x07, 0x92,
-	0xac, 0xd8, 0xea, 0x1e, 0x3e, 0x89, 0x88, 0xa0, 0x51, 0x56, 0xe6, 0xaf, 0xd3, 0x6b, 0x6d, 0xc6,
-	0xbb, 0xd6, 0x7a, 0x26, 0xbb, 0xd0, 0xf3, 0xe7, 0xcf, 0x9f, 0x0f, 0x88, 0x97, 0x4a, 0xf2, 0x83,
-	0x14, 0xb3, 0x39, 0x06, 0x24, 0x5c, 0x0e, 0x0e, 0x94, 0x8c, 0x1c, 0x9b, 0x5a, 0x09, 0xdb, 0x45,
-	0x23, 0x47, 0xd0, 0x15, 0x1f, 0x4e, 0x9b, 0xfe, 0x92, 0x91, 0xcb, 0x10, 0xed, 0x8e, 0x03, 0xc9,
-	0x6d, 0xc1, 0x8e, 0x92, 0x91, 0xc3, 0x68, 0xac, 0xf5, 0xdd, 0xce, 0x80, 0xb8, 0xdb, 0xb0, 0xc3,
-	0x50, 0x88, 0x89, 0xde, 0x88, 0xb4, 0x4f, 0xf4, 0xc5, 0xc7, 0xea, 0x00, 0xb7, 0x76, 0xe8, 0xc9,
-	0x24, 0xe2, 0x3c, 0xed, 0x8c, 0x96, 0x46, 0x3e, 0x7f, 0x14, 0xa2, 0x2f, 0x7b, 0x4e, 0x68, 0x56,
-	0x3a, 0x3f, 0x05, 0x17, 0x06, 0x81, 0xc8, 0x40, 0xb8, 0xeb, 0x10, 0xd2, 0x8b, 0xcd, 0x2c, 0x5a,
-	0x32, 0xc1, 0x28, 0x5c, 0xbb, 0x99, 0xab, 0x86, 0x38, 0x1d, 0x5e, 0x34, 0x31, 0xb6, 0x9c, 0x73,
-	0x93, 0x4d, 0xe8, 0xcd, 0xef, 0x3c, 0x2b, 0xb7, 0x31, 0xb6, 0xe8, 0x49, 0x78, 0xc7, 0xc8, 0x79,
-	0xf3, 0xa1, 0xe7, 0xd0, 0xf0, 0xb6, 0x20, 0x88, 0x52, 0x5a, 0x10, 0xb3, 0xd2, 0x9d, 0xad, 0x65,
-	0x41, 0x5a, 0x5f, 0xdd, 0xdc, 0x12, 0x05, 0x31, 0x64, 0x56, 0xbd, 0x4e, 0x2f, 0x01, 0xa7, 0xfc,
-	0x09, 0xd1, 0x50, 0xc4, 0x8f, 0x4b, 0x80, 0xc1, 0x65, 0x88, 0xc6, 0x99, 0x70, 0xf8, 0x18, 0x5a,
-	0xa2, 0x53, 0xb4, 0x8b, 0x96, 0x51, 0x2e, 0x14, 0xd1, 0x0f, 0x7c, 0x70, 0x73, 0xc9, 0x73, 0xb3,
-	0x7d, 0x02, 0xcc, 0x49, 0x90, 0xb3, 0xb0, 0x8e, 0x0b, 0x86, 0xad, 0xd2, 0x2e, 0xca, 0xc4, 0x96,
-	0x6a, 0xe4, 0xd0, 0x38, 0xcb, 0xf6, 0x4c, 0x6d, 0x97, 0xea, 0xd5, 0xee, 0x19, 0x9d, 0xea, 0x50,
-	0x15, 0xd6, 0x36, 0x83, 0xe2, 0xde, 0x83, 0x83, 0xd5, 0x0e, 0x58, 0x17, 0x71, 0xf5, 0x15, 0xe1,
-	0x07, 0xaa, 0x90, 0x58, 0x7b, 0x21, 0xc3, 0xfe, 0x93, 0x47, 0xaa, 0xa1, 0xa3, 0x6b, 0xad, 0x97,
-	0x72, 0x2d, 0x22, 0xa7, 0xd0, 0x04, 0xd9, 0xb2, 0xaa, 0xb3, 0xfa, 0x52, 0xf3, 0x4e, 0x2b, 0xfc,
-	0xd6, 0x77, 0xb6, 0xc2, 0x59, 0xab, 0x8c, 0x57, 0x64, 0x8d, 0xd4, 0xb4, 0xc2, 0x59, 0xf1, 0xae,
-	0x40, 0x93, 0x44, 0xf1, 0xd2, 0x27, 0x70, 0xdc, 0xef, 0x01, 0xbc, 0x66, 0xe1, 0x3d, 0x63, 0x17,
-	0xbb, 0x1d, 0x1b, 0xb1, 0x65, 0xbb, 0x4c, 0x1a, 0xbb, 0x80, 0x1f, 0xb6, 0xda, 0x05, 0x44, 0x5c,
-	0x37, 0xd4, 0x7b, 0x86, 0x39, 0xa9, 0x6f, 0x06, 0x3e, 0x01, 0xf0, 0x35, 0x82, 0x95, 0xb2, 0x85,
-	0xa5, 0xda, 0xdc, 0x5e, 0x67, 0xbe, 0x93, 0x67, 0xf8, 0xce, 0x30, 0x33, 0xb1, 0xda, 0xca, 0x0d,
-	0xe1, 0xfa, 0x61, 0x05, 0x5c, 0xcd, 0x08, 0xe9, 0xbb, 0xa2, 0x20, 0x89, 0xc2, 0xa6, 0xb0, 0xba,
-	0x95, 0x5d, 0x4f, 0x65, 0xd7, 0xb7, 0x36, 0x25, 0x51, 0x78, 0xe7, 0xee, 0xba, 0x28, 0x48, 0x99,
-	0xac, 0xb8, 0x9e, 0xce, 0x8a, 0x97, 0x48, 0x23, 0x06, 0xf7, 0x26, 0xec, 0x73, 0x89, 0x23, 0xeb,
-	0xf2, 0x27, 0x58, 0x97, 0x0f, 0x9d, 0x47, 0xac, 0xbf, 0x57, 0xe1, 0x10, 0xc1, 0x84, 0xd0, 0x2b,
-	0xb3, 0xa4, 0x5a, 0x96, 0x61, 0xa9, 0x7a, 0x01, 0xdd, 0xf0, 0x61, 0xcf, 0x0c, 0xba, 0xb0, 0x77,
-	0x3c, 0x54, 0x4e, 0x81, 0x17, 0x3d, 0x57, 0xb6, 0xaa, 0xec, 0x62, 0x1b, 0x4d, 0xfa, 0x71, 0x32,
-	0xbb, 0x98, 0x59, 0x06, 0xc9, 0xdd, 0x83, 0x7d, 0x44, 0x57, 0xa5, 0x1c, 0xce, 0xcb, 0x65, 0xcd,
-	0x46, 0x37, 0x5f, 0xba, 0xda, 0x7a, 0x0f, 0x2b, 0xa0, 0x73, 0x25, 0xb5, 0x91, 0x11, 0x44, 0x48,
-	0x74, 0x75, 0xd9, 0x01, 0xf2, 0x70, 0x2d, 0xfc, 0xab, 0xb2, 0x6a, 0x61, 0xc4, 0xb7, 0x8a, 0x2b,
-	0x3a, 0x40, 0xdc, 0x5d, 0xd8, 0xed, 0x36, 0x52, 0x68, 0xca, 0x87, 0x6c, 0x74, 0x11, 0x76, 0x33,
-	0x53, 0xaa, 0xdb, 0xd0, 0x74, 0xa0, 0xa8, 0x1f, 0x54, 0x97, 0xd4, 0xb6, 0x14, 0x5c, 0x19, 0xa2,
-	0xc6, 0xf6, 0xc6, 0x61, 0x56, 0x68, 0xda, 0x07, 0x87, 0xc3, 0x75, 0x0e, 0x97, 0x18, 0x34, 0xf7,
-	0x47, 0x00, 0xaf, 0x35, 0xfa, 0xdd, 0xc3, 0x96, 0x9a, 0x57, 0x71, 0xee, 0xa4, 0x89, 0x40, 0x33,
-	0x3e, 0xc4, 0x10, 0xa9, 0x8b, 0xe1, 0x9e, 0xeb, 0xe6, 0xb8, 0xef, 0xe0, 0x0a, 0xb0, 0x9f, 0x89,
-	0x34, 0x6a, 0x81, 0x72, 0x55, 0x52, 0x44, 0x31, 0xe6, 0x96, 0x3f, 0x6b, 0xcb, 0x13, 0x2d, 0xa3,
-	0x16, 0xf4, 0x35, 0x99, 0x14, 0x5d, 0xa7, 0xc3, 0x87, 0x15, 0x30, 0x44, 0x7b, 0xa7, 0xcc, 0xfa,
-	0xea, 0xa6, 0xb4, 0x96, 0xca, 0xac, 0x49, 0xa9, 0xcd, 0xfb, 0x62, 0x1f, 0x39, 0x79, 0x93, 0x9e,
-	0xdb, 0xc4, 0xb6, 0x54, 0x85, 0xf1, 0x9c, 0x72, 0x09, 0xa3, 0xb8, 0x0f, 0xf3, 0x0b, 0x39, 0x90,
-	0x22, 0x43, 0xe4, 0xf2, 0x70, 0xb0, 0xac, 0x2b, 0x1a, 0x96, 0x75, 0x89, 0x14, 0xcb, 0x76, 0xce,
-	0xd8, 0xd7, 0x51, 0xa2, 0xf5, 0xdb, 0x61, 0xc0, 0x05, 0xcd, 0xb8, 0x98, 0xec, 0xe8, 0x2e, 0xeb,
-	0xbb, 0xba, 0xb1, 0xaf, 0x9f, 0x7d, 0x74, 0x27, 0x5f, 0xf9, 0xe8, 0x4e, 0xa5, 0xd3, 0xc2, 0x76,
-	0x56, 0x8c, 0xb8, 0x6e, 0x4e, 0x3f, 0xba, 0x1f, 0x03, 0xf8, 0x66, 0x59, 0xb7, 0xad, 0x32, 0xb1,
-	0xbd, 0x8b, 0xa4, 0x21, 0x8c, 0xd9, 0x56, 0x6f, 0x90, 0xb1, 0x63, 0x0f, 0xcd, 0xa8, 0xe4, 0x75,
-	0xd8, 0x5b, 0x26, 0xd8, 0x92, 0x88, 0x89, 0x15, 0x34, 0x17, 0x69, 0x9f, 0xe8, 0x5d, 0x82, 0xc7,
-	0xad, 0x5d, 0x5c, 0xec, 0xa1, 0x83, 0x19, 0x13, 0x2b, 0x5c, 0x01, 0x86, 0xaa, 0x2e, 0x54, 0x82,
-	0x16, 0x22, 0x60, 0xa2, 0x2f, 0x9e, 0x8a, 0xbe, 0xac, 0x86, 0x18, 0xad, 0xba, 0x47, 0x37, 0x54,
-	0x62, 0xaf, 0x01, 0xb1, 0x06, 0xf8, 0x47, 0x9f, 0x80, 0x7f, 0x54, 0xc0, 0x1f, 0x00, 0xfc, 0x18,
-	0xc0, 0xfe, 0xb4, 0xa1, 0xe7, 0xd5, 0x42, 0xd9, 0x72, 0xae, 0x95, 0xfd, 0x18, 0x1f, 0xe7, 0x13,
-	0x7c, 0x92, 0x9f, 0xe5, 0xe7, 0xf8, 0x79, 0x7e, 0x81, 0x5f, 0xe4, 0x63, 0x33, 0x7c, 0x2c, 0xc6,
-	0xc7, 0xe6, 0xf8, 0xd8, 0x3c, 0x1f, 0x5b, 0xe0, 0x63, 0x8b, 0x7c, 0x7c, 0x8e, 0x8f, 0xcf, 0xf3,
-	0xf1, 0x05, 0x3e, 0xbe, 0xc8, 0x27, 0x62, 0x7c, 0x22, 0xce, 0x27, 0x12, 0x7c, 0x22, 0xc9, 0x27,
-	0x66, 0xf9, 0xc4, 0x1c, 0x9f, 0x98, 0xe7, 0x13, 0x0b, 0x7c, 0x62, 0x91, 0x4f, 0xce, 0xf0, 0xc9,
-	0x18, 0x9f, 0x8c, 0xf3, 0xc9, 0x04, 0x9f, 0x4c, 0xf2, 0xc9, 0x59, 0x3e, 0x39, 0xc7, 0x27, 0xe7,
-	0xf9, 0xe4, 0x02, 0x9f, 0x5c, 0xe4, 0x67, 0x67, 0xf8, 0xd9, 0x18, 0x3f, 0x1b, 0xe7, 0x67, 0x13,
-	0xfc, 0x6c, 0x72, 0x69, 0x1c, 0xf6, 0xbb, 0x9a, 0x86, 0xc2, 0x02, 0xe2, 0x86, 0x9e, 0x54, 0x40,
-	0xff, 0x41, 0x05, 0xf4, 0x1d, 0x55, 0x40, 0x67, 0x2c, 0xce, 0xc7, 0x12, 0x4b, 0x37, 0xe0, 0xa5,
-	0xea, 0x69, 0x48, 0x0a, 0x5b, 0x09, 0x8e, 0x7b, 0x52, 0x01, 0x0b, 0x07, 0x15, 0x30, 0x7f, 0x54,
-	0x01, 0x17, 0x66, 0xe7, 0xfe, 0xf2, 0x05, 0x00, 0xb7, 0x3a, 0x7a, 0xfa, 0x06, 0x43, 0xb7, 0x3a,
-	0x7a, 0xe6, 0x07, 0x17, 0xc6, 0x3f, 0x02, 0x70, 0xa0, 0x2e, 0x23, 0x9c, 0x51, 0x97, 0x6a, 0xf0,
-	0x02, 0xed, 0xf9, 0xd4, 0xe7, 0x8f, 0xfa, 0xaa, 0x8c, 0x8e, 0x97, 0x30, 0xe2, 0x7d, 0x42, 0xe0,
-	0xe8, 0xcb, 0x7f, 0xb6, 0x77, 0x7d, 0xfa, 0x05, 0xb8, 0x30, 0xd8, 0x56, 0x9b, 0xf2, 0xf1, 0xdf,
-	0x8e, 0xc1, 0x8b, 0x69, 0x0b, 0xd3, 0x2e, 0xcd, 0x13, 0x42, 0xaf, 0x36, 0x15, 0x42, 0xeb, 0xa4,
-	0xcd, 0x77, 0x7d, 0x93, 0x36, 0x1b, 0xc5, 0xcc, 0xcd, 0x56, 0xc5, 0xcc, 0x3a, 0x09, 0x73, 0xea,
-	0x74, 0x09, 0xb3, 0x65, 0xb9, 0xf2, 0x7d, 0xff, 0xe5, 0xca, 0x53, 0x05, 0x4a, 0xd5, 0x77, 0x81,
-	0xf2, 0x54, 0x49, 0x72, 0xf2, 0x54, 0x49, 0xb2, 0x51, 0x76, 0x7c, 0xa3, 0x51, 0x76, 0xac, 0xd6,
-	0x15, 0xaf, 0x36, 0xd5, 0x15, 0xcf, 0x55, 0x3a, 0xbc, 0xdd, 0xb2, 0xf6, 0x57, 0xa5, 0xf6, 0xe9,
-	0xe7, 0xa0, 0xf6, 0x9d, 0xa5, 0xf0, 0x65, 0x7c, 0x51, 0xf8, 0xea, 0x44, 0xbd, 0x9b, 0xa7, 0x8a,
-	0x7a, 0x4d, 0x94, 0xbb, 0xf8, 0x99, 0xf2, 0x48, 0x73, 0x19, 0xe4, 0x9e, 0x4f, 0x32, 0x48, 0xbd,
-	0xf0, 0xb1, 0xd4, 0x8a, 0xf0, 0xe1, 0x6a, 0x1d, 0xa9, 0x97, 0xd0, 0x3a, 0x06, 0xea, 0xb4, 0x0e,
-	0x57, 0xe1, 0xc8, 0xf8, 0x22, 0x5c, 0xd4, 0xa9, 0x13, 0xb7, 0x5b, 0x56, 0x27, 0xaa, 0xf4, 0x88,
-	0x1d, 0x5f, 0xf5, 0x88, 0xe6, 0x0a, 0xc4, 0xd4, 0xe9, 0x0a, 0x44, 0x33, 0x3d, 0xe1, 0xc6, 0x69,
-	0x7a, 0x42, 0xa3, 0x3a, 0x90, 0xf5, 0x45, 0x1d, 0xa8, 0x17, 0x04, 0xee, 0xfb, 0x23, 0x08, 0x34,
-	0x93, 0x01, 0x1e, 0x9d, 0xa3, 0x0a, 0xf0, 0x02, 0xcc, 0xbf, 0xe0, 0x3f, 0xf1, 0x7f, 0x45, 0x3e,
-	0xff, 0x9e, 0x6f, 0x7c, 0xbe, 0x09, 0x83, 0xbf, 0xeb, 0x0f, 0x83, 0xaf, 0xe7, 0xec, 0xb7, 0x5b,
-	0xe4, 0xec, 0x35, 0x44, 0xfd, 0x76, 0x8b, 0x44, 0xbd, 0x86, 0x9d, 0xaf, 0xb6, 0xc8, 0xce, 0x8f,
-	0xf9, 0xf8, 0xbb, 0xbe, 0xf1, 0xf1, 0x46, 0x06, 0x5e, 0xf0, 0x9b, 0x81, 0x9f, 0xc6, 0xb9, 0x7f,
-	0x73, 0x9e, 0x94, 0xfb, 0x05, 0x48, 0xf6, 0xb6, 0x0f, 0x24, 0xbb, 0x96, 0x4d, 0x67, 0x7c, 0x61,
-	0xd3, 0x75, 0xfc, 0xf9, 0xbe, 0x5f, 0xfc, 0xb9, 0x91, 0x32, 0x3f, 0x3a, 0x47, 0xc6, 0xfc, 0x02,
-	0x2c, 0xd9, 0x3e, 0x1f, 0x92, 0xfc, 0x1d, 0xc4, 0xf8, 0x4a, 0x03, 0x31, 0xfe, 0x7f, 0x90, 0xe1,
-	0xa1, 0x7f, 0xff, 0xb8, 0xee, 0xbf, 0xa8, 0x34, 0x21, 0xa3, 0x1f, 0x7d, 0x0b, 0x6a, 0x1f, 0x2d,
-	0x45, 0x9b, 0x93, 0xd1, 0xcb, 0x1f, 0x7d, 0x0b, 0x9a, 0x0d, 0x38, 0x8c, 0x74, 0xfc, 0xc3, 0x31,
-	0xd8, 0xb7, 0x8a, 0xed, 0x80, 0x03, 0x06, 0x1c, 0x30, 0xe0, 0x80, 0x01, 0x07, 0x0c, 0x38, 0x60,
-	0xc0, 0x01, 0x03, 0x0e, 0x18, 0x70, 0xc0, 0x80, 0x03, 0x06, 0x1c, 0x30, 0xe0, 0x80, 0x01, 0x07,
-	0x0c, 0x38, 0xe0, 0xf7, 0x80, 0x03, 0xfe, 0x6e, 0x0c, 0x0e, 0x88, 0xd8, 0xd4, 0x64, 0x25, 0xf8,
-	0xb7, 0xc0, 0x80, 0x07, 0x06, 0x3c, 0x30, 0xe0, 0x81, 0x01, 0x0f, 0x0c, 0x78, 0x60, 0xc0, 0x03,
-	0x03, 0x1e, 0x18, 0xf0, 0xc0, 0x80, 0x07, 0x06, 0x3c, 0x30, 0xe0, 0x81, 0x01, 0x0f, 0xfc, 0x1e,
-	0xf0, 0xc0, 0xa5, 0xcf, 0xc0, 0xc1, 0x57, 0xe1, 0xb6, 0xa7, 0x5f, 0x85, 0xdb, 0xbe, 0xf9, 0x2a,
-	0x0c, 0x1e, 0x1f, 0x85, 0xc1, 0xdf, 0x8e, 0xc2, 0xe0, 0x5f, 0x47, 0x61, 0x70, 0x70, 0x14, 0x06,
-	0x4f, 0x8f, 0xc2, 0xe0, 0xcb, 0xa3, 0x30, 0xf8, 0xfa, 0x28, 0xdc, 0xf6, 0xcd, 0x51, 0x18, 0x7c,
-	0xf2, 0x2c, 0xdc, 0xf6, 0xe4, 0x59, 0x18, 0x1c, 0x3c, 0x0b, 0xb7, 0x3d, 0x7d, 0x16, 0x6e, 0x7b,
-	0x37, 0x5f, 0x30, 0xcc, 0xdd, 0x42, 0x74, 0xcf, 0xd0, 0x6c, 0x6c, 0x59, 0x72, 0xb4, 0x4c, 0xa6,
-	0xd9, 0x87, 0xbc, 0x61, 0x95, 0xa6, 0x4c, 0xcb, 0xd8, 0x53, 0x73, 0xd8, 0x9a, 0xf2, 0x86, 0xa7,
-	0xcd, 0x9d, 0x82, 0x31, 0x8d, 0x1f, 0xd8, 0xee, 0x0f, 0xec, 0xbf, 0xf0, 0xaf, 0x33, 0xd8, 0xe9,
-	0x62, 0x3f, 0xc9, 0x9f, 0xf8, 0x5f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xa0, 0x52, 0xc2, 0x05, 0x09,
-	0x41, 0x00, 0x00,
+	// 2379 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0x4d, 0x6c, 0xdb, 0xc8,
+	0xf5, 0xf7, 0xc4, 0x4c, 0x4c, 0xd3, 0x96, 0x4d, 0x33, 0xeb, 0x0d, 0xed, 0x75, 0x14, 0xad, 0xe3,
+	0x24, 0xfe, 0xa0, 0x64, 0x4b, 0xb2, 0x13, 0x3b, 0xf8, 0xe3, 0x8f, 0x5a, 0xb2, 0x92, 0x98, 0xeb,
+	0xb5, 0xbc, 0x23, 0xa5, 0x2d, 0x76, 0xdb, 0x12, 0x34, 0x35, 0x92, 0x58, 0x53, 0x24, 0x3b, 0x33,
+	0x54, 0xe2, 0x6d, 0x03, 0x04, 0xc1, 0x1e, 0x7a, 0x29, 0xb0, 0xdd, 0x5b, 0xd1, 0x4b, 0x0f, 0x39,
+	0x2c, 0x52, 0xa0, 0xbd, 0x57, 0x39, 0x04, 0x45, 0x0b, 0x2c, 0x7a, 0xca, 0x31, 0xf0, 0x69, 0xe3,
+	0x5c, 0xb6, 0xb7, 0x5d, 0xa0, 0x87, 0x62, 0x4f, 0x05, 0x29, 0xca, 0xd6, 0x97, 0x3f, 0xd6, 0xeb,
+	0xa4, 0x3d, 0xe8, 0x60, 0x98, 0x9c, 0x79, 0x5f, 0xf3, 0xde, 0xf0, 0xbd, 0xdf, 0x7b, 0x10, 0xf7,
+	0x7f, 0x65, 0x44, 0x22, 0xba, 0x35, 0x4b, 0xb4, 0x22, 0x2a, 0xa9, 0xb3, 0x65, 0xa2, 0xd8, 0xd8,
+	0xca, 0xeb, 0x06, 0x22, 0xb3, 0x84, 0x18, 0xee, 0x9f, 0x42, 0x10, 0x2e, 0x23, 0x5c, 0x5b, 0x9f,
+	0xa5, 0xdb, 0x36, 0x22, 0x11, 0x1b, 0x5b, 0xd4, 0x12, 0xe6, 0xaa, 0xdc, 0x91, 0x2a, 0x77, 0xa4,
+	0x8e, 0x3b, 0x42, 0x88, 0x11, 0x69, 0xe5, 0x1e, 0x0d, 0x17, 0x74, 0x5a, 0x74, 0x36, 0x23, 0x9a,
+	0x55, 0x9a, 0x2d, 0x58, 0x05, 0x6b, 0xd6, 0x13, 0xb4, 0xe9, 0xe4, 0xbd, 0x37, 0xef, 0xc5, 0x7b,
+	0xaa, 0x2a, 0x18, 0x7d, 0xa7, 0xd1, 0x3c, 0xcb, 0xa6, 0xba, 0x65, 0xfa, 0xda, 0x47, 0x47, 0x1a,
+	0x37, 0xeb, 0x0c, 0x1b, 0x1d, 0x6b, 0x3a, 0x96, 0x6a, 0xe8, 0x39, 0x95, 0x22, 0x7f, 0x37, 0xd4,
+	0xb4, 0xab, 0xa3, 0x7b, 0x4a, 0xa3, 0xe8, 0x2b, 0x07, 0xbb, 0xa5, 0x4e, 0xcd, 0xf8, 0x37, 0x21,
+	0x6e, 0xe0, 0xb6, 0x61, 0x6d, 0xaa, 0x46, 0xc6, 0x46, 0x5a, 0x76, 0xdb, 0x46, 0xc2, 0x07, 0x5c,
+	0x40, 0x35, 0x10, 0xa6, 0x0a, 0xd5, 0x4b, 0xc8, 0x72, 0xa8, 0x08, 0x42, 0x60, 0xb2, 0x37, 0x21,
+	0xed, 0x54, 0x00, 0xa7, 0x9b, 0x39, 0x94, 0xd7, 0x4d, 0x9d, 0xa2, 0xbf, 0xfc, 0xf3, 0x59, 0xf7,
+	0x08, 0xbe, 0x10, 0x1b, 0xfe, 0xd9, 0xe4, 0xfe, 0xe2, 0xaf, 0x3e, 0x9a, 0x0b, 0x2f, 0xfd, 0x74,
+	0x66, 0x6a, 0x02, 0xf6, 0x7b, 0x22, 0xb2, 0x55, 0x09, 0x82, 0xc1, 0x0d, 0xa9, 0x86, 0x61, 0xdd,
+	0x53, 0xd0, 0x7d, 0x5b, 0xc7, 0x28, 0xa7, 0x68, 0xd8, 0x10, 0xcf, 0x84, 0xc0, 0xe4, 0x40, 0x2c,
+	0x12, 0x39, 0x38, 0x02, 0x29, 0x53, 0xdd, 0x34, 0xd0, 0x8a, 0x4e, 0xdc, 0x7f, 0xc9, 0xa2, 0xa5,
+	0x6b, 0x28, 0xc1, 0x3f, 0xab, 0x00, 0xb0, 0x53, 0x01, 0xec, 0xca, 0x6a, 0x66, 0x39, 0xb1, 0x96,
+	0x5a, 0x81, 0x83, 0x9e, 0xe8, 0x54, 0x55, 0x72, 0x12, 0x1b, 0xc2, 0x4f, 0xb8, 0x7e, 0xd5, 0xa1,
+	0x45, 0x64, 0x52, 0x5d, 0x53, 0x29, 0x12, 0xbb, 0x3d, 0x45, 0xd3, 0x87, 0x28, 0x5a, 0x76, 0x25,
+	0xa4, 0x4d, 0xad, 0xa6, 0xa4, 0xdf, 0x57, 0xc2, 0xa4, 0xd7, 0x93, 0x29, 0xd8, 0x20, 0x4d, 0x48,
+	0x71, 0x42, 0xfd, 0xbb, 0x92, 0x43, 0x36, 0x2d, 0x8a, 0x4c, 0x08, 0x4c, 0x06, 0x12, 0x6f, 0xfb,
+	0x7c, 0x60, 0xe9, 0xdf, 0x15, 0xd0, 0xe5, 0xba, 0x88, 0x99, 0x3e, 0x23, 0x0e, 0xc2, 0xa1, 0x7a,
+	0x8e, 0x15, 0x97, 0x41, 0x88, 0x72, 0x0d, 0x8b, 0x8a, 0xa9, 0x96, 0x90, 0x78, 0xd6, 0xf3, 0x34,
+	0xe3, 0x4a, 0x81, 0x7c, 0xfd, 0xf6, 0xba, 0x5a, 0x42, 0xc2, 0x0f, 0x38, 0x4e, 0x53, 0xb5, 0x22,
+	0x52, 0x88, 0xfe, 0x31, 0x12, 0x7b, 0x3d, 0x8d, 0xef, 0xfa, 0x1a, 0xcf, 0xc5, 0xae, 0xc7, 0xa2,
+	0xf3, 0xf3, 0xae, 0xda, 0x5f, 0x3f, 0x05, 0x33, 0xae, 0xea, 0x73, 0xd3, 0x8c, 0xf8, 0xf0, 0x21,
+	0x0f, 0x7b, 0x3d, 0xa6, 0x8c, 0xfe, 0x31, 0x12, 0xae, 0x71, 0x3d, 0x9a, 0x6e, 0x17, 0x11, 0x26,
+	0x62, 0xc0, 0x53, 0xd5, 0xb7, 0x53, 0x01, 0x3d, 0x2b, 0xa9, 0x5b, 0xcb, 0x77, 0xd7, 0xb2, 0x77,
+	0xba, 0x60, 0x6d, 0x57, 0x18, 0xe1, 0xba, 0xdd, 0x10, 0x0d, 0x78, 0x44, 0x3d, 0x2f, 0x1e, 0x80,
+	0xaf, 0x5c, 0x93, 0xdc, 0x35, 0x61, 0x9c, 0x63, 0x35, 0x6c, 0x28, 0xae, 0xe3, 0xc4, 0xc1, 0xc6,
+	0xfd, 0x1e, 0x0d, 0x1b, 0xb7, 0x74, 0x03, 0x09, 0xbf, 0x03, 0xdc, 0x58, 0x35, 0xd4, 0x8a, 0xe6,
+	0xde, 0x24, 0x8c, 0x88, 0x6d, 0x99, 0x04, 0x29, 0x9a, 0x65, 0x52, 0x6c, 0x19, 0xe2, 0x90, 0x17,
+	0x92, 0xf9, 0x43, 0x42, 0x92, 0x44, 0x98, 0x42, 0x9f, 0x2d, 0x59, 0xe5, 0xf2, 0x83, 0x33, 0xee,
+	0x1f, 0x79, 0x34, 0x99, 0x82, 0x59, 0x05, 0xa6, 0x32, 0x1b, 0xe9, 0xf5, 0x4c, 0x4a, 0x49, 0xa6,
+	0xd7, 0xb3, 0x30, 0xbd, 0xa6, 0xac, 0xc0, 0xf4, 0x06, 0x1c, 0xa9, 0x6a, 0x6f, 0x23, 0x44, 0xb8,
+	0xc5, 0x0d, 0x15, 0x55, 0x33, 0x47, 0x8a, 0xea, 0x16, 0xda, 0xbb, 0xe2, 0xe7, 0x3d, 0x67, 0x8e,
+	0xec, 0x54, 0xc0, 0x99, 0xe8, 0x9c, 0xef, 0x44, 0x50, 0x73, 0x62, 0x70, 0xf2, 0x2c, 0xe4, 0xf7,
+	0x78, 0x6a, 0x77, 0x7a, 0x84, 0xeb, 0xde, 0x42, 0xdb, 0xe2, 0x5b, 0x4d, 0x2e, 0xda, 0x42, 0xdb,
+	0x82, 0xc4, 0x05, 0x0c, 0xab, 0xa0, 0xd8, 0xce, 0xa6, 0xa1, 0x93, 0x22, 0xc2, 0xe2, 0x70, 0x23,
+	0x51, 0xbf, 0x61, 0x15, 0x36, 0x6a, 0x9b, 0xc2, 0x63, 0xc0, 0x4d, 0xb8, 0xe4, 0x6e, 0xae, 0xd1,
+	0x0c, 0x1d, 0x99, 0x54, 0xa9, 0x0b, 0xbd, 0x6e, 0x99, 0x0a, 0x2a, 0x23, 0x93, 0x12, 0xf1, 0x82,
+	0xe7, 0xb4, 0xb9, 0x43, 0x9c, 0xb6, 0x66, 0x15, 0x32, 0xc4, 0x48, 0xc6, 0x73, 0x29, 0x8f, 0xa3,
+	0xe6, 0xb0, 0x17, 0x0f, 0x5c, 0x7f, 0x5d, 0x58, 0x4b, 0xdf, 0x56, 0x32, 0x99, 0x35, 0x25, 0x19,
+	0x5f, 0x51, 0x52, 0x3f, 0x4c, 0xad, 0x67, 0x33, 0xca, 0x8f, 0x96, 0xe1, 0xba, 0x67, 0x52, 0xc8,
+	0xa8, 0xb2, 0x7a, 0xfa, 0x97, 0x1b, 0xd4, 0x57, 0x65, 0x09, 0xbf, 0x01, 0x9c, 0x58, 0x33, 0x73,
+	0xdf, 0x81, 0xbe, 0x69, 0x23, 0xaf, 0xd1, 0xb4, 0xe1, 0xaa, 0x69, 0x77, 0x6a, 0x3a, 0x7d, 0x7b,
+	0xa6, 0x39, 0xce, 0x56, 0x09, 0xb1, 0x8b, 0x58, 0x25, 0x48, 0x0c, 0x7a, 0x1e, 0xe6, 0xbe, 0x78,
+	0x00, 0x6a, 0x4e, 0xae, 0xdb, 0x15, 0x4c, 0x6e, 0xc0, 0x46, 0x08, 0x57, 0x2f, 0x63, 0xc9, 0xca,
+	0x21, 0xf1, 0x92, 0x67, 0x70, 0xf8, 0x10, 0x83, 0x37, 0x10, 0xc2, 0xee, 0xfd, 0x79, 0xdf, 0xca,
+	0xd5, 0xd2, 0x82, 0x7b, 0x3f, 0x86, 0x37, 0x52, 0x29, 0xa8, 0x78, 0x57, 0xef, 0xfd, 0xf4, 0x4a,
+	0x4a, 0x59, 0xbd, 0xbd, 0x9e, 0x86, 0x29, 0xd8, 0x6f, 0xd7, 0x91, 0x0b, 0x0a, 0x27, 0x60, 0x64,
+	0xa2, 0x82, 0x45, 0x75, 0xf7, 0xdb, 0xb6, 0x11, 0xd6, 0xad, 0x9c, 0x38, 0xee, 0xd9, 0x38, 0xd7,
+	0x98, 0x47, 0x6b, 0x89, 0xe2, 0x90, 0x5c, 0x3a, 0x54, 0x27, 0x6b, 0xc3, 0x13, 0x25, 0x7c, 0xc4,
+	0xf1, 0xf5, 0x0a, 0xbc, 0x84, 0x70, 0xf9, 0x84, 0xe2, 0x07, 0xeb, 0x24, 0x79, 0x59, 0x42, 0xe5,
+	0x02, 0xfb, 0x4b, 0xba, 0x65, 0x8a, 0x13, 0x27, 0xca, 0xd4, 0x5e, 0x6e, 0x49, 0xad, 0x57, 0x93,
+	0x74, 0xa3, 0x44, 0xe1, 0x73, 0xc0, 0x4d, 0x60, 0x54, 0xb6, 0xb6, 0xdc, 0x5a, 0xe0, 0x06, 0x85,
+	0x50, 0x95, 0x3a, 0xa4, 0x35, 0x51, 0x5c, 0x7d, 0xcd, 0x89, 0x22, 0xe4, 0x5b, 0xe1, 0x4a, 0xc9,
+	0x78, 0x36, 0x34, 0xe7, 0x8b, 0x4f, 0x01, 0xf7, 0x16, 0x41, 0x9a, 0x83, 0x91, 0xd2, 0xe8, 0x95,
+	0x6b, 0x47, 0x9a, 0x96, 0xf1, 0xd8, 0x60, 0x3d, 0x97, 0x6f, 0xda, 0xb5, 0x9d, 0x0a, 0xb8, 0x9c,
+	0x49, 0x25, 0xef, 0xc2, 0x94, 0x02, 0x53, 0xeb, 0xa9, 0xdb, 0xe9, 0xec, 0xea, 0x72, 0x76, 0x35,
+	0xbd, 0xae, 0xc0, 0xd4, 0x07, 0x77, 0x57, 0x61, 0x4a, 0xc9, 0x64, 0xe1, 0x6a, 0x32, 0x0b, 0xcf,
+	0x93, 0x56, 0x19, 0xc2, 0x25, 0xae, 0xcf, 0x07, 0x25, 0x5e, 0xd5, 0x98, 0x74, 0x03, 0x0f, 0xb9,
+	0xea, 0x92, 0x57, 0x29, 0x0a, 0xdc, 0x00, 0x41, 0x84, 0xb8, 0xb9, 0x83, 0xea, 0xda, 0x16, 0xa2,
+	0xe2, 0xf4, 0x29, 0x15, 0xdb, 0x80, 0x2f, 0x37, 0xeb, 0x89, 0xf5, 0x72, 0x97, 0x63, 0x6e, 0x99,
+	0xd6, 0x3d, 0xf3, 0xf0, 0x38, 0xce, 0x7f, 0x8f, 0x38, 0x06, 0x8f, 0x8a, 0xa1, 0x6f, 0xc1, 0xc1,
+	0x31, 0xfc, 0x3d, 0xe0, 0x2e, 0x39, 0x26, 0xc5, 0x0e, 0xa1, 0xb5, 0x0b, 0xd7, 0x62, 0xe1, 0xc2,
+	0x6b, 0xb4, 0x70, 0x6c, 0x4f, 0x79, 0xbb, 0x8a, 0x54, 0xe0, 0xfa, 0x5d, 0x93, 0xf4, 0xbc, 0x57,
+	0xea, 0x89, 0xb8, 0x18, 0x02, 0x93, 0x7d, 0xb1, 0xe5, 0xc8, 0x77, 0x85, 0xa6, 0x9e, 0x81, 0xbe,
+	0x94, 0x35, 0x9d, 0xd0, 0x3b, 0x00, 0x36, 0x08, 0x16, 0x7e, 0x0b, 0xb8, 0xc1, 0x3d, 0x27, 0xa8,
+	0x8a, 0xa1, 0x13, 0x2a, 0x2e, 0x85, 0xba, 0x27, 0xfb, 0x62, 0x63, 0x4d, 0xca, 0xd2, 0x9b, 0x3f,
+	0x47, 0x1a, 0x85, 0x28, 0xef, 0x22, 0xc2, 0xc4, 0x7b, 0x4f, 0x1e, 0x34, 0xf3, 0x3d, 0x79, 0x0a,
+	0x66, 0x6e, 0x4e, 0x71, 0xd7, 0x9a, 0x13, 0xab, 0xd0, 0x3e, 0x3f, 0xba, 0x29, 0xe8, 0xec, 0x67,
+	0xe0, 0x0c, 0x0f, 0x60, 0xa0, 0xe6, 0x09, 0xd5, 0xb5, 0x51, 0xf8, 0xdb, 0x59, 0x8e, 0xa3, 0xa5,
+	0x1a, 0x78, 0x15, 0x6f, 0x86, 0xba, 0x27, 0x7b, 0x13, 0x8f, 0xcf, 0xee, 0x54, 0xc0, 0xd5, 0x9c,
+	0x65, 0xd2, 0xb0, 0x6e, 0x12, 0x84, 0x69, 0x18, 0x95, 0x6c, 0xba, 0x1d, 0xce, 0x63, 0xb5, 0x50,
+	0x72, 0xb3, 0x7f, 0xc8, 0xb4, 0xc2, 0xd4, 0x20, 0xe5, 0x68, 0x24, 0xee, 0x8a, 0xfe, 0x17, 0x83,
+	0xbf, 0x61, 0xe0, 0x31, 0x19, 0xe0, 0xe5, 0x23, 0xe8, 0x72, 0xd4, 0x20, 0xf0, 0xca, 0x31, 0x88,
+	0xca, 0x51, 0x78, 0xed, 0x58, 0x64, 0x91, 0x18, 0x4c, 0x1c, 0x41, 0xe8, 0x7f, 0x57, 0x61, 0x8c,
+	0x88, 0x53, 0xf2, 0x9c, 0x11, 0xf6, 0xde, 0xea, 0xbe, 0x7b, 0x38, 0x7e, 0x94, 0x0c, 0x62, 0xc0,
+	0x89, 0xa3, 0x69, 0xca, 0xf1, 0x23, 0x25, 0xb9, 0x1e, 0x98, 0x38, 0x8e, 0x3b, 0x8f, 0xe9, 0xf4,
+	0xe3, 0xd2, 0xc5, 0x8e, 0x1d, 0xc4, 0xa9, 0xc3, 0xe8, 0xdc, 0xd2, 0xaf, 0x97, 0x51, 0x58, 0x33,
+	0x2c, 0x82, 0x0e, 0x27, 0x25, 0xba, 0x59, 0x30, 0x50, 0x38, 0x57, 0x0c, 0x3b, 0x04, 0x41, 0xe9,
+	0x30, 0x52, 0x6a, 0x90, 0x30, 0xb6, 0x0c, 0x63, 0x53, 0xd5, 0xb6, 0xc2, 0x9b, 0x4e, 0x01, 0xf6,
+	0xd2, 0x52, 0xba, 0x7a, 0x6f, 0x6f, 0xa6, 0xff, 0x5a, 0x01, 0xef, 0x71, 0xab, 0x5c, 0x20, 0x69,
+	0x99, 0x79, 0xbd, 0xe0, 0xe0, 0x6a, 0xa6, 0x5e, 0x8c, 0x4a, 0x31, 0x29, 0x2e, 0xcd, 0x4b, 0x0b,
+	0xd2, 0x92, 0x14, 0x8d, 0x4a, 0xd1, 0x1b, 0x52, 0x74, 0x49, 0x8a, 0x47, 0xa5, 0xf8, 0xbc, 0x14,
+	0x5f, 0x90, 0xe2, 0xd7, 0xa5, 0xf8, 0xa2, 0x14, 0x5f, 0x92, 0xe6, 0xe7, 0xa4, 0xf9, 0x98, 0xb4,
+	0x10, 0x93, 0x16, 0xe2, 0xd2, 0xc2, 0x0d, 0x69, 0x61, 0x31, 0x71, 0x89, 0x0b, 0x54, 0xc1, 0xb8,
+	0x9b, 0xa0, 0xf2, 0x7a, 0x41, 0x18, 0x78, 0x56, 0x01, 0x81, 0xe7, 0x15, 0xd0, 0xb7, 0xeb, 0x82,
+	0xd4, 0x78, 0x62, 0x8a, 0x3b, 0x5f, 0xff, 0x71, 0x2b, 0x9a, 0x97, 0x8a, 0x04, 0xe1, 0x59, 0x05,
+	0x2c, 0x3e, 0xaf, 0x80, 0x1b, 0x2e, 0xd9, 0xc2, 0xf5, 0x3f, 0x3c, 0x05, 0x40, 0x66, 0xd8, 0x73,
+	0x7c, 0x8f, 0xcc, 0xb0, 0x3d, 0x3c, 0x2b, 0x33, 0x2c, 0xcb, 0xf7, 0xca, 0x0c, 0xcb, 0xf1, 0x7d,
+	0x32, 0xc3, 0xf6, 0xf1, 0xfd, 0x32, 0xc3, 0xf6, 0xf3, 0x01, 0x99, 0x61, 0x79, 0x7e, 0x48, 0x66,
+	0x58, 0x81, 0x3f, 0x2f, 0x33, 0xec, 0xdb, 0xfc, 0x05, 0x99, 0x61, 0x45, 0x7e, 0x44, 0x66, 0xd8,
+	0x51, 0xfe, 0x1d, 0x99, 0x61, 0xdf, 0xe1, 0xc7, 0x64, 0x86, 0x1d, 0xe3, 0x2f, 0xca, 0x0c, 0x7b,
+	0x91, 0x0f, 0xca, 0x0c, 0x1b, 0xe2, 0xdf, 0x95, 0x19, 0xf6, 0x5d, 0x7e, 0x5c, 0x66, 0xd8, 0x2b,
+	0xfc, 0x55, 0x99, 0x61, 0xa7, 0xf8, 0x69, 0x99, 0x61, 0x67, 0x78, 0x49, 0x66, 0x58, 0x89, 0x0f,
+	0xcb, 0x0c, 0x1b, 0xe6, 0x23, 0x32, 0xc3, 0x46, 0xf8, 0x59, 0x99, 0x61, 0x67, 0xf9, 0x39, 0x99,
+	0x61, 0xe7, 0xf8, 0xa8, 0xcc, 0xb0, 0x51, 0x3e, 0x26, 0x33, 0x6c, 0x8c, 0x8f, 0xcb, 0x0c, 0x1b,
+	0xe7, 0xe7, 0x65, 0x86, 0xbd, 0xce, 0xdf, 0x90, 0x19, 0xf6, 0x06, 0xbf, 0x08, 0x47, 0x37, 0xb7,
+	0xdd, 0xf8, 0x29, 0x96, 0x59, 0x83, 0xc3, 0x5e, 0x76, 0xc9, 0xab, 0xba, 0x01, 0x47, 0xf6, 0xf7,
+	0xf6, 0x31, 0xa8, 0xd7, 0x6a, 0xc2, 0x21, 0x2d, 0xee, 0xa7, 0x76, 0x43, 0xcf, 0x23, 0x62, 0xab,
+	0x26, 0x0c, 0x54, 0xdb, 0x25, 0x1f, 0xe4, 0xc3, 0x7e, 0xdf, 0xa1, 0x05, 0x6c, 0x39, 0x36, 0xec,
+	0xcd, 0xa9, 0x54, 0x55, 0xe6, 0x30, 0xa5, 0x30, 0x50, 0x40, 0x26, 0xc2, 0xba, 0xe6, 0x4b, 0x12,
+	0xf6, 0xd0, 0x78, 0x3c, 0xe7, 0x03, 0x5c, 0x38, 0x56, 0x5b, 0xcb, 0x5b, 0xf8, 0x9e, 0x8a, 0x73,
+	0x6e, 0xce, 0xbd, 0xbf, 0x5d, 0xdb, 0x1d, 0x2e, 0xa9, 0xf7, 0x15, 0x55, 0xa3, 0x7a, 0x19, 0xed,
+	0xdb, 0x45, 0xe0, 0x60, 0xc9, 0xca, 0x79, 0x4c, 0x25, 0x44, 0x8b, 0x56, 0x8e, 0x40, 0xc6, 0x4d,
+	0x91, 0x90, 0xb1, 0x34, 0x62, 0xc3, 0xde, 0xaa, 0x04, 0xf7, 0x9b, 0x1d, 0xde, 0x7b, 0x54, 0xdc,
+	0xd3, 0xd1, 0x22, 0xb6, 0x9c, 0x42, 0x11, 0x0a, 0x18, 0x51, 0x55, 0xaf, 0x16, 0x56, 0x3f, 0xcc,
+	0x70, 0xa8, 0x56, 0xd7, 0x4b, 0x3a, 0xc6, 0x16, 0xd6, 0xcd, 0x02, 0xec, 0x23, 0xa6, 0xae, 0xe4,
+	0x50, 0x5e, 0x75, 0x0c, 0x5a, 0x7d, 0xc1, 0xe8, 0x17, 0x8e, 0x8e, 0x11, 0xec, 0xf1, 0x0f, 0x01,
+	0x87, 0x5a, 0x2c, 0x87, 0x62, 0xeb, 0x61, 0xaa, 0xbe, 0x85, 0x13, 0xad, 0x3b, 0x65, 0x84, 0xf5,
+	0xbc, 0x8e, 0x72, 0xfb, 0x87, 0x83, 0x01, 0xaf, 0xfe, 0xe8, 0x05, 0x37, 0x10, 0xa4, 0x08, 0x03,
+	0x84, 0x62, 0x5d, 0xf3, 0xca, 0xaa, 0x53, 0x42, 0x90, 0x77, 0x4c, 0xcd, 0x40, 0xaa, 0xa9, 0x90,
+	0xa2, 0x43, 0x73, 0xd6, 0x3d, 0x13, 0xf6, 0x3a, 0x04, 0x61, 0x85, 0xd8, 0x48, 0x1b, 0x7f, 0x04,
+	0xb8, 0xc1, 0xa6, 0x52, 0x25, 0x58, 0x4d, 0x35, 0x10, 0x1c, 0xa3, 0x2c, 0x85, 0x9f, 0x3c, 0xe8,
+	0xab, 0x63, 0xda, 0xab, 0x31, 0xa1, 0xda, 0x93, 0x08, 0x76, 0xbf, 0xfc, 0x7b, 0xf7, 0xb9, 0xcf,
+	0x9e, 0x82, 0x33, 0x7c, 0x57, 0x63, 0x2d, 0x1c, 0xff, 0x93, 0xc0, 0x0d, 0x24, 0x31, 0x72, 0x31,
+	0x6f, 0x6d, 0xf0, 0x71, 0xb9, 0xed, 0xe0, 0xa3, 0x69, 0x94, 0xf1, 0xe1, 0xa9, 0x8d, 0x32, 0x5a,
+	0x07, 0x17, 0xeb, 0xdf, 0x77, 0x70, 0xd1, 0x34, 0xaa, 0x08, 0x1f, 0x3c, 0xaa, 0x68, 0x37, 0x92,
+	0x98, 0x39, 0x70, 0x24, 0xd1, 0x66, 0x18, 0x71, 0xb1, 0x75, 0x18, 0x71, 0xa2, 0x49, 0x83, 0xf3,
+	0xfa, 0x26, 0x05, 0x87, 0x4d, 0x01, 0x66, 0x0e, 0x9c, 0x02, 0xb4, 0x69, 0xf5, 0x33, 0xa7, 0xd2,
+	0x3e, 0x36, 0xf5, 0x88, 0xe1, 0x83, 0x7b, 0xc4, 0x76, 0x1d, 0xdf, 0xd4, 0x41, 0x1d, 0x5f, 0x6b,
+	0xff, 0x96, 0x3d, 0x95, 0xfe, 0xad, 0xb9, 0x65, 0xfb, 0xe4, 0x0d, 0xb4, 0x6c, 0xc7, 0x68, 0xc7,
+	0x0a, 0xa7, 0xdf, 0x8d, 0x9d, 0xb0, 0xc9, 0xba, 0x7b, 0x3a, 0x4d, 0x56, 0x73, 0x4b, 0xf5, 0xc9,
+	0x1b, 0x68, 0xa9, 0x8e, 0xd1, 0x32, 0xfd, 0xf2, 0xb5, 0x76, 0x4c, 0xff, 0x2b, 0x1d, 0xd1, 0x8f,
+	0x4f, 0xd6, 0x10, 0x09, 0xad, 0x0d, 0x51, 0x73, 0x5f, 0x73, 0xb1, 0xb5, 0xad, 0xa9, 0xc7, 0x8b,
+	0x43, 0xff, 0xf8, 0xff, 0xa6, 0xb9, 0x7b, 0x62, 0xbc, 0x19, 0xf1, 0x0d, 0x3d, 0xfa, 0x16, 0x34,
+	0x2e, 0x25, 0x22, 0xed, 0x41, 0xdf, 0x85, 0x47, 0xdf, 0x82, 0x76, 0x1b, 0x27, 0x40, 0x7e, 0x6f,
+	0x0c, 0xed, 0xfd, 0xf7, 0x71, 0x5e, 0x07, 0xb5, 0x7d, 0x17, 0xd4, 0xf6, 0x47, 0x81, 0xeb, 0xbb,
+	0x8d, 0x68, 0x07, 0x2d, 0x75, 0xd0, 0x52, 0x07, 0x2d, 0x75, 0xd0, 0x52, 0x07, 0x2d, 0x75, 0xd0,
+	0x52, 0x07, 0x2d, 0x75, 0xd0, 0x52, 0x07, 0x2d, 0xb5, 0x45, 0x4b, 0x7f, 0x16, 0xb8, 0x41, 0x88,
+	0x6c, 0x43, 0xd5, 0x3a, 0xf3, 0xa5, 0x0e, 0x62, 0xea, 0x20, 0xa6, 0x0e, 0x62, 0xea, 0x20, 0xa6,
+	0x0e, 0x62, 0xea, 0x20, 0xa6, 0x0e, 0x62, 0xea, 0x20, 0xa6, 0xb6, 0x88, 0x29, 0xf1, 0x18, 0x3c,
+	0x7f, 0x19, 0xec, 0x7a, 0xf1, 0x32, 0xd8, 0xf5, 0xf5, 0xcb, 0x20, 0x78, 0xb8, 0x1b, 0x04, 0x9f,
+	0xef, 0x06, 0xc1, 0x17, 0xbb, 0x41, 0xf0, 0x7c, 0x37, 0x08, 0x5e, 0xec, 0x06, 0xc1, 0x97, 0xbb,
+	0x41, 0xf0, 0xd5, 0x6e, 0xb0, 0xeb, 0xeb, 0xdd, 0x20, 0xf8, 0xf4, 0x55, 0xb0, 0xeb, 0xd9, 0xab,
+	0x20, 0x78, 0xfe, 0x2a, 0xd8, 0xf5, 0xe2, 0x55, 0xb0, 0xeb, 0xc3, 0x7c, 0xc1, 0xb2, 0xb7, 0x0a,
+	0x91, 0xb2, 0x65, 0x50, 0x84, 0xb1, 0x1a, 0x71, 0xc8, 0xac, 0xf7, 0x90, 0xb7, 0x70, 0x29, 0x6c,
+	0x63, 0xab, 0xac, 0xe7, 0x10, 0x0e, 0xd7, 0xb6, 0x67, 0xed, 0xcd, 0x82, 0x35, 0x8b, 0xee, 0x53,
+	0xff, 0xe7, 0xd1, 0xc7, 0xfe, 0xf1, 0xf8, 0xe6, 0x39, 0xef, 0x77, 0xd3, 0xf1, 0xff, 0x04, 0x00,
+	0x00, 0xff, 0xff, 0x48, 0x99, 0xc6, 0x07, 0x77, 0x2e, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -2377,19 +1494,7 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if this.AuthenticateName != that1.AuthenticateName {
 		return false
 	}
-	if this.BypassOnClientCertFail != that1.BypassOnClientCertFail {
-		return false
-	}
-	if this.BypassOnHandshakeAlert != that1.BypassOnHandshakeAlert {
-		return false
-	}
-	if this.C3DCertLifespan != that1.C3DCertLifespan {
-		return false
-	}
 	if this.CacheSize != that1.CacheSize {
-		return false
-	}
-	if this.CacheTimeout != that1.CacheTimeout {
 		return false
 	}
 	if that1.CipherConfig == nil {
@@ -2407,13 +1512,7 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if this.CrlFile != that1.CrlFile {
 		return false
 	}
-	if this.Data_0Rtt != that1.Data_0Rtt {
-		return false
-	}
 	if this.ExpireCertResponseControl != that1.ExpireCertResponseControl {
-		return false
-	}
-	if this.GenericAlert != that1.GenericAlert {
 		return false
 	}
 	if this.HandshakeTimeout != that1.HandshakeTimeout {
@@ -2425,45 +1524,16 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if this.LogPublisher != that1.LogPublisher {
 		return false
 	}
-	if this.LogSslC3DEvents != that1.LogSslC3DEvents {
-		return false
-	}
 	if this.LogSslClientAuthenticationEvents != that1.LogSslClientAuthenticationEvents {
-		return false
-	}
-	if this.LogSslForwardProxyEvents != that1.LogSslForwardProxyEvents {
 		return false
 	}
 	if this.LogSslHandshakeEvents != that1.LogSslHandshakeEvents {
 		return false
 	}
-	if this.MaxActiveHandshakes != that1.MaxActiveHandshakes {
-		return false
-	}
-	if this.ModSslMethods != that1.ModSslMethods {
-		return false
-	}
-	if this.Mode != that1.Mode {
-		return false
-	}
-	if len(this.Ocsp) != len(that1.Ocsp) {
-		return false
-	}
-	for i := range this.Ocsp {
-		if !this.Ocsp[i].Equal(that1.Ocsp[i]) {
-			return false
-		}
-	}
 	if this.Passphrase != that1.Passphrase {
 		return false
 	}
 	if this.PeerCertMode != that1.PeerCertMode {
-		return false
-	}
-	if this.ProxySsl != that1.ProxySsl {
-		return false
-	}
-	if this.ProxySslPassthrough != that1.ProxySslPassthrough {
 		return false
 	}
 	if this.RenegotiatePeriod != that1.RenegotiatePeriod {
@@ -2475,9 +1545,6 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if this.Renegotiation != that1.Renegotiation {
 		return false
 	}
-	if this.RetainCertificate != that1.RetainCertificate {
-		return false
-	}
 	if this.RevokedCertStatusResponseControl != that1.RevokedCertStatusResponseControl {
 		return false
 	}
@@ -2487,37 +1554,7 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if this.ServerName != that1.ServerName {
 		return false
 	}
-	if this.SessionMirroring != that1.SessionMirroring {
-		return false
-	}
 	if this.SessionTicket != that1.SessionTicket {
-		return false
-	}
-	if this.SniDefault != that1.SniDefault {
-		return false
-	}
-	if this.SniRequire != that1.SniRequire {
-		return false
-	}
-	if this.SslC3D != that1.SslC3D {
-		return false
-	}
-	if this.SslForwardProxy != that1.SslForwardProxy {
-		return false
-	}
-	if this.SslForwardProxyBypass != that1.SslForwardProxyBypass {
-		return false
-	}
-	if this.SslForwardProxyVerifiedHandshake != that1.SslForwardProxyVerifiedHandshake {
-		return false
-	}
-	if this.SslSignHash != that1.SslSignHash {
-		return false
-	}
-	if this.StrictResume != that1.StrictResume {
-		return false
-	}
-	if this.UncleanShutdown != that1.UncleanShutdown {
 		return false
 	}
 	if this.UnknownCertStatusResponseControl != that1.UnknownCertStatusResponseControl {
@@ -2525,14 +1562,6 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	}
 	if this.UntrustedCertResponseControl != that1.UntrustedCertResponseControl {
 		return false
-	}
-	if len(this.UserSpec) != len(that1.UserSpec) {
-		return false
-	}
-	for i := range this.UserSpec {
-		if this.UserSpec[i] != that1.UserSpec[i] {
-			return false
-		}
 	}
 	if that1.CertificatesChoice == nil {
 		if this.CertificatesChoice != nil {
@@ -2543,29 +1572,21 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if !this.CertificatesChoice.Equal(that1.CertificatesChoice) {
 		return false
 	}
-	return true
-}
-func (this *GlobalSpecType_CipherGroup) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
+	if len(this.TrustedCaList) != len(that1.TrustedCaList) {
+		return false
 	}
-
-	that1, ok := that.(*GlobalSpecType_CipherGroup)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_CipherGroup)
-		if ok {
-			that1 = &that2
-		} else {
+	for i := range this.TrustedCaList {
+		if !this.TrustedCaList[i].Equal(that1.TrustedCaList[i]) {
 			return false
 		}
 	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
+	if len(this.TmOptions) != len(that1.TmOptions) {
 		return false
 	}
-	if this.CipherGroup != that1.CipherGroup {
-		return false
+	for i := range this.TmOptions {
+		if this.TmOptions[i] != that1.TmOptions[i] {
+			return false
+		}
 	}
 	return true
 }
@@ -2680,19 +1701,7 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if this.AuthenticateName != that1.AuthenticateName {
 		return false
 	}
-	if this.BypassOnClientCertFail != that1.BypassOnClientCertFail {
-		return false
-	}
-	if this.BypassOnHandshakeAlert != that1.BypassOnHandshakeAlert {
-		return false
-	}
-	if this.C3DCertLifespan != that1.C3DCertLifespan {
-		return false
-	}
 	if this.CacheSize != that1.CacheSize {
-		return false
-	}
-	if this.CacheTimeout != that1.CacheTimeout {
 		return false
 	}
 	if that1.CipherConfig == nil {
@@ -2704,42 +1713,13 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if !this.CipherConfig.Equal(that1.CipherConfig) {
 		return false
 	}
-	if this.Data_0Rtt != that1.Data_0Rtt {
-		return false
-	}
 	if this.ExpireCertResponseControl != that1.ExpireCertResponseControl {
-		return false
-	}
-	if this.GenericAlert != that1.GenericAlert {
 		return false
 	}
 	if this.HandshakeTimeout != that1.HandshakeTimeout {
 		return false
 	}
-	if this.MaxActiveHandshakes != that1.MaxActiveHandshakes {
-		return false
-	}
-	if this.ModSslMethods != that1.ModSslMethods {
-		return false
-	}
-	if this.Mode != that1.Mode {
-		return false
-	}
-	if len(this.Ocsp) != len(that1.Ocsp) {
-		return false
-	}
-	for i := range this.Ocsp {
-		if !this.Ocsp[i].Equal(that1.Ocsp[i]) {
-			return false
-		}
-	}
 	if this.PeerCertMode != that1.PeerCertMode {
-		return false
-	}
-	if this.ProxySsl != that1.ProxySsl {
-		return false
-	}
-	if this.ProxySslPassthrough != that1.ProxySslPassthrough {
 		return false
 	}
 	if this.RenegotiatePeriod != that1.RenegotiatePeriod {
@@ -2751,9 +1731,6 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if this.Renegotiation != that1.Renegotiation {
 		return false
 	}
-	if this.RetainCertificate != that1.RetainCertificate {
-		return false
-	}
 	if this.RevokedCertStatusResponseControl != that1.RevokedCertStatusResponseControl {
 		return false
 	}
@@ -2763,37 +1740,7 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if this.ServerName != that1.ServerName {
 		return false
 	}
-	if this.SessionMirroring != that1.SessionMirroring {
-		return false
-	}
 	if this.SessionTicket != that1.SessionTicket {
-		return false
-	}
-	if this.SniDefault != that1.SniDefault {
-		return false
-	}
-	if this.SniRequire != that1.SniRequire {
-		return false
-	}
-	if this.SslC3D != that1.SslC3D {
-		return false
-	}
-	if this.SslForwardProxy != that1.SslForwardProxy {
-		return false
-	}
-	if this.SslForwardProxyBypass != that1.SslForwardProxyBypass {
-		return false
-	}
-	if this.SslForwardProxyVerifiedHandshake != that1.SslForwardProxyVerifiedHandshake {
-		return false
-	}
-	if this.SslSignHash != that1.SslSignHash {
-		return false
-	}
-	if this.StrictResume != that1.StrictResume {
-		return false
-	}
-	if this.UncleanShutdown != that1.UncleanShutdown {
 		return false
 	}
 	if this.UnknownCertStatusResponseControl != that1.UnknownCertStatusResponseControl {
@@ -2801,14 +1748,6 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	}
 	if this.UntrustedCertResponseControl != that1.UntrustedCertResponseControl {
 		return false
-	}
-	if len(this.UserSpec) != len(that1.UserSpec) {
-		return false
-	}
-	for i := range this.UserSpec {
-		if this.UserSpec[i] != that1.UserSpec[i] {
-			return false
-		}
 	}
 	if that1.CertificatesChoice == nil {
 		if this.CertificatesChoice != nil {
@@ -2819,29 +1758,21 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if !this.CertificatesChoice.Equal(that1.CertificatesChoice) {
 		return false
 	}
-	return true
-}
-func (this *CreateSpecType_CipherGroup) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
+	if len(this.TrustedCaList) != len(that1.TrustedCaList) {
+		return false
 	}
-
-	that1, ok := that.(*CreateSpecType_CipherGroup)
-	if !ok {
-		that2, ok := that.(CreateSpecType_CipherGroup)
-		if ok {
-			that1 = &that2
-		} else {
+	for i := range this.TrustedCaList {
+		if !this.TrustedCaList[i].Equal(that1.TrustedCaList[i]) {
 			return false
 		}
 	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
+	if len(this.TmOptions) != len(that1.TmOptions) {
 		return false
 	}
-	if this.CipherGroup != that1.CipherGroup {
-		return false
+	for i := range this.TmOptions {
+		if this.TmOptions[i] != that1.TmOptions[i] {
+			return false
+		}
 	}
 	return true
 }
@@ -2927,19 +1858,7 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if this.AuthenticateName != that1.AuthenticateName {
 		return false
 	}
-	if this.BypassOnClientCertFail != that1.BypassOnClientCertFail {
-		return false
-	}
-	if this.BypassOnHandshakeAlert != that1.BypassOnHandshakeAlert {
-		return false
-	}
-	if this.C3DCertLifespan != that1.C3DCertLifespan {
-		return false
-	}
 	if this.CacheSize != that1.CacheSize {
-		return false
-	}
-	if this.CacheTimeout != that1.CacheTimeout {
 		return false
 	}
 	if that1.CipherConfig == nil {
@@ -2951,42 +1870,13 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if !this.CipherConfig.Equal(that1.CipherConfig) {
 		return false
 	}
-	if this.Data_0Rtt != that1.Data_0Rtt {
-		return false
-	}
 	if this.ExpireCertResponseControl != that1.ExpireCertResponseControl {
-		return false
-	}
-	if this.GenericAlert != that1.GenericAlert {
 		return false
 	}
 	if this.HandshakeTimeout != that1.HandshakeTimeout {
 		return false
 	}
-	if this.MaxActiveHandshakes != that1.MaxActiveHandshakes {
-		return false
-	}
-	if this.ModSslMethods != that1.ModSslMethods {
-		return false
-	}
-	if this.Mode != that1.Mode {
-		return false
-	}
-	if len(this.Ocsp) != len(that1.Ocsp) {
-		return false
-	}
-	for i := range this.Ocsp {
-		if !this.Ocsp[i].Equal(that1.Ocsp[i]) {
-			return false
-		}
-	}
 	if this.PeerCertMode != that1.PeerCertMode {
-		return false
-	}
-	if this.ProxySsl != that1.ProxySsl {
-		return false
-	}
-	if this.ProxySslPassthrough != that1.ProxySslPassthrough {
 		return false
 	}
 	if this.RenegotiatePeriod != that1.RenegotiatePeriod {
@@ -2998,9 +1888,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if this.Renegotiation != that1.Renegotiation {
 		return false
 	}
-	if this.RetainCertificate != that1.RetainCertificate {
-		return false
-	}
 	if this.RevokedCertStatusResponseControl != that1.RevokedCertStatusResponseControl {
 		return false
 	}
@@ -3010,37 +1897,7 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if this.ServerName != that1.ServerName {
 		return false
 	}
-	if this.SessionMirroring != that1.SessionMirroring {
-		return false
-	}
 	if this.SessionTicket != that1.SessionTicket {
-		return false
-	}
-	if this.SniDefault != that1.SniDefault {
-		return false
-	}
-	if this.SniRequire != that1.SniRequire {
-		return false
-	}
-	if this.SslC3D != that1.SslC3D {
-		return false
-	}
-	if this.SslForwardProxy != that1.SslForwardProxy {
-		return false
-	}
-	if this.SslForwardProxyBypass != that1.SslForwardProxyBypass {
-		return false
-	}
-	if this.SslForwardProxyVerifiedHandshake != that1.SslForwardProxyVerifiedHandshake {
-		return false
-	}
-	if this.SslSignHash != that1.SslSignHash {
-		return false
-	}
-	if this.StrictResume != that1.StrictResume {
-		return false
-	}
-	if this.UncleanShutdown != that1.UncleanShutdown {
 		return false
 	}
 	if this.UnknownCertStatusResponseControl != that1.UnknownCertStatusResponseControl {
@@ -3048,14 +1905,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	}
 	if this.UntrustedCertResponseControl != that1.UntrustedCertResponseControl {
 		return false
-	}
-	if len(this.UserSpec) != len(that1.UserSpec) {
-		return false
-	}
-	for i := range this.UserSpec {
-		if this.UserSpec[i] != that1.UserSpec[i] {
-			return false
-		}
 	}
 	if that1.CertificatesChoice == nil {
 		if this.CertificatesChoice != nil {
@@ -3066,29 +1915,21 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if !this.CertificatesChoice.Equal(that1.CertificatesChoice) {
 		return false
 	}
-	return true
-}
-func (this *GetSpecType_CipherGroup) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
+	if len(this.TrustedCaList) != len(that1.TrustedCaList) {
+		return false
 	}
-
-	that1, ok := that.(*GetSpecType_CipherGroup)
-	if !ok {
-		that2, ok := that.(GetSpecType_CipherGroup)
-		if ok {
-			that1 = &that2
-		} else {
+	for i := range this.TrustedCaList {
+		if !this.TrustedCaList[i].Equal(that1.TrustedCaList[i]) {
 			return false
 		}
 	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
+	if len(this.TmOptions) != len(that1.TmOptions) {
 		return false
 	}
-	if this.CipherGroup != that1.CipherGroup {
-		return false
+	for i := range this.TmOptions {
+		if this.TmOptions[i] != that1.TmOptions[i] {
+			return false
+		}
 	}
 	return true
 }
@@ -3174,19 +2015,7 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if this.AuthenticateName != that1.AuthenticateName {
 		return false
 	}
-	if this.BypassOnClientCertFail != that1.BypassOnClientCertFail {
-		return false
-	}
-	if this.BypassOnHandshakeAlert != that1.BypassOnHandshakeAlert {
-		return false
-	}
-	if this.C3DCertLifespan != that1.C3DCertLifespan {
-		return false
-	}
 	if this.CacheSize != that1.CacheSize {
-		return false
-	}
-	if this.CacheTimeout != that1.CacheTimeout {
 		return false
 	}
 	if that1.CipherConfig == nil {
@@ -3198,42 +2027,13 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if !this.CipherConfig.Equal(that1.CipherConfig) {
 		return false
 	}
-	if this.Data_0Rtt != that1.Data_0Rtt {
-		return false
-	}
 	if this.ExpireCertResponseControl != that1.ExpireCertResponseControl {
-		return false
-	}
-	if this.GenericAlert != that1.GenericAlert {
 		return false
 	}
 	if this.HandshakeTimeout != that1.HandshakeTimeout {
 		return false
 	}
-	if this.MaxActiveHandshakes != that1.MaxActiveHandshakes {
-		return false
-	}
-	if this.ModSslMethods != that1.ModSslMethods {
-		return false
-	}
-	if this.Mode != that1.Mode {
-		return false
-	}
-	if len(this.Ocsp) != len(that1.Ocsp) {
-		return false
-	}
-	for i := range this.Ocsp {
-		if !this.Ocsp[i].Equal(that1.Ocsp[i]) {
-			return false
-		}
-	}
 	if this.PeerCertMode != that1.PeerCertMode {
-		return false
-	}
-	if this.ProxySsl != that1.ProxySsl {
-		return false
-	}
-	if this.ProxySslPassthrough != that1.ProxySslPassthrough {
 		return false
 	}
 	if this.RenegotiatePeriod != that1.RenegotiatePeriod {
@@ -3245,9 +2045,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if this.Renegotiation != that1.Renegotiation {
 		return false
 	}
-	if this.RetainCertificate != that1.RetainCertificate {
-		return false
-	}
 	if this.RevokedCertStatusResponseControl != that1.RevokedCertStatusResponseControl {
 		return false
 	}
@@ -3257,37 +2054,7 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if this.ServerName != that1.ServerName {
 		return false
 	}
-	if this.SessionMirroring != that1.SessionMirroring {
-		return false
-	}
 	if this.SessionTicket != that1.SessionTicket {
-		return false
-	}
-	if this.SniDefault != that1.SniDefault {
-		return false
-	}
-	if this.SniRequire != that1.SniRequire {
-		return false
-	}
-	if this.SslC3D != that1.SslC3D {
-		return false
-	}
-	if this.SslForwardProxy != that1.SslForwardProxy {
-		return false
-	}
-	if this.SslForwardProxyBypass != that1.SslForwardProxyBypass {
-		return false
-	}
-	if this.SslForwardProxyVerifiedHandshake != that1.SslForwardProxyVerifiedHandshake {
-		return false
-	}
-	if this.SslSignHash != that1.SslSignHash {
-		return false
-	}
-	if this.StrictResume != that1.StrictResume {
-		return false
-	}
-	if this.UncleanShutdown != that1.UncleanShutdown {
 		return false
 	}
 	if this.UnknownCertStatusResponseControl != that1.UnknownCertStatusResponseControl {
@@ -3295,14 +2062,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	}
 	if this.UntrustedCertResponseControl != that1.UntrustedCertResponseControl {
 		return false
-	}
-	if len(this.UserSpec) != len(that1.UserSpec) {
-		return false
-	}
-	for i := range this.UserSpec {
-		if this.UserSpec[i] != that1.UserSpec[i] {
-			return false
-		}
 	}
 	if that1.CertificatesChoice == nil {
 		if this.CertificatesChoice != nil {
@@ -3313,29 +2072,21 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if !this.CertificatesChoice.Equal(that1.CertificatesChoice) {
 		return false
 	}
-	return true
-}
-func (this *ReplaceSpecType_CipherGroup) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
+	if len(this.TrustedCaList) != len(that1.TrustedCaList) {
+		return false
 	}
-
-	that1, ok := that.(*ReplaceSpecType_CipherGroup)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_CipherGroup)
-		if ok {
-			that1 = &that2
-		} else {
+	for i := range this.TrustedCaList {
+		if !this.TrustedCaList[i].Equal(that1.TrustedCaList[i]) {
 			return false
 		}
 	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
+	if len(this.TmOptions) != len(that1.TmOptions) {
 		return false
 	}
-	if this.CipherGroup != that1.CipherGroup {
-		return false
+	for i := range this.TmOptions {
+		if this.TmOptions[i] != that1.TmOptions[i] {
+			return false
+		}
 	}
 	return true
 }
@@ -3387,81 +2138,49 @@ func (this *ReplaceSpecType_Certificates) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GlobalSpecType) GoString() string {
+func (this *GlobalSpecType) goString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 58)
+	s := make([]string, 0, 33)
 	s = append(s, "&ssl_server_profile.GlobalSpecType{")
 	s = append(s, "AlertTimeout: "+fmt.Sprintf("%#v", this.AlertTimeout)+",\n")
 	s = append(s, "AllowExpiredCrl: "+fmt.Sprintf("%#v", this.AllowExpiredCrl)+",\n")
 	s = append(s, "Authenticate: "+fmt.Sprintf("%#v", this.Authenticate)+",\n")
 	s = append(s, "AuthenticateDepth: "+fmt.Sprintf("%#v", this.AuthenticateDepth)+",\n")
 	s = append(s, "AuthenticateName: "+fmt.Sprintf("%#v", this.AuthenticateName)+",\n")
-	s = append(s, "BypassOnClientCertFail: "+fmt.Sprintf("%#v", this.BypassOnClientCertFail)+",\n")
-	s = append(s, "BypassOnHandshakeAlert: "+fmt.Sprintf("%#v", this.BypassOnHandshakeAlert)+",\n")
-	s = append(s, "C3DCertLifespan: "+fmt.Sprintf("%#v", this.C3DCertLifespan)+",\n")
 	s = append(s, "CacheSize: "+fmt.Sprintf("%#v", this.CacheSize)+",\n")
-	s = append(s, "CacheTimeout: "+fmt.Sprintf("%#v", this.CacheTimeout)+",\n")
 	if this.CipherConfig != nil {
 		s = append(s, "CipherConfig: "+fmt.Sprintf("%#v", this.CipherConfig)+",\n")
 	}
 	s = append(s, "Crl: "+fmt.Sprintf("%#v", this.Crl)+",\n")
 	s = append(s, "CrlFile: "+fmt.Sprintf("%#v", this.CrlFile)+",\n")
-	s = append(s, "Data_0Rtt: "+fmt.Sprintf("%#v", this.Data_0Rtt)+",\n")
 	s = append(s, "ExpireCertResponseControl: "+fmt.Sprintf("%#v", this.ExpireCertResponseControl)+",\n")
-	s = append(s, "GenericAlert: "+fmt.Sprintf("%#v", this.GenericAlert)+",\n")
 	s = append(s, "HandshakeTimeout: "+fmt.Sprintf("%#v", this.HandshakeTimeout)+",\n")
 	s = append(s, "Key: "+fmt.Sprintf("%#v", this.Key)+",\n")
 	s = append(s, "LogPublisher: "+fmt.Sprintf("%#v", this.LogPublisher)+",\n")
-	s = append(s, "LogSslC3DEvents: "+fmt.Sprintf("%#v", this.LogSslC3DEvents)+",\n")
 	s = append(s, "LogSslClientAuthenticationEvents: "+fmt.Sprintf("%#v", this.LogSslClientAuthenticationEvents)+",\n")
-	s = append(s, "LogSslForwardProxyEvents: "+fmt.Sprintf("%#v", this.LogSslForwardProxyEvents)+",\n")
 	s = append(s, "LogSslHandshakeEvents: "+fmt.Sprintf("%#v", this.LogSslHandshakeEvents)+",\n")
-	s = append(s, "MaxActiveHandshakes: "+fmt.Sprintf("%#v", this.MaxActiveHandshakes)+",\n")
-	s = append(s, "ModSslMethods: "+fmt.Sprintf("%#v", this.ModSslMethods)+",\n")
-	s = append(s, "Mode: "+fmt.Sprintf("%#v", this.Mode)+",\n")
-	if this.Ocsp != nil {
-		s = append(s, "Ocsp: "+fmt.Sprintf("%#v", this.Ocsp)+",\n")
-	}
 	s = append(s, "Passphrase: "+fmt.Sprintf("%#v", this.Passphrase)+",\n")
 	s = append(s, "PeerCertMode: "+fmt.Sprintf("%#v", this.PeerCertMode)+",\n")
-	s = append(s, "ProxySsl: "+fmt.Sprintf("%#v", this.ProxySsl)+",\n")
-	s = append(s, "ProxySslPassthrough: "+fmt.Sprintf("%#v", this.ProxySslPassthrough)+",\n")
 	s = append(s, "RenegotiatePeriod: "+fmt.Sprintf("%#v", this.RenegotiatePeriod)+",\n")
 	s = append(s, "RenegotiateSize: "+fmt.Sprintf("%#v", this.RenegotiateSize)+",\n")
 	s = append(s, "Renegotiation: "+fmt.Sprintf("%#v", this.Renegotiation)+",\n")
-	s = append(s, "RetainCertificate: "+fmt.Sprintf("%#v", this.RetainCertificate)+",\n")
 	s = append(s, "RevokedCertStatusResponseControl: "+fmt.Sprintf("%#v", this.RevokedCertStatusResponseControl)+",\n")
 	s = append(s, "SecureRenegotiation: "+fmt.Sprintf("%#v", this.SecureRenegotiation)+",\n")
 	s = append(s, "ServerName: "+fmt.Sprintf("%#v", this.ServerName)+",\n")
-	s = append(s, "SessionMirroring: "+fmt.Sprintf("%#v", this.SessionMirroring)+",\n")
 	s = append(s, "SessionTicket: "+fmt.Sprintf("%#v", this.SessionTicket)+",\n")
-	s = append(s, "SniDefault: "+fmt.Sprintf("%#v", this.SniDefault)+",\n")
-	s = append(s, "SniRequire: "+fmt.Sprintf("%#v", this.SniRequire)+",\n")
-	s = append(s, "SslC3D: "+fmt.Sprintf("%#v", this.SslC3D)+",\n")
-	s = append(s, "SslForwardProxy: "+fmt.Sprintf("%#v", this.SslForwardProxy)+",\n")
-	s = append(s, "SslForwardProxyBypass: "+fmt.Sprintf("%#v", this.SslForwardProxyBypass)+",\n")
-	s = append(s, "SslForwardProxyVerifiedHandshake: "+fmt.Sprintf("%#v", this.SslForwardProxyVerifiedHandshake)+",\n")
-	s = append(s, "SslSignHash: "+fmt.Sprintf("%#v", this.SslSignHash)+",\n")
-	s = append(s, "StrictResume: "+fmt.Sprintf("%#v", this.StrictResume)+",\n")
-	s = append(s, "UncleanShutdown: "+fmt.Sprintf("%#v", this.UncleanShutdown)+",\n")
 	s = append(s, "UnknownCertStatusResponseControl: "+fmt.Sprintf("%#v", this.UnknownCertStatusResponseControl)+",\n")
 	s = append(s, "UntrustedCertResponseControl: "+fmt.Sprintf("%#v", this.UntrustedCertResponseControl)+",\n")
-	s = append(s, "UserSpec: "+fmt.Sprintf("%#v", this.UserSpec)+",\n")
 	if this.CertificatesChoice != nil {
 		s = append(s, "CertificatesChoice: "+fmt.Sprintf("%#v", this.CertificatesChoice)+",\n")
 	}
+	if this.TrustedCaList != nil {
+		s = append(s, "TrustedCaList: "+fmt.Sprintf("%#v", this.TrustedCaList)+",\n")
+	}
+	s = append(s, "TmOptions: "+fmt.Sprintf("%#v", this.TmOptions)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
-}
-func (this *GlobalSpecType_CipherGroup) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ssl_server_profile.GlobalSpecType_CipherGroup{` +
-		`CipherGroup:` + fmt.Sprintf("%#v", this.CipherGroup) + `}`}, ", ")
-	return s
 }
 func (this *GlobalSpecType_Ciphers) GoString() string {
 	if this == nil {
@@ -3495,68 +2214,38 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 49)
+	s := make([]string, 0, 26)
 	s = append(s, "&ssl_server_profile.CreateSpecType{")
 	s = append(s, "AlertTimeout: "+fmt.Sprintf("%#v", this.AlertTimeout)+",\n")
 	s = append(s, "AllowExpiredCrl: "+fmt.Sprintf("%#v", this.AllowExpiredCrl)+",\n")
 	s = append(s, "Authenticate: "+fmt.Sprintf("%#v", this.Authenticate)+",\n")
 	s = append(s, "AuthenticateDepth: "+fmt.Sprintf("%#v", this.AuthenticateDepth)+",\n")
 	s = append(s, "AuthenticateName: "+fmt.Sprintf("%#v", this.AuthenticateName)+",\n")
-	s = append(s, "BypassOnClientCertFail: "+fmt.Sprintf("%#v", this.BypassOnClientCertFail)+",\n")
-	s = append(s, "BypassOnHandshakeAlert: "+fmt.Sprintf("%#v", this.BypassOnHandshakeAlert)+",\n")
-	s = append(s, "C3DCertLifespan: "+fmt.Sprintf("%#v", this.C3DCertLifespan)+",\n")
 	s = append(s, "CacheSize: "+fmt.Sprintf("%#v", this.CacheSize)+",\n")
-	s = append(s, "CacheTimeout: "+fmt.Sprintf("%#v", this.CacheTimeout)+",\n")
 	if this.CipherConfig != nil {
 		s = append(s, "CipherConfig: "+fmt.Sprintf("%#v", this.CipherConfig)+",\n")
 	}
-	s = append(s, "Data_0Rtt: "+fmt.Sprintf("%#v", this.Data_0Rtt)+",\n")
 	s = append(s, "ExpireCertResponseControl: "+fmt.Sprintf("%#v", this.ExpireCertResponseControl)+",\n")
-	s = append(s, "GenericAlert: "+fmt.Sprintf("%#v", this.GenericAlert)+",\n")
 	s = append(s, "HandshakeTimeout: "+fmt.Sprintf("%#v", this.HandshakeTimeout)+",\n")
-	s = append(s, "MaxActiveHandshakes: "+fmt.Sprintf("%#v", this.MaxActiveHandshakes)+",\n")
-	s = append(s, "ModSslMethods: "+fmt.Sprintf("%#v", this.ModSslMethods)+",\n")
-	s = append(s, "Mode: "+fmt.Sprintf("%#v", this.Mode)+",\n")
-	if this.Ocsp != nil {
-		s = append(s, "Ocsp: "+fmt.Sprintf("%#v", this.Ocsp)+",\n")
-	}
 	s = append(s, "PeerCertMode: "+fmt.Sprintf("%#v", this.PeerCertMode)+",\n")
-	s = append(s, "ProxySsl: "+fmt.Sprintf("%#v", this.ProxySsl)+",\n")
-	s = append(s, "ProxySslPassthrough: "+fmt.Sprintf("%#v", this.ProxySslPassthrough)+",\n")
 	s = append(s, "RenegotiatePeriod: "+fmt.Sprintf("%#v", this.RenegotiatePeriod)+",\n")
 	s = append(s, "RenegotiateSize: "+fmt.Sprintf("%#v", this.RenegotiateSize)+",\n")
 	s = append(s, "Renegotiation: "+fmt.Sprintf("%#v", this.Renegotiation)+",\n")
-	s = append(s, "RetainCertificate: "+fmt.Sprintf("%#v", this.RetainCertificate)+",\n")
 	s = append(s, "RevokedCertStatusResponseControl: "+fmt.Sprintf("%#v", this.RevokedCertStatusResponseControl)+",\n")
 	s = append(s, "SecureRenegotiation: "+fmt.Sprintf("%#v", this.SecureRenegotiation)+",\n")
 	s = append(s, "ServerName: "+fmt.Sprintf("%#v", this.ServerName)+",\n")
-	s = append(s, "SessionMirroring: "+fmt.Sprintf("%#v", this.SessionMirroring)+",\n")
 	s = append(s, "SessionTicket: "+fmt.Sprintf("%#v", this.SessionTicket)+",\n")
-	s = append(s, "SniDefault: "+fmt.Sprintf("%#v", this.SniDefault)+",\n")
-	s = append(s, "SniRequire: "+fmt.Sprintf("%#v", this.SniRequire)+",\n")
-	s = append(s, "SslC3D: "+fmt.Sprintf("%#v", this.SslC3D)+",\n")
-	s = append(s, "SslForwardProxy: "+fmt.Sprintf("%#v", this.SslForwardProxy)+",\n")
-	s = append(s, "SslForwardProxyBypass: "+fmt.Sprintf("%#v", this.SslForwardProxyBypass)+",\n")
-	s = append(s, "SslForwardProxyVerifiedHandshake: "+fmt.Sprintf("%#v", this.SslForwardProxyVerifiedHandshake)+",\n")
-	s = append(s, "SslSignHash: "+fmt.Sprintf("%#v", this.SslSignHash)+",\n")
-	s = append(s, "StrictResume: "+fmt.Sprintf("%#v", this.StrictResume)+",\n")
-	s = append(s, "UncleanShutdown: "+fmt.Sprintf("%#v", this.UncleanShutdown)+",\n")
 	s = append(s, "UnknownCertStatusResponseControl: "+fmt.Sprintf("%#v", this.UnknownCertStatusResponseControl)+",\n")
 	s = append(s, "UntrustedCertResponseControl: "+fmt.Sprintf("%#v", this.UntrustedCertResponseControl)+",\n")
-	s = append(s, "UserSpec: "+fmt.Sprintf("%#v", this.UserSpec)+",\n")
 	if this.CertificatesChoice != nil {
 		s = append(s, "CertificatesChoice: "+fmt.Sprintf("%#v", this.CertificatesChoice)+",\n")
 	}
+	if this.TrustedCaList != nil {
+		s = append(s, "TrustedCaList: "+fmt.Sprintf("%#v", this.TrustedCaList)+",\n")
+	}
+	s = append(s, "TmOptions: "+fmt.Sprintf("%#v", this.TmOptions)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
-}
-func (this *CreateSpecType_CipherGroup) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ssl_server_profile.CreateSpecType_CipherGroup{` +
-		`CipherGroup:` + fmt.Sprintf("%#v", this.CipherGroup) + `}`}, ", ")
-	return s
 }
 func (this *CreateSpecType_Ciphers) GoString() string {
 	if this == nil {
@@ -3578,68 +2267,38 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 49)
+	s := make([]string, 0, 26)
 	s = append(s, "&ssl_server_profile.GetSpecType{")
 	s = append(s, "AlertTimeout: "+fmt.Sprintf("%#v", this.AlertTimeout)+",\n")
 	s = append(s, "AllowExpiredCrl: "+fmt.Sprintf("%#v", this.AllowExpiredCrl)+",\n")
 	s = append(s, "Authenticate: "+fmt.Sprintf("%#v", this.Authenticate)+",\n")
 	s = append(s, "AuthenticateDepth: "+fmt.Sprintf("%#v", this.AuthenticateDepth)+",\n")
 	s = append(s, "AuthenticateName: "+fmt.Sprintf("%#v", this.AuthenticateName)+",\n")
-	s = append(s, "BypassOnClientCertFail: "+fmt.Sprintf("%#v", this.BypassOnClientCertFail)+",\n")
-	s = append(s, "BypassOnHandshakeAlert: "+fmt.Sprintf("%#v", this.BypassOnHandshakeAlert)+",\n")
-	s = append(s, "C3DCertLifespan: "+fmt.Sprintf("%#v", this.C3DCertLifespan)+",\n")
 	s = append(s, "CacheSize: "+fmt.Sprintf("%#v", this.CacheSize)+",\n")
-	s = append(s, "CacheTimeout: "+fmt.Sprintf("%#v", this.CacheTimeout)+",\n")
 	if this.CipherConfig != nil {
 		s = append(s, "CipherConfig: "+fmt.Sprintf("%#v", this.CipherConfig)+",\n")
 	}
-	s = append(s, "Data_0Rtt: "+fmt.Sprintf("%#v", this.Data_0Rtt)+",\n")
 	s = append(s, "ExpireCertResponseControl: "+fmt.Sprintf("%#v", this.ExpireCertResponseControl)+",\n")
-	s = append(s, "GenericAlert: "+fmt.Sprintf("%#v", this.GenericAlert)+",\n")
 	s = append(s, "HandshakeTimeout: "+fmt.Sprintf("%#v", this.HandshakeTimeout)+",\n")
-	s = append(s, "MaxActiveHandshakes: "+fmt.Sprintf("%#v", this.MaxActiveHandshakes)+",\n")
-	s = append(s, "ModSslMethods: "+fmt.Sprintf("%#v", this.ModSslMethods)+",\n")
-	s = append(s, "Mode: "+fmt.Sprintf("%#v", this.Mode)+",\n")
-	if this.Ocsp != nil {
-		s = append(s, "Ocsp: "+fmt.Sprintf("%#v", this.Ocsp)+",\n")
-	}
 	s = append(s, "PeerCertMode: "+fmt.Sprintf("%#v", this.PeerCertMode)+",\n")
-	s = append(s, "ProxySsl: "+fmt.Sprintf("%#v", this.ProxySsl)+",\n")
-	s = append(s, "ProxySslPassthrough: "+fmt.Sprintf("%#v", this.ProxySslPassthrough)+",\n")
 	s = append(s, "RenegotiatePeriod: "+fmt.Sprintf("%#v", this.RenegotiatePeriod)+",\n")
 	s = append(s, "RenegotiateSize: "+fmt.Sprintf("%#v", this.RenegotiateSize)+",\n")
 	s = append(s, "Renegotiation: "+fmt.Sprintf("%#v", this.Renegotiation)+",\n")
-	s = append(s, "RetainCertificate: "+fmt.Sprintf("%#v", this.RetainCertificate)+",\n")
 	s = append(s, "RevokedCertStatusResponseControl: "+fmt.Sprintf("%#v", this.RevokedCertStatusResponseControl)+",\n")
 	s = append(s, "SecureRenegotiation: "+fmt.Sprintf("%#v", this.SecureRenegotiation)+",\n")
 	s = append(s, "ServerName: "+fmt.Sprintf("%#v", this.ServerName)+",\n")
-	s = append(s, "SessionMirroring: "+fmt.Sprintf("%#v", this.SessionMirroring)+",\n")
 	s = append(s, "SessionTicket: "+fmt.Sprintf("%#v", this.SessionTicket)+",\n")
-	s = append(s, "SniDefault: "+fmt.Sprintf("%#v", this.SniDefault)+",\n")
-	s = append(s, "SniRequire: "+fmt.Sprintf("%#v", this.SniRequire)+",\n")
-	s = append(s, "SslC3D: "+fmt.Sprintf("%#v", this.SslC3D)+",\n")
-	s = append(s, "SslForwardProxy: "+fmt.Sprintf("%#v", this.SslForwardProxy)+",\n")
-	s = append(s, "SslForwardProxyBypass: "+fmt.Sprintf("%#v", this.SslForwardProxyBypass)+",\n")
-	s = append(s, "SslForwardProxyVerifiedHandshake: "+fmt.Sprintf("%#v", this.SslForwardProxyVerifiedHandshake)+",\n")
-	s = append(s, "SslSignHash: "+fmt.Sprintf("%#v", this.SslSignHash)+",\n")
-	s = append(s, "StrictResume: "+fmt.Sprintf("%#v", this.StrictResume)+",\n")
-	s = append(s, "UncleanShutdown: "+fmt.Sprintf("%#v", this.UncleanShutdown)+",\n")
 	s = append(s, "UnknownCertStatusResponseControl: "+fmt.Sprintf("%#v", this.UnknownCertStatusResponseControl)+",\n")
 	s = append(s, "UntrustedCertResponseControl: "+fmt.Sprintf("%#v", this.UntrustedCertResponseControl)+",\n")
-	s = append(s, "UserSpec: "+fmt.Sprintf("%#v", this.UserSpec)+",\n")
 	if this.CertificatesChoice != nil {
 		s = append(s, "CertificatesChoice: "+fmt.Sprintf("%#v", this.CertificatesChoice)+",\n")
 	}
+	if this.TrustedCaList != nil {
+		s = append(s, "TrustedCaList: "+fmt.Sprintf("%#v", this.TrustedCaList)+",\n")
+	}
+	s = append(s, "TmOptions: "+fmt.Sprintf("%#v", this.TmOptions)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
-}
-func (this *GetSpecType_CipherGroup) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ssl_server_profile.GetSpecType_CipherGroup{` +
-		`CipherGroup:` + fmt.Sprintf("%#v", this.CipherGroup) + `}`}, ", ")
-	return s
 }
 func (this *GetSpecType_Ciphers) GoString() string {
 	if this == nil {
@@ -3661,68 +2320,38 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 49)
+	s := make([]string, 0, 26)
 	s = append(s, "&ssl_server_profile.ReplaceSpecType{")
 	s = append(s, "AlertTimeout: "+fmt.Sprintf("%#v", this.AlertTimeout)+",\n")
 	s = append(s, "AllowExpiredCrl: "+fmt.Sprintf("%#v", this.AllowExpiredCrl)+",\n")
 	s = append(s, "Authenticate: "+fmt.Sprintf("%#v", this.Authenticate)+",\n")
 	s = append(s, "AuthenticateDepth: "+fmt.Sprintf("%#v", this.AuthenticateDepth)+",\n")
 	s = append(s, "AuthenticateName: "+fmt.Sprintf("%#v", this.AuthenticateName)+",\n")
-	s = append(s, "BypassOnClientCertFail: "+fmt.Sprintf("%#v", this.BypassOnClientCertFail)+",\n")
-	s = append(s, "BypassOnHandshakeAlert: "+fmt.Sprintf("%#v", this.BypassOnHandshakeAlert)+",\n")
-	s = append(s, "C3DCertLifespan: "+fmt.Sprintf("%#v", this.C3DCertLifespan)+",\n")
 	s = append(s, "CacheSize: "+fmt.Sprintf("%#v", this.CacheSize)+",\n")
-	s = append(s, "CacheTimeout: "+fmt.Sprintf("%#v", this.CacheTimeout)+",\n")
 	if this.CipherConfig != nil {
 		s = append(s, "CipherConfig: "+fmt.Sprintf("%#v", this.CipherConfig)+",\n")
 	}
-	s = append(s, "Data_0Rtt: "+fmt.Sprintf("%#v", this.Data_0Rtt)+",\n")
 	s = append(s, "ExpireCertResponseControl: "+fmt.Sprintf("%#v", this.ExpireCertResponseControl)+",\n")
-	s = append(s, "GenericAlert: "+fmt.Sprintf("%#v", this.GenericAlert)+",\n")
 	s = append(s, "HandshakeTimeout: "+fmt.Sprintf("%#v", this.HandshakeTimeout)+",\n")
-	s = append(s, "MaxActiveHandshakes: "+fmt.Sprintf("%#v", this.MaxActiveHandshakes)+",\n")
-	s = append(s, "ModSslMethods: "+fmt.Sprintf("%#v", this.ModSslMethods)+",\n")
-	s = append(s, "Mode: "+fmt.Sprintf("%#v", this.Mode)+",\n")
-	if this.Ocsp != nil {
-		s = append(s, "Ocsp: "+fmt.Sprintf("%#v", this.Ocsp)+",\n")
-	}
 	s = append(s, "PeerCertMode: "+fmt.Sprintf("%#v", this.PeerCertMode)+",\n")
-	s = append(s, "ProxySsl: "+fmt.Sprintf("%#v", this.ProxySsl)+",\n")
-	s = append(s, "ProxySslPassthrough: "+fmt.Sprintf("%#v", this.ProxySslPassthrough)+",\n")
 	s = append(s, "RenegotiatePeriod: "+fmt.Sprintf("%#v", this.RenegotiatePeriod)+",\n")
 	s = append(s, "RenegotiateSize: "+fmt.Sprintf("%#v", this.RenegotiateSize)+",\n")
 	s = append(s, "Renegotiation: "+fmt.Sprintf("%#v", this.Renegotiation)+",\n")
-	s = append(s, "RetainCertificate: "+fmt.Sprintf("%#v", this.RetainCertificate)+",\n")
 	s = append(s, "RevokedCertStatusResponseControl: "+fmt.Sprintf("%#v", this.RevokedCertStatusResponseControl)+",\n")
 	s = append(s, "SecureRenegotiation: "+fmt.Sprintf("%#v", this.SecureRenegotiation)+",\n")
 	s = append(s, "ServerName: "+fmt.Sprintf("%#v", this.ServerName)+",\n")
-	s = append(s, "SessionMirroring: "+fmt.Sprintf("%#v", this.SessionMirroring)+",\n")
 	s = append(s, "SessionTicket: "+fmt.Sprintf("%#v", this.SessionTicket)+",\n")
-	s = append(s, "SniDefault: "+fmt.Sprintf("%#v", this.SniDefault)+",\n")
-	s = append(s, "SniRequire: "+fmt.Sprintf("%#v", this.SniRequire)+",\n")
-	s = append(s, "SslC3D: "+fmt.Sprintf("%#v", this.SslC3D)+",\n")
-	s = append(s, "SslForwardProxy: "+fmt.Sprintf("%#v", this.SslForwardProxy)+",\n")
-	s = append(s, "SslForwardProxyBypass: "+fmt.Sprintf("%#v", this.SslForwardProxyBypass)+",\n")
-	s = append(s, "SslForwardProxyVerifiedHandshake: "+fmt.Sprintf("%#v", this.SslForwardProxyVerifiedHandshake)+",\n")
-	s = append(s, "SslSignHash: "+fmt.Sprintf("%#v", this.SslSignHash)+",\n")
-	s = append(s, "StrictResume: "+fmt.Sprintf("%#v", this.StrictResume)+",\n")
-	s = append(s, "UncleanShutdown: "+fmt.Sprintf("%#v", this.UncleanShutdown)+",\n")
 	s = append(s, "UnknownCertStatusResponseControl: "+fmt.Sprintf("%#v", this.UnknownCertStatusResponseControl)+",\n")
 	s = append(s, "UntrustedCertResponseControl: "+fmt.Sprintf("%#v", this.UntrustedCertResponseControl)+",\n")
-	s = append(s, "UserSpec: "+fmt.Sprintf("%#v", this.UserSpec)+",\n")
 	if this.CertificatesChoice != nil {
 		s = append(s, "CertificatesChoice: "+fmt.Sprintf("%#v", this.CertificatesChoice)+",\n")
 	}
+	if this.TrustedCaList != nil {
+		s = append(s, "TrustedCaList: "+fmt.Sprintf("%#v", this.TrustedCaList)+",\n")
+	}
+	s = append(s, "TmOptions: "+fmt.Sprintf("%#v", this.TmOptions)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
-}
-func (this *ReplaceSpecType_CipherGroup) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ssl_server_profile.ReplaceSpecType_CipherGroup{` +
-		`CipherGroup:` + fmt.Sprintf("%#v", this.CipherGroup) + `}`}, ", ")
-	return s
 }
 func (this *ReplaceSpecType_Ciphers) GoString() string {
 	if this == nil {
@@ -3768,6 +2397,33 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.TmOptions) > 0 {
+		for iNdEx := len(m.TmOptions) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.TmOptions[iNdEx])
+			copy(dAtA[i:], m.TmOptions[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.TmOptions[iNdEx])))
+			i--
+			dAtA[i] = 0x3
+			i--
+			dAtA[i] = 0xd2
+		}
+	}
+	if len(m.TrustedCaList) > 0 {
+		for iNdEx := len(m.TrustedCaList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.TrustedCaList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3
+			i--
+			dAtA[i] = 0xca
+		}
+	}
 	if m.CertificatesChoice != nil {
 		{
 			size := m.CertificatesChoice.Size()
@@ -3775,17 +2431,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			if _, err := m.CertificatesChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-		}
-	}
-	if len(m.UserSpec) > 0 {
-		for iNdEx := len(m.UserSpec) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.UserSpec[iNdEx])
-			copy(dAtA[i:], m.UserSpec[iNdEx])
-			i = encodeVarintTypes(dAtA, i, uint64(len(m.UserSpec[iNdEx])))
-			i--
-			dAtA[i] = 0x3
-			i--
-			dAtA[i] = 0xb2
 		}
 	}
 	if m.UntrustedCertResponseControl != 0 {
@@ -3802,82 +2447,12 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xa0
 	}
-	if m.UncleanShutdown != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.UncleanShutdown))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x98
-	}
-	if m.StrictResume != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.StrictResume))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x90
-	}
-	if m.SslSignHash != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslSignHash))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x88
-	}
-	if m.SslForwardProxyVerifiedHandshake != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslForwardProxyVerifiedHandshake))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x80
-	}
-	if m.SslForwardProxyBypass != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslForwardProxyBypass))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xf8
-	}
-	if m.SslForwardProxy != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslForwardProxy))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xf0
-	}
-	if m.SslC3D != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslC3D))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xe8
-	}
-	if m.SniRequire != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SniRequire))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xe0
-	}
-	if m.SniDefault != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SniDefault))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xd8
-	}
 	if m.SessionTicket != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.SessionTicket))
 		i--
 		dAtA[i] = 0x2
 		i--
 		dAtA[i] = 0xd0
-	}
-	if m.SessionMirroring != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SessionMirroring))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xc8
 	}
 	if len(m.ServerName) > 0 {
 		i -= len(m.ServerName)
@@ -3901,13 +2476,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2
 		i--
 		dAtA[i] = 0xb0
-	}
-	if m.RetainCertificate != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.RetainCertificate))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xa8
 	}
 	if m.Renegotiation != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Renegotiation))
@@ -3934,20 +2502,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x92
 	}
-	if m.ProxySslPassthrough != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.ProxySslPassthrough))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0x88
-	}
-	if m.ProxySsl != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.ProxySsl))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0x80
-	}
 	if m.PeerCertMode != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.PeerCertMode))
 		i--
@@ -3964,43 +2518,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xf2
 	}
-	if len(m.Ocsp) > 0 {
-		for iNdEx := len(m.Ocsp) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Ocsp[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1
-			i--
-			dAtA[i] = 0xea
-		}
-	}
-	if m.Mode != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xe0
-	}
-	if m.ModSslMethods != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.ModSslMethods))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xd8
-	}
-	if m.MaxActiveHandshakes != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.MaxActiveHandshakes))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xd0
-	}
 	if m.LogSslHandshakeEvents != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.LogSslHandshakeEvents))
 		i--
@@ -4008,26 +2525,12 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xc8
 	}
-	if m.LogSslForwardProxyEvents != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogSslForwardProxyEvents))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xc0
-	}
 	if m.LogSslClientAuthenticationEvents != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.LogSslClientAuthenticationEvents))
 		i--
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0xb8
-	}
-	if m.LogSslC3DEvents != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogSslC3DEvents))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xb0
 	}
 	if len(m.LogPublisher) > 0 {
 		i -= len(m.LogPublisher)
@@ -4054,26 +2557,12 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x98
 	}
-	if m.GenericAlert != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.GenericAlert))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x90
-	}
 	if m.ExpireCertResponseControl != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.ExpireCertResponseControl))
 		i--
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0x88
-	}
-	if m.Data_0Rtt != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Data_0Rtt))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x80
 	}
 	if len(m.CrlFile) > 0 {
 		i -= len(m.CrlFile)
@@ -4098,30 +2587,10 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
-	if m.CacheTimeout != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.CacheTimeout))
-		i--
-		dAtA[i] = 0x50
-	}
 	if m.CacheSize != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.CacheSize))
 		i--
 		dAtA[i] = 0x48
-	}
-	if m.C3DCertLifespan != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.C3DCertLifespan))
-		i--
-		dAtA[i] = 0x40
-	}
-	if m.BypassOnHandshakeAlert != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.BypassOnHandshakeAlert))
-		i--
-		dAtA[i] = 0x38
-	}
-	if m.BypassOnClientCertFail != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.BypassOnClientCertFail))
-		i--
-		dAtA[i] = 0x30
 	}
 	if len(m.AuthenticateName) > 0 {
 		i -= len(m.AuthenticateName)
@@ -4155,20 +2624,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *GlobalSpecType_CipherGroup) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GlobalSpecType_CipherGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.CipherGroup)
-	copy(dAtA[i:], m.CipherGroup)
-	i = encodeVarintTypes(dAtA, i, uint64(len(m.CipherGroup)))
-	i--
-	dAtA[i] = 0x62
-	return len(dAtA) - i, nil
-}
 func (m *GlobalSpecType_Ciphers) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -4263,6 +2718,33 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.TmOptions) > 0 {
+		for iNdEx := len(m.TmOptions) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.TmOptions[iNdEx])
+			copy(dAtA[i:], m.TmOptions[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.TmOptions[iNdEx])))
+			i--
+			dAtA[i] = 0x3
+			i--
+			dAtA[i] = 0xd2
+		}
+	}
+	if len(m.TrustedCaList) > 0 {
+		for iNdEx := len(m.TrustedCaList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.TrustedCaList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3
+			i--
+			dAtA[i] = 0xca
+		}
+	}
 	if m.CertificatesChoice != nil {
 		{
 			size := m.CertificatesChoice.Size()
@@ -4270,17 +2752,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			if _, err := m.CertificatesChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-		}
-	}
-	if len(m.UserSpec) > 0 {
-		for iNdEx := len(m.UserSpec) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.UserSpec[iNdEx])
-			copy(dAtA[i:], m.UserSpec[iNdEx])
-			i = encodeVarintTypes(dAtA, i, uint64(len(m.UserSpec[iNdEx])))
-			i--
-			dAtA[i] = 0x3
-			i--
-			dAtA[i] = 0xb2
 		}
 	}
 	if m.UntrustedCertResponseControl != 0 {
@@ -4297,82 +2768,12 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xa0
 	}
-	if m.UncleanShutdown != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.UncleanShutdown))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x98
-	}
-	if m.StrictResume != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.StrictResume))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x90
-	}
-	if m.SslSignHash != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslSignHash))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x88
-	}
-	if m.SslForwardProxyVerifiedHandshake != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslForwardProxyVerifiedHandshake))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x80
-	}
-	if m.SslForwardProxyBypass != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslForwardProxyBypass))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xf8
-	}
-	if m.SslForwardProxy != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslForwardProxy))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xf0
-	}
-	if m.SslC3D != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslC3D))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xe8
-	}
-	if m.SniRequire != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SniRequire))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xe0
-	}
-	if m.SniDefault != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SniDefault))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xd8
-	}
 	if m.SessionTicket != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.SessionTicket))
 		i--
 		dAtA[i] = 0x2
 		i--
 		dAtA[i] = 0xd0
-	}
-	if m.SessionMirroring != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SessionMirroring))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xc8
 	}
 	if len(m.ServerName) > 0 {
 		i -= len(m.ServerName)
@@ -4396,13 +2797,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2
 		i--
 		dAtA[i] = 0xb0
-	}
-	if m.RetainCertificate != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.RetainCertificate))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xa8
 	}
 	if m.Renegotiation != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Renegotiation))
@@ -4429,63 +2823,12 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x92
 	}
-	if m.ProxySslPassthrough != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.ProxySslPassthrough))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0x88
-	}
-	if m.ProxySsl != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.ProxySsl))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0x80
-	}
 	if m.PeerCertMode != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.PeerCertMode))
 		i--
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0xf8
-	}
-	if len(m.Ocsp) > 0 {
-		for iNdEx := len(m.Ocsp) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Ocsp[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1
-			i--
-			dAtA[i] = 0xea
-		}
-	}
-	if m.Mode != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xe0
-	}
-	if m.ModSslMethods != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.ModSslMethods))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xd8
-	}
-	if m.MaxActiveHandshakes != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.MaxActiveHandshakes))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xd0
 	}
 	if m.HandshakeTimeout != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.HandshakeTimeout))
@@ -4494,26 +2837,12 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x98
 	}
-	if m.GenericAlert != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.GenericAlert))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x90
-	}
 	if m.ExpireCertResponseControl != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.ExpireCertResponseControl))
 		i--
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0x88
-	}
-	if m.Data_0Rtt != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Data_0Rtt))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x80
 	}
 	if m.CipherConfig != nil {
 		{
@@ -4524,30 +2853,10 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
-	if m.CacheTimeout != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.CacheTimeout))
-		i--
-		dAtA[i] = 0x50
-	}
 	if m.CacheSize != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.CacheSize))
 		i--
 		dAtA[i] = 0x48
-	}
-	if m.C3DCertLifespan != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.C3DCertLifespan))
-		i--
-		dAtA[i] = 0x40
-	}
-	if m.BypassOnHandshakeAlert != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.BypassOnHandshakeAlert))
-		i--
-		dAtA[i] = 0x38
-	}
-	if m.BypassOnClientCertFail != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.BypassOnClientCertFail))
-		i--
-		dAtA[i] = 0x30
 	}
 	if len(m.AuthenticateName) > 0 {
 		i -= len(m.AuthenticateName)
@@ -4581,20 +2890,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *CreateSpecType_CipherGroup) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CreateSpecType_CipherGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.CipherGroup)
-	copy(dAtA[i:], m.CipherGroup)
-	i = encodeVarintTypes(dAtA, i, uint64(len(m.CipherGroup)))
-	i--
-	dAtA[i] = 0x62
-	return len(dAtA) - i, nil
-}
 func (m *CreateSpecType_Ciphers) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -4652,6 +2947,33 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.TmOptions) > 0 {
+		for iNdEx := len(m.TmOptions) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.TmOptions[iNdEx])
+			copy(dAtA[i:], m.TmOptions[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.TmOptions[iNdEx])))
+			i--
+			dAtA[i] = 0x3
+			i--
+			dAtA[i] = 0xd2
+		}
+	}
+	if len(m.TrustedCaList) > 0 {
+		for iNdEx := len(m.TrustedCaList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.TrustedCaList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3
+			i--
+			dAtA[i] = 0xca
+		}
+	}
 	if m.CertificatesChoice != nil {
 		{
 			size := m.CertificatesChoice.Size()
@@ -4659,17 +2981,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			if _, err := m.CertificatesChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-		}
-	}
-	if len(m.UserSpec) > 0 {
-		for iNdEx := len(m.UserSpec) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.UserSpec[iNdEx])
-			copy(dAtA[i:], m.UserSpec[iNdEx])
-			i = encodeVarintTypes(dAtA, i, uint64(len(m.UserSpec[iNdEx])))
-			i--
-			dAtA[i] = 0x3
-			i--
-			dAtA[i] = 0xb2
 		}
 	}
 	if m.UntrustedCertResponseControl != 0 {
@@ -4686,82 +2997,12 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xa0
 	}
-	if m.UncleanShutdown != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.UncleanShutdown))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x98
-	}
-	if m.StrictResume != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.StrictResume))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x90
-	}
-	if m.SslSignHash != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslSignHash))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x88
-	}
-	if m.SslForwardProxyVerifiedHandshake != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslForwardProxyVerifiedHandshake))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x80
-	}
-	if m.SslForwardProxyBypass != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslForwardProxyBypass))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xf8
-	}
-	if m.SslForwardProxy != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslForwardProxy))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xf0
-	}
-	if m.SslC3D != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslC3D))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xe8
-	}
-	if m.SniRequire != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SniRequire))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xe0
-	}
-	if m.SniDefault != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SniDefault))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xd8
-	}
 	if m.SessionTicket != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.SessionTicket))
 		i--
 		dAtA[i] = 0x2
 		i--
 		dAtA[i] = 0xd0
-	}
-	if m.SessionMirroring != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SessionMirroring))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xc8
 	}
 	if len(m.ServerName) > 0 {
 		i -= len(m.ServerName)
@@ -4785,13 +3026,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2
 		i--
 		dAtA[i] = 0xb0
-	}
-	if m.RetainCertificate != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.RetainCertificate))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xa8
 	}
 	if m.Renegotiation != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Renegotiation))
@@ -4818,63 +3052,12 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x92
 	}
-	if m.ProxySslPassthrough != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.ProxySslPassthrough))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0x88
-	}
-	if m.ProxySsl != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.ProxySsl))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0x80
-	}
 	if m.PeerCertMode != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.PeerCertMode))
 		i--
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0xf8
-	}
-	if len(m.Ocsp) > 0 {
-		for iNdEx := len(m.Ocsp) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Ocsp[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1
-			i--
-			dAtA[i] = 0xea
-		}
-	}
-	if m.Mode != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xe0
-	}
-	if m.ModSslMethods != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.ModSslMethods))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xd8
-	}
-	if m.MaxActiveHandshakes != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.MaxActiveHandshakes))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xd0
 	}
 	if m.HandshakeTimeout != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.HandshakeTimeout))
@@ -4883,26 +3066,12 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x98
 	}
-	if m.GenericAlert != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.GenericAlert))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x90
-	}
 	if m.ExpireCertResponseControl != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.ExpireCertResponseControl))
 		i--
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0x88
-	}
-	if m.Data_0Rtt != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Data_0Rtt))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x80
 	}
 	if m.CipherConfig != nil {
 		{
@@ -4913,30 +3082,10 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
-	if m.CacheTimeout != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.CacheTimeout))
-		i--
-		dAtA[i] = 0x50
-	}
 	if m.CacheSize != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.CacheSize))
 		i--
 		dAtA[i] = 0x48
-	}
-	if m.C3DCertLifespan != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.C3DCertLifespan))
-		i--
-		dAtA[i] = 0x40
-	}
-	if m.BypassOnHandshakeAlert != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.BypassOnHandshakeAlert))
-		i--
-		dAtA[i] = 0x38
-	}
-	if m.BypassOnClientCertFail != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.BypassOnClientCertFail))
-		i--
-		dAtA[i] = 0x30
 	}
 	if len(m.AuthenticateName) > 0 {
 		i -= len(m.AuthenticateName)
@@ -4970,20 +3119,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *GetSpecType_CipherGroup) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetSpecType_CipherGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.CipherGroup)
-	copy(dAtA[i:], m.CipherGroup)
-	i = encodeVarintTypes(dAtA, i, uint64(len(m.CipherGroup)))
-	i--
-	dAtA[i] = 0x62
-	return len(dAtA) - i, nil
-}
 func (m *GetSpecType_Ciphers) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -5041,6 +3176,33 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.TmOptions) > 0 {
+		for iNdEx := len(m.TmOptions) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.TmOptions[iNdEx])
+			copy(dAtA[i:], m.TmOptions[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.TmOptions[iNdEx])))
+			i--
+			dAtA[i] = 0x3
+			i--
+			dAtA[i] = 0xd2
+		}
+	}
+	if len(m.TrustedCaList) > 0 {
+		for iNdEx := len(m.TrustedCaList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.TrustedCaList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3
+			i--
+			dAtA[i] = 0xca
+		}
+	}
 	if m.CertificatesChoice != nil {
 		{
 			size := m.CertificatesChoice.Size()
@@ -5048,17 +3210,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			if _, err := m.CertificatesChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-		}
-	}
-	if len(m.UserSpec) > 0 {
-		for iNdEx := len(m.UserSpec) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.UserSpec[iNdEx])
-			copy(dAtA[i:], m.UserSpec[iNdEx])
-			i = encodeVarintTypes(dAtA, i, uint64(len(m.UserSpec[iNdEx])))
-			i--
-			dAtA[i] = 0x3
-			i--
-			dAtA[i] = 0xb2
 		}
 	}
 	if m.UntrustedCertResponseControl != 0 {
@@ -5075,82 +3226,12 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xa0
 	}
-	if m.UncleanShutdown != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.UncleanShutdown))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x98
-	}
-	if m.StrictResume != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.StrictResume))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x90
-	}
-	if m.SslSignHash != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslSignHash))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x88
-	}
-	if m.SslForwardProxyVerifiedHandshake != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslForwardProxyVerifiedHandshake))
-		i--
-		dAtA[i] = 0x3
-		i--
-		dAtA[i] = 0x80
-	}
-	if m.SslForwardProxyBypass != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslForwardProxyBypass))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xf8
-	}
-	if m.SslForwardProxy != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslForwardProxy))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xf0
-	}
-	if m.SslC3D != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SslC3D))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xe8
-	}
-	if m.SniRequire != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SniRequire))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xe0
-	}
-	if m.SniDefault != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SniDefault))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xd8
-	}
 	if m.SessionTicket != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.SessionTicket))
 		i--
 		dAtA[i] = 0x2
 		i--
 		dAtA[i] = 0xd0
-	}
-	if m.SessionMirroring != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SessionMirroring))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xc8
 	}
 	if len(m.ServerName) > 0 {
 		i -= len(m.ServerName)
@@ -5174,13 +3255,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2
 		i--
 		dAtA[i] = 0xb0
-	}
-	if m.RetainCertificate != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.RetainCertificate))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xa8
 	}
 	if m.Renegotiation != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Renegotiation))
@@ -5207,63 +3281,12 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x92
 	}
-	if m.ProxySslPassthrough != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.ProxySslPassthrough))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0x88
-	}
-	if m.ProxySsl != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.ProxySsl))
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0x80
-	}
 	if m.PeerCertMode != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.PeerCertMode))
 		i--
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0xf8
-	}
-	if len(m.Ocsp) > 0 {
-		for iNdEx := len(m.Ocsp) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Ocsp[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1
-			i--
-			dAtA[i] = 0xea
-		}
-	}
-	if m.Mode != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xe0
-	}
-	if m.ModSslMethods != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.ModSslMethods))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xd8
-	}
-	if m.MaxActiveHandshakes != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.MaxActiveHandshakes))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xd0
 	}
 	if m.HandshakeTimeout != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.HandshakeTimeout))
@@ -5272,26 +3295,12 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x98
 	}
-	if m.GenericAlert != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.GenericAlert))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x90
-	}
 	if m.ExpireCertResponseControl != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.ExpireCertResponseControl))
 		i--
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0x88
-	}
-	if m.Data_0Rtt != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Data_0Rtt))
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x80
 	}
 	if m.CipherConfig != nil {
 		{
@@ -5302,30 +3311,10 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
-	if m.CacheTimeout != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.CacheTimeout))
-		i--
-		dAtA[i] = 0x50
-	}
 	if m.CacheSize != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.CacheSize))
 		i--
 		dAtA[i] = 0x48
-	}
-	if m.C3DCertLifespan != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.C3DCertLifespan))
-		i--
-		dAtA[i] = 0x40
-	}
-	if m.BypassOnHandshakeAlert != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.BypassOnHandshakeAlert))
-		i--
-		dAtA[i] = 0x38
-	}
-	if m.BypassOnClientCertFail != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.BypassOnClientCertFail))
-		i--
-		dAtA[i] = 0x30
 	}
 	if len(m.AuthenticateName) > 0 {
 		i -= len(m.AuthenticateName)
@@ -5359,20 +3348,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *ReplaceSpecType_CipherGroup) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ReplaceSpecType_CipherGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.CipherGroup)
-	copy(dAtA[i:], m.CipherGroup)
-	i = encodeVarintTypes(dAtA, i, uint64(len(m.CipherGroup)))
-	i--
-	dAtA[i] = 0x62
-	return len(dAtA) - i, nil
-}
 func (m *ReplaceSpecType_Ciphers) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -5444,20 +3419,8 @@ func (m *GlobalSpecType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.BypassOnClientCertFail != 0 {
-		n += 1 + sovTypes(uint64(m.BypassOnClientCertFail))
-	}
-	if m.BypassOnHandshakeAlert != 0 {
-		n += 1 + sovTypes(uint64(m.BypassOnHandshakeAlert))
-	}
-	if m.C3DCertLifespan != 0 {
-		n += 1 + sovTypes(uint64(m.C3DCertLifespan))
-	}
 	if m.CacheSize != 0 {
 		n += 1 + sovTypes(uint64(m.CacheSize))
-	}
-	if m.CacheTimeout != 0 {
-		n += 1 + sovTypes(uint64(m.CacheTimeout))
 	}
 	if m.CipherConfig != nil {
 		n += m.CipherConfig.Size()
@@ -5470,14 +3433,8 @@ func (m *GlobalSpecType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.Data_0Rtt != 0 {
-		n += 2 + sovTypes(uint64(m.Data_0Rtt))
-	}
 	if m.ExpireCertResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.ExpireCertResponseControl))
-	}
-	if m.GenericAlert != 0 {
-		n += 2 + sovTypes(uint64(m.GenericAlert))
 	}
 	if m.HandshakeTimeout != 0 {
 		n += 2 + sovTypes(uint64(m.HandshakeTimeout))
@@ -5490,32 +3447,11 @@ func (m *GlobalSpecType) Size() (n int) {
 	if l > 0 {
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	if m.LogSslC3DEvents != 0 {
-		n += 2 + sovTypes(uint64(m.LogSslC3DEvents))
-	}
 	if m.LogSslClientAuthenticationEvents != 0 {
 		n += 2 + sovTypes(uint64(m.LogSslClientAuthenticationEvents))
 	}
-	if m.LogSslForwardProxyEvents != 0 {
-		n += 2 + sovTypes(uint64(m.LogSslForwardProxyEvents))
-	}
 	if m.LogSslHandshakeEvents != 0 {
 		n += 2 + sovTypes(uint64(m.LogSslHandshakeEvents))
-	}
-	if m.MaxActiveHandshakes != 0 {
-		n += 2 + sovTypes(uint64(m.MaxActiveHandshakes))
-	}
-	if m.ModSslMethods != 0 {
-		n += 2 + sovTypes(uint64(m.ModSslMethods))
-	}
-	if m.Mode != 0 {
-		n += 2 + sovTypes(uint64(m.Mode))
-	}
-	if len(m.Ocsp) > 0 {
-		for _, e := range m.Ocsp {
-			l = e.Size()
-			n += 2 + l + sovTypes(uint64(l))
-		}
 	}
 	l = len(m.Passphrase)
 	if l > 0 {
@@ -5523,12 +3459,6 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.PeerCertMode != 0 {
 		n += 2 + sovTypes(uint64(m.PeerCertMode))
-	}
-	if m.ProxySsl != 0 {
-		n += 2 + sovTypes(uint64(m.ProxySsl))
-	}
-	if m.ProxySslPassthrough != 0 {
-		n += 2 + sovTypes(uint64(m.ProxySslPassthrough))
 	}
 	l = len(m.RenegotiatePeriod)
 	if l > 0 {
@@ -5541,9 +3471,6 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.Renegotiation != 0 {
 		n += 2 + sovTypes(uint64(m.Renegotiation))
 	}
-	if m.RetainCertificate != 0 {
-		n += 2 + sovTypes(uint64(m.RetainCertificate))
-	}
 	if m.RevokedCertStatusResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.RevokedCertStatusResponseControl))
 	}
@@ -5554,38 +3481,8 @@ func (m *GlobalSpecType) Size() (n int) {
 	if l > 0 {
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	if m.SessionMirroring != 0 {
-		n += 2 + sovTypes(uint64(m.SessionMirroring))
-	}
 	if m.SessionTicket != 0 {
 		n += 2 + sovTypes(uint64(m.SessionTicket))
-	}
-	if m.SniDefault != 0 {
-		n += 2 + sovTypes(uint64(m.SniDefault))
-	}
-	if m.SniRequire != 0 {
-		n += 2 + sovTypes(uint64(m.SniRequire))
-	}
-	if m.SslC3D != 0 {
-		n += 2 + sovTypes(uint64(m.SslC3D))
-	}
-	if m.SslForwardProxy != 0 {
-		n += 2 + sovTypes(uint64(m.SslForwardProxy))
-	}
-	if m.SslForwardProxyBypass != 0 {
-		n += 2 + sovTypes(uint64(m.SslForwardProxyBypass))
-	}
-	if m.SslForwardProxyVerifiedHandshake != 0 {
-		n += 2 + sovTypes(uint64(m.SslForwardProxyVerifiedHandshake))
-	}
-	if m.SslSignHash != 0 {
-		n += 2 + sovTypes(uint64(m.SslSignHash))
-	}
-	if m.StrictResume != 0 {
-		n += 2 + sovTypes(uint64(m.StrictResume))
-	}
-	if m.UncleanShutdown != 0 {
-		n += 2 + sovTypes(uint64(m.UncleanShutdown))
 	}
 	if m.UnknownCertStatusResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.UnknownCertStatusResponseControl))
@@ -5593,28 +3490,24 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.UntrustedCertResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.UntrustedCertResponseControl))
 	}
-	if len(m.UserSpec) > 0 {
-		for _, s := range m.UserSpec {
+	if m.CertificatesChoice != nil {
+		n += m.CertificatesChoice.Size()
+	}
+	if len(m.TrustedCaList) > 0 {
+		for _, e := range m.TrustedCaList {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.TmOptions) > 0 {
+		for _, s := range m.TmOptions {
 			l = len(s)
 			n += 2 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.CertificatesChoice != nil {
-		n += m.CertificatesChoice.Size()
-	}
 	return n
 }
 
-func (m *GlobalSpecType_CipherGroup) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.CipherGroup)
-	n += 1 + l + sovTypes(uint64(l))
-	return n
-}
 func (m *GlobalSpecType_Ciphers) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5675,59 +3568,20 @@ func (m *CreateSpecType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.BypassOnClientCertFail != 0 {
-		n += 1 + sovTypes(uint64(m.BypassOnClientCertFail))
-	}
-	if m.BypassOnHandshakeAlert != 0 {
-		n += 1 + sovTypes(uint64(m.BypassOnHandshakeAlert))
-	}
-	if m.C3DCertLifespan != 0 {
-		n += 1 + sovTypes(uint64(m.C3DCertLifespan))
-	}
 	if m.CacheSize != 0 {
 		n += 1 + sovTypes(uint64(m.CacheSize))
-	}
-	if m.CacheTimeout != 0 {
-		n += 1 + sovTypes(uint64(m.CacheTimeout))
 	}
 	if m.CipherConfig != nil {
 		n += m.CipherConfig.Size()
 	}
-	if m.Data_0Rtt != 0 {
-		n += 2 + sovTypes(uint64(m.Data_0Rtt))
-	}
 	if m.ExpireCertResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.ExpireCertResponseControl))
-	}
-	if m.GenericAlert != 0 {
-		n += 2 + sovTypes(uint64(m.GenericAlert))
 	}
 	if m.HandshakeTimeout != 0 {
 		n += 2 + sovTypes(uint64(m.HandshakeTimeout))
 	}
-	if m.MaxActiveHandshakes != 0 {
-		n += 2 + sovTypes(uint64(m.MaxActiveHandshakes))
-	}
-	if m.ModSslMethods != 0 {
-		n += 2 + sovTypes(uint64(m.ModSslMethods))
-	}
-	if m.Mode != 0 {
-		n += 2 + sovTypes(uint64(m.Mode))
-	}
-	if len(m.Ocsp) > 0 {
-		for _, e := range m.Ocsp {
-			l = e.Size()
-			n += 2 + l + sovTypes(uint64(l))
-		}
-	}
 	if m.PeerCertMode != 0 {
 		n += 2 + sovTypes(uint64(m.PeerCertMode))
-	}
-	if m.ProxySsl != 0 {
-		n += 2 + sovTypes(uint64(m.ProxySsl))
-	}
-	if m.ProxySslPassthrough != 0 {
-		n += 2 + sovTypes(uint64(m.ProxySslPassthrough))
 	}
 	l = len(m.RenegotiatePeriod)
 	if l > 0 {
@@ -5740,9 +3594,6 @@ func (m *CreateSpecType) Size() (n int) {
 	if m.Renegotiation != 0 {
 		n += 2 + sovTypes(uint64(m.Renegotiation))
 	}
-	if m.RetainCertificate != 0 {
-		n += 2 + sovTypes(uint64(m.RetainCertificate))
-	}
 	if m.RevokedCertStatusResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.RevokedCertStatusResponseControl))
 	}
@@ -5753,38 +3604,8 @@ func (m *CreateSpecType) Size() (n int) {
 	if l > 0 {
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	if m.SessionMirroring != 0 {
-		n += 2 + sovTypes(uint64(m.SessionMirroring))
-	}
 	if m.SessionTicket != 0 {
 		n += 2 + sovTypes(uint64(m.SessionTicket))
-	}
-	if m.SniDefault != 0 {
-		n += 2 + sovTypes(uint64(m.SniDefault))
-	}
-	if m.SniRequire != 0 {
-		n += 2 + sovTypes(uint64(m.SniRequire))
-	}
-	if m.SslC3D != 0 {
-		n += 2 + sovTypes(uint64(m.SslC3D))
-	}
-	if m.SslForwardProxy != 0 {
-		n += 2 + sovTypes(uint64(m.SslForwardProxy))
-	}
-	if m.SslForwardProxyBypass != 0 {
-		n += 2 + sovTypes(uint64(m.SslForwardProxyBypass))
-	}
-	if m.SslForwardProxyVerifiedHandshake != 0 {
-		n += 2 + sovTypes(uint64(m.SslForwardProxyVerifiedHandshake))
-	}
-	if m.SslSignHash != 0 {
-		n += 2 + sovTypes(uint64(m.SslSignHash))
-	}
-	if m.StrictResume != 0 {
-		n += 2 + sovTypes(uint64(m.StrictResume))
-	}
-	if m.UncleanShutdown != 0 {
-		n += 2 + sovTypes(uint64(m.UncleanShutdown))
 	}
 	if m.UnknownCertStatusResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.UnknownCertStatusResponseControl))
@@ -5792,28 +3613,24 @@ func (m *CreateSpecType) Size() (n int) {
 	if m.UntrustedCertResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.UntrustedCertResponseControl))
 	}
-	if len(m.UserSpec) > 0 {
-		for _, s := range m.UserSpec {
+	if m.CertificatesChoice != nil {
+		n += m.CertificatesChoice.Size()
+	}
+	if len(m.TrustedCaList) > 0 {
+		for _, e := range m.TrustedCaList {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.TmOptions) > 0 {
+		for _, s := range m.TmOptions {
 			l = len(s)
 			n += 2 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.CertificatesChoice != nil {
-		n += m.CertificatesChoice.Size()
-	}
 	return n
 }
 
-func (m *CreateSpecType_CipherGroup) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.CipherGroup)
-	n += 1 + l + sovTypes(uint64(l))
-	return n
-}
 func (m *CreateSpecType_Ciphers) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5859,59 +3676,20 @@ func (m *GetSpecType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.BypassOnClientCertFail != 0 {
-		n += 1 + sovTypes(uint64(m.BypassOnClientCertFail))
-	}
-	if m.BypassOnHandshakeAlert != 0 {
-		n += 1 + sovTypes(uint64(m.BypassOnHandshakeAlert))
-	}
-	if m.C3DCertLifespan != 0 {
-		n += 1 + sovTypes(uint64(m.C3DCertLifespan))
-	}
 	if m.CacheSize != 0 {
 		n += 1 + sovTypes(uint64(m.CacheSize))
-	}
-	if m.CacheTimeout != 0 {
-		n += 1 + sovTypes(uint64(m.CacheTimeout))
 	}
 	if m.CipherConfig != nil {
 		n += m.CipherConfig.Size()
 	}
-	if m.Data_0Rtt != 0 {
-		n += 2 + sovTypes(uint64(m.Data_0Rtt))
-	}
 	if m.ExpireCertResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.ExpireCertResponseControl))
-	}
-	if m.GenericAlert != 0 {
-		n += 2 + sovTypes(uint64(m.GenericAlert))
 	}
 	if m.HandshakeTimeout != 0 {
 		n += 2 + sovTypes(uint64(m.HandshakeTimeout))
 	}
-	if m.MaxActiveHandshakes != 0 {
-		n += 2 + sovTypes(uint64(m.MaxActiveHandshakes))
-	}
-	if m.ModSslMethods != 0 {
-		n += 2 + sovTypes(uint64(m.ModSslMethods))
-	}
-	if m.Mode != 0 {
-		n += 2 + sovTypes(uint64(m.Mode))
-	}
-	if len(m.Ocsp) > 0 {
-		for _, e := range m.Ocsp {
-			l = e.Size()
-			n += 2 + l + sovTypes(uint64(l))
-		}
-	}
 	if m.PeerCertMode != 0 {
 		n += 2 + sovTypes(uint64(m.PeerCertMode))
-	}
-	if m.ProxySsl != 0 {
-		n += 2 + sovTypes(uint64(m.ProxySsl))
-	}
-	if m.ProxySslPassthrough != 0 {
-		n += 2 + sovTypes(uint64(m.ProxySslPassthrough))
 	}
 	l = len(m.RenegotiatePeriod)
 	if l > 0 {
@@ -5924,9 +3702,6 @@ func (m *GetSpecType) Size() (n int) {
 	if m.Renegotiation != 0 {
 		n += 2 + sovTypes(uint64(m.Renegotiation))
 	}
-	if m.RetainCertificate != 0 {
-		n += 2 + sovTypes(uint64(m.RetainCertificate))
-	}
 	if m.RevokedCertStatusResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.RevokedCertStatusResponseControl))
 	}
@@ -5937,38 +3712,8 @@ func (m *GetSpecType) Size() (n int) {
 	if l > 0 {
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	if m.SessionMirroring != 0 {
-		n += 2 + sovTypes(uint64(m.SessionMirroring))
-	}
 	if m.SessionTicket != 0 {
 		n += 2 + sovTypes(uint64(m.SessionTicket))
-	}
-	if m.SniDefault != 0 {
-		n += 2 + sovTypes(uint64(m.SniDefault))
-	}
-	if m.SniRequire != 0 {
-		n += 2 + sovTypes(uint64(m.SniRequire))
-	}
-	if m.SslC3D != 0 {
-		n += 2 + sovTypes(uint64(m.SslC3D))
-	}
-	if m.SslForwardProxy != 0 {
-		n += 2 + sovTypes(uint64(m.SslForwardProxy))
-	}
-	if m.SslForwardProxyBypass != 0 {
-		n += 2 + sovTypes(uint64(m.SslForwardProxyBypass))
-	}
-	if m.SslForwardProxyVerifiedHandshake != 0 {
-		n += 2 + sovTypes(uint64(m.SslForwardProxyVerifiedHandshake))
-	}
-	if m.SslSignHash != 0 {
-		n += 2 + sovTypes(uint64(m.SslSignHash))
-	}
-	if m.StrictResume != 0 {
-		n += 2 + sovTypes(uint64(m.StrictResume))
-	}
-	if m.UncleanShutdown != 0 {
-		n += 2 + sovTypes(uint64(m.UncleanShutdown))
 	}
 	if m.UnknownCertStatusResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.UnknownCertStatusResponseControl))
@@ -5976,28 +3721,24 @@ func (m *GetSpecType) Size() (n int) {
 	if m.UntrustedCertResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.UntrustedCertResponseControl))
 	}
-	if len(m.UserSpec) > 0 {
-		for _, s := range m.UserSpec {
+	if m.CertificatesChoice != nil {
+		n += m.CertificatesChoice.Size()
+	}
+	if len(m.TrustedCaList) > 0 {
+		for _, e := range m.TrustedCaList {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.TmOptions) > 0 {
+		for _, s := range m.TmOptions {
 			l = len(s)
 			n += 2 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.CertificatesChoice != nil {
-		n += m.CertificatesChoice.Size()
-	}
 	return n
 }
 
-func (m *GetSpecType_CipherGroup) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.CipherGroup)
-	n += 1 + l + sovTypes(uint64(l))
-	return n
-}
 func (m *GetSpecType_Ciphers) Size() (n int) {
 	if m == nil {
 		return 0
@@ -6043,59 +3784,20 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.BypassOnClientCertFail != 0 {
-		n += 1 + sovTypes(uint64(m.BypassOnClientCertFail))
-	}
-	if m.BypassOnHandshakeAlert != 0 {
-		n += 1 + sovTypes(uint64(m.BypassOnHandshakeAlert))
-	}
-	if m.C3DCertLifespan != 0 {
-		n += 1 + sovTypes(uint64(m.C3DCertLifespan))
-	}
 	if m.CacheSize != 0 {
 		n += 1 + sovTypes(uint64(m.CacheSize))
-	}
-	if m.CacheTimeout != 0 {
-		n += 1 + sovTypes(uint64(m.CacheTimeout))
 	}
 	if m.CipherConfig != nil {
 		n += m.CipherConfig.Size()
 	}
-	if m.Data_0Rtt != 0 {
-		n += 2 + sovTypes(uint64(m.Data_0Rtt))
-	}
 	if m.ExpireCertResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.ExpireCertResponseControl))
-	}
-	if m.GenericAlert != 0 {
-		n += 2 + sovTypes(uint64(m.GenericAlert))
 	}
 	if m.HandshakeTimeout != 0 {
 		n += 2 + sovTypes(uint64(m.HandshakeTimeout))
 	}
-	if m.MaxActiveHandshakes != 0 {
-		n += 2 + sovTypes(uint64(m.MaxActiveHandshakes))
-	}
-	if m.ModSslMethods != 0 {
-		n += 2 + sovTypes(uint64(m.ModSslMethods))
-	}
-	if m.Mode != 0 {
-		n += 2 + sovTypes(uint64(m.Mode))
-	}
-	if len(m.Ocsp) > 0 {
-		for _, e := range m.Ocsp {
-			l = e.Size()
-			n += 2 + l + sovTypes(uint64(l))
-		}
-	}
 	if m.PeerCertMode != 0 {
 		n += 2 + sovTypes(uint64(m.PeerCertMode))
-	}
-	if m.ProxySsl != 0 {
-		n += 2 + sovTypes(uint64(m.ProxySsl))
-	}
-	if m.ProxySslPassthrough != 0 {
-		n += 2 + sovTypes(uint64(m.ProxySslPassthrough))
 	}
 	l = len(m.RenegotiatePeriod)
 	if l > 0 {
@@ -6108,9 +3810,6 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if m.Renegotiation != 0 {
 		n += 2 + sovTypes(uint64(m.Renegotiation))
 	}
-	if m.RetainCertificate != 0 {
-		n += 2 + sovTypes(uint64(m.RetainCertificate))
-	}
 	if m.RevokedCertStatusResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.RevokedCertStatusResponseControl))
 	}
@@ -6121,38 +3820,8 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if l > 0 {
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	if m.SessionMirroring != 0 {
-		n += 2 + sovTypes(uint64(m.SessionMirroring))
-	}
 	if m.SessionTicket != 0 {
 		n += 2 + sovTypes(uint64(m.SessionTicket))
-	}
-	if m.SniDefault != 0 {
-		n += 2 + sovTypes(uint64(m.SniDefault))
-	}
-	if m.SniRequire != 0 {
-		n += 2 + sovTypes(uint64(m.SniRequire))
-	}
-	if m.SslC3D != 0 {
-		n += 2 + sovTypes(uint64(m.SslC3D))
-	}
-	if m.SslForwardProxy != 0 {
-		n += 2 + sovTypes(uint64(m.SslForwardProxy))
-	}
-	if m.SslForwardProxyBypass != 0 {
-		n += 2 + sovTypes(uint64(m.SslForwardProxyBypass))
-	}
-	if m.SslForwardProxyVerifiedHandshake != 0 {
-		n += 2 + sovTypes(uint64(m.SslForwardProxyVerifiedHandshake))
-	}
-	if m.SslSignHash != 0 {
-		n += 2 + sovTypes(uint64(m.SslSignHash))
-	}
-	if m.StrictResume != 0 {
-		n += 2 + sovTypes(uint64(m.StrictResume))
-	}
-	if m.UncleanShutdown != 0 {
-		n += 2 + sovTypes(uint64(m.UncleanShutdown))
 	}
 	if m.UnknownCertStatusResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.UnknownCertStatusResponseControl))
@@ -6160,28 +3829,24 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if m.UntrustedCertResponseControl != 0 {
 		n += 2 + sovTypes(uint64(m.UntrustedCertResponseControl))
 	}
-	if len(m.UserSpec) > 0 {
-		for _, s := range m.UserSpec {
+	if m.CertificatesChoice != nil {
+		n += m.CertificatesChoice.Size()
+	}
+	if len(m.TrustedCaList) > 0 {
+		for _, e := range m.TrustedCaList {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.TmOptions) > 0 {
+		for _, s := range m.TmOptions {
 			l = len(s)
 			n += 2 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.CertificatesChoice != nil {
-		n += m.CertificatesChoice.Size()
-	}
 	return n
 }
 
-func (m *ReplaceSpecType_CipherGroup) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.CipherGroup)
-	n += 1 + l + sovTypes(uint64(l))
-	return n
-}
 func (m *ReplaceSpecType_Ciphers) Size() (n int) {
 	if m == nil {
 		return 0
@@ -6211,79 +3876,45 @@ func sovTypes(x uint64) (n int) {
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (this *GlobalSpecType) String() string {
+func (this *GlobalSpecType) string() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForOcsp := "[]*ObjectRefType{"
-	for _, f := range this.Ocsp {
-		repeatedStringForOcsp += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	repeatedStringForTrustedCaList := "[]*ObjectRefType{"
+	for _, f := range this.TrustedCaList {
+		repeatedStringForTrustedCaList += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
 	}
-	repeatedStringForOcsp += "}"
+	repeatedStringForTrustedCaList += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`AlertTimeout:` + fmt.Sprintf("%v", this.AlertTimeout) + `,`,
 		`AllowExpiredCrl:` + fmt.Sprintf("%v", this.AllowExpiredCrl) + `,`,
 		`Authenticate:` + fmt.Sprintf("%v", this.Authenticate) + `,`,
 		`AuthenticateDepth:` + fmt.Sprintf("%v", this.AuthenticateDepth) + `,`,
 		`AuthenticateName:` + fmt.Sprintf("%v", this.AuthenticateName) + `,`,
-		`BypassOnClientCertFail:` + fmt.Sprintf("%v", this.BypassOnClientCertFail) + `,`,
-		`BypassOnHandshakeAlert:` + fmt.Sprintf("%v", this.BypassOnHandshakeAlert) + `,`,
-		`C3DCertLifespan:` + fmt.Sprintf("%v", this.C3DCertLifespan) + `,`,
 		`CacheSize:` + fmt.Sprintf("%v", this.CacheSize) + `,`,
-		`CacheTimeout:` + fmt.Sprintf("%v", this.CacheTimeout) + `,`,
 		`CipherConfig:` + fmt.Sprintf("%v", this.CipherConfig) + `,`,
 		`Crl:` + fmt.Sprintf("%v", this.Crl) + `,`,
 		`CrlFile:` + fmt.Sprintf("%v", this.CrlFile) + `,`,
-		`Data_0Rtt:` + fmt.Sprintf("%v", this.Data_0Rtt) + `,`,
 		`ExpireCertResponseControl:` + fmt.Sprintf("%v", this.ExpireCertResponseControl) + `,`,
-		`GenericAlert:` + fmt.Sprintf("%v", this.GenericAlert) + `,`,
 		`HandshakeTimeout:` + fmt.Sprintf("%v", this.HandshakeTimeout) + `,`,
 		`Key:` + fmt.Sprintf("%v", this.Key) + `,`,
 		`LogPublisher:` + fmt.Sprintf("%v", this.LogPublisher) + `,`,
-		`LogSslC3DEvents:` + fmt.Sprintf("%v", this.LogSslC3DEvents) + `,`,
 		`LogSslClientAuthenticationEvents:` + fmt.Sprintf("%v", this.LogSslClientAuthenticationEvents) + `,`,
-		`LogSslForwardProxyEvents:` + fmt.Sprintf("%v", this.LogSslForwardProxyEvents) + `,`,
 		`LogSslHandshakeEvents:` + fmt.Sprintf("%v", this.LogSslHandshakeEvents) + `,`,
-		`MaxActiveHandshakes:` + fmt.Sprintf("%v", this.MaxActiveHandshakes) + `,`,
-		`ModSslMethods:` + fmt.Sprintf("%v", this.ModSslMethods) + `,`,
-		`Mode:` + fmt.Sprintf("%v", this.Mode) + `,`,
-		`Ocsp:` + repeatedStringForOcsp + `,`,
 		`Passphrase:` + fmt.Sprintf("%v", this.Passphrase) + `,`,
 		`PeerCertMode:` + fmt.Sprintf("%v", this.PeerCertMode) + `,`,
-		`ProxySsl:` + fmt.Sprintf("%v", this.ProxySsl) + `,`,
-		`ProxySslPassthrough:` + fmt.Sprintf("%v", this.ProxySslPassthrough) + `,`,
 		`RenegotiatePeriod:` + fmt.Sprintf("%v", this.RenegotiatePeriod) + `,`,
 		`RenegotiateSize:` + fmt.Sprintf("%v", this.RenegotiateSize) + `,`,
 		`Renegotiation:` + fmt.Sprintf("%v", this.Renegotiation) + `,`,
-		`RetainCertificate:` + fmt.Sprintf("%v", this.RetainCertificate) + `,`,
 		`RevokedCertStatusResponseControl:` + fmt.Sprintf("%v", this.RevokedCertStatusResponseControl) + `,`,
 		`SecureRenegotiation:` + fmt.Sprintf("%v", this.SecureRenegotiation) + `,`,
 		`ServerName:` + fmt.Sprintf("%v", this.ServerName) + `,`,
-		`SessionMirroring:` + fmt.Sprintf("%v", this.SessionMirroring) + `,`,
 		`SessionTicket:` + fmt.Sprintf("%v", this.SessionTicket) + `,`,
-		`SniDefault:` + fmt.Sprintf("%v", this.SniDefault) + `,`,
-		`SniRequire:` + fmt.Sprintf("%v", this.SniRequire) + `,`,
-		`SslC3D:` + fmt.Sprintf("%v", this.SslC3D) + `,`,
-		`SslForwardProxy:` + fmt.Sprintf("%v", this.SslForwardProxy) + `,`,
-		`SslForwardProxyBypass:` + fmt.Sprintf("%v", this.SslForwardProxyBypass) + `,`,
-		`SslForwardProxyVerifiedHandshake:` + fmt.Sprintf("%v", this.SslForwardProxyVerifiedHandshake) + `,`,
-		`SslSignHash:` + fmt.Sprintf("%v", this.SslSignHash) + `,`,
-		`StrictResume:` + fmt.Sprintf("%v", this.StrictResume) + `,`,
-		`UncleanShutdown:` + fmt.Sprintf("%v", this.UncleanShutdown) + `,`,
 		`UnknownCertStatusResponseControl:` + fmt.Sprintf("%v", this.UnknownCertStatusResponseControl) + `,`,
 		`UntrustedCertResponseControl:` + fmt.Sprintf("%v", this.UntrustedCertResponseControl) + `,`,
-		`UserSpec:` + fmt.Sprintf("%v", this.UserSpec) + `,`,
 		`CertificatesChoice:` + fmt.Sprintf("%v", this.CertificatesChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_CipherGroup) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_CipherGroup{`,
-		`CipherGroup:` + fmt.Sprintf("%v", this.CipherGroup) + `,`,
+		`TrustedCaList:` + repeatedStringForTrustedCaList + `,`,
+		`TmOptions:` + fmt.Sprintf("%v", this.TmOptions) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6327,66 +3958,34 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForOcsp := "[]*ObjectRefType{"
-	for _, f := range this.Ocsp {
-		repeatedStringForOcsp += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	repeatedStringForTrustedCaList := "[]*ObjectRefType{"
+	for _, f := range this.TrustedCaList {
+		repeatedStringForTrustedCaList += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
 	}
-	repeatedStringForOcsp += "}"
+	repeatedStringForTrustedCaList += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`AlertTimeout:` + fmt.Sprintf("%v", this.AlertTimeout) + `,`,
 		`AllowExpiredCrl:` + fmt.Sprintf("%v", this.AllowExpiredCrl) + `,`,
 		`Authenticate:` + fmt.Sprintf("%v", this.Authenticate) + `,`,
 		`AuthenticateDepth:` + fmt.Sprintf("%v", this.AuthenticateDepth) + `,`,
 		`AuthenticateName:` + fmt.Sprintf("%v", this.AuthenticateName) + `,`,
-		`BypassOnClientCertFail:` + fmt.Sprintf("%v", this.BypassOnClientCertFail) + `,`,
-		`BypassOnHandshakeAlert:` + fmt.Sprintf("%v", this.BypassOnHandshakeAlert) + `,`,
-		`C3DCertLifespan:` + fmt.Sprintf("%v", this.C3DCertLifespan) + `,`,
 		`CacheSize:` + fmt.Sprintf("%v", this.CacheSize) + `,`,
-		`CacheTimeout:` + fmt.Sprintf("%v", this.CacheTimeout) + `,`,
 		`CipherConfig:` + fmt.Sprintf("%v", this.CipherConfig) + `,`,
-		`Data_0Rtt:` + fmt.Sprintf("%v", this.Data_0Rtt) + `,`,
 		`ExpireCertResponseControl:` + fmt.Sprintf("%v", this.ExpireCertResponseControl) + `,`,
-		`GenericAlert:` + fmt.Sprintf("%v", this.GenericAlert) + `,`,
 		`HandshakeTimeout:` + fmt.Sprintf("%v", this.HandshakeTimeout) + `,`,
-		`MaxActiveHandshakes:` + fmt.Sprintf("%v", this.MaxActiveHandshakes) + `,`,
-		`ModSslMethods:` + fmt.Sprintf("%v", this.ModSslMethods) + `,`,
-		`Mode:` + fmt.Sprintf("%v", this.Mode) + `,`,
-		`Ocsp:` + repeatedStringForOcsp + `,`,
 		`PeerCertMode:` + fmt.Sprintf("%v", this.PeerCertMode) + `,`,
-		`ProxySsl:` + fmt.Sprintf("%v", this.ProxySsl) + `,`,
-		`ProxySslPassthrough:` + fmt.Sprintf("%v", this.ProxySslPassthrough) + `,`,
 		`RenegotiatePeriod:` + fmt.Sprintf("%v", this.RenegotiatePeriod) + `,`,
 		`RenegotiateSize:` + fmt.Sprintf("%v", this.RenegotiateSize) + `,`,
 		`Renegotiation:` + fmt.Sprintf("%v", this.Renegotiation) + `,`,
-		`RetainCertificate:` + fmt.Sprintf("%v", this.RetainCertificate) + `,`,
 		`RevokedCertStatusResponseControl:` + fmt.Sprintf("%v", this.RevokedCertStatusResponseControl) + `,`,
 		`SecureRenegotiation:` + fmt.Sprintf("%v", this.SecureRenegotiation) + `,`,
 		`ServerName:` + fmt.Sprintf("%v", this.ServerName) + `,`,
-		`SessionMirroring:` + fmt.Sprintf("%v", this.SessionMirroring) + `,`,
 		`SessionTicket:` + fmt.Sprintf("%v", this.SessionTicket) + `,`,
-		`SniDefault:` + fmt.Sprintf("%v", this.SniDefault) + `,`,
-		`SniRequire:` + fmt.Sprintf("%v", this.SniRequire) + `,`,
-		`SslC3D:` + fmt.Sprintf("%v", this.SslC3D) + `,`,
-		`SslForwardProxy:` + fmt.Sprintf("%v", this.SslForwardProxy) + `,`,
-		`SslForwardProxyBypass:` + fmt.Sprintf("%v", this.SslForwardProxyBypass) + `,`,
-		`SslForwardProxyVerifiedHandshake:` + fmt.Sprintf("%v", this.SslForwardProxyVerifiedHandshake) + `,`,
-		`SslSignHash:` + fmt.Sprintf("%v", this.SslSignHash) + `,`,
-		`StrictResume:` + fmt.Sprintf("%v", this.StrictResume) + `,`,
-		`UncleanShutdown:` + fmt.Sprintf("%v", this.UncleanShutdown) + `,`,
 		`UnknownCertStatusResponseControl:` + fmt.Sprintf("%v", this.UnknownCertStatusResponseControl) + `,`,
 		`UntrustedCertResponseControl:` + fmt.Sprintf("%v", this.UntrustedCertResponseControl) + `,`,
-		`UserSpec:` + fmt.Sprintf("%v", this.UserSpec) + `,`,
 		`CertificatesChoice:` + fmt.Sprintf("%v", this.CertificatesChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_CipherGroup) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_CipherGroup{`,
-		`CipherGroup:` + fmt.Sprintf("%v", this.CipherGroup) + `,`,
+		`TrustedCaList:` + repeatedStringForTrustedCaList + `,`,
+		`TmOptions:` + fmt.Sprintf("%v", this.TmOptions) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6415,66 +4014,34 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForOcsp := "[]*ObjectRefType{"
-	for _, f := range this.Ocsp {
-		repeatedStringForOcsp += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	repeatedStringForTrustedCaList := "[]*ObjectRefType{"
+	for _, f := range this.TrustedCaList {
+		repeatedStringForTrustedCaList += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
 	}
-	repeatedStringForOcsp += "}"
+	repeatedStringForTrustedCaList += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
 		`AlertTimeout:` + fmt.Sprintf("%v", this.AlertTimeout) + `,`,
 		`AllowExpiredCrl:` + fmt.Sprintf("%v", this.AllowExpiredCrl) + `,`,
 		`Authenticate:` + fmt.Sprintf("%v", this.Authenticate) + `,`,
 		`AuthenticateDepth:` + fmt.Sprintf("%v", this.AuthenticateDepth) + `,`,
 		`AuthenticateName:` + fmt.Sprintf("%v", this.AuthenticateName) + `,`,
-		`BypassOnClientCertFail:` + fmt.Sprintf("%v", this.BypassOnClientCertFail) + `,`,
-		`BypassOnHandshakeAlert:` + fmt.Sprintf("%v", this.BypassOnHandshakeAlert) + `,`,
-		`C3DCertLifespan:` + fmt.Sprintf("%v", this.C3DCertLifespan) + `,`,
 		`CacheSize:` + fmt.Sprintf("%v", this.CacheSize) + `,`,
-		`CacheTimeout:` + fmt.Sprintf("%v", this.CacheTimeout) + `,`,
 		`CipherConfig:` + fmt.Sprintf("%v", this.CipherConfig) + `,`,
-		`Data_0Rtt:` + fmt.Sprintf("%v", this.Data_0Rtt) + `,`,
 		`ExpireCertResponseControl:` + fmt.Sprintf("%v", this.ExpireCertResponseControl) + `,`,
-		`GenericAlert:` + fmt.Sprintf("%v", this.GenericAlert) + `,`,
 		`HandshakeTimeout:` + fmt.Sprintf("%v", this.HandshakeTimeout) + `,`,
-		`MaxActiveHandshakes:` + fmt.Sprintf("%v", this.MaxActiveHandshakes) + `,`,
-		`ModSslMethods:` + fmt.Sprintf("%v", this.ModSslMethods) + `,`,
-		`Mode:` + fmt.Sprintf("%v", this.Mode) + `,`,
-		`Ocsp:` + repeatedStringForOcsp + `,`,
 		`PeerCertMode:` + fmt.Sprintf("%v", this.PeerCertMode) + `,`,
-		`ProxySsl:` + fmt.Sprintf("%v", this.ProxySsl) + `,`,
-		`ProxySslPassthrough:` + fmt.Sprintf("%v", this.ProxySslPassthrough) + `,`,
 		`RenegotiatePeriod:` + fmt.Sprintf("%v", this.RenegotiatePeriod) + `,`,
 		`RenegotiateSize:` + fmt.Sprintf("%v", this.RenegotiateSize) + `,`,
 		`Renegotiation:` + fmt.Sprintf("%v", this.Renegotiation) + `,`,
-		`RetainCertificate:` + fmt.Sprintf("%v", this.RetainCertificate) + `,`,
 		`RevokedCertStatusResponseControl:` + fmt.Sprintf("%v", this.RevokedCertStatusResponseControl) + `,`,
 		`SecureRenegotiation:` + fmt.Sprintf("%v", this.SecureRenegotiation) + `,`,
 		`ServerName:` + fmt.Sprintf("%v", this.ServerName) + `,`,
-		`SessionMirroring:` + fmt.Sprintf("%v", this.SessionMirroring) + `,`,
 		`SessionTicket:` + fmt.Sprintf("%v", this.SessionTicket) + `,`,
-		`SniDefault:` + fmt.Sprintf("%v", this.SniDefault) + `,`,
-		`SniRequire:` + fmt.Sprintf("%v", this.SniRequire) + `,`,
-		`SslC3D:` + fmt.Sprintf("%v", this.SslC3D) + `,`,
-		`SslForwardProxy:` + fmt.Sprintf("%v", this.SslForwardProxy) + `,`,
-		`SslForwardProxyBypass:` + fmt.Sprintf("%v", this.SslForwardProxyBypass) + `,`,
-		`SslForwardProxyVerifiedHandshake:` + fmt.Sprintf("%v", this.SslForwardProxyVerifiedHandshake) + `,`,
-		`SslSignHash:` + fmt.Sprintf("%v", this.SslSignHash) + `,`,
-		`StrictResume:` + fmt.Sprintf("%v", this.StrictResume) + `,`,
-		`UncleanShutdown:` + fmt.Sprintf("%v", this.UncleanShutdown) + `,`,
 		`UnknownCertStatusResponseControl:` + fmt.Sprintf("%v", this.UnknownCertStatusResponseControl) + `,`,
 		`UntrustedCertResponseControl:` + fmt.Sprintf("%v", this.UntrustedCertResponseControl) + `,`,
-		`UserSpec:` + fmt.Sprintf("%v", this.UserSpec) + `,`,
 		`CertificatesChoice:` + fmt.Sprintf("%v", this.CertificatesChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_CipherGroup) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_CipherGroup{`,
-		`CipherGroup:` + fmt.Sprintf("%v", this.CipherGroup) + `,`,
+		`TrustedCaList:` + repeatedStringForTrustedCaList + `,`,
+		`TmOptions:` + fmt.Sprintf("%v", this.TmOptions) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6503,66 +4070,34 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForOcsp := "[]*ObjectRefType{"
-	for _, f := range this.Ocsp {
-		repeatedStringForOcsp += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	repeatedStringForTrustedCaList := "[]*ObjectRefType{"
+	for _, f := range this.TrustedCaList {
+		repeatedStringForTrustedCaList += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
 	}
-	repeatedStringForOcsp += "}"
+	repeatedStringForTrustedCaList += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`AlertTimeout:` + fmt.Sprintf("%v", this.AlertTimeout) + `,`,
 		`AllowExpiredCrl:` + fmt.Sprintf("%v", this.AllowExpiredCrl) + `,`,
 		`Authenticate:` + fmt.Sprintf("%v", this.Authenticate) + `,`,
 		`AuthenticateDepth:` + fmt.Sprintf("%v", this.AuthenticateDepth) + `,`,
 		`AuthenticateName:` + fmt.Sprintf("%v", this.AuthenticateName) + `,`,
-		`BypassOnClientCertFail:` + fmt.Sprintf("%v", this.BypassOnClientCertFail) + `,`,
-		`BypassOnHandshakeAlert:` + fmt.Sprintf("%v", this.BypassOnHandshakeAlert) + `,`,
-		`C3DCertLifespan:` + fmt.Sprintf("%v", this.C3DCertLifespan) + `,`,
 		`CacheSize:` + fmt.Sprintf("%v", this.CacheSize) + `,`,
-		`CacheTimeout:` + fmt.Sprintf("%v", this.CacheTimeout) + `,`,
 		`CipherConfig:` + fmt.Sprintf("%v", this.CipherConfig) + `,`,
-		`Data_0Rtt:` + fmt.Sprintf("%v", this.Data_0Rtt) + `,`,
 		`ExpireCertResponseControl:` + fmt.Sprintf("%v", this.ExpireCertResponseControl) + `,`,
-		`GenericAlert:` + fmt.Sprintf("%v", this.GenericAlert) + `,`,
 		`HandshakeTimeout:` + fmt.Sprintf("%v", this.HandshakeTimeout) + `,`,
-		`MaxActiveHandshakes:` + fmt.Sprintf("%v", this.MaxActiveHandshakes) + `,`,
-		`ModSslMethods:` + fmt.Sprintf("%v", this.ModSslMethods) + `,`,
-		`Mode:` + fmt.Sprintf("%v", this.Mode) + `,`,
-		`Ocsp:` + repeatedStringForOcsp + `,`,
 		`PeerCertMode:` + fmt.Sprintf("%v", this.PeerCertMode) + `,`,
-		`ProxySsl:` + fmt.Sprintf("%v", this.ProxySsl) + `,`,
-		`ProxySslPassthrough:` + fmt.Sprintf("%v", this.ProxySslPassthrough) + `,`,
 		`RenegotiatePeriod:` + fmt.Sprintf("%v", this.RenegotiatePeriod) + `,`,
 		`RenegotiateSize:` + fmt.Sprintf("%v", this.RenegotiateSize) + `,`,
 		`Renegotiation:` + fmt.Sprintf("%v", this.Renegotiation) + `,`,
-		`RetainCertificate:` + fmt.Sprintf("%v", this.RetainCertificate) + `,`,
 		`RevokedCertStatusResponseControl:` + fmt.Sprintf("%v", this.RevokedCertStatusResponseControl) + `,`,
 		`SecureRenegotiation:` + fmt.Sprintf("%v", this.SecureRenegotiation) + `,`,
 		`ServerName:` + fmt.Sprintf("%v", this.ServerName) + `,`,
-		`SessionMirroring:` + fmt.Sprintf("%v", this.SessionMirroring) + `,`,
 		`SessionTicket:` + fmt.Sprintf("%v", this.SessionTicket) + `,`,
-		`SniDefault:` + fmt.Sprintf("%v", this.SniDefault) + `,`,
-		`SniRequire:` + fmt.Sprintf("%v", this.SniRequire) + `,`,
-		`SslC3D:` + fmt.Sprintf("%v", this.SslC3D) + `,`,
-		`SslForwardProxy:` + fmt.Sprintf("%v", this.SslForwardProxy) + `,`,
-		`SslForwardProxyBypass:` + fmt.Sprintf("%v", this.SslForwardProxyBypass) + `,`,
-		`SslForwardProxyVerifiedHandshake:` + fmt.Sprintf("%v", this.SslForwardProxyVerifiedHandshake) + `,`,
-		`SslSignHash:` + fmt.Sprintf("%v", this.SslSignHash) + `,`,
-		`StrictResume:` + fmt.Sprintf("%v", this.StrictResume) + `,`,
-		`UncleanShutdown:` + fmt.Sprintf("%v", this.UncleanShutdown) + `,`,
 		`UnknownCertStatusResponseControl:` + fmt.Sprintf("%v", this.UnknownCertStatusResponseControl) + `,`,
 		`UntrustedCertResponseControl:` + fmt.Sprintf("%v", this.UntrustedCertResponseControl) + `,`,
-		`UserSpec:` + fmt.Sprintf("%v", this.UserSpec) + `,`,
 		`CertificatesChoice:` + fmt.Sprintf("%v", this.CertificatesChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_CipherGroup) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_CipherGroup{`,
-		`CipherGroup:` + fmt.Sprintf("%v", this.CipherGroup) + `,`,
+		`TrustedCaList:` + repeatedStringForTrustedCaList + `,`,
+		`TmOptions:` + fmt.Sprintf("%v", this.TmOptions) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6745,63 +4280,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.AuthenticateName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BypassOnClientCertFail", wireType)
-			}
-			m.BypassOnClientCertFail = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.BypassOnClientCertFail |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 7:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BypassOnHandshakeAlert", wireType)
-			}
-			m.BypassOnHandshakeAlert = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.BypassOnHandshakeAlert |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 8:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field C3DCertLifespan", wireType)
-			}
-			m.C3DCertLifespan = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.C3DCertLifespan |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 9:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CacheSize", wireType)
@@ -6821,57 +4299,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 10:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CacheTimeout", wireType)
-			}
-			m.CacheTimeout = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CacheTimeout |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CipherGroup", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CipherConfig = &GlobalSpecType_CipherGroup{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
 		case 13:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Ciphers", wireType)
@@ -6968,25 +4395,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.CrlFile = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 16:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data_0Rtt", wireType)
-			}
-			m.Data_0Rtt = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Data_0Rtt |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 17:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ExpireCertResponseControl", wireType)
@@ -7001,26 +4409,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ExpireCertResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 18:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GenericAlert", wireType)
-			}
-			m.GenericAlert = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.GenericAlert |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
+				m.ExpireCertResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7108,25 +4497,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.LogPublisher = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 22:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LogSslC3DEvents", wireType)
-			}
-			m.LogSslC3DEvents = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.LogSslC3DEvents |= vs_profiles.LogSslC3DEventsChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 23:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field LogSslClientAuthenticationEvents", wireType)
@@ -7142,25 +4512,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				b := dAtA[iNdEx]
 				iNdEx++
 				m.LogSslClientAuthenticationEvents |= vs_profiles.LogSslC3DEventsChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 24:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LogSslForwardProxyEvents", wireType)
-			}
-			m.LogSslForwardProxyEvents = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.LogSslForwardProxyEvents |= vs_profiles.LogSslC3DEventsChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7184,97 +4535,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 26:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxActiveHandshakes", wireType)
-			}
-			m.MaxActiveHandshakes = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaxActiveHandshakes |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 27:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ModSslMethods", wireType)
-			}
-			m.ModSslMethods = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ModSslMethods |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 28:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Mode", wireType)
-			}
-			m.Mode = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Mode |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 29:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Ocsp", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Ocsp = append(m.Ocsp, &schema.ObjectRefType{})
-			if err := m.Ocsp[len(m.Ocsp)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 30:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Passphrase", wireType)
@@ -7322,44 +4582,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				b := dAtA[iNdEx]
 				iNdEx++
 				m.PeerCertMode |= vs_profiles.PeerCertModeChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 32:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProxySsl", wireType)
-			}
-			m.ProxySsl = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ProxySsl |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 33:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProxySslPassthrough", wireType)
-			}
-			m.ProxySslPassthrough = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ProxySslPassthrough |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7447,25 +4669,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 37:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RetainCertificate", wireType)
-			}
-			m.RetainCertificate = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.RetainCertificate |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 38:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field RevokedCertStatusResponseControl", wireType)
@@ -7480,7 +4683,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.RevokedCertStatusResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
+				m.RevokedCertStatusResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7536,25 +4739,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ServerName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 41:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SessionMirroring", wireType)
-			}
-			m.SessionMirroring = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SessionMirroring |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 42:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SessionTicket", wireType)
@@ -7574,177 +4758,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 43:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SniDefault", wireType)
-			}
-			m.SniDefault = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SniDefault |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 44:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SniRequire", wireType)
-			}
-			m.SniRequire = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SniRequire |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 45:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslC3D", wireType)
-			}
-			m.SslC3D = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslC3D |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 46:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslForwardProxy", wireType)
-			}
-			m.SslForwardProxy = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslForwardProxy |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 47:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslForwardProxyBypass", wireType)
-			}
-			m.SslForwardProxyBypass = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslForwardProxyBypass |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 48:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslForwardProxyVerifiedHandshake", wireType)
-			}
-			m.SslForwardProxyVerifiedHandshake = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslForwardProxyVerifiedHandshake |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 49:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslSignHash", wireType)
-			}
-			m.SslSignHash = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslSignHash |= vs_profiles.SslSignHashChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 50:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StrictResume", wireType)
-			}
-			m.StrictResume = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.StrictResume |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 51:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UncleanShutdown", wireType)
-			}
-			m.UncleanShutdown = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.UncleanShutdown |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 52:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field UnknownCertStatusResponseControl", wireType)
@@ -7759,7 +4772,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UnknownCertStatusResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
+				m.UnknownCertStatusResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7778,43 +4791,11 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UntrustedCertResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
+				m.UntrustedCertResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-		case 54:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserSpec", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserSpec = append(m.UserSpec, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
 		case 56:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Certificates", wireType)
@@ -7849,6 +4830,72 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.CertificatesChoice = &GlobalSpecType_Certificates{v}
+			iNdEx = postIndex
+		case 57:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrustedCaList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TrustedCaList = append(m.TrustedCaList, &schema.ObjectRefType{})
+			if err := m.TrustedCaList[len(m.TrustedCaList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 58:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TmOptions", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TmOptions = append(m.TmOptions, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -8111,63 +5158,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.AuthenticateName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BypassOnClientCertFail", wireType)
-			}
-			m.BypassOnClientCertFail = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.BypassOnClientCertFail |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 7:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BypassOnHandshakeAlert", wireType)
-			}
-			m.BypassOnHandshakeAlert = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.BypassOnHandshakeAlert |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 8:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field C3DCertLifespan", wireType)
-			}
-			m.C3DCertLifespan = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.C3DCertLifespan |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 9:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CacheSize", wireType)
@@ -8187,57 +5177,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 10:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CacheTimeout", wireType)
-			}
-			m.CacheTimeout = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CacheTimeout |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CipherGroup", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CipherConfig = &CreateSpecType_CipherGroup{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
 		case 13:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Ciphers", wireType)
@@ -8270,25 +5209,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.CipherConfig = &CreateSpecType_Ciphers{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
-		case 16:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data_0Rtt", wireType)
-			}
-			m.Data_0Rtt = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Data_0Rtt |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 17:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ExpireCertResponseControl", wireType)
@@ -8303,26 +5223,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ExpireCertResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 18:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GenericAlert", wireType)
-			}
-			m.GenericAlert = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.GenericAlert |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
+				m.ExpireCertResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8346,97 +5247,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 26:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxActiveHandshakes", wireType)
-			}
-			m.MaxActiveHandshakes = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaxActiveHandshakes |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 27:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ModSslMethods", wireType)
-			}
-			m.ModSslMethods = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ModSslMethods |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 28:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Mode", wireType)
-			}
-			m.Mode = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Mode |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 29:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Ocsp", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Ocsp = append(m.Ocsp, &schema.ObjectRefType{})
-			if err := m.Ocsp[len(m.Ocsp)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 31:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PeerCertMode", wireType)
@@ -8452,44 +5262,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				b := dAtA[iNdEx]
 				iNdEx++
 				m.PeerCertMode |= vs_profiles.PeerCertModeChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 32:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProxySsl", wireType)
-			}
-			m.ProxySsl = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ProxySsl |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 33:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProxySslPassthrough", wireType)
-			}
-			m.ProxySslPassthrough = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ProxySslPassthrough |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8577,25 +5349,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 37:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RetainCertificate", wireType)
-			}
-			m.RetainCertificate = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.RetainCertificate |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 38:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field RevokedCertStatusResponseControl", wireType)
@@ -8610,7 +5363,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.RevokedCertStatusResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
+				m.RevokedCertStatusResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8666,25 +5419,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ServerName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 41:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SessionMirroring", wireType)
-			}
-			m.SessionMirroring = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SessionMirroring |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 42:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SessionTicket", wireType)
@@ -8704,177 +5438,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 43:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SniDefault", wireType)
-			}
-			m.SniDefault = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SniDefault |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 44:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SniRequire", wireType)
-			}
-			m.SniRequire = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SniRequire |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 45:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslC3D", wireType)
-			}
-			m.SslC3D = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslC3D |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 46:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslForwardProxy", wireType)
-			}
-			m.SslForwardProxy = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslForwardProxy |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 47:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslForwardProxyBypass", wireType)
-			}
-			m.SslForwardProxyBypass = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslForwardProxyBypass |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 48:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslForwardProxyVerifiedHandshake", wireType)
-			}
-			m.SslForwardProxyVerifiedHandshake = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslForwardProxyVerifiedHandshake |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 49:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslSignHash", wireType)
-			}
-			m.SslSignHash = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslSignHash |= vs_profiles.SslSignHashChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 50:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StrictResume", wireType)
-			}
-			m.StrictResume = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.StrictResume |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 51:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UncleanShutdown", wireType)
-			}
-			m.UncleanShutdown = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.UncleanShutdown |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 52:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field UnknownCertStatusResponseControl", wireType)
@@ -8889,7 +5452,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UnknownCertStatusResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
+				m.UnknownCertStatusResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8908,43 +5471,11 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UntrustedCertResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
+				m.UntrustedCertResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-		case 54:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserSpec", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserSpec = append(m.UserSpec, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
 		case 56:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Certificates", wireType)
@@ -8979,6 +5510,72 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.CertificatesChoice = &CreateSpecType_Certificates{v}
+			iNdEx = postIndex
+		case 57:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrustedCaList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TrustedCaList = append(m.TrustedCaList, &schema.ObjectRefType{})
+			if err := m.TrustedCaList[len(m.TrustedCaList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 58:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TmOptions", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TmOptions = append(m.TmOptions, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -9154,63 +5751,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.AuthenticateName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BypassOnClientCertFail", wireType)
-			}
-			m.BypassOnClientCertFail = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.BypassOnClientCertFail |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 7:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BypassOnHandshakeAlert", wireType)
-			}
-			m.BypassOnHandshakeAlert = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.BypassOnHandshakeAlert |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 8:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field C3DCertLifespan", wireType)
-			}
-			m.C3DCertLifespan = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.C3DCertLifespan |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 9:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CacheSize", wireType)
@@ -9230,57 +5770,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 10:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CacheTimeout", wireType)
-			}
-			m.CacheTimeout = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CacheTimeout |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CipherGroup", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CipherConfig = &GetSpecType_CipherGroup{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
 		case 13:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Ciphers", wireType)
@@ -9313,25 +5802,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.CipherConfig = &GetSpecType_Ciphers{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
-		case 16:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data_0Rtt", wireType)
-			}
-			m.Data_0Rtt = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Data_0Rtt |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 17:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ExpireCertResponseControl", wireType)
@@ -9346,26 +5816,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ExpireCertResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 18:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GenericAlert", wireType)
-			}
-			m.GenericAlert = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.GenericAlert |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
+				m.ExpireCertResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9389,97 +5840,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 26:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxActiveHandshakes", wireType)
-			}
-			m.MaxActiveHandshakes = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaxActiveHandshakes |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 27:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ModSslMethods", wireType)
-			}
-			m.ModSslMethods = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ModSslMethods |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 28:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Mode", wireType)
-			}
-			m.Mode = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Mode |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 29:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Ocsp", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Ocsp = append(m.Ocsp, &schema.ObjectRefType{})
-			if err := m.Ocsp[len(m.Ocsp)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 31:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PeerCertMode", wireType)
@@ -9495,44 +5855,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				b := dAtA[iNdEx]
 				iNdEx++
 				m.PeerCertMode |= vs_profiles.PeerCertModeChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 32:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProxySsl", wireType)
-			}
-			m.ProxySsl = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ProxySsl |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 33:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProxySslPassthrough", wireType)
-			}
-			m.ProxySslPassthrough = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ProxySslPassthrough |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9620,25 +5942,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 37:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RetainCertificate", wireType)
-			}
-			m.RetainCertificate = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.RetainCertificate |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 38:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field RevokedCertStatusResponseControl", wireType)
@@ -9653,7 +5956,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.RevokedCertStatusResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
+				m.RevokedCertStatusResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9709,25 +6012,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ServerName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 41:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SessionMirroring", wireType)
-			}
-			m.SessionMirroring = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SessionMirroring |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 42:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SessionTicket", wireType)
@@ -9747,177 +6031,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 43:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SniDefault", wireType)
-			}
-			m.SniDefault = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SniDefault |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 44:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SniRequire", wireType)
-			}
-			m.SniRequire = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SniRequire |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 45:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslC3D", wireType)
-			}
-			m.SslC3D = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslC3D |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 46:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslForwardProxy", wireType)
-			}
-			m.SslForwardProxy = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslForwardProxy |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 47:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslForwardProxyBypass", wireType)
-			}
-			m.SslForwardProxyBypass = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslForwardProxyBypass |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 48:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslForwardProxyVerifiedHandshake", wireType)
-			}
-			m.SslForwardProxyVerifiedHandshake = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslForwardProxyVerifiedHandshake |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 49:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslSignHash", wireType)
-			}
-			m.SslSignHash = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslSignHash |= vs_profiles.SslSignHashChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 50:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StrictResume", wireType)
-			}
-			m.StrictResume = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.StrictResume |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 51:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UncleanShutdown", wireType)
-			}
-			m.UncleanShutdown = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.UncleanShutdown |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 52:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field UnknownCertStatusResponseControl", wireType)
@@ -9932,7 +6045,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UnknownCertStatusResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
+				m.UnknownCertStatusResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9951,43 +6064,11 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UntrustedCertResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
+				m.UntrustedCertResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-		case 54:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserSpec", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserSpec = append(m.UserSpec, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
 		case 56:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Certificates", wireType)
@@ -10022,6 +6103,72 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.CertificatesChoice = &GetSpecType_Certificates{v}
+			iNdEx = postIndex
+		case 57:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrustedCaList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TrustedCaList = append(m.TrustedCaList, &schema.ObjectRefType{})
+			if err := m.TrustedCaList[len(m.TrustedCaList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 58:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TmOptions", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TmOptions = append(m.TmOptions, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -10197,63 +6344,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.AuthenticateName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BypassOnClientCertFail", wireType)
-			}
-			m.BypassOnClientCertFail = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.BypassOnClientCertFail |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 7:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BypassOnHandshakeAlert", wireType)
-			}
-			m.BypassOnHandshakeAlert = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.BypassOnHandshakeAlert |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 8:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field C3DCertLifespan", wireType)
-			}
-			m.C3DCertLifespan = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.C3DCertLifespan |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 9:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CacheSize", wireType)
@@ -10273,57 +6363,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 10:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CacheTimeout", wireType)
-			}
-			m.CacheTimeout = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CacheTimeout |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CipherGroup", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CipherConfig = &ReplaceSpecType_CipherGroup{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
 		case 13:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Ciphers", wireType)
@@ -10356,25 +6395,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.CipherConfig = &ReplaceSpecType_Ciphers{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
-		case 16:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data_0Rtt", wireType)
-			}
-			m.Data_0Rtt = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Data_0Rtt |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 17:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ExpireCertResponseControl", wireType)
@@ -10389,26 +6409,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ExpireCertResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 18:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GenericAlert", wireType)
-			}
-			m.GenericAlert = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.GenericAlert |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
+				m.ExpireCertResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10432,97 +6433,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 26:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxActiveHandshakes", wireType)
-			}
-			m.MaxActiveHandshakes = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaxActiveHandshakes |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 27:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ModSslMethods", wireType)
-			}
-			m.ModSslMethods = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ModSslMethods |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 28:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Mode", wireType)
-			}
-			m.Mode = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Mode |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 29:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Ocsp", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Ocsp = append(m.Ocsp, &schema.ObjectRefType{})
-			if err := m.Ocsp[len(m.Ocsp)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 31:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PeerCertMode", wireType)
@@ -10538,44 +6448,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				b := dAtA[iNdEx]
 				iNdEx++
 				m.PeerCertMode |= vs_profiles.PeerCertModeChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 32:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProxySsl", wireType)
-			}
-			m.ProxySsl = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ProxySsl |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 33:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProxySslPassthrough", wireType)
-			}
-			m.ProxySslPassthrough = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ProxySslPassthrough |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10663,25 +6535,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 37:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RetainCertificate", wireType)
-			}
-			m.RetainCertificate = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.RetainCertificate |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 38:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field RevokedCertStatusResponseControl", wireType)
@@ -10696,7 +6549,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.RevokedCertStatusResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
+				m.RevokedCertStatusResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10752,25 +6605,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ServerName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 41:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SessionMirroring", wireType)
-			}
-			m.SessionMirroring = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SessionMirroring |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 42:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SessionTicket", wireType)
@@ -10790,177 +6624,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 43:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SniDefault", wireType)
-			}
-			m.SniDefault = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SniDefault |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 44:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SniRequire", wireType)
-			}
-			m.SniRequire = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SniRequire |= vs_profiles.TrueFalseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 45:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslC3D", wireType)
-			}
-			m.SslC3D = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslC3D |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 46:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslForwardProxy", wireType)
-			}
-			m.SslForwardProxy = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslForwardProxy |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 47:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslForwardProxyBypass", wireType)
-			}
-			m.SslForwardProxyBypass = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslForwardProxyBypass |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 48:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslForwardProxyVerifiedHandshake", wireType)
-			}
-			m.SslForwardProxyVerifiedHandshake = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslForwardProxyVerifiedHandshake |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 49:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SslSignHash", wireType)
-			}
-			m.SslSignHash = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SslSignHash |= vs_profiles.SslSignHashChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 50:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StrictResume", wireType)
-			}
-			m.StrictResume = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.StrictResume |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 51:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UncleanShutdown", wireType)
-			}
-			m.UncleanShutdown = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.UncleanShutdown |= vs_profiles.EnableDisableChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 52:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field UnknownCertStatusResponseControl", wireType)
@@ -10975,7 +6638,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UnknownCertStatusResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
+				m.UnknownCertStatusResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10994,43 +6657,11 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UntrustedCertResponseControl |= vs_profiles.AcceptRejectChoice(b&0x7F) << shift
+				m.UntrustedCertResponseControl |= vs_profiles.CertResponseControlChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-		case 54:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserSpec", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserSpec = append(m.UserSpec, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
 		case 56:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Certificates", wireType)
@@ -11065,6 +6696,72 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.CertificatesChoice = &ReplaceSpecType_Certificates{v}
+			iNdEx = postIndex
+		case 57:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrustedCaList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TrustedCaList = append(m.TrustedCaList, &schema.ObjectRefType{})
+			if err := m.TrustedCaList[len(m.TrustedCaList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 58:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TmOptions", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TmOptions = append(m.TmOptions, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

@@ -817,6 +817,246 @@ func EditCryptoKeyResponseValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *EditNamespaceRBACRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *EditNamespaceRBACRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *EditNamespaceRBACRequest) DeepCopy() *EditNamespaceRBACRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &EditNamespaceRBACRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *EditNamespaceRBACRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *EditNamespaceRBACRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return EditNamespaceRBACRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateEditNamespaceRBACRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateEditNamespaceRBACRequest) ZoneNamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for zone_names")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for zone_names")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated zone_names")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items zone_names")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateEditNamespaceRBACRequest) NamespaceRbacValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for namespace_rbac")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateEditNamespaceRBACRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*EditNamespaceRBACRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *EditNamespaceRBACRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace_rbac"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace_rbac"))
+		if err := fv(ctx, m.GetNamespaceRbac(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["zone_names"]; exists {
+		vOpts := append(opts, db.WithValidateField("zone_names"))
+		if err := fv(ctx, m.GetZoneNames(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultEditNamespaceRBACRequestValidator = func() *ValidateEditNamespaceRBACRequest {
+	v := &ValidateEditNamespaceRBACRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhZoneNames := v.ZoneNamesValidationRuleHandler
+	rulesZoneNames := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhZoneNames(rulesZoneNames)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for EditNamespaceRBACRequest.zone_names: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["zone_names"] = vFn
+
+	vrhNamespaceRbac := v.NamespaceRbacValidationRuleHandler
+	rulesNamespaceRbac := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNamespaceRbac(rulesNamespaceRbac)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for EditNamespaceRBACRequest.namespace_rbac: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace_rbac"] = vFn
+
+	return v
+}()
+
+func EditNamespaceRBACRequestValidator() db.Validator {
+	return DefaultEditNamespaceRBACRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *EditNamespaceRBACResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *EditNamespaceRBACResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *EditNamespaceRBACResponse) DeepCopy() *EditNamespaceRBACResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &EditNamespaceRBACResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *EditNamespaceRBACResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *EditNamespaceRBACResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return EditNamespaceRBACResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateEditNamespaceRBACResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateEditNamespaceRBACResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*EditNamespaceRBACResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *EditNamespaceRBACResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultEditNamespaceRBACResponseValidator = func() *ValidateEditNamespaceRBACResponse {
+	v := &ValidateEditNamespaceRBACResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func EditNamespaceRBACResponseValidator() db.Validator {
+	return DefaultEditNamespaceRBACResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ExportZoneFileRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1911,6 +2151,13 @@ func (m *ImportAXFRResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetConfigurationDRefInfo()
 }
+func (m *ImportAXFRResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetConfigurationDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ImportAXFRResponse) GetConfigurationDRefInfo() ([]db.DRefInfo, error) {
@@ -1920,6 +2167,22 @@ func (m *ImportAXFRResponse) GetConfigurationDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetConfiguration().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetConfiguration().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "configuration." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ImportAXFRResponse) GetConfigurationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConfiguration() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetConfiguration().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetConfiguration().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2466,6 +2729,13 @@ func (m *ImportF5CSZoneResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSpecDRefInfo()
 }
+func (m *ImportF5CSZoneResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSpecDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ImportF5CSZoneResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
@@ -2475,6 +2745,22 @@ func (m *ImportF5CSZoneResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "spec." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ImportF5CSZoneResponse) GetSpecDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSpec() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetSpec().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

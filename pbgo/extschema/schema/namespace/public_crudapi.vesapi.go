@@ -2329,6 +2329,22 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "namespaceNamespaceObjectStatus": {
+            "type": "string",
+            "description": "Represents the final calculated status for the namespace across all remote services\n\n - NAMESPACE_STATUS_UNKNOWN: NAMESPACE STATUS UNKNOWN\n\nUnknown or unspecified status\n - NAMESPACE_CREATING: NAMESPACE CREATING\n\nNamespace is being created across remote services\n - NAMESPACE_CREATE_FAILED: NAMESPACE CREATE FAILED\n\nNamespace creation failed in one or more remote services\n - NAMESPACE_ACTIVE: NAMESPACE ACTIVE\n\nNamespace is active and successfully created across all remote services\n - NAMESPACE_DELETING: NAMESPACE DELETING\n\nNamespace is being deleted across remote services\n - NAMESPACE_DELETE_FAILED: NAMESPACE DELETE FAILED\n\nNamespace deletion failed in one or more remote services",
+            "title": "Namespace Object Status",
+            "enum": [
+                "NAMESPACE_STATUS_UNKNOWN",
+                "NAMESPACE_CREATING",
+                "NAMESPACE_CREATE_FAILED",
+                "NAMESPACE_ACTIVE",
+                "NAMESPACE_DELETING",
+                "NAMESPACE_DELETE_FAILED"
+            ],
+            "default": "NAMESPACE_STATUS_UNKNOWN",
+            "x-displayname": "Namespace Object Status",
+            "x-ves-proto-enum": "ves.io.schema.namespace.NamespaceObjectStatus"
+        },
         "namespaceReplaceRequest": {
             "type": "object",
             "description": "This is the input message of the 'Replace' RPC",
@@ -2404,12 +2420,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -2994,6 +3010,12 @@ var APISwaggerJSON string = `{
                     "title": "Metadata",
                     "$ref": "#/definitions/schemaStatusMetaType",
                     "x-displayname": "Metadata"
+                },
+                "namespace_status": {
+                    "description": " Represents the final calculated status for the namespace across all remote services",
+                    "title": "Namespace Status",
+                    "$ref": "#/definitions/namespaceNamespaceObjectStatus",
+                    "x-displayname": "Namespace Status"
                 },
                 "object_refs": {
                     "type": "array",

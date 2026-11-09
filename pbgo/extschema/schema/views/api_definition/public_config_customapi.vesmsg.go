@@ -458,6 +458,13 @@ func (m *GetReferencingLoadbalancersResp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetHttpLoadbalancersDRefInfo()
 }
+func (m *GetReferencingLoadbalancersResp) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHttpLoadbalancersDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetReferencingLoadbalancersResp) GetHttpLoadbalancersDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetHttpLoadbalancers()
@@ -472,6 +479,30 @@ func (m *GetReferencingLoadbalancersResp) GetHttpLoadbalancersDRefInfo() ([]db.D
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("http_loadbalancer.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http_loadbalancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "http_loadbalancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetReferencingLoadbalancersResp) GetHttpLoadbalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetHttpLoadbalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetReferencingLoadbalancersResp.http_loadbalancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("http_loadbalancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "http_loadbalancer.Object",
 			RefdTenant: vref.Tenant,

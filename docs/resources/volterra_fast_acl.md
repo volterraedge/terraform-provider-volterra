@@ -43,7 +43,7 @@ resource "volterra_fast_acl" "example" {
       port {
         // One of the arguments from this list "all dns user_defined" can be set
 
-        all = true
+        user_defined = "user_defined"
       }
 
       // One of the arguments from this list "ip_prefix_set prefix" must be set
@@ -61,7 +61,7 @@ resource "volterra_fast_acl" "example" {
 
     // One of the arguments from this list "all_services interface_services vip_services" must be set
 
-    interface_services = true
+    all_services = true
   }
 }
 

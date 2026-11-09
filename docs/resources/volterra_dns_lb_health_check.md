@@ -22,9 +22,20 @@ resource "volterra_dns_lb_health_check" "example" {
 
   // One of the arguments from this list "http_health_check https_health_check icmp_health_check tcp_health_check tcp_hex_health_check udp_health_check" must be set
 
-  icmp_health_check = true
-}
+  http_health_check {
+    health_check_port = "80"
 
+    health_check_secondary_port = "443"
+
+    receive = "HTTP/1"
+
+    send = "HEAD / HTTP/1.0"
+
+    // One of the arguments from this list "disable_virtual_host inherit_load_balancer_fqdn virtual_host" must be set
+
+    disable_virtual_host = true
+  }
+}
 ```
 
 Argument Reference

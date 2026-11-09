@@ -23,7 +23,11 @@ resource "volterra_dns_lb_pool" "example" {
 
   // One of the arguments from this list "a_pool aaaa_pool cname_pool mx_pool srv_pool" must be set
 
-  aaaa_pool {
+  a_pool {
+    // One of the arguments from this list "disable_health_check health_check" must be set
+
+    disable_health_check = true
+
     max_answers = "1"
 
     members {
@@ -41,7 +45,7 @@ resource "volterra_dns_lb_pool" "example" {
 
   // One of the arguments from this list "ttl use_rrset_ttl" must be set
 
-  ttl = "3600"
+  use_rrset_ttl = true
 }
 
 ```

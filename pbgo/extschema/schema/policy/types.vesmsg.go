@@ -70,6 +70,13 @@ func (m *ActiveEnhancedFirewallPoliciesType) GetDRefInfo() ([]db.DRefInfo, error
 
 	return m.GetEnhancedFirewallPoliciesDRefInfo()
 }
+func (m *ActiveEnhancedFirewallPoliciesType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetEnhancedFirewallPoliciesDRefInfoForOverlay(generateHash)
+}
 
 func (m *ActiveEnhancedFirewallPoliciesType) GetEnhancedFirewallPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetEnhancedFirewallPolicies()
@@ -84,6 +91,30 @@ func (m *ActiveEnhancedFirewallPoliciesType) GetEnhancedFirewallPoliciesDRefInfo
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("enhanced_firewall_policy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "enhanced_firewall_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "enhanced_firewall_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ActiveEnhancedFirewallPoliciesType) GetEnhancedFirewallPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetEnhancedFirewallPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveEnhancedFirewallPoliciesType.enhanced_firewall_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("enhanced_firewall_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "enhanced_firewall_policy.Object",
 			RefdTenant: vref.Tenant,
@@ -272,6 +303,13 @@ func (m *ActiveForwardProxyPoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetForwardProxyPoliciesDRefInfo()
 }
+func (m *ActiveForwardProxyPoliciesType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetForwardProxyPoliciesDRefInfoForOverlay(generateHash)
+}
 
 func (m *ActiveForwardProxyPoliciesType) GetForwardProxyPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetForwardProxyPolicies()
@@ -286,6 +324,30 @@ func (m *ActiveForwardProxyPoliciesType) GetForwardProxyPoliciesDRefInfo() ([]db
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("forward_proxy_policy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "forward_proxy_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forward_proxy_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ActiveForwardProxyPoliciesType) GetForwardProxyPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetForwardProxyPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveForwardProxyPoliciesType.forward_proxy_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("forward_proxy_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "forward_proxy_policy.Object",
 			RefdTenant: vref.Tenant,
@@ -474,6 +536,13 @@ func (m *ActiveServicePoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetServicePoliciesDRefInfo()
 }
+func (m *ActiveServicePoliciesType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetServicePoliciesDRefInfoForOverlay(generateHash)
+}
 
 func (m *ActiveServicePoliciesType) GetServicePoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetServicePolicies()
@@ -488,6 +557,30 @@ func (m *ActiveServicePoliciesType) GetServicePoliciesDRefInfo() ([]db.DRefInfo,
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("service_policy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "service_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ActiveServicePoliciesType) GetServicePoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetServicePolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveServicePoliciesType.service_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "service_policy.Object",
 			RefdTenant: vref.Tenant,
@@ -1812,6 +1905,13 @@ func (m *AsnMatcherType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAsnSetsDRefInfo()
 }
+func (m *AsnMatcherType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAsnSetsDRefInfoForOverlay(generateHash)
+}
 
 func (m *AsnMatcherType) GetAsnSetsDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetAsnSets()
@@ -1824,6 +1924,34 @@ func (m *AsnMatcherType) GetAsnSetsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("AsnMatcherType.asn_sets[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "bgp_asn_set.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "asn_sets",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *AsnMatcherType) GetAsnSetsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetAsnSets()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("AsnMatcherType.asn_sets[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "bgp_asn_set.Object",
 			RefdUID:    ref.Uid,
@@ -3901,6 +4029,13 @@ func (m *ClientMatcher) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetIpAsnChoiceDRefInfo()
 }
+func (m *ClientMatcher) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIpAsnChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ClientMatcher) GetIpAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -3928,6 +4063,43 @@ func (m *ClientMatcher) GetIpAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "asn_matcher." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ClientMatcher) GetIpAsnChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIpAsnChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetIpAsnChoice().(type) {
+	case *ClientMatcher_AnyIp:
+		return nil, nil
+	case *ClientMatcher_IpPrefixList:
+		return nil, nil
+	case *ClientMatcher_IpMatcher:
+		drInfos, err := m.GetIpMatcher().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ip_matcher." + dri.DRField
+		}
+		return drInfos, err
+	case *ClientMatcher_AsnList:
+		return nil, nil
+	case *ClientMatcher_AsnMatcher:
+		drInfos, err := m.GetAsnMatcher().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -6369,6 +6541,13 @@ func (m *IpMatcherType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPrefixSetsDRefInfo()
 }
+func (m *IpMatcherType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPrefixSetsDRefInfoForOverlay(generateHash)
+}
 
 func (m *IpMatcherType) GetPrefixSetsDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetPrefixSets()
@@ -6381,6 +6560,34 @@ func (m *IpMatcherType) GetPrefixSetsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("IpMatcherType.prefix_sets[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ip_prefix_set.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "prefix_sets",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *IpMatcherType) GetPrefixSetsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetPrefixSets()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("IpMatcherType.prefix_sets[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "ip_prefix_set.Object",
 			RefdUID:    ref.Uid,
@@ -8573,6 +8780,24 @@ func (m *OriginServerSubsetRule) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *OriginServerSubsetRule) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAsnChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAsnChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIpChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIpChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *OriginServerSubsetRule) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -8599,6 +8824,31 @@ func (m *OriginServerSubsetRule) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *OriginServerSubsetRule) GetAsnChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAsnChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAsnChoice().(type) {
+	case *OriginServerSubsetRule_AsnMatcher:
+		drInfos, err := m.GetAsnMatcher().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "asn_matcher." + dri.DRField
+		}
+		return drInfos, err
+	case *OriginServerSubsetRule_AnyAsn:
+		return nil, nil
+	case *OriginServerSubsetRule_AsnList:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *OriginServerSubsetRule) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetIpChoice() == nil {
@@ -8609,6 +8859,31 @@ func (m *OriginServerSubsetRule) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ip_matcher." + dri.DRField
+		}
+		return drInfos, err
+	case *OriginServerSubsetRule_AnyIp:
+		return nil, nil
+	case *OriginServerSubsetRule_IpPrefixList:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *OriginServerSubsetRule) GetIpChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIpChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetIpChoice().(type) {
+	case *OriginServerSubsetRule_IpMatcher:
+		drInfos, err := m.GetIpMatcher().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -11620,6 +11895,24 @@ func (m *SecurityPoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *SecurityPoliciesType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFirewallPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFirewallPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *SecurityPoliciesType) GetFirewallPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -11633,6 +11926,29 @@ func (m *SecurityPoliciesType) GetFirewallPolicyChoiceDRefInfo() ([]db.DRefInfo,
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SecurityPoliciesType) GetFirewallPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetFirewallPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetFirewallPolicyChoice().(type) {
+	case *SecurityPoliciesType_NoFirewallPolicy:
+		return nil, nil
+	case *SecurityPoliciesType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -11666,6 +11982,39 @@ func (m *SecurityPoliciesType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, e
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SecurityPoliciesType) GetForwardProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetForwardProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyChoice().(type) {
+	case *SecurityPoliciesType_NoForwardProxy:
+		return nil, nil
+	case *SecurityPoliciesType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	case *SecurityPoliciesType_ActiveServicePolicies:
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -11889,6 +12238,24 @@ func (m *SegmentPolicyType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *SegmentPolicyType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDstSegmentChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDstSegmentChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSrcSegmentChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSrcSegmentChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *SegmentPolicyType) GetDstSegmentChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -11915,6 +12282,31 @@ func (m *SegmentPolicyType) GetDstSegmentChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *SegmentPolicyType) GetDstSegmentChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDstSegmentChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDstSegmentChoice().(type) {
+	case *SegmentPolicyType_DstAny:
+		return nil, nil
+	case *SegmentPolicyType_IntraSegment:
+		return nil, nil
+	case *SegmentPolicyType_DstSegments:
+		drInfos, err := m.GetDstSegments().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDstSegments().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "dst_segments." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *SegmentPolicyType) GetSrcSegmentChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSrcSegmentChoice() == nil {
@@ -11927,6 +12319,29 @@ func (m *SegmentPolicyType) GetSrcSegmentChoiceDRefInfo() ([]db.DRefInfo, error)
 		drInfos, err := m.GetSrcSegments().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSrcSegments().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "src_segments." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SegmentPolicyType) GetSrcSegmentChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSrcSegmentChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSrcSegmentChoice().(type) {
+	case *SegmentPolicyType_SrcAny:
+		return nil, nil
+	case *SegmentPolicyType_SrcSegments:
+		drInfos, err := m.GetSrcSegments().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSrcSegments().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

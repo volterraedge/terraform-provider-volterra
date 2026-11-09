@@ -17,6 +17,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.user.setting.NtfnPreferencesMap"] = NtfnPreferencesMapValidator()
 	vr["ves.io.schema.user.setting.NtfnToUnset"] = NtfnToUnsetValidator()
 	vr["ves.io.schema.user.setting.PersonaPreferences"] = PersonaPreferencesValidator()
+	vr["ves.io.schema.user.setting.SetTimeZoneRequest"] = SetTimeZoneRequestValidator()
 	vr["ves.io.schema.user.setting.SetViewPreferenceRequest"] = SetViewPreferenceRequestValidator()
 	vr["ves.io.schema.user.setting.UpdateImageRequest"] = UpdateImageRequestValidator()
 	vr["ves.io.schema.user.setting.UserEmail"] = UserEmailValidator()

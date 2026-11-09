@@ -416,26 +416,10 @@ type ValidateCreateKubeConfigRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateCreateKubeConfigRequest) Vk8SNamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for vk8s_namespace")
-	}
-
-	return validatorFn, nil
-}
 func (v *ValidateCreateKubeConfigRequest) Vk8SClusterNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vk8s_cluster_name")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateCreateKubeConfigRequest) ExpirationDaysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for expiration_days")
 	}
 
 	return validatorFn, nil
@@ -478,12 +462,6 @@ func (v *ValidateCreateKubeConfigRequest) Validate(ctx context.Context, pm inter
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["vk8s_namespace"]; exists {
-		vOpts := append(opts, db.WithValidateField("vk8s_namespace"))
-		if err := fv(ctx, m.GetVk8SNamespace(), vOpts...); err != nil {
-			return err
-		}
-	}
 	return nil
 }
 
@@ -498,17 +476,6 @@ var DefaultCreateKubeConfigRequestValidator = func() *ValidateCreateKubeConfigRe
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhVk8SNamespace := v.Vk8SNamespaceValidationRuleHandler
-	rulesVk8SNamespace := map[string]string{
-		"ves.io.schema.rules.string.ves_object_name": "true",
-	}
-	vFn, err = vrhVk8SNamespace(rulesVk8SNamespace)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateKubeConfigRequest.vk8s_namespace: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["vk8s_namespace"] = vFn
-
 	vrhVk8SClusterName := v.Vk8SClusterNameValidationRuleHandler
 	rulesVk8SClusterName := map[string]string{
 		"ves.io.schema.rules.string.ves_object_name": "true",
@@ -519,18 +486,6 @@ var DefaultCreateKubeConfigRequestValidator = func() *ValidateCreateKubeConfigRe
 		panic(errMsg)
 	}
 	v.FldValidators["vk8s_cluster_name"] = vFn
-
-	vrhExpirationDays := v.ExpirationDaysValidationRuleHandler
-	rulesExpirationDays := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "1",
-		"ves.io.schema.rules.uint32.lte": "90",
-	}
-	vFn, err = vrhExpirationDays(rulesExpirationDays)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateKubeConfigRequest.expiration_days: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["expiration_days"] = vFn
 
 	return v
 }()
@@ -580,10 +535,10 @@ type ValidateCreateKubeConfigServiceCredentialsRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateCreateKubeConfigServiceCredentialsRequest) ExpirationDaysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+func (v *ValidateCreateKubeConfigServiceCredentialsRequest) Vk8SClusterNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for expiration_days")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vk8s_cluster_name")
 	}
 
 	return validatorFn, nil
@@ -638,9 +593,9 @@ func (v *ValidateCreateKubeConfigServiceCredentialsRequest) Validate(ctx context
 			}
 		}
 	}
-	if fv, exists := v.FldValidators["vk8s_kubeconfig"]; exists {
-		vOpts := append(opts, db.WithValidateField("vk8s_kubeconfig"))
-		if err := fv(ctx, m.GetVk8SKubeconfig(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["vk8s_cluster_name"]; exists {
+		vOpts := append(opts, db.WithValidateField("vk8s_cluster_name"))
+		if err := fv(ctx, m.GetVk8SClusterName(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -658,18 +613,16 @@ var DefaultCreateKubeConfigServiceCredentialsRequestValidator = func() *Validate
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhExpirationDays := v.ExpirationDaysValidationRuleHandler
-	rulesExpirationDays := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "1",
-		"ves.io.schema.rules.uint32.lte": "90",
+	vrhVk8SClusterName := v.Vk8SClusterNameValidationRuleHandler
+	rulesVk8SClusterName := map[string]string{
+		"ves.io.schema.rules.string.ves_object_name": "true",
 	}
-	vFn, err = vrhExpirationDays(rulesExpirationDays)
+	vFn, err = vrhVk8SClusterName(rulesVk8SClusterName)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateKubeConfigServiceCredentialsRequest.expiration_days: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateKubeConfigServiceCredentialsRequest.vk8s_cluster_name: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["expiration_days"] = vFn
-	v.FldValidators["vk8s_kubeconfig"] = Vk8SKubeconfigTypeValidator().Validate
+	v.FldValidators["vk8s_cluster_name"] = vFn
 	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
 
 	return v
@@ -697,6 +650,9 @@ func (m *CreateRequest) Redact(ctx context.Context) error {
 	}
 	if err := m.GetSpec().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateRequest.spec")
+	}
+	if err := m.GetApiCertificate().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateRequest.api_certificate")
 	}
 
 	return nil
@@ -764,6 +720,31 @@ func (v *ValidateCreateRequest) Validate(ctx context.Context, pm interface{}, op
 			return err
 		}
 	}
+
+	switch m.GetSelfCredentialChoice().(type) {
+	case *CreateRequest_ApiToken:
+		if fv, exists := v.FldValidators["self_credential_choice.api_token"]; exists {
+			val := m.GetSelfCredentialChoice().(*CreateRequest_ApiToken).ApiToken
+			vOpts := append(opts,
+				db.WithValidateField("self_credential_choice"),
+				db.WithValidateField("api_token"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateRequest_ApiCertificate:
+		if fv, exists := v.FldValidators["self_credential_choice.api_certificate"]; exists {
+			val := m.GetSelfCredentialChoice().(*CreateRequest_ApiCertificate).ApiCertificate
+			vOpts := append(opts,
+				db.WithValidateField("self_credential_choice"),
+				db.WithValidateField("api_certificate"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["spec"]; exists {
 		vOpts := append(opts, db.WithValidateField("spec"))
 		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
@@ -776,6 +757,7 @@ func (v *ValidateCreateRequest) Validate(ctx context.Context, pm interface{}, op
 // Well-known symbol for default validator implementation
 var DefaultCreateRequestValidator = func() *ValidateCreateRequest {
 	v := &ValidateCreateRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["self_credential_choice.api_certificate"] = ApiCertificateTypeValidator().Validate
 	v.FldValidators["spec"] = CustomCreateSpecTypeValidator().Validate
 
 	return v
@@ -911,20 +893,6 @@ func (m *CreateServiceCredentialsRequest) ToJSON() (string, error) {
 func (m *CreateServiceCredentialsRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
-func (m *CreateServiceCredentialsRequest) String() string {
-	if m == nil {
-		return ""
-	}
-	copy := m.DeepCopy()
-	copy.Redact(context.Background())
-	return copy.string()
-}
-
-func (m *CreateServiceCredentialsRequest) GoString() string {
-	copy := m.DeepCopy()
-	copy.Redact(context.Background())
-	return copy.goString()
-}
 
 // Redact squashes sensitive info in m (in-place)
 func (m *CreateServiceCredentialsRequest) Redact(ctx context.Context) error {
@@ -932,8 +900,6 @@ func (m *CreateServiceCredentialsRequest) Redact(ctx context.Context) error {
 	if m == nil {
 		return nil
 	}
-
-	m.Password = ""
 	if err := m.GetApiCertificate().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateServiceCredentialsRequest.api_certificate")
 	}
@@ -970,29 +936,6 @@ func (m *CreateServiceCredentialsRequest) Validate(ctx context.Context, opts ...
 
 type ValidateCreateServiceCredentialsRequest struct {
 	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateCreateServiceCredentialsRequest) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	var conv db.EnumConvFn
-	conv = func(v interface{}) int32 {
-		i := v.(APICredentialType)
-		return int32(i)
-	}
-	// APICredentialType_name is generated in .pb.go
-	validatorFn, err := db.NewEnumValidationRuleHandler(rules, APICredentialType_name, conv)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateCreateServiceCredentialsRequest) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for password")
-	}
-
-	return validatorFn, nil
 }
 
 func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -1033,12 +976,6 @@ func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, 
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
-		}
-	}
-	if fv, exists := v.FldValidators["password"]; exists {
-		vOpts := append(opts, db.WithValidateField("password"))
-		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
-			return err
 		}
 	}
 
@@ -1088,12 +1025,6 @@ func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, 
 			}
 		}
 	}
-	if fv, exists := v.FldValidators["type"]; exists {
-		vOpts := append(opts, db.WithValidateField("type"))
-		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["user_group_names"]; exists {
 		vOpts := append(opts, db.WithValidateField("user_group_names"))
 		for idx, item := range m.GetUserGroupNames() {
@@ -1103,53 +1034,12 @@ func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, 
 			}
 		}
 	}
-	if fv, exists := v.FldValidators["virtual_k8s_name"]; exists {
-		vOpts := append(opts, db.WithValidateField("virtual_k8s_name"))
-		if err := fv(ctx, m.GetVirtualK8SName(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["virtual_k8s_namespace"]; exists {
-		vOpts := append(opts, db.WithValidateField("virtual_k8s_namespace"))
-		if err := fv(ctx, m.GetVirtualK8SNamespace(), vOpts...); err != nil {
-			return err
-		}
-	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateServiceCredentialsRequestValidator = func() *ValidateCreateServiceCredentialsRequest {
 	v := &ValidateCreateServiceCredentialsRequest{FldValidators: map[string]db.ValidatorFunc{}}
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhType := v.TypeValidationRuleHandler
-	rulesType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhType(rulesType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateServiceCredentialsRequest.type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["type"] = vFn
-
-	vrhPassword := v.PasswordValidationRuleHandler
-	rulesPassword := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhPassword(rulesPassword)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateServiceCredentialsRequest.password: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["password"] = vFn
 	v.FldValidators["service_credential_choice.api_certificate"] = ApiCertificateTypeValidator().Validate
 	v.FldValidators["service_credential_choice.vk8s_kubeconfig"] = Vk8SKubeconfigTypeValidator().Validate
 	v.FldValidators["service_credential_choice.site_kubeconfig"] = SiteKubeconfigTypeValidator().Validate
@@ -1234,12 +1124,6 @@ func (v *ValidateCreateSiteGlobalKubeConfigRequest) Validate(ctx context.Context
 	if fv, exists := v.FldValidators["name"]; exists {
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["namespace"]; exists {
-		vOpts := append(opts, db.WithValidateField("namespace"))
-		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -1890,6 +1774,13 @@ func (m *GetResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
+func (m *GetResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	if m == nil {
 		return nil, nil
 	}

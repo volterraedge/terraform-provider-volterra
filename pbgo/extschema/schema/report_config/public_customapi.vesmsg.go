@@ -75,6 +75,19 @@ func (m *CustomAPIListResponseItem) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CustomAPIListResponseItem) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetGetSpecDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetGetSpecDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CustomAPIListResponseItem) GetGetSpecDRefInfo() ([]db.DRefInfo, error) {
@@ -84,6 +97,22 @@ func (m *CustomAPIListResponseItem) GetGetSpecDRefInfo() ([]db.DRefInfo, error) 
 	drInfos, err := m.GetGetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetGetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "get_spec." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CustomAPIListResponseItem) GetGetSpecDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetGetSpec() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetGetSpec().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetGetSpec().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -618,6 +647,29 @@ func (m *ListReportsHistoryResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ListReportsHistoryResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetItemsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetItemsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetReportsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetReportsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetReportsListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetReportsListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ListReportsHistoryResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
@@ -629,6 +681,26 @@ func (m *ListReportsHistoryResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetItems() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("items[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ListReportsHistoryResponse) GetItemsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetItems() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetItems() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetItems() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -659,6 +731,26 @@ func (m *ListReportsHistoryResponse) GetReportsDRefInfo() ([]db.DRefInfo, error)
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ListReportsHistoryResponse) GetReportsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReports() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetReports() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetReports() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("reports[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *ListReportsHistoryResponse) GetReportsListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetReportsList() == nil {
@@ -669,6 +761,26 @@ func (m *ListReportsHistoryResponse) GetReportsListDRefInfo() ([]db.DRefInfo, er
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetReportsList() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("reports_list[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ListReportsHistoryResponse) GetReportsListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReportsList() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetReportsList() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetReportsList() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -784,6 +896,13 @@ func (m *ListReportsHistoryResponseItem) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSpecDRefInfo()
 }
+func (m *ListReportsHistoryResponseItem) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSpecDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ListReportsHistoryResponseItem) GetSpecDRefInfo() ([]db.DRefInfo, error) {
@@ -793,6 +912,22 @@ func (m *ListReportsHistoryResponseItem) GetSpecDRefInfo() ([]db.DRefInfo, error
 	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "spec." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ListReportsHistoryResponseItem) GetSpecDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSpec() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetSpec().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

@@ -177,6 +177,29 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIrulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIrulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPmfTrafficPoliciesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPmfTrafficPoliciesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualServerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *CreateSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetIrules()
@@ -189,6 +212,34 @@ func (m *CreateSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("CreateSpecType.irules[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "irule.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "irules",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetIrulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIrules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.irules[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "irule.Object",
 			RefdUID:    ref.Uid,
@@ -244,6 +295,34 @@ func (m *CreateSpecType) GetPmfTrafficPoliciesDRefInfo() ([]db.DRefInfo, error) 
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetPmfTrafficPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetPmfTrafficPolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.pmf_traffic_policies[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "pmf_traffic_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "pmf_traffic_policies",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetPmfTrafficPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *CreateSpecType) GetPmfTrafficPoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -272,6 +351,22 @@ func (m *CreateSpecType) GetVirtualServerDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetVirtualServer().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "virtual_server." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetVirtualServerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVirtualServer() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetVirtualServer().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -644,6 +739,29 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIrulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIrulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPmfTrafficPoliciesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPmfTrafficPoliciesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualServerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetIrules()
@@ -656,6 +774,34 @@ func (m *GetSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.irules[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "irule.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "irules",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetIrulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIrules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.irules[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "irule.Object",
 			RefdUID:    ref.Uid,
@@ -711,6 +857,34 @@ func (m *GetSpecType) GetPmfTrafficPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetPmfTrafficPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetPmfTrafficPolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.pmf_traffic_policies[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "pmf_traffic_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "pmf_traffic_policies",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetPmfTrafficPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GetSpecType) GetPmfTrafficPoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -739,6 +913,22 @@ func (m *GetSpecType) GetVirtualServerDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetVirtualServer().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "virtual_server." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetVirtualServerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVirtualServer() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetVirtualServer().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1018,6 +1208,29 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIrulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIrulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPmfTrafficPoliciesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPmfTrafficPoliciesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualServerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetIrules()
@@ -1030,6 +1243,34 @@ func (m *GlobalSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.irules[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "irule.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "irules",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetIrulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIrules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.irules[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "irule.Object",
 			RefdUID:    ref.Uid,
@@ -1085,6 +1326,34 @@ func (m *GlobalSpecType) GetPmfTrafficPoliciesDRefInfo() ([]db.DRefInfo, error) 
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetPmfTrafficPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetPmfTrafficPolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.pmf_traffic_policies[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "pmf_traffic_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "pmf_traffic_policies",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetPmfTrafficPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetPmfTrafficPoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1113,6 +1382,22 @@ func (m *GlobalSpecType) GetVirtualServerDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetVirtualServer().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "virtual_server." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetVirtualServerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVirtualServer() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetVirtualServer().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1422,6 +1707,59 @@ func (m *HTTP3ProfileType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *HTTP3ProfileType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetClientSslProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClientSslProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHttp3ProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttp3ProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHttpClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHttpServerProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpServerProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetQuicProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetQuicProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServerSslProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServerSslProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTcpServerProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTcpServerProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUdpClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUdpClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUdpServerProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUdpServerProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *HTTP3ProfileType) GetClientSslProfileDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetClientSslProfile()
@@ -1434,6 +1772,34 @@ func (m *HTTP3ProfileType) GetClientSslProfileDRefInfo() ([]db.DRefInfo, error) 
 			return nil, fmt.Errorf("HTTP3ProfileType.client_ssl_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_client_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "client_ssl_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTP3ProfileType) GetClientSslProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetClientSslProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTP3ProfileType.client_ssl_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "ssl_client_profile.Object",
 			RefdUID:    ref.Uid,
@@ -1489,6 +1855,34 @@ func (m *HTTP3ProfileType) GetHttp3ProfileDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *HTTP3ProfileType) GetHttp3ProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetHttp3Profile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTP3ProfileType.http3_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http3_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "http3_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetHttp3ProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTP3ProfileType) GetHttp3ProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1520,6 +1914,34 @@ func (m *HTTP3ProfileType) GetHttpClientProfileDRefInfo() ([]db.DRefInfo, error)
 			return nil, fmt.Errorf("HTTP3ProfileType.http_client_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "http_client_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTP3ProfileType) GetHttpClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetHttpClientProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTP3ProfileType.http_client_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "http_profile.Object",
 			RefdUID:    ref.Uid,
@@ -1575,6 +1997,34 @@ func (m *HTTP3ProfileType) GetHttpServerProfileDRefInfo() ([]db.DRefInfo, error)
 	}
 	return drInfos, nil
 }
+func (m *HTTP3ProfileType) GetHttpServerProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetHttpServerProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTP3ProfileType.http_server_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "http_server_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetHttpServerProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTP3ProfileType) GetHttpServerProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1606,6 +2056,34 @@ func (m *HTTP3ProfileType) GetQuicProfileDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("HTTP3ProfileType.quic_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "quic_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "quic_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTP3ProfileType) GetQuicProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetQuicProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTP3ProfileType.quic_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "quic_profile.Object",
 			RefdUID:    ref.Uid,
@@ -1661,6 +2139,34 @@ func (m *HTTP3ProfileType) GetServerSslProfileDRefInfo() ([]db.DRefInfo, error) 
 	}
 	return drInfos, nil
 }
+func (m *HTTP3ProfileType) GetServerSslProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetServerSslProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTP3ProfileType.server_ssl_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_server_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "server_ssl_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetServerSslProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTP3ProfileType) GetServerSslProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1692,6 +2198,34 @@ func (m *HTTP3ProfileType) GetTcpServerProfileDRefInfo() ([]db.DRefInfo, error) 
 			return nil, fmt.Errorf("HTTP3ProfileType.tcp_server_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tcp_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "tcp_server_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTP3ProfileType) GetTcpServerProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTcpServerProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTP3ProfileType.tcp_server_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "tcp_profile.Object",
 			RefdUID:    ref.Uid,
@@ -1747,6 +2281,34 @@ func (m *HTTP3ProfileType) GetUdpClientProfileDRefInfo() ([]db.DRefInfo, error) 
 	}
 	return drInfos, nil
 }
+func (m *HTTP3ProfileType) GetUdpClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetUdpClientProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTP3ProfileType.udp_client_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "udp_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "udp_client_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetUdpClientProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTP3ProfileType) GetUdpClientProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1778,6 +2340,34 @@ func (m *HTTP3ProfileType) GetUdpServerProfileDRefInfo() ([]db.DRefInfo, error) 
 			return nil, fmt.Errorf("HTTP3ProfileType.udp_server_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "udp_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "udp_server_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTP3ProfileType) GetUdpServerProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetUdpServerProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTP3ProfileType.udp_server_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "udp_profile.Object",
 			RefdUID:    ref.Uid,
@@ -2530,6 +3120,74 @@ func (m *HTTPProfileType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *HTTPProfileType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetClientSslProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClientSslProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHttp2ClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttp2ClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHttp2ServerProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttp2ServerProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHttpClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHttpServerProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpServerProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOcspProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOcspProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServerSslProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServerSslProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetStreamProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetStreamProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTcpClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTcpClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTcpServerProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTcpServerProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWebsocketClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWebsocketClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWebsocketServerProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWebsocketServerProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *HTTPProfileType) GetClientSslProfileDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetClientSslProfile()
@@ -2542,6 +3200,34 @@ func (m *HTTPProfileType) GetClientSslProfileDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("HTTPProfileType.client_ssl_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_client_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "client_ssl_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTPProfileType) GetClientSslProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetClientSslProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTPProfileType.client_ssl_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "ssl_client_profile.Object",
 			RefdUID:    ref.Uid,
@@ -2597,6 +3283,34 @@ func (m *HTTPProfileType) GetHttp2ClientProfileDRefInfo() ([]db.DRefInfo, error)
 	}
 	return drInfos, nil
 }
+func (m *HTTPProfileType) GetHttp2ClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetHttp2ClientProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTPProfileType.http2_client_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http2_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "http2_client_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetHttp2ClientProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTPProfileType) GetHttp2ClientProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -2628,6 +3342,34 @@ func (m *HTTPProfileType) GetHttp2ServerProfileDRefInfo() ([]db.DRefInfo, error)
 			return nil, fmt.Errorf("HTTPProfileType.http2_server_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http2_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "http2_server_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTPProfileType) GetHttp2ServerProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetHttp2ServerProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTPProfileType.http2_server_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "http2_profile.Object",
 			RefdUID:    ref.Uid,
@@ -2683,6 +3425,34 @@ func (m *HTTPProfileType) GetHttpClientProfileDRefInfo() ([]db.DRefInfo, error) 
 	}
 	return drInfos, nil
 }
+func (m *HTTPProfileType) GetHttpClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetHttpClientProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTPProfileType.http_client_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "http_client_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetHttpClientProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTPProfileType) GetHttpClientProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -2714,6 +3484,34 @@ func (m *HTTPProfileType) GetHttpServerProfileDRefInfo() ([]db.DRefInfo, error) 
 			return nil, fmt.Errorf("HTTPProfileType.http_server_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "http_server_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTPProfileType) GetHttpServerProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetHttpServerProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTPProfileType.http_server_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "http_profile.Object",
 			RefdUID:    ref.Uid,
@@ -2769,6 +3567,34 @@ func (m *HTTPProfileType) GetOcspProfileDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *HTTPProfileType) GetOcspProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetOcspProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTPProfileType.ocsp_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ocsp_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ocsp_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetOcspProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTPProfileType) GetOcspProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -2800,6 +3626,34 @@ func (m *HTTPProfileType) GetServerSslProfileDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("HTTPProfileType.server_ssl_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_server_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "server_ssl_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTPProfileType) GetServerSslProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetServerSslProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTPProfileType.server_ssl_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "ssl_server_profile.Object",
 			RefdUID:    ref.Uid,
@@ -2855,6 +3709,34 @@ func (m *HTTPProfileType) GetStreamProfileDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *HTTPProfileType) GetStreamProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetStreamProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTPProfileType.stream_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "stream_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "stream_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetStreamProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTPProfileType) GetStreamProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -2886,6 +3768,34 @@ func (m *HTTPProfileType) GetTcpClientProfileDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("HTTPProfileType.tcp_client_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tcp_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "tcp_client_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTPProfileType) GetTcpClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTcpClientProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTPProfileType.tcp_client_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "tcp_profile.Object",
 			RefdUID:    ref.Uid,
@@ -2941,6 +3851,34 @@ func (m *HTTPProfileType) GetTcpServerProfileDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *HTTPProfileType) GetTcpServerProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTcpServerProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTPProfileType.tcp_server_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tcp_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "tcp_server_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetTcpServerProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTPProfileType) GetTcpServerProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -2984,6 +3922,34 @@ func (m *HTTPProfileType) GetWebsocketClientProfileDRefInfo() ([]db.DRefInfo, er
 	}
 	return drInfos, nil
 }
+func (m *HTTPProfileType) GetWebsocketClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetWebsocketClientProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTPProfileType.websocket_client_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "websocket_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "websocket_client_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetWebsocketClientProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *HTTPProfileType) GetWebsocketClientProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -3015,6 +3981,34 @@ func (m *HTTPProfileType) GetWebsocketServerProfileDRefInfo() ([]db.DRefInfo, er
 			return nil, fmt.Errorf("HTTPProfileType.websocket_server_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "websocket_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "websocket_server_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTPProfileType) GetWebsocketServerProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetWebsocketServerProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("HTTPProfileType.websocket_server_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "websocket_profile.Object",
 			RefdUID:    ref.Uid,
@@ -3914,6 +4908,29 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIrulesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIrulesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPmfTrafficPoliciesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPmfTrafficPoliciesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualServerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ReplaceSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetIrules()
@@ -3926,6 +4943,34 @@ func (m *ReplaceSpecType) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("ReplaceSpecType.irules[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "irule.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "irules",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetIrulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIrules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.irules[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "irule.Object",
 			RefdUID:    ref.Uid,
@@ -3981,6 +5026,34 @@ func (m *ReplaceSpecType) GetPmfTrafficPoliciesDRefInfo() ([]db.DRefInfo, error)
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetPmfTrafficPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetPmfTrafficPolicies()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.pmf_traffic_policies[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "pmf_traffic_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "pmf_traffic_policies",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetPmfTrafficPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *ReplaceSpecType) GetPmfTrafficPoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -4009,6 +5082,22 @@ func (m *ReplaceSpecType) GetVirtualServerDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetVirtualServer().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "virtual_server." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetVirtualServerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVirtualServer() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetVirtualServer().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -4298,6 +5387,39 @@ func (m *TCPProfileType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *TCPProfileType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetClientSslProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClientSslProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOcspProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOcspProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServerSslProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServerSslProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTcpClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTcpClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTcpServerProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTcpServerProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *TCPProfileType) GetClientSslProfileDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetClientSslProfile()
@@ -4310,6 +5432,34 @@ func (m *TCPProfileType) GetClientSslProfileDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("TCPProfileType.client_ssl_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_client_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "client_ssl_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *TCPProfileType) GetClientSslProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetClientSslProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("TCPProfileType.client_ssl_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "ssl_client_profile.Object",
 			RefdUID:    ref.Uid,
@@ -4365,6 +5515,34 @@ func (m *TCPProfileType) GetOcspProfileDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *TCPProfileType) GetOcspProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetOcspProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("TCPProfileType.ocsp_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ocsp_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ocsp_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetOcspProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *TCPProfileType) GetOcspProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -4396,6 +5574,34 @@ func (m *TCPProfileType) GetServerSslProfileDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("TCPProfileType.server_ssl_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_server_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "server_ssl_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *TCPProfileType) GetServerSslProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetServerSslProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("TCPProfileType.server_ssl_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "ssl_server_profile.Object",
 			RefdUID:    ref.Uid,
@@ -4451,6 +5657,34 @@ func (m *TCPProfileType) GetTcpClientProfileDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *TCPProfileType) GetTcpClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTcpClientProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("TCPProfileType.tcp_client_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tcp_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "tcp_client_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetTcpClientProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *TCPProfileType) GetTcpClientProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -4482,6 +5716,34 @@ func (m *TCPProfileType) GetTcpServerProfileDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("TCPProfileType.tcp_server_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tcp_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "tcp_server_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *TCPProfileType) GetTcpServerProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTcpServerProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("TCPProfileType.tcp_server_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "tcp_profile.Object",
 			RefdUID:    ref.Uid,
@@ -4936,6 +6198,34 @@ func (m *UDPProfileType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *UDPProfileType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetClientSslProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClientSslProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServerSslProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServerSslProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUdpClientProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUdpClientProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUdpServerProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUdpServerProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *UDPProfileType) GetClientSslProfileDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetClientSslProfile()
@@ -4948,6 +6238,34 @@ func (m *UDPProfileType) GetClientSslProfileDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("UDPProfileType.client_ssl_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_client_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "client_ssl_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *UDPProfileType) GetClientSslProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetClientSslProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("UDPProfileType.client_ssl_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "ssl_client_profile.Object",
 			RefdUID:    ref.Uid,
@@ -5003,6 +6321,34 @@ func (m *UDPProfileType) GetServerSslProfileDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *UDPProfileType) GetServerSslProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetServerSslProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("UDPProfileType.server_ssl_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ssl_server_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "server_ssl_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetServerSslProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *UDPProfileType) GetServerSslProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -5046,6 +6392,34 @@ func (m *UDPProfileType) GetUdpClientProfileDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *UDPProfileType) GetUdpClientProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetUdpClientProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("UDPProfileType.udp_client_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "udp_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "udp_client_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetUdpClientProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *UDPProfileType) GetUdpClientProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -5077,6 +6451,34 @@ func (m *UDPProfileType) GetUdpServerProfileDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("UDPProfileType.udp_server_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "udp_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "udp_server_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *UDPProfileType) GetUdpServerProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetUdpServerProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("UDPProfileType.udp_server_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "udp_profile.Object",
 			RefdUID:    ref.Uid,
@@ -5504,6 +6906,69 @@ func (m *VirtualServerType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *VirtualServerType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAccessProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAccessProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetClonePoolClientDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClonePoolClientDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetClonePoolServerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetClonePoolServerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDefaultPersistenceProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultPersistenceProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDefaultPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDefaultPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetFallbackPersistenceProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFallbackPersistenceProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetFixProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFixProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLastHopPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLastHopPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRequestLoggingProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRequestLoggingProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetStatisticsProfileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetStatisticsProfileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualServerTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServerTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *VirtualServerType) GetAccessProfileDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetAccessProfile()
@@ -5516,6 +6981,34 @@ func (m *VirtualServerType) GetAccessProfileDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("VirtualServerType.access_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "access_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "access_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *VirtualServerType) GetAccessProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetAccessProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VirtualServerType.access_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "access_profile.Object",
 			RefdUID:    ref.Uid,
@@ -5571,6 +7064,34 @@ func (m *VirtualServerType) GetClonePoolClientDRefInfo() ([]db.DRefInfo, error) 
 	}
 	return drInfos, nil
 }
+func (m *VirtualServerType) GetClonePoolClientDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetClonePoolClient()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VirtualServerType.clone_pool_client[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cluster.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "clone_pool_client",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetClonePoolClientDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *VirtualServerType) GetClonePoolClientDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -5602,6 +7123,34 @@ func (m *VirtualServerType) GetClonePoolServerDRefInfo() ([]db.DRefInfo, error) 
 			return nil, fmt.Errorf("VirtualServerType.clone_pool_server[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cluster.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "clone_pool_server",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *VirtualServerType) GetClonePoolServerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetClonePoolServer()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VirtualServerType.clone_pool_server[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "cluster.Object",
 			RefdUID:    ref.Uid,
@@ -5657,6 +7206,34 @@ func (m *VirtualServerType) GetDefaultPersistenceProfileDRefInfo() ([]db.DRefInf
 	}
 	return drInfos, nil
 }
+func (m *VirtualServerType) GetDefaultPersistenceProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetDefaultPersistenceProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VirtualServerType.default_persistence_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "persistence_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "default_persistence_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetDefaultPersistenceProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *VirtualServerType) GetDefaultPersistenceProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -5688,6 +7265,34 @@ func (m *VirtualServerType) GetDefaultPoolDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("VirtualServerType.default_pool[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cluster.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "default_pool",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *VirtualServerType) GetDefaultPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetDefaultPool()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VirtualServerType.default_pool[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "cluster.Object",
 			RefdUID:    ref.Uid,
@@ -5743,6 +7348,34 @@ func (m *VirtualServerType) GetFallbackPersistenceProfileDRefInfo() ([]db.DRefIn
 	}
 	return drInfos, nil
 }
+func (m *VirtualServerType) GetFallbackPersistenceProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetFallbackPersistenceProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VirtualServerType.fallback_persistence_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "persistence_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "fallback_persistence_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetFallbackPersistenceProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *VirtualServerType) GetFallbackPersistenceProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -5774,6 +7407,34 @@ func (m *VirtualServerType) GetFixProfileDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("VirtualServerType.fix_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "fix_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "fix_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *VirtualServerType) GetFixProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetFixProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VirtualServerType.fix_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "fix_profile.Object",
 			RefdUID:    ref.Uid,
@@ -5829,6 +7490,34 @@ func (m *VirtualServerType) GetLastHopPoolDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *VirtualServerType) GetLastHopPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetLastHopPool()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VirtualServerType.last_hop_pool[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cluster.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "last_hop_pool",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetLastHopPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *VirtualServerType) GetLastHopPoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -5872,6 +7561,34 @@ func (m *VirtualServerType) GetRequestLoggingProfileDRefInfo() ([]db.DRefInfo, e
 	}
 	return drInfos, nil
 }
+func (m *VirtualServerType) GetRequestLoggingProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetRequestLoggingProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VirtualServerType.request_logging_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "request_logging_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "request_logging_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetRequestLoggingProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *VirtualServerType) GetRequestLoggingProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -5903,6 +7620,34 @@ func (m *VirtualServerType) GetStatisticsProfileDRefInfo() ([]db.DRefInfo, error
 			return nil, fmt.Errorf("VirtualServerType.statistics_profile[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "statistics_profile.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "statistics_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *VirtualServerType) GetStatisticsProfileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetStatisticsProfile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VirtualServerType.statistics_profile[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "statistics_profile.Object",
 			RefdUID:    ref.Uid,
@@ -5985,6 +7730,67 @@ func (m *VirtualServerType) GetVirtualServerTypeDRefInfo() ([]db.DRefInfo, error
 		drInfos, err := m.GetHttp3().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttp3().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http3." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *VirtualServerType) GetVirtualServerTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVirtualServerType() == nil {
+		return nil, nil
+	}
+	switch m.GetVirtualServerType().(type) {
+	case *VirtualServerType_Http:
+		drInfos, err := m.GetHttp().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttp().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http." + dri.DRField
+		}
+		return drInfos, err
+	case *VirtualServerType_Https:
+		drInfos, err := m.GetHttps().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
+		}
+		return drInfos, err
+	case *VirtualServerType_Tcp:
+		drInfos, err := m.GetTcp().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTcp().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tcp." + dri.DRField
+		}
+		return drInfos, err
+	case *VirtualServerType_Udp:
+		drInfos, err := m.GetUdp().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUdp().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "udp." + dri.DRField
+		}
+		return drInfos, err
+	case *VirtualServerType_Http3:
+		drInfos, err := m.GetHttp3().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttp3().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

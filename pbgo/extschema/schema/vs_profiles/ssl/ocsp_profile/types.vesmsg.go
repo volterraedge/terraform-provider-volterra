@@ -71,46 +71,6 @@ func (v *ValidateCreateSpecType) MaxAgeValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-func (v *ValidateCreateSpecType) UserSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for user_spec")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for user_spec")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated user_spec")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items user_spec")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
 
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
@@ -149,12 +109,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["user_spec"]; exists {
-		vOpts := append(opts, db.WithValidateField("user_spec"))
-		if err := fv(ctx, m.GetUserSpec(), vOpts...); err != nil {
-			return err
-		}
-	}
 	return nil
 }
 
@@ -180,17 +134,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["max_age"] = vFn
-
-	vrhUserSpec := v.UserSpecValidationRuleHandler
-	rulesUserSpec := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "50",
-	}
-	vFn, err = vrhUserSpec(rulesUserSpec)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.user_spec: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["user_spec"] = vFn
 
 	return v
 }()
@@ -248,46 +191,6 @@ func (v *ValidateGetSpecType) MaxAgeValidationRuleHandler(rules map[string]strin
 
 	return validatorFn, nil
 }
-func (v *ValidateGetSpecType) UserSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for user_spec")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for user_spec")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated user_spec")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items user_spec")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
 
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
@@ -326,12 +229,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["user_spec"]; exists {
-		vOpts := append(opts, db.WithValidateField("user_spec"))
-		if err := fv(ctx, m.GetUserSpec(), vOpts...); err != nil {
-			return err
-		}
-	}
 	return nil
 }
 
@@ -357,17 +254,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["max_age"] = vFn
-
-	vrhUserSpec := v.UserSpecValidationRuleHandler
-	rulesUserSpec := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "50",
-	}
-	vFn, err = vrhUserSpec(rulesUserSpec)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.user_spec: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["user_spec"] = vFn
 
 	return v
 }()
@@ -425,46 +311,6 @@ func (v *ValidateGlobalSpecType) MaxAgeValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-func (v *ValidateGlobalSpecType) UserSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for user_spec")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for user_spec")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated user_spec")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items user_spec")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
 
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
@@ -509,12 +355,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["user_spec"]; exists {
-		vOpts := append(opts, db.WithValidateField("user_spec"))
-		if err := fv(ctx, m.GetUserSpec(), vOpts...); err != nil {
-			return err
-		}
-	}
 	return nil
 }
 
@@ -540,17 +380,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["max_age"] = vFn
-
-	vrhUserSpec := v.UserSpecValidationRuleHandler
-	rulesUserSpec := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "50",
-	}
-	vFn, err = vrhUserSpec(rulesUserSpec)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.user_spec: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["user_spec"] = vFn
 
 	return v
 }()
@@ -608,46 +437,6 @@ func (v *ValidateReplaceSpecType) MaxAgeValidationRuleHandler(rules map[string]s
 
 	return validatorFn, nil
 }
-func (v *ValidateReplaceSpecType) UserSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for user_spec")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for user_spec")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated user_spec")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items user_spec")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
 
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
@@ -686,12 +475,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["user_spec"]; exists {
-		vOpts := append(opts, db.WithValidateField("user_spec"))
-		if err := fv(ctx, m.GetUserSpec(), vOpts...); err != nil {
-			return err
-		}
-	}
 	return nil
 }
 
@@ -718,17 +501,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["max_age"] = vFn
 
-	vrhUserSpec := v.UserSpecValidationRuleHandler
-	rulesUserSpec := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "50",
-	}
-	vFn, err = vrhUserSpec(rulesUserSpec)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.user_spec: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["user_spec"] = vFn
-
 	return v
 }()
 
@@ -744,7 +516,6 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.MaxAge = f.GetMaxAge()
 	m.Nonce = f.GetNonce()
 	m.SubPath = f.GetSubPath()
-	m.UserSpec = f.GetUserSpec()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -766,7 +537,6 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.MaxAge = m1.MaxAge
 	f.Nonce = m1.Nonce
 	f.SubPath = m1.SubPath
-	f.UserSpec = m1.UserSpec
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -785,7 +555,6 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.MaxAge = f.GetMaxAge()
 	m.Nonce = f.GetNonce()
 	m.SubPath = f.GetSubPath()
-	m.UserSpec = f.GetUserSpec()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -807,7 +576,6 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.MaxAge = m1.MaxAge
 	f.Nonce = m1.Nonce
 	f.SubPath = m1.SubPath
-	f.UserSpec = m1.UserSpec
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -826,7 +594,6 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.MaxAge = f.GetMaxAge()
 	m.Nonce = f.GetNonce()
 	m.SubPath = f.GetSubPath()
-	m.UserSpec = f.GetUserSpec()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -848,7 +615,6 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.MaxAge = m1.MaxAge
 	f.Nonce = m1.Nonce
 	f.SubPath = m1.SubPath
-	f.UserSpec = m1.UserSpec
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

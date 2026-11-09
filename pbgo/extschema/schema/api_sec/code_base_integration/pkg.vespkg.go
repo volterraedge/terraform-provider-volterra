@@ -16,8 +16,16 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.code_base_integration.SpecType"] = SpecTypeValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.Object"] = ObjectValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.StatusObject"] = StatusObjectValidator()
+	vr["ves.io.schema.api_sec.code_base_integration.ScanStatusCancelled"] = ScanStatusCancelledValidator()
+	vr["ves.io.schema.api_sec.code_base_integration.ScanStatusDone"] = ScanStatusDoneValidator()
+	vr["ves.io.schema.api_sec.code_base_integration.ScanStatusFailed"] = ScanStatusFailedValidator()
+	vr["ves.io.schema.api_sec.code_base_integration.ScanStatusInProgress"] = ScanStatusInProgressValidator()
+	vr["ves.io.schema.api_sec.code_base_integration.ScanStatusPending"] = ScanStatusPendingValidator()
+	vr["ves.io.schema.api_sec.code_base_integration.ScanStatusTimedOut"] = ScanStatusTimedOutValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.UpdateCodeBaseIntegrationReq"] = UpdateCodeBaseIntegrationReqValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.UpdateCodeBaseIntegrationResp"] = UpdateCodeBaseIntegrationRespValidator()
+	vr["ves.io.schema.api_sec.code_base_integration.UpdateScanStatusReq"] = UpdateScanStatusReqValidator()
+	vr["ves.io.schema.api_sec.code_base_integration.UpdateScanStatusResp"] = UpdateScanStatusRespValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.DeleteRequest"] = DeleteRequestValidator()
@@ -32,6 +40,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.code_base_integration.BitBucketCloudIntegration"] = BitBucketCloudIntegrationValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.BitBucketServerIntegration"] = BitBucketServerIntegrationValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.CodeBaseIntegration"] = CodeBaseIntegrationValidator()
+	vr["ves.io.schema.api_sec.code_base_integration.CodeScanInfo"] = CodeScanInfoValidator()
+	vr["ves.io.schema.api_sec.code_base_integration.CodeScanningStatus"] = CodeScanningStatusValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.api_sec.code_base_integration.GithubEnterpriseIntegration"] = GithubEnterpriseIntegrationValidator()
@@ -86,6 +96,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.code_base_integration.gitlab_enterprise.access_token.wingman_secret_info",
 	}
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_sec.code_base_integration.API.Create"] = "ves.io.schema.api_sec.code_base_integration.CreateRequest"
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.code_base_integration.API.Get"] = []string{
+		"status.#.conditions.#",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.code_base_integration.API.List"] = []string{
+		"items.#.status_set.#.conditions.#",
+	}
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.api_sec.code_base_integration.API.Replace"] = []string{
 		"spec.code_base_integration.azure_repos.access_token.blindfold_secret_info_internal",
 		"spec.code_base_integration.azure_repos.access_token.secret_encoding_type",

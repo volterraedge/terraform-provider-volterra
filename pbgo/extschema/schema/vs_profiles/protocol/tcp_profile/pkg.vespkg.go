@@ -43,6 +43,8 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
+	mdr.RPCConfidentialRequestRegistry["ves.io.schema.vs_profiles.protocol.tcp_profile.API.Create"] = "ves.io.schema.vs_profiles.protocol.tcp_profile.CreateRequest"
+	mdr.RPCConfidentialRequestRegistry["ves.io.schema.vs_profiles.protocol.tcp_profile.API.Replace"] = "ves.io.schema.vs_profiles.protocol.tcp_profile.ReplaceRequest"
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

@@ -322,10 +322,21 @@ func resourceVolterraVirtualHost() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -481,10 +492,21 @@ func resourceVolterraVirtualHost() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -1373,6 +1395,18 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				},
 			},
 
+			"disable_http10": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"enable_http10": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"http_protocol_options": {
 
 				Type:     schema.TypeList,
@@ -1641,10 +1675,21 @@ func resourceVolterraVirtualHost() *schema.Resource {
 												},
 
 												"url": {
+													Sensitive: true,
 													Type:     schema.TypeString,
 													Required: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -1831,10 +1876,21 @@ func resourceVolterraVirtualHost() *schema.Resource {
 												},
 
 												"url": {
+													Sensitive: true,
 													Type:     schema.TypeString,
 													Required: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -2135,10 +2191,21 @@ func resourceVolterraVirtualHost() *schema.Resource {
 												},
 
 												"url": {
+													Sensitive: true,
 													Type:     schema.TypeString,
 													Required: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -2325,10 +2392,21 @@ func resourceVolterraVirtualHost() *schema.Resource {
 												},
 
 												"url": {
+													Sensitive: true,
 													Type:     schema.TypeString,
 													Required: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -3093,11 +3171,23 @@ func resourceVolterraVirtualHost() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:       schema.TypeString,
 																			Required:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -3866,6 +3956,15 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 													}
 
+													if v, ok := primKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														primKey.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := primKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -4054,6 +4153,15 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 															}
 														}
+
+													}
+
+													if v, ok := secKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														secKey.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -5170,6 +5278,34 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//http10_choice
+
+	http10ChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_http10"); ok && !http10ChoiceTypeFound {
+
+		http10ChoiceTypeFound = true
+
+		if v.(bool) {
+			http10ChoiceInt := &ves_io_schema_virtual_host.CreateSpecType_DisableHttp10{}
+			http10ChoiceInt.DisableHttp10 = &ves_io_schema.Empty{}
+			createSpec.Http10Choice = http10ChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_http10"); ok && !http10ChoiceTypeFound {
+
+		http10ChoiceTypeFound = true
+
+		if v.(bool) {
+			http10ChoiceInt := &ves_io_schema_virtual_host.CreateSpecType_EnableHttp10{}
+			http10ChoiceInt.EnableHttp10 = &ves_io_schema.Empty{}
+			createSpec.Http10Choice = http10ChoiceInt
+		}
+
+	}
+
 	//http_protocol_options
 	if v, ok := d.GetOk("http_protocol_options"); ok && !isIntfNil(v) {
 
@@ -5585,6 +5721,15 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 							}
 
+							if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -5820,6 +5965,15 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 									}
 								}
+
+							}
+
+							if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -6301,6 +6455,15 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 							}
 
+							if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -6536,6 +6699,15 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 									}
 								}
+
+							}
+
+							if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -7460,6 +7632,15 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 													}
 
+													if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -8343,6 +8524,15 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 													}
 
+													if v, ok := primKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														primKey.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := primKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -8531,6 +8721,15 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 															}
 														}
+
+													}
+
+													if v, ok := secKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														secKey.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -9626,6 +9825,32 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	http10ChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_http10"); ok && !http10ChoiceTypeFound {
+
+		http10ChoiceTypeFound = true
+
+		if v.(bool) {
+			http10ChoiceInt := &ves_io_schema_virtual_host.ReplaceSpecType_DisableHttp10{}
+			http10ChoiceInt.DisableHttp10 = &ves_io_schema.Empty{}
+			updateSpec.Http10Choice = http10ChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_http10"); ok && !http10ChoiceTypeFound {
+
+		http10ChoiceTypeFound = true
+
+		if v.(bool) {
+			http10ChoiceInt := &ves_io_schema_virtual_host.ReplaceSpecType_EnableHttp10{}
+			http10ChoiceInt.EnableHttp10 = &ves_io_schema.Empty{}
+			updateSpec.Http10Choice = http10ChoiceInt
+		}
+
+	}
+
 	if v, ok := d.GetOk("http_protocol_options"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -10029,6 +10254,15 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 							}
 
+							if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -10262,6 +10496,15 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 									}
 								}
+
+							}
+
+							if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -10741,6 +10984,15 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 							}
 
+							if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -10974,6 +11226,15 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 									}
 								}
+
+							}
+
+							if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 							}
 
@@ -11883,6 +12144,15 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 															}
 														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
 
 													}
 

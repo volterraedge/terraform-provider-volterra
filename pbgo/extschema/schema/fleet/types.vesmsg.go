@@ -85,6 +85,13 @@ func (m *BGPConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPeersDRefInfo()
 }
+func (m *BGPConfiguration) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPeersDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *BGPConfiguration) GetPeersDRefInfo() ([]db.DRefInfo, error) {
@@ -96,6 +103,26 @@ func (m *BGPConfiguration) GetPeersDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPeers() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *BGPConfiguration) GetPeersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPeers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetPeers() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPeers() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -727,8 +754,106 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInsideVirtualNetworkDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInsideVirtualNetworkDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInterfaceChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInterfaceChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkConnectorsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkConnectorsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkFirewallDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkFirewallDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideVirtualNetworkDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideVirtualNetworkDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetStorageInterfaceChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetStorageInterfaceChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetStorageStaticRoutesChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetStorageStaticRoutesChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUsbPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUsbPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *CreateSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDcClusterGroupChoice().(type) {
+	case *CreateSpecType_NoDcClusterGroup:
+		return nil, nil
+	case *CreateSpecType_DcClusterGroup:
+		vref := m.GetDcClusterGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *CreateSpecType_DcClusterGroupInside:
+		vref := m.GetDcClusterGroupInside()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_inside",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *CreateSpecType) GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *CreateSpecType_NoDcClusterGroup:
 		return nil, nil
@@ -847,6 +972,34 @@ func (m *CreateSpecType) GetInsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetInsideVirtualNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetInsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.inside_virtual_network[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "inside_virtual_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetInsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *CreateSpecType) GetInsideVirtualNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -900,7 +1053,64 @@ func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetInterfaceChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInterfaceChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetInterfaceChoice().(type) {
+	case *CreateSpecType_InterfaceList:
+		drInfos, err := m.GetInterfaceList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "interface_list." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_DeviceList:
+		drInfos, err := m.GetDeviceList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDeviceList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "device_list." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_DefaultConfig:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetLogsReceiverChoice().(type) {
+	case *CreateSpecType_LogsStreamingDisabled:
+		return nil, nil
+	case *CreateSpecType_LogReceiver:
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		dri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *CreateSpecType_LogsStreamingDisabled:
 		return nil, nil
@@ -981,6 +1191,34 @@ func (m *CreateSpecType) GetNetworkConnectorsDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetNetworkConnectorsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNetworkConnectors()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.network_connectors[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_connector.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "network_connectors",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetNetworkConnectorsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *CreateSpecType) GetNetworkConnectorsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1012,6 +1250,34 @@ func (m *CreateSpecType) GetNetworkFirewallDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("CreateSpecType.network_firewall[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_firewall.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "network_firewall",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetNetworkFirewallDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNetworkFirewall()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.network_firewall[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_firewall.Object",
 			RefdUID:    ref.Uid,
@@ -1067,6 +1333,34 @@ func (m *CreateSpecType) GetOutsideVirtualNetworkDRefInfo() ([]db.DRefInfo, erro
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetOutsideVirtualNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetOutsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.outside_virtual_network[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "outside_virtual_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetOutsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *CreateSpecType) GetOutsideVirtualNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1110,6 +1404,29 @@ func (m *CreateSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetStorageInterfaceChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetStorageInterfaceChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetStorageInterfaceChoice().(type) {
+	case *CreateSpecType_NoStorageInterfaces:
+		return nil, nil
+	case *CreateSpecType_StorageInterfaceList:
+		drInfos, err := m.GetStorageInterfaceList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageInterfaceList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_interface_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStorageStaticRoutesChoice() == nil {
@@ -1133,7 +1450,56 @@ func (m *CreateSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, 
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetStorageStaticRoutesChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetStorageStaticRoutesChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetStorageStaticRoutesChoice().(type) {
+	case *CreateSpecType_NoStorageStaticRoutes:
+		return nil, nil
+	case *CreateSpecType_StorageStaticRoutes:
+		drInfos, err := m.GetStorageStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageStaticRoutes().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *CreateSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUsbPolicyChoice().(type) {
+	case *CreateSpecType_DenyAllUsb:
+		return nil, nil
+	case *CreateSpecType_AllowAllUsb:
+		return nil, nil
+	case *CreateSpecType_UsbPolicy:
+		vref := m.GetUsbPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("usb_policy.Object")
+		dri := db.DRefInfo{
+			RefdType:   "usb_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "usb_policy",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *CreateSpecType) GetUsbPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetUsbPolicyChoice().(type) {
 	case *CreateSpecType_DenyAllUsb:
 		return nil, nil
@@ -2605,6 +2971,13 @@ func (m *DeviceInstanceType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDeviceInstanceDRefInfo()
 }
+func (m *DeviceInstanceType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDeviceInstanceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *DeviceInstanceType) GetDeviceInstanceDRefInfo() ([]db.DRefInfo, error) {
@@ -2616,6 +2989,27 @@ func (m *DeviceInstanceType) GetDeviceInstanceDRefInfo() ([]db.DRefInfo, error) 
 		drInfos, err := m.GetNetworkDevice().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNetworkDevice().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "network_device." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DeviceInstanceType) GetDeviceInstanceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDeviceInstance() == nil {
+		return nil, nil
+	}
+	switch m.GetDeviceInstance().(type) {
+	case *DeviceInstanceType_NetworkDevice:
+		drInfos, err := m.GetNetworkDevice().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNetworkDevice().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4462,6 +4856,13 @@ func (m *FleetDeviceListType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDevicesDRefInfo()
 }
+func (m *FleetDeviceListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDevicesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *FleetDeviceListType) GetDevicesDRefInfo() ([]db.DRefInfo, error) {
@@ -4473,6 +4874,26 @@ func (m *FleetDeviceListType) GetDevicesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDevices() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("devices[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *FleetDeviceListType) GetDevicesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDevices() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDevices() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDevices() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -4630,6 +5051,13 @@ func (m *FleetInterfaceListType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetInterfacesDRefInfo()
 }
+func (m *FleetInterfaceListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInterfacesDRefInfoForOverlay(generateHash)
+}
 
 func (m *FleetInterfaceListType) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetInterfaces()
@@ -4644,6 +5072,30 @@ func (m *FleetInterfaceListType) GetInterfacesDRefInfo() ([]db.DRefInfo, error) 
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("network_interface.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "interfaces",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *FleetInterfaceListType) GetInterfacesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetInterfaces()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("FleetInterfaceListType.interfaces[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_interface.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_interface.Object",
 			RefdTenant: vref.Tenant,
@@ -5797,6 +6249,13 @@ func (m *FleetStorageStaticRoutesListType) GetDRefInfo() ([]db.DRefInfo, error) 
 
 	return m.GetStorageRoutesDRefInfo()
 }
+func (m *FleetStorageStaticRoutesListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetStorageRoutesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *FleetStorageStaticRoutesListType) GetStorageRoutesDRefInfo() ([]db.DRefInfo, error) {
@@ -5808,6 +6267,26 @@ func (m *FleetStorageStaticRoutesListType) GetStorageRoutesDRefInfo() ([]db.DRef
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStorageRoutes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("storage_routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *FleetStorageStaticRoutesListType) GetStorageRoutesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetStorageRoutes() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetStorageRoutes() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageRoutes() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -6099,8 +6578,106 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInsideVirtualNetworkDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInsideVirtualNetworkDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInterfaceChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInterfaceChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkConnectorsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkConnectorsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkFirewallDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkFirewallDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideVirtualNetworkDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideVirtualNetworkDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetStorageInterfaceChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetStorageInterfaceChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetStorageStaticRoutesChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetStorageStaticRoutesChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUsbPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUsbPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDcClusterGroupChoice().(type) {
+	case *GetSpecType_NoDcClusterGroup:
+		return nil, nil
+	case *GetSpecType_DcClusterGroup:
+		vref := m.GetDcClusterGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *GetSpecType_DcClusterGroupInside:
+		vref := m.GetDcClusterGroupInside()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_inside",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GetSpecType) GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *GetSpecType_NoDcClusterGroup:
 		return nil, nil
@@ -6219,6 +6796,34 @@ func (m *GetSpecType) GetInsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetInsideVirtualNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetInsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.inside_virtual_network[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "inside_virtual_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetInsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GetSpecType) GetInsideVirtualNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -6272,7 +6877,64 @@ func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetInterfaceChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInterfaceChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetInterfaceChoice().(type) {
+	case *GetSpecType_InterfaceList:
+		drInfos, err := m.GetInterfaceList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "interface_list." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_DeviceList:
+		drInfos, err := m.GetDeviceList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDeviceList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "device_list." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_DefaultConfig:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetLogsReceiverChoice().(type) {
+	case *GetSpecType_LogsStreamingDisabled:
+		return nil, nil
+	case *GetSpecType_LogReceiver:
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		dri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GetSpecType) GetLogsReceiverChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GetSpecType_LogsStreamingDisabled:
 		return nil, nil
@@ -6353,6 +7015,34 @@ func (m *GetSpecType) GetNetworkConnectorsDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetNetworkConnectorsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNetworkConnectors()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.network_connectors[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_connector.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "network_connectors",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetNetworkConnectorsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GetSpecType) GetNetworkConnectorsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -6384,6 +7074,34 @@ func (m *GetSpecType) GetNetworkFirewallDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.network_firewall[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_firewall.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "network_firewall",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetNetworkFirewallDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNetworkFirewall()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.network_firewall[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_firewall.Object",
 			RefdUID:    ref.Uid,
@@ -6439,6 +7157,34 @@ func (m *GetSpecType) GetOutsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error) 
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetOutsideVirtualNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetOutsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.outside_virtual_network[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "outside_virtual_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetOutsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GetSpecType) GetOutsideVirtualNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -6482,6 +7228,29 @@ func (m *GetSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetStorageInterfaceChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetStorageInterfaceChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetStorageInterfaceChoice().(type) {
+	case *GetSpecType_NoStorageInterfaces:
+		return nil, nil
+	case *GetSpecType_StorageInterfaceList:
+		drInfos, err := m.GetStorageInterfaceList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageInterfaceList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_interface_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStorageStaticRoutesChoice() == nil {
@@ -6505,7 +7274,56 @@ func (m *GetSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetStorageStaticRoutesChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetStorageStaticRoutesChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetStorageStaticRoutesChoice().(type) {
+	case *GetSpecType_NoStorageStaticRoutes:
+		return nil, nil
+	case *GetSpecType_StorageStaticRoutes:
+		drInfos, err := m.GetStorageStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageStaticRoutes().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GetSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUsbPolicyChoice().(type) {
+	case *GetSpecType_DenyAllUsb:
+		return nil, nil
+	case *GetSpecType_AllowAllUsb:
+		return nil, nil
+	case *GetSpecType_UsbPolicy:
+		vref := m.GetUsbPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("usb_policy.Object")
+		dri := db.DRefInfo{
+			RefdType:   "usb_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "usb_policy",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GetSpecType) GetUsbPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetUsbPolicyChoice().(type) {
 	case *GetSpecType_DenyAllUsb:
 		return nil, nil
@@ -7836,8 +8654,136 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDcClusterGroupInterfaceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupInterfaceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDevicesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDevicesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInsideVirtualNetworkDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInsideVirtualNetworkDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInterfaceChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInterfaceChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetK8SClusterDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetK8SClusterDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLocalControlPlaneDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLocalControlPlaneDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkConnectorsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkConnectorsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkFirewallDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkFirewallDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideVirtualNetworkDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideVirtualNetworkDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSingleSiteDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSingleSiteDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetStorageInterfaceChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetStorageInterfaceChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetStorageStaticRoutesChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetStorageStaticRoutesChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUsbPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUsbPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDcClusterGroupChoice().(type) {
+	case *GlobalSpecType_NoDcClusterGroup:
+		return nil, nil
+	case *GlobalSpecType_DcClusterGroup:
+		vref := m.GetDcClusterGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *GlobalSpecType_DcClusterGroupInside:
+		vref := m.GetDcClusterGroupInside()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_inside",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GlobalSpecType) GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *GlobalSpecType_NoDcClusterGroup:
 		return nil, nil
@@ -7956,6 +8902,34 @@ func (m *GlobalSpecType) GetDcClusterGroupInterfaceDRefInfo() ([]db.DRefInfo, er
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDcClusterGroupInterfaceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetDcClusterGroupInterface()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dc_cluster_group_interface[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "dc_cluster_group_interface",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetDcClusterGroupInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetDcClusterGroupInterfaceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -7996,6 +8970,26 @@ func (m *GlobalSpecType) GetDevicesDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetDevicesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDevices() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDevices() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDevices() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("devices[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 func (m *GlobalSpecType) GetInsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetInsideVirtualNetwork()
 	if len(refs) == 0 {
@@ -8007,6 +9001,34 @@ func (m *GlobalSpecType) GetInsideVirtualNetworkDRefInfo() ([]db.DRefInfo, error
 			return nil, fmt.Errorf("GlobalSpecType.inside_virtual_network[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "inside_virtual_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetInsideVirtualNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetInsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.inside_virtual_network[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_network.Object",
 			RefdUID:    ref.Uid,
@@ -8064,7 +9086,49 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetInterfaceChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInterfaceChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetInterfaceChoice().(type) {
+	case *GlobalSpecType_InterfaceList:
+		drInfos, err := m.GetInterfaceList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "interface_list." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_LegacyDevices:
+		return nil, nil
+	case *GlobalSpecType_DefaultInterfaces:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetK8SClusterDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetK8SCluster()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("k8s_cluster.Object")
+	dri := db.DRefInfo{
+		RefdType:   "k8s_cluster.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "k8s_cluster",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetK8SClusterDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetK8SCluster()
 	if vref == nil {
 		return nil, nil
@@ -8125,7 +9189,47 @@ func (m *GlobalSpecType) GetLocalControlPlaneDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetLocalControlPlaneDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetLocalControlPlane() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetLocalControlPlane().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetLocalControlPlane().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "local_control_plane." + dri.DRField
+	}
+	return drInfos, err
+}
+
 func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetLogsReceiverChoice().(type) {
+	case *GlobalSpecType_LogsStreamingDisabled:
+		return nil, nil
+	case *GlobalSpecType_LogReceiver:
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		dri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *GlobalSpecType_LogsStreamingDisabled:
 		return nil, nil
@@ -8206,6 +9310,34 @@ func (m *GlobalSpecType) GetNetworkConnectorsDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetNetworkConnectorsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNetworkConnectors()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.network_connectors[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_connector.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "network_connectors",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetNetworkConnectorsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetNetworkConnectorsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -8237,6 +9369,34 @@ func (m *GlobalSpecType) GetNetworkFirewallDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.network_firewall[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_firewall.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "network_firewall",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetNetworkFirewallDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNetworkFirewall()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.network_firewall[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_firewall.Object",
 			RefdUID:    ref.Uid,
@@ -8292,6 +9452,34 @@ func (m *GlobalSpecType) GetOutsideVirtualNetworkDRefInfo() ([]db.DRefInfo, erro
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetOutsideVirtualNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetOutsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.outside_virtual_network[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "outside_virtual_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetOutsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetOutsideVirtualNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -8323,6 +9511,34 @@ func (m *GlobalSpecType) GetSingleSiteDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.single_site[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "single_site",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetSingleSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetSingleSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.single_site[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
@@ -8378,6 +9594,29 @@ func (m *GlobalSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetStorageInterfaceChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetStorageInterfaceChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetStorageInterfaceChoice().(type) {
+	case *GlobalSpecType_NoStorageInterfaces:
+		return nil, nil
+	case *GlobalSpecType_StorageInterfaceList:
+		drInfos, err := m.GetStorageInterfaceList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageInterfaceList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_interface_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStorageStaticRoutesChoice() == nil {
@@ -8401,7 +9640,56 @@ func (m *GlobalSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, 
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetStorageStaticRoutesChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetStorageStaticRoutesChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetStorageStaticRoutesChoice().(type) {
+	case *GlobalSpecType_NoStorageStaticRoutes:
+		return nil, nil
+	case *GlobalSpecType_StorageStaticRoutes:
+		drInfos, err := m.GetStorageStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageStaticRoutes().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUsbPolicyChoice().(type) {
+	case *GlobalSpecType_DenyAllUsb:
+		return nil, nil
+	case *GlobalSpecType_AllowAllUsb:
+		return nil, nil
+	case *GlobalSpecType_UsbPolicy:
+		vref := m.GetUsbPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("usb_policy.Object")
+		dri := db.DRefInfo{
+			RefdType:   "usb_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "usb_policy",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GlobalSpecType) GetUsbPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetUsbPolicyChoice().(type) {
 	case *GlobalSpecType_DenyAllUsb:
 		return nil, nil
@@ -8463,6 +9751,23 @@ func (m *GlobalSpecType) GetUsbPolicyChoiceDBEntries(ctx context.Context, d db.I
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -10012,6 +11317,13 @@ func (m *LocalControlPlaneType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetBgpConfigDRefInfo()
 }
+func (m *LocalControlPlaneType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetBgpConfigDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *LocalControlPlaneType) GetBgpConfigDRefInfo() ([]db.DRefInfo, error) {
@@ -10021,6 +11333,22 @@ func (m *LocalControlPlaneType) GetBgpConfigDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetBgpConfig().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetBgpConfig().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "bgp_config." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *LocalControlPlaneType) GetBgpConfigDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetBgpConfig() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetBgpConfig().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetBgpConfig().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -10171,6 +11499,13 @@ func (m *NetworkingDeviceInstanceType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetInterfaceDRefInfo()
 }
+func (m *NetworkingDeviceInstanceType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInterfaceDRefInfoForOverlay(generateHash)
+}
 
 func (m *NetworkingDeviceInstanceType) GetInterfaceDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetInterface()
@@ -10183,6 +11518,34 @@ func (m *NetworkingDeviceInstanceType) GetInterfaceDRefInfo() ([]db.DRefInfo, er
 			return nil, fmt.Errorf("NetworkingDeviceInstanceType.interface[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "interface",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *NetworkingDeviceInstanceType) GetInterfaceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetInterface()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("NetworkingDeviceInstanceType.interface[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_interface.Object",
 			RefdUID:    ref.Uid,
@@ -10964,8 +12327,106 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInsideVirtualNetworkDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInsideVirtualNetworkDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInterfaceChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInterfaceChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkConnectorsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkConnectorsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNetworkFirewallDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkFirewallDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOutsideVirtualNetworkDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOutsideVirtualNetworkDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetStorageInterfaceChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetStorageInterfaceChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetStorageStaticRoutesChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetStorageStaticRoutesChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetUsbPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetUsbPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ReplaceSpecType) GetDcClusterGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDcClusterGroupChoice().(type) {
+	case *ReplaceSpecType_NoDcClusterGroup:
+		return nil, nil
+	case *ReplaceSpecType_DcClusterGroup:
+		vref := m.GetDcClusterGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *ReplaceSpecType_DcClusterGroupInside:
+		vref := m.GetDcClusterGroupInside()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_inside",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ReplaceSpecType) GetDcClusterGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDcClusterGroupChoice().(type) {
 	case *ReplaceSpecType_NoDcClusterGroup:
 		return nil, nil
@@ -11084,6 +12545,34 @@ func (m *ReplaceSpecType) GetInsideVirtualNetworkDRefInfo() ([]db.DRefInfo, erro
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetInsideVirtualNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetInsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.inside_virtual_network[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "inside_virtual_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetInsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *ReplaceSpecType) GetInsideVirtualNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -11137,7 +12626,64 @@ func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInterfaceChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetInterfaceChoice().(type) {
+	case *ReplaceSpecType_InterfaceList:
+		drInfos, err := m.GetInterfaceList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "interface_list." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_DeviceList:
+		drInfos, err := m.GetDeviceList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDeviceList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "device_list." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_DefaultConfig:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetLogsReceiverChoice().(type) {
+	case *ReplaceSpecType_LogsStreamingDisabled:
+		return nil, nil
+	case *ReplaceSpecType_LogReceiver:
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		dri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetLogsReceiverChoice().(type) {
 	case *ReplaceSpecType_LogsStreamingDisabled:
 		return nil, nil
@@ -11218,6 +12764,34 @@ func (m *ReplaceSpecType) GetNetworkConnectorsDRefInfo() ([]db.DRefInfo, error) 
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetNetworkConnectorsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNetworkConnectors()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.network_connectors[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_connector.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "network_connectors",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetNetworkConnectorsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *ReplaceSpecType) GetNetworkConnectorsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -11249,6 +12823,34 @@ func (m *ReplaceSpecType) GetNetworkFirewallDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("ReplaceSpecType.network_firewall[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_firewall.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "network_firewall",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetNetworkFirewallDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetNetworkFirewall()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.network_firewall[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_firewall.Object",
 			RefdUID:    ref.Uid,
@@ -11304,6 +12906,34 @@ func (m *ReplaceSpecType) GetOutsideVirtualNetworkDRefInfo() ([]db.DRefInfo, err
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetOutsideVirtualNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetOutsideVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.outside_virtual_network[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "outside_virtual_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetOutsideVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *ReplaceSpecType) GetOutsideVirtualNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -11347,6 +12977,29 @@ func (m *ReplaceSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, er
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetStorageInterfaceChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetStorageInterfaceChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetStorageInterfaceChoice().(type) {
+	case *ReplaceSpecType_NoStorageInterfaces:
+		return nil, nil
+	case *ReplaceSpecType_StorageInterfaceList:
+		drInfos, err := m.GetStorageInterfaceList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageInterfaceList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_interface_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStorageStaticRoutesChoice() == nil {
@@ -11370,7 +13023,56 @@ func (m *ReplaceSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo,
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetStorageStaticRoutesChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetStorageStaticRoutesChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetStorageStaticRoutesChoice().(type) {
+	case *ReplaceSpecType_NoStorageStaticRoutes:
+		return nil, nil
+	case *ReplaceSpecType_StorageStaticRoutes:
+		drInfos, err := m.GetStorageStaticRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStorageStaticRoutes().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "storage_static_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *ReplaceSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUsbPolicyChoice().(type) {
+	case *ReplaceSpecType_DenyAllUsb:
+		return nil, nil
+	case *ReplaceSpecType_AllowAllUsb:
+		return nil, nil
+	case *ReplaceSpecType_UsbPolicy:
+		vref := m.GetUsbPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("usb_policy.Object")
+		dri := db.DRefInfo{
+			RefdType:   "usb_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "usb_policy",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ReplaceSpecType) GetUsbPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetUsbPolicyChoice().(type) {
 	case *ReplaceSpecType_DenyAllUsb:
 		return nil, nil

@@ -61,6 +61,18 @@ func resourceVolterraAuthorizationServer() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"issuer": {
+
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
+			"issuer_disable": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"jwks_uri": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -120,6 +132,33 @@ func resourceVolterraAuthorizationServerCreate(d *schema.ResourceData, meta inte
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		createMeta.Namespace =
 			v.(string)
+	}
+
+	//issuer_validation
+
+	issuerValidationTypeFound := false
+
+	if v, ok := d.GetOk("issuer"); ok && !isIntfNil(v) && !issuerValidationTypeFound {
+
+		issuerValidationTypeFound = true
+		issuerValidationInt := &ves_io_schema_authorization_server.CreateSpecType_Issuer{}
+
+		createSpec.IssuerValidation = issuerValidationInt
+
+		issuerValidationInt.Issuer = v.(string)
+
+	}
+
+	if v, ok := d.GetOk("issuer_disable"); ok && !issuerValidationTypeFound {
+
+		issuerValidationTypeFound = true
+
+		if v.(bool) {
+			issuerValidationInt := &ves_io_schema_authorization_server.CreateSpecType_IssuerDisable{}
+			issuerValidationInt.IssuerDisable = &ves_io_schema.Empty{}
+			createSpec.IssuerValidation = issuerValidationInt
+		}
+
 	}
 
 	//jwks_uri
@@ -228,6 +267,31 @@ func resourceVolterraAuthorizationServerUpdate(d *schema.ResourceData, meta inte
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		updateMeta.Namespace =
 			v.(string)
+	}
+
+	issuerValidationTypeFound := false
+
+	if v, ok := d.GetOk("issuer"); ok && !isIntfNil(v) && !issuerValidationTypeFound {
+
+		issuerValidationTypeFound = true
+		issuerValidationInt := &ves_io_schema_authorization_server.ReplaceSpecType_Issuer{}
+
+		updateSpec.IssuerValidation = issuerValidationInt
+
+		issuerValidationInt.Issuer = v.(string)
+
+	}
+
+	if v, ok := d.GetOk("issuer_disable"); ok && !issuerValidationTypeFound {
+
+		issuerValidationTypeFound = true
+
+		if v.(bool) {
+			issuerValidationInt := &ves_io_schema_authorization_server.ReplaceSpecType_IssuerDisable{}
+			issuerValidationInt.IssuerDisable = &ves_io_schema.Empty{}
+			updateSpec.IssuerValidation = issuerValidationInt
+		}
+
 	}
 
 	if v, ok := d.GetOk("jwks_uri"); ok && !isIntfNil(v) {

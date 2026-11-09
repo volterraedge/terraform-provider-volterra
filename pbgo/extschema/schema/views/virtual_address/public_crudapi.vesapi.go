@@ -1787,7 +1787,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_address-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_address.API.Create"
             },
             "x-displayname": "Virtual Address",
@@ -1888,7 +1887,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_address-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_address.API.Replace"
             },
             "x-displayname": "Virtual Address",
@@ -2005,7 +2003,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_address-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_address.API.List"
             },
             "x-displayname": "Virtual Address",
@@ -2116,7 +2113,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_address-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_address.API.Get"
             },
             "delete": {
@@ -2210,7 +2206,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_address-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_address.API.Delete"
             },
             "x-displayname": "Virtual Address",
@@ -2320,12 +2315,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -2943,29 +2938,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "viewsWhereVK8SService": {
-            "type": "object",
-            "description": "This defines a reference to a RE site or virtual site where a load balancer could be advertised in the vK8s service network",
-            "title": "WhereVK8SService",
-            "x-displayname": "vK8s Services on RE",
-            "x-ves-displayorder": "3",
-            "x-ves-oneof-field-choice": "[\"site\",\"virtual_site\"]",
-            "x-ves-proto-message": "ves.io.schema.views.WhereVK8SService",
-            "properties": {
-                "site": {
-                    "description": "Exclusive with [virtual_site]\n Reference to site object",
-                    "title": "RE Site",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "RE Reference"
-                },
-                "virtual_site": {
-                    "description": "Exclusive with [site]\n Reference to virtual site object",
-                    "title": "Virtual Site",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Virtual Site Reference"
-                }
-            }
-        },
         "virtual_addressCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -3016,16 +2988,11 @@ var APISwaggerJSON string = `{
             "description": "Create Virtual Address",
             "title": "Create Virtual Address",
             "x-displayname": "Create Virtual Address",
-            "x-ves-oneof-field-deployment_type_choice": "[\"private\",\"public\"]",
+            "x-ves-oneof-field-deployment_type_choice": "[\"public\"]",
             "x-ves-proto-message": "ves.io.schema.views.virtual_address.CreateSpecType",
             "properties": {
-                "private": {
-                    "description": "Exclusive with [public]\n",
-                    "$ref": "#/definitions/virtual_addressPrivateDeploymentType",
-                    "x-displayname": "Private"
-                },
                 "public": {
-                    "description": "Exclusive with [private]\n",
+                    "description": "Exclusive with []\n",
                     "$ref": "#/definitions/virtual_addressPublicDeploymentType",
                     "x-displayname": "Public"
                 },
@@ -3036,35 +3003,6 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
-                    }
-                }
-            }
-        },
-        "virtual_addressCustomVIP": {
-            "type": "object",
-            "description": "Custom IP Selection",
-            "title": "Custom IP Selection",
-            "x-displayname": "Custom IP Selection",
-            "x-ves-oneof-field-vip_select_type": "[\"ip_v4\"]",
-            "x-ves-proto-message": "ves.io.schema.views.virtual_address.CustomVIP",
-            "properties": {
-                "ip_v4": {
-                    "type": "string",
-                    "description": "Exclusive with []\n V4 IP\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
-                    "title": "V4 VIP",
-                    "x-displayname": "IPv4",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv4": "true"
-                    }
-                },
-                "ip_v6": {
-                    "type": "string",
-                    "description": " Optional common virtual V6 IP across all nodes to be used as automatic VIP.\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "Common V6 VIP",
-                    "x-displayname": "IPv6",
-                    "x-ves-example": "2001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 }
             }
@@ -3194,16 +3132,11 @@ var APISwaggerJSON string = `{
             "description": "Get Virtual Address",
             "title": "Get Virtual Address",
             "x-displayname": "Get Virtual Address",
-            "x-ves-oneof-field-deployment_type_choice": "[\"private\",\"public\"]",
+            "x-ves-oneof-field-deployment_type_choice": "[\"public\"]",
             "x-ves-proto-message": "ves.io.schema.views.virtual_address.GetSpecType",
             "properties": {
-                "private": {
-                    "description": "Exclusive with [public]\n",
-                    "$ref": "#/definitions/virtual_addressPrivateDeploymentType",
-                    "x-displayname": "Private"
-                },
                 "public": {
-                    "description": "Exclusive with [private]\n",
+                    "description": "Exclusive with []\n",
                     "$ref": "#/definitions/virtual_addressPublicDeploymentType",
                     "x-displayname": "Public"
                 },
@@ -3223,7 +3156,7 @@ var APISwaggerJSON string = `{
             "title": "Global",
             "x-displayname": "Global",
             "x-ves-oneof-field-network_selection_choice": "[\"f5_global_network\"]",
-            "x-ves-oneof-field-vip_choice": "[\"specific_vip\",\"tenant_public_default_vip\"]",
+            "x-ves-oneof-field-vip_choice": "[\"specific_vip\"]",
             "x-ves-proto-message": "ves.io.schema.views.virtual_address.GlobalWhereType",
             "properties": {
                 "f5_global_network": {
@@ -3233,16 +3166,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "F5 Global Network"
                 },
                 "specific_vip": {
-                    "description": "Exclusive with [tenant_public_default_vip]\n Specific VIP",
+                    "description": "Exclusive with []\n Specific VIP",
                     "title": "Specific VIP",
                     "$ref": "#/definitions/viewsAdvertisePublic",
                     "x-displayname": "Specific VIP"
-                },
-                "tenant_public_default_vip": {
-                    "description": "Exclusive with [specific_vip]\n Tenant VIP",
-                    "title": "Tenant VIP",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Tenant Default VIP"
                 }
             }
         },
@@ -3368,110 +3295,18 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "virtual_addressPrivateDeploymentType": {
-            "type": "object",
-            "title": "PrivateAdvertisementType",
-            "x-displayname": "PrivateAdvertisementType",
-            "x-ves-oneof-field-site_type_choice": "[\"segment\",\"site\",\"virtual_ce_sites\"]",
-            "x-ves-proto-message": "ves.io.schema.views.virtual_address.PrivateDeploymentType",
-            "properties": {
-                "segment": {
-                    "description": "Exclusive with [site virtual_ce_sites]\n",
-                    "title": "Segment",
-                    "$ref": "#/definitions/virtual_addressSegmentType",
-                    "x-displayname": "Segment"
-                },
-                "site": {
-                    "description": "Exclusive with [segment virtual_ce_sites]\n",
-                    "title": "Site Type",
-                    "$ref": "#/definitions/virtual_addressSecureMeshV2SiteType",
-                    "x-displayname": "Site"
-                },
-                "virtual_ce_sites": {
-                    "description": "Exclusive with [segment site]\n",
-                    "title": "Virtual Sites",
-                    "$ref": "#/definitions/virtual_addressVirtualCESites",
-                    "x-displayname": "Virtual Sites"
-                }
-            }
-        },
         "virtual_addressPublicDeploymentType": {
             "type": "object",
             "title": "PublicDeploymentType",
             "x-displayname": "PublicDeploymentType",
-            "x-ves-oneof-field-where_selection_choice": "[\"global\",\"regional\",\"vk8s_service\"]",
+            "x-ves-oneof-field-where_selection_choice": "[\"global\"]",
             "x-ves-proto-message": "ves.io.schema.views.virtual_address.PublicDeploymentType",
             "properties": {
                 "global": {
-                    "description": "Exclusive with [regional vk8s_service]\n",
+                    "description": "Exclusive with []\n",
                     "title": "Global",
                     "$ref": "#/definitions/virtual_addressGlobalWhereType",
                     "x-displayname": "Global"
-                },
-                "regional": {
-                    "description": "Exclusive with [global vk8s_service]\n",
-                    "title": "Regional",
-                    "$ref": "#/definitions/virtual_addressRegionalWhereType",
-                    "x-displayname": "Regional"
-                },
-                "vk8s_service": {
-                    "description": "Exclusive with [global regional]\n Advertise on vK8s Service Network on RE.",
-                    "title": "vk8s services network",
-                    "$ref": "#/definitions/viewsWhereVK8SService",
-                    "x-displayname": "vK8s Service Network on RE"
-                }
-            }
-        },
-        "virtual_addressRegionalSiteType": {
-            "type": "object",
-            "description": "Select Regional Site",
-            "title": "Select Regional Site or Virtual Network",
-            "x-displayname": "Select Regional Site",
-            "x-ves-oneof-field-network_selection_choice": "[\"f5_global_network\"]",
-            "x-ves-oneof-field-vip_choice": "[\"specific_vip\",\"tenant_public_default_vip\"]",
-            "x-ves-proto-message": "ves.io.schema.views.virtual_address.RegionalSiteType",
-            "properties": {
-                "f5_global_network": {
-                    "description": "Exclusive with []\n",
-                    "title": "F5 Global Network",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "F5 Global Network"
-                },
-                "regional_edge_site": {
-                    "type": "array",
-                    "description": " Reference to site object",
-                    "title": "RE Site",
-                    "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "Regional Edge"
-                },
-                "specific_vip": {
-                    "description": "Exclusive with [tenant_public_default_vip]\n Specific VIP",
-                    "title": "Specific VIP",
-                    "$ref": "#/definitions/viewsAdvertisePublic",
-                    "x-displayname": "Specific VIP"
-                },
-                "tenant_public_default_vip": {
-                    "description": "Exclusive with [specific_vip]\n Tenant VIP",
-                    "title": "Tenant VIP",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Tenant Default VIP"
-                }
-            }
-        },
-        "virtual_addressRegionalWhereType": {
-            "type": "object",
-            "title": "Regional",
-            "x-displayname": "Regional",
-            "x-ves-oneof-field-site_or_virtual_network_type": "[\"regional_site\"]",
-            "x-ves-proto-message": "ves.io.schema.views.virtual_address.RegionalWhereType",
-            "properties": {
-                "regional_site": {
-                    "description": "Exclusive with []\n Select Regional Edge",
-                    "title": "Select Regional Edge",
-                    "$ref": "#/definitions/virtual_addressRegionalSiteType",
-                    "x-displayname": "Select Regional Edge"
                 }
             }
         },
@@ -3505,16 +3340,11 @@ var APISwaggerJSON string = `{
             "description": "Replace Virtual Address",
             "title": "Replace Virtual Address",
             "x-displayname": "Replace Virtual Address",
-            "x-ves-oneof-field-deployment_type_choice": "[\"private\",\"public\"]",
+            "x-ves-oneof-field-deployment_type_choice": "[\"public\"]",
             "x-ves-proto-message": "ves.io.schema.views.virtual_address.ReplaceSpecType",
             "properties": {
-                "private": {
-                    "description": "Exclusive with [public]\n",
-                    "$ref": "#/definitions/virtual_addressPrivateDeploymentType",
-                    "x-displayname": "Private"
-                },
                 "public": {
-                    "description": "Exclusive with [private]\n",
+                    "description": "Exclusive with []\n",
                     "$ref": "#/definitions/virtual_addressPublicDeploymentType",
                     "x-displayname": "Public"
                 },
@@ -3526,68 +3356,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
-                }
-            }
-        },
-        "virtual_addressSecureMeshV2SiteType": {
-            "type": "object",
-            "title": "Site",
-            "x-displayname": "Site",
-            "x-ves-oneof-field-network_choice": "[\"segment_network\",\"site_local_inside_network\",\"site_local_network\"]",
-            "x-ves-oneof-field-vip_choice": "[\"custom_vip\"]",
-            "x-ves-proto-message": "ves.io.schema.views.virtual_address.SecureMeshV2SiteType",
-            "properties": {
-                "custom_vip": {
-                    "description": "Exclusive with []\n Tenant VIP",
-                    "title": "Custom VIP",
-                    "$ref": "#/definitions/virtual_addressCustomVIP",
-                    "x-displayname": "Custom VIP"
-                },
-                "segment_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network]\n",
-                    "title": "Segment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment (Global VRF)"
-                },
-                "site_local_inside_network": {
-                    "description": "Exclusive with [segment_network site_local_network]\n",
-                    "title": "Site Local Network Inside",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Site Local Inside (Local VRF)"
-                },
-                "site_local_network": {
-                    "description": "Exclusive with [segment_network site_local_inside_network]\n",
-                    "title": "Site Local Network",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Site Local Outside (Local VRF)"
-                },
-                "site_name": {
-                    "description": "\n\nExample: - \"smsv2-site-name\"-",
-                    "title": "Name",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Name",
-                    "x-ves-example": "smsv2-site-name"
-                }
-            }
-        },
-        "virtual_addressSegmentType": {
-            "type": "object",
-            "description": "Select Segment",
-            "title": "Select Segment",
-            "x-displayname": "Segment",
-            "x-ves-oneof-field-vip_choice": "[\"custom_vip\"]",
-            "x-ves-proto-message": "ves.io.schema.views.virtual_address.SegmentType",
-            "properties": {
-                "custom_vip": {
-                    "description": "Exclusive with []\n Tenant VIP",
-                    "title": "Custom VIP",
-                    "$ref": "#/definitions/virtual_addressCustomVIP",
-                    "x-displayname": "Custom VIP"
-                },
-                "segment_network": {
-                    "title": "Segment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment"
                 }
             }
         },
@@ -3622,47 +3390,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
-                }
-            }
-        },
-        "virtual_addressVirtualCESites": {
-            "type": "object",
-            "title": "Customer Edge Virtual Sites",
-            "x-displayname": "Customer Edge Virtual Sites",
-            "x-ves-oneof-field-network_choice": "[\"segment_network\",\"site_local_inside_network\",\"site_local_network\"]",
-            "x-ves-oneof-field-vip_choice": "[\"custom_vip\"]",
-            "x-ves-proto-message": "ves.io.schema.views.virtual_address.VirtualCESites",
-            "properties": {
-                "ce_virtual_site": {
-                    "description": "\n\nExample: - \"shared/ce-site\"-",
-                    "title": "Virtual Site",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Virtual Site",
-                    "x-ves-example": "shared/ce-site"
-                },
-                "custom_vip": {
-                    "description": "Exclusive with []\n Custom VIP",
-                    "title": "Custom VIP",
-                    "$ref": "#/definitions/virtual_addressCustomVIP",
-                    "x-displayname": "Custom VIP"
-                },
-                "segment_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network]\n",
-                    "title": "Segment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment (Global VRF)"
-                },
-                "site_local_inside_network": {
-                    "description": "Exclusive with [segment_network site_local_network]\n",
-                    "title": "Site Local Network Inside",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Site Local Inside (Local VRF)"
-                },
-                "site_local_network": {
-                    "description": "Exclusive with [segment_network site_local_inside_network]\n",
-                    "title": "Site Local Network",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Site Local Outside (Local VRF)"
                 }
             }
         }

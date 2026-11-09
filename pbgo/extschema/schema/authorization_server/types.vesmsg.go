@@ -75,6 +75,13 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) IssuerValidationIssuerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Issuer, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for issuer")
+	}
+	return oValidatorFn_Issuer, nil
+}
 func (v *ValidateCreateSpecType) JwksUriValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -97,6 +104,31 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
+
+	switch m.GetIssuerValidation().(type) {
+	case *CreateSpecType_IssuerDisable:
+		if fv, exists := v.FldValidators["issuer_validation.issuer_disable"]; exists {
+			val := m.GetIssuerValidation().(*CreateSpecType_IssuerDisable).IssuerDisable
+			vOpts := append(opts,
+				db.WithValidateField("issuer_validation"),
+				db.WithValidateField("issuer_disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_Issuer:
+		if fv, exists := v.FldValidators["issuer_validation.issuer"]; exists {
+			val := m.GetIssuerValidation().(*CreateSpecType_Issuer).Issuer
+			vOpts := append(opts,
+				db.WithValidateField("issuer_validation"),
+				db.WithValidateField("issuer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["jwks_uri"]; exists {
 		vOpts := append(opts, db.WithValidateField("jwks_uri"))
 		if err := fv(ctx, m.GetJwksUri(), vOpts...); err != nil {
@@ -116,6 +148,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+	vrhIssuerValidationIssuer := v.IssuerValidationIssuerValidationRuleHandler
+	rulesIssuerValidationIssuer := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "512",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFnMap["issuer_validation.issuer"], err = vrhIssuerValidationIssuer(rulesIssuerValidationIssuer)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.issuer_validation_issuer: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["issuer_validation.issuer"] = vFnMap["issuer_validation.issuer"]
 
 	vrhJwksUri := v.JwksUriValidationRuleHandler
 	rulesJwksUri := map[string]string{
@@ -188,6 +232,13 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) IssuerValidationIssuerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Issuer, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for issuer")
+	}
+	return oValidatorFn_Issuer, nil
+}
 func (v *ValidateGetSpecType) JwksUriValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -209,6 +260,31 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	switch m.GetIssuerValidation().(type) {
+	case *GetSpecType_IssuerDisable:
+		if fv, exists := v.FldValidators["issuer_validation.issuer_disable"]; exists {
+			val := m.GetIssuerValidation().(*GetSpecType_IssuerDisable).IssuerDisable
+			vOpts := append(opts,
+				db.WithValidateField("issuer_validation"),
+				db.WithValidateField("issuer_disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_Issuer:
+		if fv, exists := v.FldValidators["issuer_validation.issuer"]; exists {
+			val := m.GetIssuerValidation().(*GetSpecType_Issuer).Issuer
+			vOpts := append(opts,
+				db.WithValidateField("issuer_validation"),
+				db.WithValidateField("issuer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 	if fv, exists := v.FldValidators["jwks_uri"]; exists {
 		vOpts := append(opts, db.WithValidateField("jwks_uri"))
@@ -241,6 +317,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+	vrhIssuerValidationIssuer := v.IssuerValidationIssuerValidationRuleHandler
+	rulesIssuerValidationIssuer := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "512",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFnMap["issuer_validation.issuer"], err = vrhIssuerValidationIssuer(rulesIssuerValidationIssuer)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.issuer_validation_issuer: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["issuer_validation.issuer"] = vFnMap["issuer_validation.issuer"]
 
 	vrhJwksUri := v.JwksUriValidationRuleHandler
 	rulesJwksUri := map[string]string{
@@ -316,6 +404,13 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) IssuerValidationIssuerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Issuer, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for issuer")
+	}
+	return oValidatorFn_Issuer, nil
+}
 func (v *ValidateGlobalSpecType) JwksUriValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -337,6 +432,31 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	switch m.GetIssuerValidation().(type) {
+	case *GlobalSpecType_IssuerDisable:
+		if fv, exists := v.FldValidators["issuer_validation.issuer_disable"]; exists {
+			val := m.GetIssuerValidation().(*GlobalSpecType_IssuerDisable).IssuerDisable
+			vOpts := append(opts,
+				db.WithValidateField("issuer_validation"),
+				db.WithValidateField("issuer_disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Issuer:
+		if fv, exists := v.FldValidators["issuer_validation.issuer"]; exists {
+			val := m.GetIssuerValidation().(*GlobalSpecType_Issuer).Issuer
+			vOpts := append(opts,
+				db.WithValidateField("issuer_validation"),
+				db.WithValidateField("issuer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 	if fv, exists := v.FldValidators["jwks"]; exists {
 		vOpts := append(opts, db.WithValidateField("jwks"))
@@ -384,6 +504,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+	vrhIssuerValidationIssuer := v.IssuerValidationIssuerValidationRuleHandler
+	rulesIssuerValidationIssuer := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "512",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFnMap["issuer_validation.issuer"], err = vrhIssuerValidationIssuer(rulesIssuerValidationIssuer)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.issuer_validation_issuer: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["issuer_validation.issuer"] = vFnMap["issuer_validation.issuer"]
 
 	vrhJwksUri := v.JwksUriValidationRuleHandler
 	rulesJwksUri := map[string]string{
@@ -457,6 +589,13 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) IssuerValidationIssuerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Issuer, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for issuer")
+	}
+	return oValidatorFn_Issuer, nil
+}
 func (v *ValidateReplaceSpecType) JwksUriValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -479,6 +618,31 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if m == nil {
 		return nil
 	}
+
+	switch m.GetIssuerValidation().(type) {
+	case *ReplaceSpecType_IssuerDisable:
+		if fv, exists := v.FldValidators["issuer_validation.issuer_disable"]; exists {
+			val := m.GetIssuerValidation().(*ReplaceSpecType_IssuerDisable).IssuerDisable
+			vOpts := append(opts,
+				db.WithValidateField("issuer_validation"),
+				db.WithValidateField("issuer_disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_Issuer:
+		if fv, exists := v.FldValidators["issuer_validation.issuer"]; exists {
+			val := m.GetIssuerValidation().(*ReplaceSpecType_Issuer).Issuer
+			vOpts := append(opts,
+				db.WithValidateField("issuer_validation"),
+				db.WithValidateField("issuer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["jwks_uri"]; exists {
 		vOpts := append(opts, db.WithValidateField("jwks_uri"))
 		if err := fv(ctx, m.GetJwksUri(), vOpts...); err != nil {
@@ -498,6 +662,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+	vrhIssuerValidationIssuer := v.IssuerValidationIssuerValidationRuleHandler
+	rulesIssuerValidationIssuer := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "512",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFnMap["issuer_validation.issuer"], err = vrhIssuerValidationIssuer(rulesIssuerValidationIssuer)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.issuer_validation_issuer: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["issuer_validation.issuer"] = vFnMap["issuer_validation.issuer"]
 
 	vrhJwksUri := v.JwksUriValidationRuleHandler
 	rulesJwksUri := map[string]string{
@@ -519,10 +695,46 @@ func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetIssuerValidationToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.IssuerValidation.(type) {
+	case nil:
+		o.IssuerValidation = nil
+
+	case *CreateSpecType_Issuer:
+		o.IssuerValidation = &GlobalSpecType_Issuer{Issuer: of.Issuer}
+
+	case *CreateSpecType_IssuerDisable:
+		o.IssuerValidation = &GlobalSpecType_IssuerDisable{IssuerDisable: of.IssuerDisable}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetIssuerValidationFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.IssuerValidation.(type) {
+	case nil:
+		r.IssuerValidation = nil
+
+	case *GlobalSpecType_Issuer:
+		r.IssuerValidation = &CreateSpecType_Issuer{Issuer: of.Issuer}
+
+	case *GlobalSpecType_IssuerDisable:
+		r.IssuerValidation = &CreateSpecType_IssuerDisable{IssuerDisable: of.IssuerDisable}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.GetIssuerValidationFromGlobalSpecType(f)
 	m.JwksUri = f.GetJwksUri()
 }
 
@@ -541,6 +753,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
+	m1.SetIssuerValidationToGlobalSpecType(f)
 	f.JwksUri = m1.JwksUri
 }
 
@@ -552,10 +765,46 @@ func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetIssuerValidationToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.IssuerValidation.(type) {
+	case nil:
+		o.IssuerValidation = nil
+
+	case *GetSpecType_Issuer:
+		o.IssuerValidation = &GlobalSpecType_Issuer{Issuer: of.Issuer}
+
+	case *GetSpecType_IssuerDisable:
+		o.IssuerValidation = &GlobalSpecType_IssuerDisable{IssuerDisable: of.IssuerDisable}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetIssuerValidationFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.IssuerValidation.(type) {
+	case nil:
+		r.IssuerValidation = nil
+
+	case *GlobalSpecType_Issuer:
+		r.IssuerValidation = &GetSpecType_Issuer{Issuer: of.Issuer}
+
+	case *GlobalSpecType_IssuerDisable:
+		r.IssuerValidation = &GetSpecType_IssuerDisable{IssuerDisable: of.IssuerDisable}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.GetIssuerValidationFromGlobalSpecType(f)
 	m.JwksUri = f.GetJwksUri()
 	m.LastFetchStatus = f.GetLastFetchStatus()
 	m.LastSuccessfulFetch = f.GetLastSuccessfulFetch()
@@ -576,6 +825,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	m1.SetIssuerValidationToGlobalSpecType(f)
 	f.JwksUri = m1.JwksUri
 	f.LastFetchStatus = m1.LastFetchStatus
 	f.LastSuccessfulFetch = m1.LastSuccessfulFetch
@@ -589,10 +839,46 @@ func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetIssuerValidationToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.IssuerValidation.(type) {
+	case nil:
+		o.IssuerValidation = nil
+
+	case *ReplaceSpecType_Issuer:
+		o.IssuerValidation = &GlobalSpecType_Issuer{Issuer: of.Issuer}
+
+	case *ReplaceSpecType_IssuerDisable:
+		o.IssuerValidation = &GlobalSpecType_IssuerDisable{IssuerDisable: of.IssuerDisable}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetIssuerValidationFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.IssuerValidation.(type) {
+	case nil:
+		r.IssuerValidation = nil
+
+	case *GlobalSpecType_Issuer:
+		r.IssuerValidation = &ReplaceSpecType_Issuer{Issuer: of.Issuer}
+
+	case *GlobalSpecType_IssuerDisable:
+		r.IssuerValidation = &ReplaceSpecType_IssuerDisable{IssuerDisable: of.IssuerDisable}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.GetIssuerValidationFromGlobalSpecType(f)
 	m.JwksUri = f.GetJwksUri()
 }
 
@@ -611,6 +897,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	}
 	_ = m1
 
+	m1.SetIssuerValidationToGlobalSpecType(f)
 	f.JwksUri = m1.JwksUri
 }
 

@@ -27,6 +27,258 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *ActiveActiveRegion) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ActiveActiveRegion) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ActiveActiveRegion) DeepCopy() *ActiveActiveRegion {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ActiveActiveRegion{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ActiveActiveRegion) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ActiveActiveRegion) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ActiveActiveRegionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateActiveActiveRegion struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateActiveActiveRegion) Region_1ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for region_1")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateActiveActiveRegion) Region_2ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for region_2")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateActiveActiveRegion) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ActiveActiveRegion)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ActiveActiveRegion got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["region_1"]; exists {
+		vOpts := append(opts, db.WithValidateField("region_1"))
+		if err := fv(ctx, m.GetRegion_1(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["region_2"]; exists {
+		vOpts := append(opts, db.WithValidateField("region_2"))
+		if err := fv(ctx, m.GetRegion_2(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultActiveActiveRegionValidator = func() *ValidateActiveActiveRegion {
+	v := &ValidateActiveActiveRegion{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRegion_1 := v.Region_1ValidationRuleHandler
+	rulesRegion_1 := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhRegion_1(rulesRegion_1)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ActiveActiveRegion.region_1: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["region_1"] = vFn
+
+	vrhRegion_2 := v.Region_2ValidationRuleHandler
+	rulesRegion_2 := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhRegion_2(rulesRegion_2)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ActiveActiveRegion.region_2: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["region_2"] = vFn
+
+	return v
+}()
+
+func ActiveActiveRegionValidator() db.Validator {
+	return DefaultActiveActiveRegionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ActivePassiveRegion) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ActivePassiveRegion) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ActivePassiveRegion) DeepCopy() *ActivePassiveRegion {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ActivePassiveRegion{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ActivePassiveRegion) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ActivePassiveRegion) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ActivePassiveRegionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateActivePassiveRegion struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateActivePassiveRegion) Region_1ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for region_1")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateActivePassiveRegion) Region_2ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for region_2")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateActivePassiveRegion) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ActivePassiveRegion)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ActivePassiveRegion got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["region_1"]; exists {
+		vOpts := append(opts, db.WithValidateField("region_1"))
+		if err := fv(ctx, m.GetRegion_1(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["region_2"]; exists {
+		vOpts := append(opts, db.WithValidateField("region_2"))
+		if err := fv(ctx, m.GetRegion_2(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultActivePassiveRegionValidator = func() *ValidateActivePassiveRegion {
+	v := &ValidateActivePassiveRegion{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRegion_1 := v.Region_1ValidationRuleHandler
+	rulesRegion_1 := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhRegion_1(rulesRegion_1)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ActivePassiveRegion.region_1: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["region_1"] = vFn
+
+	vrhRegion_2 := v.Region_2ValidationRuleHandler
+	rulesRegion_2 := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhRegion_2(rulesRegion_2)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ActivePassiveRegion.region_2: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["region_2"] = vFn
+
+	return v
+}()
+
+func ActivePassiveRegionValidator() db.Validator {
+	return DefaultActivePassiveRegionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecInfraCloudHosted) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -81,6 +333,14 @@ func (v *ValidateCreateSpecInfraCloudHosted) TypeChoiceProductionValidationRuleH
 func (v *ValidateCreateSpecInfraCloudHosted) TypeChoiceTestingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return TestingValidator().Validate, nil
 }
+
+func (v *ValidateCreateSpecInfraCloudHosted) TypeChoiceProductionV2ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ProductionV2Validator().Validate, nil
+}
+
+func (v *ValidateCreateSpecInfraCloudHosted) TypeChoiceTestingV2ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return TestingV2Validator().Validate, nil
+}
 func (v *ValidateCreateSpecInfraCloudHosted) IpAddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
@@ -121,6 +381,23 @@ func (v *ValidateCreateSpecInfraCloudHosted) IpAddressesValidationRuleHandler(ru
 
 	return validatorFn, nil
 }
+func (v *ValidateCreateSpecInfraCloudHosted) IpAddressListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ip_address_list")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := IPAddressListValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
 
 func (v *ValidateCreateSpecInfraCloudHosted) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecInfraCloudHosted)
@@ -134,6 +411,18 @@ func (v *ValidateCreateSpecInfraCloudHosted) Validate(ctx context.Context, pm in
 	}
 	if m == nil {
 		return nil
+	}
+	if fv, exists := v.FldValidators["host_name_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("host_name_list"))
+		if err := fv(ctx, m.GetHostNameList(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["ip_address_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("ip_address_list"))
+		if err := fv(ctx, m.GetIpAddressList(), vOpts...); err != nil {
+			return err
+		}
 	}
 	if fv, exists := v.FldValidators["ip_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_addresses"))
@@ -170,6 +459,28 @@ func (v *ValidateCreateSpecInfraCloudHosted) Validate(ctx context.Context, pm in
 			vOpts := append(opts,
 				db.WithValidateField("type_choice"),
 				db.WithValidateField("testing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecInfraCloudHosted_ProductionV2:
+		if fv, exists := v.FldValidators["type_choice.production_v2"]; exists {
+			val := m.GetTypeChoice().(*CreateSpecInfraCloudHosted_ProductionV2).ProductionV2
+			vOpts := append(opts,
+				db.WithValidateField("type_choice"),
+				db.WithValidateField("production_v2"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecInfraCloudHosted_TestingV2:
+		if fv, exists := v.FldValidators["type_choice.testing_v2"]; exists {
+			val := m.GetTypeChoice().(*CreateSpecInfraCloudHosted_TestingV2).TestingV2
+			vOpts := append(opts,
+				db.WithValidateField("type_choice"),
+				db.WithValidateField("testing_v2"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -217,8 +528,28 @@ var DefaultCreateSpecInfraCloudHostedValidator = func() *ValidateCreateSpecInfra
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecInfraCloudHosted.type_choice_testing: %s", err)
 		panic(errMsg)
 	}
+	vrhTypeChoiceProductionV2 := v.TypeChoiceProductionV2ValidationRuleHandler
+	rulesTypeChoiceProductionV2 := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["type_choice.production_v2"], err = vrhTypeChoiceProductionV2(rulesTypeChoiceProductionV2)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecInfraCloudHosted.type_choice_production_v2: %s", err)
+		panic(errMsg)
+	}
+	vrhTypeChoiceTestingV2 := v.TypeChoiceTestingV2ValidationRuleHandler
+	rulesTypeChoiceTestingV2 := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["type_choice.testing_v2"], err = vrhTypeChoiceTestingV2(rulesTypeChoiceTestingV2)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecInfraCloudHosted.type_choice_testing_v2: %s", err)
+		panic(errMsg)
+	}
 	v.FldValidators["type_choice.production"] = vFnMap["type_choice.production"]
 	v.FldValidators["type_choice.testing"] = vFnMap["type_choice.testing"]
+	v.FldValidators["type_choice.production_v2"] = vFnMap["type_choice.production_v2"]
+	v.FldValidators["type_choice.testing_v2"] = vFnMap["type_choice.testing_v2"]
 
 	vrhIpAddresses := v.IpAddressesValidationRuleHandler
 	rulesIpAddresses := map[string]string{
@@ -230,6 +561,18 @@ var DefaultCreateSpecInfraCloudHostedValidator = func() *ValidateCreateSpecInfra
 		panic(errMsg)
 	}
 	v.FldValidators["ip_addresses"] = vFn
+
+	vrhIpAddressList := v.IpAddressListValidationRuleHandler
+	rulesIpAddressList := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhIpAddressList(rulesIpAddressList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecInfraCloudHosted.ip_address_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip_address_list"] = vFn
+	v.FldValidators["host_name_list"] = HostNameListValidator().Validate
 
 	return v
 }()
@@ -292,6 +635,30 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if m == nil {
 		return nil
 	}
+	if fv, exists := v.FldValidators["bot_allowlist_policy_metadata"]; exists {
+		vOpts := append(opts, db.WithValidateField("bot_allowlist_policy_metadata"))
+		if err := fv(ctx, m.GetBotAllowlistPolicyMetadata(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["bot_endpoint_policy_metadata"]; exists {
+		vOpts := append(opts, db.WithValidateField("bot_endpoint_policy_metadata"))
+		if err := fv(ctx, m.GetBotEndpointPolicyMetadata(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["bot_network_policy_metadata"]; exists {
+		vOpts := append(opts, db.WithValidateField("bot_network_policy_metadata"))
+		if err := fv(ctx, m.GetBotNetworkPolicyMetadata(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["cloned_infra_name"]; exists {
+		vOpts := append(opts, db.WithValidateField("cloned_infra_name"))
+		if err := fv(ctx, m.GetClonedInfraName(), vOpts...); err != nil {
+			return err
+		}
+	}
 
 	switch m.GetCreateBotInfraChoice().(type) {
 	case *CreateSpecType_CreateCloudHosted:
@@ -325,6 +692,9 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
 	v.FldValidators["create_bot_infra_choice.create_cloud_hosted"] = CreateSpecInfraCloudHostedValidator().Validate
+	v.FldValidators["bot_endpoint_policy_metadata"] = EndpointPolicyMetadataValidator().Validate
+	v.FldValidators["bot_allowlist_policy_metadata"] = PolicyMetadataValidator().Validate
+	v.FldValidators["bot_network_policy_metadata"] = PolicyMetadataValidator().Validate
 
 	return v
 }()
@@ -1237,8 +1607,48 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetBotAllowlistPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBotAllowlistPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetBotEndpointPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBotEndpointPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetBotNetworkPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetBotNetworkPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetBotAllowlistPolicyDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetBotAllowlistPolicy()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bot_allowlist_policy.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bot_allowlist_policy.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "bot_allowlist_policy",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetBotAllowlistPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetBotAllowlistPolicy()
 	if vref == nil {
 		return nil, nil
@@ -1300,6 +1710,23 @@ func (m *GlobalSpecType) GetBotEndpointPolicyDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return []db.DRefInfo{dri}, nil
 }
+func (m *GlobalSpecType) GetBotEndpointPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vref := m.GetBotEndpointPolicy()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bot_endpoint_policy.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bot_endpoint_policy.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "bot_endpoint_policy",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
 
 // GetBotEndpointPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetBotEndpointPolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1329,6 +1756,23 @@ func (m *GlobalSpecType) GetBotEndpointPolicyDBEntries(ctx context.Context, d db
 }
 
 func (m *GlobalSpecType) GetBotNetworkPolicyDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetBotNetworkPolicy()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bot_network_policy.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bot_network_policy.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "bot_network_policy",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetBotNetworkPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetBotNetworkPolicy()
 	if vref == nil {
 		return nil, nil
@@ -1683,6 +2127,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
+	if fv, exists := v.FldValidators["cloned_infra_name"]; exists {
+		vOpts := append(opts, db.WithValidateField("cloned_infra_name"))
+		if err := fv(ctx, m.GetClonedInfraName(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["cluster_state"]; exists {
 		vOpts := append(opts, db.WithValidateField("cluster_state"))
 		if err := fv(ctx, m.GetClusterState(), vOpts...); err != nil {
@@ -1881,6 +2331,273 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HostNameList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HostNameList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HostNameList) DeepCopy() *HostNameList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HostNameList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HostNameList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HostNameList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HostNameListValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHostNameList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHostNameList) HostNamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for host_names")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for host_names")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated host_names")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items host_names")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHostNameList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HostNameList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HostNameList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["host_names"]; exists {
+		vOpts := append(opts, db.WithValidateField("host_names"))
+		if err := fv(ctx, m.GetHostNames(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHostNameListValidator = func() *ValidateHostNameList {
+	v := &ValidateHostNameList{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHostNames := v.HostNamesValidationRuleHandler
+	rulesHostNames := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+	}
+	vFn, err = vrhHostNames(rulesHostNames)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HostNameList.host_names: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["host_names"] = vFn
+
+	return v
+}()
+
+func HostNameListValidator() db.Validator {
+	return DefaultHostNameListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPAddressList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPAddressList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPAddressList) DeepCopy() *IPAddressList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPAddressList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPAddressList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPAddressList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPAddressListValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIPAddressList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPAddressList) IpAddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ip_addresses")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ip_addresses")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ip_addresses")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ip_addresses")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIPAddressList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPAddressList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPAddressList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["ip_addresses"]; exists {
+		vOpts := append(opts, db.WithValidateField("ip_addresses"))
+		if err := fv(ctx, m.GetIpAddresses(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPAddressListValidator = func() *ValidateIPAddressList {
+	v := &ValidateIPAddressList{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIpAddresses := v.IpAddressesValidationRuleHandler
+	rulesIpAddresses := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ip":        "true",
+	}
+	vFn, err = vrhIpAddresses(rulesIpAddresses)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPAddressList.ip_addresses: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip_addresses"] = vFn
+
+	return v
+}()
+
+func IPAddressListValidator() db.Validator {
+	return DefaultIPAddressListValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2301,6 +3018,86 @@ func (v *ValidateInfraCloudHosted) InfraRegionValidationRuleHandler(rules map[st
 
 	return validatorFn, nil
 }
+func (v *ValidateInfraCloudHosted) ActiveRegionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for active_regions")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for active_regions")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated active_regions")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items active_regions")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateInfraCloudHosted) PassiveRegionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for passive_regions")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for passive_regions")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated passive_regions")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items passive_regions")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
 
 func (v *ValidateInfraCloudHosted) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*InfraCloudHosted)
@@ -2314,6 +3111,12 @@ func (v *ValidateInfraCloudHosted) Validate(ctx context.Context, pm interface{},
 	}
 	if m == nil {
 		return nil
+	}
+	if fv, exists := v.FldValidators["active_regions"]; exists {
+		vOpts := append(opts, db.WithValidateField("active_regions"))
+		if err := fv(ctx, m.GetActiveRegions(), vOpts...); err != nil {
+			return err
+		}
 	}
 	if fv, exists := v.FldValidators["egress"]; exists {
 		vOpts := append(opts, db.WithValidateField("egress"))
@@ -2354,6 +3157,12 @@ func (v *ValidateInfraCloudHosted) Validate(ctx context.Context, pm interface{},
 	if fv, exists := v.FldValidators["ip_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_addresses"))
 		if err := fv(ctx, m.GetIpAddresses(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["passive_regions"]; exists {
+		vOpts := append(opts, db.WithValidateField("passive_regions"))
+		if err := fv(ctx, m.GetPassiveRegions(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -2436,6 +3245,28 @@ var DefaultInfraCloudHostedValidator = func() *ValidateInfraCloudHosted {
 		panic(errMsg)
 	}
 	v.FldValidators["infra_region"] = vFn
+
+	vrhActiveRegions := v.ActiveRegionsValidationRuleHandler
+	rulesActiveRegions := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhActiveRegions(rulesActiveRegions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InfraCloudHosted.active_regions: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["active_regions"] = vFn
+
+	vrhPassiveRegions := v.PassiveRegionsValidationRuleHandler
+	rulesPassiveRegions := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPassiveRegions(rulesPassiveRegions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InfraCloudHosted.passive_regions: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["passive_regions"] = vFn
 
 	return v
 }()
@@ -3296,6 +4127,159 @@ func ProductionValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ProductionV2) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ProductionV2) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ProductionV2) DeepCopy() *ProductionV2 {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ProductionV2{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ProductionV2) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ProductionV2) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ProductionV2Validator().Validate(ctx, m, opts...)
+}
+
+type ValidateProductionV2 struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateProductionV2) TypeChoiceProductionActiveActiveRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ActiveActiveRegionValidator().Validate, nil
+}
+
+func (v *ValidateProductionV2) TypeChoiceProductionActivePassiveRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ActivePassiveRegionValidator().Validate, nil
+}
+
+func (v *ValidateProductionV2) TypeChoiceProductionSingleActiveRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return SingleActiveRegionValidator().Validate, nil
+}
+
+func (v *ValidateProductionV2) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ProductionV2)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ProductionV2 got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetTypeChoiceProduction().(type) {
+	case *ProductionV2_ActiveActiveRegion:
+		if fv, exists := v.FldValidators["type_choice_production.active_active_region"]; exists {
+			val := m.GetTypeChoiceProduction().(*ProductionV2_ActiveActiveRegion).ActiveActiveRegion
+			vOpts := append(opts,
+				db.WithValidateField("type_choice_production"),
+				db.WithValidateField("active_active_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProductionV2_ActivePassiveRegion:
+		if fv, exists := v.FldValidators["type_choice_production.active_passive_region"]; exists {
+			val := m.GetTypeChoiceProduction().(*ProductionV2_ActivePassiveRegion).ActivePassiveRegion
+			vOpts := append(opts,
+				db.WithValidateField("type_choice_production"),
+				db.WithValidateField("active_passive_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProductionV2_SingleActiveRegion:
+		if fv, exists := v.FldValidators["type_choice_production.single_active_region"]; exists {
+			val := m.GetTypeChoiceProduction().(*ProductionV2_SingleActiveRegion).SingleActiveRegion
+			vOpts := append(opts,
+				db.WithValidateField("type_choice_production"),
+				db.WithValidateField("single_active_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultProductionV2Validator = func() *ValidateProductionV2 {
+	v := &ValidateProductionV2{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+	vrhTypeChoiceProductionActiveActiveRegion := v.TypeChoiceProductionActiveActiveRegionValidationRuleHandler
+	rulesTypeChoiceProductionActiveActiveRegion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["type_choice_production.active_active_region"], err = vrhTypeChoiceProductionActiveActiveRegion(rulesTypeChoiceProductionActiveActiveRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ProductionV2.type_choice_production_active_active_region: %s", err)
+		panic(errMsg)
+	}
+	vrhTypeChoiceProductionActivePassiveRegion := v.TypeChoiceProductionActivePassiveRegionValidationRuleHandler
+	rulesTypeChoiceProductionActivePassiveRegion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["type_choice_production.active_passive_region"], err = vrhTypeChoiceProductionActivePassiveRegion(rulesTypeChoiceProductionActivePassiveRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ProductionV2.type_choice_production_active_passive_region: %s", err)
+		panic(errMsg)
+	}
+	vrhTypeChoiceProductionSingleActiveRegion := v.TypeChoiceProductionSingleActiveRegionValidationRuleHandler
+	rulesTypeChoiceProductionSingleActiveRegion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["type_choice_production.single_active_region"], err = vrhTypeChoiceProductionSingleActiveRegion(rulesTypeChoiceProductionSingleActiveRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ProductionV2.type_choice_production_single_active_region: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["type_choice_production.active_active_region"] = vFnMap["type_choice_production.active_active_region"]
+	v.FldValidators["type_choice_production.active_passive_region"] = vFnMap["type_choice_production.active_passive_region"]
+	v.FldValidators["type_choice_production.single_active_region"] = vFnMap["type_choice_production.single_active_region"]
+
+	return v
+}()
+
+func ProductionV2Validator() db.Validator {
+	return DefaultProductionV2Validator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ReplaceSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3458,6 +4442,107 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SingleActiveRegion) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SingleActiveRegion) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SingleActiveRegion) DeepCopy() *SingleActiveRegion {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SingleActiveRegion{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SingleActiveRegion) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SingleActiveRegion) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SingleActiveRegionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSingleActiveRegion struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSingleActiveRegion) Region_1ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for region_1")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSingleActiveRegion) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SingleActiveRegion)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SingleActiveRegion got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["region_1"]; exists {
+		vOpts := append(opts, db.WithValidateField("region_1"))
+		if err := fv(ctx, m.GetRegion_1(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSingleActiveRegionValidator = func() *ValidateSingleActiveRegion {
+	v := &ValidateSingleActiveRegion{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRegion_1 := v.Region_1ValidationRuleHandler
+	rulesRegion_1 := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhRegion_1(rulesRegion_1)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SingleActiveRegion.region_1: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["region_1"] = vFn
+
+	return v
+}()
+
+func SingleActiveRegionValidator() db.Validator {
+	return DefaultSingleActiveRegionValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3662,6 +4747,109 @@ func TestingValidator() db.Validator {
 	return DefaultTestingValidator
 }
 
+// augmented methods on protoc/std generated struct
+
+func (m *TestingV2) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TestingV2) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TestingV2) DeepCopy() *TestingV2 {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TestingV2{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TestingV2) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TestingV2) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TestingV2Validator().Validate(ctx, m, opts...)
+}
+
+type ValidateTestingV2 struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTestingV2) TypeChoiceTestingSingleActiveRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return SingleActiveRegionValidator().Validate, nil
+}
+
+func (v *ValidateTestingV2) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TestingV2)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TestingV2 got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetTypeChoiceTesting().(type) {
+	case *TestingV2_SingleActiveRegion:
+		if fv, exists := v.FldValidators["type_choice_testing.single_active_region"]; exists {
+			val := m.GetTypeChoiceTesting().(*TestingV2_SingleActiveRegion).SingleActiveRegion
+			vOpts := append(opts,
+				db.WithValidateField("type_choice_testing"),
+				db.WithValidateField("single_active_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTestingV2Validator = func() *ValidateTestingV2 {
+	v := &ValidateTestingV2{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+	vrhTypeChoiceTestingSingleActiveRegion := v.TypeChoiceTestingSingleActiveRegionValidationRuleHandler
+	rulesTypeChoiceTestingSingleActiveRegion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["type_choice_testing.single_active_region"], err = vrhTypeChoiceTestingSingleActiveRegion(rulesTypeChoiceTestingSingleActiveRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field TestingV2.type_choice_testing_single_active_region: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["type_choice_testing.single_active_region"] = vFnMap["type_choice_testing.single_active_region"]
+
+	return v
+}()
+
+func TestingV2Validator() db.Validator {
+	return DefaultTestingV2Validator
+}
+
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetCreateBotInfraChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.CreateBotInfraChoice.(type) {
@@ -3695,6 +4883,10 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	if f == nil {
 		return
 	}
+	m.BotAllowlistPolicyMetadata = f.GetBotAllowlistPolicyMetadata()
+	m.BotEndpointPolicyMetadata = f.GetBotEndpointPolicyMetadata()
+	m.BotNetworkPolicyMetadata = f.GetBotNetworkPolicyMetadata()
+	m.ClonedInfraName = f.GetClonedInfraName()
 	m.GetCreateBotInfraChoiceFromGlobalSpecType(f)
 	m.DeploymentMode = f.GetDeploymentMode()
 	m.TrafficType = f.GetTrafficType()
@@ -3715,6 +4907,10 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
+	f.BotAllowlistPolicyMetadata = m1.BotAllowlistPolicyMetadata
+	f.BotEndpointPolicyMetadata = m1.BotEndpointPolicyMetadata
+	f.BotNetworkPolicyMetadata = m1.BotNetworkPolicyMetadata
+	f.ClonedInfraName = m1.ClonedInfraName
 	m1.SetCreateBotInfraChoiceToGlobalSpecType(f)
 	f.DeploymentMode = m1.DeploymentMode
 	f.TrafficType = m1.TrafficType

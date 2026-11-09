@@ -68,6 +68,13 @@ func (m *CertificateList) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCertificatesDRefInfo()
 }
+func (m *CertificateList) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCertificatesDRefInfoForOverlay(generateHash)
+}
 
 func (m *CertificateList) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetCertificates()
@@ -80,6 +87,34 @@ func (m *CertificateList) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("CertificateList.certificates[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "certificate.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "certificates",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CertificateList) GetCertificatesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCertificates()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CertificateList.certificates[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "certificate.Object",
 			RefdUID:    ref.Uid,
@@ -225,6 +260,16 @@ func (m *CreateSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
 func (m *CreateSpecType) DeepCopy() *CreateSpecType {
 	if m == nil {
 		return nil
@@ -263,8 +308,26 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetOcspDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetOcspDRefInfo() FAILED")
+	if fdrInfos, err := m.GetTrustedCaListDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTrustedCaListDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificatesChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertificatesChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTrustedCaListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTrustedCaListDRefInfoForOverlay() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -292,38 +355,87 @@ func (m *CreateSpecType) GetCertificatesChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 }
 
-func (m *CreateSpecType) GetOcspDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetOcsp()
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetCertificatesChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCertificatesChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetCertificatesChoice().(type) {
+	case *CreateSpecType_Certificates:
+		drInfos, err := m.GetCertificates().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCertificates().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "certificates." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+func (m *CreateSpecType) GetTrustedCaListDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetTrustedCaList()
 	if len(refs) == 0 {
 		return nil, nil
 	}
 	drInfos := make([]db.DRefInfo, 0, len(refs))
 	for i, ref := range refs {
 		if ref == nil {
-			return nil, fmt.Errorf("CreateSpecType.ocsp[%d] has a nil value", i)
+			return nil, fmt.Errorf("CreateSpecType.trusted_ca_list[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
 		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "ocsp_profile.Object",
+			RefdType:   "trusted_ca_list.Object",
 			RefdUID:    ref.Uid,
 			RefdTenant: ref.Tenant,
 			RefdNS:     ref.Namespace,
 			RefdName:   ref.Name,
-			DRField:    "ocsp",
+			DRField:    "trusted_ca_list",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetTrustedCaListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTrustedCaList()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.trusted_ca_list[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "trusted_ca_list.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "trusted_ca_list",
 			Ref:        ref,
 		})
 	}
 	return drInfos, nil
 }
 
-// GetOcspDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *CreateSpecType) GetOcspDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+// GetTrustedCaListDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateSpecType) GetTrustedCaListDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "ocsp_profile.Object")
+	refdType, err := d.TypeForEntryKind("", "", "trusted_ca_list.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: ocsp_profile")
+		return nil, errors.Wrap(err, "Cannot find type for kind: trusted_ca_list")
 	}
-	for _, ref := range m.GetOcsp() {
+	for _, ref := range m.GetTrustedCaList() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -355,14 +467,6 @@ func (v *ValidateCreateSpecType) AuthenticateDepthValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-func (v *ValidateCreateSpecType) C3DCertLifespanValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for c3d_cert_lifespan")
-	}
-
-	return validatorFn, nil
-}
 func (v *ValidateCreateSpecType) CacheSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
@@ -371,72 +475,10 @@ func (v *ValidateCreateSpecType) CacheSizeValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-func (v *ValidateCreateSpecType) CacheTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_timeout")
-	}
-
-	return validatorFn, nil
-}
 func (v *ValidateCreateSpecType) HandshakeTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for handshake_timeout")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateCreateSpecType) MaxActiveHandshakesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for max_active_handshakes")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateCreateSpecType) OcspValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ocsp")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ocsp")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated ocsp")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items ocsp")
-		}
-		return nil
 	}
 
 	return validatorFn, nil
@@ -457,11 +499,57 @@ func (v *ValidateCreateSpecType) RenegotiateSizeValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-func (v *ValidateCreateSpecType) UserSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateCreateSpecType) TrustedCaListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_ca_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for trusted_ca_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated trusted_ca_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items trusted_ca_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateCreateSpecType) TmOptionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for user_spec")
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for tm_options")
 	}
 	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
@@ -473,7 +561,7 @@ func (v *ValidateCreateSpecType) UserSpecValidationRuleHandler(rules map[string]
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for user_spec")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tm_options")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
@@ -487,10 +575,10 @@ func (v *ValidateCreateSpecType) UserSpecValidationRuleHandler(rules map[string]
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated user_spec")
+			return errors.Wrap(err, "repeated tm_options")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items user_spec")
+			return errors.Wrap(err, "items tm_options")
 		}
 		return nil
 	}
@@ -541,33 +629,9 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["bypass_on_client_cert_fail"]; exists {
-		vOpts := append(opts, db.WithValidateField("bypass_on_client_cert_fail"))
-		if err := fv(ctx, m.GetBypassOnClientCertFail(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["bypass_on_handshake_alert"]; exists {
-		vOpts := append(opts, db.WithValidateField("bypass_on_handshake_alert"))
-		if err := fv(ctx, m.GetBypassOnHandshakeAlert(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["c3d_cert_lifespan"]; exists {
-		vOpts := append(opts, db.WithValidateField("c3d_cert_lifespan"))
-		if err := fv(ctx, m.GetC3DCertLifespan(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["cache_size"]; exists {
 		vOpts := append(opts, db.WithValidateField("cache_size"))
 		if err := fv(ctx, m.GetCacheSize(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["cache_timeout"]; exists {
-		vOpts := append(opts, db.WithValidateField("cache_timeout"))
-		if err := fv(ctx, m.GetCacheTimeout(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -587,17 +651,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 
 	switch m.GetCipherConfig().(type) {
-	case *CreateSpecType_CipherGroup:
-		if fv, exists := v.FldValidators["cipher_config.cipher_group"]; exists {
-			val := m.GetCipherConfig().(*CreateSpecType_CipherGroup).CipherGroup
-			vOpts := append(opts,
-				db.WithValidateField("cipher_config"),
-				db.WithValidateField("cipher_group"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *CreateSpecType_Ciphers:
 		if fv, exists := v.FldValidators["cipher_config.ciphers"]; exists {
 			val := m.GetCipherConfig().(*CreateSpecType_Ciphers).Ciphers
@@ -610,21 +663,9 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			}
 		}
 	}
-	if fv, exists := v.FldValidators["data_0rtt"]; exists {
-		vOpts := append(opts, db.WithValidateField("data_0rtt"))
-		if err := fv(ctx, m.GetData_0Rtt(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["expire_cert_response_control"]; exists {
 		vOpts := append(opts, db.WithValidateField("expire_cert_response_control"))
 		if err := fv(ctx, m.GetExpireCertResponseControl(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["generic_alert"]; exists {
-		vOpts := append(opts, db.WithValidateField("generic_alert"))
-		if err := fv(ctx, m.GetGenericAlert(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -634,45 +675,9 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["max_active_handshakes"]; exists {
-		vOpts := append(opts, db.WithValidateField("max_active_handshakes"))
-		if err := fv(ctx, m.GetMaxActiveHandshakes(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["mod_ssl_methods"]; exists {
-		vOpts := append(opts, db.WithValidateField("mod_ssl_methods"))
-		if err := fv(ctx, m.GetModSslMethods(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["mode"]; exists {
-		vOpts := append(opts, db.WithValidateField("mode"))
-		if err := fv(ctx, m.GetMode(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ocsp"]; exists {
-		vOpts := append(opts, db.WithValidateField("ocsp"))
-		if err := fv(ctx, m.GetOcsp(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["peer_cert_mode"]; exists {
 		vOpts := append(opts, db.WithValidateField("peer_cert_mode"))
 		if err := fv(ctx, m.GetPeerCertMode(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["proxy_ssl"]; exists {
-		vOpts := append(opts, db.WithValidateField("proxy_ssl"))
-		if err := fv(ctx, m.GetProxySsl(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["proxy_ssl_passthrough"]; exists {
-		vOpts := append(opts, db.WithValidateField("proxy_ssl_passthrough"))
-		if err := fv(ctx, m.GetProxySslPassthrough(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -694,12 +699,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["retain_certificate"]; exists {
-		vOpts := append(opts, db.WithValidateField("retain_certificate"))
-		if err := fv(ctx, m.GetRetainCertificate(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["revoked_cert_status_response_control"]; exists {
 		vOpts := append(opts, db.WithValidateField("revoked_cert_status_response_control"))
 		if err := fv(ctx, m.GetRevokedCertStatusResponseControl(), vOpts...); err != nil {
@@ -718,69 +717,21 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["session_mirroring"]; exists {
-		vOpts := append(opts, db.WithValidateField("session_mirroring"))
-		if err := fv(ctx, m.GetSessionMirroring(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["session_ticket"]; exists {
 		vOpts := append(opts, db.WithValidateField("session_ticket"))
 		if err := fv(ctx, m.GetSessionTicket(), vOpts...); err != nil {
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["sni_default"]; exists {
-		vOpts := append(opts, db.WithValidateField("sni_default"))
-		if err := fv(ctx, m.GetSniDefault(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["tm_options"]; exists {
+		vOpts := append(opts, db.WithValidateField("tm_options"))
+		if err := fv(ctx, m.GetTmOptions(), vOpts...); err != nil {
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["sni_require"]; exists {
-		vOpts := append(opts, db.WithValidateField("sni_require"))
-		if err := fv(ctx, m.GetSniRequire(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_c3d"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_c3d"))
-		if err := fv(ctx, m.GetSslC3D(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_forward_proxy"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_forward_proxy"))
-		if err := fv(ctx, m.GetSslForwardProxy(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_forward_proxy_bypass"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_forward_proxy_bypass"))
-		if err := fv(ctx, m.GetSslForwardProxyBypass(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_forward_proxy_verified_handshake"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_forward_proxy_verified_handshake"))
-		if err := fv(ctx, m.GetSslForwardProxyVerifiedHandshake(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_sign_hash"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_sign_hash"))
-		if err := fv(ctx, m.GetSslSignHash(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["strict_resume"]; exists {
-		vOpts := append(opts, db.WithValidateField("strict_resume"))
-		if err := fv(ctx, m.GetStrictResume(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["unclean_shutdown"]; exists {
-		vOpts := append(opts, db.WithValidateField("unclean_shutdown"))
-		if err := fv(ctx, m.GetUncleanShutdown(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["trusted_ca_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("trusted_ca_list"))
+		if err := fv(ctx, m.GetTrustedCaList(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -793,12 +744,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["untrusted_cert_response_control"]; exists {
 		vOpts := append(opts, db.WithValidateField("untrusted_cert_response_control"))
 		if err := fv(ctx, m.GetUntrustedCertResponseControl(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["user_spec"]; exists {
-		vOpts := append(opts, db.WithValidateField("user_spec"))
-		if err := fv(ctx, m.GetUserSpec(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -839,18 +784,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["authenticate_depth"] = vFn
 
-	vrhC3DCertLifespan := v.C3DCertLifespanValidationRuleHandler
-	rulesC3DCertLifespan := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "24",
-		"ves.io.schema.rules.uint32.lte": "720",
-	}
-	vFn, err = vrhC3DCertLifespan(rulesC3DCertLifespan)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.c3d_cert_lifespan: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["c3d_cert_lifespan"] = vFn
-
 	vrhCacheSize := v.CacheSizeValidationRuleHandler
 	rulesCacheSize := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
@@ -863,18 +796,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["cache_size"] = vFn
 
-	vrhCacheTimeout := v.CacheTimeoutValidationRuleHandler
-	rulesCacheTimeout := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "86400",
-	}
-	vFn, err = vrhCacheTimeout(rulesCacheTimeout)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.cache_timeout: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["cache_timeout"] = vFn
-
 	vrhHandshakeTimeout := v.HandshakeTimeoutValidationRuleHandler
 	rulesHandshakeTimeout := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "5",
@@ -886,29 +807,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["handshake_timeout"] = vFn
-
-	vrhMaxActiveHandshakes := v.MaxActiveHandshakesValidationRuleHandler
-	rulesMaxActiveHandshakes := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "4294967295",
-	}
-	vFn, err = vrhMaxActiveHandshakes(rulesMaxActiveHandshakes)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.max_active_handshakes: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["max_active_handshakes"] = vFn
-
-	vrhOcsp := v.OcspValidationRuleHandler
-	rulesOcsp := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhOcsp(rulesOcsp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.ocsp: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["ocsp"] = vFn
 
 	vrhRenegotiatePeriod := v.RenegotiatePeriodValidationRuleHandler
 	rulesRenegotiatePeriod := map[string]string{
@@ -932,16 +830,27 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["renegotiate_size"] = vFn
 
-	vrhUserSpec := v.UserSpecValidationRuleHandler
-	rulesUserSpec := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "50",
+	vrhTrustedCaList := v.TrustedCaListValidationRuleHandler
+	rulesTrustedCaList := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
 	}
-	vFn, err = vrhUserSpec(rulesUserSpec)
+	vFn, err = vrhTrustedCaList(rulesTrustedCaList)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.user_spec: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.trusted_ca_list: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["user_spec"] = vFn
+	v.FldValidators["trusted_ca_list"] = vFn
+
+	vrhTmOptions := v.TmOptionsValidationRuleHandler
+	rulesTmOptions := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"dont-insert-empty-fragments no-tlsv1.3\",\"dont-insert-empty-fragments no-dtls\",\"dont-insert-empty-fragments no-dtlsv1\",\"dont-insert-empty-fragments no-dtlsv1.2\",\"dont-insert-empty-fragments no-session-resumption-on-renegotiation\",\"dont-insert-empty-fragments no-ssl\",\"dont-insert-empty-fragments no-sslv3\",\"dont-insert-empty-fragments no-tls\",\"dont-insert-empty-fragments no-tlsv1\",\"dont-insert-empty-fragments no-tlsv1.1\",\"dont-insert-empty-fragments no-tlsv1.2\",\"dont-insert-empty-fragments no-tlsv1.3\",\"dont-insert-empty-fragments passive-close\",\"dont-insert-empty-fragments single-dh-use\",\"dont-insert-empty-fragments tls-rollback-bug\"]",
+	}
+	vFn, err = vrhTmOptions(rulesTmOptions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.tm_options: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tm_options"] = vFn
 	v.FldValidators["certificates_choice.certificates"] = CertificateListValidator().Validate
 
 	return v
@@ -959,6 +868,16 @@ func (m *GetSpecType) ToJSON() (string, error) {
 
 func (m *GetSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GetSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	return nil
 }
 
 func (m *GetSpecType) DeepCopy() *GetSpecType {
@@ -999,8 +918,26 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetOcspDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetOcspDRefInfo() FAILED")
+	if fdrInfos, err := m.GetTrustedCaListDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTrustedCaListDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificatesChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertificatesChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTrustedCaListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTrustedCaListDRefInfoForOverlay() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -1028,38 +965,87 @@ func (m *GetSpecType) GetCertificatesChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
-func (m *GetSpecType) GetOcspDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetOcsp()
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetCertificatesChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCertificatesChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetCertificatesChoice().(type) {
+	case *GetSpecType_Certificates:
+		drInfos, err := m.GetCertificates().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCertificates().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "certificates." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+func (m *GetSpecType) GetTrustedCaListDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetTrustedCaList()
 	if len(refs) == 0 {
 		return nil, nil
 	}
 	drInfos := make([]db.DRefInfo, 0, len(refs))
 	for i, ref := range refs {
 		if ref == nil {
-			return nil, fmt.Errorf("GetSpecType.ocsp[%d] has a nil value", i)
+			return nil, fmt.Errorf("GetSpecType.trusted_ca_list[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
 		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "ocsp_profile.Object",
+			RefdType:   "trusted_ca_list.Object",
 			RefdUID:    ref.Uid,
 			RefdTenant: ref.Tenant,
 			RefdNS:     ref.Namespace,
 			RefdName:   ref.Name,
-			DRField:    "ocsp",
+			DRField:    "trusted_ca_list",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetTrustedCaListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTrustedCaList()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.trusted_ca_list[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "trusted_ca_list.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "trusted_ca_list",
 			Ref:        ref,
 		})
 	}
 	return drInfos, nil
 }
 
-// GetOcspDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GetSpecType) GetOcspDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+// GetTrustedCaListDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetTrustedCaListDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "ocsp_profile.Object")
+	refdType, err := d.TypeForEntryKind("", "", "trusted_ca_list.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: ocsp_profile")
+		return nil, errors.Wrap(err, "Cannot find type for kind: trusted_ca_list")
 	}
-	for _, ref := range m.GetOcsp() {
+	for _, ref := range m.GetTrustedCaList() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -1091,14 +1077,6 @@ func (v *ValidateGetSpecType) AuthenticateDepthValidationRuleHandler(rules map[s
 
 	return validatorFn, nil
 }
-func (v *ValidateGetSpecType) C3DCertLifespanValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for c3d_cert_lifespan")
-	}
-
-	return validatorFn, nil
-}
 func (v *ValidateGetSpecType) CacheSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
@@ -1107,72 +1085,10 @@ func (v *ValidateGetSpecType) CacheSizeValidationRuleHandler(rules map[string]st
 
 	return validatorFn, nil
 }
-func (v *ValidateGetSpecType) CacheTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_timeout")
-	}
-
-	return validatorFn, nil
-}
 func (v *ValidateGetSpecType) HandshakeTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for handshake_timeout")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateGetSpecType) MaxActiveHandshakesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for max_active_handshakes")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateGetSpecType) OcspValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ocsp")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ocsp")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated ocsp")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items ocsp")
-		}
-		return nil
 	}
 
 	return validatorFn, nil
@@ -1193,11 +1109,57 @@ func (v *ValidateGetSpecType) RenegotiateSizeValidationRuleHandler(rules map[str
 
 	return validatorFn, nil
 }
-func (v *ValidateGetSpecType) UserSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGetSpecType) TrustedCaListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_ca_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for trusted_ca_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated trusted_ca_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items trusted_ca_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateGetSpecType) TmOptionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for user_spec")
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for tm_options")
 	}
 	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
@@ -1209,7 +1171,7 @@ func (v *ValidateGetSpecType) UserSpecValidationRuleHandler(rules map[string]str
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for user_spec")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tm_options")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
@@ -1223,10 +1185,10 @@ func (v *ValidateGetSpecType) UserSpecValidationRuleHandler(rules map[string]str
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated user_spec")
+			return errors.Wrap(err, "repeated tm_options")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items user_spec")
+			return errors.Wrap(err, "items tm_options")
 		}
 		return nil
 	}
@@ -1277,33 +1239,9 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["bypass_on_client_cert_fail"]; exists {
-		vOpts := append(opts, db.WithValidateField("bypass_on_client_cert_fail"))
-		if err := fv(ctx, m.GetBypassOnClientCertFail(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["bypass_on_handshake_alert"]; exists {
-		vOpts := append(opts, db.WithValidateField("bypass_on_handshake_alert"))
-		if err := fv(ctx, m.GetBypassOnHandshakeAlert(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["c3d_cert_lifespan"]; exists {
-		vOpts := append(opts, db.WithValidateField("c3d_cert_lifespan"))
-		if err := fv(ctx, m.GetC3DCertLifespan(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["cache_size"]; exists {
 		vOpts := append(opts, db.WithValidateField("cache_size"))
 		if err := fv(ctx, m.GetCacheSize(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["cache_timeout"]; exists {
-		vOpts := append(opts, db.WithValidateField("cache_timeout"))
-		if err := fv(ctx, m.GetCacheTimeout(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -1323,17 +1261,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 
 	switch m.GetCipherConfig().(type) {
-	case *GetSpecType_CipherGroup:
-		if fv, exists := v.FldValidators["cipher_config.cipher_group"]; exists {
-			val := m.GetCipherConfig().(*GetSpecType_CipherGroup).CipherGroup
-			vOpts := append(opts,
-				db.WithValidateField("cipher_config"),
-				db.WithValidateField("cipher_group"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *GetSpecType_Ciphers:
 		if fv, exists := v.FldValidators["cipher_config.ciphers"]; exists {
 			val := m.GetCipherConfig().(*GetSpecType_Ciphers).Ciphers
@@ -1346,21 +1273,9 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			}
 		}
 	}
-	if fv, exists := v.FldValidators["data_0rtt"]; exists {
-		vOpts := append(opts, db.WithValidateField("data_0rtt"))
-		if err := fv(ctx, m.GetData_0Rtt(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["expire_cert_response_control"]; exists {
 		vOpts := append(opts, db.WithValidateField("expire_cert_response_control"))
 		if err := fv(ctx, m.GetExpireCertResponseControl(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["generic_alert"]; exists {
-		vOpts := append(opts, db.WithValidateField("generic_alert"))
-		if err := fv(ctx, m.GetGenericAlert(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -1370,45 +1285,9 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["max_active_handshakes"]; exists {
-		vOpts := append(opts, db.WithValidateField("max_active_handshakes"))
-		if err := fv(ctx, m.GetMaxActiveHandshakes(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["mod_ssl_methods"]; exists {
-		vOpts := append(opts, db.WithValidateField("mod_ssl_methods"))
-		if err := fv(ctx, m.GetModSslMethods(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["mode"]; exists {
-		vOpts := append(opts, db.WithValidateField("mode"))
-		if err := fv(ctx, m.GetMode(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ocsp"]; exists {
-		vOpts := append(opts, db.WithValidateField("ocsp"))
-		if err := fv(ctx, m.GetOcsp(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["peer_cert_mode"]; exists {
 		vOpts := append(opts, db.WithValidateField("peer_cert_mode"))
 		if err := fv(ctx, m.GetPeerCertMode(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["proxy_ssl"]; exists {
-		vOpts := append(opts, db.WithValidateField("proxy_ssl"))
-		if err := fv(ctx, m.GetProxySsl(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["proxy_ssl_passthrough"]; exists {
-		vOpts := append(opts, db.WithValidateField("proxy_ssl_passthrough"))
-		if err := fv(ctx, m.GetProxySslPassthrough(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -1430,12 +1309,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["retain_certificate"]; exists {
-		vOpts := append(opts, db.WithValidateField("retain_certificate"))
-		if err := fv(ctx, m.GetRetainCertificate(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["revoked_cert_status_response_control"]; exists {
 		vOpts := append(opts, db.WithValidateField("revoked_cert_status_response_control"))
 		if err := fv(ctx, m.GetRevokedCertStatusResponseControl(), vOpts...); err != nil {
@@ -1454,69 +1327,21 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["session_mirroring"]; exists {
-		vOpts := append(opts, db.WithValidateField("session_mirroring"))
-		if err := fv(ctx, m.GetSessionMirroring(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["session_ticket"]; exists {
 		vOpts := append(opts, db.WithValidateField("session_ticket"))
 		if err := fv(ctx, m.GetSessionTicket(), vOpts...); err != nil {
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["sni_default"]; exists {
-		vOpts := append(opts, db.WithValidateField("sni_default"))
-		if err := fv(ctx, m.GetSniDefault(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["tm_options"]; exists {
+		vOpts := append(opts, db.WithValidateField("tm_options"))
+		if err := fv(ctx, m.GetTmOptions(), vOpts...); err != nil {
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["sni_require"]; exists {
-		vOpts := append(opts, db.WithValidateField("sni_require"))
-		if err := fv(ctx, m.GetSniRequire(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_c3d"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_c3d"))
-		if err := fv(ctx, m.GetSslC3D(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_forward_proxy"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_forward_proxy"))
-		if err := fv(ctx, m.GetSslForwardProxy(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_forward_proxy_bypass"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_forward_proxy_bypass"))
-		if err := fv(ctx, m.GetSslForwardProxyBypass(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_forward_proxy_verified_handshake"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_forward_proxy_verified_handshake"))
-		if err := fv(ctx, m.GetSslForwardProxyVerifiedHandshake(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_sign_hash"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_sign_hash"))
-		if err := fv(ctx, m.GetSslSignHash(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["strict_resume"]; exists {
-		vOpts := append(opts, db.WithValidateField("strict_resume"))
-		if err := fv(ctx, m.GetStrictResume(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["unclean_shutdown"]; exists {
-		vOpts := append(opts, db.WithValidateField("unclean_shutdown"))
-		if err := fv(ctx, m.GetUncleanShutdown(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["trusted_ca_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("trusted_ca_list"))
+		if err := fv(ctx, m.GetTrustedCaList(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -1529,12 +1354,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if fv, exists := v.FldValidators["untrusted_cert_response_control"]; exists {
 		vOpts := append(opts, db.WithValidateField("untrusted_cert_response_control"))
 		if err := fv(ctx, m.GetUntrustedCertResponseControl(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["user_spec"]; exists {
-		vOpts := append(opts, db.WithValidateField("user_spec"))
-		if err := fv(ctx, m.GetUserSpec(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -1575,18 +1394,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["authenticate_depth"] = vFn
 
-	vrhC3DCertLifespan := v.C3DCertLifespanValidationRuleHandler
-	rulesC3DCertLifespan := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "24",
-		"ves.io.schema.rules.uint32.lte": "720",
-	}
-	vFn, err = vrhC3DCertLifespan(rulesC3DCertLifespan)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.c3d_cert_lifespan: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["c3d_cert_lifespan"] = vFn
-
 	vrhCacheSize := v.CacheSizeValidationRuleHandler
 	rulesCacheSize := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
@@ -1599,18 +1406,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["cache_size"] = vFn
 
-	vrhCacheTimeout := v.CacheTimeoutValidationRuleHandler
-	rulesCacheTimeout := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "86400",
-	}
-	vFn, err = vrhCacheTimeout(rulesCacheTimeout)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.cache_timeout: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["cache_timeout"] = vFn
-
 	vrhHandshakeTimeout := v.HandshakeTimeoutValidationRuleHandler
 	rulesHandshakeTimeout := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "5",
@@ -1622,29 +1417,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["handshake_timeout"] = vFn
-
-	vrhMaxActiveHandshakes := v.MaxActiveHandshakesValidationRuleHandler
-	rulesMaxActiveHandshakes := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "4294967295",
-	}
-	vFn, err = vrhMaxActiveHandshakes(rulesMaxActiveHandshakes)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.max_active_handshakes: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["max_active_handshakes"] = vFn
-
-	vrhOcsp := v.OcspValidationRuleHandler
-	rulesOcsp := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhOcsp(rulesOcsp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.ocsp: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["ocsp"] = vFn
 
 	vrhRenegotiatePeriod := v.RenegotiatePeriodValidationRuleHandler
 	rulesRenegotiatePeriod := map[string]string{
@@ -1668,16 +1440,27 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["renegotiate_size"] = vFn
 
-	vrhUserSpec := v.UserSpecValidationRuleHandler
-	rulesUserSpec := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "50",
+	vrhTrustedCaList := v.TrustedCaListValidationRuleHandler
+	rulesTrustedCaList := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
 	}
-	vFn, err = vrhUserSpec(rulesUserSpec)
+	vFn, err = vrhTrustedCaList(rulesTrustedCaList)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.user_spec: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.trusted_ca_list: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["user_spec"] = vFn
+	v.FldValidators["trusted_ca_list"] = vFn
+
+	vrhTmOptions := v.TmOptionsValidationRuleHandler
+	rulesTmOptions := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"dont-insert-empty-fragments no-tlsv1.3\",\"dont-insert-empty-fragments no-dtls\",\"dont-insert-empty-fragments no-dtlsv1\",\"dont-insert-empty-fragments no-dtlsv1.2\",\"dont-insert-empty-fragments no-session-resumption-on-renegotiation\",\"dont-insert-empty-fragments no-ssl\",\"dont-insert-empty-fragments no-sslv3\",\"dont-insert-empty-fragments no-tls\",\"dont-insert-empty-fragments no-tlsv1\",\"dont-insert-empty-fragments no-tlsv1.1\",\"dont-insert-empty-fragments no-tlsv1.2\",\"dont-insert-empty-fragments no-tlsv1.3\",\"dont-insert-empty-fragments passive-close\",\"dont-insert-empty-fragments single-dh-use\",\"dont-insert-empty-fragments tls-rollback-bug\"]",
+	}
+	vFn, err = vrhTmOptions(rulesTmOptions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.tm_options: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tm_options"] = vFn
 	v.FldValidators["certificates_choice.certificates"] = CertificateListValidator().Validate
 
 	return v
@@ -1695,6 +1478,32 @@ func (m *GlobalSpecType) ToJSON() (string, error) {
 
 func (m *GlobalSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+func (m *GlobalSpecType) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.string()
+}
+
+func (m *GlobalSpecType) GoString() string {
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.Passphrase = ""
+
+	return nil
 }
 
 func (m *GlobalSpecType) DeepCopy() *GlobalSpecType {
@@ -1735,8 +1544,26 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetOcspDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetOcspDRefInfo() FAILED")
+	if fdrInfos, err := m.GetTrustedCaListDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTrustedCaListDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificatesChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertificatesChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTrustedCaListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTrustedCaListDRefInfoForOverlay() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -1764,38 +1591,87 @@ func (m *GlobalSpecType) GetCertificatesChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 }
 
-func (m *GlobalSpecType) GetOcspDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetOcsp()
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetCertificatesChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCertificatesChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetCertificatesChoice().(type) {
+	case *GlobalSpecType_Certificates:
+		drInfos, err := m.GetCertificates().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCertificates().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "certificates." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+func (m *GlobalSpecType) GetTrustedCaListDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetTrustedCaList()
 	if len(refs) == 0 {
 		return nil, nil
 	}
 	drInfos := make([]db.DRefInfo, 0, len(refs))
 	for i, ref := range refs {
 		if ref == nil {
-			return nil, fmt.Errorf("GlobalSpecType.ocsp[%d] has a nil value", i)
+			return nil, fmt.Errorf("GlobalSpecType.trusted_ca_list[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
 		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "ocsp_profile.Object",
+			RefdType:   "trusted_ca_list.Object",
 			RefdUID:    ref.Uid,
 			RefdTenant: ref.Tenant,
 			RefdNS:     ref.Namespace,
 			RefdName:   ref.Name,
-			DRField:    "ocsp",
+			DRField:    "trusted_ca_list",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetTrustedCaListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTrustedCaList()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.trusted_ca_list[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "trusted_ca_list.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "trusted_ca_list",
 			Ref:        ref,
 		})
 	}
 	return drInfos, nil
 }
 
-// GetOcspDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GlobalSpecType) GetOcspDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+// GetTrustedCaListDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetTrustedCaListDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "ocsp_profile.Object")
+	refdType, err := d.TypeForEntryKind("", "", "trusted_ca_list.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: ocsp_profile")
+		return nil, errors.Wrap(err, "Cannot find type for kind: trusted_ca_list")
 	}
-	for _, ref := range m.GetOcsp() {
+	for _, ref := range m.GetTrustedCaList() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -1827,14 +1703,6 @@ func (v *ValidateGlobalSpecType) AuthenticateDepthValidationRuleHandler(rules ma
 
 	return validatorFn, nil
 }
-func (v *ValidateGlobalSpecType) C3DCertLifespanValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for c3d_cert_lifespan")
-	}
-
-	return validatorFn, nil
-}
 func (v *ValidateGlobalSpecType) CacheSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
@@ -1843,72 +1711,10 @@ func (v *ValidateGlobalSpecType) CacheSizeValidationRuleHandler(rules map[string
 
 	return validatorFn, nil
 }
-func (v *ValidateGlobalSpecType) CacheTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_timeout")
-	}
-
-	return validatorFn, nil
-}
 func (v *ValidateGlobalSpecType) HandshakeTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for handshake_timeout")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateGlobalSpecType) MaxActiveHandshakesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for max_active_handshakes")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateGlobalSpecType) OcspValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ocsp")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ocsp")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated ocsp")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items ocsp")
-		}
-		return nil
 	}
 
 	return validatorFn, nil
@@ -1929,11 +1735,57 @@ func (v *ValidateGlobalSpecType) RenegotiateSizeValidationRuleHandler(rules map[
 
 	return validatorFn, nil
 }
-func (v *ValidateGlobalSpecType) UserSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGlobalSpecType) TrustedCaListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_ca_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for trusted_ca_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated trusted_ca_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items trusted_ca_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateGlobalSpecType) TmOptionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for user_spec")
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for tm_options")
 	}
 	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
@@ -1945,7 +1797,7 @@ func (v *ValidateGlobalSpecType) UserSpecValidationRuleHandler(rules map[string]
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for user_spec")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tm_options")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
@@ -1959,10 +1811,10 @@ func (v *ValidateGlobalSpecType) UserSpecValidationRuleHandler(rules map[string]
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated user_spec")
+			return errors.Wrap(err, "repeated tm_options")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items user_spec")
+			return errors.Wrap(err, "items tm_options")
 		}
 		return nil
 	}
@@ -2013,33 +1865,9 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["bypass_on_client_cert_fail"]; exists {
-		vOpts := append(opts, db.WithValidateField("bypass_on_client_cert_fail"))
-		if err := fv(ctx, m.GetBypassOnClientCertFail(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["bypass_on_handshake_alert"]; exists {
-		vOpts := append(opts, db.WithValidateField("bypass_on_handshake_alert"))
-		if err := fv(ctx, m.GetBypassOnHandshakeAlert(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["c3d_cert_lifespan"]; exists {
-		vOpts := append(opts, db.WithValidateField("c3d_cert_lifespan"))
-		if err := fv(ctx, m.GetC3DCertLifespan(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["cache_size"]; exists {
 		vOpts := append(opts, db.WithValidateField("cache_size"))
 		if err := fv(ctx, m.GetCacheSize(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["cache_timeout"]; exists {
-		vOpts := append(opts, db.WithValidateField("cache_timeout"))
-		if err := fv(ctx, m.GetCacheTimeout(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -2059,17 +1887,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 
 	switch m.GetCipherConfig().(type) {
-	case *GlobalSpecType_CipherGroup:
-		if fv, exists := v.FldValidators["cipher_config.cipher_group"]; exists {
-			val := m.GetCipherConfig().(*GlobalSpecType_CipherGroup).CipherGroup
-			vOpts := append(opts,
-				db.WithValidateField("cipher_config"),
-				db.WithValidateField("cipher_group"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *GlobalSpecType_Ciphers:
 		if fv, exists := v.FldValidators["cipher_config.ciphers"]; exists {
 			val := m.GetCipherConfig().(*GlobalSpecType_Ciphers).Ciphers
@@ -2094,21 +1911,9 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["data_0rtt"]; exists {
-		vOpts := append(opts, db.WithValidateField("data_0rtt"))
-		if err := fv(ctx, m.GetData_0Rtt(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["expire_cert_response_control"]; exists {
 		vOpts := append(opts, db.WithValidateField("expire_cert_response_control"))
 		if err := fv(ctx, m.GetExpireCertResponseControl(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["generic_alert"]; exists {
-		vOpts := append(opts, db.WithValidateField("generic_alert"))
-		if err := fv(ctx, m.GetGenericAlert(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -2130,51 +1935,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["log_ssl_c3d_events"]; exists {
-		vOpts := append(opts, db.WithValidateField("log_ssl_c3d_events"))
-		if err := fv(ctx, m.GetLogSslC3DEvents(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["log_ssl_client_authentication_events"]; exists {
 		vOpts := append(opts, db.WithValidateField("log_ssl_client_authentication_events"))
 		if err := fv(ctx, m.GetLogSslClientAuthenticationEvents(), vOpts...); err != nil {
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["log_ssl_forward_proxy_events"]; exists {
-		vOpts := append(opts, db.WithValidateField("log_ssl_forward_proxy_events"))
-		if err := fv(ctx, m.GetLogSslForwardProxyEvents(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["log_ssl_handshake_events"]; exists {
 		vOpts := append(opts, db.WithValidateField("log_ssl_handshake_events"))
 		if err := fv(ctx, m.GetLogSslHandshakeEvents(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["max_active_handshakes"]; exists {
-		vOpts := append(opts, db.WithValidateField("max_active_handshakes"))
-		if err := fv(ctx, m.GetMaxActiveHandshakes(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["mod_ssl_methods"]; exists {
-		vOpts := append(opts, db.WithValidateField("mod_ssl_methods"))
-		if err := fv(ctx, m.GetModSslMethods(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["mode"]; exists {
-		vOpts := append(opts, db.WithValidateField("mode"))
-		if err := fv(ctx, m.GetMode(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ocsp"]; exists {
-		vOpts := append(opts, db.WithValidateField("ocsp"))
-		if err := fv(ctx, m.GetOcsp(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -2187,18 +1956,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["peer_cert_mode"]; exists {
 		vOpts := append(opts, db.WithValidateField("peer_cert_mode"))
 		if err := fv(ctx, m.GetPeerCertMode(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["proxy_ssl"]; exists {
-		vOpts := append(opts, db.WithValidateField("proxy_ssl"))
-		if err := fv(ctx, m.GetProxySsl(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["proxy_ssl_passthrough"]; exists {
-		vOpts := append(opts, db.WithValidateField("proxy_ssl_passthrough"))
-		if err := fv(ctx, m.GetProxySslPassthrough(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -2220,12 +1977,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["retain_certificate"]; exists {
-		vOpts := append(opts, db.WithValidateField("retain_certificate"))
-		if err := fv(ctx, m.GetRetainCertificate(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["revoked_cert_status_response_control"]; exists {
 		vOpts := append(opts, db.WithValidateField("revoked_cert_status_response_control"))
 		if err := fv(ctx, m.GetRevokedCertStatusResponseControl(), vOpts...); err != nil {
@@ -2244,69 +1995,21 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["session_mirroring"]; exists {
-		vOpts := append(opts, db.WithValidateField("session_mirroring"))
-		if err := fv(ctx, m.GetSessionMirroring(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["session_ticket"]; exists {
 		vOpts := append(opts, db.WithValidateField("session_ticket"))
 		if err := fv(ctx, m.GetSessionTicket(), vOpts...); err != nil {
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["sni_default"]; exists {
-		vOpts := append(opts, db.WithValidateField("sni_default"))
-		if err := fv(ctx, m.GetSniDefault(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["tm_options"]; exists {
+		vOpts := append(opts, db.WithValidateField("tm_options"))
+		if err := fv(ctx, m.GetTmOptions(), vOpts...); err != nil {
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["sni_require"]; exists {
-		vOpts := append(opts, db.WithValidateField("sni_require"))
-		if err := fv(ctx, m.GetSniRequire(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_c3d"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_c3d"))
-		if err := fv(ctx, m.GetSslC3D(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_forward_proxy"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_forward_proxy"))
-		if err := fv(ctx, m.GetSslForwardProxy(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_forward_proxy_bypass"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_forward_proxy_bypass"))
-		if err := fv(ctx, m.GetSslForwardProxyBypass(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_forward_proxy_verified_handshake"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_forward_proxy_verified_handshake"))
-		if err := fv(ctx, m.GetSslForwardProxyVerifiedHandshake(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_sign_hash"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_sign_hash"))
-		if err := fv(ctx, m.GetSslSignHash(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["strict_resume"]; exists {
-		vOpts := append(opts, db.WithValidateField("strict_resume"))
-		if err := fv(ctx, m.GetStrictResume(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["unclean_shutdown"]; exists {
-		vOpts := append(opts, db.WithValidateField("unclean_shutdown"))
-		if err := fv(ctx, m.GetUncleanShutdown(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["trusted_ca_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("trusted_ca_list"))
+		if err := fv(ctx, m.GetTrustedCaList(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -2319,12 +2022,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["untrusted_cert_response_control"]; exists {
 		vOpts := append(opts, db.WithValidateField("untrusted_cert_response_control"))
 		if err := fv(ctx, m.GetUntrustedCertResponseControl(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["user_spec"]; exists {
-		vOpts := append(opts, db.WithValidateField("user_spec"))
-		if err := fv(ctx, m.GetUserSpec(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -2365,18 +2062,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["authenticate_depth"] = vFn
 
-	vrhC3DCertLifespan := v.C3DCertLifespanValidationRuleHandler
-	rulesC3DCertLifespan := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "24",
-		"ves.io.schema.rules.uint32.lte": "720",
-	}
-	vFn, err = vrhC3DCertLifespan(rulesC3DCertLifespan)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.c3d_cert_lifespan: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["c3d_cert_lifespan"] = vFn
-
 	vrhCacheSize := v.CacheSizeValidationRuleHandler
 	rulesCacheSize := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
@@ -2389,18 +2074,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["cache_size"] = vFn
 
-	vrhCacheTimeout := v.CacheTimeoutValidationRuleHandler
-	rulesCacheTimeout := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "86400",
-	}
-	vFn, err = vrhCacheTimeout(rulesCacheTimeout)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.cache_timeout: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["cache_timeout"] = vFn
-
 	vrhHandshakeTimeout := v.HandshakeTimeoutValidationRuleHandler
 	rulesHandshakeTimeout := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "5",
@@ -2412,29 +2085,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["handshake_timeout"] = vFn
-
-	vrhMaxActiveHandshakes := v.MaxActiveHandshakesValidationRuleHandler
-	rulesMaxActiveHandshakes := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "4294967295",
-	}
-	vFn, err = vrhMaxActiveHandshakes(rulesMaxActiveHandshakes)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.max_active_handshakes: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["max_active_handshakes"] = vFn
-
-	vrhOcsp := v.OcspValidationRuleHandler
-	rulesOcsp := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhOcsp(rulesOcsp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.ocsp: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["ocsp"] = vFn
 
 	vrhRenegotiatePeriod := v.RenegotiatePeriodValidationRuleHandler
 	rulesRenegotiatePeriod := map[string]string{
@@ -2458,16 +2108,27 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["renegotiate_size"] = vFn
 
-	vrhUserSpec := v.UserSpecValidationRuleHandler
-	rulesUserSpec := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "50",
+	vrhTrustedCaList := v.TrustedCaListValidationRuleHandler
+	rulesTrustedCaList := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
 	}
-	vFn, err = vrhUserSpec(rulesUserSpec)
+	vFn, err = vrhTrustedCaList(rulesTrustedCaList)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.user_spec: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.trusted_ca_list: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["user_spec"] = vFn
+	v.FldValidators["trusted_ca_list"] = vFn
+
+	vrhTmOptions := v.TmOptionsValidationRuleHandler
+	rulesTmOptions := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"dont-insert-empty-fragments no-tlsv1.3\",\"dont-insert-empty-fragments no-dtls\",\"dont-insert-empty-fragments no-dtlsv1\",\"dont-insert-empty-fragments no-dtlsv1.2\",\"dont-insert-empty-fragments no-session-resumption-on-renegotiation\",\"dont-insert-empty-fragments no-ssl\",\"dont-insert-empty-fragments no-sslv3\",\"dont-insert-empty-fragments no-tls\",\"dont-insert-empty-fragments no-tlsv1\",\"dont-insert-empty-fragments no-tlsv1.1\",\"dont-insert-empty-fragments no-tlsv1.2\",\"dont-insert-empty-fragments no-tlsv1.3\",\"dont-insert-empty-fragments passive-close\",\"dont-insert-empty-fragments single-dh-use\",\"dont-insert-empty-fragments tls-rollback-bug\"]",
+	}
+	vFn, err = vrhTmOptions(rulesTmOptions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.tm_options: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tm_options"] = vFn
 	v.FldValidators["certificates_choice.certificates"] = CertificateListValidator().Validate
 
 	return v
@@ -2485,6 +2146,16 @@ func (m *ReplaceSpecType) ToJSON() (string, error) {
 
 func (m *ReplaceSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	return nil
 }
 
 func (m *ReplaceSpecType) DeepCopy() *ReplaceSpecType {
@@ -2525,8 +2196,26 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := m.GetOcspDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetOcspDRefInfo() FAILED")
+	if fdrInfos, err := m.GetTrustedCaListDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTrustedCaListDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificatesChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertificatesChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTrustedCaListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTrustedCaListDRefInfoForOverlay() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -2554,38 +2243,87 @@ func (m *ReplaceSpecType) GetCertificatesChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 }
 
-func (m *ReplaceSpecType) GetOcspDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetOcsp()
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetCertificatesChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCertificatesChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetCertificatesChoice().(type) {
+	case *ReplaceSpecType_Certificates:
+		drInfos, err := m.GetCertificates().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCertificates().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "certificates." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+func (m *ReplaceSpecType) GetTrustedCaListDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetTrustedCaList()
 	if len(refs) == 0 {
 		return nil, nil
 	}
 	drInfos := make([]db.DRefInfo, 0, len(refs))
 	for i, ref := range refs {
 		if ref == nil {
-			return nil, fmt.Errorf("ReplaceSpecType.ocsp[%d] has a nil value", i)
+			return nil, fmt.Errorf("ReplaceSpecType.trusted_ca_list[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
 		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "ocsp_profile.Object",
+			RefdType:   "trusted_ca_list.Object",
 			RefdUID:    ref.Uid,
 			RefdTenant: ref.Tenant,
 			RefdNS:     ref.Namespace,
 			RefdName:   ref.Name,
-			DRField:    "ocsp",
+			DRField:    "trusted_ca_list",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetTrustedCaListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTrustedCaList()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.trusted_ca_list[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "trusted_ca_list.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "trusted_ca_list",
 			Ref:        ref,
 		})
 	}
 	return drInfos, nil
 }
 
-// GetOcspDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *ReplaceSpecType) GetOcspDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+// GetTrustedCaListDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ReplaceSpecType) GetTrustedCaListDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "ocsp_profile.Object")
+	refdType, err := d.TypeForEntryKind("", "", "trusted_ca_list.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: ocsp_profile")
+		return nil, errors.Wrap(err, "Cannot find type for kind: trusted_ca_list")
 	}
-	for _, ref := range m.GetOcsp() {
+	for _, ref := range m.GetTrustedCaList() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -2617,14 +2355,6 @@ func (v *ValidateReplaceSpecType) AuthenticateDepthValidationRuleHandler(rules m
 
 	return validatorFn, nil
 }
-func (v *ValidateReplaceSpecType) C3DCertLifespanValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for c3d_cert_lifespan")
-	}
-
-	return validatorFn, nil
-}
 func (v *ValidateReplaceSpecType) CacheSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
@@ -2633,72 +2363,10 @@ func (v *ValidateReplaceSpecType) CacheSizeValidationRuleHandler(rules map[strin
 
 	return validatorFn, nil
 }
-func (v *ValidateReplaceSpecType) CacheTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_timeout")
-	}
-
-	return validatorFn, nil
-}
 func (v *ValidateReplaceSpecType) HandshakeTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for handshake_timeout")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateReplaceSpecType) MaxActiveHandshakesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for max_active_handshakes")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateReplaceSpecType) OcspValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ocsp")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ocsp")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated ocsp")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items ocsp")
-		}
-		return nil
 	}
 
 	return validatorFn, nil
@@ -2719,11 +2387,57 @@ func (v *ValidateReplaceSpecType) RenegotiateSizeValidationRuleHandler(rules map
 
 	return validatorFn, nil
 }
-func (v *ValidateReplaceSpecType) UserSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateReplaceSpecType) TrustedCaListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_ca_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for trusted_ca_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated trusted_ca_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items trusted_ca_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateReplaceSpecType) TmOptionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	itemRules := db.GetRepStringItemRules(rules)
 	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for user_spec")
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for tm_options")
 	}
 	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
@@ -2735,7 +2449,7 @@ func (v *ValidateReplaceSpecType) UserSpecValidationRuleHandler(rules map[string
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for user_spec")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tm_options")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
@@ -2749,10 +2463,10 @@ func (v *ValidateReplaceSpecType) UserSpecValidationRuleHandler(rules map[string
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated user_spec")
+			return errors.Wrap(err, "repeated tm_options")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items user_spec")
+			return errors.Wrap(err, "items tm_options")
 		}
 		return nil
 	}
@@ -2803,33 +2517,9 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["bypass_on_client_cert_fail"]; exists {
-		vOpts := append(opts, db.WithValidateField("bypass_on_client_cert_fail"))
-		if err := fv(ctx, m.GetBypassOnClientCertFail(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["bypass_on_handshake_alert"]; exists {
-		vOpts := append(opts, db.WithValidateField("bypass_on_handshake_alert"))
-		if err := fv(ctx, m.GetBypassOnHandshakeAlert(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["c3d_cert_lifespan"]; exists {
-		vOpts := append(opts, db.WithValidateField("c3d_cert_lifespan"))
-		if err := fv(ctx, m.GetC3DCertLifespan(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["cache_size"]; exists {
 		vOpts := append(opts, db.WithValidateField("cache_size"))
 		if err := fv(ctx, m.GetCacheSize(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["cache_timeout"]; exists {
-		vOpts := append(opts, db.WithValidateField("cache_timeout"))
-		if err := fv(ctx, m.GetCacheTimeout(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -2849,17 +2539,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 
 	switch m.GetCipherConfig().(type) {
-	case *ReplaceSpecType_CipherGroup:
-		if fv, exists := v.FldValidators["cipher_config.cipher_group"]; exists {
-			val := m.GetCipherConfig().(*ReplaceSpecType_CipherGroup).CipherGroup
-			vOpts := append(opts,
-				db.WithValidateField("cipher_config"),
-				db.WithValidateField("cipher_group"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *ReplaceSpecType_Ciphers:
 		if fv, exists := v.FldValidators["cipher_config.ciphers"]; exists {
 			val := m.GetCipherConfig().(*ReplaceSpecType_Ciphers).Ciphers
@@ -2872,21 +2551,9 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			}
 		}
 	}
-	if fv, exists := v.FldValidators["data_0rtt"]; exists {
-		vOpts := append(opts, db.WithValidateField("data_0rtt"))
-		if err := fv(ctx, m.GetData_0Rtt(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["expire_cert_response_control"]; exists {
 		vOpts := append(opts, db.WithValidateField("expire_cert_response_control"))
 		if err := fv(ctx, m.GetExpireCertResponseControl(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["generic_alert"]; exists {
-		vOpts := append(opts, db.WithValidateField("generic_alert"))
-		if err := fv(ctx, m.GetGenericAlert(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -2896,45 +2563,9 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["max_active_handshakes"]; exists {
-		vOpts := append(opts, db.WithValidateField("max_active_handshakes"))
-		if err := fv(ctx, m.GetMaxActiveHandshakes(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["mod_ssl_methods"]; exists {
-		vOpts := append(opts, db.WithValidateField("mod_ssl_methods"))
-		if err := fv(ctx, m.GetModSslMethods(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["mode"]; exists {
-		vOpts := append(opts, db.WithValidateField("mode"))
-		if err := fv(ctx, m.GetMode(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ocsp"]; exists {
-		vOpts := append(opts, db.WithValidateField("ocsp"))
-		if err := fv(ctx, m.GetOcsp(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["peer_cert_mode"]; exists {
 		vOpts := append(opts, db.WithValidateField("peer_cert_mode"))
 		if err := fv(ctx, m.GetPeerCertMode(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["proxy_ssl"]; exists {
-		vOpts := append(opts, db.WithValidateField("proxy_ssl"))
-		if err := fv(ctx, m.GetProxySsl(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["proxy_ssl_passthrough"]; exists {
-		vOpts := append(opts, db.WithValidateField("proxy_ssl_passthrough"))
-		if err := fv(ctx, m.GetProxySslPassthrough(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -2956,12 +2587,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["retain_certificate"]; exists {
-		vOpts := append(opts, db.WithValidateField("retain_certificate"))
-		if err := fv(ctx, m.GetRetainCertificate(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["revoked_cert_status_response_control"]; exists {
 		vOpts := append(opts, db.WithValidateField("revoked_cert_status_response_control"))
 		if err := fv(ctx, m.GetRevokedCertStatusResponseControl(), vOpts...); err != nil {
@@ -2980,69 +2605,21 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["session_mirroring"]; exists {
-		vOpts := append(opts, db.WithValidateField("session_mirroring"))
-		if err := fv(ctx, m.GetSessionMirroring(), vOpts...); err != nil {
-			return err
-		}
-	}
 	if fv, exists := v.FldValidators["session_ticket"]; exists {
 		vOpts := append(opts, db.WithValidateField("session_ticket"))
 		if err := fv(ctx, m.GetSessionTicket(), vOpts...); err != nil {
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["sni_default"]; exists {
-		vOpts := append(opts, db.WithValidateField("sni_default"))
-		if err := fv(ctx, m.GetSniDefault(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["tm_options"]; exists {
+		vOpts := append(opts, db.WithValidateField("tm_options"))
+		if err := fv(ctx, m.GetTmOptions(), vOpts...); err != nil {
 			return err
 		}
 	}
-	if fv, exists := v.FldValidators["sni_require"]; exists {
-		vOpts := append(opts, db.WithValidateField("sni_require"))
-		if err := fv(ctx, m.GetSniRequire(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_c3d"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_c3d"))
-		if err := fv(ctx, m.GetSslC3D(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_forward_proxy"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_forward_proxy"))
-		if err := fv(ctx, m.GetSslForwardProxy(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_forward_proxy_bypass"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_forward_proxy_bypass"))
-		if err := fv(ctx, m.GetSslForwardProxyBypass(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_forward_proxy_verified_handshake"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_forward_proxy_verified_handshake"))
-		if err := fv(ctx, m.GetSslForwardProxyVerifiedHandshake(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["ssl_sign_hash"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssl_sign_hash"))
-		if err := fv(ctx, m.GetSslSignHash(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["strict_resume"]; exists {
-		vOpts := append(opts, db.WithValidateField("strict_resume"))
-		if err := fv(ctx, m.GetStrictResume(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["unclean_shutdown"]; exists {
-		vOpts := append(opts, db.WithValidateField("unclean_shutdown"))
-		if err := fv(ctx, m.GetUncleanShutdown(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["trusted_ca_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("trusted_ca_list"))
+		if err := fv(ctx, m.GetTrustedCaList(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -3055,12 +2632,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if fv, exists := v.FldValidators["untrusted_cert_response_control"]; exists {
 		vOpts := append(opts, db.WithValidateField("untrusted_cert_response_control"))
 		if err := fv(ctx, m.GetUntrustedCertResponseControl(), vOpts...); err != nil {
-			return err
-		}
-	}
-	if fv, exists := v.FldValidators["user_spec"]; exists {
-		vOpts := append(opts, db.WithValidateField("user_spec"))
-		if err := fv(ctx, m.GetUserSpec(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -3101,18 +2672,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["authenticate_depth"] = vFn
 
-	vrhC3DCertLifespan := v.C3DCertLifespanValidationRuleHandler
-	rulesC3DCertLifespan := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "24",
-		"ves.io.schema.rules.uint32.lte": "720",
-	}
-	vFn, err = vrhC3DCertLifespan(rulesC3DCertLifespan)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.c3d_cert_lifespan: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["c3d_cert_lifespan"] = vFn
-
 	vrhCacheSize := v.CacheSizeValidationRuleHandler
 	rulesCacheSize := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
@@ -3125,18 +2684,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["cache_size"] = vFn
 
-	vrhCacheTimeout := v.CacheTimeoutValidationRuleHandler
-	rulesCacheTimeout := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "86400",
-	}
-	vFn, err = vrhCacheTimeout(rulesCacheTimeout)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.cache_timeout: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["cache_timeout"] = vFn
-
 	vrhHandshakeTimeout := v.HandshakeTimeoutValidationRuleHandler
 	rulesHandshakeTimeout := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "5",
@@ -3148,29 +2695,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["handshake_timeout"] = vFn
-
-	vrhMaxActiveHandshakes := v.MaxActiveHandshakesValidationRuleHandler
-	rulesMaxActiveHandshakes := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "4294967295",
-	}
-	vFn, err = vrhMaxActiveHandshakes(rulesMaxActiveHandshakes)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.max_active_handshakes: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["max_active_handshakes"] = vFn
-
-	vrhOcsp := v.OcspValidationRuleHandler
-	rulesOcsp := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhOcsp(rulesOcsp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.ocsp: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["ocsp"] = vFn
 
 	vrhRenegotiatePeriod := v.RenegotiatePeriodValidationRuleHandler
 	rulesRenegotiatePeriod := map[string]string{
@@ -3194,16 +2718,27 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["renegotiate_size"] = vFn
 
-	vrhUserSpec := v.UserSpecValidationRuleHandler
-	rulesUserSpec := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "50",
+	vrhTrustedCaList := v.TrustedCaListValidationRuleHandler
+	rulesTrustedCaList := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
 	}
-	vFn, err = vrhUserSpec(rulesUserSpec)
+	vFn, err = vrhTrustedCaList(rulesTrustedCaList)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.user_spec: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.trusted_ca_list: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["user_spec"] = vFn
+	v.FldValidators["trusted_ca_list"] = vFn
+
+	vrhTmOptions := v.TmOptionsValidationRuleHandler
+	rulesTmOptions := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"dont-insert-empty-fragments no-tlsv1.3\",\"dont-insert-empty-fragments no-dtls\",\"dont-insert-empty-fragments no-dtlsv1\",\"dont-insert-empty-fragments no-dtlsv1.2\",\"dont-insert-empty-fragments no-session-resumption-on-renegotiation\",\"dont-insert-empty-fragments no-ssl\",\"dont-insert-empty-fragments no-sslv3\",\"dont-insert-empty-fragments no-tls\",\"dont-insert-empty-fragments no-tlsv1\",\"dont-insert-empty-fragments no-tlsv1.1\",\"dont-insert-empty-fragments no-tlsv1.2\",\"dont-insert-empty-fragments no-tlsv1.3\",\"dont-insert-empty-fragments passive-close\",\"dont-insert-empty-fragments single-dh-use\",\"dont-insert-empty-fragments tls-rollback-bug\"]",
+	}
+	vFn, err = vrhTmOptions(rulesTmOptions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.tm_options: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tm_options"] = vFn
 	v.FldValidators["certificates_choice.certificates"] = CertificateListValidator().Validate
 
 	return v
@@ -3248,9 +2783,6 @@ func (r *CreateSpecType) SetCipherConfigToGlobalSpecType(o *GlobalSpecType) erro
 	case nil:
 		o.CipherConfig = nil
 
-	case *CreateSpecType_CipherGroup:
-		o.CipherConfig = &GlobalSpecType_CipherGroup{CipherGroup: of.CipherGroup}
-
 	case *CreateSpecType_Ciphers:
 		o.CipherConfig = &GlobalSpecType_Ciphers{Ciphers: of.Ciphers}
 
@@ -3264,9 +2796,6 @@ func (r *CreateSpecType) GetCipherConfigFromGlobalSpecType(o *GlobalSpecType) er
 	switch of := o.CipherConfig.(type) {
 	case nil:
 		r.CipherConfig = nil
-
-	case *GlobalSpecType_CipherGroup:
-		r.CipherConfig = &CreateSpecType_CipherGroup{CipherGroup: of.CipherGroup}
 
 	case *GlobalSpecType_Ciphers:
 		r.CipherConfig = &CreateSpecType_Ciphers{Ciphers: of.Ciphers}
@@ -3286,45 +2815,23 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.Authenticate = f.GetAuthenticate()
 	m.AuthenticateDepth = f.GetAuthenticateDepth()
 	m.AuthenticateName = f.GetAuthenticateName()
-	m.BypassOnClientCertFail = f.GetBypassOnClientCertFail()
-	m.BypassOnHandshakeAlert = f.GetBypassOnHandshakeAlert()
-	m.C3DCertLifespan = f.GetC3DCertLifespan()
 	m.CacheSize = f.GetCacheSize()
-	m.CacheTimeout = f.GetCacheTimeout()
 	m.GetCertificatesChoiceFromGlobalSpecType(f)
 	m.GetCipherConfigFromGlobalSpecType(f)
-	m.Data_0Rtt = f.GetData_0Rtt()
 	m.ExpireCertResponseControl = f.GetExpireCertResponseControl()
-	m.GenericAlert = f.GetGenericAlert()
 	m.HandshakeTimeout = f.GetHandshakeTimeout()
-	m.MaxActiveHandshakes = f.GetMaxActiveHandshakes()
-	m.ModSslMethods = f.GetModSslMethods()
-	m.Mode = f.GetMode()
-	m.Ocsp = f.GetOcsp()
 	m.PeerCertMode = f.GetPeerCertMode()
-	m.ProxySsl = f.GetProxySsl()
-	m.ProxySslPassthrough = f.GetProxySslPassthrough()
 	m.RenegotiatePeriod = f.GetRenegotiatePeriod()
 	m.RenegotiateSize = f.GetRenegotiateSize()
 	m.Renegotiation = f.GetRenegotiation()
-	m.RetainCertificate = f.GetRetainCertificate()
 	m.RevokedCertStatusResponseControl = f.GetRevokedCertStatusResponseControl()
 	m.SecureRenegotiation = f.GetSecureRenegotiation()
 	m.ServerName = f.GetServerName()
-	m.SessionMirroring = f.GetSessionMirroring()
 	m.SessionTicket = f.GetSessionTicket()
-	m.SniDefault = f.GetSniDefault()
-	m.SniRequire = f.GetSniRequire()
-	m.SslC3D = f.GetSslC3D()
-	m.SslForwardProxy = f.GetSslForwardProxy()
-	m.SslForwardProxyBypass = f.GetSslForwardProxyBypass()
-	m.SslForwardProxyVerifiedHandshake = f.GetSslForwardProxyVerifiedHandshake()
-	m.SslSignHash = f.GetSslSignHash()
-	m.StrictResume = f.GetStrictResume()
-	m.UncleanShutdown = f.GetUncleanShutdown()
+	m.TmOptions = f.GetTmOptions()
+	m.TrustedCaList = f.GetTrustedCaList()
 	m.UnknownCertStatusResponseControl = f.GetUnknownCertStatusResponseControl()
 	m.UntrustedCertResponseControl = f.GetUntrustedCertResponseControl()
-	m.UserSpec = f.GetUserSpec()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -3347,45 +2854,23 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.Authenticate = m1.Authenticate
 	f.AuthenticateDepth = m1.AuthenticateDepth
 	f.AuthenticateName = m1.AuthenticateName
-	f.BypassOnClientCertFail = m1.BypassOnClientCertFail
-	f.BypassOnHandshakeAlert = m1.BypassOnHandshakeAlert
-	f.C3DCertLifespan = m1.C3DCertLifespan
 	f.CacheSize = m1.CacheSize
-	f.CacheTimeout = m1.CacheTimeout
 	m1.SetCertificatesChoiceToGlobalSpecType(f)
 	m1.SetCipherConfigToGlobalSpecType(f)
-	f.Data_0Rtt = m1.Data_0Rtt
 	f.ExpireCertResponseControl = m1.ExpireCertResponseControl
-	f.GenericAlert = m1.GenericAlert
 	f.HandshakeTimeout = m1.HandshakeTimeout
-	f.MaxActiveHandshakes = m1.MaxActiveHandshakes
-	f.ModSslMethods = m1.ModSslMethods
-	f.Mode = m1.Mode
-	f.Ocsp = m1.Ocsp
 	f.PeerCertMode = m1.PeerCertMode
-	f.ProxySsl = m1.ProxySsl
-	f.ProxySslPassthrough = m1.ProxySslPassthrough
 	f.RenegotiatePeriod = m1.RenegotiatePeriod
 	f.RenegotiateSize = m1.RenegotiateSize
 	f.Renegotiation = m1.Renegotiation
-	f.RetainCertificate = m1.RetainCertificate
 	f.RevokedCertStatusResponseControl = m1.RevokedCertStatusResponseControl
 	f.SecureRenegotiation = m1.SecureRenegotiation
 	f.ServerName = m1.ServerName
-	f.SessionMirroring = m1.SessionMirroring
 	f.SessionTicket = m1.SessionTicket
-	f.SniDefault = m1.SniDefault
-	f.SniRequire = m1.SniRequire
-	f.SslC3D = m1.SslC3D
-	f.SslForwardProxy = m1.SslForwardProxy
-	f.SslForwardProxyBypass = m1.SslForwardProxyBypass
-	f.SslForwardProxyVerifiedHandshake = m1.SslForwardProxyVerifiedHandshake
-	f.SslSignHash = m1.SslSignHash
-	f.StrictResume = m1.StrictResume
-	f.UncleanShutdown = m1.UncleanShutdown
+	f.TmOptions = m1.TmOptions
+	f.TrustedCaList = m1.TrustedCaList
 	f.UnknownCertStatusResponseControl = m1.UnknownCertStatusResponseControl
 	f.UntrustedCertResponseControl = m1.UntrustedCertResponseControl
-	f.UserSpec = m1.UserSpec
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -3431,9 +2916,6 @@ func (r *GetSpecType) SetCipherConfigToGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		o.CipherConfig = nil
 
-	case *GetSpecType_CipherGroup:
-		o.CipherConfig = &GlobalSpecType_CipherGroup{CipherGroup: of.CipherGroup}
-
 	case *GetSpecType_Ciphers:
 		o.CipherConfig = &GlobalSpecType_Ciphers{Ciphers: of.Ciphers}
 
@@ -3447,9 +2929,6 @@ func (r *GetSpecType) GetCipherConfigFromGlobalSpecType(o *GlobalSpecType) error
 	switch of := o.CipherConfig.(type) {
 	case nil:
 		r.CipherConfig = nil
-
-	case *GlobalSpecType_CipherGroup:
-		r.CipherConfig = &GetSpecType_CipherGroup{CipherGroup: of.CipherGroup}
 
 	case *GlobalSpecType_Ciphers:
 		r.CipherConfig = &GetSpecType_Ciphers{Ciphers: of.Ciphers}
@@ -3469,45 +2948,23 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.Authenticate = f.GetAuthenticate()
 	m.AuthenticateDepth = f.GetAuthenticateDepth()
 	m.AuthenticateName = f.GetAuthenticateName()
-	m.BypassOnClientCertFail = f.GetBypassOnClientCertFail()
-	m.BypassOnHandshakeAlert = f.GetBypassOnHandshakeAlert()
-	m.C3DCertLifespan = f.GetC3DCertLifespan()
 	m.CacheSize = f.GetCacheSize()
-	m.CacheTimeout = f.GetCacheTimeout()
 	m.GetCertificatesChoiceFromGlobalSpecType(f)
 	m.GetCipherConfigFromGlobalSpecType(f)
-	m.Data_0Rtt = f.GetData_0Rtt()
 	m.ExpireCertResponseControl = f.GetExpireCertResponseControl()
-	m.GenericAlert = f.GetGenericAlert()
 	m.HandshakeTimeout = f.GetHandshakeTimeout()
-	m.MaxActiveHandshakes = f.GetMaxActiveHandshakes()
-	m.ModSslMethods = f.GetModSslMethods()
-	m.Mode = f.GetMode()
-	m.Ocsp = f.GetOcsp()
 	m.PeerCertMode = f.GetPeerCertMode()
-	m.ProxySsl = f.GetProxySsl()
-	m.ProxySslPassthrough = f.GetProxySslPassthrough()
 	m.RenegotiatePeriod = f.GetRenegotiatePeriod()
 	m.RenegotiateSize = f.GetRenegotiateSize()
 	m.Renegotiation = f.GetRenegotiation()
-	m.RetainCertificate = f.GetRetainCertificate()
 	m.RevokedCertStatusResponseControl = f.GetRevokedCertStatusResponseControl()
 	m.SecureRenegotiation = f.GetSecureRenegotiation()
 	m.ServerName = f.GetServerName()
-	m.SessionMirroring = f.GetSessionMirroring()
 	m.SessionTicket = f.GetSessionTicket()
-	m.SniDefault = f.GetSniDefault()
-	m.SniRequire = f.GetSniRequire()
-	m.SslC3D = f.GetSslC3D()
-	m.SslForwardProxy = f.GetSslForwardProxy()
-	m.SslForwardProxyBypass = f.GetSslForwardProxyBypass()
-	m.SslForwardProxyVerifiedHandshake = f.GetSslForwardProxyVerifiedHandshake()
-	m.SslSignHash = f.GetSslSignHash()
-	m.StrictResume = f.GetStrictResume()
-	m.UncleanShutdown = f.GetUncleanShutdown()
+	m.TmOptions = f.GetTmOptions()
+	m.TrustedCaList = f.GetTrustedCaList()
 	m.UnknownCertStatusResponseControl = f.GetUnknownCertStatusResponseControl()
 	m.UntrustedCertResponseControl = f.GetUntrustedCertResponseControl()
-	m.UserSpec = f.GetUserSpec()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -3530,45 +2987,23 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.Authenticate = m1.Authenticate
 	f.AuthenticateDepth = m1.AuthenticateDepth
 	f.AuthenticateName = m1.AuthenticateName
-	f.BypassOnClientCertFail = m1.BypassOnClientCertFail
-	f.BypassOnHandshakeAlert = m1.BypassOnHandshakeAlert
-	f.C3DCertLifespan = m1.C3DCertLifespan
 	f.CacheSize = m1.CacheSize
-	f.CacheTimeout = m1.CacheTimeout
 	m1.SetCertificatesChoiceToGlobalSpecType(f)
 	m1.SetCipherConfigToGlobalSpecType(f)
-	f.Data_0Rtt = m1.Data_0Rtt
 	f.ExpireCertResponseControl = m1.ExpireCertResponseControl
-	f.GenericAlert = m1.GenericAlert
 	f.HandshakeTimeout = m1.HandshakeTimeout
-	f.MaxActiveHandshakes = m1.MaxActiveHandshakes
-	f.ModSslMethods = m1.ModSslMethods
-	f.Mode = m1.Mode
-	f.Ocsp = m1.Ocsp
 	f.PeerCertMode = m1.PeerCertMode
-	f.ProxySsl = m1.ProxySsl
-	f.ProxySslPassthrough = m1.ProxySslPassthrough
 	f.RenegotiatePeriod = m1.RenegotiatePeriod
 	f.RenegotiateSize = m1.RenegotiateSize
 	f.Renegotiation = m1.Renegotiation
-	f.RetainCertificate = m1.RetainCertificate
 	f.RevokedCertStatusResponseControl = m1.RevokedCertStatusResponseControl
 	f.SecureRenegotiation = m1.SecureRenegotiation
 	f.ServerName = m1.ServerName
-	f.SessionMirroring = m1.SessionMirroring
 	f.SessionTicket = m1.SessionTicket
-	f.SniDefault = m1.SniDefault
-	f.SniRequire = m1.SniRequire
-	f.SslC3D = m1.SslC3D
-	f.SslForwardProxy = m1.SslForwardProxy
-	f.SslForwardProxyBypass = m1.SslForwardProxyBypass
-	f.SslForwardProxyVerifiedHandshake = m1.SslForwardProxyVerifiedHandshake
-	f.SslSignHash = m1.SslSignHash
-	f.StrictResume = m1.StrictResume
-	f.UncleanShutdown = m1.UncleanShutdown
+	f.TmOptions = m1.TmOptions
+	f.TrustedCaList = m1.TrustedCaList
 	f.UnknownCertStatusResponseControl = m1.UnknownCertStatusResponseControl
 	f.UntrustedCertResponseControl = m1.UntrustedCertResponseControl
-	f.UserSpec = m1.UserSpec
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -3614,9 +3049,6 @@ func (r *ReplaceSpecType) SetCipherConfigToGlobalSpecType(o *GlobalSpecType) err
 	case nil:
 		o.CipherConfig = nil
 
-	case *ReplaceSpecType_CipherGroup:
-		o.CipherConfig = &GlobalSpecType_CipherGroup{CipherGroup: of.CipherGroup}
-
 	case *ReplaceSpecType_Ciphers:
 		o.CipherConfig = &GlobalSpecType_Ciphers{Ciphers: of.Ciphers}
 
@@ -3630,9 +3062,6 @@ func (r *ReplaceSpecType) GetCipherConfigFromGlobalSpecType(o *GlobalSpecType) e
 	switch of := o.CipherConfig.(type) {
 	case nil:
 		r.CipherConfig = nil
-
-	case *GlobalSpecType_CipherGroup:
-		r.CipherConfig = &ReplaceSpecType_CipherGroup{CipherGroup: of.CipherGroup}
 
 	case *GlobalSpecType_Ciphers:
 		r.CipherConfig = &ReplaceSpecType_Ciphers{Ciphers: of.Ciphers}
@@ -3652,45 +3081,23 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.Authenticate = f.GetAuthenticate()
 	m.AuthenticateDepth = f.GetAuthenticateDepth()
 	m.AuthenticateName = f.GetAuthenticateName()
-	m.BypassOnClientCertFail = f.GetBypassOnClientCertFail()
-	m.BypassOnHandshakeAlert = f.GetBypassOnHandshakeAlert()
-	m.C3DCertLifespan = f.GetC3DCertLifespan()
 	m.CacheSize = f.GetCacheSize()
-	m.CacheTimeout = f.GetCacheTimeout()
 	m.GetCertificatesChoiceFromGlobalSpecType(f)
 	m.GetCipherConfigFromGlobalSpecType(f)
-	m.Data_0Rtt = f.GetData_0Rtt()
 	m.ExpireCertResponseControl = f.GetExpireCertResponseControl()
-	m.GenericAlert = f.GetGenericAlert()
 	m.HandshakeTimeout = f.GetHandshakeTimeout()
-	m.MaxActiveHandshakes = f.GetMaxActiveHandshakes()
-	m.ModSslMethods = f.GetModSslMethods()
-	m.Mode = f.GetMode()
-	m.Ocsp = f.GetOcsp()
 	m.PeerCertMode = f.GetPeerCertMode()
-	m.ProxySsl = f.GetProxySsl()
-	m.ProxySslPassthrough = f.GetProxySslPassthrough()
 	m.RenegotiatePeriod = f.GetRenegotiatePeriod()
 	m.RenegotiateSize = f.GetRenegotiateSize()
 	m.Renegotiation = f.GetRenegotiation()
-	m.RetainCertificate = f.GetRetainCertificate()
 	m.RevokedCertStatusResponseControl = f.GetRevokedCertStatusResponseControl()
 	m.SecureRenegotiation = f.GetSecureRenegotiation()
 	m.ServerName = f.GetServerName()
-	m.SessionMirroring = f.GetSessionMirroring()
 	m.SessionTicket = f.GetSessionTicket()
-	m.SniDefault = f.GetSniDefault()
-	m.SniRequire = f.GetSniRequire()
-	m.SslC3D = f.GetSslC3D()
-	m.SslForwardProxy = f.GetSslForwardProxy()
-	m.SslForwardProxyBypass = f.GetSslForwardProxyBypass()
-	m.SslForwardProxyVerifiedHandshake = f.GetSslForwardProxyVerifiedHandshake()
-	m.SslSignHash = f.GetSslSignHash()
-	m.StrictResume = f.GetStrictResume()
-	m.UncleanShutdown = f.GetUncleanShutdown()
+	m.TmOptions = f.GetTmOptions()
+	m.TrustedCaList = f.GetTrustedCaList()
 	m.UnknownCertStatusResponseControl = f.GetUnknownCertStatusResponseControl()
 	m.UntrustedCertResponseControl = f.GetUntrustedCertResponseControl()
-	m.UserSpec = f.GetUserSpec()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -3713,45 +3120,23 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.Authenticate = m1.Authenticate
 	f.AuthenticateDepth = m1.AuthenticateDepth
 	f.AuthenticateName = m1.AuthenticateName
-	f.BypassOnClientCertFail = m1.BypassOnClientCertFail
-	f.BypassOnHandshakeAlert = m1.BypassOnHandshakeAlert
-	f.C3DCertLifespan = m1.C3DCertLifespan
 	f.CacheSize = m1.CacheSize
-	f.CacheTimeout = m1.CacheTimeout
 	m1.SetCertificatesChoiceToGlobalSpecType(f)
 	m1.SetCipherConfigToGlobalSpecType(f)
-	f.Data_0Rtt = m1.Data_0Rtt
 	f.ExpireCertResponseControl = m1.ExpireCertResponseControl
-	f.GenericAlert = m1.GenericAlert
 	f.HandshakeTimeout = m1.HandshakeTimeout
-	f.MaxActiveHandshakes = m1.MaxActiveHandshakes
-	f.ModSslMethods = m1.ModSslMethods
-	f.Mode = m1.Mode
-	f.Ocsp = m1.Ocsp
 	f.PeerCertMode = m1.PeerCertMode
-	f.ProxySsl = m1.ProxySsl
-	f.ProxySslPassthrough = m1.ProxySslPassthrough
 	f.RenegotiatePeriod = m1.RenegotiatePeriod
 	f.RenegotiateSize = m1.RenegotiateSize
 	f.Renegotiation = m1.Renegotiation
-	f.RetainCertificate = m1.RetainCertificate
 	f.RevokedCertStatusResponseControl = m1.RevokedCertStatusResponseControl
 	f.SecureRenegotiation = m1.SecureRenegotiation
 	f.ServerName = m1.ServerName
-	f.SessionMirroring = m1.SessionMirroring
 	f.SessionTicket = m1.SessionTicket
-	f.SniDefault = m1.SniDefault
-	f.SniRequire = m1.SniRequire
-	f.SslC3D = m1.SslC3D
-	f.SslForwardProxy = m1.SslForwardProxy
-	f.SslForwardProxyBypass = m1.SslForwardProxyBypass
-	f.SslForwardProxyVerifiedHandshake = m1.SslForwardProxyVerifiedHandshake
-	f.SslSignHash = m1.SslSignHash
-	f.StrictResume = m1.StrictResume
-	f.UncleanShutdown = m1.UncleanShutdown
+	f.TmOptions = m1.TmOptions
+	f.TrustedCaList = m1.TrustedCaList
 	f.UnknownCertStatusResponseControl = m1.UnknownCertStatusResponseControl
 	f.UntrustedCertResponseControl = m1.UntrustedCertResponseControl
-	f.UserSpec = m1.UserSpec
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

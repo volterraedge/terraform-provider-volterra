@@ -27,6 +27,15 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_sec.code_base_integration.crudapi.API.Create"] = "ves.io.schema.api_sec.code_base_integration.crudapi.ObjectCreateReq"
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.code_base_integration.crudapi.API.Get"] = []string{
+		"status.#.conditions.#",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.code_base_integration.crudapi.API.List"] = []string{
+		"items.#.status.#.conditions.#",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.code_base_integration.crudapi.API.ListStream"] = []string{
+		"items.#.status.#.conditions.#",
+	}
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_sec.code_base_integration.crudapi.API.Replace"] = "ves.io.schema.api_sec.code_base_integration.crudapi.ObjectReplaceReq"
 }
 

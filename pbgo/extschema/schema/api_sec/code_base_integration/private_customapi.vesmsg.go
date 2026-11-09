@@ -24,6 +24,468 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *ScanStatusCancelled) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ScanStatusCancelled) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ScanStatusCancelled) DeepCopy() *ScanStatusCancelled {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ScanStatusCancelled{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ScanStatusCancelled) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ScanStatusCancelled) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ScanStatusCancelledValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateScanStatusCancelled struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateScanStatusCancelled) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ScanStatusCancelled)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ScanStatusCancelled got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["reason"]; exists {
+		vOpts := append(opts, db.WithValidateField("reason"))
+		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultScanStatusCancelledValidator = func() *ValidateScanStatusCancelled {
+	v := &ValidateScanStatusCancelled{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ScanStatusCancelledValidator() db.Validator {
+	return DefaultScanStatusCancelledValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ScanStatusDone) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ScanStatusDone) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ScanStatusDone) DeepCopy() *ScanStatusDone {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ScanStatusDone{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ScanStatusDone) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ScanStatusDone) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ScanStatusDoneValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateScanStatusDone struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateScanStatusDone) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ScanStatusDone)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ScanStatusDone got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["api_endpoints_found"]; exists {
+		vOpts := append(opts, db.WithValidateField("api_endpoints_found"))
+		if err := fv(ctx, m.GetApiEndpointsFound(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["completed_at"]; exists {
+		vOpts := append(opts, db.WithValidateField("completed_at"))
+		if err := fv(ctx, m.GetCompletedAt(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultScanStatusDoneValidator = func() *ValidateScanStatusDone {
+	v := &ValidateScanStatusDone{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ScanStatusDoneValidator() db.Validator {
+	return DefaultScanStatusDoneValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ScanStatusFailed) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ScanStatusFailed) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ScanStatusFailed) DeepCopy() *ScanStatusFailed {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ScanStatusFailed{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ScanStatusFailed) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ScanStatusFailed) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ScanStatusFailedValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateScanStatusFailed struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateScanStatusFailed) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ScanStatusFailed)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ScanStatusFailed got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["error"]; exists {
+		vOpts := append(opts, db.WithValidateField("error"))
+		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultScanStatusFailedValidator = func() *ValidateScanStatusFailed {
+	v := &ValidateScanStatusFailed{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ScanStatusFailedValidator() db.Validator {
+	return DefaultScanStatusFailedValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ScanStatusInProgress) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ScanStatusInProgress) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ScanStatusInProgress) DeepCopy() *ScanStatusInProgress {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ScanStatusInProgress{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ScanStatusInProgress) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ScanStatusInProgress) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ScanStatusInProgressValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateScanStatusInProgress struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateScanStatusInProgress) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ScanStatusInProgress)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ScanStatusInProgress got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["progress"]; exists {
+		vOpts := append(opts, db.WithValidateField("progress"))
+		if err := fv(ctx, m.GetProgress(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["started_at"]; exists {
+		vOpts := append(opts, db.WithValidateField("started_at"))
+		if err := fv(ctx, m.GetStartedAt(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultScanStatusInProgressValidator = func() *ValidateScanStatusInProgress {
+	v := &ValidateScanStatusInProgress{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ScanStatusInProgressValidator() db.Validator {
+	return DefaultScanStatusInProgressValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ScanStatusPending) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ScanStatusPending) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ScanStatusPending) DeepCopy() *ScanStatusPending {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ScanStatusPending{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ScanStatusPending) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ScanStatusPending) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ScanStatusPendingValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateScanStatusPending struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateScanStatusPending) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ScanStatusPending)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ScanStatusPending got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["created_at"]; exists {
+		vOpts := append(opts, db.WithValidateField("created_at"))
+		if err := fv(ctx, m.GetCreatedAt(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultScanStatusPendingValidator = func() *ValidateScanStatusPending {
+	v := &ValidateScanStatusPending{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ScanStatusPendingValidator() db.Validator {
+	return DefaultScanStatusPendingValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ScanStatusTimedOut) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ScanStatusTimedOut) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ScanStatusTimedOut) DeepCopy() *ScanStatusTimedOut {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ScanStatusTimedOut{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ScanStatusTimedOut) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ScanStatusTimedOut) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ScanStatusTimedOutValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateScanStatusTimedOut struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateScanStatusTimedOut) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ScanStatusTimedOut)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ScanStatusTimedOut got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["completed_at"]; exists {
+		vOpts := append(opts, db.WithValidateField("completed_at"))
+		if err := fv(ctx, m.GetCompletedAt(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["started_at"]; exists {
+		vOpts := append(opts, db.WithValidateField("started_at"))
+		if err := fv(ctx, m.GetStartedAt(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultScanStatusTimedOutValidator = func() *ValidateScanStatusTimedOut {
+	v := &ValidateScanStatusTimedOut{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ScanStatusTimedOutValidator() db.Validator {
+	return DefaultScanStatusTimedOutValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *UpdateCodeBaseIntegrationReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -198,4 +660,245 @@ var DefaultUpdateCodeBaseIntegrationRespValidator = func() *ValidateUpdateCodeBa
 
 func UpdateCodeBaseIntegrationRespValidator() db.Validator {
 	return DefaultUpdateCodeBaseIntegrationRespValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpdateScanStatusReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpdateScanStatusReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpdateScanStatusReq) DeepCopy() *UpdateScanStatusReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpdateScanStatusReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpdateScanStatusReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpdateScanStatusReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateScanStatusReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUpdateScanStatusReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpdateScanStatusReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateScanStatusReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpdateScanStatusReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["kafka_message_created_at"]; exists {
+		vOpts := append(opts, db.WithValidateField("kafka_message_created_at"))
+		if err := fv(ctx, m.GetKafkaMessageCreatedAt(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["namespace"]; exists {
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["project_name"]; exists {
+		vOpts := append(opts, db.WithValidateField("project_name"))
+		if err := fv(ctx, m.GetProjectName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["status"]; exists {
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetStatusMetadata().(type) {
+	case *UpdateScanStatusReq_Pending:
+		if fv, exists := v.FldValidators["status_metadata.pending"]; exists {
+			val := m.GetStatusMetadata().(*UpdateScanStatusReq_Pending).Pending
+			vOpts := append(opts,
+				db.WithValidateField("status_metadata"),
+				db.WithValidateField("pending"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpdateScanStatusReq_InProgress:
+		if fv, exists := v.FldValidators["status_metadata.in_progress"]; exists {
+			val := m.GetStatusMetadata().(*UpdateScanStatusReq_InProgress).InProgress
+			vOpts := append(opts,
+				db.WithValidateField("status_metadata"),
+				db.WithValidateField("in_progress"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpdateScanStatusReq_Done:
+		if fv, exists := v.FldValidators["status_metadata.done"]; exists {
+			val := m.GetStatusMetadata().(*UpdateScanStatusReq_Done).Done
+			vOpts := append(opts,
+				db.WithValidateField("status_metadata"),
+				db.WithValidateField("done"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpdateScanStatusReq_Failed:
+		if fv, exists := v.FldValidators["status_metadata.failed"]; exists {
+			val := m.GetStatusMetadata().(*UpdateScanStatusReq_Failed).Failed
+			vOpts := append(opts,
+				db.WithValidateField("status_metadata"),
+				db.WithValidateField("failed"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpdateScanStatusReq_Cancelled:
+		if fv, exists := v.FldValidators["status_metadata.cancelled"]; exists {
+			val := m.GetStatusMetadata().(*UpdateScanStatusReq_Cancelled).Cancelled
+			vOpts := append(opts,
+				db.WithValidateField("status_metadata"),
+				db.WithValidateField("cancelled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpdateScanStatusReq_TimedOut:
+		if fv, exists := v.FldValidators["status_metadata.timed_out"]; exists {
+			val := m.GetStatusMetadata().(*UpdateScanStatusReq_TimedOut).TimedOut
+			vOpts := append(opts,
+				db.WithValidateField("status_metadata"),
+				db.WithValidateField("timed_out"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["tenant"]; exists {
+		vOpts := append(opts, db.WithValidateField("tenant"))
+		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpdateScanStatusReqValidator = func() *ValidateUpdateScanStatusReq {
+	v := &ValidateUpdateScanStatusReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UpdateScanStatusReqValidator() db.Validator {
+	return DefaultUpdateScanStatusReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpdateScanStatusResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpdateScanStatusResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpdateScanStatusResp) DeepCopy() *UpdateScanStatusResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpdateScanStatusResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpdateScanStatusResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpdateScanStatusResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateScanStatusRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUpdateScanStatusResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpdateScanStatusResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateScanStatusResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpdateScanStatusResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpdateScanStatusRespValidator = func() *ValidateUpdateScanStatusResp {
+	v := &ValidateUpdateScanStatusResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UpdateScanStatusRespValidator() db.Validator {
+	return DefaultUpdateScanStatusRespValidator
 }

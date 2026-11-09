@@ -23,7 +23,7 @@ resource "volterra_infraprotect_asn" "example" {
 
   // One of the arguments from this list "bgp_session_disabled bgp_session_enabled" must be set
 
-  bgp_session_enabled = true
+  bgp_session_disabled = true
 }
 
 ```

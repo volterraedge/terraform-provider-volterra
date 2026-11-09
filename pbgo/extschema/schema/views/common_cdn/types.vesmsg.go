@@ -13,6 +13,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema_cdn_purge_command "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cdn_purge_command"
 )
 
 var (
@@ -604,6 +606,17 @@ func (v *ValidateLilacCDNCachePurgeRequest) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
+	case *LilacCDNCachePurgeRequest_HostnameList:
+		if fv, exists := v.FldValidators["pattern_type.hostname_list"]; exists {
+			val := m.GetPatternType().(*LilacCDNCachePurgeRequest_HostnameList).HostnameList
+			vOpts := append(opts,
+				db.WithValidateField("pattern_type"),
+				db.WithValidateField("hostname_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 	if fv, exists := v.FldValidators["purge_epoch_timestamp"]; exists {
 		vOpts := append(opts, db.WithValidateField("purge_epoch_timestamp"))
@@ -722,6 +735,7 @@ var DefaultLilacCDNCachePurgeRequestValidator = func() *ValidateLilacCDNCachePur
 		panic(errMsg)
 	}
 	v.FldValidators["name"] = vFn
+	v.FldValidators["pattern_type.hostname_list"] = ves_io_schema_cdn_purge_command.HostnameListValidator().Validate
 
 	return v
 }()

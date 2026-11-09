@@ -19,6 +19,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.SpecType"] = SpecTypeValidator()
 	vr["ves.io.schema.namespace.Object"] = ObjectValidator()
 	vr["ves.io.schema.namespace.StatusObject"] = StatusObjectValidator()
+	vr["ves.io.schema.namespace.EvaluateBatchAPIAccessForUserRequest"] = EvaluateBatchAPIAccessForUserRequestValidator()
+	vr["ves.io.schema.namespace.EvaluateBatchAPIAccessForUserResponse"] = EvaluateBatchAPIAccessForUserResponseValidator()
 	vr["ves.io.schema.namespace.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.namespace.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.namespace.GetRequest"] = GetRequestValidator()
@@ -105,6 +107,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.namespace.DynamicDataReq"] = DynamicDataReqValidator()
 	vr["ves.io.schema.namespace.DynamicDataResp"] = DynamicDataRespValidator()
+	vr["ves.io.schema.namespace.DynamicDefaultValuesResp"] = DynamicDefaultValuesRespValidator()
+	vr["ves.io.schema.namespace.GetDynamicDefaultValuesReq"] = GetDynamicDefaultValuesReqValidator()
 	vr["ves.io.schema.namespace.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.namespace.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.namespace.NamespaceStatusRequest"] = NamespaceStatusRequestValidator()
@@ -134,30 +138,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventory"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "virtual_service_filter",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventory"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "virtual_servers",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.namespace.NamespaceCustomAPI.ApplicationInventory"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "virtual_service_filter",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.namespace.NamespaceCustomAPI.ApplicationInventory"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "virtual_servers",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.namespace.NamespaceMLCustomAPI.GetApiEndpointsStats"] = []string{
 		"discovered",
 		"inventory",

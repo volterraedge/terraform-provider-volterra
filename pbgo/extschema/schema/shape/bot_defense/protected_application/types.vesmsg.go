@@ -729,6 +729,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetConnectorTypeChoiceDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetConnectorTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetConnectorTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -740,6 +747,43 @@ func (m *GetSpecType) GetConnectorTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetXcMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetXcMesh().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "xc_mesh." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_BigIpIapp:
+		return nil, nil
+	case *GetSpecType_CustomConnector:
+		return nil, nil
+	case *GetSpecType_Cloudfront:
+		return nil, nil
+	case *GetSpecType_Cloudflare:
+		return nil, nil
+	case *GetSpecType_NotApplicableConnector:
+		return nil, nil
+	case *GetSpecType_AdobeCommerceConnector:
+		return nil, nil
+	case *GetSpecType_F5BigIp:
+		return nil, nil
+	case *GetSpecType_SalesforceCommerceConnector:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetConnectorTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectorTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectorTypeChoice().(type) {
+	case *GetSpecType_XcMesh:
+		drInfos, err := m.GetXcMesh().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetXcMesh().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1032,6 +1076,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetConnectorTypeChoiceDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetConnectorTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetConnectorTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1043,6 +1094,43 @@ func (m *GlobalSpecType) GetConnectorTypeChoiceDRefInfo() ([]db.DRefInfo, error)
 		drInfos, err := m.GetXcMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetXcMesh().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "xc_mesh." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_BigIpIapp:
+		return nil, nil
+	case *GlobalSpecType_CustomConnector:
+		return nil, nil
+	case *GlobalSpecType_Cloudfront:
+		return nil, nil
+	case *GlobalSpecType_Cloudflare:
+		return nil, nil
+	case *GlobalSpecType_NotApplicableConnector:
+		return nil, nil
+	case *GlobalSpecType_AdobeCommerceConnector:
+		return nil, nil
+	case *GlobalSpecType_F5BigIp:
+		return nil, nil
+	case *GlobalSpecType_SalesforceCommerceConnector:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetConnectorTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectorTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectorTypeChoice().(type) {
+	case *GlobalSpecType_XcMesh:
+		drInfos, err := m.GetXcMesh().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetXcMesh().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1566,6 +1654,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetConnectorTypeChoiceDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetConnectorTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetConnectorTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1577,6 +1672,43 @@ func (m *ReplaceSpecType) GetConnectorTypeChoiceDRefInfo() ([]db.DRefInfo, error
 		drInfos, err := m.GetXcMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetXcMesh().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "xc_mesh." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_BigIpIapp:
+		return nil, nil
+	case *ReplaceSpecType_CustomConnector:
+		return nil, nil
+	case *ReplaceSpecType_Cloudfront:
+		return nil, nil
+	case *ReplaceSpecType_Cloudflare:
+		return nil, nil
+	case *ReplaceSpecType_NotApplicableConnector:
+		return nil, nil
+	case *ReplaceSpecType_AdobeCommerceConnector:
+		return nil, nil
+	case *ReplaceSpecType_F5BigIp:
+		return nil, nil
+	case *ReplaceSpecType_SalesforceCommerceConnector:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetConnectorTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetConnectorTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetConnectorTypeChoice().(type) {
+	case *ReplaceSpecType_XcMesh:
+		drInfos, err := m.GetXcMesh().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetXcMesh().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2027,8 +2159,32 @@ func (m *XCMeshConnector) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetHttpLoadBalancerDRefInfo()
 }
+func (m *XCMeshConnector) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHttpLoadBalancerDRefInfoForOverlay(generateHash)
+}
 
 func (m *XCMeshConnector) GetHttpLoadBalancerDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetHttpLoadBalancer()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("http_loadbalancer.Object")
+	dri := db.DRefInfo{
+		RefdType:   "http_loadbalancer.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "http_load_balancer",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *XCMeshConnector) GetHttpLoadBalancerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetHttpLoadBalancer()
 	if vref == nil {
 		return nil, nil

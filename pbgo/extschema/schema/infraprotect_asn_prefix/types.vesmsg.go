@@ -70,8 +70,32 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAsnDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAsnDRefInfoForOverlay(generateHash)
+}
 
 func (m *CreateSpecType) GetAsnDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAsn()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("infraprotect_asn.Object")
+	dri := db.DRefInfo{
+		RefdType:   "infraprotect_asn.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "asn",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *CreateSpecType) GetAsnDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetAsn()
 	if vref == nil {
 		return nil, nil
@@ -259,6 +283,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAsnDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAsnDRefInfoForOverlay(generateHash)
+}
 
 // SetStateChangeTimestamp sets the field
 func (m *GetSpecType) SetStateChangeTimestamp(in *google_protobuf.Timestamp) {
@@ -266,6 +297,23 @@ func (m *GetSpecType) SetStateChangeTimestamp(in *google_protobuf.Timestamp) {
 }
 
 func (m *GetSpecType) GetAsnDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAsn()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("infraprotect_asn.Object")
+	dri := db.DRefInfo{
+		RefdType:   "infraprotect_asn.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "asn",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GetSpecType) GetAsnDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetAsn()
 	if vref == nil {
 		return nil, nil
@@ -728,6 +776,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAsnDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAsnDRefInfoForOverlay(generateHash)
+}
 
 // SetStateChangeTimestamp sets the field
 func (m *GlobalSpecType) SetStateChangeTimestamp(in *google_protobuf.Timestamp) {
@@ -735,6 +790,23 @@ func (m *GlobalSpecType) SetStateChangeTimestamp(in *google_protobuf.Timestamp) 
 }
 
 func (m *GlobalSpecType) GetAsnDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAsn()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("infraprotect_asn.Object")
+	dri := db.DRefInfo{
+		RefdType:   "infraprotect_asn.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "asn",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetAsnDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetAsn()
 	if vref == nil {
 		return nil, nil

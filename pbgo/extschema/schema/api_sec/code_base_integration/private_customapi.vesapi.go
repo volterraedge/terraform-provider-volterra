@@ -42,6 +42,14 @@ func (c *PrivateCustomAPIGrpcClient) doRPCUpdateCodeBaseIntegration(ctx context.
 	rsp, err := c.grpcClient.UpdateCodeBaseIntegration(ctx, req, opts...)
 	return rsp, err
 }
+func (c *PrivateCustomAPIGrpcClient) doRPCUpdateScanStatus(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &UpdateScanStatusReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_sec.code_base_integration.UpdateScanStatusReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.UpdateScanStatus(ctx, req, opts...)
+	return rsp, err
+}
 
 func (c *PrivateCustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
@@ -74,6 +82,7 @@ func NewPrivateCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["UpdateCodeBaseIntegration"] = ccl.doRPCUpdateCodeBaseIntegration
+	rpcFns["UpdateScanStatus"] = ccl.doRPCUpdateScanStatus
 	ccl.rpcFns = rpcFns
 	return ccl
 }
@@ -173,6 +182,93 @@ func (c *PrivateCustomAPIRestClient) doRPCUpdateCodeBaseIntegration(ctx context.
 	}
 	return pbRsp, nil
 }
+func (c *PrivateCustomAPIRestClient) doRPCUpdateScanStatus(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &UpdateScanStatusReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_sec.code_base_integration.UpdateScanStatusReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("kafka_message_created_at", fmt.Sprintf("%v", req.KafkaMessageCreatedAt))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("project_name", fmt.Sprintf("%v", req.ProjectName))
+		q.Add("status", fmt.Sprintf("%v", req.Status))
+		q.Add("status_metadata", fmt.Sprintf("%v", req.StatusMetadata))
+		q.Add("tenant", fmt.Sprintf("%v", req.Tenant))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &UpdateScanStatusResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_sec.code_base_integration.UpdateScanStatusResp", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 
 func (c *PrivateCustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
@@ -199,6 +295,7 @@ func NewPrivateCustomAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["UpdateCodeBaseIntegration"] = ccl.doRPCUpdateCodeBaseIntegration
+	rpcFns["UpdateScanStatus"] = ccl.doRPCUpdateScanStatus
 	ccl.rpcFns = rpcFns
 	return ccl
 }
@@ -213,6 +310,10 @@ type privateCustomAPIInprocClient struct {
 func (c *privateCustomAPIInprocClient) UpdateCodeBaseIntegration(ctx context.Context, in *UpdateCodeBaseIntegrationReq, opts ...grpc.CallOption) (*UpdateCodeBaseIntegrationResp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_sec.code_base_integration.PrivateCustomAPI.UpdateCodeBaseIntegration")
 	return c.PrivateCustomAPIServer.UpdateCodeBaseIntegration(ctx, in)
+}
+func (c *privateCustomAPIInprocClient) UpdateScanStatus(ctx context.Context, in *UpdateScanStatusReq, opts ...grpc.CallOption) (*UpdateScanStatusResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_sec.code_base_integration.PrivateCustomAPI.UpdateScanStatus")
+	return c.PrivateCustomAPIServer.UpdateScanStatus(ctx, in)
 }
 
 func NewPrivateCustomAPIInprocClient(svc svcfw.Service) PrivateCustomAPIClient {
@@ -263,6 +364,39 @@ func (s *privateCustomAPISrv) UpdateCodeBaseIntegration(ctx context.Context, in 
 	}
 
 	rsp, err = cah.UpdateCodeBaseIntegration(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	return rsp, nil
+}
+func (s *privateCustomAPISrv) UpdateScanStatus(ctx context.Context, in *UpdateScanStatusReq) (*UpdateScanStatusResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_sec.code_base_integration.PrivateCustomAPI")
+	cah, ok := ah.(PrivateCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *PrivateCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *UpdateScanStatusResp
+		err error
+	)
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_sec.code_base_integration.PrivateCustomAPI.UpdateScanStatus"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.UpdateScanStatus(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -385,6 +519,100 @@ var PrivateCustomAPISwaggerJSON string = `{
             "x-displayname": "",
             "x-ves-proto-service": "ves.io.schema.api_sec.code_base_integration.PrivateCustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
+        "/private/namespaces/{namespace}/code_base_integration/{name}/scan/update": {
+            "post": {
+                "operationId": "ves.io.schema.api_sec.code_base_integration.PrivateCustomAPI.UpdateScanStatus",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/code_base_integrationUpdateScanStatusResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/code_base_integrationUpdateScanStatusReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "PrivateCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_sec-code_base_integration-privatecustomapi-updatescanstatus"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.api_sec.code_base_integration.PrivateCustomAPI.UpdateScanStatus"
+            },
+            "x-displayname": "",
+            "x-ves-proto-service": "ves.io.schema.api_sec.code_base_integration.PrivateCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
         }
     },
     "definitions": {
@@ -425,6 +653,76 @@ var PrivateCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "code_base_integrationScanStatusCancelled": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.api_sec.code_base_integration.ScanStatusCancelled",
+            "properties": {
+                "reason": {
+                    "type": "string"
+                }
+            }
+        },
+        "code_base_integrationScanStatusDone": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.api_sec.code_base_integration.ScanStatusDone",
+            "properties": {
+                "api_endpoints_found": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "completed_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "code_base_integrationScanStatusFailed": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.api_sec.code_base_integration.ScanStatusFailed",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "code_base_integrationScanStatusInProgress": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.api_sec.code_base_integration.ScanStatusInProgress",
+            "properties": {
+                "progress": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "started_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "code_base_integrationScanStatusPending": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.api_sec.code_base_integration.ScanStatusPending",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "code_base_integrationScanStatusTimedOut": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.api_sec.code_base_integration.ScanStatusTimedOut",
+            "properties": {
+                "completed_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "started_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
         "code_base_integrationUpdateCodeBaseIntegrationReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.api_sec.code_base_integration.UpdateCodeBaseIntegrationReq",
@@ -458,6 +756,60 @@ var PrivateCustomAPISwaggerJSON string = `{
         "code_base_integrationUpdateCodeBaseIntegrationResp": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.api_sec.code_base_integration.UpdateCodeBaseIntegrationResp"
+        },
+        "code_base_integrationUpdateScanStatusReq": {
+            "type": "object",
+            "x-ves-oneof-field-status_metadata": "[\"cancelled\",\"done\",\"failed\",\"in_progress\",\"pending\",\"timed_out\"]",
+            "x-ves-proto-message": "ves.io.schema.api_sec.code_base_integration.UpdateScanStatusReq",
+            "properties": {
+                "cancelled": {
+                    "description": "Exclusive with [done failed in_progress pending timed_out]\n",
+                    "$ref": "#/definitions/code_base_integrationScanStatusCancelled"
+                },
+                "done": {
+                    "description": "Exclusive with [cancelled failed in_progress pending timed_out]\n",
+                    "$ref": "#/definitions/code_base_integrationScanStatusDone"
+                },
+                "failed": {
+                    "description": "Exclusive with [cancelled done in_progress pending timed_out]\n",
+                    "$ref": "#/definitions/code_base_integrationScanStatusFailed"
+                },
+                "in_progress": {
+                    "description": "Exclusive with [cancelled done failed pending timed_out]\n",
+                    "$ref": "#/definitions/code_base_integrationScanStatusInProgress"
+                },
+                "kafka_message_created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "namespace": {
+                    "type": "string"
+                },
+                "pending": {
+                    "description": "Exclusive with [cancelled done failed in_progress timed_out]\n",
+                    "$ref": "#/definitions/code_base_integrationScanStatusPending"
+                },
+                "project_name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "tenant": {
+                    "type": "string"
+                },
+                "timed_out": {
+                    "description": "Exclusive with [cancelled done failed in_progress pending]\n",
+                    "$ref": "#/definitions/code_base_integrationScanStatusTimedOut"
+                }
+            }
+        },
+        "code_base_integrationUpdateScanStatusResp": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.api_sec.code_base_integration.UpdateScanStatusResp"
         }
     },
     "x-displayname": "",

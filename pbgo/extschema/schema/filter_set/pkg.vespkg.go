@@ -28,6 +28,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.filter_set.ReplaceResponse"] = ReplaceResponseValidator()
 	vr["ves.io.schema.filter_set.FindFilterSetsReq"] = FindFilterSetsReqValidator()
 	vr["ves.io.schema.filter_set.FindFilterSetsRsp"] = FindFilterSetsRspValidator()
+	vr["ves.io.schema.filter_set.AdvancedFilterExpressionField"] = AdvancedFilterExpressionFieldValidator()
 	vr["ves.io.schema.filter_set.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.filter_set.FilterExpressionField"] = FilterExpressionFieldValidator()
 	vr["ves.io.schema.filter_set.FilterSetField"] = FilterSetFieldValidator()

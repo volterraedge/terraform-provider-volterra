@@ -69,8 +69,32 @@ func (m *AppCertificate) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCertificateDRefInfo()
 }
+func (m *AppCertificate) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCertificateDRefInfoForOverlay(generateHash)
+}
 
 func (m *AppCertificate) GetCertificateDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCertificate()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("certificate.Object")
+	dri := db.DRefInfo{
+		RefdType:   "certificate.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "certificate",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *AppCertificate) GetCertificateDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCertificate()
 	if vref == nil {
 		return nil, nil
@@ -197,6 +221,13 @@ func (m *ApplicationTags) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAppTagsDRefInfo()
 }
+func (m *ApplicationTags) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAppTagsDRefInfoForOverlay(generateHash)
+}
 
 func (m *ApplicationTags) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetAppTags()
@@ -211,6 +242,30 @@ func (m *ApplicationTags) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("uztna_application_tag.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_application_tag.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_tags",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ApplicationTags) GetAppTagsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetAppTags()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ApplicationTags.app_tags[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("uztna_application_tag.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_application_tag.Object",
 			RefdTenant: vref.Tenant,
@@ -419,6 +474,34 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppTagsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppTagsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLocationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLocationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProtocolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
@@ -436,7 +519,40 @@ func (m *CreateSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetAppTagsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAppTags() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAppTags().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppTags().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_tags." + dri.DRField
+	}
+	return drInfos, err
+}
+
 func (m *CreateSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetLocation()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "location",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *CreateSpecType) GetLocationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetLocation()
 	if vref == nil {
 		return nil, nil
@@ -497,6 +613,22 @@ func (m *CreateSpecType) GetOriginDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetOriginDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOrigin() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetOrigin().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOrigin().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "origin." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProtocol() == nil {
@@ -505,6 +637,22 @@ func (m *CreateSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetProtocol().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProtocol().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "protocol." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetProtocolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProtocol() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetProtocol().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetProtocol().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -754,6 +902,34 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppTagsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppTagsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLocationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLocationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProtocolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
@@ -771,7 +947,40 @@ func (m *GetSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetAppTagsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAppTags() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAppTags().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppTags().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_tags." + dri.DRField
+	}
+	return drInfos, err
+}
+
 func (m *GetSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetLocation()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "location",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GetSpecType) GetLocationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetLocation()
 	if vref == nil {
 		return nil, nil
@@ -832,6 +1041,22 @@ func (m *GetSpecType) GetOriginDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetOriginDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOrigin() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetOrigin().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOrigin().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "origin." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProtocol() == nil {
@@ -840,6 +1065,22 @@ func (m *GetSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetProtocol().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProtocol().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "protocol." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetProtocolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProtocol() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetProtocol().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetProtocol().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1094,6 +1335,39 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppTagsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppTagsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLocationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLocationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProtocolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
@@ -1111,7 +1385,40 @@ func (m *GlobalSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetAppTagsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAppTags() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAppTags().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppTags().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_tags." + dri.DRField
+	}
+	return drInfos, err
+}
+
 func (m *GlobalSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetLocation()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "location",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetLocationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetLocation()
 	if vref == nil {
 		return nil, nil
@@ -1172,6 +1479,22 @@ func (m *GlobalSpecType) GetOriginDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetOriginDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOrigin() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetOrigin().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOrigin().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "origin." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProtocol() == nil {
@@ -1188,7 +1511,40 @@ func (m *GlobalSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetProtocolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProtocol() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetProtocol().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetProtocol().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "protocol." + dri.DRField
+	}
+	return drInfos, err
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1471,6 +1827,24 @@ func (m *Origin) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *Origin) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetOriginPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSnatPoolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSnatPoolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *Origin) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetOriginPool()
@@ -1485,6 +1859,30 @@ func (m *Origin) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("uztna_origin_pool.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_origin_pool.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "origin_pool",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *Origin) GetOriginPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetOriginPool()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("Origin.origin_pool[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("uztna_origin_pool.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_origin_pool.Object",
 			RefdTenant: vref.Tenant,
@@ -1538,6 +1936,30 @@ func (m *Origin) GetSnatPoolDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("uztna_snat_pool.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_snat_pool.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "snat_pool",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *Origin) GetSnatPoolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSnatPool()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("Origin.snat_pool[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("uztna_snat_pool.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "uztna_snat_pool.Object",
 			RefdTenant: vref.Tenant,
@@ -1787,6 +2209,13 @@ func (m *Protocol) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetProtocolChoiceDRefInfo()
 }
+func (m *Protocol) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetProtocolChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *Protocol) GetProtocolChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1800,6 +2229,33 @@ func (m *Protocol) GetProtocolChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetHTTPS().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHTTPS().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "HTTPS." + dri.DRField
+		}
+		return drInfos, err
+	case *Protocol_TCP:
+		return nil, nil
+	case *Protocol_UDP:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *Protocol) GetProtocolChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProtocolChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetProtocolChoice().(type) {
+	case *Protocol_HTTP:
+		return nil, nil
+	case *Protocol_HTTPS:
+		drInfos, err := m.GetHTTPS().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHTTPS().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1994,6 +2450,34 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppTagsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAppTagsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetLocationDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLocationDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProtocolDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
@@ -2011,7 +2495,40 @@ func (m *ReplaceSpecType) GetAppTagsDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetAppTagsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAppTags() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAppTags().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppTags().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_tags." + dri.DRField
+	}
+	return drInfos, err
+}
+
 func (m *ReplaceSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetLocation()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "location",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ReplaceSpecType) GetLocationDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetLocation()
 	if vref == nil {
 		return nil, nil
@@ -2072,6 +2589,22 @@ func (m *ReplaceSpecType) GetOriginDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetOriginDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOrigin() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetOrigin().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOrigin().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "origin." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProtocol() == nil {
@@ -2080,6 +2613,22 @@ func (m *ReplaceSpecType) GetProtocolDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetProtocol().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetProtocol().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "protocol." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetProtocolDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProtocol() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetProtocol().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetProtocol().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

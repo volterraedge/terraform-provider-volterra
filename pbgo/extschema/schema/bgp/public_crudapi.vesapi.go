@@ -3230,6 +3230,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "BGP Peer",
             "x-ves-displayorder": "1,2,5",
             "x-ves-oneof-field-bfd_choice": "[\"bfd_disabled\",\"bfd_enabled\"]",
+            "x-ves-oneof-field-ebgp_multihop_choice": "[\"ebgp_multihop_disabled\",\"ebgp_multihop_enabled\"]",
             "x-ves-oneof-field-enable_choice": "[\"disable\",\"routing_policies\"]",
             "x-ves-oneof-field-passive_choice": "[\"passive_mode_disabled\",\"passive_mode_enabled\"]",
             "x-ves-oneof-field-type_choice": "[\"external\"]",
@@ -3252,6 +3253,18 @@ var APISwaggerJSON string = `{
                     "title": "disable",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disabled"
+                },
+                "ebgp_multihop_disabled": {
+                    "description": "Exclusive with [ebgp_multihop_enabled]\n eBGP multihop is disabled. Single-hop BFD (port 3784) is used and\n ebgp-multihop is not configured on the BGP speaker.",
+                    "title": "ebgp_multihop_disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "ebgp_multihop_enabled": {
+                    "description": "Exclusive with [ebgp_multihop_disabled]\n eBGP multihop is enabled (default). The BGP speaker allows non-directly-connected peers\n and BFD runs in multihop mode (port 4784).",
+                    "title": "ebgp_multihop_enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enabled"
                 },
                 "external": {
                     "description": "Exclusive with []\n External BGP peer.",
@@ -3781,12 +3794,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {

@@ -128,24 +128,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"demo1", "test"},
 		},
 	}
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.virtual_server.CustomAPI.GetAssociatedObjects"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "traffic_policies.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "virtual_addresses.#.spec.gc_spec.private.segment.custom_vip.ip_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "virtual_addresses.#.spec.gc_spec.private.site.custom_vip.ip_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "virtual_addresses.#.spec.gc_spec.private.virtual_ce_sites.custom_vip.ip_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-	}
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

@@ -2426,6 +2426,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "ioschemaPathMatcherType": {
+            "type": "object",
+            "description": "x-displayName: \"Path to Match\"\nPath match of the URI can be either be, Prefix match or exact match or regular expression match",
+            "title": "PathMatcherType",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "x-displayName: \"Exact\"\nx-example: \"/logout\"\nExact path value to match",
+                    "title": "exact"
+                },
+                "prefix": {
+                    "type": "string",
+                    "description": "x-displayName: \"Prefix\"\nx-example: \"/register/\"\nPath prefix to match (e.g. the value / will match on all paths)",
+                    "title": "prefix"
+                },
+                "regex": {
+                    "type": "string",
+                    "description": "x-displayName: \"Regex\"\nRegular expression of path match (e.g. the value .* will match on all paths)",
+                    "title": "regex"
+                }
+            }
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -2686,12 +2708,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -3505,20 +3527,26 @@ var APISwaggerJSON string = `{
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"none\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info none]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info none]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType",
                     "x-displayname": "Clear Secret"
+                },
+                "none": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info]\n No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.",
+                    "title": "None",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
                 }
             }
         },
@@ -4327,10 +4355,11 @@ var APISwaggerJSON string = `{
             "description": "Creates virtual host in a given namespace.",
             "title": "Create virtual host",
             "x-displayname": "Create Virtual Host",
-            "x-ves-displayorder": "15,2,3,5,85,18,19,38,6,17,7,8,100,101,102,103,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82,111",
+            "x-ves-displayorder": "15,2,3,5,85,18,19,38,6,17,7,8,100,101,102,103,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82,111,114",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
+            "x-ves-oneof-field-http10_choice": "[\"disable_http10\",\"enable_http10\"]",
             "x-ves-oneof-field-max_requests_per_connection_choice": "[\"max_requests_per_connection\",\"no_request_limit_per_connection\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
@@ -4444,6 +4473,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable DNS resolution",
                     "x-ves-example": "false"
                 },
+                "disable_http10": {
+                    "description": "Exclusive with [enable_http10]\n Reject HTTP/1.0 and HTTP/0.9 on this LB.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_path_normalize": {
                     "description": "Exclusive with [enable_path_normalize]\n Path normalization is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -4468,6 +4502,11 @@ var APISwaggerJSON string = `{
                     "description": " In this mode of proxy, virtual host will resolve the destination endpoint dynamically.\n\n The dynamic resolution is done using a predefined field in the request. This predefined\n field depends on the ProxyType configured on the Virtual Host.\n\n For HTTP traffic, i.e. with ProxyType as HTTP_PROXY or HTTPS_PROXY, virtual host will use the\n \"HOST\" http header from the request and perform DNS resolution to select destination endpoint.\n\n For TCP traffic with SNI, (If the ProxyType is TCP_PROXY_WITH_SNI), virtual host will perform DNS\n resolution using the SNI.\n\n The DNS resolution is performed in the virtual network specified in outside_network_type or\n outside_network\n\n In both modes of operation(either using Host header or SNI), the DNS resolution could return\n multiple addresses. First IPv4 address from such returned list is used as endpoint for the\n request. The DNS response is cached for 60s by default.",
                     "$ref": "#/definitions/virtual_hostDynamicReverseProxyType",
                     "x-displayname": "Dynamic Reverse Proxy"
+                },
+                "enable_http10": {
+                    "description": "Exclusive with [disable_http10]\n Allow HTTP/1.0 and HTTP/0.9 on this LB.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
                 },
                 "enable_path_normalize": {
                     "description": "Exclusive with [disable_path_normalize]\n Path normalization is enabled",
@@ -4740,12 +4779,13 @@ var APISwaggerJSON string = `{
             "description": "Get virtual host from a given namespace.",
             "title": "Get virtual host",
             "x-displayname": "Get Virtual Host",
-            "x-ves-displayorder": "10,15,2,3,5,85,18,19,38,6,17,7,8,100,101,102,103,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82,111",
+            "x-ves-displayorder": "10,15,2,3,5,85,18,19,38,6,17,7,8,100,101,102,103,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82,111,114",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-ddos_auto_mitigation_action": "[\"block\",\"ddos_js_challenge\",\"l7_ddos_action_default\",\"l7_ddos_captcha_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
             "x-ves-oneof-field-dns_zone_state_choice": "[\"not_ready\",\"ready\"]",
+            "x-ves-oneof-field-http10_choice": "[\"disable_http10\",\"enable_http10\"]",
             "x-ves-oneof-field-max_requests_per_connection_choice": "[\"max_requests_per_connection\",\"no_request_limit_per_connection\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
@@ -4884,6 +4924,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable DNS resolution",
                     "x-ves-example": "false"
                 },
+                "disable_http10": {
+                    "description": "Exclusive with [enable_http10]\n Reject HTTP/1.0 and HTTP/0.9 on this LB.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_path_normalize": {
                     "description": "Exclusive with [enable_path_normalize]\n Path normalization is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -4916,6 +4961,11 @@ var APISwaggerJSON string = `{
                     "description": " In this mode of proxy, virtual host will resolve the destination endpoint dynamically.\n\n The dynamic resolution is done using a predefined field in the request. This predefined\n field depends on the ProxyType configured on the Virtual Host.\n\n For HTTP traffic, i.e. with ProxyType as HTTP_PROXY or HTTPS_PROXY, virtual host will use the\n \"HOST\" http header from the request and perform DNS resolution to select destination endpoint.\n\n For TCP traffic with SNI, (If the ProxyType is TCP_PROXY_WITH_SNI), virtual host will perform DNS\n resolution using the SNI.\n\n The DNS resolution is performed in the virtual network specified in outside_network_type or\n outside_network\n\n In both modes of operation(either using Host header or SNI), the DNS resolution could return\n multiple addresses. First IPv4 address from such returned list is used as endpoint for the\n request. The DNS response is cached for 60s by default.",
                     "$ref": "#/definitions/virtual_hostDynamicReverseProxyType",
                     "x-displayname": "Dynamic Reverse Proxy"
+                },
+                "enable_http10": {
+                    "description": "Exclusive with [disable_http10]\n Allow HTTP/1.0 and HTTP/0.9 on this LB.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
                 },
                 "enable_path_normalize": {
                     "description": "Exclusive with [disable_path_normalize]\n Path normalization is enabled",
@@ -5239,10 +5289,11 @@ var APISwaggerJSON string = `{
             "description": "Replace a given virtual host in a given namespace.",
             "title": "Replace virtual host",
             "x-displayname": "Replace Virtual Host",
-            "x-ves-displayorder": "15,2,3,5,85,18,19,38,6,17,7,8,100,101,102,103,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82,111",
+            "x-ves-displayorder": "15,2,3,5,85,18,19,38,6,17,7,8,100,101,102,103,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82,111,114",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
+            "x-ves-oneof-field-http10_choice": "[\"disable_http10\",\"enable_http10\"]",
             "x-ves-oneof-field-max_requests_per_connection_choice": "[\"max_requests_per_connection\",\"no_request_limit_per_connection\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
@@ -5356,6 +5407,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable DNS resolution",
                     "x-ves-example": "false"
                 },
+                "disable_http10": {
+                    "description": "Exclusive with [enable_http10]\n Reject HTTP/1.0 and HTTP/0.9 on this LB.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_path_normalize": {
                     "description": "Exclusive with [enable_path_normalize]\n Path normalization is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -5380,6 +5436,11 @@ var APISwaggerJSON string = `{
                     "description": " In this mode of proxy, virtual host will resolve the destination endpoint dynamically.\n\n The dynamic resolution is done using a predefined field in the request. This predefined\n field depends on the ProxyType configured on the Virtual Host.\n\n For HTTP traffic, i.e. with ProxyType as HTTP_PROXY or HTTPS_PROXY, virtual host will use the\n \"HOST\" http header from the request and perform DNS resolution to select destination endpoint.\n\n For TCP traffic with SNI, (If the ProxyType is TCP_PROXY_WITH_SNI), virtual host will perform DNS\n resolution using the SNI.\n\n The DNS resolution is performed in the virtual network specified in outside_network_type or\n outside_network\n\n In both modes of operation(either using Host header or SNI), the DNS resolution could return\n multiple addresses. First IPv4 address from such returned list is used as endpoint for the\n request. The DNS response is cached for 60s by default.",
                     "$ref": "#/definitions/virtual_hostDynamicReverseProxyType",
                     "x-displayname": "Dynamic Reverse Proxy"
+                },
+                "enable_http10": {
+                    "description": "Exclusive with [disable_http10]\n Allow HTTP/1.0 and HTTP/0.9 on this LB.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
                 },
                 "enable_path_normalize": {
                     "description": "Exclusive with [disable_path_normalize]\n Path normalization is enabled",
@@ -5766,6 +5827,19 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/virtual_hostDNSRecord"
                     },
                     "x-displayname": "DNS Records"
+                },
+                "dns_zones": {
+                    "type": "array",
+                    "description": " DNS Zone references in use by this object\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
+                    "title": "DNS Zone References",
+                    "maxItems": 256,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "DNS Zone References",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256"
+                    }
                 }
             }
         },
@@ -6899,6 +6973,53 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Custom Message for Temporary Blocking\"\nx-example: \"string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"\nCustom message is of type -uri_ref-. Currently supported URL schemes is -string:///-.\nFor -string:///- scheme, message needs to be encoded in Base64 format.\nYou can specify this message as base64 encoded plain text message e.g. \"Blocked..\"\nor it can be HTML paragraph or a body string encoded as base64 string\nE.g. \"\u003cp\u003e Blocked \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"",
                     "title": "custom_page"
+                }
+            }
+        },
+        "virtual_hostVHImageOptimizationSettings": {
+            "type": "object",
+            "description": "x-displayName: \"Image Optimization Settings\"\nConfiguration for image optimization per domain and path",
+            "title": "VHImageOptimizationSettings",
+            "properties": {
+                "all_domains": {
+                    "description": "x-displayName: \"All Domains\"",
+                    "title": "All Domains",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "express": {
+                    "description": "x-displayName: \"Express\"\nx-choiceDescription: \"Use Accept Header parameters for transformations\"",
+                    "title": "Express",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Name\"\nx-required\nx-example: \"my-image-optimization\"",
+                    "title": "Name"
+                },
+                "path": {
+                    "description": "x-displayName: \"Path Match\"\nx-required",
+                    "title": "Path Match",
+                    "$ref": "#/definitions/ioschemaPathMatcherType"
+                },
+                "select_domains": {
+                    "description": "x-displayName: \"Select Domains\"",
+                    "title": "Select Domains",
+                    "$ref": "#/definitions/virtual_hostVHSelectDomainsType"
+                }
+            }
+        },
+        "virtual_hostVHSelectDomainsType": {
+            "type": "object",
+            "description": "x-displayName: \"Select Domains\"",
+            "title": "VHSelectDomainsType",
+            "properties": {
+                "domains": {
+                    "type": "array",
+                    "description": "x-displayName: \"Domains\"\nx-required",
+                    "title": "Domains",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },

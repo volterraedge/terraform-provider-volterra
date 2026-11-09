@@ -189,6 +189,12 @@ func (v *ValidateCredentialsExpiry) Validate(ctx context.Context, pm interface{}
 			return err
 		}
 	}
+	if fv, exists := v.FldValidators["retention_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("retention_policy"))
+		if err := fv(ctx, m.GetRetentionPolicy(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -446,6 +452,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDownstreamCosDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDownstreamCosDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSharedPublicVipDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSharedPublicVipDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetDownstreamCosDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetDownstreamCos()
@@ -458,6 +482,34 @@ func (m *GlobalSpecType) GetDownstreamCosDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.downstream_cos[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "downstream_cos.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "downstream_cos",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetDownstreamCosDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetDownstreamCos()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.downstream_cos[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "downstream_cos.Object",
 			RefdUID:    ref.Uid,
@@ -501,6 +553,34 @@ func (m *GlobalSpecType) GetSharedPublicVipDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.shared_public_vip[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "public_ip.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "shared_public_vip",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetSharedPublicVipDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetSharedPublicVip()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.shared_public_vip[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "public_ip.Object",
 			RefdUID:    ref.Uid,
@@ -790,6 +870,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["k8s_server_sub_ca_latest_version"]; exists {
 		vOpts := append(opts, db.WithValidateField("k8s_server_sub_ca_latest_version"))
 		if err := fv(ctx, m.GetK8SServerSubCaLatestVersion(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["k8s_server_sub_ca_min_version"]; exists {
+		vOpts := append(opts, db.WithValidateField("k8s_server_sub_ca_min_version"))
+		if err := fv(ctx, m.GetK8SServerSubCaMinVersion(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -1334,6 +1420,99 @@ var DefaultPrivateDeactivateTenantResponseValidator = func() *ValidatePrivateDea
 
 func PrivateDeactivateTenantResponseValidator() db.Validator {
 	return DefaultPrivateDeactivateTenantResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RetentionPolicy) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RetentionPolicy) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RetentionPolicy) DeepCopy() *RetentionPolicy {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RetentionPolicy{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RetentionPolicy) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RetentionPolicy) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RetentionPolicyValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRetentionPolicy struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRetentionPolicy) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RetentionPolicy)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RetentionPolicy got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetRetentionPolicyChoice().(type) {
+	case *RetentionPolicy_RetainIndefinitely:
+		if fv, exists := v.FldValidators["retention_policy_choice.retain_indefinitely"]; exists {
+			val := m.GetRetentionPolicyChoice().(*RetentionPolicy_RetainIndefinitely).RetainIndefinitely
+			vOpts := append(opts,
+				db.WithValidateField("retention_policy_choice"),
+				db.WithValidateField("retain_indefinitely"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RetentionPolicy_RetentionDays:
+		if fv, exists := v.FldValidators["retention_policy_choice.retention_days"]; exists {
+			val := m.GetRetentionPolicyChoice().(*RetentionPolicy_RetentionDays).RetentionDays
+			vOpts := append(opts,
+				db.WithValidateField("retention_policy_choice"),
+				db.WithValidateField("retention_days"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRetentionPolicyValidator = func() *ValidateRetentionPolicy {
+	v := &ValidateRetentionPolicy{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func RetentionPolicyValidator() db.Validator {
+	return DefaultRetentionPolicyValidator
 }
 
 // augmented methods on protoc/std generated struct

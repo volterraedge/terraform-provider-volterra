@@ -42,6 +42,14 @@ func (c *PrivateConfigKubeConfigAPIGrpcClient) doRPCGlobalAccessEnabled(ctx cont
 	rsp, err := c.grpcClient.GlobalAccessEnabled(ctx, req, opts...)
 	return rsp, err
 }
+func (c *PrivateConfigKubeConfigAPIGrpcClient) doRPCRevokeK8SServerSubCA(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &RevokeK8SServerSubCARequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.RevokeK8SServerSubCARequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.RevokeK8SServerSubCA(ctx, req, opts...)
+	return rsp, err
+}
 
 func (c *PrivateConfigKubeConfigAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
@@ -74,6 +82,7 @@ func NewPrivateConfigKubeConfigAPIGrpcClient(cc *grpc.ClientConn) server.CustomC
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GlobalAccessEnabled"] = ccl.doRPCGlobalAccessEnabled
+	rpcFns["RevokeK8SServerSubCA"] = ccl.doRPCRevokeK8SServerSubCA
 	ccl.rpcFns = rpcFns
 	return ccl
 }
@@ -168,6 +177,89 @@ func (c *PrivateConfigKubeConfigAPIRestClient) doRPCGlobalAccessEnabled(ctx cont
 	}
 	return pbRsp, nil
 }
+func (c *PrivateConfigKubeConfigAPIRestClient) doRPCRevokeK8SServerSubCA(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &RevokeK8SServerSubCARequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.RevokeK8SServerSubCARequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("reason", fmt.Sprintf("%v", req.Reason))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &RevokeK8SServerSubCAResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.RevokeK8SServerSubCAResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 
 func (c *PrivateConfigKubeConfigAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
@@ -194,6 +286,7 @@ func NewPrivateConfigKubeConfigAPIRestClient(baseURL string, hc http.Client) ser
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GlobalAccessEnabled"] = ccl.doRPCGlobalAccessEnabled
+	rpcFns["RevokeK8SServerSubCA"] = ccl.doRPCRevokeK8SServerSubCA
 	ccl.rpcFns = rpcFns
 	return ccl
 }
@@ -208,6 +301,10 @@ type privateConfigKubeConfigAPIInprocClient struct {
 func (c *privateConfigKubeConfigAPIInprocClient) GlobalAccessEnabled(ctx context.Context, in *GlobalAccessCheckRequest, opts ...grpc.CallOption) (*GlobalAccessCheckResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.PrivateConfigKubeConfigAPI.GlobalAccessEnabled")
 	return c.PrivateConfigKubeConfigAPIServer.GlobalAccessEnabled(ctx, in)
+}
+func (c *privateConfigKubeConfigAPIInprocClient) RevokeK8SServerSubCA(ctx context.Context, in *RevokeK8SServerSubCARequest, opts ...grpc.CallOption) (*RevokeK8SServerSubCAResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.PrivateConfigKubeConfigAPI.RevokeK8SServerSubCA")
+	return c.PrivateConfigKubeConfigAPIServer.RevokeK8SServerSubCA(ctx, in)
 }
 
 func NewPrivateConfigKubeConfigAPIInprocClient(svc svcfw.Service) PrivateConfigKubeConfigAPIClient {
@@ -258,6 +355,39 @@ func (s *privateConfigKubeConfigAPISrv) GlobalAccessEnabled(ctx context.Context,
 	}
 
 	rsp, err = cah.GlobalAccessEnabled(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	return rsp, nil
+}
+func (s *privateConfigKubeConfigAPISrv) RevokeK8SServerSubCA(ctx context.Context, in *RevokeK8SServerSubCARequest) (*RevokeK8SServerSubCAResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.PrivateConfigKubeConfigAPI")
+	cah, ok := ah.(PrivateConfigKubeConfigAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *PrivateConfigKubeConfigAPIServer", ah)
+	}
+
+	var (
+		rsp *RevokeK8SServerSubCAResponse
+		err error
+	)
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.PrivateConfigKubeConfigAPI.RevokeK8SServerSubCA"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.RevokeK8SServerSubCA(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -379,6 +509,106 @@ var PrivateConfigKubeConfigAPISwaggerJSON string = `{
             "x-displayname": "Private Site KubeConfig API",
             "x-ves-proto-service": "ves.io.schema.site.PrivateConfigKubeConfigAPI",
             "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
+        "/ves.io.schema/private/namespaces/{namespace}/sites/{name}/revoke_k8s_server_sub_ca": {
+            "post": {
+                "summary": "Revoke K8s Server Sub CA",
+                "description": "Evict a compromised pk8s local server SubCA now. The operation mints a new\nSubCA, advances the trusted minimum version past the compromised SubCA, and\nre-issues the server cert of every pk8s site of the tenant under the new SubCA.",
+                "operationId": "ves.io.schema.site.PrivateConfigKubeConfigAPI.RevokeK8SServerSubCA",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/siteRevokeK8SServerSubCAResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nNamespace of the site in the request path. pk8s sites are in the system namespace.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-required\nx-example: \"ce398\"\nName of a site of the tenant. The handler validates that the site exists. The\ntenant is taken from the request context, not resolved from this site.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/siteRevokeK8SServerSubCARequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "PrivateConfigKubeConfigAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-privateconfigkubeconfigapi-revokek8sserversubca"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.PrivateConfigKubeConfigAPI.RevokeK8SServerSubCA"
+            },
+            "x-displayname": "Private Site KubeConfig API",
+            "x-ves-proto-service": "ves.io.schema.site.PrivateConfigKubeConfigAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
         }
     },
     "definitions": {
@@ -396,6 +626,79 @@ var PrivateConfigKubeConfigAPISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Enabled",
                     "x-ves-example": "false"
+                }
+            }
+        },
+        "siteRevokeK8SServerSubCARequest": {
+            "type": "object",
+            "description": "Request to evict a compromised pk8s local server SubCA. The SubCA is\ntenant-scoped. The tenant comes from the request context, and the operation\napplies to every pk8s site of that tenant.",
+            "title": "Revoke K8s Server Sub CA Request",
+            "x-displayname": "Revoke K8s Server Sub CA Request",
+            "x-ves-proto-message": "ves.io.schema.site.RevokeK8SServerSubCARequest",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of a site of the tenant. The handler validates that the site exists. The\n tenant is taken from the request context, not resolved from this site.\n\nExample: - \"ce398\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "Name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Name",
+                    "x-ves-example": "ce398",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the site in the request path. pk8s sites are in the system namespace.\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "Namespace",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " Free-form reason. The handler records it in the API audit log.\n\nExample: - \"key compromise\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Reason",
+                    "maxLength": 256,
+                    "x-displayname": "Reason",
+                    "x-ves-example": "key compromise",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                }
+            }
+        },
+        "siteRevokeK8SServerSubCAResponse": {
+            "type": "object",
+            "description": "Result of an evict-now revocation.",
+            "title": "Revoke K8s Server Sub CA Response",
+            "x-displayname": "Revoke K8s Server Sub CA Response",
+            "x-ves-proto-message": "ves.io.schema.site.RevokeK8SServerSubCAResponse",
+            "properties": {
+                "latest_version": {
+                    "type": "integer",
+                    "description": " Version of the new SubCA that signs pk8s server certs after revocation.",
+                    "title": "Latest Version",
+                    "format": "int64",
+                    "x-displayname": "Latest Version"
+                },
+                "min_version": {
+                    "type": "integer",
+                    "description": " Lowest SubCA version still trusted after revocation. Versions below this\n value, including the compromised SubCA, are no longer in the trust bundle.",
+                    "title": "Min Version",
+                    "format": "int64",
+                    "x-displayname": "Min Version"
                 }
             }
         }

@@ -187,10 +187,21 @@ func resourceVolterraApiTesting() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -352,10 +363,21 @@ func resourceVolterraApiTesting() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -522,10 +544,21 @@ func resourceVolterraApiTesting() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -687,10 +720,21 @@ func resourceVolterraApiTesting() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -1036,6 +1080,15 @@ func resourceVolterraApiTestingCreate(d *schema.ResourceData, meta interface{}) 
 
 													}
 
+													if v, ok := valueMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														value.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := valueMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -1232,6 +1285,15 @@ func resourceVolterraApiTestingCreate(d *schema.ResourceData, meta interface{}) 
 
 															}
 														}
+
+													}
+
+													if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														password.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -1440,6 +1502,15 @@ func resourceVolterraApiTestingCreate(d *schema.ResourceData, meta interface{}) 
 
 													}
 
+													if v, ok := tokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														token.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := tokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -1636,6 +1707,15 @@ func resourceVolterraApiTestingCreate(d *schema.ResourceData, meta interface{}) 
 
 															}
 														}
+
+													}
+
+													if v, ok := jsonPayloadMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														jsonPayload.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -2079,6 +2159,15 @@ func resourceVolterraApiTestingUpdate(d *schema.ResourceData, meta interface{}) 
 
 													}
 
+													if v, ok := valueMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														value.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := valueMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -2275,6 +2364,15 @@ func resourceVolterraApiTestingUpdate(d *schema.ResourceData, meta interface{}) 
 
 															}
 														}
+
+													}
+
+													if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														password.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -2483,6 +2581,15 @@ func resourceVolterraApiTestingUpdate(d *schema.ResourceData, meta interface{}) 
 
 													}
 
+													if v, ok := tokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														token.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := tokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -2679,6 +2786,15 @@ func resourceVolterraApiTestingUpdate(d *schema.ResourceData, meta interface{}) 
 
 															}
 														}
+
+													}
+
+													if v, ok := jsonPayloadMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														jsonPayload.SecretInfoOneof = secretInfoOneofInt
 
 													}
 

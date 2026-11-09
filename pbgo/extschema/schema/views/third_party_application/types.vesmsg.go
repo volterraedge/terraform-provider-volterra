@@ -105,6 +105,34 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiDefinitionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDefinitionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServiceDiscoveryDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServiceDiscoveryDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -118,6 +146,29 @@ func (m *GetSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetApiSpecification().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetApiDefinitionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDefinitionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDefinitionChoice().(type) {
+	case *GetSpecType_DisableApiDefinition:
+		return nil, nil
+	case *GetSpecType_ApiSpecification:
+		drInfos, err := m.GetApiSpecification().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -152,6 +203,29 @@ func (m *GetSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *GetSpecType_DisableApiDiscovery:
+		return nil, nil
+	case *GetSpecType_EnableApiDiscovery:
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSensitiveDataPolicyChoice() == nil {
@@ -175,7 +249,47 @@ func (m *GetSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSensitiveDataPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *GetSpecType_DefaultSensitiveDataPolicy:
+		return nil, nil
+	case *GetSpecType_SensitiveDataPolicy:
+		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sensitive_data_policy." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GetSpecType) GetServiceDiscoveryDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetServiceDiscovery()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "service_discovery",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GetSpecType) GetServiceDiscoveryDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetServiceDiscovery()
 	if vref == nil {
 		return nil, nil
@@ -541,6 +655,39 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiDefinitionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDefinitionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServiceDiscoveryDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServiceDiscoveryDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -554,6 +701,29 @@ func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 		drInfos, err := m.GetApiSpecification().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDefinitionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDefinitionChoice().(type) {
+	case *GlobalSpecType_DisableApiDefinition:
+		return nil, nil
+	case *GlobalSpecType_ApiSpecification:
+		drInfos, err := m.GetApiSpecification().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -588,6 +758,29 @@ func (m *GlobalSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *GlobalSpecType_DisableApiDiscovery:
+		return nil, nil
+	case *GlobalSpecType_EnableApiDiscovery:
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSensitiveDataPolicyChoice() == nil {
@@ -611,7 +804,47 @@ func (m *GlobalSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, 
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSensitiveDataPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *GlobalSpecType_DefaultSensitiveDataPolicy:
+		return nil, nil
+	case *GlobalSpecType_SensitiveDataPolicy:
+		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sensitive_data_policy." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetServiceDiscoveryDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetServiceDiscovery()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "service_discovery",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetServiceDiscoveryDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetServiceDiscovery()
 	if vref == nil {
 		return nil, nil
@@ -657,6 +890,23 @@ func (m *GlobalSpecType) GetServiceDiscoveryDBEntries(ctx context.Context, d db.
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1024,6 +1274,34 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiDefinitionChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDefinitionChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServiceDiscoveryDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServiceDiscoveryDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1037,6 +1315,29 @@ func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error
 		drInfos, err := m.GetApiSpecification().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDefinitionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDefinitionChoice().(type) {
+	case *ReplaceSpecType_DisableApiDefinition:
+		return nil, nil
+	case *ReplaceSpecType_ApiSpecification:
+		drInfos, err := m.GetApiSpecification().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1071,6 +1372,29 @@ func (m *ReplaceSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetApiDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *ReplaceSpecType_DisableApiDiscovery:
+		return nil, nil
+	case *ReplaceSpecType_EnableApiDiscovery:
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSensitiveDataPolicyChoice() == nil {
@@ -1094,7 +1418,47 @@ func (m *ReplaceSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo,
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetSensitiveDataPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSensitiveDataPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *ReplaceSpecType_DefaultSensitiveDataPolicy:
+		return nil, nil
+	case *ReplaceSpecType_SensitiveDataPolicy:
+		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sensitive_data_policy." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *ReplaceSpecType) GetServiceDiscoveryDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetServiceDiscovery()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "service_discovery",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ReplaceSpecType) GetServiceDiscoveryDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetServiceDiscovery()
 	if vref == nil {
 		return nil, nil

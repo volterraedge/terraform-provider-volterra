@@ -2245,6 +2245,116 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_F5XcBotDefenseBasicUser:
+		if fv, exists := v.FldValidators["choice.f5xc_bot_defense_basic_user"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcBotDefenseBasicUser).F5XcBotDefenseBasicUser
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bot_defense_basic_user"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcBotDefenseBasicMonitor:
+		if fv, exists := v.FldValidators["choice.f5xc_bot_defense_basic_monitor"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcBotDefenseBasicMonitor).F5XcBotDefenseBasicMonitor
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bot_defense_basic_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcAdspConsoleStandardMonitor:
+		if fv, exists := v.FldValidators["choice.f5xc_adsp_console_standard_monitor"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcAdspConsoleStandardMonitor).F5XcAdspConsoleStandardMonitor
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_adsp_console_standard_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcAdspConsoleStandardUser:
+		if fv, exists := v.FldValidators["choice.f5xc_adsp_console_standard_user"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcAdspConsoleStandardUser).F5XcAdspConsoleStandardUser
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_adsp_console_standard_user"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcAdspConsoleStandardAdmin:
+		if fv, exists := v.FldValidators["choice.f5xc_adsp_console_standard_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcAdspConsoleStandardAdmin).F5XcAdspConsoleStandardAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_adsp_console_standard_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcBotProtectionStandardUser:
+		if fv, exists := v.FldValidators["choice.f5xc_bot_protection_standard_user"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcBotProtectionStandardUser).F5XcBotProtectionStandardUser
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bot_protection_standard_user"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcBotProtectionStandardMonitor:
+		if fv, exists := v.FldValidators["choice.f5xc_bot_protection_standard_monitor"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcBotProtectionStandardMonitor).F5XcBotProtectionStandardMonitor
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bot_protection_standard_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcBotProtectionStandardAdmin:
+		if fv, exists := v.FldValidators["choice.f5xc_bot_protection_standard_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcBotProtectionStandardAdmin).F5XcBotProtectionStandardAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bot_protection_standard_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcContentDeliveryNetworkStandardPurgeMonitor:
+		if fv, exists := v.FldValidators["choice.f5xc_content_delivery_network_standard_purge_monitor"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcContentDeliveryNetworkStandardPurgeMonitor).F5XcContentDeliveryNetworkStandardPurgeMonitor
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_content_delivery_network_standard_purge_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcContentDeliveryNetworkStandardPurgeUser:
+		if fv, exists := v.FldValidators["choice.f5xc_content_delivery_network_standard_purge_user"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcContentDeliveryNetworkStandardPurgeUser).F5XcContentDeliveryNetworkStandardPurgeUser
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_content_delivery_network_standard_purge_user"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 	return nil
 }

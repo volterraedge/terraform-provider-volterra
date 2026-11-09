@@ -1529,6 +1529,12 @@ func (v *ValidateCacheTTLEnableProps) Validate(ctx context.Context, pm interface
 			return err
 		}
 	}
+	if fv, exists := v.FldValidators["serve_stale"]; exists {
+		vOpts := append(opts, db.WithValidateField("serve_stale"))
+		if err := fv(ctx, m.GetServeStale(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

@@ -71,6 +71,13 @@ func (m *CentralManagerList) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCentralManagerSiteDRefInfo()
 }
+func (m *CentralManagerList) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCentralManagerSiteDRefInfoForOverlay(generateHash)
+}
 
 func (m *CentralManagerList) GetCentralManagerSiteDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetCentralManagerSite()
@@ -85,6 +92,30 @@ func (m *CentralManagerList) GetCentralManagerSiteDRefInfo() ([]db.DRefInfo, err
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("bigip_centralmanager_site.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "bigip_centralmanager_site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "central_manager_site",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CentralManagerList) GetCentralManagerSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetCentralManagerSite()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("CentralManagerList.central_manager_site[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("bigip_centralmanager_site.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "bigip_centralmanager_site.Object",
 			RefdTenant: vref.Tenant,
@@ -282,6 +313,24 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCentralManagerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCentralManagerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNodeListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNodeListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetCentralManagerDRefInfo() ([]db.DRefInfo, error) {
@@ -291,6 +340,22 @@ func (m *CreateSpecType) GetCentralManagerDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetCentralManager().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCentralManager().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "central_manager." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetCentralManagerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCentralManager() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCentralManager().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCentralManager().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -309,6 +374,26 @@ func (m *CreateSpecType) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNodeList() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("node_list[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetNodeListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNodeList() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetNodeList() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodeList() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -518,6 +603,24 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCentralManagerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCentralManagerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNodeListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNodeListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetCentralManagerDRefInfo() ([]db.DRefInfo, error) {
@@ -527,6 +630,22 @@ func (m *GetSpecType) GetCentralManagerDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetCentralManager().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCentralManager().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "central_manager." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetCentralManagerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCentralManager() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCentralManager().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCentralManager().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -545,6 +664,26 @@ func (m *GetSpecType) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNodeList() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("node_list[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetNodeListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNodeList() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetNodeList() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodeList() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -777,6 +916,29 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCentralManagerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCentralManagerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNodeListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNodeListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetCentralManagerDRefInfo() ([]db.DRefInfo, error) {
@@ -786,6 +948,22 @@ func (m *GlobalSpecType) GetCentralManagerDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetCentralManager().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCentralManager().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "central_manager." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetCentralManagerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCentralManager() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCentralManager().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCentralManager().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -814,7 +992,44 @@ func (m *GlobalSpecType) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetNodeListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNodeList() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetNodeList() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodeList() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("node_list[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1109,6 +1324,24 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCentralManagerDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCentralManagerDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNodeListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNodeListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetCentralManagerDRefInfo() ([]db.DRefInfo, error) {
@@ -1118,6 +1351,22 @@ func (m *ReplaceSpecType) GetCentralManagerDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetCentralManager().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCentralManager().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "central_manager." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetCentralManagerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCentralManager() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCentralManager().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCentralManager().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1136,6 +1385,26 @@ func (m *ReplaceSpecType) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNodeList() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("node_list[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetNodeListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNodeList() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetNodeList() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodeList() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]

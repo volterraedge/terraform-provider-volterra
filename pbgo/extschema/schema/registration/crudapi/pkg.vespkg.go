@@ -26,6 +26,62 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.registration.crudapi.API.Create"] = []string{
+		"spec.gc_spec.infra.provider:10",
+		"spec.gc_spec.infra.provider:11",
+		"spec.gc_spec.infra.provider:12",
+		"spec.gc_spec.infra.provider:AWS_K8S",
+		"spec.gc_spec.infra.provider:AZURE_K8S",
+		"spec.gc_spec.infra.provider:GCP_K8S",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.crudapi.API.Create"] = []string{
+		"spec.gc_spec.infra.provider:10",
+		"spec.gc_spec.infra.provider:11",
+		"spec.gc_spec.infra.provider:12",
+		"spec.gc_spec.infra.provider:AWS_K8S",
+		"spec.gc_spec.infra.provider:AZURE_K8S",
+		"spec.gc_spec.infra.provider:GCP_K8S",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.crudapi.API.Get"] = []string{
+		"spec.gc_spec.infra.provider:10",
+		"spec.gc_spec.infra.provider:11",
+		"spec.gc_spec.infra.provider:12",
+		"spec.gc_spec.infra.provider:AWS_K8S",
+		"spec.gc_spec.infra.provider:AZURE_K8S",
+		"spec.gc_spec.infra.provider:GCP_K8S",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.crudapi.API.List"] = []string{
+		"items.#.spec.gc_spec.infra.provider:10",
+		"items.#.spec.gc_spec.infra.provider:11",
+		"items.#.spec.gc_spec.infra.provider:12",
+		"items.#.spec.gc_spec.infra.provider:AWS_K8S",
+		"items.#.spec.gc_spec.infra.provider:AZURE_K8S",
+		"items.#.spec.gc_spec.infra.provider:GCP_K8S",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.crudapi.API.ListStream"] = []string{
+		"items.#.spec.gc_spec.infra.provider:10",
+		"items.#.spec.gc_spec.infra.provider:11",
+		"items.#.spec.gc_spec.infra.provider:12",
+		"items.#.spec.gc_spec.infra.provider:AWS_K8S",
+		"items.#.spec.gc_spec.infra.provider:AZURE_K8S",
+		"items.#.spec.gc_spec.infra.provider:GCP_K8S",
+	}
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.registration.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.infra.provider:10",
+		"spec.gc_spec.infra.provider:11",
+		"spec.gc_spec.infra.provider:12",
+		"spec.gc_spec.infra.provider:AWS_K8S",
+		"spec.gc_spec.infra.provider:AZURE_K8S",
+		"spec.gc_spec.infra.provider:GCP_K8S",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.infra.provider:10",
+		"spec.gc_spec.infra.provider:11",
+		"spec.gc_spec.infra.provider:12",
+		"spec.gc_spec.infra.provider:AWS_K8S",
+		"spec.gc_spec.infra.provider:AZURE_K8S",
+		"spec.gc_spec.infra.provider:GCP_K8S",
+	}
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

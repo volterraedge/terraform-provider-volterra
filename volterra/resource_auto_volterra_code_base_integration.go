@@ -161,10 +161,21 @@ func resourceVolterraCodeBaseIntegration() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:     schema.TypeString,
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -326,10 +337,21 @@ func resourceVolterraCodeBaseIntegration() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:     schema.TypeString,
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -496,10 +518,21 @@ func resourceVolterraCodeBaseIntegration() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:     schema.TypeString,
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -676,10 +709,21 @@ func resourceVolterraCodeBaseIntegration() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:     schema.TypeString,
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -851,10 +895,21 @@ func resourceVolterraCodeBaseIntegration() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:     schema.TypeString,
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -1026,10 +1081,21 @@ func resourceVolterraCodeBaseIntegration() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:     schema.TypeString,
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -1191,10 +1257,21 @@ func resourceVolterraCodeBaseIntegration() *schema.Resource {
 															},
 
 															"url": {
+																Sensitive: true,
 																Type:     schema.TypeString,
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -1459,6 +1536,15 @@ func resourceVolterraCodeBaseIntegrationCreate(d *schema.ResourceData, meta inte
 
 										}
 
+										if v, ok := accessTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											accessToken.SecretInfoOneof = secretInfoOneofInt
+
+										}
+
 										if v, ok := accessTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
@@ -1655,6 +1741,15 @@ func resourceVolterraCodeBaseIntegrationCreate(d *schema.ResourceData, meta inte
 
 												}
 											}
+
+										}
+
+										if v, ok := passwdMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											passwd.SecretInfoOneof = secretInfoOneofInt
 
 										}
 
@@ -1860,6 +1955,15 @@ func resourceVolterraCodeBaseIntegrationCreate(d *schema.ResourceData, meta inte
 
 												}
 											}
+
+										}
+
+										if v, ok := passwdMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											passwd.SecretInfoOneof = secretInfoOneofInt
 
 										}
 
@@ -2080,6 +2184,15 @@ func resourceVolterraCodeBaseIntegrationCreate(d *schema.ResourceData, meta inte
 
 										}
 
+										if v, ok := accessTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											accessToken.SecretInfoOneof = secretInfoOneofInt
+
+										}
+
 										if v, ok := accessTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
@@ -2288,6 +2401,15 @@ func resourceVolterraCodeBaseIntegrationCreate(d *schema.ResourceData, meta inte
 
 												}
 											}
+
+										}
+
+										if v, ok := accessTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											accessToken.SecretInfoOneof = secretInfoOneofInt
 
 										}
 
@@ -2502,6 +2624,15 @@ func resourceVolterraCodeBaseIntegrationCreate(d *schema.ResourceData, meta inte
 
 										}
 
+										if v, ok := accessTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											accessToken.SecretInfoOneof = secretInfoOneofInt
+
+										}
+
 										if v, ok := accessTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
@@ -2698,6 +2829,15 @@ func resourceVolterraCodeBaseIntegrationCreate(d *schema.ResourceData, meta inte
 
 												}
 											}
+
+										}
+
+										if v, ok := accessTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											accessToken.SecretInfoOneof = secretInfoOneofInt
 
 										}
 
@@ -3022,6 +3162,15 @@ func resourceVolterraCodeBaseIntegrationUpdate(d *schema.ResourceData, meta inte
 
 										}
 
+										if v, ok := accessTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											accessToken.SecretInfoOneof = secretInfoOneofInt
+
+										}
+
 										if v, ok := accessTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
@@ -3218,6 +3367,15 @@ func resourceVolterraCodeBaseIntegrationUpdate(d *schema.ResourceData, meta inte
 
 												}
 											}
+
+										}
+
+										if v, ok := passwdMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											passwd.SecretInfoOneof = secretInfoOneofInt
 
 										}
 
@@ -3423,6 +3581,15 @@ func resourceVolterraCodeBaseIntegrationUpdate(d *schema.ResourceData, meta inte
 
 												}
 											}
+
+										}
+
+										if v, ok := passwdMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											passwd.SecretInfoOneof = secretInfoOneofInt
 
 										}
 
@@ -3643,6 +3810,15 @@ func resourceVolterraCodeBaseIntegrationUpdate(d *schema.ResourceData, meta inte
 
 										}
 
+										if v, ok := accessTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											accessToken.SecretInfoOneof = secretInfoOneofInt
+
+										}
+
 										if v, ok := accessTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
@@ -3851,6 +4027,15 @@ func resourceVolterraCodeBaseIntegrationUpdate(d *schema.ResourceData, meta inte
 
 												}
 											}
+
+										}
+
+										if v, ok := accessTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											accessToken.SecretInfoOneof = secretInfoOneofInt
 
 										}
 
@@ -4065,6 +4250,15 @@ func resourceVolterraCodeBaseIntegrationUpdate(d *schema.ResourceData, meta inte
 
 										}
 
+										if v, ok := accessTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											accessToken.SecretInfoOneof = secretInfoOneofInt
+
+										}
+
 										if v, ok := accessTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
@@ -4261,6 +4455,15 @@ func resourceVolterraCodeBaseIntegrationUpdate(d *schema.ResourceData, meta inte
 
 												}
 											}
+
+										}
+
+										if v, ok := accessTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+											secretInfoOneofInt.None = &ves_io_schema.Empty{}
+											accessToken.SecretInfoOneof = secretInfoOneofInt
 
 										}
 

@@ -166,10 +166,21 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									},
 
 									"url": {
+										Sensitive: true,
 										Type:     schema.TypeString,
 										Required: true,
 									},
 								},
+							},
+						},
+
+						"none": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
 							},
 						},
 
@@ -1523,11 +1534,23 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 																											},
 
 																											"url": {
+																												Sensitive: true,
 																												Type:       schema.TypeString,
 																												Required:   true,
 																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
+																									},
+																								},
+
+																								"none": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
 																									},
 																								},
 
@@ -3019,11 +3042,23 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 																											},
 
 																											"url": {
+																												Sensitive: true,
 																												Type:       schema.TypeString,
 																												Required:   true,
 																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
+																									},
+																								},
+
+																								"none": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
 																									},
 																								},
 
@@ -3839,6 +3874,15 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 						}
 					}
+
+				}
+
+				if v, ok := adminPasswordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+					secretInfoOneofTypeFound = true
+					secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+					secretInfoOneofInt.None = &ves_io_schema.Empty{}
+					adminPassword.SecretInfoOneof = secretInfoOneofInt
 
 				}
 
@@ -5884,6 +5928,15 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 																								}
 																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																							secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
 
 																						}
 
@@ -8048,6 +8101,15 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 																								}
 																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																							secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
 
 																						}
 
@@ -10964,6 +11026,15 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 																						}
 
+																						if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																							secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																						}
+
 																						if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																							secretInfoOneofTypeFound = true
@@ -13113,6 +13184,15 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 																								}
 																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																							secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
 
 																						}
 

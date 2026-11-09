@@ -145,6 +145,16 @@ func ResourceSecureMeshSiteV2InstanceResourceV1() *schema.Resource {
 										},
 									},
 
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
+										},
+									},
+
 									"vault_secret_info": {
 
 										Type:       schema.TypeList,
@@ -285,6 +295,18 @@ func ResourceSecureMeshSiteV2InstanceResourceV1() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"disable_cedns_record": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_cedns_record": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 
 						"custom_dns": {
 
@@ -440,6 +462,16 @@ func ResourceSecureMeshSiteV2InstanceResourceV1() *schema.Resource {
 										},
 									},
 
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
+										},
+									},
+
 									"vault_secret_info": {
 
 										Type:       schema.TypeList,
@@ -537,22 +569,6 @@ func ResourceSecureMeshSiteV2InstanceResourceV1() *schema.Resource {
 
 				Type:     schema.TypeBool,
 				Optional: true,
-			},
-
-			"private_adn": {
-
-				Type:     schema.TypeList,
-				MaxItems: 1,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"private_adn": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-					},
-				},
 			},
 
 			"active_forward_proxy_policies": {
@@ -1504,6 +1520,901 @@ func ResourceSecureMeshSiteV2InstanceResourceV1() *schema.Resource {
 
 										Type:     schema.TypeBool,
 										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"aks_k8s": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disable_anti_affinity": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_anti_affinity": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"rules": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"label_key": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"label_value": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"topology_keys": {
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"deployment_size": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+
+						"labels": {
+							Type:     schema.TypeMap,
+							Optional: true,
+						},
+
+						"not_managed": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"node_list": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"hostname": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"interface_list": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"dhcp_client": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"dhcp_server": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"dhcp_networks": {
+
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"dns_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"same_as_dgw": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dgw_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"first_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"last_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"pool_settings": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"pools": {
+
+																						Type:       schema.TypeList,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"end_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"exclude": {
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"start_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"dhcp_option82_tag": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"fixed_ip_map": {
+																			Type:       schema.TypeMap,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_end": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_start": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"interface_ip_map": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+																						Type:       schema.TypeMap,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv4_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ip": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"default_gw": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"dns_server": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"ip_address": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"bond_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"devices": {
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"active_backup": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"lacp": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"rate": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"link_polling_interval": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"link_up_delay": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"ethernet_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"mac": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"vlan_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"vlan_id": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"ipv6_auto_config": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"host": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"router": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"network_prefix": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"stateful": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"dhcp_networks": {
+
+																									Type:     schema.TypeList,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"network_prefix": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"network_prefix_allocator": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"name": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"namespace": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"tenant": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
+																											"pool_settings": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+
+																											"pools": {
+
+																												Type:     schema.TypeList,
+																												Optional: true,
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"end_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+
+																														"exclude": {
+																															Type:       schema.TypeBool,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"start_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+																													},
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"fixed_ip_map": {
+																									Type:     schema.TypeMap,
+																									Optional: true,
+																								},
+
+																								"automatic_from_end": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"automatic_from_start": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"interface_ip_map": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"interface_ip_map": {
+																												Type:     schema.TypeMap,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"dns_config": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"configured_list": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"dns_list": {
+																												Type: schema.TypeList,
+
+																												Required: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"local_dns": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"configured_address": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"first_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+
+																											"last_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv6_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ipv6_address": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cluster_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Required: true,
+																								},
+																								"value": {
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"default_gw": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"ip_address": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"node_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"ip_address": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"is_management": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"is_primary": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"labels": {
+																Type:     schema.TypeMap,
+																Optional: true,
+															},
+
+															"monitor": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
+															"monitor_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"mtu": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"network_option": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Required: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"segment_network": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"namespace": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"tenant": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"site_local_inside_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"site_local_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"priority": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_enabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"public_ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"type": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
 									},
 								},
 							},
@@ -6602,6 +7513,1740 @@ func ResourceSecureMeshSiteV2InstanceResourceV1() *schema.Resource {
 				},
 			},
 
+			"gke_k8s": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disable_anti_affinity": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_anti_affinity": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"rules": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"label_key": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"label_value": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"topology_keys": {
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"deployment_size": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+
+						"labels": {
+							Type:     schema.TypeMap,
+							Optional: true,
+						},
+
+						"not_managed": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"node_list": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"hostname": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"interface_list": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"dhcp_client": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"dhcp_server": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"dhcp_networks": {
+
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"dns_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"same_as_dgw": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dgw_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"first_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"last_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"pool_settings": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"pools": {
+
+																						Type:       schema.TypeList,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"end_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"exclude": {
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"start_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"dhcp_option82_tag": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"fixed_ip_map": {
+																			Type:       schema.TypeMap,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_end": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_start": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"interface_ip_map": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+																						Type:       schema.TypeMap,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv4_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ip": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"default_gw": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"dns_server": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"ip_address": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"bond_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"devices": {
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"active_backup": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"lacp": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"rate": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"link_polling_interval": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"link_up_delay": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"ethernet_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"mac": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"vlan_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"vlan_id": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"ipv6_auto_config": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"host": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"router": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"network_prefix": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"stateful": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"dhcp_networks": {
+
+																									Type:     schema.TypeList,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"network_prefix": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"network_prefix_allocator": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"name": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"namespace": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"tenant": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
+																											"pool_settings": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+
+																											"pools": {
+
+																												Type:     schema.TypeList,
+																												Optional: true,
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"end_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+
+																														"exclude": {
+																															Type:       schema.TypeBool,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"start_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+																													},
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"fixed_ip_map": {
+																									Type:     schema.TypeMap,
+																									Optional: true,
+																								},
+
+																								"automatic_from_end": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"automatic_from_start": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"interface_ip_map": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"interface_ip_map": {
+																												Type:     schema.TypeMap,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"dns_config": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"configured_list": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"dns_list": {
+																												Type: schema.TypeList,
+
+																												Required: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"local_dns": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"configured_address": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"first_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+
+																											"last_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv6_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ipv6_address": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cluster_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Required: true,
+																								},
+																								"value": {
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"default_gw": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"ip_address": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"node_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"ip_address": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"is_management": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"is_primary": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"labels": {
+																Type:     schema.TypeMap,
+																Optional: true,
+															},
+
+															"monitor": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
+															"monitor_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"mtu": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"network_option": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Required: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"segment_network": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"namespace": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"tenant": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"site_local_inside_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"site_local_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"priority": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_enabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"public_ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"type": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"hyper_v": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"not_managed": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"node_list": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"hostname": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"interface_list": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"dhcp_client": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"dhcp_server": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"dhcp_networks": {
+
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"dns_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"same_as_dgw": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dgw_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"first_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"last_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"pool_settings": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"pools": {
+
+																						Type:       schema.TypeList,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"end_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"exclude": {
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"start_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"dhcp_option82_tag": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"fixed_ip_map": {
+																			Type:       schema.TypeMap,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_end": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_start": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"interface_ip_map": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+																						Type:       schema.TypeMap,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv4_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ip": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"default_gw": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"dns_server": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"ip_address": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"bond_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"devices": {
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"active_backup": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"lacp": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"rate": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"link_polling_interval": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"link_up_delay": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"ethernet_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"mac": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"vlan_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"vlan_id": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"ipv6_auto_config": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"host": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"router": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"network_prefix": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"stateful": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"dhcp_networks": {
+
+																									Type:     schema.TypeList,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"network_prefix": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"network_prefix_allocator": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"name": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"namespace": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"tenant": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
+																											"pool_settings": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+
+																											"pools": {
+
+																												Type:     schema.TypeList,
+																												Optional: true,
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"end_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+
+																														"exclude": {
+																															Type:       schema.TypeBool,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"start_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+																													},
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"fixed_ip_map": {
+																									Type:     schema.TypeMap,
+																									Optional: true,
+																								},
+
+																								"automatic_from_end": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"automatic_from_start": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"interface_ip_map": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"interface_ip_map": {
+																												Type:     schema.TypeMap,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"dns_config": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"configured_list": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"dns_list": {
+																												Type: schema.TypeList,
+
+																												Required: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"local_dns": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"configured_address": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"first_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+
+																											"last_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv6_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ipv6_address": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cluster_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Required: true,
+																								},
+																								"value": {
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"default_gw": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"ip_address": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"node_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"ip_address": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"is_management": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"is_primary": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"labels": {
+																Type:     schema.TypeMap,
+																Optional: true,
+															},
+
+															"monitor": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
+															"monitor_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"mtu": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"network_option": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Required: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"segment_network": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"namespace": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"tenant": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"site_local_inside_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"site_local_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"priority": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_enabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"public_ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"type": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"kvm": {
 
 				Type:     schema.TypeList,
@@ -8293,6 +10938,901 @@ func ResourceSecureMeshSiteV2InstanceResourceV1() *schema.Resource {
 							Type:     schema.TypeList,
 							MaxItems: 1,
 							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"node_list": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"hostname": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"interface_list": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"dhcp_client": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"dhcp_server": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"dhcp_networks": {
+
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"dns_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"same_as_dgw": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dgw_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"first_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"last_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"pool_settings": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"pools": {
+
+																						Type:       schema.TypeList,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"end_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"exclude": {
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"start_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"dhcp_option82_tag": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"fixed_ip_map": {
+																			Type:       schema.TypeMap,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_end": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_start": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"interface_ip_map": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+																						Type:       schema.TypeMap,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv4_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ip": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"default_gw": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"dns_server": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"ip_address": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"bond_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"devices": {
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"active_backup": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"lacp": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"rate": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"link_polling_interval": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"link_up_delay": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"ethernet_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"mac": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"vlan_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"vlan_id": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"ipv6_auto_config": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"host": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"router": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"network_prefix": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"stateful": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"dhcp_networks": {
+
+																									Type:     schema.TypeList,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"network_prefix": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"network_prefix_allocator": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"name": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"namespace": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"tenant": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
+																											"pool_settings": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+
+																											"pools": {
+
+																												Type:     schema.TypeList,
+																												Optional: true,
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"end_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+
+																														"exclude": {
+																															Type:       schema.TypeBool,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"start_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+																													},
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"fixed_ip_map": {
+																									Type:     schema.TypeMap,
+																									Optional: true,
+																								},
+
+																								"automatic_from_end": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"automatic_from_start": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"interface_ip_map": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"interface_ip_map": {
+																												Type:     schema.TypeMap,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"dns_config": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"configured_list": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"dns_list": {
+																												Type: schema.TypeList,
+
+																												Required: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"local_dns": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"configured_address": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"first_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+
+																											"last_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv6_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ipv6_address": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cluster_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Required: true,
+																								},
+																								"value": {
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"default_gw": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"ip_address": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"node_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"ip_address": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"is_management": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"is_primary": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"labels": {
+																Type:     schema.TypeMap,
+																Optional: true,
+															},
+
+															"monitor": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
+															"monitor_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"mtu": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"network_option": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Required: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"segment_network": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"namespace": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"tenant": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"site_local_inside_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"site_local_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"priority": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_enabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"public_ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"type": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"oci_k8s": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disable_anti_affinity": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_anti_affinity": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"rules": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"label_key": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"label_value": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"topology_keys": {
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"deployment_size": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+
+						"labels": {
+							Type:     schema.TypeMap,
+							Optional: true,
+						},
+
+						"not_managed": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 

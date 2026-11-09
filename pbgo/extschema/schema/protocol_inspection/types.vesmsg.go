@@ -69,6 +69,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetEnableDisableComplianceChecksDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetEnableDisableComplianceChecksDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefInfo, error) {
@@ -78,6 +85,22 @@ func (m *CreateSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefIn
 	drInfos, err := m.GetEnableDisableComplianceChecks().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecks().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "enable_disable_compliance_checks." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetEnableDisableComplianceChecksDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetEnableDisableComplianceChecks() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetEnableDisableComplianceChecks().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecks().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -243,8 +266,39 @@ func (m *EnableDisableComplianceChecks) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetComplianceCheckChoiceDRefInfo()
 }
+func (m *EnableDisableComplianceChecks) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetComplianceCheckChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *EnableDisableComplianceChecks) GetComplianceCheckChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetComplianceCheckChoice().(type) {
+	case *EnableDisableComplianceChecks_EnableComplianceChecks:
+		vref := m.GetEnableComplianceChecks()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_compliance_checks.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dns_compliance_checks.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "enable_compliance_checks",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *EnableDisableComplianceChecks_DisableComplianceChecks:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *EnableDisableComplianceChecks) GetComplianceCheckChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetComplianceCheckChoice().(type) {
 	case *EnableDisableComplianceChecks_EnableComplianceChecks:
 		vref := m.GetEnableComplianceChecks()
@@ -566,6 +620,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetEnableDisableComplianceChecksDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetEnableDisableComplianceChecksDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefInfo, error) {
@@ -575,6 +636,22 @@ func (m *GetSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefInfo,
 	drInfos, err := m.GetEnableDisableComplianceChecks().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecks().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "enable_disable_compliance_checks." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetEnableDisableComplianceChecksDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetEnableDisableComplianceChecks() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetEnableDisableComplianceChecks().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecks().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -751,6 +828,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDnsProxiesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDnsProxiesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetEnableDisableComplianceChecksDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecksDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetDnsProxiesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetDnsProxies()
@@ -765,6 +860,30 @@ func (m *GlobalSpecType) GetDnsProxiesDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("dns_proxy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_proxy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_proxies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetDnsProxiesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsProxies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dns_proxies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_proxy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "dns_proxy.Object",
 			RefdTenant: vref.Tenant,
@@ -813,6 +932,22 @@ func (m *GlobalSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefIn
 	drInfos, err := m.GetEnableDisableComplianceChecks().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecks().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "enable_disable_compliance_checks." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetEnableDisableComplianceChecksDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetEnableDisableComplianceChecks() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetEnableDisableComplianceChecks().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecks().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1041,6 +1176,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetEnableDisableComplianceChecksDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetEnableDisableComplianceChecksDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefInfo, error) {
@@ -1050,6 +1192,22 @@ func (m *ReplaceSpecType) GetEnableDisableComplianceChecksDRefInfo() ([]db.DRefI
 	drInfos, err := m.GetEnableDisableComplianceChecks().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecks().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "enable_disable_compliance_checks." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetEnableDisableComplianceChecksDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetEnableDisableComplianceChecks() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetEnableDisableComplianceChecks().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecks().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

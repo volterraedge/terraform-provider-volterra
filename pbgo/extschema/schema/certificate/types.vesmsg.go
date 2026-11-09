@@ -27,6 +27,469 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AutoCertConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AutoCertConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AutoCertConfig) DeepCopy() *AutoCertConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AutoCertConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AutoCertConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AutoCertConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AutoCertConfigValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AutoCertConfig) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetChallengeChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetChallengeChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIssuerChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIssuerChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+func (m *AutoCertConfig) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetChallengeChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetChallengeChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIssuerChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIssuerChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *AutoCertConfig) GetChallengeChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetChallengeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetChallengeChoice().(type) {
+	case *AutoCertConfig_Dns_01:
+		return nil, nil
+	case *AutoCertConfig_Http_01:
+		drInfos, err := m.GetHttp_01().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttp_01().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_01." + dri.DRField
+		}
+		return drInfos, err
+	case *AutoCertConfig_PreValidated:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AutoCertConfig) GetChallengeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetChallengeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetChallengeChoice().(type) {
+	case *AutoCertConfig_Dns_01:
+		return nil, nil
+	case *AutoCertConfig_Http_01:
+		drInfos, err := m.GetHttp_01().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttp_01().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_01." + dri.DRField
+		}
+		return drInfos, err
+	case *AutoCertConfig_PreValidated:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfo for the field's type
+func (m *AutoCertConfig) GetIssuerChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetIssuerChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetIssuerChoice().(type) {
+	case *AutoCertConfig_Default:
+		return nil, nil
+	case *AutoCertConfig_CustomIssuer:
+		drInfos, err := m.GetCustomIssuer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCustomIssuer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "custom_issuer." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AutoCertConfig) GetIssuerChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetIssuerChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetIssuerChoice().(type) {
+	case *AutoCertConfig_Default:
+		return nil, nil
+	case *AutoCertConfig_CustomIssuer:
+		drInfos, err := m.GetCustomIssuer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCustomIssuer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "custom_issuer." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+type ValidateAutoCertConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAutoCertConfig) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for domains")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for domains")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated domains")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateAutoCertConfig) RenewBeforeDaysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for renew_before_days")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAutoCertConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AutoCertConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AutoCertConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetChallengeChoice().(type) {
+	case *AutoCertConfig_Dns_01:
+		if fv, exists := v.FldValidators["challenge_choice.dns_01"]; exists {
+			val := m.GetChallengeChoice().(*AutoCertConfig_Dns_01).Dns_01
+			vOpts := append(opts,
+				db.WithValidateField("challenge_choice"),
+				db.WithValidateField("dns_01"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AutoCertConfig_Http_01:
+		if fv, exists := v.FldValidators["challenge_choice.http_01"]; exists {
+			val := m.GetChallengeChoice().(*AutoCertConfig_Http_01).Http_01
+			vOpts := append(opts,
+				db.WithValidateField("challenge_choice"),
+				db.WithValidateField("http_01"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AutoCertConfig_PreValidated:
+		if fv, exists := v.FldValidators["challenge_choice.pre_validated"]; exists {
+			val := m.GetChallengeChoice().(*AutoCertConfig_PreValidated).PreValidated
+			vOpts := append(opts,
+				db.WithValidateField("challenge_choice"),
+				db.WithValidateField("pre_validated"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["domains"]; exists {
+		vOpts := append(opts, db.WithValidateField("domains"))
+		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetIssuerChoice().(type) {
+	case *AutoCertConfig_Default:
+		if fv, exists := v.FldValidators["issuer_choice.default"]; exists {
+			val := m.GetIssuerChoice().(*AutoCertConfig_Default).Default
+			vOpts := append(opts,
+				db.WithValidateField("issuer_choice"),
+				db.WithValidateField("default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AutoCertConfig_CustomIssuer:
+		if fv, exists := v.FldValidators["issuer_choice.custom_issuer"]; exists {
+			val := m.GetIssuerChoice().(*AutoCertConfig_CustomIssuer).CustomIssuer
+			vOpts := append(opts,
+				db.WithValidateField("issuer_choice"),
+				db.WithValidateField("custom_issuer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["key_algorithm"]; exists {
+		vOpts := append(opts, db.WithValidateField("key_algorithm"))
+		if err := fv(ctx, m.GetKeyAlgorithm(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["renew_before_days"]; exists {
+		vOpts := append(opts, db.WithValidateField("renew_before_days"))
+		if err := fv(ctx, m.GetRenewBeforeDays(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAutoCertConfigValidator = func() *ValidateAutoCertConfig {
+	v := &ValidateAutoCertConfig{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomains := v.DomainsValidationRuleHandler
+	rulesDomains := map[string]string{
+		"ves.io.schema.rules.message.required":                "true",
+		"ves.io.schema.rules.repeated.items.string.max_len":   "253",
+		"ves.io.schema.rules.repeated.items.string.min_len":   "1",
+		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
+		"ves.io.schema.rules.repeated.max_items":              "100",
+		"ves.io.schema.rules.repeated.min_items":              "1",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhDomains(rulesDomains)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AutoCertConfig.domains: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domains"] = vFn
+
+	vrhRenewBeforeDays := v.RenewBeforeDaysValidationRuleHandler
+	rulesRenewBeforeDays := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "90",
+	}
+	vFn, err = vrhRenewBeforeDays(rulesRenewBeforeDays)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AutoCertConfig.renew_before_days: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["renew_before_days"] = vFn
+	v.FldValidators["challenge_choice.dns_01"] = DNS01ChallengeConfigValidator().Validate
+	v.FldValidators["challenge_choice.http_01"] = HTTP01ChallengeConfigValidator().Validate
+	v.FldValidators["issuer_choice.custom_issuer"] = CustomIssuerValidator().Validate
+
+	return v
+}()
+
+func AutoCertConfigValidator() db.Validator {
+	return DefaultAutoCertConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CertificateLifecycleStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CertificateLifecycleStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CertificateLifecycleStatus) DeepCopy() *CertificateLifecycleStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CertificateLifecycleStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CertificateLifecycleStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CertificateLifecycleStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CertificateLifecycleStatusValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCertificateLifecycleStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCertificateLifecycleStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CertificateLifecycleStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CertificateLifecycleStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["dns_instructions"]; exists {
+		vOpts := append(opts, db.WithValidateField("dns_instructions"))
+		for idx, item := range m.GetDnsInstructions() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["error_message"]; exists {
+		vOpts := append(opts, db.WithValidateField("error_message"))
+		if err := fv(ctx, m.GetErrorMessage(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["next_renewal_time"]; exists {
+		vOpts := append(opts, db.WithValidateField("next_renewal_time"))
+		if err := fv(ctx, m.GetNextRenewalTime(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["state"]; exists {
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCertificateLifecycleStatusValidator = func() *ValidateCertificateLifecycleStatus {
+	v := &ValidateCertificateLifecycleStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CertificateLifecycleStatusValidator() db.Validator {
+	return DefaultCertificateLifecycleStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -80,10 +543,56 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetCertificateChainDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificateChainDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCertificateChainDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProviderDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetProviderDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificateChainDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertificateChainDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProviderDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProviderDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
 }
 
 func (m *CreateSpecType) GetCertificateChainDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCertificateChain()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("certificate_chain.Object")
+	dri := db.DRefInfo{
+		RefdType:   "certificate_chain.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "certificate_chain",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *CreateSpecType) GetCertificateChainDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCertificateChain()
 	if vref == nil {
 		return nil, nil
@@ -128,6 +637,52 @@ func (m *CreateSpecType) GetCertificateChainDBEntries(ctx context.Context, d db.
 	return entries, nil
 }
 
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetProviderDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetProvider() == nil {
+		return nil, nil
+	}
+	switch m.GetProvider().(type) {
+	case *CreateSpecType_Manual:
+		return nil, nil
+	case *CreateSpecType_AutoCert:
+		drInfos, err := m.GetAutoCert().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAutoCert().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "auto_cert." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetProviderDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProvider() == nil {
+		return nil, nil
+	}
+	switch m.GetProvider().(type) {
+	case *CreateSpecType_Manual:
+		return nil, nil
+	case *CreateSpecType_AutoCert:
+		drInfos, err := m.GetAutoCert().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAutoCert().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "auto_cert." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -136,23 +691,6 @@ func (v *ValidateCreateSpecType) CertificateUrlValidationRuleHandler(rules map[s
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate_url")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateCreateSpecType) PrivateKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_key")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-		return nil
 	}
 
 	return validatorFn, nil
@@ -225,6 +763,31 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
+
+	switch m.GetProvider().(type) {
+	case *CreateSpecType_Manual:
+		if fv, exists := v.FldValidators["provider.manual"]; exists {
+			val := m.GetProvider().(*CreateSpecType_Manual).Manual
+			vOpts := append(opts,
+				db.WithValidateField("provider"),
+				db.WithValidateField("manual"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_AutoCert:
+		if fv, exists := v.FldValidators["provider.auto_cert"]; exists {
+			val := m.GetProvider().(*CreateSpecType_AutoCert).AutoCert
+			vOpts := append(opts,
+				db.WithValidateField("provider"),
+				db.WithValidateField("auto_cert"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
 
@@ -241,10 +804,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhCertificateUrl := v.CertificateUrlValidationRuleHandler
 	rulesCertificateUrl := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
 		"ves.io.schema.rules.string.certificate_url": "true",
 		"ves.io.schema.rules.string.max_bytes":       "131072",
-		"ves.io.schema.rules.string.min_bytes":       "1",
 	}
 	vFn, err = vrhCertificateUrl(rulesCertificateUrl)
 	if err != nil {
@@ -252,18 +813,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["certificate_url"] = vFn
-
-	vrhPrivateKey := v.PrivateKeyValidationRuleHandler
-	rulesPrivateKey := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhPrivateKey(rulesPrivateKey)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.private_key: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["private_key"] = vFn
 	v.FldValidators["ocsp_stapling_choice.custom_hash_algorithms"] = ves_io_schema.HashAlgorithmsValidator().Validate
+	v.FldValidators["provider.auto_cert"] = AutoCertConfigValidator().Validate
+	v.FldValidators["private_key"] = ves_io_schema.SecretTypeValidator().Validate
 	v.FldValidators["certificate_chain"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -271,6 +823,453 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomIssuer) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomIssuer) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomIssuer) DeepCopy() *CustomIssuer {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomIssuer{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomIssuer) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomIssuer) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomIssuerValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CustomIssuer) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIssuerRefDRefInfo()
+}
+func (m *CustomIssuer) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIssuerRefDRefInfoForOverlay(generateHash)
+}
+
+func (m *CustomIssuer) GetIssuerRefDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetIssuerRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CustomIssuer.issuer_ref[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "acme_issuer.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "issuer_ref",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CustomIssuer) GetIssuerRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIssuerRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CustomIssuer.issuer_ref[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "acme_issuer.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "issuer_ref",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+
+// GetIssuerRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CustomIssuer) GetIssuerRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "acme_issuer.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: acme_issuer")
+	}
+	for _, ref := range m.GetIssuerRef() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+	return entries, nil
+}
+
+type ValidateCustomIssuer struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomIssuer) IssuerRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for issuer_ref")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for issuer_ref")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated issuer_ref")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items issuer_ref")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomIssuer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomIssuer)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomIssuer got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["issuer_ref"]; exists {
+		vOpts := append(opts, db.WithValidateField("issuer_ref"))
+		if err := fv(ctx, m.GetIssuerRef(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomIssuerValidator = func() *ValidateCustomIssuer {
+	v := &ValidateCustomIssuer{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIssuerRef := v.IssuerRefValidationRuleHandler
+	rulesIssuerRef := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhIssuerRef(rulesIssuerRef)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomIssuer.issuer_ref: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["issuer_ref"] = vFn
+
+	return v
+}()
+
+func CustomIssuerValidator() db.Validator {
+	return DefaultCustomIssuerValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNS01ChallengeConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNS01ChallengeConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNS01ChallengeConfig) DeepCopy() *DNS01ChallengeConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNS01ChallengeConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNS01ChallengeConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNS01ChallengeConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNS01ChallengeConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNS01ChallengeConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNS01ChallengeConfig) DnsProviderChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_provider_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDNS01ChallengeConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNS01ChallengeConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNS01ChallengeConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_provider_choice"]; exists {
+		val := m.GetDnsProviderChoice()
+		vOpts := append(opts,
+			db.WithValidateField("dns_provider_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDnsProviderChoice().(type) {
+	case *DNS01ChallengeConfig_CnameDelegation:
+		if fv, exists := v.FldValidators["dns_provider_choice.cname_delegation"]; exists {
+			val := m.GetDnsProviderChoice().(*DNS01ChallengeConfig_CnameDelegation).CnameDelegation
+			vOpts := append(opts,
+				db.WithValidateField("dns_provider_choice"),
+				db.WithValidateField("cname_delegation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DNS01ChallengeConfig_Delegated:
+		if fv, exists := v.FldValidators["dns_provider_choice.delegated"]; exists {
+			val := m.GetDnsProviderChoice().(*DNS01ChallengeConfig_Delegated).Delegated
+			vOpts := append(opts,
+				db.WithValidateField("dns_provider_choice"),
+				db.WithValidateField("delegated"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNS01ChallengeConfigValidator = func() *ValidateDNS01ChallengeConfig {
+	v := &ValidateDNS01ChallengeConfig{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+	vrhDnsProviderChoice := v.DnsProviderChoiceValidationRuleHandler
+	rulesDnsProviderChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDnsProviderChoice(rulesDnsProviderChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNS01ChallengeConfig.dns_provider_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dns_provider_choice"] = vFn
+
+	return v
+}()
+
+func DNS01ChallengeConfigValidator() db.Validator {
+	return DefaultDNS01ChallengeConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSInstruction) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSInstruction) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSInstruction) DeepCopy() *DNSInstruction {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSInstruction{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSInstruction) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSInstruction) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSInstructionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSInstruction struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSInstruction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSInstruction)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSInstruction got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["name"]; exists {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["record_type"]; exists {
+		vOpts := append(opts, db.WithValidateField("record_type"))
+		if err := fv(ctx, m.GetRecordType(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["status"]; exists {
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["value"]; exists {
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSInstructionValidator = func() *ValidateDNSInstruction {
+	v := &ValidateDNSInstruction{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DNSInstructionValidator() db.Validator {
+	return DefaultDNSInstructionValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -349,10 +1348,65 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
+	if fdrInfos, err := m.GetVirtualServersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificateChainDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertificateChainDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHttpLoadbalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpLoadbalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProviderDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProviderDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTcpLoadbalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTcpLoadbalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualServersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 	return drInfos, nil
 }
 
 func (m *GetSpecType) GetCertificateChainDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCertificateChain()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("certificate_chain.Object")
+	dri := db.DRefInfo{
+		RefdType:   "certificate_chain.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "certificate_chain",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GetSpecType) GetCertificateChainDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCertificateChain()
 	if vref == nil {
 		return nil, nil
@@ -421,6 +1475,30 @@ func (m *GetSpecType) GetHttpLoadbalancersDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetHttpLoadbalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetHttpLoadbalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.http_loadbalancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("http_loadbalancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http_loadbalancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "http_loadbalancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetHttpLoadbalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GetSpecType) GetHttpLoadbalancersDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -468,6 +1546,49 @@ func (m *GetSpecType) GetProviderDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "virtual_host_auto_cert." + dri.DRField
 		}
 		return drInfos, err
+	case *GetSpecType_AutoCert:
+		drInfos, err := m.GetAutoCert().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAutoCert().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "auto_cert." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetProviderDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProvider() == nil {
+		return nil, nil
+	}
+	switch m.GetProvider().(type) {
+	case *GetSpecType_Manual:
+		return nil, nil
+	case *GetSpecType_VirtualHostAutoCert:
+		drInfos, err := m.GetVirtualHostAutoCert().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualHostAutoCert().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_host_auto_cert." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_AutoCert:
+		drInfos, err := m.GetAutoCert().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAutoCert().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "auto_cert." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
@@ -486,6 +1607,30 @@ func (m *GetSpecType) GetTcpLoadbalancersDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("tcp_loadbalancer.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tcp_loadbalancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "tcp_loadbalancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetTcpLoadbalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetTcpLoadbalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.tcp_loadbalancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("tcp_loadbalancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "tcp_loadbalancer.Object",
 			RefdTenant: vref.Tenant,
@@ -526,6 +1671,83 @@ func (m *GetSpecType) GetTcpLoadbalancersDBEntries(ctx context.Context, d db.Int
 	return entries, nil
 }
 
+func (m *GetSpecType) GetVirtualServersDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetVirtualServers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.virtual_servers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_server.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_server.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_servers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetVirtualServersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetVirtualServers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.virtual_servers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_server.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_server.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_servers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+
+// GetVirtualServersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetVirtualServersDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_server.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_server")
+	}
+	for i, vref := range m.GetVirtualServers() {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.virtual_servers[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "virtual_server.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+	return entries, nil
+}
+
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -534,23 +1756,6 @@ func (v *ValidateGetSpecType) CertificateUrlValidationRuleHandler(rules map[stri
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate_url")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateGetSpecType) PrivateKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_key")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-		return nil
 	}
 
 	return validatorFn, nil
@@ -665,10 +1870,30 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_AutoCert:
+		if fv, exists := v.FldValidators["provider.auto_cert"]; exists {
+			val := m.GetProvider().(*GetSpecType_AutoCert).AutoCert
+			vOpts := append(opts,
+				db.WithValidateField("provider"),
+				db.WithValidateField("auto_cert"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 	if fv, exists := v.FldValidators["tcp_loadbalancers"]; exists {
 		vOpts := append(opts, db.WithValidateField("tcp_loadbalancers"))
 		for idx, item := range m.GetTcpLoadbalancers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["virtual_servers"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtual_servers"))
+		for idx, item := range m.GetVirtualServers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
@@ -691,10 +1916,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhCertificateUrl := v.CertificateUrlValidationRuleHandler
 	rulesCertificateUrl := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
 		"ves.io.schema.rules.string.certificate_url": "true",
 		"ves.io.schema.rules.string.max_bytes":       "131072",
-		"ves.io.schema.rules.string.min_bytes":       "1",
 	}
 	vFn, err = vrhCertificateUrl(rulesCertificateUrl)
 	if err != nil {
@@ -702,22 +1925,14 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["certificate_url"] = vFn
-
-	vrhPrivateKey := v.PrivateKeyValidationRuleHandler
-	rulesPrivateKey := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhPrivateKey(rulesPrivateKey)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.private_key: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["private_key"] = vFn
 	v.FldValidators["ocsp_stapling_choice.custom_hash_algorithms"] = ves_io_schema.HashAlgorithmsValidator().Validate
 	v.FldValidators["provider.virtual_host_auto_cert"] = VirtualHostAutoCertValidator().Validate
+	v.FldValidators["provider.auto_cert"] = AutoCertConfigValidator().Validate
+	v.FldValidators["private_key"] = ves_io_schema.SecretTypeValidator().Validate
 	v.FldValidators["certificate_chain"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["http_loadbalancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["tcp_loadbalancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["virtual_servers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -809,8 +2024,58 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificateChainDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertificateChainDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHttpLoadbalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpLoadbalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProviderDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProviderDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTcpLoadbalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTcpLoadbalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualServersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetCertificateChainDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCertificateChain()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("certificate_chain.Object")
+	dri := db.DRefInfo{
+		RefdType:   "certificate_chain.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "certificate_chain",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetCertificateChainDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCertificateChain()
 	if vref == nil {
 		return nil, nil
@@ -879,6 +2144,30 @@ func (m *GlobalSpecType) GetHttpLoadbalancersDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetHttpLoadbalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetHttpLoadbalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.http_loadbalancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("http_loadbalancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http_loadbalancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "http_loadbalancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetHttpLoadbalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetHttpLoadbalancersDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -926,6 +2215,49 @@ func (m *GlobalSpecType) GetProviderDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "virtual_host_auto_cert." + dri.DRField
 		}
 		return drInfos, err
+	case *GlobalSpecType_AutoCert:
+		drInfos, err := m.GetAutoCert().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAutoCert().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "auto_cert." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetProviderDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProvider() == nil {
+		return nil, nil
+	}
+	switch m.GetProvider().(type) {
+	case *GlobalSpecType_Manual:
+		return nil, nil
+	case *GlobalSpecType_VirtualHostAutoCert:
+		drInfos, err := m.GetVirtualHostAutoCert().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualHostAutoCert().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_host_auto_cert." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_AutoCert:
+		drInfos, err := m.GetAutoCert().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAutoCert().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "auto_cert." + dri.DRField
+		}
+		return drInfos, err
 	default:
 		return nil, nil
 	}
@@ -944,6 +2276,30 @@ func (m *GlobalSpecType) GetTcpLoadbalancersDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("tcp_loadbalancer.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tcp_loadbalancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "tcp_loadbalancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetTcpLoadbalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetTcpLoadbalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.tcp_loadbalancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("tcp_loadbalancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "tcp_loadbalancer.Object",
 			RefdTenant: vref.Tenant,
@@ -1008,6 +2364,30 @@ func (m *GlobalSpecType) GetVirtualServersDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetVirtualServersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetVirtualServers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.virtual_servers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_server.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_server.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_servers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetVirtualServersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetVirtualServersDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1045,23 +2425,6 @@ func (v *ValidateGlobalSpecType) CertificateUrlValidationRuleHandler(rules map[s
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate_url")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateGlobalSpecType) PrivateKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_key")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-		return nil
 	}
 
 	return validatorFn, nil
@@ -1176,6 +2539,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_AutoCert:
+		if fv, exists := v.FldValidators["provider.auto_cert"]; exists {
+			val := m.GetProvider().(*GlobalSpecType_AutoCert).AutoCert
+			vOpts := append(opts,
+				db.WithValidateField("provider"),
+				db.WithValidateField("auto_cert"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	}
 	if fv, exists := v.FldValidators["tcp_loadbalancers"]; exists {
 		vOpts := append(opts, db.WithValidateField("tcp_loadbalancers"))
@@ -1211,10 +2585,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhCertificateUrl := v.CertificateUrlValidationRuleHandler
 	rulesCertificateUrl := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
 		"ves.io.schema.rules.string.certificate_url": "true",
 		"ves.io.schema.rules.string.max_bytes":       "131072",
-		"ves.io.schema.rules.string.min_bytes":       "1",
 	}
 	vFn, err = vrhCertificateUrl(rulesCertificateUrl)
 	if err != nil {
@@ -1222,19 +2594,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["certificate_url"] = vFn
-
-	vrhPrivateKey := v.PrivateKeyValidationRuleHandler
-	rulesPrivateKey := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhPrivateKey(rulesPrivateKey)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.private_key: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["private_key"] = vFn
 	v.FldValidators["ocsp_stapling_choice.custom_hash_algorithms"] = ves_io_schema.HashAlgorithmsValidator().Validate
 	v.FldValidators["provider.virtual_host_auto_cert"] = VirtualHostAutoCertValidator().Validate
+	v.FldValidators["provider.auto_cert"] = AutoCertConfigValidator().Validate
+	v.FldValidators["private_key"] = ves_io_schema.SecretTypeValidator().Validate
 	v.FldValidators["certificate_chain"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["http_loadbalancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["tcp_loadbalancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -1245,6 +2608,261 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HTTP01ChallengeConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HTTP01ChallengeConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HTTP01ChallengeConfig) DeepCopy() *HTTP01ChallengeConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HTTP01ChallengeConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HTTP01ChallengeConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HTTP01ChallengeConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HTTP01ChallengeConfigValidator().Validate(ctx, m, opts...)
+}
+
+func (m *HTTP01ChallengeConfig) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualHostRefDRefInfo()
+}
+func (m *HTTP01ChallengeConfig) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualHostRefDRefInfoForOverlay(generateHash)
+}
+
+func (m *HTTP01ChallengeConfig) GetVirtualHostRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetVirtualHostRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_host.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_host.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "virtual_host_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *HTTP01ChallengeConfig) GetVirtualHostRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vref := m.GetVirtualHostRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_host.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_host.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "virtual_host_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+
+// GetVirtualHostRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *HTTP01ChallengeConfig) GetVirtualHostRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_host.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_host")
+	}
+	vref := m.GetVirtualHostRef()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "virtual_host.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+	return entries, nil
+}
+
+type ValidateHTTP01ChallengeConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHTTP01ChallengeConfig) VirtualHostRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for virtual_host_ref")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHTTP01ChallengeConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HTTP01ChallengeConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HTTP01ChallengeConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["virtual_host_ref"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtual_host_ref"))
+		if err := fv(ctx, m.GetVirtualHostRef(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHTTP01ChallengeConfigValidator = func() *ValidateHTTP01ChallengeConfig {
+	v := &ValidateHTTP01ChallengeConfig{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVirtualHostRef := v.VirtualHostRefValidationRuleHandler
+	rulesVirtualHostRef := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVirtualHostRef(rulesVirtualHostRef)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HTTP01ChallengeConfig.virtual_host_ref: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["virtual_host_ref"] = vFn
+
+	return v
+}()
+
+func HTTP01ChallengeConfigValidator() db.Validator {
+	return DefaultHTTP01ChallengeConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PreValidatedConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PreValidatedConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PreValidatedConfig) DeepCopy() *PreValidatedConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PreValidatedConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PreValidatedConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PreValidatedConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PreValidatedConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePreValidatedConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePreValidatedConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PreValidatedConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PreValidatedConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPreValidatedConfigValidator = func() *ValidatePreValidatedConfig {
+	v := &ValidatePreValidatedConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func PreValidatedConfigValidator() db.Validator {
+	return DefaultPreValidatedConfigValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1302,10 +2920,56 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetCertificateChainDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificateChainDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCertificateChainDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProviderDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetProviderDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificateChainDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCertificateChainDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProviderDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProviderDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
 }
 
 func (m *ReplaceSpecType) GetCertificateChainDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCertificateChain()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("certificate_chain.Object")
+	dri := db.DRefInfo{
+		RefdType:   "certificate_chain.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "certificate_chain",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ReplaceSpecType) GetCertificateChainDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCertificateChain()
 	if vref == nil {
 		return nil, nil
@@ -1350,6 +3014,52 @@ func (m *ReplaceSpecType) GetCertificateChainDBEntries(ctx context.Context, d db
 	return entries, nil
 }
 
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetProviderDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetProvider() == nil {
+		return nil, nil
+	}
+	switch m.GetProvider().(type) {
+	case *ReplaceSpecType_Manual:
+		return nil, nil
+	case *ReplaceSpecType_AutoCert:
+		drInfos, err := m.GetAutoCert().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAutoCert().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "auto_cert." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetProviderDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProvider() == nil {
+		return nil, nil
+	}
+	switch m.GetProvider().(type) {
+	case *ReplaceSpecType_Manual:
+		return nil, nil
+	case *ReplaceSpecType_AutoCert:
+		drInfos, err := m.GetAutoCert().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAutoCert().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "auto_cert." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1358,23 +3068,6 @@ func (v *ValidateReplaceSpecType) CertificateUrlValidationRuleHandler(rules map[
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate_url")
-	}
-
-	return validatorFn, nil
-}
-func (v *ValidateReplaceSpecType) PrivateKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_key")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-		return nil
 	}
 
 	return validatorFn, nil
@@ -1447,6 +3140,31 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			return err
 		}
 	}
+
+	switch m.GetProvider().(type) {
+	case *ReplaceSpecType_Manual:
+		if fv, exists := v.FldValidators["provider.manual"]; exists {
+			val := m.GetProvider().(*ReplaceSpecType_Manual).Manual
+			vOpts := append(opts,
+				db.WithValidateField("provider"),
+				db.WithValidateField("manual"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_AutoCert:
+		if fv, exists := v.FldValidators["provider.auto_cert"]; exists {
+			val := m.GetProvider().(*ReplaceSpecType_AutoCert).AutoCert
+			vOpts := append(opts,
+				db.WithValidateField("provider"),
+				db.WithValidateField("auto_cert"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
 
@@ -1463,10 +3181,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhCertificateUrl := v.CertificateUrlValidationRuleHandler
 	rulesCertificateUrl := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
 		"ves.io.schema.rules.string.certificate_url": "true",
 		"ves.io.schema.rules.string.max_bytes":       "131072",
-		"ves.io.schema.rules.string.min_bytes":       "1",
 	}
 	vFn, err = vrhCertificateUrl(rulesCertificateUrl)
 	if err != nil {
@@ -1474,18 +3190,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["certificate_url"] = vFn
-
-	vrhPrivateKey := v.PrivateKeyValidationRuleHandler
-	rulesPrivateKey := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhPrivateKey(rulesPrivateKey)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.private_key: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["private_key"] = vFn
 	v.FldValidators["ocsp_stapling_choice.custom_hash_algorithms"] = ves_io_schema.HashAlgorithmsValidator().Validate
+	v.FldValidators["provider.auto_cert"] = AutoCertConfigValidator().Validate
+	v.FldValidators["private_key"] = ves_io_schema.SecretTypeValidator().Validate
 	v.FldValidators["certificate_chain"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1539,6 +3246,13 @@ func (m *VirtualHostAutoCert) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetOwnerVirtualHostDRefInfo()
 }
+func (m *VirtualHostAutoCert) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetOwnerVirtualHostDRefInfoForOverlay(generateHash)
+}
 
 func (m *VirtualHostAutoCert) GetOwnerVirtualHostDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetOwnerVirtualHost()
@@ -1551,6 +3265,34 @@ func (m *VirtualHostAutoCert) GetOwnerVirtualHostDRefInfo() ([]db.DRefInfo, erro
 			return nil, fmt.Errorf("VirtualHostAutoCert.owner_virtual_host[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_host.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "owner_virtual_host",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *VirtualHostAutoCert) GetOwnerVirtualHostDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetOwnerVirtualHost()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VirtualHostAutoCert.owner_virtual_host[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_host.Object",
 			RefdUID:    ref.Uid,
@@ -1726,6 +3468,41 @@ func (r *CreateSpecType) GetOcspStaplingChoiceFromGlobalSpecType(o *GlobalSpecTy
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetProviderToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.Provider.(type) {
+	case nil:
+		o.Provider = nil
+
+	case *CreateSpecType_AutoCert:
+		o.Provider = &GlobalSpecType_AutoCert{AutoCert: of.AutoCert}
+
+	case *CreateSpecType_Manual:
+		o.Provider = &GlobalSpecType_Manual{Manual: of.Manual}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetProviderFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.Provider.(type) {
+	case nil:
+		r.Provider = nil
+
+	case *GlobalSpecType_AutoCert:
+		r.Provider = &CreateSpecType_AutoCert{AutoCert: of.AutoCert}
+
+	case *GlobalSpecType_Manual:
+		r.Provider = &CreateSpecType_Manual{Manual: of.Manual}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -1734,6 +3511,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.CertificateUrl = f.GetCertificateUrl()
 	m.GetOcspStaplingChoiceFromGlobalSpecType(f)
 	m.PrivateKey = f.GetPrivateKey()
+	m.GetProviderFromGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1755,6 +3533,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.CertificateUrl = m1.CertificateUrl
 	m1.SetOcspStaplingChoiceToGlobalSpecType(f)
 	f.PrivateKey = m1.PrivateKey
+	m1.SetProviderToGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1812,6 +3591,9 @@ func (r *GetSpecType) SetProviderToGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		o.Provider = nil
 
+	case *GetSpecType_AutoCert:
+		o.Provider = &GlobalSpecType_AutoCert{AutoCert: of.AutoCert}
+
 	case *GetSpecType_Manual:
 		o.Provider = &GlobalSpecType_Manual{Manual: of.Manual}
 
@@ -1828,6 +3610,9 @@ func (r *GetSpecType) GetProviderFromGlobalSpecType(o *GlobalSpecType) error {
 	switch of := o.Provider.(type) {
 	case nil:
 		r.Provider = nil
+
+	case *GlobalSpecType_AutoCert:
+		r.Provider = &GetSpecType_AutoCert{AutoCert: of.AutoCert}
 
 	case *GlobalSpecType_Manual:
 		r.Provider = &GetSpecType_Manual{Manual: of.Manual}
@@ -1853,6 +3638,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.PrivateKey = f.GetPrivateKey()
 	m.GetProviderFromGlobalSpecType(f)
 	m.TcpLoadbalancers = f.GetTcpLoadbalancers()
+	m.VirtualServers = f.GetVirtualServers()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1878,6 +3664,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.PrivateKey = m1.PrivateKey
 	m1.SetProviderToGlobalSpecType(f)
 	f.TcpLoadbalancers = m1.TcpLoadbalancers
+	f.VirtualServers = m1.VirtualServers
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1929,6 +3716,41 @@ func (r *ReplaceSpecType) GetOcspStaplingChoiceFromGlobalSpecType(o *GlobalSpecT
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetProviderToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.Provider.(type) {
+	case nil:
+		o.Provider = nil
+
+	case *ReplaceSpecType_AutoCert:
+		o.Provider = &GlobalSpecType_AutoCert{AutoCert: of.AutoCert}
+
+	case *ReplaceSpecType_Manual:
+		o.Provider = &GlobalSpecType_Manual{Manual: of.Manual}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetProviderFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.Provider.(type) {
+	case nil:
+		r.Provider = nil
+
+	case *GlobalSpecType_AutoCert:
+		r.Provider = &ReplaceSpecType_AutoCert{AutoCert: of.AutoCert}
+
+	case *GlobalSpecType_Manual:
+		r.Provider = &ReplaceSpecType_Manual{Manual: of.Manual}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -1937,6 +3759,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.CertificateUrl = f.GetCertificateUrl()
 	m.GetOcspStaplingChoiceFromGlobalSpecType(f)
 	m.PrivateKey = f.GetPrivateKey()
+	m.GetProviderFromGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1958,6 +3781,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.CertificateUrl = m1.CertificateUrl
 	m1.SetOcspStaplingChoiceToGlobalSpecType(f)
 	f.PrivateKey = m1.PrivateKey
+	m1.SetProviderToGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

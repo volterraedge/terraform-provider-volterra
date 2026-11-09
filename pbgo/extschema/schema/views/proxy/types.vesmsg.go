@@ -106,6 +106,29 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProxyPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProxyPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -127,6 +150,37 @@ func (m *CreateSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDynamicProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDynamicProxy().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "dynamic_proxy." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetProxyChoice().(type) {
+	case *CreateSpecType_HttpProxy:
+		drInfos, err := m.GetHttpProxy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpProxy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_proxy." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_DynamicProxy:
+		drInfos, err := m.GetDynamicProxy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDynamicProxy().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -161,6 +215,29 @@ func (m *CreateSpecType) GetProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetProxyPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProxyPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetProxyPolicyChoice().(type) {
+	case *CreateSpecType_NoForwardProxyPolicy:
+		return nil, nil
+	case *CreateSpecType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteChoice() == nil {
@@ -171,6 +248,29 @@ func (m *CreateSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetSiteVirtualSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteVirtualSites().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_virtual_sites." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_DoNotAdvertise:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetSiteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteChoice().(type) {
+	case *CreateSpecType_SiteVirtualSites:
+		drInfos, err := m.GetSiteVirtualSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteVirtualSites().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -570,6 +670,13 @@ func (m *DynamicHttpProxyType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetMoreOptionDRefInfo()
 }
+func (m *DynamicHttpProxyType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetMoreOptionDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *DynamicHttpProxyType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
@@ -579,6 +686,22 @@ func (m *DynamicHttpProxyType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetMoreOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "more_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DynamicHttpProxyType) GetMoreOptionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMoreOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetMoreOption().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -696,6 +819,24 @@ func (m *DynamicHttpsProxyType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *DynamicHttpsProxyType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetMoreOptionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMoreOptionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTlsParamsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParamsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *DynamicHttpsProxyType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
@@ -713,6 +854,22 @@ func (m *DynamicHttpsProxyType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *DynamicHttpsProxyType) GetMoreOptionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMoreOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetMoreOption().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "more_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *DynamicHttpsProxyType) GetTlsParamsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTlsParams() == nil {
@@ -721,6 +878,22 @@ func (m *DynamicHttpsProxyType) GetTlsParamsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetTlsParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_params." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DynamicHttpsProxyType) GetTlsParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTlsParams() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTlsParams().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParams().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -834,6 +1007,13 @@ func (m *DynamicProxyType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetProxyChoiceDRefInfo()
 }
+func (m *DynamicProxyType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetProxyChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *DynamicProxyType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -857,6 +1037,39 @@ func (m *DynamicProxyType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetHttpsProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsProxy().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https_proxy." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DynamicProxyType) GetProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetProxyChoice().(type) {
+	case *DynamicProxyType_SniProxy:
+		return nil, nil
+	case *DynamicProxyType_HttpProxy:
+		drInfos, err := m.GetHttpProxy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpProxy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_proxy." + dri.DRField
+		}
+		return drInfos, err
+	case *DynamicProxyType_HttpsProxy:
+		drInfos, err := m.GetHttpsProxy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpsProxy().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1268,6 +1481,29 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProxyPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProxyPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1289,6 +1525,37 @@ func (m *GetSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDynamicProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDynamicProxy().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "dynamic_proxy." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetProxyChoice().(type) {
+	case *GetSpecType_HttpProxy:
+		drInfos, err := m.GetHttpProxy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpProxy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_proxy." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_DynamicProxy:
+		drInfos, err := m.GetDynamicProxy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDynamicProxy().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1323,6 +1590,29 @@ func (m *GetSpecType) GetProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetProxyPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProxyPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetProxyPolicyChoice().(type) {
+	case *GetSpecType_NoForwardProxyPolicy:
+		return nil, nil
+	case *GetSpecType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteChoice() == nil {
@@ -1333,6 +1623,29 @@ func (m *GetSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetSiteVirtualSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteVirtualSites().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_virtual_sites." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_DoNotAdvertise:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetSiteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteChoice().(type) {
+	case *GetSpecType_SiteVirtualSites:
+		drInfos, err := m.GetSiteVirtualSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteVirtualSites().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1764,8 +2077,67 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetNetworkChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNetworkChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProxyPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProxyPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetNetworkChoice().(type) {
+	case *GlobalSpecType_SiteLocalNetwork:
+		return nil, nil
+	case *GlobalSpecType_SiteLocalInsideNetwork:
+		return nil, nil
+	case *GlobalSpecType_InsideNetwork:
+		vref := m.GetInsideNetwork()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_network.Object")
+		dri := db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "inside_network",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GlobalSpecType) GetNetworkChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetNetworkChoice().(type) {
 	case *GlobalSpecType_SiteLocalNetwork:
 		return nil, nil
@@ -1857,6 +2229,37 @@ func (m *GlobalSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetProxyChoice().(type) {
+	case *GlobalSpecType_HttpProxy:
+		drInfos, err := m.GetHttpProxy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpProxy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_proxy." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_DynamicProxy:
+		drInfos, err := m.GetDynamicProxy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDynamicProxy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "dynamic_proxy." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetProxyPolicyChoice() == nil {
@@ -1869,6 +2272,29 @@ func (m *GlobalSpecType) GetProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetProxyPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProxyPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetProxyPolicyChoice().(type) {
+	case *GlobalSpecType_NoForwardProxyPolicy:
+		return nil, nil
+	case *GlobalSpecType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1903,7 +2329,47 @@ func (m *GlobalSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetSiteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteChoice().(type) {
+	case *GlobalSpecType_SiteVirtualSites:
+		drInfos, err := m.GetSiteVirtualSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteVirtualSites().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_virtual_sites." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_DoNotAdvertise:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -2367,6 +2833,24 @@ func (m *HttpConnectProxyType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *HttpConnectProxyType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetHttpHttpsChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpHttpsChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMoreOptionDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMoreOptionDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *HttpConnectProxyType) GetHttpHttpsChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2391,6 +2875,29 @@ func (m *HttpConnectProxyType) GetHttpHttpsChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *HttpConnectProxyType) GetHttpHttpsChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetHttpHttpsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetHttpHttpsChoice().(type) {
+	case *HttpConnectProxyType_EnableHttp:
+		return nil, nil
+	case *HttpConnectProxyType_EnableHttps:
+		drInfos, err := m.GetEnableHttps().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableHttps().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_https." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *HttpConnectProxyType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetMoreOption() == nil {
@@ -2399,6 +2906,22 @@ func (m *HttpConnectProxyType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetMoreOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "more_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HttpConnectProxyType) GetMoreOptionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMoreOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetMoreOption().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2563,6 +3086,13 @@ func (m *HttpsConnectType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTlsParamsDRefInfo()
 }
+func (m *HttpsConnectType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTlsParamsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HttpsConnectType) GetTlsParamsDRefInfo() ([]db.DRefInfo, error) {
@@ -2572,6 +3102,22 @@ func (m *HttpsConnectType) GetTlsParamsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetTlsParams().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetTlsParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_params." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HttpsConnectType) GetTlsParamsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTlsParams() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetTlsParams().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParams().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2731,6 +3277,29 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetProxyPolicyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProxyPolicyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSiteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2752,6 +3321,37 @@ func (m *ReplaceSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDynamicProxy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDynamicProxy().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "dynamic_proxy." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetProxyChoice().(type) {
+	case *ReplaceSpecType_HttpProxy:
+		drInfos, err := m.GetHttpProxy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpProxy().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_proxy." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_DynamicProxy:
+		drInfos, err := m.GetDynamicProxy().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDynamicProxy().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2786,6 +3386,29 @@ func (m *ReplaceSpecType) GetProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetProxyPolicyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetProxyPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetProxyPolicyChoice().(type) {
+	case *ReplaceSpecType_NoForwardProxyPolicy:
+		return nil, nil
+	case *ReplaceSpecType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteChoice() == nil {
@@ -2796,6 +3419,29 @@ func (m *ReplaceSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetSiteVirtualSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteVirtualSites().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_virtual_sites." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_DoNotAdvertise:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetSiteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSiteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteChoice().(type) {
+	case *ReplaceSpecType_SiteVirtualSites:
+		drInfos, err := m.GetSiteVirtualSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteVirtualSites().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

@@ -1994,11 +1994,23 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																								},
 
 																								"url": {
+																									Sensitive: true,
 																									Type:       schema.TypeString,
 																									Required:   true,
 																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
+																						},
+																					},
+
+																					"none": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
 																						},
 																					},
 
@@ -2720,11 +2732,23 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																								},
 
 																								"url": {
+																									Sensitive: true,
 																									Type:       schema.TypeString,
 																									Required:   true,
 																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
+																						},
+																					},
+
+																					"none": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
 																						},
 																					},
 
@@ -7099,6 +7123,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
+
+												"serve_stale": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
 											},
 										},
 									},
@@ -7125,6 +7155,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 												},
 
 												"ignore_response_cookie": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"serve_stale": {
 													Type:       schema.TypeBool,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
@@ -7159,6 +7195,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
+
+												"serve_stale": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
 											},
 										},
 									},
@@ -7185,6 +7227,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 												},
 
 												"ignore_response_cookie": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"serve_stale": {
 													Type:       schema.TypeBool,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
@@ -7219,6 +7267,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
+
+												"serve_stale": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
 											},
 										},
 									},
@@ -7245,6 +7299,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 												},
 
 												"ignore_response_cookie": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"serve_stale": {
 													Type:       schema.TypeBool,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
@@ -10039,8 +10099,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"cleartext": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:      schema.TypeString,
+										Optional:  true,
+										Sensitive: true,
 									},
 								},
 							},
@@ -10781,10 +10842,21 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -11083,11 +11155,23 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:       schema.TypeString,
 																			Required:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -11320,6 +11404,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
+
+																		"serve_stale": {
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
 																	},
 																},
 															},
@@ -11346,6 +11436,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"ignore_response_cookie": {
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"serve_stale": {
 																			Type:       schema.TypeBool,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
@@ -11380,6 +11476,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
+
+																		"serve_stale": {
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
 																	},
 																},
 															},
@@ -11406,6 +11508,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"ignore_response_cookie": {
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"serve_stale": {
 																			Type:       schema.TypeBool,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
@@ -11440,6 +11548,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
+
+																		"serve_stale": {
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
 																	},
 																},
 															},
@@ -11466,6 +11580,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"ignore_response_cookie": {
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"serve_stale": {
 																			Type:       schema.TypeBool,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
@@ -12084,11 +12204,23 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:       schema.TypeString,
 																			Required:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -12286,11 +12418,23 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:       schema.TypeString,
 																			Required:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -14368,11 +14512,23 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																																	},
 
 																																	"url": {
+																																		Sensitive: true,
 																																		Type:       schema.TypeString,
 																																		Required:   true,
 																																		Deprecated: "This field is deprecated and will be removed in future release.",
 																																	},
 																																},
+																															},
+																														},
+
+																														"none": {
+
+																															Type:       schema.TypeList,
+																															MaxItems:   1,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																															Elem: &schema.Resource{
+																																Schema: map[string]*schema.Schema{},
 																															},
 																														},
 
@@ -15094,11 +15250,23 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																																	},
 
 																																	"url": {
+																																		Sensitive: true,
 																																		Type:       schema.TypeString,
 																																		Required:   true,
 																																		Deprecated: "This field is deprecated and will be removed in future release.",
 																																	},
 																																},
+																															},
+																														},
+
+																														"none": {
+
+																															Type:       schema.TypeList,
+																															MaxItems:   1,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																															Elem: &schema.Resource{
+																																Schema: map[string]*schema.Schema{},
 																															},
 																														},
 
@@ -17221,6 +17389,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		"cleartext": {
 																			Type:       schema.TypeString,
 																			Optional:   true,
+																			Sensitive:  true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
@@ -17607,11 +17776,23 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:       schema.TypeString,
 																						Required:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -17769,11 +17950,23 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:       schema.TypeString,
 																						Required:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -23615,10 +23808,21 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -24041,10 +24245,21 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -24230,10 +24445,21 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"url": {
+																			Sensitive: true,
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -30522,6 +30748,15 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 																			}
 
+																			if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																			}
+
 																			if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																				secretInfoOneofTypeFound = true
@@ -31458,6 +31693,15 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 																					}
 																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				password.SecretInfoOneof = secretInfoOneofInt
 
 																			}
 
@@ -37372,6 +37616,12 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 										}
 
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.HostnameUri.ServeStale = v.(bool)
+
+										}
+
 									}
 								}
 
@@ -37404,6 +37654,12 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 										if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 											eligibleForCacheInt.SchemeHostnameRequestUri.IgnoreResponseCookie = v.(bool)
+
+										}
+
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeHostnameRequestUri.ServeStale = v.(bool)
 
 										}
 
@@ -37442,6 +37698,12 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 										}
 
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeHostnameUri.ServeStale = v.(bool)
+
+										}
+
 									}
 								}
 
@@ -37474,6 +37736,12 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 										if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 											eligibleForCacheInt.SchemeHostnameUriQuery.IgnoreResponseCookie = v.(bool)
+
+										}
+
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeHostnameUriQuery.ServeStale = v.(bool)
 
 										}
 
@@ -37512,6 +37780,12 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 										}
 
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeProxyHostRequestUri.ServeStale = v.(bool)
+
+										}
+
 									}
 								}
 
@@ -37544,6 +37818,12 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 										if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 											eligibleForCacheInt.SchemeProxyHostUri.IgnoreResponseCookie = v.(bool)
+
+										}
+
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeProxyHostUri.ServeStale = v.(bool)
 
 										}
 
@@ -42775,6 +43055,15 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 																}
 
+																if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -43145,6 +43434,15 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 													}
 
+													if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -43471,6 +43769,12 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 																}
 
+																if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+																	eligibleForCacheInt.HostnameUri.ServeStale = v.(bool)
+
+																}
+
 															}
 														}
 
@@ -43503,6 +43807,12 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 																if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 																	eligibleForCacheInt.SchemeHostnameRequestUri.IgnoreResponseCookie = v.(bool)
+
+																}
+
+																if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+																	eligibleForCacheInt.SchemeHostnameRequestUri.ServeStale = v.(bool)
 
 																}
 
@@ -43541,6 +43851,12 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 																}
 
+																if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+																	eligibleForCacheInt.SchemeHostnameUri.ServeStale = v.(bool)
+
+																}
+
 															}
 														}
 
@@ -43573,6 +43889,12 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 																if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 																	eligibleForCacheInt.SchemeHostnameUriQuery.IgnoreResponseCookie = v.(bool)
+
+																}
+
+																if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+																	eligibleForCacheInt.SchemeHostnameUriQuery.ServeStale = v.(bool)
 
 																}
 
@@ -43611,6 +43933,12 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 																}
 
+																if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+																	eligibleForCacheInt.SchemeProxyHostRequestUri.ServeStale = v.(bool)
+
+																}
+
 															}
 														}
 
@@ -43643,6 +43971,12 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 																if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 																	eligibleForCacheInt.SchemeProxyHostUri.IgnoreResponseCookie = v.(bool)
+
+																}
+
+																if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+																	eligibleForCacheInt.SchemeProxyHostUri.ServeStale = v.(bool)
 
 																}
 
@@ -44499,6 +44833,15 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 													}
 
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -44730,6 +45073,15 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 															}
 														}
+
+													}
+
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -47703,6 +48055,15 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 																												}
 
+																												if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																													secretInfoOneofTypeFound = true
+																													secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																													secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																													password.SecretInfoOneof = secretInfoOneofInt
+
+																												}
+
 																												if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																													secretInfoOneofTypeFound = true
@@ -48639,6 +49000,15 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 																														}
 																													}
+
+																												}
+
+																												if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																													secretInfoOneofTypeFound = true
+																													secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																													secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																													password.SecretInfoOneof = secretInfoOneofInt
 
 																												}
 
@@ -51991,6 +52361,15 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 																}
 
+																if v, ok := backupKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	backupKey.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := backupKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -52170,6 +52549,15 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 																		}
 																	}
+
+																}
+
+																if v, ok := secretKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	secretKey.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -60024,6 +60412,15 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 																}
 
+																if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -60619,6 +61016,15 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 													}
 
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -60850,6 +61256,15 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 															}
 														}
+
+													}
+
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -68879,6 +69294,15 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 																			}
 
+																			if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																			}
+
 																			if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																				secretInfoOneofTypeFound = true
@@ -69815,6 +70239,15 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 																					}
 																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				password.SecretInfoOneof = secretInfoOneofInt
 
 																			}
 
@@ -75724,6 +76157,12 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 										}
 
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.HostnameUri.ServeStale = v.(bool)
+
+										}
+
 									}
 								}
 
@@ -75756,6 +76195,12 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 										if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 											eligibleForCacheInt.SchemeHostnameRequestUri.IgnoreResponseCookie = v.(bool)
+
+										}
+
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeHostnameRequestUri.ServeStale = v.(bool)
 
 										}
 
@@ -75794,6 +76239,12 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 										}
 
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeHostnameUri.ServeStale = v.(bool)
+
+										}
+
 									}
 								}
 
@@ -75826,6 +76277,12 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 										if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 											eligibleForCacheInt.SchemeHostnameUriQuery.IgnoreResponseCookie = v.(bool)
+
+										}
+
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeHostnameUriQuery.ServeStale = v.(bool)
 
 										}
 
@@ -75864,6 +76321,12 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 										}
 
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeProxyHostRequestUri.ServeStale = v.(bool)
+
+										}
+
 									}
 								}
 
@@ -75896,6 +76359,12 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 										if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 											eligibleForCacheInt.SchemeProxyHostUri.IgnoreResponseCookie = v.(bool)
+
+										}
+
+										if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+											eligibleForCacheInt.SchemeProxyHostUri.ServeStale = v.(bool)
 
 										}
 
@@ -81108,6 +81577,15 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 																}
 
+																if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -81478,6 +81956,15 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 													}
 
+													if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -81801,6 +82288,12 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 																}
 
+																if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+																	eligibleForCacheInt.HostnameUri.ServeStale = v.(bool)
+
+																}
+
 															}
 														}
 
@@ -81833,6 +82326,12 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 																if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 																	eligibleForCacheInt.SchemeHostnameRequestUri.IgnoreResponseCookie = v.(bool)
+
+																}
+
+																if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+																	eligibleForCacheInt.SchemeHostnameRequestUri.ServeStale = v.(bool)
 
 																}
 
@@ -81871,6 +82370,12 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 																}
 
+																if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+																	eligibleForCacheInt.SchemeHostnameUri.ServeStale = v.(bool)
+
+																}
+
 															}
 														}
 
@@ -81903,6 +82408,12 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 																if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 																	eligibleForCacheInt.SchemeHostnameUriQuery.IgnoreResponseCookie = v.(bool)
+
+																}
+
+																if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+																	eligibleForCacheInt.SchemeHostnameUriQuery.ServeStale = v.(bool)
 
 																}
 
@@ -81941,6 +82452,12 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 																}
 
+																if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+																	eligibleForCacheInt.SchemeProxyHostRequestUri.ServeStale = v.(bool)
+
+																}
+
 															}
 														}
 
@@ -81973,6 +82490,12 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 																if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
 																	eligibleForCacheInt.SchemeProxyHostUri.IgnoreResponseCookie = v.(bool)
+
+																}
+
+																if v, ok := cs["serve_stale"]; ok && !isIntfNil(v) {
+
+																	eligibleForCacheInt.SchemeProxyHostUri.ServeStale = v.(bool)
 
 																}
 
@@ -82829,6 +83352,15 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 													}
 
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -83060,6 +83592,15 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 															}
 														}
+
+													}
+
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 													}
 
@@ -86033,6 +86574,15 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 																												}
 
+																												if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																													secretInfoOneofTypeFound = true
+																													secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																													secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																													password.SecretInfoOneof = secretInfoOneofInt
+
+																												}
+
 																												if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																													secretInfoOneofTypeFound = true
@@ -86969,6 +87519,15 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 																														}
 																													}
+
+																												}
+
+																												if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																													secretInfoOneofTypeFound = true
+																													secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																													secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																													password.SecretInfoOneof = secretInfoOneofInt
 
 																												}
 
@@ -90321,6 +90880,15 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 																}
 
+																if v, ok := backupKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	backupKey.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := backupKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -90500,6 +91068,15 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 																		}
 																	}
+
+																}
+
+																if v, ok := secretKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	secretKey.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -98353,6 +98930,15 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 																}
 
+																if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -98947,6 +99533,15 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 													}
 
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+													}
+
 													if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 														secretInfoOneofTypeFound = true
@@ -99178,6 +99773,15 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 															}
 														}
+
+													}
+
+													if v, ok := cs["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+														secretInfoOneofInt.None = &ves_io_schema.Empty{}
+														valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 													}
 

@@ -2954,7 +2954,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "domain_match": {
                     "type": "array",
-                    "description": "Domain Matchers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure how to match domains from which you accept traffic on this endpoint\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Domain Matchers",
                     "items": {
                         "$ref": "#/definitions/shapebot_defenseDomainMatcherType"
@@ -3017,7 +3017,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "header_match": {
                     "type": "array",
-                    "description": "Header Matchers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure a match for headers that either must be present or must not be present in a request for the request to be evaluated by Bot Defense.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Header Matchers",
                     "items": {
                         "$ref": "#/definitions/bot_defenseMatcherType"
@@ -3039,7 +3039,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "header_name": {
                     "type": "string",
-                    "description": " Enter the Header Name\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
+                    "description": " The name of the header to add to a blocked request.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
                     "title": "Header Name",
                     "x-displayname": "Header",
                     "x-ves-required": "true",
@@ -3050,7 +3050,7 @@ var APISwaggerJSON string = `{
                 },
                 "header_value": {
                     "type": "string",
-                    "description": " Enter the Header Value\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " The header value to add to a blocked request.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Header Value",
                     "x-displayname": "Value",
                     "x-ves-required": "true",
@@ -3094,7 +3094,7 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Operator Name\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
+                    "description": " A name to identify this header matcher.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
                     "title": "Operator Name",
                     "x-displayname": "Name",
                     "x-ves-required": "true",
@@ -3190,7 +3190,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip_allowlist": {
                     "type": "array",
-                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " IP addresses and IP prefixes added to the allow list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "IP \u0026 IP Prefix List",
                     "items": {
                         "$ref": "#/definitions/bot_defenseIPAllowlistDetail"
@@ -3202,7 +3202,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip_range_allowlist": {
                     "type": "array",
-                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Ranges of IP addresses added to the allowlist.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "IP Range List",
                     "items": {
                         "$ref": "#/definitions/bot_defenseIPRangeAllowlistDetail"
@@ -3223,13 +3223,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip_description": {
                     "type": "string",
-                    "description": " The description for ip address",
+                    "description": " Information to help identify the IP allowlist entry.",
                     "title": "ip description",
                     "x-displayname": "Description"
                 },
                 "ip_value": {
                     "type": "string",
-                    "description": " A single Ip address\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The IP address or IP prefix you want to add.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "ip value",
                     "x-displayname": "Value",
                     "x-ves-required": "true",
@@ -3272,12 +3272,12 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "IP Range Allowlist value",
             "title": "IP Range Allowlist Detail",
-            "x-displayname": "IP Range Allowlist",
+            "x-displayname": "IP Range",
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.IPRangeAllowlistDetail",
             "properties": {
                 "end_with": {
                     "type": "string",
-                    "description": " IP range end with\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The end of the IP address range.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "IP end with value",
                     "x-displayname": "End With",
                     "x-ves-required": "true",
@@ -3289,13 +3289,12 @@ var APISwaggerJSON string = `{
                 },
                 "ip_description": {
                     "type": "string",
-                    "description": " The description for IP range",
                     "title": "ip description",
                     "x-displayname": "Description"
                 },
                 "start_with": {
                     "type": "string",
-                    "description": " IP range start with\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The beginning of the IP address range.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "IP start with value",
                     "x-displayname": "Start With",
                     "x-ves-required": "true",
@@ -3355,7 +3354,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "domain_name": {
                     "type": "string",
-                    "description": " Inbound FQDN value\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The hostname and domain name for requests that are routed to Bot Defense. For example, \"shop.example.com\".\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "Fully qualified domain name",
                     "maxLength": 256,
                     "x-displayname": "Inbound FQDN",
@@ -3381,7 +3380,7 @@ var APISwaggerJSON string = `{
                 },
                 "outbound_domain_name": {
                     "type": "string",
-                    "description": " Outbound FQDN or IP value\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The host and domain name or the IP address where you want to send requests that Bot Defense allows to continue to the origin. For example, enter \"internal.example.com\".\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "FQDN / IP",
                     "x-displayname": "Outbound FQDN / IP",
                     "x-ves-required": "true",
@@ -3392,7 +3391,7 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Outbound Port value\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": " The outbound port number for requests that Bot Defense allows to continue to the origin.\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "port",
                     "format": "int64",
                     "x-displayname": "Outbound Port",
@@ -3480,21 +3479,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "case_insensitive": {
                     "type": "boolean",
-                    "description": " case insensitive checker",
+                    "description": " Determines if matching is case-sensitive.",
                     "title": "Check case insensitive",
                     "format": "boolean",
                     "x-displayname": "Case-Insensitive"
                 },
                 "not": {
                     "type": "boolean",
-                    "description": " not checker",
+                    "description": " Select Yes if you want Bot Defense to match values that are the opposite of the values you entered above.",
                     "title": "Check not",
                     "format": "boolean",
                     "x-displayname": "Not(!)"
                 },
                 "value": {
                     "type": "string",
-                    "description": " Query Matcher Value\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " The value you want to match.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Query Matcher Value",
                     "minLength": 1,
                     "maxLength": 256,
@@ -3590,7 +3589,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "path_match": {
                     "type": "array",
-                    "description": "Path Matchers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure how to match paths for endpoints you want to protect with Bot Defense.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Path Matchers",
                     "items": {
                         "$ref": "#/definitions/shapebot_defensePathMatcherType"
@@ -3613,21 +3612,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "case_insensitive": {
                     "type": "boolean",
-                    "description": " case insensitive checker",
+                    "description": " Determines if matching is case-sensitive.",
                     "title": "Check case insensitive",
                     "format": "boolean",
                     "x-displayname": "Case-Insensitive"
                 },
                 "not": {
                     "type": "boolean",
-                    "description": " not checker",
+                    "description": " Select Yes if you want Bot Defense to match values that are the opposite of the values you entered above.",
                     "title": "Check not",
                     "format": "boolean",
                     "x-displayname": "Not(!)"
                 },
                 "value": {
                     "type": "string",
-                    "description": " Path Matcher Value\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 2048\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " The value you want to match.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 2048\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Path Matcher Value",
                     "minLength": 1,
                     "maxLength": 2048,
@@ -3752,7 +3751,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Domain"
                 },
                 "flow_label_choice": {
-                    "description": " Endpoint label category\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " High-level label categories to help identity endpoints for more granular attack intent identification and reporting.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Endpoint category",
                     "$ref": "#/definitions/schemaBotPolicyFlowLabelCategoriesChoiceType",
                     "x-displayname": "Endpoint category",
@@ -3763,7 +3762,7 @@ var APISwaggerJSON string = `{
                 },
                 "header": {
                     "type": "array",
-                    "description": " header matcher",
+                    "description": " Configure a match for headers that either must be present or must not be present in a request for the request to be evaluated by Bot Defense.",
                     "title": "Header",
                     "items": {
                         "$ref": "#/definitions/bot_defenseHeaderOperator"
@@ -3772,7 +3771,7 @@ var APISwaggerJSON string = `{
                 },
                 "http_methods": {
                     "type": "array",
-                    "description": " List of HTTP methods.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 9\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " The methods you want to protect with Bot Defense.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 9\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "HTTP Methods",
                     "minItems": 1,
                     "maxItems": 9,
@@ -3800,13 +3799,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "path": {
-                    "description": " URI path matcher.",
+                    "description": " Configure how to match the paths for endpoints you want to protect with Bot Defense.",
                     "title": "Path",
                     "$ref": "#/definitions/bot_defensePathOperator",
                     "x-displayname": "Path"
                 },
                 "query": {
-                    "description": " query matcher.",
+                    "description": " Configure matches for the URL query parameters you want to protect.",
                     "title": "Query",
                     "$ref": "#/definitions/bot_defenseQueryOperator",
                     "x-displayname": "Query"
@@ -3818,13 +3817,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Treat Known Bots as Regular Requests"
                 },
                 "request_body": {
-                    "description": " request body matcher",
+                    "description": " Configure a match for specific content in the body of a protected endpoint request.",
                     "title": "Request Body",
                     "$ref": "#/definitions/bot_defenseRequestBodyOperator",
                     "x-displayname": "Request Body"
                 },
                 "transaction_result_criteria": {
-                    "description": " Establish criteria for transaction success and failure by replicating the conditions from the origin, using the response parameters to define the conditions",
+                    "description": " The success and failure conditions that replicate the behavior of the origin endpoint.  These conditions do not block or allow requests but help improve the ability of Bot Defense to detect bots.",
                     "title": "Transaction Result Criteria",
                     "$ref": "#/definitions/bot_defenseTransactionResult",
                     "x-displayname": "Transaction Result Criteria"
@@ -3837,7 +3836,7 @@ var APISwaggerJSON string = `{
                 },
                 "usernames": {
                     "type": "array",
-                    "description": " Add the field name where you store username on the Request Body\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A request body parameter with a name-value pair that Bot Defense can use to identify the username associated with a request. Username reporting can help you identify individuals or accounts impacted by an attack\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Username Reporting",
                     "maxItems": 64,
                     "items": {
@@ -3907,14 +3906,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Domain"
                 },
                 "flow_label_choice": {
-                    "description": " Endpoint label category",
+                    "description": " High-level label categories to help identity endpoints for more granular attack intent identification and reporting.",
                     "title": "Endpoint category",
                     "$ref": "#/definitions/schemaBotPolicyFlowLabelCategoriesChoiceType",
                     "x-displayname": "Endpoint category"
                 },
                 "header": {
                     "type": "array",
-                    "description": " header matcher",
+                    "description": " Configure a match for headers that either must be present or must not be present in a request for the request to be evaluated by Bot Defense.",
                     "title": "Header",
                     "items": {
                         "$ref": "#/definitions/bot_defenseHeaderOperator"
@@ -3923,7 +3922,7 @@ var APISwaggerJSON string = `{
                 },
                 "http_methods": {
                     "type": "array",
-                    "description": " List of HTTP methods.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 9\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " The methods you want to protect with Bot Defense.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 9\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "HTTP Methods",
                     "minItems": 1,
                     "maxItems": 9,
@@ -3951,13 +3950,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "path": {
-                    "description": " URI path matcher.",
+                    "description": " Configure how to match the paths for endpoints you want to protect with Bot Defense.",
                     "title": "Path",
                     "$ref": "#/definitions/bot_defensePathOperator",
                     "x-displayname": "Path"
                 },
                 "query": {
-                    "description": " query matcher.",
+                    "description": " Configure matches for the URL query parameters you want to protect.",
                     "title": "Query",
                     "$ref": "#/definitions/bot_defenseQueryOperator",
                     "x-displayname": "Query"
@@ -3975,13 +3974,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Treat Known Bots as Regular Requests"
                 },
                 "request_body": {
-                    "description": " request body matcher",
+                    "description": " Configure a match for specific content in the body of a protected endpoint request.",
                     "title": "Request Body",
                     "$ref": "#/definitions/bot_defenseRequestBodyOperator",
                     "x-displayname": "Request Body"
                 },
                 "transaction_result_criteria": {
-                    "description": " Establish criteria for transaction success and failure by replicating the conditions from the origin, using the response parameters to define the conditions",
+                    "description": " The success and failure conditions that replicate the behavior of the origin endpoint.  These conditions do not block or allow requests but help improve the ability of Bot Defense to detect bots.",
                     "title": "Transaction Result Criteria",
                     "$ref": "#/definitions/bot_defenseTransactionResult",
                     "x-displayname": "Transaction Result Criteria"
@@ -3994,7 +3993,7 @@ var APISwaggerJSON string = `{
                 },
                 "usernames": {
                     "type": "array",
-                    "description": " Add the field name where you store username on the Request Body\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A request body parameter with a name-value pair that Bot Defense can use to identify the username associated with a request. Username reporting can help you identify individuals or accounts impacted by an attack.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Username Reporting",
                     "maxItems": 64,
                     "items": {
@@ -4039,7 +4038,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "query_match": {
                     "type": "array",
-                    "description": "Query Matchers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure matches for URL query parameters you want to protect.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Query Matchers",
                     "items": {
                         "$ref": "#/definitions/bot_defenseMatcherType"
@@ -4097,7 +4096,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "request_body_match": {
                     "type": "array",
-                    "description": "RequestBody Matchers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure a match for specific content in the body of a protected endpoint request.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "RequestBody Matchers",
                     "items": {
                         "$ref": "#/definitions/bot_defenseMatcherType"
@@ -4447,7 +4446,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "response_header_match_v2": {
                     "type": "array",
-                    "description": "Response Header Matchers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " How to match the header value that Bot Defense can use to identify valid requests\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Response Header Matchers",
                     "items": {
                         "$ref": "#/definitions/bot_defenseResponseHeaderMatcherTypeV2"
@@ -4593,7 +4592,7 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Header Name\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
+                    "description": " The response header Bot Defense can use to identify valid requests.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n",
                     "title": "Header Name",
                     "x-displayname": "Header Name",
                     "x-ves-required": "true",
@@ -4666,7 +4665,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Failure Conditions"
                 },
                 "transaction_result_success": {
-                    "description": " Define the conditions that will replicate success conditions for requests on this endpoint\n x-textBlockContent:\n **Define Condition**\n\n Set success and failure conditions based on the origin's response code, headers, body, or cookie",
+                    "description": " Define the conditions that will replicate success conditions for requests on this endpoint",
                     "title": "Success Conditions",
                     "$ref": "#/definitions/bot_defenseTransactionResultType",
                     "x-displayname": "Success Conditions"
@@ -4682,25 +4681,25 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.TransactionResultType",
             "properties": {
                 "cookie_v2": {
-                    "description": " Conditions in Cookie, if any, that would help identify valid Requests to the Origin.",
+                    "description": " Conditions in the cookie that identify valid requests to the endpoint",
                     "title": "Cookie",
                     "$ref": "#/definitions/bot_defenseCookies",
                     "x-displayname": "Cookies"
                 },
                 "responseBody": {
-                    "description": " Conditions in Response Body, if any, that would help identify valid Requests to the Origin.",
+                    "description": " Conditions in the response body that identify valid requests to the endpoint.",
                     "title": "Response Body",
                     "$ref": "#/definitions/bot_defenseResponseBody",
                     "x-displayname": "Response Body"
                 },
                 "responseCode": {
-                    "description": " Response Code returned by Origin for valid Requests.",
+                    "description": " The response code returned by the origin for valid requests.",
                     "title": "Response Code",
                     "$ref": "#/definitions/bot_defenseResponseCode",
                     "x-displayname": "Response Code"
                 },
                 "response_header_v2": {
-                    "description": " Conditions in Response Header, if any, that would help identify valid Requests to the Origin.",
+                    "description": " Conditions in the response header that identify valid requests to the endpoint.",
                     "title": "Response Header",
                     "$ref": "#/definitions/bot_defenseResponseHeaders",
                     "x-displayname": "Response Header"
@@ -4716,7 +4715,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "domain_name": {
                     "type": "string",
-                    "description": " Domain Name\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The fully-qualified domain name of the origin where you want to send requests that Bot Defense determines to be human traffic.\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "Fully qualified domain name",
                     "maxLength": 256,
                     "x-displayname": "FQDN",
@@ -4833,7 +4832,7 @@ var APISwaggerJSON string = `{
                 },
                 "name_value_pair": {
                     "type": "array",
-                    "description": " Response Header Pair\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Headers to add to the blocked request. You can add multiple headers.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Response Header",
                     "items": {
                         "$ref": "#/definitions/bot_defenseHeaderNameValuePair"
@@ -4844,7 +4843,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "status": {
-                    "description": " HTTP Status code to respond with\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.not_in: [0]\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " The status code you want to display when Bot Defense blocks a request.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.not_in: [0]\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Status",
                     "$ref": "#/definitions/bot_defenseBlockActionHttpStatusCode",
                     "x-displayname": "Status",
@@ -4888,7 +4887,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "auto_type_header_name": {
                     "type": "string",
-                    "description": " A case-insensitive HTTP header name.\n\nExample: - \"Bot-Automation-Type\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "description": " The header that you want to add to requests that Bot Defense allows to continue to origin. You create the headers when you configure the protected endpoint.\n\nExample: - \"Bot-Automation-Type\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
                     "title": "auto_type_header_name",
                     "maxLength": 256,
                     "x-displayname": "Automation Type Header Name",
@@ -4910,7 +4909,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.WebClientRedirectMitigationActionType",
             "properties": {
                 "status": {
-                    "description": " HTTP Status code to respond with\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.in: [302]\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " The status code you want to display when Bot Defense blocks a request.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.in: [302]\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Status",
                     "$ref": "#/definitions/schemaHttpStatusCode",
                     "x-displayname": "Status",
@@ -6197,12 +6196,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -6750,13 +6749,13 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.shape.bot_defense.DomainMatcherType",
             "properties": {
                 "negation": {
-                    "description": " not checker",
+                    "description": " Select Yes if you want Bot Defense to match values that are the opposite of the values you entered above.",
                     "title": "Check not",
                     "$ref": "#/definitions/bot_defenseNegationOperator",
                     "x-displayname": "Not(!)"
                 },
                 "operator": {
-                    "description": " Choose the Comparison Operator\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Comparison Operator",
                     "$ref": "#/definitions/bot_defenseComparisonOperator",
                     "x-displayname": "Comparison Operator",
@@ -6767,7 +6766,7 @@ var APISwaggerJSON string = `{
                 },
                 "value": {
                     "type": "string",
-                    "description": " Domain Matcher Value\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " The value you want to match.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Domain Matcher Value",
                     "minLength": 1,
                     "maxLength": 256,

@@ -1832,6 +1832,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																						},
 																					},
 
+																					"none": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
 																					"vault_secret_info": {
 
 																						Type:       schema.TypeList,
@@ -6124,6 +6134,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																			},
 																		},
 
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
+																			},
+																		},
+
 																		"vault_secret_info": {
 
 																			Type:       schema.TypeList,
@@ -6286,6 +6306,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -6459,6 +6489,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																			},
 																		},
 
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
+																			},
+																		},
+
 																		"vault_secret_info": {
 
 																			Type:       schema.TypeList,
@@ -6621,6 +6661,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -9837,7 +9887,7 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 				Optional: true,
 			},
 
-			"caching_policy": {
+			"bot_protection": {
 
 				Type:     schema.TypeList,
 				MaxItems: 1,
@@ -9845,7 +9895,13 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"custom_cache_rule": {
+						"disable_js_insert": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"js_insert_all_pages": {
 
 							Type:     schema.TypeList,
 							MaxItems: 1,
@@ -9853,23 +9909,420 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"cdn_cache_rules": {
+									"javascript_location": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"js_insert_all_pages_except": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"exclude_list": {
+
 										Type:     schema.TypeList,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"name": {
+												"any_domain": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"domain": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"exact_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"suffix_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"metadata": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"disable": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"path": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"path": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"prefix": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"javascript_location": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"js_insertion_rules": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"exclude_list": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"any_domain": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"domain": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"exact_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"suffix_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"metadata": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"disable": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"path": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"path": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"prefix": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"rules": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"any_domain": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"domain": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"exact_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"suffix_value": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"javascript_location": {
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+
+												"metadata": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"disable": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"path": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"path": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"prefix": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"policy": {
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"disable_bot_protection": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"caching_policy": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"custom_cache_rule": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"cdn_cache_rules": {
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -9880,28 +10333,32 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"default_cache_action": {
 
-							Type:     schema.TypeList,
-							MaxItems: 1,
-							Optional: true,
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"cache_disabled": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"cache_ttl_default": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"cache_ttl_override": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"eligible_for_cache": {
@@ -9932,6 +10389,230 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 				Type:     schema.TypeBool,
 				Optional: true,
+			},
+
+			"enable_cdn": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"caching_policy": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"custom_cache_rule": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cdn_cache_rules": {
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"default_cache_action": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cache_disabled": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"cache_ttl_default": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"cache_ttl_override": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"eligible_for_cache": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"cache_ttl": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"compression_params": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"content_length": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"content_type": {
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"disable_on_etag_header": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"remove_accept_encoding_header": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"image_optimization_config": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"image_optimizations": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"all_domains": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"select_domains": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"domains": {
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"express": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"path": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"path": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"prefix": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 
 			"captcha_challenge": {
@@ -12337,8 +13018,9 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"cleartext": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:      schema.TypeString,
+										Optional:  true,
+										Sensitive: true,
 									},
 								},
 							},
@@ -13447,6 +14129,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																},
 															},
 
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
 															"vault_secret_info": {
 
 																Type:       schema.TypeList,
@@ -14345,6 +15037,17 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																									},
 																								},
 
+																								"none": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
+																									},
+																								},
+
 																								"vault_secret_info": {
 
 																									Type:       schema.TypeList,
@@ -15113,6 +15816,18 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 							Optional: true,
 						},
 
+						"disable_http10": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_http10": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"idle_timeout": {
 							Type:     schema.TypeInt,
 							Optional: true,
@@ -15313,6 +16028,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 													},
 												},
 
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
+													},
+												},
+
 												"vault_secret_info": {
 
 													Type:       schema.TypeList,
@@ -15499,6 +16224,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -15805,6 +16540,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 													},
 												},
 
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
+													},
+												},
+
 												"vault_secret_info": {
 
 													Type:       schema.TypeList,
@@ -15991,6 +16736,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																Required: true,
 															},
 														},
+													},
+												},
+
+												"none": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
 													},
 												},
 
@@ -17715,6 +18470,17 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -21711,6 +22477,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																			},
 																		},
 
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
+																			},
+																		},
+
 																		"vault_secret_info": {
 
 																			Type:       schema.TypeList,
@@ -21897,6 +22673,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -22203,6 +22989,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																			},
 																		},
 
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
+																			},
+																		},
+
 																		"vault_secret_info": {
 
 																			Type:       schema.TypeList,
@@ -22389,6 +23185,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -23195,6 +24001,18 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
+						},
+
+						"xff_num_trusted_hops_custom": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"xff_num_trusted_hops_default": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 					},
 				},

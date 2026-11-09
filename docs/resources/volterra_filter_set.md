@@ -24,10 +24,10 @@ resource "volterra_filter_set" "example" {
   filter_fields {
     field_id = "field_id"
 
-    // One of the arguments from this list "date_field filter_expression_field label_selector_field string_field" must be set
+    // One of the arguments from this list "advanced_filter_expression_field date_field filter_expression_field label_selector_field string_field" must be set
 
-    string_field {
-      field_values = ["field_values"]
+    filter_expression_field {
+      expression = "region in (us-west1, us-west2),tier in (staging)"
     }
   }
 }
@@ -63,7 +63,9 @@ list of fields and their values selected by the user.
 
 `field_id` - (Required) an identifier for the field that maps to some UI filter component (`String`).
 
-###### One of the arguments from this list "date_field, filter_expression_field, label_selector_field, string_field" must be set
+###### One of the arguments from this list "advanced_filter_expression_field, date_field, filter_expression_field, label_selector_field, string_field" must be set
+
+`advanced_filter_expression_field` - (Required) x-displayName: "Group & Query Selector Expression". See [Field Value Advanced Filter Expression Field ](#field-value-advanced-filter-expression-field) below for details.
 
 `date_field` - (Optional) x-displayName: "Date/Time Range". See [Field Value Date Field ](#field-value-date-field) below for details.
 
@@ -72,6 +74,12 @@ list of fields and their values selected by the user.
 `label_selector_field` - (Optional) x-displayName: "Kubernetes-style Label Selector Expression (deprecated)". See [Field Value Label Selector Field ](#field-value-label-selector-field) below for details.(Deprecated)
 
 `string_field` - (Optional) x-displayName: "String". See [Field Value String Field ](#field-value-string-field) below for details.
+
+### Field Value Advanced Filter Expression Field
+
+x-displayName: "Group & Query Selector Expression".
+
+`expression` - (Required) combined with logical operators (AND/OR). This allows users to build complex, nested filter logic. (`String`).
 
 ### Field Value Date Field
 

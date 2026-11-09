@@ -69,8 +69,32 @@ func (m *AWSCloudLinkConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCloudLinkDRefInfo()
 }
+func (m *AWSCloudLinkConfigType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudLinkDRefInfoForOverlay(generateHash)
+}
 
 func (m *AWSCloudLinkConfigType) GetCloudLinkDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCloudLink()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_link.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_link.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cloud_link",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *AWSCloudLinkConfigType) GetCloudLinkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCloudLink()
 	if vref == nil {
 		return nil, nil
@@ -524,8 +548,63 @@ func (m *AWSManagedMode) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *AWSManagedMode) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAwsCloudUserAccountDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAwsCloudUserAccountDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetAwsResourceMappingListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAwsResourceMappingListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetNodeListDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetNodeListDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPrivateConnectivityChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPrivateConnectivityChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPrivateWorkloadRoutingChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPrivateWorkloadRoutingChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVipAutomationChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVipAutomationChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *AWSManagedMode) GetAwsCloudUserAccountDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAwsCloudUserAccount()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_user_account.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_user_account.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "aws_cloud_user_account",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *AWSManagedMode) GetAwsCloudUserAccountDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetAwsCloudUserAccount()
 	if vref == nil {
 		return nil, nil
@@ -586,6 +665,22 @@ func (m *AWSManagedMode) GetAwsResourceMappingListDRefInfo() ([]db.DRefInfo, err
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AWSManagedMode) GetAwsResourceMappingListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAwsResourceMappingList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAwsResourceMappingList().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAwsResourceMappingList().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "aws_resource_mapping_list." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *AWSManagedMode) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNodeList() == nil {
@@ -594,6 +689,22 @@ func (m *AWSManagedMode) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetNodeList().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "node_list." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AWSManagedMode) GetNodeListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNodeList() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetNodeList().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -614,6 +725,29 @@ func (m *AWSManagedMode) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo, 
 		drInfos, err := m.GetCloudLinkConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCloudLinkConfig().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cloud_link_config." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AWSManagedMode) GetPrivateConnectivityChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPrivateConnectivityChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPrivateConnectivityChoice().(type) {
+	case *AWSManagedMode_PrivateConnectivityDisabled:
+		return nil, nil
+	case *AWSManagedMode_CloudLinkConfig:
+		drInfos, err := m.GetCloudLinkConfig().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCloudLinkConfig().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -648,6 +782,29 @@ func (m *AWSManagedMode) GetPrivateWorkloadRoutingChoiceDRefInfo() ([]db.DRefInf
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AWSManagedMode) GetPrivateWorkloadRoutingChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPrivateWorkloadRoutingChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPrivateWorkloadRoutingChoice().(type) {
+	case *AWSManagedMode_DisablePrivateWorkloadRoutingToCe:
+		return nil, nil
+	case *AWSManagedMode_EnablePrivateWorkloadRoutingList:
+		drInfos, err := m.GetEnablePrivateWorkloadRoutingList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnablePrivateWorkloadRoutingList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_private_workload_routing_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *AWSManagedMode) GetVipAutomationChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetVipAutomationChoice() == nil {
@@ -660,6 +817,29 @@ func (m *AWSManagedMode) GetVipAutomationChoiceDRefInfo() ([]db.DRefInfo, error)
 		drInfos, err := m.GetEnableVipAutomation().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableVipAutomation().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_vip_automation." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AWSManagedMode) GetVipAutomationChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVipAutomationChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetVipAutomationChoice().(type) {
+	case *AWSManagedMode_DisableVipAutomation:
+		return nil, nil
+	case *AWSManagedMode_EnableVipAutomation:
+		drInfos, err := m.GetEnableVipAutomation().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableVipAutomation().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1230,6 +1410,13 @@ func (m *AWSManagedNode) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetInterfaceListDRefInfo()
 }
+func (m *AWSManagedNode) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInterfaceListDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AWSManagedNode) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
@@ -1241,6 +1428,26 @@ func (m *AWSManagedNode) GetInterfaceListDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInterfaceList() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("interface_list[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AWSManagedNode) GetInterfaceListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInterfaceList() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetInterfaceList() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInterfaceList() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1477,6 +1684,13 @@ func (m *AWSManagedNodeList) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNodeListDRefInfo()
 }
+func (m *AWSManagedNodeList) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNodeListDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AWSManagedNodeList) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
@@ -1488,6 +1702,26 @@ func (m *AWSManagedNodeList) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNodeList() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("node_list[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AWSManagedNodeList) GetNodeListDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNodeList() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetNodeList() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodeList() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1897,6 +2131,13 @@ func (m *AWSOrchestratedInterface) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNetworkOptionDRefInfo()
 }
+func (m *AWSOrchestratedInterface) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkOptionDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AWSOrchestratedInterface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, error) {
@@ -1906,6 +2147,22 @@ func (m *AWSOrchestratedInterface) GetNetworkOptionDRefInfo() ([]db.DRefInfo, er
 	drInfos, err := m.GetNetworkOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "network_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AWSOrchestratedInterface) GetNetworkOptionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetNetworkOption().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2084,6 +2341,13 @@ func (m *AWSResourceMappingListType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAwsResourceMappingsDRefInfo()
 }
+func (m *AWSResourceMappingListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAwsResourceMappingsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AWSResourceMappingListType) GetAwsResourceMappingsDRefInfo() ([]db.DRefInfo, error) {
@@ -2095,6 +2359,26 @@ func (m *AWSResourceMappingListType) GetAwsResourceMappingsDRefInfo() ([]db.DRef
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsResourceMappings() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("aws_resource_mappings[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AWSResourceMappingListType) GetAwsResourceMappingsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAwsResourceMappings() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetAwsResourceMappings() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsResourceMappings() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -2253,6 +2537,13 @@ func (m *AWSResourceMappingType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNetworkOptionDRefInfo()
 }
+func (m *AWSResourceMappingType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkOptionDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AWSResourceMappingType) GetNetworkOptionDRefInfo() ([]db.DRefInfo, error) {
@@ -2262,6 +2553,22 @@ func (m *AWSResourceMappingType) GetNetworkOptionDRefInfo() ([]db.DRefInfo, erro
 	drInfos, err := m.GetNetworkOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "network_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AWSResourceMappingType) GetNetworkOptionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetNetworkOption().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2812,6 +3119,13 @@ func (m *EnablePrivateWorkloadRoutingListType) GetDRefInfo() ([]db.DRefInfo, err
 
 	return m.GetEnablePrivateWorkloadRoutingToCeDRefInfo()
 }
+func (m *EnablePrivateWorkloadRoutingListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetEnablePrivateWorkloadRoutingToCeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *EnablePrivateWorkloadRoutingListType) GetEnablePrivateWorkloadRoutingToCeDRefInfo() ([]db.DRefInfo, error) {
@@ -2823,6 +3137,26 @@ func (m *EnablePrivateWorkloadRoutingListType) GetEnablePrivateWorkloadRoutingTo
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnablePrivateWorkloadRoutingToCe() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("enable_private_workload_routing_to_ce[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *EnablePrivateWorkloadRoutingListType) GetEnablePrivateWorkloadRoutingToCeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetEnablePrivateWorkloadRoutingToCe() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetEnablePrivateWorkloadRoutingToCe() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnablePrivateWorkloadRoutingToCe() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -2982,6 +3316,13 @@ func (m *EnablePrivateWorkloadRoutingType) GetDRefInfo() ([]db.DRefInfo, error) 
 
 	return m.GetNetworkOptionDRefInfo()
 }
+func (m *EnablePrivateWorkloadRoutingType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkOptionDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *EnablePrivateWorkloadRoutingType) GetNetworkOptionDRefInfo() ([]db.DRefInfo, error) {
@@ -2991,6 +3332,22 @@ func (m *EnablePrivateWorkloadRoutingType) GetNetworkOptionDRefInfo() ([]db.DRef
 	drInfos, err := m.GetNetworkOption().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "network_option." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *EnablePrivateWorkloadRoutingType) GetNetworkOptionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetNetworkOption() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetNetworkOption().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNetworkOption().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3173,8 +3530,32 @@ func (m *EnableVIPAutomationType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDnsConnectorRefDRefInfo()
 }
+func (m *EnableVIPAutomationType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDnsConnectorRefDRefInfoForOverlay(generateHash)
+}
 
 func (m *EnableVIPAutomationType) GetDnsConnectorRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetDnsConnectorRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("dns_connector.Object")
+	dri := db.DRefInfo{
+		RefdType:   "dns_connector.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "dns_connector_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *EnableVIPAutomationType) GetDnsConnectorRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetDnsConnectorRef()
 	if vref == nil {
 		return nil, nil

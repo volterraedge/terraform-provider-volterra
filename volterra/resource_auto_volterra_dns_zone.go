@@ -2295,10 +2295,21 @@ func resourceVolterraDnsZone() *schema.Resource {
 												},
 
 												"url": {
+													Sensitive: true,
 													Type:     schema.TypeString,
 													Required: true,
 												},
 											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
 										},
 									},
 
@@ -2359,6 +2370,43 @@ func resourceVolterraDnsZone() *schema.Resource {
 													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"namespace_rbac": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disabled": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enabled": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"namespaces": {
+										Type: schema.TypeList,
+
+										Required: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
 										},
 									},
 								},
@@ -5346,6 +5394,15 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 							}
 
+							if v, ok := tsigKeyValueMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := tsigKeyValueMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -5413,6 +5470,67 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 									}
 								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	//namespace_rbac
+	if v, ok := d.GetOk("namespace_rbac"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		namespaceRbac := &ves_io_schema_dns_zone.NamespaceRBAC{}
+		createSpec.NamespaceRbac = namespaceRbac
+		for _, set := range sl {
+			if set != nil {
+				namespaceRbacMapStrToI := set.(map[string]interface{})
+
+				modeTypeFound := false
+
+				if v, ok := namespaceRbacMapStrToI["disabled"]; ok && !isIntfNil(v) && !modeTypeFound {
+
+					modeTypeFound = true
+
+					if v.(bool) {
+						modeInt := &ves_io_schema_dns_zone.NamespaceRBAC_Disabled{}
+						modeInt.Disabled = &ves_io_schema.Empty{}
+						namespaceRbac.Mode = modeInt
+					}
+
+				}
+
+				if v, ok := namespaceRbacMapStrToI["enabled"]; ok && !isIntfNil(v) && !modeTypeFound {
+
+					modeTypeFound = true
+					modeInt := &ves_io_schema_dns_zone.NamespaceRBAC_Enabled{}
+					modeInt.Enabled = &ves_io_schema_dns_zone.NamespaceRBACEnabled{}
+					namespaceRbac.Mode = modeInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["namespaces"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field namespaces")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								modeInt.Enabled.Namespaces = ls
 
 							}
 
@@ -8446,6 +8564,15 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 							}
 
+							if v, ok := tsigKeyValueMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+								secretInfoOneofInt.None = &ves_io_schema.Empty{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+							}
+
 							if v, ok := tsigKeyValueMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 								secretInfoOneofTypeFound = true
@@ -8513,6 +8640,66 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 									}
 								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("namespace_rbac"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		namespaceRbac := &ves_io_schema_dns_zone.NamespaceRBAC{}
+		updateSpec.NamespaceRbac = namespaceRbac
+		for _, set := range sl {
+			if set != nil {
+				namespaceRbacMapStrToI := set.(map[string]interface{})
+
+				modeTypeFound := false
+
+				if v, ok := namespaceRbacMapStrToI["disabled"]; ok && !isIntfNil(v) && !modeTypeFound {
+
+					modeTypeFound = true
+
+					if v.(bool) {
+						modeInt := &ves_io_schema_dns_zone.NamespaceRBAC_Disabled{}
+						modeInt.Disabled = &ves_io_schema.Empty{}
+						namespaceRbac.Mode = modeInt
+					}
+
+				}
+
+				if v, ok := namespaceRbacMapStrToI["enabled"]; ok && !isIntfNil(v) && !modeTypeFound {
+
+					modeTypeFound = true
+					modeInt := &ves_io_schema_dns_zone.NamespaceRBAC_Enabled{}
+					modeInt.Enabled = &ves_io_schema_dns_zone.NamespaceRBACEnabled{}
+					namespaceRbac.Mode = modeInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["namespaces"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field namespaces")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								modeInt.Enabled.Namespaces = ls
 
 							}
 

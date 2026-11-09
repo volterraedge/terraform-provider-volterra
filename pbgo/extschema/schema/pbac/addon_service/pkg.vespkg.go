@@ -36,6 +36,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.pbac.addon_service.CustomSupportTicket"] = CustomSupportTicketValidator()
 	vr["ves.io.schema.pbac.addon_service.EntitlementConfig"] = EntitlementConfigValidator()
 	vr["ves.io.schema.pbac.addon_service.EntitlementFeatureDetails"] = EntitlementFeatureDetailsValidator()
+	vr["ves.io.schema.pbac.addon_service.FixedValue"] = FixedValueValidator()
+	vr["ves.io.schema.pbac.addon_service.FloatMultiplier"] = FloatMultiplierValidator()
 	vr["ves.io.schema.pbac.addon_service.Formula"] = FormulaValidator()
 	vr["ves.io.schema.pbac.addon_service.FullyManagedActivationType"] = FullyManagedActivationTypeValidator()
 	vr["ves.io.schema.pbac.addon_service.GetSpecType"] = GetSpecTypeValidator()
@@ -61,17 +63,11 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.pbac.addon_service.API.Get"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.entitlement_config",
-			AllowedEnvironments: []string{"test"},
-		},
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.pbac.addon_service.API.Get"] = []string{
+		"spec.entitlement_config.entitlement_features.quota_mapping.object_limits.operator",
 	}
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.pbac.addon_service.API.List"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "items.#.get_spec.entitlement_config",
-			AllowedEnvironments: []string{"test"},
-		},
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.pbac.addon_service.API.List"] = []string{
+		"items.#.get_spec.entitlement_config.entitlement_features.quota_mapping.object_limits.operator",
 	}
 }
 

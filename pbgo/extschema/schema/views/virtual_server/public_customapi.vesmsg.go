@@ -151,6 +151,14 @@ func (m *GetAssociatedObjectsResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	return drInfos, nil
 }
+func (m *GetAssociatedObjectsResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	return drInfos, nil
+}
 
 type ValidateGetAssociatedObjectsResponse struct {
 	FldValidators map[string]db.ValidatorFunc

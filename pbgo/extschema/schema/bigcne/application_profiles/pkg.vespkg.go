@@ -45,44 +45,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bigcne.application_profiles.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.pmf_traffic_policies.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bigcne.application_profiles.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.pmf_traffic_policies.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bigcne.application_profiles.API.Get"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "create_form.spec.pmf_traffic_policies.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.pmf_traffic_policies.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "spec.pmf_traffic_policies.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bigcne.application_profiles.API.List"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "items.#.get_spec.pmf_traffic_policies.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bigcne.application_profiles.API.Replace"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.pmf_traffic_policies.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

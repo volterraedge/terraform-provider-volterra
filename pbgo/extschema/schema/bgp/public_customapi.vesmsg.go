@@ -152,6 +152,13 @@ func (m *GetStatusResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return nil, nil
 }
+func (m *GetStatusResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
 
 type ValidateGetStatusResponse struct {
 	FldValidators map[string]db.ValidatorFunc

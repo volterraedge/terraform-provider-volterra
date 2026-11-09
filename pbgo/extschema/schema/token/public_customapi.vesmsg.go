@@ -253,6 +253,13 @@ func (m *ObjectChangeResp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return nil, nil
 }
+func (m *ObjectChangeResp) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
 
 type ValidateObjectChangeResp struct {
 	FldValidators map[string]db.ValidatorFunc

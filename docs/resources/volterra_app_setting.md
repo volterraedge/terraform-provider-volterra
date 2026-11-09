@@ -44,49 +44,11 @@ resource "volterra_app_setting" "example" {
     user_behavior_analysis_setting {
       // One of the arguments from this list "disable_learning enable_learning" must be set
 
-      disable_learning = true
+      enable_learning = true
 
       // One of the arguments from this list "disable_detection enable_detection" must be set
 
-      enable_detection {
-        // One of the arguments from this list "bola_detection_automatic bola_detection_manual exclude_bola_detection" can be set
-
-        exclude_bola_detection = true
-
-        // One of the arguments from this list "exclude_bot_defense_activity include_bot_defense_activity" must be set
-
-        include_bot_defense_activity = true
-
-        // One of the arguments from this list "cooling_off_period" must be set
-
-        cooling_off_period = "cooling_off_period"
-
-        // One of the arguments from this list "exclude_failed_login_activity include_failed_login_activity" must be set
-
-        include_failed_login_activity {
-          login_failures_threshold = "10"
-        }
-
-        // One of the arguments from this list "exclude_forbidden_activity include_forbidden_activity" must be set
-
-        exclude_forbidden_activity = true
-
-        // One of the arguments from this list "exclude_ip_reputation include_ip_reputation" must be set
-
-        include_ip_reputation = true
-
-        // One of the arguments from this list "exclude_non_existent_url_activity include_non_existent_url_activity_automatic include_non_existent_url_activity_custom" can be set
-
-        exclude_non_existent_url_activity = true
-
-        // One of the arguments from this list "exclude_rate_limit include_rate_limit" must be set
-
-        include_rate_limit = true
-
-        // One of the arguments from this list "exclude_waf_activity include_waf_activity" must be set
-
-        include_waf_activity = true
-      }
+      disable_detection = true
     }
   }
 }
@@ -126,7 +88,7 @@ List of settings to enable for each AppType, given instance of AppType Exist in 
 
 `business_logic_markup_setting` - (Optional) Setting specifying how API Discovery will be performed.. See [App Type Settings Business Logic Markup Setting ](#app-type-settings-business-logic-markup-setting) below for details.
 
-`timeseries_analyses_setting` - (Optional) The clients are flagged if anomalies are observed. See [App Type Settings Timeseries Analyses Setting ](#app-type-settings-timeseries-analyses-setting) below for details.
+`timeseries_analyses_setting` - (Optional) The clients are flagged if anomalies are observed. See [App Type Settings Timeseries Analyses Setting ](#app-type-settings-timeseries-analyses-setting) below for details.(Deprecated)
 
 `user_behavior_analysis_setting` - (Optional) The risk score of the user decays over time, if no further suspicious activity is noted. See [App Type Settings User Behavior Analysis Setting ](#app-type-settings-user-behavior-analysis-setting) below for details.
 
@@ -274,7 +236,7 @@ Enable AI based malicious user detection.
 
 ###### One of the arguments from this list "exclude_forbidden_activity, include_forbidden_activity" must be set
 
-`exclude_forbidden_activity` - (Optional) Exclude forbidden activity by policy in malicious user detection (`Bool`).
+`exclude_forbidden_activity`- (Optional) Exclude forbidden activity by policy in malicious user detection (`Bool`).
 
 `include_forbidden_activity` - (Optional) Include forbidden activity by policy in malicious user detection. See [Forbidden Activity Choice Include Forbidden Activity ](#forbidden-activity-choice-include-forbidden-activity) below for details.
 

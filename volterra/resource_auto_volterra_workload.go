@@ -1807,10 +1807,21 @@ func resourceVolterraWorkload() *schema.Resource {
 																																	},
 
 																																	"url": {
+																																		Sensitive: true,
 																																		Type:     schema.TypeString,
 																																		Required: true,
 																																	},
 																																},
+																															},
+																														},
+
+																														"none": {
+
+																															Type:     schema.TypeList,
+																															MaxItems: 1,
+																															Optional: true,
+																															Elem: &schema.Resource{
+																																Schema: map[string]*schema.Schema{},
 																															},
 																														},
 
@@ -3768,10 +3779,21 @@ func resourceVolterraWorkload() *schema.Resource {
 																																				},
 
 																																				"url": {
+																																					Sensitive: true,
 																																					Type:     schema.TypeString,
 																																					Required: true,
 																																				},
 																																			},
+																																		},
+																																	},
+
+																																	"none": {
+
+																																		Type:     schema.TypeList,
+																																		MaxItems: 1,
+																																		Optional: true,
+																																		Elem: &schema.Resource{
+																																			Schema: map[string]*schema.Schema{},
 																																		},
 																																	},
 
@@ -5600,10 +5622,21 @@ func resourceVolterraWorkload() *schema.Resource {
 																																	},
 
 																																	"url": {
+																																		Sensitive: true,
 																																		Type:     schema.TypeString,
 																																		Required: true,
 																																	},
 																																},
+																															},
+																														},
+
+																														"none": {
+
+																															Type:     schema.TypeList,
+																															MaxItems: 1,
+																															Optional: true,
+																															Elem: &schema.Resource{
+																																Schema: map[string]*schema.Schema{},
 																															},
 																														},
 
@@ -9131,10 +9164,21 @@ func resourceVolterraWorkload() *schema.Resource {
 																																	},
 
 																																	"url": {
+																																		Sensitive: true,
 																																		Type:     schema.TypeString,
 																																		Required: true,
 																																	},
 																																},
+																															},
+																														},
+
+																														"none": {
+
+																															Type:     schema.TypeList,
+																															MaxItems: 1,
+																															Optional: true,
+																															Elem: &schema.Resource{
+																																Schema: map[string]*schema.Schema{},
 																															},
 																														},
 
@@ -11092,10 +11136,21 @@ func resourceVolterraWorkload() *schema.Resource {
 																																				},
 
 																																				"url": {
+																																					Sensitive: true,
 																																					Type:     schema.TypeString,
 																																					Required: true,
 																																				},
 																																			},
+																																		},
+																																	},
+
+																																	"none": {
+
+																																		Type:     schema.TypeList,
+																																		MaxItems: 1,
+																																		Optional: true,
+																																		Elem: &schema.Resource{
+																																			Schema: map[string]*schema.Schema{},
 																																		},
 																																	},
 
@@ -12924,10 +12979,21 @@ func resourceVolterraWorkload() *schema.Resource {
 																																	},
 
 																																	"url": {
+																																		Sensitive: true,
 																																		Type:     schema.TypeString,
 																																		Required: true,
 																																	},
 																																},
+																															},
+																														},
+
+																														"none": {
+
+																															Type:     schema.TypeList,
+																															MaxItems: 1,
+																															Optional: true,
+																															Elem: &schema.Resource{
+																																Schema: map[string]*schema.Schema{},
 																															},
 																														},
 
@@ -17544,6 +17610,15 @@ func resourceVolterraWorkloadCreate(d *schema.ResourceData, meta interface{}) er
 
 																												}
 
+																												if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																													secretInfoOneofTypeFound = true
+																													secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																													secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																													privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																												}
+
 																												if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																													secretInfoOneofTypeFound = true
@@ -20643,6 +20718,15 @@ func resourceVolterraWorkloadCreate(d *schema.ResourceData, meta interface{}) er
 
 																															}
 
+																															if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																																secretInfoOneofTypeFound = true
+																																secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																																secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																															}
+
 																															if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																																secretInfoOneofTypeFound = true
@@ -23545,6 +23629,15 @@ func resourceVolterraWorkloadCreate(d *schema.ResourceData, meta interface{}) er
 
 																														}
 																													}
+
+																												}
+
+																												if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																													secretInfoOneofTypeFound = true
+																													secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																													secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																													privateKey.SecretInfoOneof = secretInfoOneofInt
 
 																												}
 
@@ -28861,6 +28954,15 @@ func resourceVolterraWorkloadCreate(d *schema.ResourceData, meta interface{}) er
 
 																												}
 
+																												if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																													secretInfoOneofTypeFound = true
+																													secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																													secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																													privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																												}
+
 																												if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																													secretInfoOneofTypeFound = true
@@ -31960,6 +32062,15 @@ func resourceVolterraWorkloadCreate(d *schema.ResourceData, meta interface{}) er
 
 																															}
 
+																															if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																																secretInfoOneofTypeFound = true
+																																secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																																secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																															}
+
 																															if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																																secretInfoOneofTypeFound = true
@@ -34862,6 +34973,15 @@ func resourceVolterraWorkloadCreate(d *schema.ResourceData, meta interface{}) er
 
 																														}
 																													}
+
+																												}
+
+																												if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																													secretInfoOneofTypeFound = true
+																													secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																													secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																													privateKey.SecretInfoOneof = secretInfoOneofInt
 
 																												}
 
@@ -40543,6 +40663,15 @@ func resourceVolterraWorkloadUpdate(d *schema.ResourceData, meta interface{}) er
 
 																												}
 
+																												if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																													secretInfoOneofTypeFound = true
+																													secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																													secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																													privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																												}
+
 																												if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																													secretInfoOneofTypeFound = true
@@ -43642,6 +43771,15 @@ func resourceVolterraWorkloadUpdate(d *schema.ResourceData, meta interface{}) er
 
 																															}
 
+																															if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																																secretInfoOneofTypeFound = true
+																																secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																																secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																															}
+
 																															if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																																secretInfoOneofTypeFound = true
@@ -46544,6 +46682,15 @@ func resourceVolterraWorkloadUpdate(d *schema.ResourceData, meta interface{}) er
 
 																														}
 																													}
+
+																												}
+
+																												if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																													secretInfoOneofTypeFound = true
+																													secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																													secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																													privateKey.SecretInfoOneof = secretInfoOneofInt
 
 																												}
 
@@ -51860,6 +52007,15 @@ func resourceVolterraWorkloadUpdate(d *schema.ResourceData, meta interface{}) er
 
 																												}
 
+																												if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																													secretInfoOneofTypeFound = true
+																													secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																													secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																													privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																												}
+
 																												if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																													secretInfoOneofTypeFound = true
@@ -54959,6 +55115,15 @@ func resourceVolterraWorkloadUpdate(d *schema.ResourceData, meta interface{}) er
 
 																															}
 
+																															if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																																secretInfoOneofTypeFound = true
+																																secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																																secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																															}
+
 																															if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																																secretInfoOneofTypeFound = true
@@ -57861,6 +58026,15 @@ func resourceVolterraWorkloadUpdate(d *schema.ResourceData, meta interface{}) er
 
 																														}
 																													}
+
+																												}
+
+																												if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																													secretInfoOneofTypeFound = true
+																													secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																													secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																													privateKey.SecretInfoOneof = secretInfoOneofInt
 
 																												}
 

@@ -62,6 +62,81 @@ func resourceVolterraBotInfrastructure() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"bot_allowlist_policy_metadata": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"version": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"bot_endpoint_policy_metadata": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"type": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"version": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"bot_network_policy_metadata": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"version": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"cloned_infra_name": {
+				Type:       schema.TypeString,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
+
 			"create_cloud_hosted": {
 
 				Type:     schema.TypeList,
@@ -70,10 +145,51 @@ func resourceVolterraBotInfrastructure() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"host_name_list": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"host_names": {
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+
+						"ip_address_list": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"ip_addresses": {
+										Type: schema.TypeList,
+
+										Required: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+
 						"ip_addresses": {
 							Type: schema.TypeList,
 
-							Optional: true,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -81,20 +197,92 @@ func resourceVolterraBotInfrastructure() *schema.Resource {
 
 						"production": {
 
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"region_1": {
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"region_2": {
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"production_v2": {
+
 							Type:     schema.TypeList,
 							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"region_1": {
-										Type:     schema.TypeString,
-										Required: true,
+									"active_active_region": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"region_1": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"region_2": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+											},
+										},
 									},
 
-									"region_2": {
-										Type:     schema.TypeString,
-										Required: true,
+									"active_passive_region": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"region_1": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"region_2": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+											},
+										},
+									},
+
+									"single_active_region": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"region_1": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+											},
+										},
 									},
 								},
 							},
@@ -102,15 +290,44 @@ func resourceVolterraBotInfrastructure() *schema.Resource {
 
 						"testing": {
 
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"region_1": {
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"testing_v2": {
+
 							Type:     schema.TypeList,
 							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"region_1": {
-										Type:     schema.TypeString,
-										Required: true,
+									"single_active_region": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"region_1": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+											},
+										},
 									},
 								},
 							},
@@ -186,6 +403,89 @@ func resourceVolterraBotInfrastructureCreate(d *schema.ResourceData, meta interf
 			v.(string)
 	}
 
+	//bot_allowlist_policy_metadata
+	if v, ok := d.GetOk("bot_allowlist_policy_metadata"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		botAllowlistPolicyMetadata := &ves_io_schema_shape_bot_defense_bot_infrastructure.PolicyMetadata{}
+		createSpec.BotAllowlistPolicyMetadata = botAllowlistPolicyMetadata
+		for _, set := range sl {
+			if set != nil {
+				botAllowlistPolicyMetadataMapStrToI := set.(map[string]interface{})
+
+				if w, ok := botAllowlistPolicyMetadataMapStrToI["name"]; ok && !isIntfNil(w) {
+					botAllowlistPolicyMetadata.Name = w.(string)
+				}
+
+				if w, ok := botAllowlistPolicyMetadataMapStrToI["version"]; ok && !isIntfNil(w) {
+					botAllowlistPolicyMetadata.Version = w.(string)
+				}
+
+			}
+		}
+
+	}
+
+	//bot_endpoint_policy_metadata
+	if v, ok := d.GetOk("bot_endpoint_policy_metadata"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		botEndpointPolicyMetadata := &ves_io_schema_shape_bot_defense_bot_infrastructure.EndpointPolicyMetadata{}
+		createSpec.BotEndpointPolicyMetadata = botEndpointPolicyMetadata
+		for _, set := range sl {
+			if set != nil {
+				botEndpointPolicyMetadataMapStrToI := set.(map[string]interface{})
+
+				if w, ok := botEndpointPolicyMetadataMapStrToI["name"]; ok && !isIntfNil(w) {
+					botEndpointPolicyMetadata.Name = w.(string)
+				}
+
+				if v, ok := botEndpointPolicyMetadataMapStrToI["type"]; ok && !isIntfNil(v) {
+
+					botEndpointPolicyMetadata.Type = ves_io_schema_shape_bot_defense_bot_infrastructure.TrafficType(ves_io_schema_shape_bot_defense_bot_infrastructure.TrafficType_value[v.(string)])
+
+				}
+
+				if w, ok := botEndpointPolicyMetadataMapStrToI["version"]; ok && !isIntfNil(w) {
+					botEndpointPolicyMetadata.Version = w.(string)
+				}
+
+			}
+		}
+
+	}
+
+	//bot_network_policy_metadata
+	if v, ok := d.GetOk("bot_network_policy_metadata"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		botNetworkPolicyMetadata := &ves_io_schema_shape_bot_defense_bot_infrastructure.PolicyMetadata{}
+		createSpec.BotNetworkPolicyMetadata = botNetworkPolicyMetadata
+		for _, set := range sl {
+			if set != nil {
+				botNetworkPolicyMetadataMapStrToI := set.(map[string]interface{})
+
+				if w, ok := botNetworkPolicyMetadataMapStrToI["name"]; ok && !isIntfNil(w) {
+					botNetworkPolicyMetadata.Name = w.(string)
+				}
+
+				if w, ok := botNetworkPolicyMetadataMapStrToI["version"]; ok && !isIntfNil(w) {
+					botNetworkPolicyMetadata.Version = w.(string)
+				}
+
+			}
+		}
+
+	}
+
+	//cloned_infra_name
+	if v, ok := d.GetOk("cloned_infra_name"); ok && !isIntfNil(v) {
+
+		createSpec.ClonedInfraName =
+			v.(string)
+
+	}
+
 	//create_bot_infra_choice
 
 	createBotInfraChoiceTypeFound := false
@@ -201,6 +501,60 @@ func resourceVolterraBotInfrastructureCreate(d *schema.ResourceData, meta interf
 		for _, set := range sl {
 			if set != nil {
 				cs := set.(map[string]interface{})
+
+				if v, ok := cs["host_name_list"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					hostNameList := &ves_io_schema_shape_bot_defense_bot_infrastructure.HostNameList{}
+					createBotInfraChoiceInt.CreateCloudHosted.HostNameList = hostNameList
+					for _, set := range sl {
+						if set != nil {
+							hostNameListMapStrToI := set.(map[string]interface{})
+
+							if w, ok := hostNameListMapStrToI["host_names"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field host_names")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								hostNameList.HostNames = ls
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["ip_address_list"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					ipAddressList := &ves_io_schema_shape_bot_defense_bot_infrastructure.IPAddressList{}
+					createBotInfraChoiceInt.CreateCloudHosted.IpAddressList = ipAddressList
+					for _, set := range sl {
+						if set != nil {
+							ipAddressListMapStrToI := set.(map[string]interface{})
+
+							if w, ok := ipAddressListMapStrToI["ip_addresses"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ip_addresses")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								ipAddressList.IpAddresses = ls
+							}
+
+						}
+					}
+
+				}
 
 				if v, ok := cs["ip_addresses"]; ok && !isIntfNil(v) {
 
@@ -248,6 +602,106 @@ func resourceVolterraBotInfrastructureCreate(d *schema.ResourceData, meta interf
 
 				}
 
+				if v, ok := cs["production_v2"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+					typeChoiceTypeFound = true
+					typeChoiceInt := &ves_io_schema_shape_bot_defense_bot_infrastructure.CreateSpecInfraCloudHosted_ProductionV2{}
+					typeChoiceInt.ProductionV2 = &ves_io_schema_shape_bot_defense_bot_infrastructure.ProductionV2{}
+					createBotInfraChoiceInt.CreateCloudHosted.TypeChoice = typeChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							typeChoiceProductionTypeFound := false
+
+							if v, ok := cs["active_active_region"]; ok && !isIntfNil(v) && !typeChoiceProductionTypeFound {
+
+								typeChoiceProductionTypeFound = true
+								typeChoiceProductionInt := &ves_io_schema_shape_bot_defense_bot_infrastructure.ProductionV2_ActiveActiveRegion{}
+								typeChoiceProductionInt.ActiveActiveRegion = &ves_io_schema_shape_bot_defense_bot_infrastructure.ActiveActiveRegion{}
+								typeChoiceInt.ProductionV2.TypeChoiceProduction = typeChoiceProductionInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["region_1"]; ok && !isIntfNil(v) {
+
+											typeChoiceProductionInt.ActiveActiveRegion.Region_1 = v.(string)
+
+										}
+
+										if v, ok := cs["region_2"]; ok && !isIntfNil(v) {
+
+											typeChoiceProductionInt.ActiveActiveRegion.Region_2 = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["active_passive_region"]; ok && !isIntfNil(v) && !typeChoiceProductionTypeFound {
+
+								typeChoiceProductionTypeFound = true
+								typeChoiceProductionInt := &ves_io_schema_shape_bot_defense_bot_infrastructure.ProductionV2_ActivePassiveRegion{}
+								typeChoiceProductionInt.ActivePassiveRegion = &ves_io_schema_shape_bot_defense_bot_infrastructure.ActivePassiveRegion{}
+								typeChoiceInt.ProductionV2.TypeChoiceProduction = typeChoiceProductionInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["region_1"]; ok && !isIntfNil(v) {
+
+											typeChoiceProductionInt.ActivePassiveRegion.Region_1 = v.(string)
+
+										}
+
+										if v, ok := cs["region_2"]; ok && !isIntfNil(v) {
+
+											typeChoiceProductionInt.ActivePassiveRegion.Region_2 = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["single_active_region"]; ok && !isIntfNil(v) && !typeChoiceProductionTypeFound {
+
+								typeChoiceProductionTypeFound = true
+								typeChoiceProductionInt := &ves_io_schema_shape_bot_defense_bot_infrastructure.ProductionV2_SingleActiveRegion{}
+								typeChoiceProductionInt.SingleActiveRegion = &ves_io_schema_shape_bot_defense_bot_infrastructure.SingleActiveRegion{}
+								typeChoiceInt.ProductionV2.TypeChoiceProduction = typeChoiceProductionInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["region_1"]; ok && !isIntfNil(v) {
+
+											typeChoiceProductionInt.SingleActiveRegion.Region_1 = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
 				if v, ok := cs["testing"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
 
 					typeChoiceTypeFound = true
@@ -263,6 +717,48 @@ func resourceVolterraBotInfrastructureCreate(d *schema.ResourceData, meta interf
 							if v, ok := cs["region_1"]; ok && !isIntfNil(v) {
 
 								typeChoiceInt.Testing.Region_1 = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["testing_v2"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+					typeChoiceTypeFound = true
+					typeChoiceInt := &ves_io_schema_shape_bot_defense_bot_infrastructure.CreateSpecInfraCloudHosted_TestingV2{}
+					typeChoiceInt.TestingV2 = &ves_io_schema_shape_bot_defense_bot_infrastructure.TestingV2{}
+					createBotInfraChoiceInt.CreateCloudHosted.TypeChoice = typeChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							typeChoiceTestingTypeFound := false
+
+							if v, ok := cs["single_active_region"]; ok && !isIntfNil(v) && !typeChoiceTestingTypeFound {
+
+								typeChoiceTestingTypeFound = true
+								typeChoiceTestingInt := &ves_io_schema_shape_bot_defense_bot_infrastructure.TestingV2_SingleActiveRegion{}
+								typeChoiceTestingInt.SingleActiveRegion = &ves_io_schema_shape_bot_defense_bot_infrastructure.SingleActiveRegion{}
+								typeChoiceInt.TestingV2.TypeChoiceTesting = typeChoiceTestingInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["region_1"]; ok && !isIntfNil(v) {
+
+											typeChoiceTestingInt.SingleActiveRegion.Region_1 = v.(string)
+
+										}
+
+									}
+								}
 
 							}
 
@@ -404,6 +900,21 @@ func resourceVolterraBotInfrastructureUpdate(d *schema.ResourceData, meta interf
 			if set != nil {
 				cs := set.(map[string]interface{})
 
+				if v, ok := cs["active_regions"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field active_regions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					botInfraChoiceInt.CloudHosted.ActiveRegions = ls
+
+				}
+
 				if v, ok := cs["egress"]; ok && !isIntfNil(v) {
 
 					sl := v.([]interface{})
@@ -536,6 +1047,21 @@ func resourceVolterraBotInfrastructureUpdate(d *schema.ResourceData, meta interf
 						}
 					}
 					botInfraChoiceInt.CloudHosted.IpAddresses = ls
+
+				}
+
+				if v, ok := cs["passive_regions"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field passive_regions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					botInfraChoiceInt.CloudHosted.PassiveRegions = ls
 
 				}
 

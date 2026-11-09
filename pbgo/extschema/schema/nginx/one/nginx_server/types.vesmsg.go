@@ -70,8 +70,53 @@ func (m *DataplaneReference) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDataplaneRefDRefInfo()
 }
+func (m *DataplaneReference) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDataplaneRefDRefInfoForOverlay(generateHash)
+}
 
 func (m *DataplaneReference) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDataplaneRef().(type) {
+	case *DataplaneReference_NginxInstance:
+		vref := m.GetNginxInstance()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("nginx_instance.Object")
+		dri := db.DRefInfo{
+			RefdType:   "nginx_instance.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "nginx_instance",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *DataplaneReference_NginxCsg:
+		vref := m.GetNginxCsg()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("nginx_csg.Object")
+		dri := db.DRefInfo{
+			RefdType:   "nginx_csg.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "nginx_csg",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *DataplaneReference) GetDataplaneRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDataplaneRef().(type) {
 	case *DataplaneReference_NginxInstance:
 		vref := m.GetNginxInstance()
@@ -301,6 +346,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDataplaneRefDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDataplaneRefDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
@@ -310,6 +362,22 @@ func (m *GetSpecType) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetDataplaneRef().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDataplaneRef().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "dataplane_ref." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetDataplaneRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDataplaneRef() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDataplaneRef().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDataplaneRef().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -480,6 +548,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDataplaneRefDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDataplaneRefDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
@@ -497,7 +583,40 @@ func (m *GlobalSpecType) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetDataplaneRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDataplaneRef() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDataplaneRef().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDataplaneRef().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "dataplane_ref." + dri.DRField
+	}
+	return drInfos, err
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil

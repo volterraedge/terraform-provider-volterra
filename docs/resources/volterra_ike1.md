@@ -22,13 +22,13 @@ resource "volterra_ike1" "example" {
 
   // One of the arguments from this list "ike_keylifetime_hours ike_keylifetime_minutes use_default_keylifetime" must be set
 
-  ike_keylifetime_minutes {
-    duration = "duration"
-  }
+  use_default_keylifetime = true
 
   // One of the arguments from this list "reauth_disabled reauth_timeout_days reauth_timeout_hours" must be set
 
-  reauth_disabled = true
+  reauth_timeout_days {
+    duration = "duration"
+  }
 }
 
 ```

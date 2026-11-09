@@ -20,7 +20,6 @@ resource "volterra_cdn_cache_rule" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 }
-
 ```
 
 Argument Reference
@@ -168,6 +167,8 @@ x-displayName: "Scheme + Proxy Host + Request URI".
 
 `ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
 
+`serve_stale` - (Optional) Serve a stale cached object during origin unreachability while asynchronously revalidating it with the origin server, when the requested object is already in cache. (`Bool`).
+
 ### Eligible For Cache Scheme Proxy Host Uri
 
 x-displayName: "Scheme + Proxy Host + URI".
@@ -177,6 +178,8 @@ x-displayName: "Scheme + Proxy Host + URI".
 `cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
 
 `ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
+
+`serve_stale` - (Optional) Serve a stale cached object during origin unreachability while asynchronously revalidating it with the origin server, when the requested object is already in cache. (`Bool`).
 
 ### Path Match Operator
 
@@ -241,4 +244,4 @@ The Cache Rule Expression Terms that are ANDed.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured cdn_cache_rule.
+*   `id` - This is the id of the configured cdn_cache_rule.

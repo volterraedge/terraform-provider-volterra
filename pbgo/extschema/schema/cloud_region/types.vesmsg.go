@@ -69,8 +69,39 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPolicyGroupChoiceDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPolicyGroupChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetSpecType) GetPolicyGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPolicyGroupChoice().(type) {
+	case *GetSpecType_DefaultPolicyGroup:
+		return nil, nil
+	case *GetSpecType_PolicyGroup:
+		vref := m.GetPolicyGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("unified_policy_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "unified_policy_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "policy_group",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GetSpecType) GetPolicyGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetPolicyGroupChoice().(type) {
 	case *GetSpecType_DefaultPolicyGroup:
 		return nil, nil
@@ -264,8 +295,39 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPolicyGroupChoiceDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPolicyGroupChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *GlobalSpecType) GetPolicyGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPolicyGroupChoice().(type) {
+	case *GlobalSpecType_DefaultPolicyGroup:
+		return nil, nil
+	case *GlobalSpecType_PolicyGroup:
+		vref := m.GetPolicyGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("unified_policy_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "unified_policy_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "policy_group",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GlobalSpecType) GetPolicyGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetPolicyGroupChoice().(type) {
 	case *GlobalSpecType_DefaultPolicyGroup:
 		return nil, nil
@@ -459,8 +521,39 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPolicyGroupChoiceDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPolicyGroupChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *ReplaceSpecType) GetPolicyGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPolicyGroupChoice().(type) {
+	case *ReplaceSpecType_DefaultPolicyGroup:
+		return nil, nil
+	case *ReplaceSpecType_PolicyGroup:
+		vref := m.GetPolicyGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("unified_policy_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "unified_policy_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "policy_group",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ReplaceSpecType) GetPolicyGroupChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetPolicyGroupChoice().(type) {
 	case *ReplaceSpecType_DefaultPolicyGroup:
 		return nil, nil

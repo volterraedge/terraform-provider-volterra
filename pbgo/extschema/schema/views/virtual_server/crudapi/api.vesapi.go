@@ -1534,7 +1534,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_server-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_server.crudapi.API.Get"
             },
             "delete": {
@@ -1610,7 +1609,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_server-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_server.crudapi.API.Delete"
             },
             "put": {
@@ -1694,7 +1692,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_server-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_server.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -1842,7 +1839,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_server-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_server.crudapi.API.List"
             },
             "post": {
@@ -1920,7 +1916,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_server-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_server.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2068,7 +2063,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_server-crudapi-api-liststream"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_server.crudapi.API.ListStream"
             },
             "x-displayname": "",
@@ -2176,7 +2170,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_server-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_server.crudapi.API.Get"
             },
             "x-displayname": "",
@@ -2324,7 +2317,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_server-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_server.crudapi.API.List"
             },
             "x-displayname": "",
@@ -2407,7 +2399,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_server-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_server.crudapi.API.Delete"
             },
             "put": {
@@ -2491,7 +2482,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_server-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_server.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -2576,7 +2566,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-virtual_server-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.views.virtual_server.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2885,12 +2874,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -3388,78 +3377,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaTMMStateType": {
-            "type": "object",
-            "description": "Displays the current state on the object",
-            "title": "State",
-            "x-displayname": "State",
-            "x-ves-oneof-field-state_choice": "[\"state_disabled\",\"state_enabled\"]",
-            "x-ves-proto-message": "ves.io.schema.TMMStateType",
-            "properties": {
-                "state_disabled": {
-                    "description": "Exclusive with [state_enabled]\n",
-                    "title": "Disabled",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disabled"
-                },
-                "state_enabled": {
-                    "description": "Exclusive with [state_disabled]\n",
-                    "title": "Enabled",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Enabled"
-                }
-            }
-        },
-        "schemaTMMVirtualServerAddressTranslationType": {
-            "type": "object",
-            "description": "Specifies, when checked (enabled), that the system translates the address of the virtual server. When cleared (disabled), specifies that the system uses the address without translation. This option is useful when the system is load balancing devices that have the same IP address. The default is enabled.",
-            "title": "Address Translation",
-            "x-displayname": "Address Translation",
-            "x-ves-oneof-field-address_translation_choice": "[\"address_translation_disable\",\"address_translation_enable\"]",
-            "x-ves-proto-message": "ves.io.schema.TMMVirtualServerAddressTranslationType",
-            "properties": {
-                "address_translation_disable": {
-                    "description": "Exclusive with [address_translation_enable]\n",
-                    "title": "Disable",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "address_translation_enable": {
-                    "description": "Exclusive with [address_translation_disable]\n",
-                    "title": "Enable",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Enable"
-                }
-            }
-        },
-        "schemaTMMVirtualServerAutoLastHopType": {
-            "type": "object",
-            "description": "When enabled, allows the system to send return traffic to the MAC address that transmitted the request, even if the routing table points to a different network or interface. As a result, the system can send return traffic to clients even when there is no matching route. For example, if the system does not have a default route configured and the client is located on a remote network. This setting is also useful when the system is load balancing transparent devices that do not modify the source IP address of the packet. Without the last hop option enabled, the system could return connections to a different transparent node, resulting in asymmetric routing. You can configure this setting globally and on an object level. You set the global Auto Last Hop value on the System :: Configuration :: Local Traffic :: General screen. To configure this setting globally, retain the Default setting. When you configure Auto Last Hop with a value other than Default at the object level, its setting takes precedence over the global setting. This enables you to configure auto last hop on a per-virtual server basis. The default is Default, meaning that the system uses the global auto-lasthop setting to send back the request.",
-            "title": "Auto Last Hop",
-            "x-displayname": "Auto Last Hop",
-            "x-ves-oneof-field-auto_last_hop_choice": "[\"auto_last_hop_default\",\"auto_last_hop_disable\",\"auto_last_hop_enable\"]",
-            "x-ves-proto-message": "ves.io.schema.TMMVirtualServerAutoLastHopType",
-            "properties": {
-                "auto_last_hop_default": {
-                    "description": "Exclusive with [auto_last_hop_disable auto_last_hop_enable]\n",
-                    "title": "Default",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Default"
-                },
-                "auto_last_hop_disable": {
-                    "description": "Exclusive with [auto_last_hop_default auto_last_hop_enable]\n",
-                    "title": "Disable",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "auto_last_hop_enable": {
-                    "description": "Exclusive with [auto_last_hop_default auto_last_hop_disable]\n",
-                    "title": "Enable",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Enable"
-                }
-            }
-        },
         "schemaTMMVirtualServerConnectionRateLimitMode": {
             "type": "object",
             "title": "Connection Rate Limit Mode",
@@ -3508,78 +3425,6 @@ var APISwaggerJSON string = `{
                     "title": "Per Virtual Server, Destination and Source Address",
                     "$ref": "#/definitions/schemaSourceDestinationAddressType",
                     "x-displayname": "Per Virtual Server, Destination and Source Address"
-                }
-            }
-        },
-        "schemaTMMVirtualServerNAT64Type": {
-            "type": "object",
-            "description": "When enabled, allows the system to send return traffic to the MAC address that transmitted the request, even if the routing table points to a different network or interface. As a result, the system can send return traffic to clients even when there is no matching route. For example, if the system does not have a default route configured and the client is located on a remote network. This setting is also useful when the system is load balancing transparent devices that do not modify the source IP address of the packet. Without the last hop option enabled, the system could return connections to a different transparent node, resulting in asymmetric routing. You can configure this setting globally and on an object level. You set the global Auto Last Hop value on the System :: Configuration :: Local Traffic :: General screen. To configure this setting globally, retain the Default setting. When you configure Auto Last Hop with a value other than Default at the object level, its setting takes precedence over the global setting. This enables you to configure auto last hop on a per-virtual server basis. The default is Default, meaning that the system uses the global auto-lasthop setting to send back the request.",
-            "title": "NAT64",
-            "x-displayname": "NAT64",
-            "x-ves-oneof-field-nat64_choice": "[\"nat64_disable\",\"nat64_enable\"]",
-            "x-ves-proto-message": "ves.io.schema.TMMVirtualServerNAT64Type",
-            "properties": {
-                "nat64_disable": {
-                    "description": "Exclusive with [nat64_enable]\n",
-                    "title": "Disable",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "nat64_enable": {
-                    "description": "Exclusive with [nat64_disable]\n",
-                    "title": "Enable",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Enable"
-                }
-            }
-        },
-        "schemaTMMVirtualServerPortTranslationType": {
-            "type": "object",
-            "description": "Specifies, when checked (enabled), that the system translates the port of the virtual server. When cleared (disabled), specifies that the system uses the port without translation. Turning off port translation for a virtual server is useful if you want to use the virtual server to load balance connections to any service. The default is enabled.",
-            "title": "Port Translation",
-            "x-displayname": "Port Translation",
-            "x-ves-oneof-field-port_translation_choice": "[\"port_translation_disable\",\"port_translation_enable\"]",
-            "x-ves-proto-message": "ves.io.schema.TMMVirtualServerPortTranslationType",
-            "properties": {
-                "port_translation_disable": {
-                    "description": "Exclusive with [port_translation_enable]\n",
-                    "title": "Disable",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "port_translation_enable": {
-                    "description": "Exclusive with [port_translation_disable]\n",
-                    "title": "Enable",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Enable"
-                }
-            }
-        },
-        "schemaTMMVirtualServerSourcePortType": {
-            "type": "object",
-            "description": "Specifies whether the system preserves the source port of the connection. The default is Preserve.",
-            "title": "Source Port",
-            "x-displayname": "Source Port",
-            "x-ves-oneof-field-source_port_choice": "[\"source_port_change\",\"source_port_preserve\",\"source_port_preserve_strict\"]",
-            "x-ves-proto-message": "ves.io.schema.TMMVirtualServerSourcePortType",
-            "properties": {
-                "source_port_change": {
-                    "description": "Exclusive with [source_port_preserve source_port_preserve_strict]\n",
-                    "title": "Change",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Change"
-                },
-                "source_port_preserve": {
-                    "description": "Exclusive with [source_port_change source_port_preserve_strict]\n",
-                    "title": "Preserve",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Preserve"
-                },
-                "source_port_preserve_strict": {
-                    "description": "Exclusive with [source_port_change source_port_preserve]\n",
-                    "title": "Preserve Strict",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Preserve Strict"
                 }
             }
         },
@@ -3671,49 +3516,25 @@ var APISwaggerJSON string = `{
             "description": "Shape of the virtual server specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
-            "x-ves-oneof-field-default_persistence_profile_choice": "[\"default_persistence_profile\",\"default_persistence_profile_none\"]",
             "x-ves-oneof-field-default_pool_choice": "[\"default_pool\",\"default_pool_none\"]",
             "x-ves-oneof-field-domain_choice": "[\"managed\",\"not_managed\"]",
-            "x-ves-oneof-field-fallback_persistence_profile_choice": "[\"fallback_persistence_profile\",\"fallback_persistence_profile_none\"]",
-            "x-ves-oneof-field-last_hop_pool_choice": "[\"last_hop_pool\",\"last_hop_pool_none\"]",
-            "x-ves-oneof-field-request_logging_profile_choice": "[\"request_logging_profile\",\"request_logging_profile_none\"]",
-            "x-ves-oneof-field-statistics_profile_choice": "[\"statistics_profile\",\"statistics_profile_none\"]",
             "x-ves-oneof-field-virtual_server_type": "[\"https\"]",
             "x-ves-proto-message": "ves.io.schema.views.virtual_server.GlobalSpecType",
             "properties": {
                 "access_profile": {
-                    "description": " Specified an access policy that determines the authentication rules and access controls applied to user sessions for this virtual server",
+                    "description": " Specifies an access policy that determines the authentication rules and access controls applied to user sessions for this virtual server.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Per Session Access Policy",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Per Session Access Policy"
-                },
-                "auto_last_hop": {
-                    "description": " When enabled, allows the system to send return traffic to the MAC address that transmitted the request, even if the routing table points to a different network or interface. As a result, the system can send return traffic to clients even when there is no matching route. For example, if the system does not have a default route configured and the client is located on a remote network. This setting is also useful when the system is load balancing transparent devices that do not modify the source IP address of the packet. Without the last hop option enabled, the system could return connections to a different transparent node, resulting in asymmetric routing. You can configure this setting globally and on an object level. You set the global Auto Last Hop value on the System :: Configuration :: Local Traffic :: General screen. To configure this setting globally, retain the Default setting. When you configure Auto Last Hop with a value other than Default at the object level, its setting takes precedence over the global setting. This enables you to configure auto last hop on a per-virtual server basis. The default is Default, meaning that the system uses the global auto-lasthop setting to send back the request.",
-                    "title": "Auto Last Hop",
-                    "$ref": "#/definitions/schemaTMMVirtualServerAutoLastHopType",
-                    "x-displayname": "Auto Last Hop"
-                },
-                "clone_pool_options": {
-                    "title": "Clone Pool",
-                    "$ref": "#/definitions/virtual_serverClonePoolType",
-                    "x-displayname": "Clone Pool"
+                    "x-displayname": "Per Session Access Policy",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "connection_limit_options": {
                     "title": "Connection Limits",
                     "$ref": "#/definitions/virtual_serverConnectionLimitsType",
                     "x-displayname": "Connection Limit Options"
-                },
-                "default_persistence_profile": {
-                    "description": "Exclusive with [default_persistence_profile_none]\n",
-                    "title": "Select Profile",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Profile"
-                },
-                "default_persistence_profile_none": {
-                    "description": "Exclusive with [default_persistence_profile]\n",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "None"
                 },
                 "default_pool": {
                     "description": "Exclusive with [default_pool_none]\n",
@@ -3751,18 +3572,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
-                "fallback_persistence_profile": {
-                    "description": "Exclusive with [fallback_persistence_profile_none]\n",
-                    "title": "Select Profile",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Profile"
-                },
-                "fallback_persistence_profile_none": {
-                    "description": "Exclusive with [fallback_persistence_profile]\n",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "None"
-                },
                 "http3": {
                     "description": " Selection provides configuration for HTTP/3 services",
                     "title": "HTTP/3",
@@ -3781,86 +3590,17 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaTMMImmediateActionOnServiceDownType",
                     "x-displayname": "Immediate Action On Service Down"
                 },
-                "irules": {
-                    "type": "array",
-                    "description": " Specifies the iRules you want run on this virtual server. iRules help automate the intercepting, processing, and routing of application traffic.",
-                    "title": "iRules",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "iRules"
-                },
-                "json": {
-                    "description": " Specifies whether the JSON profile is enabled. Default value is False.",
-                    "title": "json",
-                    "$ref": "#/definitions/vs_profilesTrueFalseChoice",
-                    "x-displayname": "JSON"
-                },
-                "last_hop_pool": {
-                    "description": "Exclusive with [last_hop_pool_none]\n",
-                    "title": "Select",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Pool"
-                },
-                "last_hop_pool_none": {
-                    "description": "Exclusive with [last_hop_pool]\n",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "None"
-                },
                 "managed": {
                     "description": "Exclusive with [not_managed]\n Domains that are managed by F5XC platform through setting up of dns_zones",
                     "title": "Managed by F5XC",
                     "$ref": "#/definitions/virtual_serverDomainsManagedByF5XC",
                     "x-displayname": "Managed by F5XC"
                 },
-                "nat64": {
-                    "description": " When enabled, allows the system to send return traffic to the MAC address that transmitted the request, even if the routing table points to a different network or interface. As a result, the system can send return traffic to clients even when there is no matching route. For example, if the system does not have a default route configured and the client is located on a remote network. This setting is also useful when the system is load balancing transparent devices that do not modify the source IP address of the packet. Without the last hop option enabled, the system could return connections to a different transparent node, resulting in asymmetric routing. You can configure this setting globally and on an object level. You set the global Auto Last Hop value on the System :: Configuration :: Local Traffic :: General screen. To configure this setting globally, retain the Default setting. When you configure Auto Last Hop with a value other than Default at the object level, its setting takes precedence over the global setting. This enables you to configure auto last hop on a per-virtual server basis. The default is Default, meaning that the system uses the global auto-lasthop setting to send back the request.",
-                    "title": "NAT64",
-                    "$ref": "#/definitions/schemaTMMVirtualServerNAT64Type",
-                    "x-displayname": "NAT64"
-                },
                 "not_managed": {
                     "description": "Exclusive with [managed]\n Not Managed by F5XC",
                     "title": "Not Managed by F5XC",
                     "$ref": "#/definitions/virtual_serverNotManagedDomainsType",
                     "x-displayname": "Not Managed by F5XC"
-                },
-                "request_logging_profile": {
-                    "description": "Exclusive with [request_logging_profile_none]\n",
-                    "title": "Select Profile",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Profile"
-                },
-                "request_logging_profile_none": {
-                    "description": "Exclusive with [request_logging_profile]\n",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "None"
-                },
-                "sse": {
-                    "description": " Specifies whether the SSE profile is enabled. Default value is False.",
-                    "title": "sse",
-                    "$ref": "#/definitions/vs_profilesTrueFalseChoice",
-                    "x-displayname": "SSE"
-                },
-                "state": {
-                    "description": " State",
-                    "title": "State",
-                    "$ref": "#/definitions/schemaTMMStateType",
-                    "x-displayname": "State"
-                },
-                "statistics_profile": {
-                    "description": "Exclusive with [statistics_profile_none]\n",
-                    "title": "Select Profile",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Profile"
-                },
-                "statistics_profile_none": {
-                    "description": "Exclusive with [statistics_profile]\n",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "None"
                 },
                 "traffic_policies": {
                     "type": "array",
@@ -3875,11 +3615,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "32"
                     }
                 },
-                "translations": {
-                    "title": "Translation",
-                    "$ref": "#/definitions/virtual_serverTranslationType",
-                    "x-displayname": "Translation"
-                },
                 "view_internal": {
                     "description": " Reference to view internal object",
                     "title": "view_internal",
@@ -3888,12 +3623,16 @@ var APISwaggerJSON string = `{
                 },
                 "virtual_addresses": {
                     "type": "array",
-                    "description": " Specify the virtual address objects to be associated with this virtual server",
+                    "description": " Specify the virtual address objects to be associated with this virtual server\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Virtual Address",
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
-                    "x-displayname": "Virtual Addresses"
+                    "x-displayname": "Virtual Addresses",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "vs_score": {
                     "type": "integer",
@@ -3917,62 +3656,32 @@ var APISwaggerJSON string = `{
             "properties": {
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [port_ranges]\n Exact Port to match\n\nExample: - \"6443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [port_ranges]\n Exact Port to match\n\nExample: - \"6443\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "port",
                     "format": "int64",
                     "x-displayname": "Port",
                     "x-ves-example": "6443",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [port]\n Port range to match\n\nExample: - \"8080-8191\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 32\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range: true\n",
+                    "description": "Exclusive with [port]\n Port range to match\n\nExample: - \"8080-8191\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 32\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range: true\n",
                     "title": "port_range",
                     "minLength": 1,
                     "maxLength": 32,
                     "x-displayname": "Port Range",
                     "x-ves-example": "8080-8191",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "32",
                         "ves.io.schema.rules.string.min_len": "1",
                         "ves.io.schema.rules.string.port_range": "true"
                     }
-                }
-            }
-        },
-        "virtual_serverClonePoolType": {
-            "type": "object",
-            "title": "Clone Pool",
-            "x-displayname": "Clone Pool",
-            "x-ves-oneof-field-clone_pool_client_choice": "[\"pool_client\",\"pool_client_none\"]",
-            "x-ves-oneof-field-clone_pool_server_choice": "[\"pool_server\",\"pool_server_none\"]",
-            "x-ves-proto-message": "ves.io.schema.views.virtual_server.ClonePoolType",
-            "properties": {
-                "pool_client": {
-                    "description": "Exclusive with [pool_client_none]\n",
-                    "title": "Select",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Pool"
-                },
-                "pool_client_none": {
-                    "description": "Exclusive with [pool_client]\n",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "None"
-                },
-                "pool_server": {
-                    "description": "Exclusive with [pool_server_none]\n",
-                    "title": "Select",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Pool"
-                },
-                "pool_server_none": {
-                    "description": "Exclusive with [pool_server]\n",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "None"
                 }
             }
         },
@@ -4134,15 +3843,19 @@ var APISwaggerJSON string = `{
                 },
                 "services": {
                     "type": "array",
-                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Services",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Service Ports",
+                    "minItems": 1,
                     "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/viewsvirtual_serverServiceType"
                     },
-                    "x-displayname": "Services",
+                    "x-displayname": "Service Ports",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -4166,30 +3879,10 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "HTTPDefaultServerSelection",
             "x-displayname": "HTTP Server Selection",
-            "x-ves-oneof-field-http2_server_profile_choice": "[\"http2_server_profile\",\"http2_server_profile_none\",\"http2_server_profile_same_as_client\"]",
             "x-ves-oneof-field-http_server_profile_choice": "[\"http_server_profile\",\"http_server_profile_same_as_client\"]",
             "x-ves-oneof-field-protocol_server_profile_choice": "[\"protocol_server_profile\",\"protocol_server_profile_same_as_client\"]",
-            "x-ves-oneof-field-websocket_server_profile_choice": "[\"websocket_server_profile\",\"websocket_server_profile_same_as_client\"]",
             "x-ves-proto-message": "ves.io.schema.views.virtual_server.HTTPDefaultServerSelection",
             "properties": {
-                "http2_server_profile": {
-                    "description": "Exclusive with [http2_server_profile_none http2_server_profile_same_as_client]\n",
-                    "title": "Select Profile",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Profile"
-                },
-                "http2_server_profile_none": {
-                    "description": "Exclusive with [http2_server_profile http2_server_profile_same_as_client]\n",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "None"
-                },
-                "http2_server_profile_same_as_client": {
-                    "description": "Exclusive with [http2_server_profile http2_server_profile_none]\n",
-                    "title": "Use Client Profile",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Use Client Profile"
-                },
                 "http_server_profile": {
                     "description": "Exclusive with [http_server_profile_same_as_client]\n",
                     "title": "Select Profile",
@@ -4227,18 +3920,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
-                },
-                "websocket_server_profile": {
-                    "description": "Exclusive with [websocket_server_profile_same_as_client]\n",
-                    "title": "Select Profile",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Profile"
-                },
-                "websocket_server_profile_same_as_client": {
-                    "description": "Exclusive with [websocket_server_profile]\n",
-                    "title": "Use Client Profile",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Use Client Profile"
                 }
             }
         },
@@ -4246,38 +3927,9 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "HTTPServices",
             "x-displayname": "HTTPServices",
-            "x-ves-oneof-field-fix_profile_choice": "[\"fix_profile\",\"fix_profile_none\"]",
-            "x-ves-oneof-field-http2_client_profile_choice": "[\"http2_client_profile\",\"http2_client_profile_none\"]",
-            "x-ves-oneof-field-ocsp_profile_choice": "[\"ocsp_profile\",\"ocsp_profile_none\"]",
             "x-ves-oneof-field-server_app_type_choice": "[\"server_app_type_same_as_client\"]",
-            "x-ves-oneof-field-stream_profile_choice": "[\"stream_profile\",\"stream_profile_none\"]",
-            "x-ves-oneof-field-websocket_client_profile_choice": "[\"websocket_client_profile\",\"websocket_client_profile_none\"]",
             "x-ves-proto-message": "ves.io.schema.views.virtual_server.HTTPServices",
             "properties": {
-                "fix_profile": {
-                    "description": "Exclusive with [fix_profile_none]\n",
-                    "title": "Select Profile",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Profile"
-                },
-                "fix_profile_none": {
-                    "description": "Exclusive with [fix_profile]\n",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "None"
-                },
-                "http2_client_profile": {
-                    "description": "Exclusive with [http2_client_profile_none]\n",
-                    "title": "Select Profile",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Profile"
-                },
-                "http2_client_profile_none": {
-                    "description": "Exclusive with [http2_client_profile]\n",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "None"
-                },
                 "http_client_profile": {
                     "description": " Specifies that the selected profile is a client-side HTTP profile. The list contains entries for each already defined client protocol profile.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "HTTP Profile (Client)",
@@ -4287,18 +3939,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
-                },
-                "ocsp_profile": {
-                    "description": "Exclusive with [ocsp_profile_none]\n",
-                    "title": "Select Profile",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Profile"
-                },
-                "ocsp_profile_none": {
-                    "description": "Exclusive with [ocsp_profile]\n",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "None"
                 },
                 "protocol_client_profile": {
                     "description": " Specifies that the selected profile is a client-side profile. The list contains entries for each already defined client protocol profile.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4318,55 +3958,37 @@ var APISwaggerJSON string = `{
                 },
                 "services": {
                     "type": "array",
-                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Services",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Service Ports",
+                    "minItems": 1,
                     "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/viewsvirtual_serverServiceType"
                     },
-                    "x-displayname": "Services",
+                    "x-displayname": "Service Ports",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "ssl_client_profiles": {
                     "type": "array",
-                    "description": " Specifies the SSL profile for managing client-side SSL traffic. The list contains entries for each already defined client-side SSL profile.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Specifies the SSL profile for managing client-side SSL traffic. The list contains entries for each already defined client-side SSL profile.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Client SSL Profile",
                     "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "SSL Profile (Client)",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
-                },
-                "stream_profile": {
-                    "description": "Exclusive with [stream_profile_none]\n",
-                    "title": "Select Profile",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Profile"
-                },
-                "stream_profile_none": {
-                    "description": "Exclusive with [stream_profile]\n",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "None"
-                },
-                "websocket_client_profile": {
-                    "description": "Exclusive with [websocket_client_profile_none]\n",
-                    "title": "Select Profile",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select Profile"
-                },
-                "websocket_client_profile_none": {
-                    "description": "Exclusive with [websocket_client_profile]\n",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "None"
                 }
             }
         },
@@ -4482,32 +4104,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "virtual_serverTranslationType": {
-            "type": "object",
-            "title": "Translation Options",
-            "x-displayname": "Translation",
-            "x-ves-proto-message": "ves.io.schema.views.virtual_server.TranslationType",
-            "properties": {
-                "address_translation": {
-                    "description": " Specifies, when checked (enabled), that the system translates the address of the virtual server. When cleared (disabled), specifies that the system uses the address without translation. This option is useful when the system is load balancing devices that have the same IP address. The default is enabled.",
-                    "title": "Address Translation",
-                    "$ref": "#/definitions/schemaTMMVirtualServerAddressTranslationType",
-                    "x-displayname": "Address Translation"
-                },
-                "port_translation": {
-                    "description": " Specifies, when checked (enabled), that the system translates the port of the virtual server. When cleared (disabled), specifies that the system uses the port without translation. Turning off port translation for a virtual server is useful if you want to use the virtual server to load balance connections to any service. The default is enabled.",
-                    "title": "Port Translation",
-                    "$ref": "#/definitions/schemaTMMVirtualServerPortTranslationType",
-                    "x-displayname": "Port Translation"
-                },
-                "source_port": {
-                    "description": " Specifies whether the system preserves the source port of the connection. The default is Preserve.\n Preserve: Specifies that the system preserves the value configured for the source port, unless the source port from a particular SNAT is already in use, in which case the system uses a different port. Note that when CMP is involved, LTM might change Source Port to keep the client-side and server-side traffic on the same TMM. In this case, the system ignores the Preserve setting.\n Preserve Strict: Specifies that the system preserves the value configured for the source port. If the port is in use, the system does not process the connection. F5 Networks recommends that you restrict use of this setting to cases that meet at least one of the following conditions: The port is configured for UDP traffic. The system is configured for nPath routing or is running in transparent mode (that is, there is no translation of any other Layer 3 or Layer 4 field). There is a one-to-one relationship between virtual IP addresses and node addresses, or clustered multi-processing (CMP) is disabled.\n Change: Specifies that the system changes the source port. This setting is useful for obfuscating internal network addresses.",
-                    "title": "Source Port",
-                    "$ref": "#/definitions/schemaTMMVirtualServerSourcePortType",
-                    "x-displayname": "Source Port"
-                }
-            }
-        },
         "virtual_servercrudapiErrorCode": {
             "type": "string",
             "enum": [
@@ -4519,18 +4115,6 @@ var APISwaggerJSON string = `{
             "default": "EOK",
             "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.virtual_server.crudapi.ErrorCode"
-        },
-        "vs_profilesTrueFalseChoice": {
-            "type": "string",
-            "description": "\n - FALSE: False\n - TRUE: True",
-            "title": "TrueFalseChoice",
-            "enum": [
-                "FALSE",
-                "TRUE"
-            ],
-            "default": "FALSE",
-            "x-displayname": "True or False choice",
-            "x-ves-proto-enum": "ves.io.schema.vs_profiles.TrueFalseChoice"
         }
     },
     "x-displayname": "",

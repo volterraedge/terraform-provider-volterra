@@ -1455,6 +1455,173 @@ func BehaviorByScriptValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *BoolFilter) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BoolFilter) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BoolFilter) DeepCopy() *BoolFilter {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BoolFilter{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BoolFilter) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BoolFilter) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BoolFilterValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBoolFilter struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBoolFilter) OpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(FilterOperator)
+		return int32(i)
+	}
+	// FilterOperator_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, FilterOperator_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for op")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateBoolFilter) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepBoolItemRules(rules)
+	itemValFn, err := db.NewBoolValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []bool, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]bool)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []bool, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBoolFilter) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BoolFilter)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BoolFilter got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["op"]; exists {
+		vOpts := append(opts, db.WithValidateField("op"))
+		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["values"]; exists {
+		vOpts := append(opts, db.WithValidateField("values"))
+		if err := fv(ctx, m.GetValues(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBoolFilterValidator = func() *ValidateBoolFilter {
+	v := &ValidateBoolFilter{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOp := v.OpValidationRuleHandler
+	rulesOp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhOp(rulesOp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BoolFilter.op: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["op"] = vFn
+
+	vrhValues := v.ValuesValidationRuleHandler
+	rulesValues := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "2",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhValues(rulesValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BoolFilter.values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["values"] = vFn
+
+	return v
+}()
+
+func BoolFilterValidator() db.Validator {
+	return DefaultBoolFilterValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DeleteScriptJustificationRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1599,6 +1766,88 @@ var DefaultDeleteScriptJustificationResponseValidator = func() *ValidateDeleteSc
 
 func DeleteScriptJustificationResponseValidator() db.Validator {
 	return DefaultDeleteScriptJustificationResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DetectedDomainsFilters) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DetectedDomainsFilters) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DetectedDomainsFilters) DeepCopy() *DetectedDomainsFilters {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DetectedDomainsFilters{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DetectedDomainsFilters) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DetectedDomainsFilters) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DetectedDomainsFiltersValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDetectedDomainsFilters struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDetectedDomainsFilters) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DetectedDomainsFilters)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DetectedDomainsFilters got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["category_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("category_filter"))
+		if err := fv(ctx, m.GetCategoryFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["domain_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("domain_filter"))
+		if err := fv(ctx, m.GetDomainFilter(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDetectedDomainsFiltersValidator = func() *ValidateDetectedDomainsFilters {
+	v := &ValidateDetectedDomainsFilters{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["domain_filter"] = StringFilterValidator().Validate
+	v.FldValidators["category_filter"] = StringFilterValidator().Validate
+
+	return v
+}()
+
+func DetectedDomainsFiltersValidator() db.Validator {
+	return DefaultDetectedDomainsFiltersValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -5515,6 +5764,12 @@ func (v *ValidateListDetectedDomainsRequest) Validate(ctx context.Context, pm in
 			return err
 		}
 	}
+	if fv, exists := v.FldValidators["filters"]; exists {
+		vOpts := append(opts, db.WithValidateField("filters"))
+		if err := fv(ctx, m.GetFilters(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["locations"]; exists {
 		vOpts := append(opts, db.WithValidateField("locations"))
 		if err := fv(ctx, m.GetLocations(), vOpts...); err != nil {
@@ -5590,6 +5845,7 @@ var DefaultListDetectedDomainsRequestValidator = func() *ValidateListDetectedDom
 		panic(errMsg)
 	}
 	v.FldValidators["risk"] = vFn
+	v.FldValidators["filters"] = DetectedDomainsFiltersValidator().Validate
 
 	return v
 }()
@@ -7650,6 +7906,18 @@ func (v *ValidateScriptInfo) Validate(ctx context.Context, pm interface{}, opts 
 			return err
 		}
 	}
+	if fv, exists := v.FldValidators["cookie_operations"]; exists {
+		vOpts := append(opts, db.WithValidateField("cookie_operations"))
+		if err := fv(ctx, m.GetCookieOperations(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["dom_mutations"]; exists {
+		vOpts := append(opts, db.WithValidateField("dom_mutations"))
+		if err := fv(ctx, m.GetDomMutations(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["first_seen"]; exists {
 		vOpts := append(opts, db.WithValidateField("first_seen"))
 		if err := fv(ctx, m.GetFirstSeen(), vOpts...); err != nil {
@@ -7725,6 +7993,12 @@ func (v *ValidateScriptInfo) Validate(ctx context.Context, pm interface{}, opts 
 	if fv, exists := v.FldValidators["status"]; exists {
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["storage_operations"]; exists {
+		vOpts := append(opts, db.WithValidateField("storage_operations"))
+		if err := fv(ctx, m.GetStorageOperations(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -8156,6 +8430,174 @@ var DefaultSortValidator = func() *ValidateSort {
 
 func SortValidator() db.Validator {
 	return DefaultSortValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StringFilter) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StringFilter) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StringFilter) DeepCopy() *StringFilter {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StringFilter{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StringFilter) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StringFilter) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StringFilterValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateStringFilter struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStringFilter) OpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(FilterOperator)
+		return int32(i)
+	}
+	// FilterOperator_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, FilterOperator_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for op")
+	}
+
+	return validatorFn, nil
+}
+func (v *ValidateStringFilter) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStringFilter) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StringFilter)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StringFilter got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["op"]; exists {
+		vOpts := append(opts, db.WithValidateField("op"))
+		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["values"]; exists {
+		vOpts := append(opts, db.WithValidateField("values"))
+		if err := fv(ctx, m.GetValues(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStringFilterValidator = func() *ValidateStringFilter {
+	v := &ValidateStringFilter{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOp := v.OpValidationRuleHandler
+	rulesOp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhOp(rulesOp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StringFilter.op: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["op"] = vFn
+
+	vrhValues := v.ValuesValidationRuleHandler
+	rulesValues := map[string]string{
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.repeated.items.string.max_len": "256",
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.min_items":            "1",
+		"ves.io.schema.rules.repeated.unique":               "true",
+	}
+	vFn, err = vrhValues(rulesValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StringFilter.values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["values"] = vFn
+
+	return v
+}()
+
+func StringFilterValidator() db.Validator {
+	return DefaultStringFilterValidator
 }
 
 // augmented methods on protoc/std generated struct

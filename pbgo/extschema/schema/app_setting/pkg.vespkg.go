@@ -61,11 +61,13 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.app_setting.API.Create"] = []string{
 		"spec.anomaly_types.#",
 		"spec.app_type_refs.#",
+		"spec.app_type_settings.#.timeseries_analyses_setting",
 		"spec.app_type_settings.#.user_behavior_analysis_setting.enable_detection.bola_detection_manual",
 	}
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.app_setting.API.Replace"] = []string{
 		"spec.anomaly_types.#",
 		"spec.app_type_refs.#",
+		"spec.app_type_settings.#.timeseries_analyses_setting",
 		"spec.app_type_settings.#.user_behavior_analysis_setting.enable_detection.bola_detection_manual",
 	}
 }

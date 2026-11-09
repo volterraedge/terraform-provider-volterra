@@ -99,7 +99,7 @@ Specifies name and TTL used for DNS resolution..
 ### Endpoint Address Service Info
 
 ```
- In case of Consul, tags on the service is matched against service_selector.
+In case of Consul, tags on the service is matched against service_selector.
 ```
 
 `discovery_type` - (Required) Specifies whether the discovery is from Kubernetes or Consul cluster (`String`).

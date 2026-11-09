@@ -42,6 +42,22 @@ func (c *CustomAPIGrpcClient) doRPCCertificateHealthStatusList(ctx context.Conte
 	rsp, err := c.grpcClient.CertificateHealthStatusList(ctx, req, opts...)
 	return rsp, err
 }
+func (c *CustomAPIGrpcClient) doRPCRetryIssuance(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &RetryIssuanceRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.certificate.RetryIssuanceRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.RetryIssuance(ctx, req, opts...)
+	return rsp, err
+}
+func (c *CustomAPIGrpcClient) doRPCRevokeCertificate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &RevokeCertificateRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.certificate.RevokeCertificateRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.RevokeCertificate(ctx, req, opts...)
+	return rsp, err
+}
 
 func (c *CustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
@@ -74,6 +90,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CertificateHealthStatusList"] = ccl.doRPCCertificateHealthStatusList
+	rpcFns["RetryIssuance"] = ccl.doRPCRetryIssuance
+	rpcFns["RevokeCertificate"] = ccl.doRPCRevokeCertificate
 	ccl.rpcFns = rpcFns
 	return ccl
 }
@@ -175,6 +193,171 @@ func (c *CustomAPIRestClient) doRPCCertificateHealthStatusList(ctx context.Conte
 	}
 	return pbRsp, nil
 }
+func (c *CustomAPIRestClient) doRPCRetryIssuance(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &RetryIssuanceRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.certificate.RetryIssuanceRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("force_renew", fmt.Sprintf("%v", req.ForceRenew))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &RetryIssuanceResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.certificate.RetryIssuanceResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+func (c *CustomAPIRestClient) doRPCRevokeCertificate(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &RevokeCertificateRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.certificate.RevokeCertificateRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &RevokeCertificateResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.certificate.RevokeCertificateResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
 
 func (c *CustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
@@ -201,6 +384,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CertificateHealthStatusList"] = ccl.doRPCCertificateHealthStatusList
+	rpcFns["RetryIssuance"] = ccl.doRPCRetryIssuance
+	rpcFns["RevokeCertificate"] = ccl.doRPCRevokeCertificate
 	ccl.rpcFns = rpcFns
 	return ccl
 }
@@ -215,6 +400,14 @@ type customAPIInprocClient struct {
 func (c *customAPIInprocClient) CertificateHealthStatusList(ctx context.Context, in *CertificateHealthStatusListRequest, opts ...grpc.CallOption) (*CertificateHealthStatusListResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.certificate.CustomAPI.CertificateHealthStatusList")
 	return c.CustomAPIServer.CertificateHealthStatusList(ctx, in)
+}
+func (c *customAPIInprocClient) RetryIssuance(ctx context.Context, in *RetryIssuanceRequest, opts ...grpc.CallOption) (*RetryIssuanceResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.certificate.CustomAPI.RetryIssuance")
+	return c.CustomAPIServer.RetryIssuance(ctx, in)
+}
+func (c *customAPIInprocClient) RevokeCertificate(ctx context.Context, in *RevokeCertificateRequest, opts ...grpc.CallOption) (*RevokeCertificateResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.certificate.CustomAPI.RevokeCertificate")
+	return c.CustomAPIServer.RevokeCertificate(ctx, in)
 }
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
@@ -286,6 +479,102 @@ func (s *customAPISrv) CertificateHealthStatusList(ctx context.Context, in *Cert
 
 	return rsp, nil
 }
+func (s *customAPISrv) RetryIssuance(ctx context.Context, in *RetryIssuanceRequest) (*RetryIssuanceResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.certificate.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *RetryIssuanceResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.certificate.RetryIssuanceRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.RetryIssuance' operation on 'certificate'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.certificate.CustomAPI.RetryIssuance"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.RetryIssuance(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.certificate.RetryIssuanceResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) RevokeCertificate(ctx context.Context, in *RevokeCertificateRequest) (*RevokeCertificateResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.certificate.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *RevokeCertificateResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.certificate.RevokeCertificateRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.RevokeCertificate' operation on 'certificate'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.certificate.CustomAPI.RevokeCertificate"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.RevokeCertificate(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.certificate.RevokeCertificateResponse", rsp)...)
+
+	return rsp, nil
+}
 
 func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
 	return &customAPISrv{svc: svc}
@@ -310,6 +599,206 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/{namespace}/certificates/{name}/retry": {
+            "post": {
+                "summary": "Retry Certificate Issuance",
+                "description": "Retries certificate issuance after a corrected error or wait condition.\nA retry for a valid certificate is a no-op unless force_renew is true.\nAn active issuance or renewal is not duplicated.",
+                "operationId": "ves.io.schema.certificate.CustomAPI.RetryIssuance",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/certificateRetryIssuanceResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-required\nx-example: \"system\"\nNamespace of the certificate.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "name\n\nx-required\nx-example: \"my-certificate\"\nName of the certificate.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/certificateRetryIssuanceRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-certificate-customapi-retryissuance"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.certificate.CustomAPI.RetryIssuance"
+            },
+            "x-displayname": "Certificate Custom API",
+            "x-ves-proto-service": "ves.io.schema.certificate.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/certificates/{name}/revoke": {
+            "post": {
+                "summary": "Revoke Certificate",
+                "description": "Revokes an issued certificate by sending an ACME revocation request to the\nissuing CA. The certificate is added to the CA's revocation list (CRL/OCSP)\nand will no longer be trusted by clients that check revocation status.\nThe certificate object is not deleted — it transitions to the REVOKED state.",
+                "operationId": "ves.io.schema.certificate.CustomAPI.RevokeCertificate",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/certificateRevokeCertificateResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-required\nx-example: \"system\"\nNamespace of the certificate.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "name\n\nx-required\nx-example: \"my-certificate\"\nName of the certificate.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/certificateRevokeCertificateRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-certificate-customapi-revokecertificate"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.certificate.CustomAPI.RevokeCertificate"
+            },
+            "x-displayname": "Certificate Custom API",
+            "x-ves-proto-service": "ves.io.schema.certificate.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/certificates_health_status": {
             "get": {
                 "summary": "Certificate Health Status List",
@@ -382,7 +871,7 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "order",
-                        "description": "x-example: \"ASCENDING\"\nList the certificates in ascending or descending order, by expiration date. Default is descending.\n\nSort in descending order\nSort in ascending order",
+                        "description": "x-example: \"ASCENDING\"\nList the certificates in ascending or descending order, by expiration date.\nDefault is ascending (soonest to expire first).\n\nSort in descending order\nSort in ascending order",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -395,7 +884,7 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "max_results",
-                        "description": "x-example: \"10\"\nMax number of certificates to return. Default to 10. Max of 1000.",
+                        "description": "x-example: \"10\"\nMax number of certificates to return. Default is 10. Max of 1000.",
                         "in": "query",
                         "required": false,
                         "type": "integer",
@@ -404,13 +893,14 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "lb_type",
-                        "description": "Returns certificates associated with specific load balancer types, {VIRTUAL_SERVER, HTTP, TCP}. If this is omitted then certificates are returned for all load balancer types.\n\nx-unit: \"type\"\nx-unit: \"type\"\nx-unit: \"type\"",
+                        "description": "Filter certificates by associated load balancer types.\nOne or more types in {VIRTUAL_SERVER, HTTP, TCP} can be specified.\nIf omitted, certificates for all load balancer types are returned.\n\nx-unit: \"type\"\nx-unit: \"type\"\nx-unit: \"type\"\nx-unit: \"type\"",
                         "in": "query",
                         "required": false,
                         "type": "array",
                         "items": {
                             "type": "string",
                             "enum": [
+                                "UNSPECIFIED_LB",
                                 "VIRTUAL_SERVER",
                                 "HTTP",
                                 "TCP"
@@ -421,13 +911,14 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "cert_type",
-                        "description": "Select fields to be returned in the response.\nOne or more fields in {CUSTOM, AUTO} can be specified. If this is omitted then all certificate types are returned.\n\nx-unit: \"type\"\nx-unit: \"type\"",
+                        "description": "Filter certificates by provisioning type.\nOne or more types in {CUSTOM, AUTO} can be specified.\nIf omitted, all certificate types are returned.\n\nx-unit: \"type\"\nx-unit: \"type\"\nx-unit: \"type\"",
                         "in": "query",
                         "required": false,
                         "type": "array",
                         "items": {
                             "type": "string",
                             "enum": [
+                                "UNSPECIFIED_CERT",
                                 "CUSTOM",
                                 "AUTO"
                             ]
@@ -443,7 +934,6 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-certificate-customapi-certificatehealthstatuslist"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.certificate.CustomAPI.CertificateHealthStatusList"
             },
             "x-displayname": "Certificate Custom API",
@@ -454,26 +944,28 @@ var CustomAPISwaggerJSON string = `{
     "definitions": {
         "certificateCertStatus": {
             "type": "string",
-            "description": "Type of certificate based on how it was provisioned\n\nx-unit: \"type\"\nx-unit: \"type\"\nx-unit: \"type\"",
-            "title": "Certificate Status",
+            "description": "Status of a certificate based on its expiration: {UP_TO_DATE, EXPIRING, EXPIRED}\n\nx-unit: \"type\"\nx-unit: \"type\"\nx-unit: \"type\"\nx-unit: \"type\"",
+            "title": "CertStatus",
             "enum": [
+                "UNSPECIFIED_STATUS",
                 "UP_TO_DATE",
                 "EXPIRING",
                 "EXPIRED"
             ],
-            "default": "UP_TO_DATE",
-            "x-displayname": "Certificate Type",
+            "default": "UNSPECIFIED_STATUS",
+            "x-displayname": "Certificate Status",
             "x-ves-proto-enum": "ves.io.schema.certificate.CertStatus"
         },
         "certificateCertType": {
             "type": "string",
-            "description": "x-displayName: \"Certificate Type\"\nType of certificate based on how it was provisioned\n\n - CUSTOM: x-displayName: \"Custom\"\nx-unit: \"type\"\n - AUTO: x-displayName: \"Autocert\"\nx-unit: \"type\"",
-            "title": "Certificate Type",
+            "description": "x-displayName: \"Certificate Type\"\nType of certificate based on how it was provisioned: {CUSTOM, AUTO}\n\n - UNSPECIFIED_CERT: x-displayName: \"Unspecified\"\nx-unit: \"type\"\n - CUSTOM: x-displayName: \"Custom\"\nx-unit: \"type\"\n - AUTO: x-displayName: \"Autocert\"\nx-unit: \"type\"",
+            "title": "CertType",
             "enum": [
+                "UNSPECIFIED_CERT",
                 "CUSTOM",
                 "AUTO"
             ],
-            "default": "CUSTOM"
+            "default": "UNSPECIFIED_CERT"
         },
         "certificateCertificateHealthStatusListResponse": {
             "type": "object",
@@ -484,7 +976,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "items": {
                     "type": "array",
-                    "description": " Collection of Certificate Health Status",
+                    "description": " Collection of Certificate Health Status items, filtered and sorted per request parameters",
                     "title": "Items",
                     "items": {
                         "$ref": "#/definitions/certificateCertificateHealthStatusListResponseItem"
@@ -493,17 +985,17 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "total_expired": {
                     "type": "integer",
-                    "description": " Total number of certificates that are expired",
-                    "title": "Total number of certificates that are expired",
+                    "description": " Total number of expired certificates matching the applied filters",
+                    "title": "Total Expired",
                     "format": "int64",
-                    "x-displayname": "Total number of Expired Certificates"
+                    "x-displayname": "Total Expired Certificates"
                 },
                 "total_expiring_soon": {
                     "type": "integer",
-                    "description": " Total number of certificates that are expiring within 14 days",
-                    "title": "Total number of certificates that are expiring within 14 days",
+                    "description": " Total number of certificates expiring within 14 days, matching the applied filters",
+                    "title": "Total Expiring Soon",
                     "format": "int64",
-                    "x-displayname": "Total number of certificates expiring within 14 days"
+                    "x-displayname": "Total Expiring Soon"
                 }
             }
         },
@@ -515,60 +1007,63 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.certificate.CertificateHealthStatusListResponseItem",
             "properties": {
                 "info": {
-                    "description": " Information about this certificate.",
+                    "description": " Detailed information about this certificate",
                     "title": "Information",
                     "$ref": "#/definitions/schemaCertInfoType",
                     "x-displayname": "Certificate Information"
                 },
                 "is_autocert": {
                     "type": "boolean",
-                    "description": " Information about this certificate.",
-                    "title": "Is an Auto-cert Certificate",
+                    "description": " True if this certificate was automatically provisioned",
+                    "title": "Is Autocert",
                     "format": "boolean",
-                    "x-displayname": "Is an Autocert Certificate"
+                    "x-displayname": "Is Autocert Certificate"
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of the certificate\n\nExample: - \"ns1\"-",
+                    "description": " Name of the certificate\n\nExample: - \"my-certificate\"-",
                     "title": "Name",
                     "x-displayname": "Name",
-                    "x-ves-example": "ns1"
+                    "x-ves-example": "my-certificate"
                 },
                 "namespace": {
                     "type": "string",
                     "description": " Namespace where the certificate lives\n\nExample: - \"ns1\"-",
-                    "title": "Name",
-                    "x-displayname": "Name",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
                 },
                 "sslprofile_type": {
-                    "description": " One fields {CLIENT, SERVER, OCSP} can be specified.",
+                    "type": "array",
+                    "description": " The SSL profile type for this certificate.\n One or more of {CLIENT, SERVER, OCSP}.",
                     "title": "SSL Profile Type",
-                    "$ref": "#/definitions/certificateSSLProfileType",
+                    "items": {
+                        "$ref": "#/definitions/certificateSSLProfileType"
+                    },
                     "x-displayname": "SSL Profile Type"
                 },
                 "status": {
-                    "description": " The current status of the certificate, based on its valid date range.",
+                    "description": " Current status of the certificate based on its expiration.\n One of {UP_TO_DATE, EXPIRING, EXPIRED}.",
                     "title": "Status",
                     "$ref": "#/definitions/certificateCertStatus",
                     "x-displayname": "Status"
                 },
                 "time_until_expiry": {
                     "type": "integer",
-                    "description": " How many days until a certificate is set to expire",
-                    "title": "Time until Expiry",
+                    "description": " Number of days until the certificate expires. Negative values indicate already expired.",
+                    "title": "Time Until Expiry",
                     "format": "int32",
                     "x-displayname": "Time Until Expiry"
                 },
                 "type": {
                     "type": "array",
-                    "description": " The type(s) of load balancers that are associated with this certificate, {VIRTUAL_SERVER, HTTP, TCP}.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Type",
+                    "description": " The load balancer type(s) associated with this certificate.\n One or more of {VIRTUAL_SERVER, HTTP, TCP}.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Load Balancer Types",
                     "maxItems": 3,
                     "items": {
                         "$ref": "#/definitions/certificateLoadBalancerType"
                     },
-                    "x-displayname": "Type",
+                    "x-displayname": "Load Balancer Types",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "3",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -578,27 +1073,112 @@ var CustomAPISwaggerJSON string = `{
         },
         "certificateLoadBalancerType": {
             "type": "string",
-            "description": "Types of supported load balancers\n\nx-unit: \"type\"\nx-unit: \"type\"\nx-unit: \"type\"",
-            "title": "Load Balancer Type",
+            "description": "Types of supported load balancers: {VIRTUAL_SERVER, HTTP, TCP}\n\nx-unit: \"type\"\nx-unit: \"type\"\nx-unit: \"type\"\nx-unit: \"type\"",
+            "title": "LoadBalancerType",
             "enum": [
+                "UNSPECIFIED_LB",
                 "VIRTUAL_SERVER",
                 "HTTP",
                 "TCP"
             ],
-            "default": "VIRTUAL_SERVER",
+            "default": "UNSPECIFIED_LB",
             "x-displayname": "Load Balancer Type",
             "x-ves-proto-enum": "ves.io.schema.certificate.LoadBalancerType"
         },
+        "certificateRetryIssuanceRequest": {
+            "type": "object",
+            "description": "Request to retry certificate issuance.",
+            "title": "RetryIssuanceRequest",
+            "x-displayname": "Retry Issuance Request",
+            "x-ves-proto-message": "ves.io.schema.certificate.RetryIssuanceRequest",
+            "properties": {
+                "force_renew": {
+                    "type": "boolean",
+                    "description": " Request replacement of a currently valid certificate. When false or\n omitted, retry only re-drives failed or waiting certificate issuance.\n This option does not duplicate an issuance or renewal already in progress.",
+                    "title": "force_renew",
+                    "format": "boolean",
+                    "x-displayname": "Force Renew"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the certificate.\n\nExample: - \"my-certificate\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "my-certificate",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the certificate.\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "certificateRetryIssuanceResponse": {
+            "type": "object",
+            "description": "Response for retry issuance request.",
+            "title": "RetryIssuanceResponse",
+            "x-displayname": "Retry Issuance Response",
+            "x-ves-proto-message": "ves.io.schema.certificate.RetryIssuanceResponse"
+        },
+        "certificateRevokeCertificateRequest": {
+            "type": "object",
+            "description": "Request to revoke an issued certificate.",
+            "title": "RevokeCertificateRequest",
+            "x-displayname": "Revoke Certificate Request",
+            "x-ves-proto-message": "ves.io.schema.certificate.RevokeCertificateRequest",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the certificate.\n\nExample: - \"my-certificate\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "my-certificate",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the certificate.\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "certificateRevokeCertificateResponse": {
+            "type": "object",
+            "description": "Response for revoke certificate request.",
+            "title": "RevokeCertificateResponse",
+            "x-displayname": "Revoke Certificate Response",
+            "x-ves-proto-message": "ves.io.schema.certificate.RevokeCertificateResponse"
+        },
         "certificateSSLProfileType": {
             "type": "string",
-            "description": "Types of ssl profiles\n\nx-unit: \"type\"\nx-unit: \"type\"\nx-unit: \"type\"",
-            "title": "SSL Profile Type",
+            "description": "Types of SSL profiles\n\nx-unit: \"type\"\nx-unit: \"type\"\nx-unit: \"type\"\nx-unit: \"type\"",
+            "title": "SSLProfileType",
             "enum": [
+                "UNSPECIFIED_SSL_PROFILE",
                 "CLIENT",
                 "SERVER",
                 "OCSP"
             ],
-            "default": "CLIENT",
+            "default": "UNSPECIFIED_SSL_PROFILE",
             "x-displayname": "SSL Profile Type",
             "x-ves-proto-enum": "ves.io.schema.certificate.SSLProfileType"
         },

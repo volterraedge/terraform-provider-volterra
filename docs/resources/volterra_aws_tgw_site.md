@@ -22,9 +22,7 @@ resource "volterra_aws_tgw_site" "example" {
 
   aws_parameters {
     admin_password {
-
-
-      // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
+      // One of the arguments from this list "blindfold_secret_info clear_secret_info none vault_secret_info wingman_secret_info" must be set
 
       blindfold_secret_info {
         decryption_provider = "value"
@@ -58,11 +56,7 @@ resource "volterra_aws_tgw_site" "example" {
       workload_subnet {
         // One of the arguments from this list "existing_subnet_id subnet_param" must be set
 
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
+        existing_subnet_id = "subnet-12345678901234567"
       }
     }
 
@@ -77,14 +71,12 @@ resource "volterra_aws_tgw_site" "example" {
 
     // One of the arguments from this list "disable_encryption enable_encryption" can be set
 
-    enable_encryption {
-      kms_key_id = "kms_key_id"
-    }
+    disable_encryption = true
     instance_type = "a1.xlarge"
 
     // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
 
-    disable_internet_vip = true
+    enable_internet_vip = true
 
     // One of the arguments from this list "custom_security_group f5xc_security_group" must be set
 
@@ -97,19 +89,17 @@ resource "volterra_aws_tgw_site" "example" {
 
       // One of the arguments from this list "autogenerate name_tag" must be set
 
-      name_tag = "name_tag"
+      autogenerate = true
       primary_ipv4 = "10.1.0.0/16"
     }
     ssh_key = "ssh-rsa AAAAB..."
 
     // One of the arguments from this list "existing_tgw new_tgw" must be set
 
-    existing_tgw {
-      tgw_asn = "64500"
+    new_tgw {
+      // One of the arguments from this list "system_generated user_assigned" must be set
 
-      tgw_id = "tgw-12345678901234567"
-
-      volterra_site_asn = "64501"
+      system_generated = true
     }
 
     // One of the arguments from this list "reserved_tgw_cidr tgw_cidr" must be set
@@ -127,29 +117,7 @@ resource "volterra_aws_tgw_site" "example" {
 
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled private_connectivity" must be set
 
-  direct_connect_enabled {
-    // One of the arguments from this list "auto_asn custom_asn" must be set
-
-    auto_asn = true
-
-    // One of the arguments from this list "hosted_vifs manual_gw standard_vifs" must be set
-
-    hosted_vifs {
-      // One of the arguments from this list "site_registration_over_direct_connect site_registration_over_internet" can be set
-
-      site_registration_over_internet = true
-
-      vif_list {
-        vif_id = "dxvif-fgwtckim"
-
-        // One of the arguments from this list "other_region same_as_site_region" must be set
-
-        same_as_site_region = true
-      }
-
-      vifs = ["value"]
-    }
-  }
+  direct_connect_disabled = true
 
   // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
 
@@ -409,7 +377,7 @@ Site Network related details will be configured.
 
 ###### One of the arguments from this list "global_network_list, no_global_network" must be set
 
-`global_network_list` - (Optional) List of global network connections. See [Global Network Choice Global Network List ](#global-network-choice-global-network-list) below for details.
+`global_network_list`- (Optional) List of global network connections. See [Global Network Choice Global Network List ](#global-network-choice-global-network-list) below for details.
 
 `no_global_network` - (Optional) No global network to connect (`Bool`).
 
@@ -441,21 +409,11 @@ Note that this choice would be deprecated in the near release..
 
 Select WAF Signatures Update Mode for the site. By default, new signatures will be applied manually..
 
-###### One of the arguments from this list "automatic, manual" can be set
+###### One of the arguments from this list "automatic, manual" must be set
 
 `automatic` - (Optional) New WAF signatures will be applied automatically as soon as they are released. (`Bool`).
 
 `manual` - (Optional) New WAF signatures will only be applied when an update is triggered manually. (`Bool`).
-
-### Admin Password Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Asn Choice Auto Asn
 
@@ -477,13 +435,13 @@ User is managing the ASN for TGW and F5XC Site..
 
 Admin password user for accessing site through serial console ..
 
-
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -619,13 +577,13 @@ Site Registration and Site to RE tunnels go over the internet gateway.
 
 TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
 
-
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -1035,16 +993,6 @@ Only HTTP Port (80) will be allowed..
 
 Only HTTPS Port (443) will be allowed..
 
-### Private Key Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
 ### Ref
 
 Reference to another volterra object is shown like below
@@ -1072,6 +1020,10 @@ Clear Secret is used for the secrets that are not encrypted.
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
 
 ### Secret Info Oneof Vault Secret Info
 
@@ -1340,4 +1292,4 @@ Worker nodes is set to zero.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured aws_tgw_site.
+*   `id` - This is the id of the configured aws_tgw_site.

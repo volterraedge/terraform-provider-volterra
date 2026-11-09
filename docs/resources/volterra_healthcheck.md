@@ -22,28 +22,16 @@ resource "volterra_healthcheck" "example" {
 
   // One of the arguments from this list "dns_health_check dns_proxy_icmp_health_check dns_proxy_tcp_health_check dns_proxy_udp_health_check http_health_check tcp_health_check udp_icmp_health_check" must be set
 
-  http_health_check {
-    expected_response = "00000034"
+  dns_proxy_tcp_health_check {
+    expected_response = ".*"
 
-    expected_status_codes = ["200-250"]
-
-    headers = {
-      "key1" = "value1"
-    }
-
-    // One of the arguments from this list "host_header use_origin_server_name" must be set
-
-    use_origin_server_name = true
-    path = "/healthcheck"
-    request_headers_to_remove = ["user-agent"]
-    use_http2 = true
+    send_payload = "send_payload"
   }
   healthy_threshold   = ["2"]
   interval            = ["10"]
   timeout             = ["1"]
   unhealthy_threshold = ["5"]
 }
-
 ```
 
 Argument Reference

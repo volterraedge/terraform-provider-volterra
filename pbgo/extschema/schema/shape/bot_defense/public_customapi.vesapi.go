@@ -42,6 +42,14 @@ func (c *CustomAPIGrpcClient) doRPCGetArtifactRegistryToken(ctx context.Context,
 	rsp, err := c.grpcClient.GetArtifactRegistryToken(ctx, req, opts...)
 	return rsp, err
 }
+func (c *CustomAPIGrpcClient) doRPCGetFeatureFlags(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetFeatureFlagsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.bot_defense.GetFeatureFlagsReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetFeatureFlags(ctx, req, opts...)
+	return rsp, err
+}
 func (c *CustomAPIGrpcClient) doRPCSuggestValues(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SuggestValuesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -82,6 +90,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetArtifactRegistryToken"] = ccl.doRPCGetArtifactRegistryToken
+	rpcFns["GetFeatureFlags"] = ccl.doRPCGetFeatureFlags
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
 	ccl.rpcFns = rpcFns
 	return ccl
@@ -169,6 +178,87 @@ func (c *CustomAPIRestClient) doRPCGetArtifactRegistryToken(ctx context.Context,
 	pbRsp := &GetArtifactRegistryTokenResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.GetArtifactRegistryTokenResp", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+func (c *CustomAPIRestClient) doRPCGetFeatureFlags(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetFeatureFlagsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.shape.bot_defense.GetFeatureFlagsReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetFeatureFlagsResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.shape.bot_defense.GetFeatureFlagsResp", body)
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -286,6 +376,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetArtifactRegistryToken"] = ccl.doRPCGetArtifactRegistryToken
+	rpcFns["GetFeatureFlags"] = ccl.doRPCGetFeatureFlags
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
 	ccl.rpcFns = rpcFns
 	return ccl
@@ -301,6 +392,10 @@ type customAPIInprocClient struct {
 func (c *customAPIInprocClient) GetArtifactRegistryToken(ctx context.Context, in *GetArtifactRegistryTokenReq, opts ...grpc.CallOption) (*GetArtifactRegistryTokenResp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.bot_defense.CustomAPI.GetArtifactRegistryToken")
 	return c.CustomAPIServer.GetArtifactRegistryToken(ctx, in)
+}
+func (c *customAPIInprocClient) GetFeatureFlags(ctx context.Context, in *GetFeatureFlagsReq, opts ...grpc.CallOption) (*GetFeatureFlagsResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.bot_defense.CustomAPI.GetFeatureFlags")
+	return c.CustomAPIServer.GetFeatureFlags(ctx, in)
 }
 func (c *customAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.shape.bot_defense.CustomAPI.SuggestValues")
@@ -373,6 +468,54 @@ func (s *customAPISrv) GetArtifactRegistryToken(ctx context.Context, in *GetArti
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.GetArtifactRegistryTokenResp", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetFeatureFlags(ctx context.Context, in *GetFeatureFlagsReq) (*GetFeatureFlagsResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.shape.bot_defense.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetFeatureFlagsResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.GetFeatureFlagsReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetFeatureFlags' operation on 'bot_defense'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.shape.bot_defense.CustomAPI.GetFeatureFlags"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetFeatureFlags(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.shape.bot_defense.GetFeatureFlagsResp", rsp)...)
 
 	return rsp, nil
 }
@@ -532,6 +675,90 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.shape.bot_defense.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/{namespace}/feature_flags": {
+            "get": {
+                "summary": "Get Feature Flags",
+                "description": "Returns the Bot Defense feature flags for the current tenant.",
+                "operationId": "ves.io.schema.shape.bot_defense.CustomAPI.GetFeatureFlags",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/bot_defenseGetFeatureFlagsResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-required\nNamespace in which the feature flags are evaluated.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-shape-bot_defense-customapi-getfeatureflags"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.shape.bot_defense.CustomAPI.GetFeatureFlags"
+            },
+            "x-displayname": "Bot Defense Custom API",
+            "x-ves-proto-service": "ves.io.schema.shape.bot_defense.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/suggest-values": {
             "post": {
                 "summary": "Suggest Values",
@@ -626,6 +853,30 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bot_defenseFeatureFlag": {
+            "type": "object",
+            "description": "Bot Defense feature availability for the current tenant.",
+            "title": "FeatureFlag",
+            "x-displayname": "Feature Flag",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.FeatureFlag",
+            "properties": {
+                "disabled": {
+                    "type": "boolean",
+                    "description": " Indicates whether the feature is disabled for the current tenant.\n\nExample: - \"true\"-",
+                    "title": "Disabled",
+                    "format": "boolean",
+                    "x-displayname": "Disabled",
+                    "x-ves-example": "true"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Stable public name of the feature.\n\nExample: - \"addon_subscription_check\"-",
+                    "title": "Name",
+                    "x-displayname": "Feature Name",
+                    "x-ves-example": "addon_subscription_check"
+                }
+            }
+        },
         "bot_defenseGetArtifactRegistryTokenResp": {
             "type": "object",
             "description": "Response body of GetArtifactRegistryToken request",
@@ -645,6 +896,24 @@ var CustomAPISwaggerJSON string = `{
                     "description": "  Access token for the F5 Artifact Registry (FAR)\n This token can be used to authenticate with FAR when pulling related images for Kubernetes bot infrastructure.",
                     "title": "token",
                     "x-displayname": "Token"
+                }
+            }
+        },
+        "bot_defenseGetFeatureFlagsResp": {
+            "type": "object",
+            "description": "Response containing every supported Bot Defense feature flag.",
+            "title": "GetFeatureFlagsResp",
+            "x-displayname": "Response for Get Feature Flags",
+            "x-ves-proto-message": "ves.io.schema.shape.bot_defense.GetFeatureFlagsResp",
+            "properties": {
+                "feature_flags": {
+                    "type": "array",
+                    "description": " Bot Defense feature flags and their status for the current tenant.",
+                    "title": "Feature Flags",
+                    "items": {
+                        "$ref": "#/definitions/bot_defenseFeatureFlag"
+                    },
+                    "x-displayname": "Feature Flags"
                 }
             }
         },

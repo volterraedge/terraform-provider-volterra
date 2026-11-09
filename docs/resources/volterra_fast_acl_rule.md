@@ -29,17 +29,15 @@ resource "volterra_fast_acl_rule" "example" {
   port {
     // One of the arguments from this list "all dns user_defined" can be set
 
-    dns = true
+    all = true
   }
 
   // One of the arguments from this list "ip_prefix_set prefix" must be set
 
-  ip_prefix_set {
-    ref {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
+  prefix {
+    ipv6_prefix = ["[2001:db8::1::/112, 2001::db8::2::/112]"]
+
+    prefix = ["[192.168.1.0/24, 192.168.2.0/24]\""]
   }
 }
 

@@ -419,8 +419,56 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.more_option.security_options.api_protection",
@@ -549,8 +597,56 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.more_option.security_options.api_protection",
@@ -729,8 +825,56 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "create_form.spec.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
 			FieldPath:           "create_form.spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.more_option.security_options.api_protection",
@@ -857,8 +1001,56 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "replace_form.spec.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
 			FieldPath:           "replace_form.spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.more_option.security_options.api_protection",
@@ -985,8 +1177,56 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.more_option.security_options.api_protection",
@@ -1134,8 +1374,56 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "items.#.get_spec.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
 			FieldPath:           "items.#.get_spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.more_option.security_options.api_protection",
@@ -1533,8 +1821,56 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.more_option.security_options.api_protection",
@@ -1638,6 +1974,9 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 	}
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.cdn_loadbalancer.API.Replace"] = "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest"
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNCachePurge"] = []string{
+		".hostname",
+	}
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

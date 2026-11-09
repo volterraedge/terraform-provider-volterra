@@ -1798,6 +1798,15 @@ func (v *ValidateAPIEndpointsRsp) Validate(ctx context.Context, pm interface{}, 
 			}
 		}
 	}
+	if fv, exists := v.FldValidators["discovered_domains"]; exists {
+		vOpts := append(opts, db.WithValidateField("discovered_domains"))
+		for idx, item := range m.GetDiscoveredDomains() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	if fv, exists := v.FldValidators["last_update"]; exists {
 		vOpts := append(opts, db.WithValidateField("last_update"))
 		if err := fv(ctx, m.GetLastUpdate(), vOpts...); err != nil {

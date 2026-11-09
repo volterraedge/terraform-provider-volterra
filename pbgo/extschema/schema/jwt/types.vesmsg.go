@@ -278,6 +278,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRulesDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRulesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -289,6 +296,26 @@ func (m *GlobalSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRules() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRules() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRules() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -398,6 +425,13 @@ func (m *JwtRequirement) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRequiresTypeDRefInfo()
 }
+func (m *JwtRequirement) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRequiresTypeDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *JwtRequirement) GetRequiresTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -419,6 +453,39 @@ func (m *JwtRequirement) GetRequiresTypeDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetProviderAndAudiences().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetProviderAndAudiences().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "provider_and_audiences." + dri.DRField
+		}
+		return drInfos, err
+	case *JwtRequirement_AllowMissingOrFailed:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *JwtRequirement) GetRequiresTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRequiresType() == nil {
+		return nil, nil
+	}
+	switch m.GetRequiresType().(type) {
+	case *JwtRequirement_Provider:
+		drInfos, err := m.GetProvider().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetProvider().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "provider." + dri.DRField
+		}
+		return drInfos, err
+	case *JwtRequirement_ProviderAndAudiences:
+		drInfos, err := m.GetProviderAndAudiences().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetProviderAndAudiences().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -545,6 +612,13 @@ func (m *Provider) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetProviderDRefInfo()
 }
+func (m *Provider) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetProviderDRefInfoForOverlay(generateHash)
+}
 
 func (m *Provider) GetProviderDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetProvider()
@@ -557,6 +631,34 @@ func (m *Provider) GetProviderDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("Provider.provider[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "jwt_provider.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "provider",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *Provider) GetProviderDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetProvider()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("Provider.provider[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "jwt_provider.Object",
 			RefdUID:    ref.Uid,
@@ -735,6 +837,13 @@ func (m *ProviderWithAudiences) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetProviderDRefInfo()
 }
+func (m *ProviderWithAudiences) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetProviderDRefInfoForOverlay(generateHash)
+}
 
 func (m *ProviderWithAudiences) GetProviderDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetProvider()
@@ -747,6 +856,34 @@ func (m *ProviderWithAudiences) GetProviderDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("ProviderWithAudiences.provider[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "jwt_provider.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "provider",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ProviderWithAudiences) GetProviderDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetProvider()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ProviderWithAudiences.provider[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "jwt_provider.Object",
 			RefdUID:    ref.Uid,
@@ -1002,6 +1139,13 @@ func (m *RequirementRule) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRequiresDRefInfo()
 }
+func (m *RequirementRule) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRequiresDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *RequirementRule) GetRequiresDRefInfo() ([]db.DRefInfo, error) {
@@ -1011,6 +1155,22 @@ func (m *RequirementRule) GetRequiresDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetRequires().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRequires().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "requires." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RequirementRule) GetRequiresDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRequires() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRequires().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRequires().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

@@ -51,6 +51,72 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.cdn_cache_rule.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.cache_rules.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cdn_cache_rule.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.cache_rules.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cdn_cache_rule.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.cache_rules.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.cache_rules.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.cache_rules.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.cache_rules.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+	}
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cdn_cache_rule.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.cache_rules.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.cache_rules.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+	}
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.cdn_cache_rule.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.cache_rules.eligible_for_cache.scheme_proxy_host_request_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cache_rules.eligible_for_cache.scheme_proxy_host_uri.serve_stale",
+			AllowedEnvironments: []string{"crt", "demo1", "staging", "test"},
+		},
+	}
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

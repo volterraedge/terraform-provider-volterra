@@ -86,8 +86,59 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRuleChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *CreateSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetProxyChoice().(type) {
+	case *CreateSpecType_AnyProxy:
+		return nil, nil
+	case *CreateSpecType_NetworkConnector:
+		vref := m.GetNetworkConnector()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_connector.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_connector.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_connector",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *CreateSpecType_ProxyLabelSelector:
+		return nil, nil
+	case *CreateSpecType_DrpHttpConnect:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *CreateSpecType) GetProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetProxyChoice().(type) {
 	case *CreateSpecType_AnyProxy:
 		return nil, nil
@@ -178,6 +229,33 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetRuleChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRuleChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRuleChoice().(type) {
+	case *CreateSpecType_AllowAll:
+		return nil, nil
+	case *CreateSpecType_AllowList:
+		return nil, nil
+	case *CreateSpecType_DenyList:
+		return nil, nil
+	case *CreateSpecType_RuleList:
+		drInfos, err := m.GetRuleList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rule_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentPolicy() == nil {
@@ -186,6 +264,22 @@ func (m *CreateSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetSegmentPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -588,8 +682,78 @@ func (m *ForwardProxyAdvancedRuleType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ForwardProxyAdvancedRuleType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDestinationChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDestinationChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSourceChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSourceChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ForwardProxyAdvancedRuleType) GetDestinationChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDestinationChoice().(type) {
+	case *ForwardProxyAdvancedRuleType_AllDestinations:
+		return nil, nil
+	case *ForwardProxyAdvancedRuleType_TlsList:
+		return nil, nil
+	case *ForwardProxyAdvancedRuleType_HttpList:
+		return nil, nil
+	case *ForwardProxyAdvancedRuleType_DstIpPrefixSet:
+		vref := m.GetDstIpPrefixSet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("ip_prefix_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "ip_prefix_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dst_ip_prefix_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *ForwardProxyAdvancedRuleType_DstPrefixList:
+		return nil, nil
+	case *ForwardProxyAdvancedRuleType_DstLabelSelector:
+		return nil, nil
+	case *ForwardProxyAdvancedRuleType_DstAsnSet:
+		vref := m.GetDstAsnSet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("bgp_asn_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "bgp_asn_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dst_asn_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *ForwardProxyAdvancedRuleType_DstAsnList:
+		return nil, nil
+	case *ForwardProxyAdvancedRuleType_UrlCategoryList:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ForwardProxyAdvancedRuleType) GetDestinationChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetDestinationChoice().(type) {
 	case *ForwardProxyAdvancedRuleType_AllDestinations:
 		return nil, nil
@@ -704,6 +868,52 @@ func (m *ForwardProxyAdvancedRuleType) GetDestinationChoiceDBEntries(ctx context
 }
 
 func (m *ForwardProxyAdvancedRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetSourceChoice().(type) {
+	case *ForwardProxyAdvancedRuleType_AllSources:
+		return nil, nil
+	case *ForwardProxyAdvancedRuleType_PrefixList:
+		return nil, nil
+	case *ForwardProxyAdvancedRuleType_InsideSources:
+		return nil, nil
+	case *ForwardProxyAdvancedRuleType_Interface:
+		vref := m.GetInterface()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_interface.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "interface",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *ForwardProxyAdvancedRuleType_LabelSelector:
+		return nil, nil
+	case *ForwardProxyAdvancedRuleType_IpPrefixSet:
+		vref := m.GetIpPrefixSet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("ip_prefix_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "ip_prefix_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ip_prefix_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ForwardProxyAdvancedRuleType) GetSourceChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetSourceChoice().(type) {
 	case *ForwardProxyAdvancedRuleType_AllSources:
 		return nil, nil
@@ -1243,6 +1453,13 @@ func (m *ForwardProxyRuleListType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRulesDRefInfo()
 }
+func (m *ForwardProxyRuleListType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRulesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ForwardProxyRuleListType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -1254,6 +1471,26 @@ func (m *ForwardProxyRuleListType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ForwardProxyRuleListType) GetRulesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRules() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRules() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRules() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1760,8 +1997,59 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRuleChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetProxyChoice().(type) {
+	case *GetSpecType_AnyProxy:
+		return nil, nil
+	case *GetSpecType_NetworkConnector:
+		vref := m.GetNetworkConnector()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_connector.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_connector.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_connector",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *GetSpecType_ProxyLabelSelector:
+		return nil, nil
+	case *GetSpecType_DrpHttpConnect:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GetSpecType) GetProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetProxyChoice().(type) {
 	case *GetSpecType_AnyProxy:
 		return nil, nil
@@ -1852,6 +2140,33 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetRuleChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRuleChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRuleChoice().(type) {
+	case *GetSpecType_AllowAll:
+		return nil, nil
+	case *GetSpecType_AllowList:
+		return nil, nil
+	case *GetSpecType_DenyList:
+		return nil, nil
+	case *GetSpecType_RuleList:
+		drInfos, err := m.GetRuleList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rule_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentPolicy() == nil {
@@ -1860,6 +2175,22 @@ func (m *GetSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetSegmentPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2132,8 +2463,64 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRuleChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetProxyChoice().(type) {
+	case *GlobalSpecType_AnyProxy:
+		return nil, nil
+	case *GlobalSpecType_NetworkConnector:
+		vref := m.GetNetworkConnector()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_connector.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_connector.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_connector",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *GlobalSpecType_ProxyLabelSelector:
+		return nil, nil
+	case *GlobalSpecType_DrpHttpConnect:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GlobalSpecType) GetProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetProxyChoice().(type) {
 	case *GlobalSpecType_AnyProxy:
 		return nil, nil
@@ -2224,6 +2611,33 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetRuleChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRuleChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRuleChoice().(type) {
+	case *GlobalSpecType_AllowAll:
+		return nil, nil
+	case *GlobalSpecType_AllowList:
+		return nil, nil
+	case *GlobalSpecType_DenyList:
+		return nil, nil
+	case *GlobalSpecType_RuleList:
+		drInfos, err := m.GetRuleList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rule_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentPolicy() == nil {
@@ -2240,7 +2654,40 @@ func (m *GlobalSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetSegmentPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -2551,8 +2998,59 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProxyChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetProxyChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRuleChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ReplaceSpecType) GetProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetProxyChoice().(type) {
+	case *ReplaceSpecType_AnyProxy:
+		return nil, nil
+	case *ReplaceSpecType_NetworkConnector:
+		vref := m.GetNetworkConnector()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_connector.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_connector.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_connector",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *ReplaceSpecType_ProxyLabelSelector:
+		return nil, nil
+	case *ReplaceSpecType_DrpHttpConnect:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ReplaceSpecType) GetProxyChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetProxyChoice().(type) {
 	case *ReplaceSpecType_AnyProxy:
 		return nil, nil
@@ -2643,6 +3141,33 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetRuleChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRuleChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRuleChoice().(type) {
+	case *ReplaceSpecType_AllowAll:
+		return nil, nil
+	case *ReplaceSpecType_AllowList:
+		return nil, nil
+	case *ReplaceSpecType_DenyList:
+		return nil, nil
+	case *ReplaceSpecType_RuleList:
+		drInfos, err := m.GetRuleList().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rule_list." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSegmentPolicy() == nil {
@@ -2651,6 +3176,22 @@ func (m *ReplaceSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetSegmentPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

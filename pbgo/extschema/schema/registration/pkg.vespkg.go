@@ -62,8 +62,102 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.registration.API.Create"] = []string{
+		"spec.infra.provider:10",
+		"spec.infra.provider:11",
+		"spec.infra.provider:12",
+		"spec.infra.provider:AWS_K8S",
+		"spec.infra.provider:AZURE_K8S",
+		"spec.infra.provider:GCP_K8S",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.API.Create"] = []string{
+		"spec.infra.provider:10",
+		"spec.infra.provider:11",
+		"spec.infra.provider:12",
+		"spec.infra.provider:AWS_K8S",
+		"spec.infra.provider:AZURE_K8S",
+		"spec.infra.provider:GCP_K8S",
+	}
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.CustomAPI.Get"] = []string{
+		"create_form.spec.infra.provider:10",
+		"create_form.spec.infra.provider:11",
+		"create_form.spec.infra.provider:12",
+		"create_form.spec.infra.provider:AWS_K8S",
+		"create_form.spec.infra.provider:AZURE_K8S",
+		"create_form.spec.infra.provider:GCP_K8S",
 		"object",
+		"spec.infra.provider:10",
+		"spec.infra.provider:11",
+		"spec.infra.provider:12",
+		"spec.infra.provider:AWS_K8S",
+		"spec.infra.provider:AZURE_K8S",
+		"spec.infra.provider:GCP_K8S",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.CustomAPI.List"] = []string{
+		"items.#.get_spec.infra.provider:10",
+		"items.#.get_spec.infra.provider:11",
+		"items.#.get_spec.infra.provider:12",
+		"items.#.get_spec.infra.provider:AWS_K8S",
+		"items.#.get_spec.infra.provider:AZURE_K8S",
+		"items.#.get_spec.infra.provider:GCP_K8S",
+		"items.#.object.spec.gc_spec.infra.provider:10",
+		"items.#.object.spec.gc_spec.infra.provider:11",
+		"items.#.object.spec.gc_spec.infra.provider:12",
+		"items.#.object.spec.gc_spec.infra.provider:AWS_K8S",
+		"items.#.object.spec.gc_spec.infra.provider:AZURE_K8S",
+		"items.#.object.spec.gc_spec.infra.provider:GCP_K8S",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.CustomAPI.ListRegistrationsBySite"] = []string{
+		"items.#.get_spec.infra.provider:10",
+		"items.#.get_spec.infra.provider:11",
+		"items.#.get_spec.infra.provider:12",
+		"items.#.get_spec.infra.provider:AWS_K8S",
+		"items.#.get_spec.infra.provider:AZURE_K8S",
+		"items.#.get_spec.infra.provider:GCP_K8S",
+		"items.#.object.spec.gc_spec.infra.provider:10",
+		"items.#.object.spec.gc_spec.infra.provider:11",
+		"items.#.object.spec.gc_spec.infra.provider:12",
+		"items.#.object.spec.gc_spec.infra.provider:AWS_K8S",
+		"items.#.object.spec.gc_spec.infra.provider:AZURE_K8S",
+		"items.#.object.spec.gc_spec.infra.provider:GCP_K8S",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.CustomAPI.ListRegistrationsByState"] = []string{
+		"items.#.get_spec.infra.provider:10",
+		"items.#.get_spec.infra.provider:11",
+		"items.#.get_spec.infra.provider:12",
+		"items.#.get_spec.infra.provider:AWS_K8S",
+		"items.#.get_spec.infra.provider:AZURE_K8S",
+		"items.#.get_spec.infra.provider:GCP_K8S",
+		"items.#.object.spec.gc_spec.infra.provider:10",
+		"items.#.object.spec.gc_spec.infra.provider:11",
+		"items.#.object.spec.gc_spec.infra.provider:12",
+		"items.#.object.spec.gc_spec.infra.provider:AWS_K8S",
+		"items.#.object.spec.gc_spec.infra.provider:AZURE_K8S",
+		"items.#.object.spec.gc_spec.infra.provider:GCP_K8S",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.CustomAPI.RegistrationApprove"] = []string{
+		"obj.spec.gc_spec.infra.provider:10",
+		"obj.spec.gc_spec.infra.provider:11",
+		"obj.spec.gc_spec.infra.provider:12",
+		"obj.spec.gc_spec.infra.provider:AWS_K8S",
+		"obj.spec.gc_spec.infra.provider:AZURE_K8S",
+		"obj.spec.gc_spec.infra.provider:GCP_K8S",
+	}
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.registration.CustomAPI.RegistrationCreate"] = []string{
+		"spec.infra.provider:10",
+		"spec.infra.provider:11",
+		"spec.infra.provider:12",
+		"spec.infra.provider:AWS_K8S",
+		"spec.infra.provider:AZURE_K8S",
+		"spec.infra.provider:GCP_K8S",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.CustomAPI.RegistrationCreate"] = []string{
+		"spec.gc_spec.infra.provider:10",
+		"spec.gc_spec.infra.provider:11",
+		"spec.gc_spec.infra.provider:12",
+		"spec.gc_spec.infra.provider:AWS_K8S",
+		"spec.gc_spec.infra.provider:AZURE_K8S",
+		"spec.gc_spec.infra.provider:GCP_K8S",
 	}
 }
 

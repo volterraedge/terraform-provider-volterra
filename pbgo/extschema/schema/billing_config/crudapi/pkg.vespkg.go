@@ -26,6 +26,27 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.billing_config.crudapi.API.Create"] = []string{
+		"spec.gc_spec.entitlement_configs.entitlement_features.quota_mapping.object_limits.operator",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.billing_config.crudapi.API.Create"] = []string{
+		"spec.gc_spec.entitlement_configs.entitlement_features.quota_mapping.object_limits.operator",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.billing_config.crudapi.API.Get"] = []string{
+		"spec.gc_spec.entitlement_configs.entitlement_features.quota_mapping.object_limits.operator",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.billing_config.crudapi.API.List"] = []string{
+		"items.#.spec.gc_spec.entitlement_configs.entitlement_features.quota_mapping.object_limits.operator",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.billing_config.crudapi.API.ListStream"] = []string{
+		"items.#.spec.gc_spec.entitlement_configs.entitlement_features.quota_mapping.object_limits.operator",
+	}
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.billing_config.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.entitlement_configs.entitlement_features.quota_mapping.object_limits.operator",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.billing_config.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.entitlement_configs.entitlement_features.quota_mapping.object_limits.operator",
+	}
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

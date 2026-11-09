@@ -602,6 +602,108 @@ func PersonaPreferencesValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SetTimeZoneRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SetTimeZoneRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SetTimeZoneRequest) DeepCopy() *SetTimeZoneRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SetTimeZoneRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SetTimeZoneRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SetTimeZoneRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SetTimeZoneRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSetTimeZoneRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSetTimeZoneRequest) TimeZoneValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for time_zone")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSetTimeZoneRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SetTimeZoneRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SetTimeZoneRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["time_zone"]; exists {
+		vOpts := append(opts, db.WithValidateField("time_zone"))
+		if err := fv(ctx, m.GetTimeZone(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSetTimeZoneRequestValidator = func() *ValidateSetTimeZoneRequest {
+	v := &ValidateSetTimeZoneRequest{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTimeZone := v.TimeZoneValidationRuleHandler
+	rulesTimeZone := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFn, err = vrhTimeZone(rulesTimeZone)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SetTimeZoneRequest.time_zone: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["time_zone"] = vFn
+
+	return v
+}()
+
+func SetTimeZoneRequestValidator() db.Validator {
+	return DefaultSetTimeZoneRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SetViewPreferenceRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

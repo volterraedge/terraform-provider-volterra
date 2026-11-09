@@ -243,6 +243,18 @@ func resourceVolterraBgp() *schema.Resource {
 							},
 						},
 
+						"ebgp_multihop_disabled": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"ebgp_multihop_enabled": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"disable": {
 
 							Type:     schema.TypeBool,
@@ -478,8 +490,9 @@ func resourceVolterraBgp() *schema.Resource {
 
 									"md5_auth_key": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:      schema.TypeString,
+										Optional:  true,
+										Sensitive: true,
 									},
 
 									"no_authentication": {
@@ -1342,6 +1355,32 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 							}
 
 						}
+					}
+
+				}
+
+				ebgpMultihopChoiceTypeFound := false
+
+				if v, ok := peersMapStrToI["ebgp_multihop_disabled"]; ok && !isIntfNil(v) && !ebgpMultihopChoiceTypeFound {
+
+					ebgpMultihopChoiceTypeFound = true
+
+					if v.(bool) {
+						ebgpMultihopChoiceInt := &ves_io_schema_bgp.Peer_EbgpMultihopDisabled{}
+						ebgpMultihopChoiceInt.EbgpMultihopDisabled = &ves_io_schema.Empty{}
+						peers[i].EbgpMultihopChoice = ebgpMultihopChoiceInt
+					}
+
+				}
+
+				if v, ok := peersMapStrToI["ebgp_multihop_enabled"]; ok && !isIntfNil(v) && !ebgpMultihopChoiceTypeFound {
+
+					ebgpMultihopChoiceTypeFound = true
+
+					if v.(bool) {
+						ebgpMultihopChoiceInt := &ves_io_schema_bgp.Peer_EbgpMultihopEnabled{}
+						ebgpMultihopChoiceInt.EbgpMultihopEnabled = &ves_io_schema.Empty{}
+						peers[i].EbgpMultihopChoice = ebgpMultihopChoiceInt
 					}
 
 				}
@@ -2926,6 +2965,32 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 							}
 
 						}
+					}
+
+				}
+
+				ebgpMultihopChoiceTypeFound := false
+
+				if v, ok := peersMapStrToI["ebgp_multihop_disabled"]; ok && !isIntfNil(v) && !ebgpMultihopChoiceTypeFound {
+
+					ebgpMultihopChoiceTypeFound = true
+
+					if v.(bool) {
+						ebgpMultihopChoiceInt := &ves_io_schema_bgp.Peer_EbgpMultihopDisabled{}
+						ebgpMultihopChoiceInt.EbgpMultihopDisabled = &ves_io_schema.Empty{}
+						peers[i].EbgpMultihopChoice = ebgpMultihopChoiceInt
+					}
+
+				}
+
+				if v, ok := peersMapStrToI["ebgp_multihop_enabled"]; ok && !isIntfNil(v) && !ebgpMultihopChoiceTypeFound {
+
+					ebgpMultihopChoiceTypeFound = true
+
+					if v.(bool) {
+						ebgpMultihopChoiceInt := &ves_io_schema_bgp.Peer_EbgpMultihopEnabled{}
+						ebgpMultihopChoiceInt.EbgpMultihopEnabled = &ves_io_schema.Empty{}
+						peers[i].EbgpMultihopChoice = ebgpMultihopChoiceInt
 					}
 
 				}

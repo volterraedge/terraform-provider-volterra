@@ -68,6 +68,13 @@ func (m *BrowserTypeMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *BrowserTypeMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *BrowserTypeMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -81,6 +88,29 @@ func (m *BrowserTypeMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *BrowserTypeMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *BrowserTypeMatch_StringValues:
+		return nil, nil
+	case *BrowserTypeMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -233,6 +263,13 @@ func (m *BrowserVersionMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *BrowserVersionMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *BrowserVersionMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -246,6 +283,29 @@ func (m *BrowserVersionMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *BrowserVersionMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *BrowserVersionMatch_StringValues:
+		return nil, nil
+	case *BrowserVersionMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -398,6 +458,13 @@ func (m *CPUUsageMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *CPUUsageMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CPUUsageMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -411,6 +478,29 @@ func (m *CPUUsageMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CPUUsageMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *CPUUsageMatch_IntValues:
+		return nil, nil
+	case *CPUUsageMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -633,6 +723,13 @@ func (m *ClientSSLCipher) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *ClientSSLCipher) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ClientSSLCipher) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -646,6 +743,29 @@ func (m *ClientSSLCipher) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ClientSSLCipher) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *ClientSSLCipher_StringValues:
+		return nil, nil
+	case *ClientSSLCipher_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -798,6 +918,13 @@ func (m *ClientSSLCipherBits) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *ClientSSLCipherBits) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ClientSSLCipherBits) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -811,6 +938,29 @@ func (m *ClientSSLCipherBits) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ClientSSLCipherBits) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *ClientSSLCipherBits_IntValues:
+		return nil, nil
+	case *ClientSSLCipherBits_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -963,6 +1113,13 @@ func (m *ClientSSLMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSelectorDRefInfo()
 }
+func (m *ClientSSLMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSelectorDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ClientSSLMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
@@ -994,6 +1151,47 @@ func (m *ClientSSLMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetCipherBits().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCipherBits().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cipher_bits." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ClientSSLMatch) GetSelectorDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSelector() == nil {
+		return nil, nil
+	}
+	switch m.GetSelector().(type) {
+	case *ClientSSLMatch_Protocol:
+		drInfos, err := m.GetProtocol().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetProtocol().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "protocol." + dri.DRField
+		}
+		return drInfos, err
+	case *ClientSSLMatch_Cipher:
+		drInfos, err := m.GetCipher().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCipher().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cipher." + dri.DRField
+		}
+		return drInfos, err
+	case *ClientSSLMatch_CipherBits:
+		drInfos, err := m.GetCipherBits().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCipherBits().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1193,6 +1391,13 @@ func (m *ClientSSLProtocol) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *ClientSSLProtocol) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ClientSSLProtocol) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -1206,6 +1411,29 @@ func (m *ClientSSLProtocol) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ClientSSLProtocol) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *ClientSSLProtocol_StringValues:
+		return nil, nil
+	case *ClientSSLProtocol_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1325,6 +1553,13 @@ func (m *DataGroupList) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDatagroupDRefInfo()
 }
+func (m *DataGroupList) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDatagroupDRefInfoForOverlay(generateHash)
+}
 
 func (m *DataGroupList) GetDatagroupDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetDatagroup()
@@ -1337,6 +1572,34 @@ func (m *DataGroupList) GetDatagroupDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("DataGroupList.datagroup[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "data_group.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "datagroup",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *DataGroupList) GetDatagroupDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetDatagroup()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("DataGroupList.datagroup[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "data_group.Object",
 			RefdUID:    ref.Uid,
@@ -1515,6 +1778,13 @@ func (m *DeviceMakeMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *DeviceMakeMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *DeviceMakeMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -1528,6 +1798,29 @@ func (m *DeviceMakeMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DeviceMakeMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *DeviceMakeMatch_StringValues:
+		return nil, nil
+	case *DeviceMakeMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1680,6 +1973,13 @@ func (m *DeviceModelMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *DeviceModelMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *DeviceModelMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -1693,6 +1993,29 @@ func (m *DeviceModelMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DeviceModelMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *DeviceModelMatch_StringValues:
+		return nil, nil
+	case *DeviceModelMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1845,6 +2168,13 @@ func (m *GeoIPMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *GeoIPMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GeoIPMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -1858,6 +2188,29 @@ func (m *GeoIPMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GeoIPMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *GeoIPMatch_StringValues:
+		return nil, nil
+	case *GeoIPMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2092,6 +2445,13 @@ func (m *HTTPBasicAuthMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *HTTPBasicAuthMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPBasicAuthMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -2105,6 +2465,29 @@ func (m *HTTPBasicAuthMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPBasicAuthMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *HTTPBasicAuthMatch_StringValues:
+		return nil, nil
+	case *HTTPBasicAuthMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2354,6 +2737,13 @@ func (m *HTTPConnectHost) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *HTTPConnectHost) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPConnectHost) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -2367,6 +2757,29 @@ func (m *HTTPConnectHost) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPConnectHost) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *HTTPConnectHost_StringValues:
+		return nil, nil
+	case *HTTPConnectHost_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2519,6 +2932,13 @@ func (m *HTTPConnectMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSelectorDRefInfo()
 }
+func (m *HTTPConnectMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSelectorDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPConnectMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
@@ -2540,6 +2960,37 @@ func (m *HTTPConnectMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetPort().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPort().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "port." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPConnectMatch) GetSelectorDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSelector() == nil {
+		return nil, nil
+	}
+	switch m.GetSelector().(type) {
+	case *HTTPConnectMatch_Host:
+		drInfos, err := m.GetHost().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHost().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "host." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPConnectMatch_Port:
+		drInfos, err := m.GetPort().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPort().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2727,6 +3178,13 @@ func (m *HTTPConnectPort) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *HTTPConnectPort) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPConnectPort) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -2740,6 +3198,29 @@ func (m *HTTPConnectPort) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPConnectPort) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *HTTPConnectPort_IntValues:
+		return nil, nil
+	case *HTTPConnectPort_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2892,6 +3373,13 @@ func (m *HTTPCookieMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *HTTPCookieMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPCookieMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -2905,6 +3393,29 @@ func (m *HTTPCookieMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPCookieMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *HTTPCookieMatch_StringValues:
+		return nil, nil
+	case *HTTPCookieMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -3122,6 +3633,13 @@ func (m *HTTPHeaderMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *HTTPHeaderMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPHeaderMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -3135,6 +3653,29 @@ func (m *HTTPHeaderMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPHeaderMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *HTTPHeaderMatch_StringValues:
+		return nil, nil
+	case *HTTPHeaderMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -3352,6 +3893,13 @@ func (m *HTTPHostFullStringMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *HTTPHostFullStringMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPHostFullStringMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -3365,6 +3913,29 @@ func (m *HTTPHostFullStringMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPHostFullStringMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *HTTPHostFullStringMatch_StringValues:
+		return nil, nil
+	case *HTTPHostFullStringMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -3544,6 +4115,13 @@ func (m *HTTPHostHostMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *HTTPHostHostMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPHostHostMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -3557,6 +4135,29 @@ func (m *HTTPHostHostMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPHostHostMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *HTTPHostHostMatch_StringValues:
+		return nil, nil
+	case *HTTPHostHostMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -3676,6 +4277,13 @@ func (m *HTTPHostMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSelectorDRefInfo()
 }
+func (m *HTTPHostMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSelectorDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPHostMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
@@ -3707,6 +4315,47 @@ func (m *HTTPHostMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetFullString().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetFullString().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "full_string." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPHostMatch) GetSelectorDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSelector() == nil {
+		return nil, nil
+	}
+	switch m.GetSelector().(type) {
+	case *HTTPHostMatch_Host:
+		drInfos, err := m.GetHost().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHost().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "host." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPHostMatch_Port:
+		drInfos, err := m.GetPort().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPort().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "port." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPHostMatch_FullString:
+		drInfos, err := m.GetFullString().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetFullString().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -3906,6 +4555,13 @@ func (m *HTTPHostPortMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *HTTPHostPortMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPHostPortMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -3919,6 +4575,29 @@ func (m *HTTPHostPortMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPHostPortMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *HTTPHostPortMatch_IntValues:
+		return nil, nil
+	case *HTTPHostPortMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4038,6 +4717,13 @@ func (m *HTTPMethodMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *HTTPMethodMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPMethodMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -4051,6 +4737,29 @@ func (m *HTTPMethodMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPMethodMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *HTTPMethodMatch_StringValues:
+		return nil, nil
+	case *HTTPMethodMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4242,6 +4951,13 @@ func (m *HTTPProxyAddressMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *HTTPProxyAddressMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPProxyAddressMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -4255,6 +4971,29 @@ func (m *HTTPProxyAddressMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPProxyAddressMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *HTTPProxyAddressMatch_StringValues:
+		return nil, nil
+	case *HTTPProxyAddressMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4374,6 +5113,13 @@ func (m *HTTPProxyMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSelectorDRefInfo()
 }
+func (m *HTTPProxyMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSelectorDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPProxyMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
@@ -4405,6 +5151,47 @@ func (m *HTTPProxyMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetRouteDomain().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRouteDomain().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "route_domain." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPProxyMatch) GetSelectorDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSelector() == nil {
+		return nil, nil
+	}
+	switch m.GetSelector().(type) {
+	case *HTTPProxyMatch_Address:
+		drInfos, err := m.GetAddress().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAddress().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "address." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPProxyMatch_Port:
+		drInfos, err := m.GetPort().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPort().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "port." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPProxyMatch_RouteDomain:
+		drInfos, err := m.GetRouteDomain().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRouteDomain().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4604,6 +5391,13 @@ func (m *HTTPProxyPortMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *HTTPProxyPortMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPProxyPortMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -4617,6 +5411,29 @@ func (m *HTTPProxyPortMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPProxyPortMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *HTTPProxyPortMatch_IntValues:
+		return nil, nil
+	case *HTTPProxyPortMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4736,6 +5553,13 @@ func (m *HTTPProxyRouteDomainMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *HTTPProxyRouteDomainMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPProxyRouteDomainMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -4749,6 +5573,29 @@ func (m *HTTPProxyRouteDomainMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPProxyRouteDomainMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *HTTPProxyRouteDomainMatch_StringValues:
+		return nil, nil
+	case *HTTPProxyRouteDomainMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4868,6 +5715,13 @@ func (m *HTTPRefererMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSelectorDRefInfo()
 }
+func (m *HTTPRefererMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSelectorDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPRefererMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
@@ -4969,6 +5823,117 @@ func (m *HTTPRefererMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetUrlUnnamedQueryParameter().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUrlUnnamedQueryParameter().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_unnamed_query_parameter." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPRefererMatch) GetSelectorDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSelector() == nil {
+		return nil, nil
+	}
+	switch m.GetSelector().(type) {
+	case *HTTPRefererMatch_UrlFullString:
+		drInfos, err := m.GetUrlFullString().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlFullString().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_full_string." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPRefererMatch_UrlExtension:
+		drInfos, err := m.GetUrlExtension().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlExtension().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_extension." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPRefererMatch_UrlHost:
+		drInfos, err := m.GetUrlHost().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlHost().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_host." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPRefererMatch_UrlPath:
+		drInfos, err := m.GetUrlPath().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlPath().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_path." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPRefererMatch_UrlPathSegment:
+		drInfos, err := m.GetUrlPathSegment().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlPathSegment().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_path_segment." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPRefererMatch_UrlPort:
+		drInfos, err := m.GetUrlPort().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlPort().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_port." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPRefererMatch_UrlQueryParameter:
+		drInfos, err := m.GetUrlQueryParameter().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlQueryParameter().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_query_parameter." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPRefererMatch_UrlQueryString:
+		drInfos, err := m.GetUrlQueryString().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlQueryString().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_query_string." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPRefererMatch_UrlScheme:
+		drInfos, err := m.GetUrlScheme().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlScheme().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_scheme." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPRefererMatch_UrlUnnamedQueryParameter:
+		drInfos, err := m.GetUrlUnnamedQueryParameter().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlUnnamedQueryParameter().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -5231,6 +6196,13 @@ func (m *HTTPSetCookieMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *HTTPSetCookieMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPSetCookieMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -5244,6 +6216,29 @@ func (m *HTTPSetCookieMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPSetCookieMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *HTTPSetCookieMatch_StringValues:
+		return nil, nil
+	case *HTTPSetCookieMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -5491,6 +6486,13 @@ func (m *HTTPStatusMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSelectorDRefInfo()
 }
+func (m *HTTPStatusMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSelectorDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPStatusMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
@@ -5522,6 +6524,47 @@ func (m *HTTPStatusMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetText().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetText().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "text." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPStatusMatch) GetSelectorDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSelector() == nil {
+		return nil, nil
+	}
+	switch m.GetSelector().(type) {
+	case *HTTPStatusMatch_FullString:
+		drInfos, err := m.GetFullString().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetFullString().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "full_string." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPStatusMatch_Code:
+		drInfos, err := m.GetCode().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCode().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "code." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPStatusMatch_Text:
+		drInfos, err := m.GetText().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetText().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -5694,6 +6737,13 @@ func (m *HTTPURIMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSelectorDRefInfo()
 }
+func (m *HTTPURIMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSelectorDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPURIMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
@@ -5795,6 +6845,117 @@ func (m *HTTPURIMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetUrlUnnamedQueryParameter().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUrlUnnamedQueryParameter().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_unnamed_query_parameter." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPURIMatch) GetSelectorDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSelector() == nil {
+		return nil, nil
+	}
+	switch m.GetSelector().(type) {
+	case *HTTPURIMatch_UrlFullString:
+		drInfos, err := m.GetUrlFullString().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlFullString().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_full_string." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPURIMatch_UrlExtension:
+		drInfos, err := m.GetUrlExtension().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlExtension().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_extension." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPURIMatch_UrlHost:
+		drInfos, err := m.GetUrlHost().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlHost().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_host." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPURIMatch_UrlPath:
+		drInfos, err := m.GetUrlPath().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlPath().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_path." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPURIMatch_UrlPathSegment:
+		drInfos, err := m.GetUrlPathSegment().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlPathSegment().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_path_segment." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPURIMatch_UrlPort:
+		drInfos, err := m.GetUrlPort().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlPort().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_port." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPURIMatch_UrlQueryParameter:
+		drInfos, err := m.GetUrlQueryParameter().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlQueryParameter().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_query_parameter." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPURIMatch_UrlQueryString:
+		drInfos, err := m.GetUrlQueryString().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlQueryString().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_query_string." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPURIMatch_UrlScheme:
+		drInfos, err := m.GetUrlScheme().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlScheme().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "url_scheme." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPURIMatch_UrlUnnamedQueryParameter:
+		drInfos, err := m.GetUrlUnnamedQueryParameter().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUrlUnnamedQueryParameter().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -6057,6 +7218,13 @@ func (m *HTTPUserAgentMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSelectorDRefInfo()
 }
+func (m *HTTPUserAgentMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSelectorDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPUserAgentMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
@@ -6108,6 +7276,67 @@ func (m *HTTPUserAgentMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetToken().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetToken().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "token." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPUserAgentMatch) GetSelectorDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSelector() == nil {
+		return nil, nil
+	}
+	switch m.GetSelector().(type) {
+	case *HTTPUserAgentMatch_BrowserType:
+		drInfos, err := m.GetBrowserType().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBrowserType().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "browser_type." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPUserAgentMatch_BrowserVersion:
+		drInfos, err := m.GetBrowserVersion().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBrowserVersion().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "browser_version." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPUserAgentMatch_DeviceMake:
+		drInfos, err := m.GetDeviceMake().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDeviceMake().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "device_make." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPUserAgentMatch_DeviceModel:
+		drInfos, err := m.GetDeviceModel().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDeviceModel().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "device_model." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPUserAgentMatch_Token:
+		drInfos, err := m.GetToken().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetToken().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -6304,6 +7533,13 @@ func (m *HTTPVersionMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSelectorDRefInfo()
 }
+func (m *HTTPVersionMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSelectorDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPVersionMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
@@ -6345,6 +7581,57 @@ func (m *HTTPVersionMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetVersionProtocol().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVersionProtocol().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "version_protocol." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPVersionMatch) GetSelectorDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSelector() == nil {
+		return nil, nil
+	}
+	switch m.GetSelector().(type) {
+	case *HTTPVersionMatch_VersionFullString:
+		drInfos, err := m.GetVersionFullString().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVersionFullString().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "version_full_string." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPVersionMatch_VersionMajor:
+		drInfos, err := m.GetVersionMajor().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVersionMajor().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "version_major." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPVersionMatch_VersionMinor:
+		drInfos, err := m.GetVersionMinor().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVersionMinor().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "version_minor." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPVersionMatch_VersionProtocol:
+		drInfos, err := m.GetVersionProtocol().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVersionProtocol().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -7370,6 +8657,13 @@ func (m *SSLALPNMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *SSLALPNMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SSLALPNMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -7383,6 +8677,29 @@ func (m *SSLALPNMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SSLALPNMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *SSLALPNMatch_StringValues:
+		return nil, nil
+	case *SSLALPNMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -7561,6 +8878,13 @@ func (m *SSLCertificateMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *SSLCertificateMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SSLCertificateMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -7574,6 +8898,29 @@ func (m *SSLCertificateMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SSLCertificateMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *SSLCertificateMatch_StringValues:
+		return nil, nil
+	case *SSLCertificateMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -7791,6 +9138,13 @@ func (m *SSLExtensionMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSelectorDRefInfo()
 }
+func (m *SSLExtensionMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSelectorDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SSLExtensionMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
@@ -7822,6 +9176,47 @@ func (m *SSLExtensionMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetAlpn().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAlpn().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "alpn." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SSLExtensionMatch) GetSelectorDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSelector() == nil {
+		return nil, nil
+	}
+	switch m.GetSelector().(type) {
+	case *SSLExtensionMatch_ServerName:
+		drInfos, err := m.GetServerName().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetServerName().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "server_name." + dri.DRField
+		}
+		return drInfos, err
+	case *SSLExtensionMatch_Npn:
+		drInfos, err := m.GetNpn().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNpn().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "npn." + dri.DRField
+		}
+		return drInfos, err
+	case *SSLExtensionMatch_Alpn:
+		drInfos, err := m.GetAlpn().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAlpn().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -7994,6 +9389,13 @@ func (m *SSLNPNMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *SSLNPNMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SSLNPNMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -8007,6 +9409,29 @@ func (m *SSLNPNMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SSLNPNMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *SSLNPNMatch_StringValues:
+		return nil, nil
+	case *SSLNPNMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -8185,6 +9610,13 @@ func (m *SSLServerNameMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *SSLServerNameMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SSLServerNameMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -8198,6 +9630,29 @@ func (m *SSLServerNameMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SSLServerNameMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *SSLServerNameMatch_StringValues:
+		return nil, nil
+	case *SSLServerNameMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -8350,6 +9805,13 @@ func (m *StatusCodeMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *StatusCodeMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *StatusCodeMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -8363,6 +9825,29 @@ func (m *StatusCodeMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *StatusCodeMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *StatusCodeMatch_IntValues:
+		return nil, nil
+	case *StatusCodeMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -8515,6 +10000,13 @@ func (m *StatusFullStringMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *StatusFullStringMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *StatusFullStringMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -8528,6 +10020,29 @@ func (m *StatusFullStringMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *StatusFullStringMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *StatusFullStringMatch_StringValues:
+		return nil, nil
+	case *StatusFullStringMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -8680,6 +10195,13 @@ func (m *StatusTextMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *StatusTextMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *StatusTextMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -8693,6 +10215,29 @@ func (m *StatusTextMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *StatusTextMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *StatusTextMatch_StringValues:
+		return nil, nil
+	case *StatusTextMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -8978,6 +10523,13 @@ func (m *TCPAddressMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *TCPAddressMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TCPAddressMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -8991,6 +10543,29 @@ func (m *TCPAddressMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TCPAddressMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *TCPAddressMatch_StringValues:
+		return nil, nil
+	case *TCPAddressMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -9143,6 +10718,13 @@ func (m *TCPMSSMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *TCPMSSMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TCPMSSMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -9156,6 +10738,29 @@ func (m *TCPMSSMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TCPMSSMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *TCPMSSMatch_IntValues:
+		return nil, nil
+	case *TCPMSSMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -9308,6 +10913,13 @@ func (m *TCPMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSelectorDRefInfo()
 }
+func (m *TCPMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSelectorDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TCPMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
@@ -9379,6 +10991,87 @@ func (m *TCPMatch) GetSelectorDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetTcpVlanId().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTcpVlanId().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tcp_vlan_id." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TCPMatch) GetSelectorDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetSelector() == nil {
+		return nil, nil
+	}
+	switch m.GetSelector().(type) {
+	case *TCPMatch_TcpAddress:
+		drInfos, err := m.GetTcpAddress().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTcpAddress().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tcp_address." + dri.DRField
+		}
+		return drInfos, err
+	case *TCPMatch_TcpMss:
+		drInfos, err := m.GetTcpMss().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTcpMss().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tcp_mss." + dri.DRField
+		}
+		return drInfos, err
+	case *TCPMatch_TcpPort:
+		drInfos, err := m.GetTcpPort().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTcpPort().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tcp_port." + dri.DRField
+		}
+		return drInfos, err
+	case *TCPMatch_TcpRouteDomain:
+		drInfos, err := m.GetTcpRouteDomain().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTcpRouteDomain().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tcp_route_domain." + dri.DRField
+		}
+		return drInfos, err
+	case *TCPMatch_TcpRtt:
+		drInfos, err := m.GetTcpRtt().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTcpRtt().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tcp_rtt." + dri.DRField
+		}
+		return drInfos, err
+	case *TCPMatch_TcpVlan:
+		drInfos, err := m.GetTcpVlan().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTcpVlan().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tcp_vlan." + dri.DRField
+		}
+		return drInfos, err
+	case *TCPMatch_TcpVlanId:
+		drInfos, err := m.GetTcpVlanId().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTcpVlanId().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -9638,6 +11331,13 @@ func (m *TCPPortMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *TCPPortMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TCPPortMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -9651,6 +11351,29 @@ func (m *TCPPortMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TCPPortMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *TCPPortMatch_IntValues:
+		return nil, nil
+	case *TCPPortMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -9803,6 +11526,13 @@ func (m *TCPRTTMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *TCPRTTMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TCPRTTMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -9816,6 +11546,29 @@ func (m *TCPRTTMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TCPRTTMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *TCPRTTMatch_IntValues:
+		return nil, nil
+	case *TCPRTTMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -9968,6 +11721,13 @@ func (m *TCPRouteDomainMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *TCPRouteDomainMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TCPRouteDomainMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -9981,6 +11741,29 @@ func (m *TCPRouteDomainMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TCPRouteDomainMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *TCPRouteDomainMatch_IntValues:
+		return nil, nil
+	case *TCPRouteDomainMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -10133,6 +11916,13 @@ func (m *TCPVLANIDMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *TCPVLANIDMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TCPVLANIDMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -10146,6 +11936,29 @@ func (m *TCPVLANIDMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TCPVLANIDMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *TCPVLANIDMatch_IntValues:
+		return nil, nil
+	case *TCPVLANIDMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -10298,6 +12111,13 @@ func (m *TCPVLANMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *TCPVLANMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TCPVLANMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -10311,6 +12131,29 @@ func (m *TCPVLANMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TCPVLANMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *TCPVLANMatch_StringValues:
+		return nil, nil
+	case *TCPVLANMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -10463,6 +12306,13 @@ func (m *URLExtensionMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *URLExtensionMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *URLExtensionMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -10476,6 +12326,29 @@ func (m *URLExtensionMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *URLExtensionMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *URLExtensionMatch_StringValues:
+		return nil, nil
+	case *URLExtensionMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -10628,6 +12501,13 @@ func (m *URLFullStringMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *URLFullStringMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *URLFullStringMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -10641,6 +12521,29 @@ func (m *URLFullStringMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *URLFullStringMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *URLFullStringMatch_StringValues:
+		return nil, nil
+	case *URLFullStringMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -10793,6 +12696,13 @@ func (m *URLHostMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *URLHostMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *URLHostMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -10806,6 +12716,29 @@ func (m *URLHostMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *URLHostMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *URLHostMatch_StringValues:
+		return nil, nil
+	case *URLHostMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -10958,6 +12891,13 @@ func (m *URLPathMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *URLPathMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *URLPathMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -10971,6 +12911,29 @@ func (m *URLPathMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *URLPathMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *URLPathMatch_StringValues:
+		return nil, nil
+	case *URLPathMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -11123,6 +13086,13 @@ func (m *URLPathSegmentMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *URLPathSegmentMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *URLPathSegmentMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -11136,6 +13106,29 @@ func (m *URLPathSegmentMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *URLPathSegmentMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *URLPathSegmentMatch_StringValues:
+		return nil, nil
+	case *URLPathSegmentMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -11294,6 +13287,13 @@ func (m *URLPortMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *URLPortMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *URLPortMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -11307,6 +13307,29 @@ func (m *URLPortMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *URLPortMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *URLPortMatch_IntValues:
+		return nil, nil
+	case *URLPortMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -11459,6 +13482,13 @@ func (m *URLQueryParameterMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *URLQueryParameterMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *URLQueryParameterMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -11472,6 +13502,29 @@ func (m *URLQueryParameterMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *URLQueryParameterMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *URLQueryParameterMatch_StringValues:
+		return nil, nil
+	case *URLQueryParameterMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -11630,6 +13683,13 @@ func (m *URLQueryStringMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *URLQueryStringMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *URLQueryStringMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -11643,6 +13703,29 @@ func (m *URLQueryStringMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *URLQueryStringMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *URLQueryStringMatch_StringValues:
+		return nil, nil
+	case *URLQueryStringMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -11795,6 +13878,13 @@ func (m *URLSchemeMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *URLSchemeMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *URLSchemeMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -11808,6 +13898,29 @@ func (m *URLSchemeMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *URLSchemeMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *URLSchemeMatch_StringValues:
+		return nil, nil
+	case *URLSchemeMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -11960,6 +14073,13 @@ func (m *URLUnnamedQueryParameterMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *URLUnnamedQueryParameterMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *URLUnnamedQueryParameterMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -11973,6 +14093,29 @@ func (m *URLUnnamedQueryParameterMatch) GetValuesDRefInfo() ([]db.DRefInfo, erro
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *URLUnnamedQueryParameterMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *URLUnnamedQueryParameterMatch_StringValues:
+		return nil, nil
+	case *URLUnnamedQueryParameterMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -12131,6 +14274,13 @@ func (m *UserAgentTokenMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *UserAgentTokenMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *UserAgentTokenMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -12144,6 +14294,29 @@ func (m *UserAgentTokenMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *UserAgentTokenMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *UserAgentTokenMatch_StringValues:
+		return nil, nil
+	case *UserAgentTokenMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -12321,6 +14494,13 @@ func (m *VersionFullStringMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *VersionFullStringMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *VersionFullStringMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -12334,6 +14514,29 @@ func (m *VersionFullStringMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *VersionFullStringMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *VersionFullStringMatch_StringValues:
+		return nil, nil
+	case *VersionFullStringMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -12486,6 +14689,13 @@ func (m *VersionMajorMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *VersionMajorMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *VersionMajorMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -12499,6 +14709,29 @@ func (m *VersionMajorMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *VersionMajorMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *VersionMajorMatch_IntValues:
+		return nil, nil
+	case *VersionMajorMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -12651,6 +14884,13 @@ func (m *VersionMinorMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *VersionMinorMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *VersionMinorMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -12664,6 +14904,29 @@ func (m *VersionMinorMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *VersionMinorMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *VersionMinorMatch_IntValues:
+		return nil, nil
+	case *VersionMinorMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -12816,6 +15079,13 @@ func (m *VersionProtocolMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *VersionProtocolMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *VersionProtocolMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -12829,6 +15099,29 @@ func (m *VersionProtocolMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *VersionProtocolMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *VersionProtocolMatch_StringValues:
+		return nil, nil
+	case *VersionProtocolMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -12981,6 +15274,13 @@ func (m *WebSocketMatch) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetValuesDRefInfo()
 }
+func (m *WebSocketMatch) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValuesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *WebSocketMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
@@ -12994,6 +15294,29 @@ func (m *WebSocketMatch) GetValuesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDatagroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "datagroup." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *WebSocketMatch) GetValuesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetValues() == nil {
+		return nil, nil
+	}
+	switch m.GetValues().(type) {
+	case *WebSocketMatch_StringValues:
+		return nil, nil
+	case *WebSocketMatch_Datagroup:
+		drInfos, err := m.GetDatagroup().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDatagroup().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

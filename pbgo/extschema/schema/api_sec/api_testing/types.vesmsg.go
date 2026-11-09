@@ -147,6 +147,7 @@ var DefaultApiKeyValidator = func() *ValidateApiKey {
 	rulesKey := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "128",
+		"ves.io.schema.rules.string.pattern":   "^[a-zA-Z0-9][a-zA-Z0-9_.-]*$",
 	}
 	vFn, err = vrhKey(rulesKey)
 	if err != nil {
@@ -172,6 +173,196 @@ var DefaultApiKeyValidator = func() *ValidateApiKey {
 
 func ApiKeyValidator() db.Validator {
 	return DefaultApiKeyValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ApiTestScanInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiTestScanInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiTestScanInfo) DeepCopy() *ApiTestScanInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiTestScanInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiTestScanInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiTestScanInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiTestScanInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApiTestScanInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiTestScanInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiTestScanInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiTestScanInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["completed_at"]; exists {
+		vOpts := append(opts, db.WithValidateField("completed_at"))
+		if err := fv(ctx, m.GetCompletedAt(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["created_at"]; exists {
+		vOpts := append(opts, db.WithValidateField("created_at"))
+		if err := fv(ctx, m.GetCreatedAt(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["domain"]; exists {
+		vOpts := append(opts, db.WithValidateField("domain"))
+		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["error"]; exists {
+		vOpts := append(opts, db.WithValidateField("error"))
+		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["kafka_message_created_at"]; exists {
+		vOpts := append(opts, db.WithValidateField("kafka_message_created_at"))
+		if err := fv(ctx, m.GetKafkaMessageCreatedAt(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["last_status_update"]; exists {
+		vOpts := append(opts, db.WithValidateField("last_status_update"))
+		if err := fv(ctx, m.GetLastStatusUpdate(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["started_at"]; exists {
+		vOpts := append(opts, db.WithValidateField("started_at"))
+		if err := fv(ctx, m.GetStartedAt(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["status"]; exists {
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiTestScanInfoValidator = func() *ValidateApiTestScanInfo {
+	v := &ValidateApiTestScanInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ApiTestScanInfoValidator() db.Validator {
+	return DefaultApiTestScanInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ApiTestingStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiTestingStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiTestingStatus) DeepCopy() *ApiTestingStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiTestingStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiTestingStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiTestingStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiTestingStatusValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApiTestingStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiTestingStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiTestingStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiTestingStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["last_updated"]; exists {
+		vOpts := append(opts, db.WithValidateField("last_updated"))
+		if err := fv(ctx, m.GetLastUpdated(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiTestingStatusValidator = func() *ValidateApiTestingStatus {
+	v := &ValidateApiTestingStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ApiTestingStatusValidator() db.Validator {
+	return DefaultApiTestingStatusValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -676,6 +867,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhCustomHeaderValue := v.CustomHeaderValueValidationRuleHandler
 	rulesCustomHeaderValue := map[string]string{
 		"ves.io.schema.rules.string.max_len": "128",
+		"ves.io.schema.rules.string.pattern": "^[^\\x00-\\x08\\x0A-\\x1F\\x7F]*$",
 	}
 	vFn, err = vrhCustomHeaderValue(rulesCustomHeaderValue)
 	if err != nil {
@@ -926,6 +1118,7 @@ var DefaultCredentialsValidator = func() *ValidateCredentials {
 	rulesCredentialName := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.pattern":   "^[a-zA-Z0-9][a-zA-Z0-9_.-]*$",
 	}
 	vFn, err = vrhCredentialName(rulesCredentialName)
 	if err != nil {
@@ -1360,6 +1553,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhCustomHeaderValue := v.CustomHeaderValueValidationRuleHandler
 	rulesCustomHeaderValue := map[string]string{
 		"ves.io.schema.rules.string.max_len": "128",
+		"ves.io.schema.rules.string.pattern": "^[^\\x00-\\x08\\x0A-\\x1F\\x7F]*$",
 	}
 	vFn, err = vrhCustomHeaderValue(rulesCustomHeaderValue)
 	if err != nil {
@@ -1603,6 +1797,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhCustomHeaderValue := v.CustomHeaderValueValidationRuleHandler
 	rulesCustomHeaderValue := map[string]string{
 		"ves.io.schema.rules.string.max_len": "128",
+		"ves.io.schema.rules.string.pattern": "^[^\\x00-\\x08\\x0A-\\x1F\\x7F]*$",
 	}
 	vFn, err = vrhCustomHeaderValue(rulesCustomHeaderValue)
 	if err != nil {
@@ -2055,6 +2250,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhCustomHeaderValue := v.CustomHeaderValueValidationRuleHandler
 	rulesCustomHeaderValue := map[string]string{
 		"ves.io.schema.rules.string.max_len": "128",
+		"ves.io.schema.rules.string.pattern": "^[^\\x00-\\x08\\x0A-\\x1F\\x7F]*$",
 	}
 	vFn, err = vrhCustomHeaderValue(rulesCustomHeaderValue)
 	if err != nil {

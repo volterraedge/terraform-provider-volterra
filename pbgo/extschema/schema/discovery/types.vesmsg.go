@@ -219,8 +219,39 @@ func (m *CbipCertificateAuthority) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetServerValidationChoiceDRefInfo()
 }
+func (m *CbipCertificateAuthority) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetServerValidationChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *CbipCertificateAuthority) GetServerValidationChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetServerValidationChoice().(type) {
+	case *CbipCertificateAuthority_TrustedCa:
+		vref := m.GetTrustedCa()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("trusted_ca_list.Object")
+		dri := db.DRefInfo{
+			RefdType:   "trusted_ca_list.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "trusted_ca",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *CbipCertificateAuthority_SkipServerVerification:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *CbipCertificateAuthority) GetServerValidationChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetServerValidationChoice().(type) {
 	case *CbipCertificateAuthority_TrustedCa:
 		vref := m.GetTrustedCa()
@@ -443,6 +474,24 @@ func (m *CbipCluster) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CbipCluster) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCbipCertificateAuthorityDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCbipCertificateAuthorityDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetCbipDevicesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCbipDevicesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CbipCluster) GetCbipCertificateAuthorityDRefInfo() ([]db.DRefInfo, error) {
@@ -452,6 +501,22 @@ func (m *CbipCluster) GetCbipCertificateAuthorityDRefInfo() ([]db.DRefInfo, erro
 	drInfos, err := m.GetCbipCertificateAuthority().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCbipCertificateAuthority().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cbip_certificate_authority." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CbipCluster) GetCbipCertificateAuthorityDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCbipCertificateAuthority() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCbipCertificateAuthority().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCbipCertificateAuthority().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -470,6 +535,26 @@ func (m *CbipCluster) GetCbipDevicesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCbipDevices() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("cbip_devices[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CbipCluster) GetCbipDevicesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCbipDevices() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetCbipDevices() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCbipDevices() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -877,6 +962,13 @@ func (m *CbipDeviceConfig) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCbipCertificateAuthorityDRefInfo()
 }
+func (m *CbipDeviceConfig) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCbipCertificateAuthorityDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CbipDeviceConfig) GetCbipCertificateAuthorityDRefInfo() ([]db.DRefInfo, error) {
@@ -886,6 +978,22 @@ func (m *CbipDeviceConfig) GetCbipCertificateAuthorityDRefInfo() ([]db.DRefInfo,
 	drInfos, err := m.GetCbipCertificateAuthority().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCbipCertificateAuthority().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cbip_certificate_authority." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CbipDeviceConfig) GetCbipCertificateAuthorityDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCbipCertificateAuthority() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCbipCertificateAuthority().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCbipCertificateAuthority().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1130,6 +1238,24 @@ func (m *CbipDiscoveryType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CbipDiscoveryType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCbipClustersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCbipClustersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServerCaDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServerCaDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CbipDiscoveryType) GetCbipClustersDRefInfo() ([]db.DRefInfo, error) {
@@ -1151,6 +1277,26 @@ func (m *CbipDiscoveryType) GetCbipClustersDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CbipDiscoveryType) GetCbipClustersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCbipClusters() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetCbipClusters() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCbipClusters() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("cbip_clusters[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 func (m *CbipDiscoveryType) GetServerCaDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetServerCa()
 	if len(refs) == 0 {
@@ -1162,6 +1308,34 @@ func (m *CbipDiscoveryType) GetServerCaDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("CbipDiscoveryType.server_ca[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "trusted_ca_list.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "server_ca",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CbipDiscoveryType) GetServerCaDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetServerCa()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CbipDiscoveryType.server_ca[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "trusted_ca_list.Object",
 			RefdUID:    ref.Uid,
@@ -2225,6 +2399,24 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDiscoveryChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDiscoveryChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWhereDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWhereDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2253,6 +2445,33 @@ func (m *CreateSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDiscoveryChoice().(type) {
+	case *CreateSpecType_DiscoveryK8S:
+		return nil, nil
+	case *CreateSpecType_DiscoveryConsul:
+		return nil, nil
+	case *CreateSpecType_DiscoveryCbip:
+		drInfos, err := m.GetDiscoveryCbip().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDiscoveryCbip().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "discovery_cbip." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_DiscoveryThirdParty:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
@@ -2261,6 +2480,22 @@ func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "where." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetWhereDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhere() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWhere().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWhere().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2908,6 +3143,24 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDiscoveryChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDiscoveryChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWhereDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWhereDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2936,6 +3189,33 @@ func (m *GetSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDiscoveryChoice().(type) {
+	case *GetSpecType_DiscoveryK8S:
+		return nil, nil
+	case *GetSpecType_DiscoveryConsul:
+		return nil, nil
+	case *GetSpecType_DiscoveryCbip:
+		drInfos, err := m.GetDiscoveryCbip().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDiscoveryCbip().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "discovery_cbip." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_DiscoveryThirdParty:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
@@ -2944,6 +3224,22 @@ func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "where." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetWhereDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhere() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWhere().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWhere().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -3296,6 +3592,29 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDiscoveryChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDiscoveryChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWhereDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWhereDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -3324,7 +3643,51 @@ func (m *GlobalSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDiscoveryChoice().(type) {
+	case *GlobalSpecType_DiscoveryK8S:
+		return nil, nil
+	case *GlobalSpecType_DiscoveryConsul:
+		return nil, nil
+	case *GlobalSpecType_DiscoveryCbip:
+		drInfos, err := m.GetDiscoveryCbip().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDiscoveryCbip().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "discovery_cbip." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_DiscoveryThirdParty:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -3377,6 +3740,22 @@ func (m *GlobalSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "where." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetWhereDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhere() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWhere().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWhere().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -5499,6 +5878,24 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDiscoveryChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDiscoveryChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWhereDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWhereDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -5527,6 +5924,33 @@ func (m *ReplaceSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetDiscoveryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDiscoveryChoice().(type) {
+	case *ReplaceSpecType_DiscoveryK8S:
+		return nil, nil
+	case *ReplaceSpecType_DiscoveryConsul:
+		return nil, nil
+	case *ReplaceSpecType_DiscoveryCbip:
+		drInfos, err := m.GetDiscoveryCbip().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDiscoveryCbip().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "discovery_cbip." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_DiscoveryThirdParty:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWhere() == nil {
@@ -5535,6 +5959,22 @@ func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWhere().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "where." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetWhereDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWhere() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWhere().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWhere().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

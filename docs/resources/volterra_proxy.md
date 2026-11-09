@@ -27,18 +27,11 @@ resource "volterra_proxy" "example" {
 // One of the arguments from this list "dynamic_proxy http_proxy" must be set
 
 
-dynamic_proxy {
+http_proxy {
 	
-// One of the arguments from this list "disable_dns_masquerade enable_dns_masquerade" must be set
+// One of the arguments from this list "enable_http enable_https" must be set
 
-	enable_dns_masquerade = true
-	
-domains = ["www.foo.com"]
-	
-// One of the arguments from this list "http_proxy https_proxy sni_proxy" must be set
-
-
-https_proxy {
+	enable_http = true
 	
 
 more_option {
@@ -89,7 +82,7 @@ cookies_to_modify {
 
 // One of the arguments from this list "ignore_samesite samesite_lax samesite_none samesite_strict" can be set
 
-	ignore_samesite = true
+	samesite_none = true
 	
 
 // One of the arguments from this list "add_secure ignore_secure" can be set
@@ -103,6 +96,10 @@ cookies_to_modify {
 			}
 	
 			disable_default_error_pages = true
+	
+// One of the arguments from this list "disable_http10 enable_http10" must be set
+
+	enable_http10 = true
 	
 			idle_timeout = "2000"
 	
@@ -133,7 +130,7 @@ jwt {
 
 // One of the arguments from this list "disable_path_normalize enable_path_normalize" can be set
 
-	disable_path_normalize = true
+	enable_path_normalize = true
 	
 
 request_cookies_to_add {
@@ -178,8 +175,7 @@ response_cookies_to_add {
 
 // One of the arguments from this list "add_expiry ignore_expiry" can be set
 
-	add_expiry = "add_expiry"
-
+	ignore_expiry = true
 	
 
 // One of the arguments from this list "add_httponly ignore_httponly" can be set
@@ -243,97 +239,14 @@ response_headers_to_remove = ["host"]
 
 // One of the arguments from this list "additional_domains enable_strict_sni_host_header_check" can be set
 
-
-additional_domains {
-	
-domains = ["www.foo.com"]
-	
-}
-	
-}
-	
-
-tls_params {
-	
-// One of the arguments from this list "no_mtls use_mtls" must be set
-
-	no_mtls = true
-	
-
-tls_certificates {
-	
-			certificate_url = "value"
-	
-			description = "Certificate used in production environment"
-	
-
-// One of the arguments from this list "custom_hash_algorithms disable_ocsp_stapling use_system_defaults" can be set
-
-
-use_system_defaults {
-	
-}
-	
-
-private_key {
-	
-
-blindfold_secret_info_internal {
-	
-			decryption_provider = "value"
-	
-			location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-	
-			store_provider = "value"
-	
-}
-	
-			secret_encoding_type = "secret_encoding_type"
-	
-// One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-
-blindfold_secret_info {
-	
-			decryption_provider = "value"
-	
-			location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-	
-			store_provider = "value"
-	
-}
-	
-}
-	
-}
-	
-
-tls_config {
-	
-// One of the arguments from this list "custom_security default_security low_security medium_security" must be set
-
-	medium_security = true
-	
-}
-	
-}
+	enable_strict_sni_host_header_check = true
 	
 }
 	
 }
 // One of the arguments from this list "active_forward_proxy_policies no_forward_proxy_policy" must be set
 
-
-active_forward_proxy_policies {
-	
-forward_proxy_policies {
-	name = "test1"
-	namespace = "staging"
-	tenant = "acmecorp"
-}
-		
-	
-}
+	no_forward_proxy_policy = true
 // One of the arguments from this list "do_not_advertise site_virtual_sites" must be set
 
 
@@ -458,7 +371,7 @@ Advertise on a customer site and a given network..
 
 `ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
 
-`network` - (Required) By default VIP chosen as ip address of primary network interface in the network (`String`). Must be one of: `SITE_NETWORK_INSIDE_AND_OUTSIDE`, `SITE_NETWORK_INSIDE`, `SITE_NETWORK_OUTSIDE`, `SITE_NETWORK_SERVICE`, `SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_IP_FABRIC`. Note: Current provider behavior does not return a validation error for invalid values and may fall back to default `SITE_NETWORK_INSIDE_AND_OUTSIDE`.
+`network` - (Required) By default VIP chosen as ip address of primary network interface in the network. Accepted values: `SITE_NETWORK_INSIDE_AND_OUTSIDE` (default), `SITE_NETWORK_INSIDE`, `SITE_NETWORK_OUTSIDE`, `SITE_NETWORK_SERVICE`, `SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_IP_FABRIC`. Note: an invalid/unrecognized value may currently fall back to the default `SITE_NETWORK_INSIDE_AND_OUTSIDE` instead of returning a validation error. (`String`).
 
 `site` - (Required) Reference to site object. See [ref](#ref) below for details.
 
@@ -466,7 +379,7 @@ Advertise on a customer site and a given network..
 
 Advertise on a customer virtual site and a given network..
 
-`network` - (Required) IP address of primary network interface in the network. Accepted values: `SITE_NETWORK_INSIDE`, `SITE_NETWORK_OUTSIDE`, `SITE_NETWORK_INSIDE_AND_OUTSIDE`. Note: Invalid values may currently fall back to default `SITE_NETWORK_INSIDE_AND_OUTSIDE` instead of returning a validation error (`String`).
+`network` - (Required) IP address of primary network interface in the network. Accepted values: `SITE_NETWORK_INSIDE_AND_OUTSIDE` (default), `SITE_NETWORK_INSIDE`, `SITE_NETWORK_OUTSIDE`, `SITE_NETWORK_SERVICE`, `SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_IP_FABRIC`. Note: an invalid/unrecognized value may currently fall back to the default `SITE_NETWORK_INSIDE_AND_OUTSIDE` instead of returning a validation error. (`String`).
 
 `virtual_site` - (Required) Reference to virtual site object. See [ref](#ref) below for details.
 
@@ -490,11 +403,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -538,6 +453,14 @@ Downstream TLS Parameters like certificate, private key, etc.
 
 Ignore expiry attribute.
 
+### Http10 Choice Disable Http10
+
+Reject HTTP/1.0 and HTTP/0.9 traffic on this LB..
+
+### Http10 Choice Enable Http10
+
+Allow HTTP/1.0 and HTTP/0.9 traffic on this LB..
+
 ### Http Https Choice Enable Http
 
 HTTP connect transaction is in cleartext(unencrypted).
@@ -563,6 +486,12 @@ Advanced More options like header manipulation, compression etc..
 `custom_errors` - (Optional) matches for a request. (`String`).
 
 `disable_default_error_pages` - (Optional) Disable the use of default F5XC error pages. (`Bool`).
+
+###### One of the arguments from this list "disable_http10, enable_http10" must be set
+
+`disable_http10` - (Optional) Reject HTTP/1.0 and HTTP/0.9 traffic on this LB. (`Bool`).
+
+`enable_http10` - (Optional) Allow HTTP/1.0 and HTTP/0.9 traffic on this LB. (`Bool`).
 
 `idle_timeout` - (Optional) received, otherwise the stream is reset. (`Int`).
 
@@ -635,6 +564,12 @@ Advanced More options like header manipulation, compression etc..
 `custom_errors` - (Optional) matches for a request. (`String`).
 
 `disable_default_error_pages` - (Optional) Disable the use of default F5XC error pages. (`Bool`).
+
+###### One of the arguments from this list "disable_http10, enable_http10" must be set
+
+`disable_http10` - (Optional) Reject HTTP/1.0 and HTTP/0.9 traffic on this LB. (`Bool`).
+
+`enable_http10` - (Optional) Allow HTTP/1.0 and HTTP/0.9 traffic on this LB. (`Bool`).
 
 `idle_timeout` - (Optional) received, otherwise the stream is reset. (`Int`).
 
@@ -1114,6 +1049,10 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
+
 ### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
@@ -1222,11 +1161,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -1302,11 +1243,13 @@ Secret Value of the Cookie header.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 

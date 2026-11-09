@@ -86,6 +86,29 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetOperGcSpecDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOperGcSpecDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetOriginPoolsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVipChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVipChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetOperGcSpecDRefInfo() ([]db.DRefInfo, error) {
@@ -95,6 +118,22 @@ func (m *GlobalSpecType) GetOperGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetOperGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetOperGcSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "oper_gc_spec." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetOperGcSpecDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOperGcSpec() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetOperGcSpec().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOperGcSpec().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -113,6 +152,26 @@ func (m *GlobalSpecType) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOriginPools() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("origin_pools[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetOriginPoolsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginPools() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetOriginPools() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOriginPools() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -145,6 +204,41 @@ func (m *GlobalSpecType) GetVipChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_DoNotAdvertise:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetVipChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVipChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetVipChoice().(type) {
+	case *GlobalSpecType_AdvertiseOnPublicDefaultVip:
+		return nil, nil
+	case *GlobalSpecType_AdvertiseOnPublic:
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_AdvertiseCustom:
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -584,6 +678,39 @@ func (m *OperGlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *OperGlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertiseSiteDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseSiteDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetAdvertiseVirtualNetworkDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseVirtualNetworkDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetAdvertiseVirtualSiteDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseVirtualSiteDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetEndpointNfvServiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetEndpointNfvServiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPublicIpDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPublicIpDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *OperGlobalSpecType) GetAdvertiseSiteDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetAdvertiseSite()
@@ -596,6 +723,34 @@ func (m *OperGlobalSpecType) GetAdvertiseSiteDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("OperGlobalSpecType.advertise_site[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "advertise_site",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *OperGlobalSpecType) GetAdvertiseSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetAdvertiseSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("OperGlobalSpecType.advertise_site[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
@@ -651,6 +806,34 @@ func (m *OperGlobalSpecType) GetAdvertiseVirtualNetworkDRefInfo() ([]db.DRefInfo
 	}
 	return drInfos, nil
 }
+func (m *OperGlobalSpecType) GetAdvertiseVirtualNetworkDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetAdvertiseVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("OperGlobalSpecType.advertise_virtual_network[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "advertise_virtual_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetAdvertiseVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *OperGlobalSpecType) GetAdvertiseVirtualNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -682,6 +865,34 @@ func (m *OperGlobalSpecType) GetAdvertiseVirtualSiteDRefInfo() ([]db.DRefInfo, e
 			return nil, fmt.Errorf("OperGlobalSpecType.advertise_virtual_site[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "advertise_virtual_site",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *OperGlobalSpecType) GetAdvertiseVirtualSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetAdvertiseVirtualSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("OperGlobalSpecType.advertise_virtual_site[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
@@ -737,6 +948,34 @@ func (m *OperGlobalSpecType) GetEndpointNfvServiceDRefInfo() ([]db.DRefInfo, err
 	}
 	return drInfos, nil
 }
+func (m *OperGlobalSpecType) GetEndpointNfvServiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetEndpointNfvService()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("OperGlobalSpecType.endpoint_nfv_service[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "nfv_service.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "endpoint_nfv_service",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetEndpointNfvServiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *OperGlobalSpecType) GetEndpointNfvServiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -768,6 +1007,34 @@ func (m *OperGlobalSpecType) GetPublicIpDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("OperGlobalSpecType.public_ip[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "public_ip.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "public_ip",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *OperGlobalSpecType) GetPublicIpDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetPublicIp()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("OperGlobalSpecType.public_ip[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "public_ip.Object",
 			RefdUID:    ref.Uid,
@@ -920,6 +1187,13 @@ func (m *OriginServerEndpointK8SServiceType) GetDRefInfo() ([]db.DRefInfo, error
 
 	return m.GetK8SServiceDRefInfo()
 }
+func (m *OriginServerEndpointK8SServiceType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetK8SServiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *OriginServerEndpointK8SServiceType) GetK8SServiceDRefInfo() ([]db.DRefInfo, error) {
@@ -929,6 +1203,22 @@ func (m *OriginServerEndpointK8SServiceType) GetK8SServiceDRefInfo() ([]db.DRefI
 	drInfos, err := m.GetK8SService().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "k8s_service." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *OriginServerEndpointK8SServiceType) GetK8SServiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetK8SService() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetK8SService().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetK8SService().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1054,8 +1344,32 @@ func (m *OriginServerEndpointNFVServiceType) GetDRefInfo() ([]db.DRefInfo, error
 
 	return m.GetEndpointNfvServiceDRefInfo()
 }
+func (m *OriginServerEndpointNFVServiceType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetEndpointNfvServiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *OriginServerEndpointNFVServiceType) GetEndpointNfvServiceDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetEndpointNfvService()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("nfv_service.Object")
+	dri := db.DRefInfo{
+		RefdType:   "nfv_service.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "endpoint_nfv_service",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *OriginServerEndpointNFVServiceType) GetEndpointNfvServiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetEndpointNfvService()
 	if vref == nil {
 		return nil, nil
@@ -1217,6 +1531,13 @@ func (m *OriginServerWithWeight) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetOriginServerChoiceDRefInfo()
 }
+func (m *OriginServerWithWeight) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetOriginServerChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *OriginServerWithWeight) GetOriginServerChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1238,6 +1559,37 @@ func (m *OriginServerWithWeight) GetOriginServerChoiceDRefInfo() ([]db.DRefInfo,
 		drInfos, err := m.GetK8SService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "k8s_service." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *OriginServerWithWeight) GetOriginServerChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetOriginServerChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOriginServerChoice().(type) {
+	case *OriginServerWithWeight_EndpointNfvService:
+		drInfos, err := m.GetEndpointNfvService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEndpointNfvService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "endpoint_nfv_service." + dri.DRField
+		}
+		return drInfos, err
+	case *OriginServerWithWeight_K8SService:
+		drInfos, err := m.GetK8SService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

@@ -96,6 +96,24 @@ func (m *AdvertiseCustomType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *AdvertiseCustomType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertiseWhereDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseWhereDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPortsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPortsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseCustomType) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) {
@@ -117,6 +135,26 @@ func (m *AdvertiseCustomType) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error)
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *AdvertiseCustomType) GetAdvertiseWhereDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseWhere() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetAdvertiseWhere() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseWhere() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("advertise_where[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *AdvertiseCustomType) GetPortsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPorts() == nil {
@@ -127,6 +165,26 @@ func (m *AdvertiseCustomType) GetPortsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPorts() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("ports[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AdvertiseCustomType) GetPortsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPorts() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetPorts() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPorts() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -495,6 +553,13 @@ func (m *AdvertiseMultiPortType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPortsDRefInfo()
 }
+func (m *AdvertiseMultiPortType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPortsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseMultiPortType) GetPortsDRefInfo() ([]db.DRefInfo, error) {
@@ -506,6 +571,26 @@ func (m *AdvertiseMultiPortType) GetPortsDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPorts() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("ports[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AdvertiseMultiPortType) GetPortsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPorts() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetPorts() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPorts() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -679,6 +764,13 @@ func (m *AdvertiseOptionsType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAdvertiseChoiceDRefInfo()
 }
+func (m *AdvertiseOptionsType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAdvertiseChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseOptionsType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -702,6 +794,41 @@ func (m *AdvertiseOptionsType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, erro
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
+		}
+		return drInfos, err
+	case *AdvertiseOptionsType_DoNotAdvertise:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AdvertiseOptionsType) GetAdvertiseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *AdvertiseOptionsType_AdvertiseInCluster:
+		return nil, nil
+	case *AdvertiseOptionsType_AdvertiseOnPublic:
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
+		}
+		return drInfos, err
+	case *AdvertiseOptionsType_AdvertiseCustom:
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -888,6 +1015,13 @@ func (m *AdvertisePortType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAdvertiseChoiceDRefInfo()
 }
+func (m *AdvertisePortType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAdvertiseChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AdvertisePortType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -899,6 +1033,29 @@ func (m *AdvertisePortType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) 
 		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+	case *AdvertisePortType_TcpLoadbalancer:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AdvertisePortType) GetAdvertiseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *AdvertisePortType_HttpLoadbalancer:
+		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1099,6 +1256,13 @@ func (m *AdvertisePublicType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAdvertiseChoiceDRefInfo()
 }
+func (m *AdvertisePublicType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAdvertiseChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AdvertisePublicType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1120,6 +1284,37 @@ func (m *AdvertisePublicType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error
 		drInfos, err := m.GetMultiPorts().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetMultiPorts().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "multi_ports." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AdvertisePublicType) GetAdvertiseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *AdvertisePublicType_Port:
+		drInfos, err := m.GetPort().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPort().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "port." + dri.DRField
+		}
+		return drInfos, err
+	case *AdvertisePublicType_MultiPorts:
+		drInfos, err := m.GetMultiPorts().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetMultiPorts().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1447,6 +1642,13 @@ func (m *AdvertiseSinglePortType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAdvertiseChoiceDRefInfo()
 }
+func (m *AdvertiseSinglePortType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAdvertiseChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseSinglePortType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1458,6 +1660,29 @@ func (m *AdvertiseSinglePortType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, e
 		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+	case *AdvertiseSinglePortType_TcpLoadbalancer:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AdvertiseSinglePortType) GetAdvertiseChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *AdvertiseSinglePortType_HttpLoadbalancer:
+		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1642,6 +1867,13 @@ func (m *AdvertiseWhereType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetChoiceDRefInfo()
 }
+func (m *AdvertiseWhereType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseWhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1673,6 +1905,47 @@ func (m *AdvertiseWhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetVk8SService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVk8SService().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "vk8s_service." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *AdvertiseWhereType) GetChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetChoice().(type) {
+	case *AdvertiseWhereType_Site:
+		drInfos, err := m.GetSite().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSite().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site." + dri.DRField
+		}
+		return drInfos, err
+	case *AdvertiseWhereType_VirtualSite:
+		drInfos, err := m.GetVirtualSite().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site." + dri.DRField
+		}
+		return drInfos, err
+	case *AdvertiseWhereType_Vk8SService:
+		drInfos, err := m.GetVk8SService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVk8SService().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2302,8 +2575,50 @@ func (m *ContainerType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ContainerType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFlavorChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetFlavorChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetImageDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetImageDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ContainerType) GetFlavorChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetFlavorChoice().(type) {
+	case *ContainerType_CustomFlavor:
+		vref := m.GetCustomFlavor()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("workload_flavor.Object")
+		dri := db.DRefInfo{
+			RefdType:   "workload_flavor.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "custom_flavor",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	case *ContainerType_DefaultFlavor:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ContainerType) GetFlavorChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetFlavorChoice().(type) {
 	case *ContainerType_CustomFlavor:
 		vref := m.GetCustomFlavor()
@@ -2369,6 +2684,22 @@ func (m *ContainerType) GetImageDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetImage().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetImage().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "image." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ContainerType) GetImageDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetImage() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetImage().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetImage().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2707,6 +3038,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetWorkloadChoiceDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWorkloadChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetWorkloadChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2748,6 +3086,57 @@ func (m *CreateSpecType) GetWorkloadChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetJob().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetJob().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "job." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetWorkloadChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWorkloadChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetWorkloadChoice().(type) {
+	case *CreateSpecType_SimpleService:
+		drInfos, err := m.GetSimpleService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSimpleService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "simple_service." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_Service:
+		drInfos, err := m.GetService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "service." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_StatefulService:
+		drInfos, err := m.GetStatefulService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStatefulService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "stateful_service." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_Job:
+		drInfos, err := m.GetJob().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetJob().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2920,6 +3309,13 @@ func (m *DeployCESiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSiteDRefInfo()
 }
+func (m *DeployCESiteType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteDRefInfoForOverlay(generateHash)
+}
 
 func (m *DeployCESiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetSite()
@@ -2934,6 +3330,30 @@ func (m *DeployCESiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("site.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "site",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *DeployCESiteType) GetSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSite()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("DeployCESiteType.site[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("site.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdTenant: vref.Tenant,
@@ -3123,6 +3543,13 @@ func (m *DeployCEVirtualSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetVirtualSiteDRefInfo()
 }
+func (m *DeployCEVirtualSiteType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualSiteDRefInfoForOverlay(generateHash)
+}
 
 func (m *DeployCEVirtualSiteType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetVirtualSite()
@@ -3137,6 +3564,30 @@ func (m *DeployCEVirtualSiteType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("virtual_site.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_site",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *DeployCEVirtualSiteType) GetVirtualSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetVirtualSite()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("DeployCEVirtualSiteType.virtual_site[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_site.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_site.Object",
 			RefdTenant: vref.Tenant,
@@ -3326,6 +3777,13 @@ func (m *DeployOptionsType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDeployChoiceDRefInfo()
 }
+func (m *DeployOptionsType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDeployChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *DeployOptionsType) GetDeployChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -3371,6 +3829,61 @@ func (m *DeployOptionsType) GetDeployChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetDeployReSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDeployReSites().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "deploy_re_sites." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *DeployOptionsType) GetDeployChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDeployChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDeployChoice().(type) {
+	case *DeployOptionsType_AllRes:
+		return nil, nil
+	case *DeployOptionsType_DeployReVirtualSites:
+		drInfos, err := m.GetDeployReVirtualSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDeployReVirtualSites().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "deploy_re_virtual_sites." + dri.DRField
+		}
+		return drInfos, err
+	case *DeployOptionsType_DeployCeVirtualSites:
+		drInfos, err := m.GetDeployCeVirtualSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDeployCeVirtualSites().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "deploy_ce_virtual_sites." + dri.DRField
+		}
+		return drInfos, err
+	case *DeployOptionsType_DeployCeSites:
+		drInfos, err := m.GetDeployCeSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDeployCeSites().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "deploy_ce_sites." + dri.DRField
+		}
+		return drInfos, err
+	case *DeployOptionsType_DefaultVirtualSites:
+		return nil, nil
+	case *DeployOptionsType_DeployReSites:
+		drInfos, err := m.GetDeployReSites().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDeployReSites().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -3565,6 +4078,13 @@ func (m *DeployRESiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSiteDRefInfo()
 }
+func (m *DeployRESiteType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteDRefInfoForOverlay(generateHash)
+}
 
 func (m *DeployRESiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetSite()
@@ -3579,6 +4099,30 @@ func (m *DeployRESiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("site.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "site",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *DeployRESiteType) GetSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetSite()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("DeployRESiteType.site[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("site.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "site.Object",
 			RefdTenant: vref.Tenant,
@@ -3768,6 +4312,13 @@ func (m *DeployREVirtualSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetVirtualSiteDRefInfo()
 }
+func (m *DeployREVirtualSiteType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualSiteDRefInfoForOverlay(generateHash)
+}
 
 func (m *DeployREVirtualSiteType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetVirtualSite()
@@ -3782,6 +4333,30 @@ func (m *DeployREVirtualSiteType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("virtual_site.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_site",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *DeployREVirtualSiteType) GetVirtualSiteDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetVirtualSite()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("DeployREVirtualSiteType.virtual_site[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_site.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "virtual_site.Object",
 			RefdTenant: vref.Tenant,
@@ -4541,6 +5116,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetWorkloadChoiceDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWorkloadChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetWorkloadChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -4582,6 +5164,57 @@ func (m *GetSpecType) GetWorkloadChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetJob().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetJob().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "job." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetWorkloadChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWorkloadChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetWorkloadChoice().(type) {
+	case *GetSpecType_SimpleService:
+		drInfos, err := m.GetSimpleService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSimpleService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "simple_service." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_Service:
+		drInfos, err := m.GetService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "service." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_StatefulService:
+		drInfos, err := m.GetStatefulService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStatefulService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "stateful_service." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_Job:
+		drInfos, err := m.GetJob().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetJob().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -4786,8 +5419,48 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualK8SDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualK8SDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWorkloadChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWorkloadChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -4833,6 +5506,23 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 }
 
 func (m *GlobalSpecType) GetVirtualK8SDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetVirtualK8S()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_k8s.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_k8s.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "virtual_k8s",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetVirtualK8SDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetVirtualK8S()
 	if vref == nil {
 		return nil, nil
@@ -4917,6 +5607,57 @@ func (m *GlobalSpecType) GetWorkloadChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetJob().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetJob().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "job." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetWorkloadChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWorkloadChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetWorkloadChoice().(type) {
+	case *GlobalSpecType_SimpleService:
+		drInfos, err := m.GetSimpleService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSimpleService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "simple_service." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_Service:
+		drInfos, err := m.GetService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "service." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_StatefulService:
+		drInfos, err := m.GetStatefulService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStatefulService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "stateful_service." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_Job:
+		drInfos, err := m.GetJob().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetJob().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -5354,6 +6095,24 @@ func (m *HTTPLoadBalancerType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *HTTPLoadBalancerType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetRouteChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetRouteChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPLoadBalancerType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
@@ -5388,6 +6147,39 @@ func (m *HTTPLoadBalancerType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, err
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPLoadBalancerType) GetLoadbalancerTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *HTTPLoadBalancerType_Http:
+		return nil, nil
+	case *HTTPLoadBalancerType_HttpsAutoCert:
+		drInfos, err := m.GetHttpsAutoCert().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpsAutoCert().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https_auto_cert." + dri.DRField
+		}
+		return drInfos, err
+	case *HTTPLoadBalancerType_Https:
+		drInfos, err := m.GetHttps().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *HTTPLoadBalancerType) GetRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetRouteChoice() == nil {
@@ -5400,6 +6192,29 @@ func (m *HTTPLoadBalancerType) GetRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetSpecificRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSpecificRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "specific_routes." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPLoadBalancerType) GetRouteChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRouteChoice().(type) {
+	case *HTTPLoadBalancerType_DefaultRoute:
+		return nil, nil
+	case *HTTPLoadBalancerType_SpecificRoutes:
+		drInfos, err := m.GetSpecificRoutes().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSpecificRoutes().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -6239,8 +7054,39 @@ func (m *ImageType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRegistryChoiceDRefInfo()
 }
+func (m *ImageType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRegistryChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *ImageType) GetRegistryChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetRegistryChoice().(type) {
+	case *ImageType_Public:
+		return nil, nil
+	case *ImageType_ContainerRegistry:
+		vref := m.GetContainerRegistry()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("container_registry.Object")
+		dri := db.DRefInfo{
+			RefdType:   "container_registry.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "container_registry",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ImageType) GetRegistryChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetRegistryChoice().(type) {
 	case *ImageType_Public:
 		return nil, nil
@@ -6477,6 +7323,24 @@ func (m *JobType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *JobType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetContainersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetContainersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDeployOptionsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDeployOptionsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *JobType) GetContainersDRefInfo() ([]db.DRefInfo, error) {
@@ -6498,6 +7362,26 @@ func (m *JobType) GetContainersDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *JobType) GetContainersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetContainers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetContainers() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetContainers() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("containers[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *JobType) GetDeployOptionsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDeployOptions() == nil {
@@ -6506,6 +7390,22 @@ func (m *JobType) GetDeployOptionsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetDeployOptions().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDeployOptions().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "deploy_options." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *JobType) GetDeployOptionsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDeployOptions() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDeployOptions().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDeployOptions().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -8043,6 +8943,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetWorkloadChoiceDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWorkloadChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetWorkloadChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -8084,6 +8991,57 @@ func (m *ReplaceSpecType) GetWorkloadChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetJob().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetJob().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "job." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetWorkloadChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWorkloadChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetWorkloadChoice().(type) {
+	case *ReplaceSpecType_SimpleService:
+		drInfos, err := m.GetSimpleService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSimpleService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "simple_service." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_Service:
+		drInfos, err := m.GetService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "service." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_StatefulService:
+		drInfos, err := m.GetStatefulService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStatefulService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "stateful_service." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_Job:
+		drInfos, err := m.GetJob().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetJob().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -8256,6 +9214,13 @@ func (m *RouteInfoType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetChoiceDRefInfo()
 }
+func (m *RouteInfoType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *RouteInfoType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -8273,6 +9238,33 @@ func (m *RouteInfoType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetCustomRouteObject().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomRouteObject().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "custom_route_object." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RouteInfoType) GetChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetChoice().(type) {
+	case *RouteInfoType_SimpleRoute:
+		return nil, nil
+	case *RouteInfoType_RedirectRoute:
+		return nil, nil
+	case *RouteInfoType_DirectResponseRoute:
+		return nil, nil
+	case *RouteInfoType_CustomRouteObject:
+		drInfos, err := m.GetCustomRouteObject().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCustomRouteObject().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -8445,6 +9437,13 @@ func (m *RouteType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRoutesDRefInfo()
 }
+func (m *RouteType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRoutesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *RouteType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
@@ -8456,6 +9455,26 @@ func (m *RouteType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *RouteType) GetRoutesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRoutes() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutes() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -8641,6 +9660,29 @@ func (m *ServiceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ServiceType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertiseOptionsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseOptionsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetContainersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetContainersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDeployOptionsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDeployOptionsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ServiceType) GetAdvertiseOptionsDRefInfo() ([]db.DRefInfo, error) {
@@ -8650,6 +9692,22 @@ func (m *ServiceType) GetAdvertiseOptionsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetAdvertiseOptions().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAdvertiseOptions().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "advertise_options." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ServiceType) GetAdvertiseOptionsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseOptions() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAdvertiseOptions().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseOptions().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -8678,6 +9736,26 @@ func (m *ServiceType) GetContainersDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ServiceType) GetContainersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetContainers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetContainers() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetContainers() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("containers[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *ServiceType) GetDeployOptionsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDeployOptions() == nil {
@@ -8686,6 +9764,22 @@ func (m *ServiceType) GetDeployOptionsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetDeployOptions().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDeployOptions().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "deploy_options." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ServiceType) GetDeployOptionsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDeployOptions() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDeployOptions().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDeployOptions().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -9057,6 +10151,13 @@ func (m *SimpleServiceType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetContainerDRefInfo()
 }
+func (m *SimpleServiceType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetContainerDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *SimpleServiceType) GetContainerDRefInfo() ([]db.DRefInfo, error) {
@@ -9066,6 +10167,22 @@ func (m *SimpleServiceType) GetContainerDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetContainer().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetContainer().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "container." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *SimpleServiceType) GetContainerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetContainer() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetContainer().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetContainer().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -9479,6 +10596,29 @@ func (m *StatefulServiceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *StatefulServiceType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertiseOptionsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseOptionsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetContainersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetContainersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDeployOptionsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDeployOptionsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *StatefulServiceType) GetAdvertiseOptionsDRefInfo() ([]db.DRefInfo, error) {
@@ -9488,6 +10628,22 @@ func (m *StatefulServiceType) GetAdvertiseOptionsDRefInfo() ([]db.DRefInfo, erro
 	drInfos, err := m.GetAdvertiseOptions().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAdvertiseOptions().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "advertise_options." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *StatefulServiceType) GetAdvertiseOptionsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAdvertiseOptions() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetAdvertiseOptions().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseOptions().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -9516,6 +10672,26 @@ func (m *StatefulServiceType) GetContainersDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *StatefulServiceType) GetContainersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetContainers() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetContainers() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetContainers() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("containers[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *StatefulServiceType) GetDeployOptionsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDeployOptions() == nil {
@@ -9524,6 +10700,22 @@ func (m *StatefulServiceType) GetDeployOptionsDRefInfo() ([]db.DRefInfo, error) 
 	drInfos, err := m.GetDeployOptions().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDeployOptions().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "deploy_options." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *StatefulServiceType) GetDeployOptionsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDeployOptions() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetDeployOptions().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDeployOptions().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

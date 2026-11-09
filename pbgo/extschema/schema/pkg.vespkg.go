@@ -271,6 +271,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.TextBlock"] = TextBlockValidator()
 	vr["ves.io.schema.Tile"] = TileValidator()
 	vr["ves.io.schema.Tiles"] = TilesValidator()
+	vr["ves.io.schema.UnitConfiguration"] = UnitConfigurationValidator()
 	vr["ves.io.schema.ValueAtPath"] = ValueAtPathValidator()
 }
 

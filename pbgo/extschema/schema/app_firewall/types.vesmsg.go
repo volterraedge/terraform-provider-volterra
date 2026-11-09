@@ -4306,7 +4306,7 @@ var DefaultSignaturesStagingSettingsValidator = func() *ValidateSignaturesStagin
 	rulesStagingPeriod := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.uint32.gte":       "1",
-		"ves.io.schema.rules.uint32.lte":       "20",
+		"ves.io.schema.rules.uint32.lte":       "30",
 	}
 	vFn, err = vrhStagingPeriod(rulesStagingPeriod)
 	if err != nil {

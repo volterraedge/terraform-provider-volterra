@@ -200,8 +200,32 @@ func (m *AwsService) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveryCloudObjectDRefInfo()
 }
+func (m *AwsService) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryCloudObjectDRefInfoForOverlay(generateHash)
+}
 
 func (m *AwsService) GetDiscoveryCloudObjectDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetDiscoveryCloudObject()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("discovery_cloud.Object")
+	dri := db.DRefInfo{
+		RefdType:   "discovery_cloud.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "discovery_cloud_object",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *AwsService) GetDiscoveryCloudObjectDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetDiscoveryCloudObject()
 	if vref == nil {
 		return nil, nil
@@ -485,8 +509,32 @@ func (m *ConsulService) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveryObjectDRefInfo()
 }
+func (m *ConsulService) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryObjectDRefInfoForOverlay(generateHash)
+}
 
 func (m *ConsulService) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetDiscoveryObject()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "discovery_object",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ConsulService) GetDiscoveryObjectDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetDiscoveryObject()
 	if vref == nil {
 		return nil, nil
@@ -788,6 +836,29 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetHttpLoadBalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpLoadBalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServiceTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServiceTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTcpLoadBalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTcpLoadBalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *CreateSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetHttpLoadBalancers()
@@ -802,6 +873,30 @@ func (m *CreateSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("http_loadbalancer.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http_loadbalancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "http_load_balancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetHttpLoadBalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetHttpLoadBalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("CreateSpecType.http_load_balancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("http_loadbalancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "http_loadbalancer.Object",
 			RefdTenant: vref.Tenant,
@@ -913,6 +1008,77 @@ func (m *CreateSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetServiceTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServiceType() == nil {
+		return nil, nil
+	}
+	switch m.GetServiceType().(type) {
+	case *CreateSpecType_VirtualServer:
+		drInfos, err := m.GetVirtualServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_server." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_K8SService:
+		drInfos, err := m.GetK8SService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "k8s_service." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_ConsulService:
+		drInfos, err := m.GetConsulService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "consul_service." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_N1DiscoveredServer:
+		drInfos, err := m.GetN1DiscoveredServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetN1DiscoveredServer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "n1_discovered_server." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_ThirdParty:
+		drInfos, err := m.GetThirdParty().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetThirdParty().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "third_party." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_AwsService:
+		drInfos, err := m.GetAwsService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_service." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *CreateSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetTcpLoadBalancers()
 	if len(vrefs) == 0 {
@@ -926,6 +1092,30 @@ func (m *CreateSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("tcp_loadbalancer.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tcp_loadbalancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "tcp_load_balancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CreateSpecType) GetTcpLoadBalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetTcpLoadBalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("CreateSpecType.tcp_load_balancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("tcp_loadbalancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "tcp_loadbalancer.Object",
 			RefdTenant: vref.Tenant,
@@ -1239,6 +1429,29 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetHttpLoadBalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpLoadBalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServiceTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServiceTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTcpLoadBalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTcpLoadBalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetHttpLoadBalancers()
@@ -1253,6 +1466,30 @@ func (m *GetSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("http_loadbalancer.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http_loadbalancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "http_load_balancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetHttpLoadBalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetHttpLoadBalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.http_load_balancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("http_loadbalancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "http_loadbalancer.Object",
 			RefdTenant: vref.Tenant,
@@ -1364,6 +1601,77 @@ func (m *GetSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetServiceTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServiceType() == nil {
+		return nil, nil
+	}
+	switch m.GetServiceType().(type) {
+	case *GetSpecType_VirtualServer:
+		drInfos, err := m.GetVirtualServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_server." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_K8SService:
+		drInfos, err := m.GetK8SService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "k8s_service." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_ConsulService:
+		drInfos, err := m.GetConsulService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "consul_service." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_N1DiscoveredServer:
+		drInfos, err := m.GetN1DiscoveredServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetN1DiscoveredServer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "n1_discovered_server." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_ThirdParty:
+		drInfos, err := m.GetThirdParty().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetThirdParty().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "third_party." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_AwsService:
+		drInfos, err := m.GetAwsService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_service." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GetSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetTcpLoadBalancers()
 	if len(vrefs) == 0 {
@@ -1377,6 +1685,30 @@ func (m *GetSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("tcp_loadbalancer.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tcp_loadbalancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "tcp_load_balancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetTcpLoadBalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetTcpLoadBalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.tcp_load_balancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("tcp_loadbalancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "tcp_loadbalancer.Object",
 			RefdTenant: vref.Tenant,
@@ -1700,6 +2032,39 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetHttpLoadBalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpLoadBalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInternalVirtualHostDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInternalVirtualHostDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServiceTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServiceTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTcpLoadBalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTcpLoadBalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetHttpLoadBalancers()
@@ -1714,6 +2079,30 @@ func (m *GlobalSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("http_loadbalancer.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http_loadbalancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "http_load_balancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetHttpLoadBalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetHttpLoadBalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.http_load_balancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("http_loadbalancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "http_loadbalancer.Object",
 			RefdTenant: vref.Tenant,
@@ -1755,6 +2144,23 @@ func (m *GlobalSpecType) GetHttpLoadBalancersDBEntries(ctx context.Context, d db
 }
 
 func (m *GlobalSpecType) GetInternalVirtualHostDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetInternalVirtualHost()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bigip_virtual_server.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bigip_virtual_server.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "internal_virtual_host",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetInternalVirtualHostDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetInternalVirtualHost()
 	if vref == nil {
 		return nil, nil
@@ -1870,6 +2276,77 @@ func (m *GlobalSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetServiceTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServiceType() == nil {
+		return nil, nil
+	}
+	switch m.GetServiceType().(type) {
+	case *GlobalSpecType_VirtualServer:
+		drInfos, err := m.GetVirtualServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_server." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_K8SService:
+		drInfos, err := m.GetK8SService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "k8s_service." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_ConsulService:
+		drInfos, err := m.GetConsulService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "consul_service." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_N1DiscoveredServer:
+		drInfos, err := m.GetN1DiscoveredServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetN1DiscoveredServer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "n1_discovered_server." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_ThirdParty:
+		drInfos, err := m.GetThirdParty().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetThirdParty().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "third_party." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_AwsService:
+		drInfos, err := m.GetAwsService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_service." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetTcpLoadBalancers()
 	if len(vrefs) == 0 {
@@ -1883,6 +2360,30 @@ func (m *GlobalSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("tcp_loadbalancer.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tcp_loadbalancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "tcp_load_balancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetTcpLoadBalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetTcpLoadBalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.tcp_load_balancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("tcp_loadbalancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "tcp_loadbalancer.Object",
 			RefdTenant: vref.Tenant,
@@ -1924,6 +2425,23 @@ func (m *GlobalSpecType) GetTcpLoadBalancersDBEntries(ctx context.Context, d db.
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -2239,8 +2757,32 @@ func (m *K8SService) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveryObjectDRefInfo()
 }
+func (m *K8SService) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryObjectDRefInfoForOverlay(generateHash)
+}
 
 func (m *K8SService) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetDiscoveryObject()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "discovery_object",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *K8SService) GetDiscoveryObjectDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetDiscoveryObject()
 	if vref == nil {
 		return nil, nil
@@ -2526,8 +3068,32 @@ func (m *NginxOneDiscoveredServer) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNginxServiceDiscoveryRefDRefInfo()
 }
+func (m *NginxOneDiscoveredServer) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNginxServiceDiscoveryRefDRefInfoForOverlay(generateHash)
+}
 
 func (m *NginxOneDiscoveredServer) GetNginxServiceDiscoveryRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetNginxServiceDiscoveryRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("nginx_service_discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "nginx_service_discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "nginx_service_discovery_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *NginxOneDiscoveredServer) GetNginxServiceDiscoveryRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetNginxServiceDiscoveryRef()
 	if vref == nil {
 		return nil, nil
@@ -2823,6 +3389,29 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetHttpLoadBalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpLoadBalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetServiceTypeDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetServiceTypeDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTcpLoadBalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTcpLoadBalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *ReplaceSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetHttpLoadBalancers()
@@ -2837,6 +3426,30 @@ func (m *ReplaceSpecType) GetHttpLoadBalancersDRefInfo() ([]db.DRefInfo, error) 
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("http_loadbalancer.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "http_loadbalancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "http_load_balancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetHttpLoadBalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetHttpLoadBalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.http_load_balancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("http_loadbalancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "http_loadbalancer.Object",
 			RefdTenant: vref.Tenant,
@@ -2948,6 +3561,77 @@ func (m *ReplaceSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetServiceTypeDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServiceType() == nil {
+		return nil, nil
+	}
+	switch m.GetServiceType().(type) {
+	case *ReplaceSpecType_VirtualServer:
+		drInfos, err := m.GetVirtualServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualServer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_server." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_K8SService:
+		drInfos, err := m.GetK8SService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "k8s_service." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_ConsulService:
+		drInfos, err := m.GetConsulService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "consul_service." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_N1DiscoveredServer:
+		drInfos, err := m.GetN1DiscoveredServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetN1DiscoveredServer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "n1_discovered_server." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_ThirdParty:
+		drInfos, err := m.GetThirdParty().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetThirdParty().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "third_party." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_AwsService:
+		drInfos, err := m.GetAwsService().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAwsService().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws_service." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *ReplaceSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetTcpLoadBalancers()
 	if len(vrefs) == 0 {
@@ -2961,6 +3645,30 @@ func (m *ReplaceSpecType) GetTcpLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("tcp_loadbalancer.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tcp_loadbalancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "tcp_load_balancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ReplaceSpecType) GetTcpLoadBalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetTcpLoadBalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.tcp_load_balancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("tcp_loadbalancer.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "tcp_loadbalancer.Object",
 			RefdTenant: vref.Tenant,
@@ -3258,8 +3966,32 @@ func (m *ThirdPartyApplicationDiscovery) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveryObjectDRefInfo()
 }
+func (m *ThirdPartyApplicationDiscovery) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryObjectDRefInfoForOverlay(generateHash)
+}
 
 func (m *ThirdPartyApplicationDiscovery) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetDiscoveryObject()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "discovery_object",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ThirdPartyApplicationDiscovery) GetDiscoveryObjectDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetDiscoveryObject()
 	if vref == nil {
 		return nil, nil
@@ -3386,8 +4118,32 @@ func (m *VirtualServer) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDiscoveryObjectDRefInfo()
 }
+func (m *VirtualServer) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryObjectDRefInfoForOverlay(generateHash)
+}
 
 func (m *VirtualServer) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetDiscoveryObject()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "discovery_object",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *VirtualServer) GetDiscoveryObjectDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetDiscoveryObject()
 	if vref == nil {
 		return nil, nil

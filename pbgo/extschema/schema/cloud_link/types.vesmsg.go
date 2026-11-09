@@ -758,8 +758,32 @@ func (m *AWSType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAwsCredDRefInfo()
 }
+func (m *AWSType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAwsCredDRefInfoForOverlay(generateHash)
+}
 
 func (m *AWSType) GetAwsCredDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAwsCred()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_credentials.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_credentials.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "aws_cred",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *AWSType) GetAwsCredDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetAwsCred()
 	if vref == nil {
 		return nil, nil
@@ -1125,6 +1149,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCloudProviderDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudProviderDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
@@ -1148,6 +1179,39 @@ func (m *CreateSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetCloudProviderDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCloudProvider() == nil {
+		return nil, nil
+	}
+	switch m.GetCloudProvider().(type) {
+	case *CreateSpecType_Aws:
+		drInfos, err := m.GetAws().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAws().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_Azure:
+		return nil, nil
+	case *CreateSpecType_Gcp:
+		drInfos, err := m.GetGcp().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcp().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1828,8 +1892,32 @@ func (m *GCPType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetGcpCredDRefInfo()
 }
+func (m *GCPType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGcpCredDRefInfoForOverlay(generateHash)
+}
 
 func (m *GCPType) GetGcpCredDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetGcpCred()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_credentials.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_credentials.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "gcp_cred",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GCPType) GetGcpCredDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetGcpCred()
 	if vref == nil {
 		return nil, nil
@@ -2046,6 +2134,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCloudProviderDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudProviderDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
@@ -2069,6 +2164,39 @@ func (m *GetSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetCloudProviderDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCloudProvider() == nil {
+		return nil, nil
+	}
+	switch m.GetCloudProvider().(type) {
+	case *GetSpecType_Aws:
+		drInfos, err := m.GetAws().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAws().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_Azure:
+		return nil, nil
+	case *GetSpecType_Gcp:
+		drInfos, err := m.GetGcp().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcp().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2331,6 +2459,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCloudProviderDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudProviderDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
@@ -2354,6 +2489,39 @@ func (m *GlobalSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetCloudProviderDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCloudProvider() == nil {
+		return nil, nil
+	}
+	switch m.GetCloudProvider().(type) {
+	case *GlobalSpecType_Aws:
+		drInfos, err := m.GetAws().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAws().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_Azure:
+		return nil, nil
+	case *GlobalSpecType_Gcp:
+		drInfos, err := m.GetGcp().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcp().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2816,6 +2984,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCloudProviderDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudProviderDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
@@ -2839,6 +3014,39 @@ func (m *ReplaceSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetCloudProviderDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCloudProvider() == nil {
+		return nil, nil
+	}
+	switch m.GetCloudProvider().(type) {
+	case *ReplaceSpecType_Aws:
+		drInfos, err := m.GetAws().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAws().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_Azure:
+		return nil, nil
+	case *ReplaceSpecType_Gcp:
+		drInfos, err := m.GetGcp().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcp().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

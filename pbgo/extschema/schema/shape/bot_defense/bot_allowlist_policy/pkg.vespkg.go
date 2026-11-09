@@ -25,6 +25,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.ReplaceResponse"] = ReplaceResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomReplaceRequest"] = CustomReplaceRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomReplaceResponse"] = CustomReplaceResponseValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.DeployPolicyRequest"] = DeployPolicyRequestValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.DeployPolicyResponse"] = DeployPolicyResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.GetContentRequest"] = GetContentRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.GetContentResponse"] = GetContentResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_allowlist_policy.GetPoliciesAndVersionsListRequest"] = GetPoliciesAndVersionsListRequestValidator()

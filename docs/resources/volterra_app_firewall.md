@@ -48,7 +48,6 @@ resource "volterra_app_firewall" "example" {
 
   disable_ai_enhancements = true
 }
-
 ```
 
 Argument Reference
@@ -366,13 +365,13 @@ Enforce new and updated attack signatures.
 
 would not enforce it i.e signature would be in monitoring mode for staging period (instead of blocking mode).
 
-`staging_period` - (Required) 20 days. (`Int`).
+`staging_period` - (Required) 30 days. (`Int`).
 
 ### Signatures Staging Settings Stage New Signatures
 
 Stage new attack signatures only. Updated signatures will be enforced.
 
-`staging_period` - (Required) 20 days. (`Int`).
+`staging_period` - (Required) 30 days. (`Int`).
 
 ### State Choice Disabled
 
@@ -403,4 +402,4 @@ Define violations to be disabled for detection.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured app_firewall.
+*   `id` - This is the id of the configured app_firewall.

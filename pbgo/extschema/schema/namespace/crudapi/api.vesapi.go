@@ -2925,6 +2925,22 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "namespaceNamespaceObjectStatus": {
+            "type": "string",
+            "description": "Represents the final calculated status for the namespace across all remote services\n\n - NAMESPACE_STATUS_UNKNOWN: NAMESPACE STATUS UNKNOWN\n\nUnknown or unspecified status\n - NAMESPACE_CREATING: NAMESPACE CREATING\n\nNamespace is being created across remote services\n - NAMESPACE_CREATE_FAILED: NAMESPACE CREATE FAILED\n\nNamespace creation failed in one or more remote services\n - NAMESPACE_ACTIVE: NAMESPACE ACTIVE\n\nNamespace is active and successfully created across all remote services\n - NAMESPACE_DELETING: NAMESPACE DELETING\n\nNamespace is being deleted across remote services\n - NAMESPACE_DELETE_FAILED: NAMESPACE DELETE FAILED\n\nNamespace deletion failed in one or more remote services",
+            "title": "Namespace Object Status",
+            "enum": [
+                "NAMESPACE_STATUS_UNKNOWN",
+                "NAMESPACE_CREATING",
+                "NAMESPACE_CREATE_FAILED",
+                "NAMESPACE_ACTIVE",
+                "NAMESPACE_DELETING",
+                "NAMESPACE_DELETE_FAILED"
+            ],
+            "default": "NAMESPACE_STATUS_UNKNOWN",
+            "x-displayname": "Namespace Object Status",
+            "x-ves-proto-enum": "ves.io.schema.namespace.NamespaceObjectStatus"
+        },
         "namespacePublicAdvertiseChoice": {
             "type": "string",
             "description": "Enum for advertisement choise on public.\n\nInherit tenant's default.\nEnable enables advertisement on public.\nDisable disables advertisement on public.",
@@ -2986,6 +3002,12 @@ var APISwaggerJSON string = `{
                     "title": "Metadata",
                     "$ref": "#/definitions/schemaStatusMetaType",
                     "x-displayname": "Metadata"
+                },
+                "namespace_status": {
+                    "description": " Represents the final calculated status for the namespace across all remote services",
+                    "title": "Namespace Status",
+                    "$ref": "#/definitions/namespaceNamespaceObjectStatus",
+                    "x-displayname": "Namespace Status"
                 },
                 "object_refs": {
                     "type": "array",
@@ -3206,12 +3228,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -3225,6 +3247,13 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "schemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "schemaInitializerType": {
             "type": "object",
@@ -3360,20 +3389,26 @@ var APISwaggerJSON string = `{
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"none\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info none]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info none]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType",
                     "x-displayname": "Clear Secret"
+                },
+                "none": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info]\n No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.",
+                    "title": "None",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "None"
                 }
             }
         },

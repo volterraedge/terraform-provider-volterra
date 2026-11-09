@@ -256,6 +256,29 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetJsClusterDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetJsClusterDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetMobileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMobileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWebDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWebDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetJsClusterDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetJsCluster()
@@ -268,6 +291,34 @@ func (m *GlobalSpecType) GetJsClusterDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.js_cluster[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cluster.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "js_cluster",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetJsClusterDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetJsCluster()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.js_cluster[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "cluster.Object",
 			RefdUID:    ref.Uid,
@@ -316,6 +367,22 @@ func (m *GlobalSpecType) GetMobileDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetMobileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetMobile() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetMobile().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMobile().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "mobile." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetWebDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWeb() == nil {
@@ -324,6 +391,22 @@ func (m *GlobalSpecType) GetWebDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetWeb().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetWeb().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "web." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetWebDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetWeb() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetWeb().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWeb().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -443,6 +526,13 @@ func (m *Instance) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetClusterDRefInfo()
 }
+func (m *Instance) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetClusterDRefInfoForOverlay(generateHash)
+}
 
 func (m *Instance) GetClusterDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetCluster()
@@ -455,6 +545,34 @@ func (m *Instance) GetClusterDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("Instance.cluster[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cluster.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "cluster",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *Instance) GetClusterDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetCluster()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("Instance.cluster[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "cluster.Object",
 			RefdUID:    ref.Uid,

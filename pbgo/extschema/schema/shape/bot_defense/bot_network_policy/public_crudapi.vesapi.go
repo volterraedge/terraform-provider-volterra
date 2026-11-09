@@ -1590,6 +1590,16 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Bot Infra name\"\nx-example: \"cluster-1\"\nThe cluster id deployed this policy",
                     "title": "Bot Infra Name"
                 },
+                "deployment_status": {
+                    "type": "string",
+                    "description": "x-displayName: \"Deployment Status\"\nx-example: \"Deployed\"\nThe status of policy deployed to cluster",
+                    "title": "Deployment Status"
+                },
+                "environment_type": {
+                    "type": "string",
+                    "description": "x-displayName: \"Environment Type\"\nx-example: \"TESTING\"\nThe environment of policy deployed to cluster",
+                    "title": "Environment Type"
+                },
                 "in_use_version": {
                     "type": "string",
                     "description": "x-displayName: \"In Use Version\"\nx-example: \"1.0\"\nThe version of policy deployed to cluster\nThe version format should be X.0",
@@ -1625,7 +1635,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "domain_name": {
                     "type": "string",
-                    "description": " Inbound FQDN value\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The hostname and domain name for requests that are routed to Bot Defense. For example, \"shop.example.com\".\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "Fully qualified domain name",
                     "maxLength": 256,
                     "x-displayname": "Inbound FQDN",
@@ -1651,7 +1661,7 @@ var APISwaggerJSON string = `{
                 },
                 "outbound_domain_name": {
                     "type": "string",
-                    "description": " Outbound FQDN or IP value\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The host and domain name or the IP address where you want to send requests that Bot Defense allows to continue to the origin. For example, enter \"internal.example.com\".\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "FQDN / IP",
                     "x-displayname": "Outbound FQDN / IP",
                     "x-ves-required": "true",
@@ -1662,7 +1672,7 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Outbound Port value\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": " The outbound port number for requests that Bot Defense allows to continue to the origin.\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "port",
                     "format": "int64",
                     "x-displayname": "Outbound Port",
@@ -1737,7 +1747,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "domain_name": {
                     "type": "string",
-                    "description": " Domain Name\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "description": " The fully-qualified domain name of the origin where you want to send requests that Bot Defense determines to be human traffic.\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.not_empty: true\n",
                     "title": "Fully qualified domain name",
                     "maxLength": 256,
                     "x-displayname": "FQDN",
@@ -2166,12 +2176,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {

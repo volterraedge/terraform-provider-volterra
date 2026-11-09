@@ -22,112 +22,46 @@ resource "volterra_discovery" "example" {
 
   // One of the arguments from this list "cluster_id no_cluster_id" must be set
 
-  cluster_id = "cluster_id"
+  no_cluster_id = true
 
   // One of the arguments from this list "discovery_cbip discovery_consul discovery_k8s discovery_third_party" must be set
 
-  discovery_consul {
+  discovery_k8s {
     access_info {
-      connection_info {
-        api_server = "api.acme.com:4430"
+      // One of the arguments from this list "connection_info in_cluster kubeconfig_url" must be set
 
-        tls_info {
-          ca_certificate_url {
-            blindfold_secret_info_internal {
-              decryption_provider = "value"
+      kubeconfig_url {
+        blindfold_secret_info_internal {
+          decryption_provider = "value"
 
-              location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
 
-              store_provider = "value"
-            }
+          store_provider = "value"
+        }
 
-            secret_encoding_type = "secret_encoding_type"
+        secret_encoding_type = "secret_encoding_type"
 
-            // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
+        // One of the arguments from this list "blindfold_secret_info clear_secret_info none vault_secret_info wingman_secret_info" must be set
 
-            wingman_secret_info {
-              name = "ChargeBack-API-Key"
-            }
-          }
+        blindfold_secret_info {
+          decryption_provider = "value"
 
-          certificate = "value"
+          location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
 
-          certificate_url {
-            blindfold_secret_info_internal {
-              decryption_provider = "value"
-
-              location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-              store_provider = "value"
-            }
-
-            secret_encoding_type = "secret_encoding_type"
-
-            // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-            blindfold_secret_info {
-              decryption_provider = "value"
-
-              location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-              store_provider = "value"
-            }
-          }
-
-          key_url {
-            blindfold_secret_info_internal {
-              decryption_provider = "value"
-
-              location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-              store_provider = "value"
-            }
-
-            secret_encoding_type = "secret_encoding_type"
-
-            // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-            wingman_secret_info {
-              name = "ChargeBack-API-Key"
-            }
-          }
-
-          server_name = "k8s.acme.com"
-
-          trusted_ca_url = "value"
+          store_provider = "value"
         }
       }
 
-      http_basic_auth_info {
-        passwd_url {
-          blindfold_secret_info_internal {
-            decryption_provider = "value"
+      // One of the arguments from this list "isolated reachable" must be set
 
-            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-            store_provider = "value"
-          }
-
-          secret_encoding_type = "secret_encoding_type"
-
-          // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-          wingman_secret_info {
-            name = "ChargeBack-API-Key"
-          }
-        }
-
-        user_name = "Joe"
-      }
-
-      scheme = "scheme"
+      isolated = true
     }
 
     // One of the arguments from this list "default_all namespace_mapping" can be set
 
     default_all = true
     publish_info {
-      // One of the arguments from this list "disable publish" must be set
+      // One of the arguments from this list "disable dns_delegation publish publish_fqdns" must be set
 
       disable = true
     }
@@ -144,7 +78,6 @@ resource "volterra_discovery" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -220,11 +153,13 @@ Password used to log into an admin account on the BIG-IP device.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -257,6 +192,24 @@ x-required.
 `skip_server_verification` - (Optional) Skip origin server verification (`Bool`).
 
 `trusted_ca` - (Optional) Select/Add a Root CA Certificate object to associate with this Origin Pool for verification of server's certificate. See [ref](#ref) below for details.
+
+### Cbip Clusters Cbip Devices
+
+List of Classic BIG-IP devices..
+
+`admin_credentials` - (Required) x-required. See [Cbip Devices Admin Credentials ](#cbip-devices-admin-credentials) below for details.(Deprecated)
+
+`cbip_certificate_authority` - (Required) x-required. See [Cbip Devices Cbip Certificate Authority ](#cbip-devices-cbip-certificate-authority) below for details.(Deprecated)
+
+`cbip_mgmt_ip` - (Required) IP Address of the Classic BIG-IP device. Hostname is not supported. (`String`).(Deprecated)
+
+###### One of the arguments from this list "default_all, namespace_mapping" can be set
+
+`default_all` - (Optional) If configuring in an App Namespace, discovered services across all BIG-IP partitions will be discovered in the current Namespace (`Bool`).(Deprecated)
+
+`namespace_mapping` - (Optional) Select the BIG-IP partitions from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace.. See [Namespace Mapping Choice Namespace Mapping ](#namespace-mapping-choice-namespace-mapping) below for details.(Deprecated)
+
+`virtual_server_filter` - (Optional) Filters to discover only required BIG-IP Virtual Servers. The Virtual Server will be discovered only if it matches all criteria specified below. A blank criteria will be treated as match all.. See [Cbip Devices Virtual Server Filter ](#cbip-devices-virtual-server-filter) below for details.(Deprecated)
 
 ### Cbip Clusters Ha Sync
 
@@ -300,6 +253,38 @@ Filters to discover only required BIG-IP Virtual Servers. The Virtual Server wil
 
 `protocols` - (Optional) Filter by protocol(s) (`String`).(Deprecated)
 
+### Cbip Devices Admin Credentials
+
+x-required.
+
+`password` - (Required) Password used to log into an admin account on the BIG-IP device. See [Admin Credentials Password ](#admin-credentials-password) below for details.
+
+`username` - (Required) Username used to log into an admin account on the BIG-IP device (`String`).
+
+### Cbip Devices Cbip Certificate Authority
+
+x-required.
+
+###### One of the arguments from this list "skip_server_verification, trusted_ca" must be set
+
+`skip_server_verification` - (Optional) Skip origin server verification (`Bool`).
+
+`trusted_ca` - (Optional) Select/Add a Root CA Certificate object to associate with this Origin Pool for verification of server's certificate. See [ref](#ref) below for details.
+
+### Cbip Devices Virtual Server Filter
+
+Filters to discover only required BIG-IP Virtual Servers. The Virtual Server will be discovered only if it matches all criteria specified below. A blank criteria will be treated as match all..
+
+`description_regex` - (Optional) Regex to match Virtual Server description (`String`).
+
+`discover_disabled_virtual_servers` - (Optional) When checked, disabled virtual servers will be included (`Bool`).
+
+`name_regex` - (Optional) Regex to match Virtual Server name (`String`).
+
+`port_ranges` - (Optional) Maximum number of ports allowed is 1024. (`String`).
+
+`protocols` - (Optional) Filter by protocol(s) (`String`).(Deprecated)
+
 ### Certificate Url Blindfold Secret Info Internal
 
 Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
@@ -326,11 +311,13 @@ Provide kubeconfig file to connect to K8s cluster.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -359,6 +346,8 @@ are in an Active-Active or Active-Standby setup or even a standalone BIG-IP devi
 `admin_credentials` - (Required) x-required. See [Cbip Clusters Admin Credentials ](#cbip-clusters-admin-credentials) below for details.
 
 `cbip_certificate_authority` - (Required) x-required. See [Cbip Clusters Cbip Certificate Authority ](#cbip-clusters-cbip-certificate-authority) below for details.
+
+`cbip_devices` - (Required) List of Classic BIG-IP devices.. See [Cbip Clusters Cbip Devices ](#cbip-clusters-cbip-devices) below for details.(Deprecated)
 
 `cbip_mgmt_ips` - (Required) IP Addresses of BIG-IP devices. Hostname is not supported. (`String`).
 
@@ -484,11 +473,13 @@ F5XC Secret. URL for password, needs to be fetched from this path.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -688,6 +679,10 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
+
 ### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
@@ -732,11 +727,13 @@ F5XC Secret. URL to fetch the server CA certificate file.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -750,11 +747,13 @@ F5XC Secret. URL to fetch the client certificate file.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -768,11 +767,13 @@ The data may be optionally secured using BlindFold..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -781,4 +782,4 @@ The data may be optionally secured using BlindFold..
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured discovery.
+*   `id` - This is the id of the configured discovery.

@@ -191,6 +191,13 @@ func (m *CACertificateObj) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTrustedCaDRefInfo()
 }
+func (m *CACertificateObj) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTrustedCaDRefInfoForOverlay(generateHash)
+}
 
 func (m *CACertificateObj) GetTrustedCaDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetTrustedCa()
@@ -203,6 +210,34 @@ func (m *CACertificateObj) GetTrustedCaDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("CACertificateObj.trusted_ca[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "trusted_ca_list.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "trusted_ca",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *CACertificateObj) GetTrustedCaDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetTrustedCa()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CACertificateObj.trusted_ca[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "trusted_ca_list.Object",
 			RefdUID:    ref.Uid,
@@ -381,6 +416,13 @@ func (m *ClientCertificateObj) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetUseTlsObjDRefInfo()
 }
+func (m *ClientCertificateObj) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetUseTlsObjDRefInfoForOverlay(generateHash)
+}
 
 func (m *ClientCertificateObj) GetUseTlsObjDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetUseTlsObj()
@@ -393,6 +435,34 @@ func (m *ClientCertificateObj) GetUseTlsObjDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("ClientCertificateObj.use_tls_obj[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "certificate.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "use_tls_obj",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *ClientCertificateObj) GetUseTlsObjDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetUseTlsObj()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ClientCertificateObj.use_tls_obj[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "certificate.Object",
 			RefdUID:    ref.Uid,
@@ -593,6 +663,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetReceiverDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReceiverDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
@@ -614,6 +691,37 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetWebhook().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "webhook." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetReceiverDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReceiver() == nil {
+		return nil, nil
+	}
+	switch m.GetReceiver().(type) {
+	case *CreateSpecType_Slack:
+		return nil, nil
+	case *CreateSpecType_Pagerduty:
+		return nil, nil
+	case *CreateSpecType_Opsgenie:
+		return nil, nil
+	case *CreateSpecType_Email:
+		return nil, nil
+	case *CreateSpecType_Sms:
+		return nil, nil
+	case *CreateSpecType_Webhook:
+		drInfos, err := m.GetWebhook().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -933,6 +1041,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetReceiverDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReceiverDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
@@ -954,6 +1069,37 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetWebhook().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "webhook." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetReceiverDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReceiver() == nil {
+		return nil, nil
+	}
+	switch m.GetReceiver().(type) {
+	case *GetSpecType_Slack:
+		return nil, nil
+	case *GetSpecType_Pagerduty:
+		return nil, nil
+	case *GetSpecType_Opsgenie:
+		return nil, nil
+	case *GetSpecType_Email:
+		return nil, nil
+	case *GetSpecType_Sms:
+		return nil, nil
+	case *GetSpecType_Webhook:
+		drInfos, err := m.GetWebhook().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1172,6 +1318,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetReceiverDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReceiverDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
@@ -1193,6 +1346,37 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetWebhook().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "webhook." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetReceiverDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReceiver() == nil {
+		return nil, nil
+	}
+	switch m.GetReceiver().(type) {
+	case *GlobalSpecType_Slack:
+		return nil, nil
+	case *GlobalSpecType_Pagerduty:
+		return nil, nil
+	case *GlobalSpecType_Opsgenie:
+		return nil, nil
+	case *GlobalSpecType_Email:
+		return nil, nil
+	case *GlobalSpecType_Sms:
+		return nil, nil
+	case *GlobalSpecType_Webhook:
+		drInfos, err := m.GetWebhook().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1416,6 +1600,24 @@ func (m *HTTPConfig) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *HTTPConfig) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAuthChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAuthChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetTlsChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetTlsChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPConfig) GetAuthChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1444,6 +1646,33 @@ func (m *HTTPConfig) GetAuthChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPConfig) GetAuthChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAuthChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAuthChoice().(type) {
+	case *HTTPConfig_BasicAuth:
+		return nil, nil
+	case *HTTPConfig_NoAuthorization:
+		return nil, nil
+	case *HTTPConfig_AuthToken:
+		return nil, nil
+	case *HTTPConfig_ClientCertObj:
+		drInfos, err := m.GetClientCertObj().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetClientCertObj().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "client_cert_obj." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 // GetDRefInfo for the field's type
 func (m *HTTPConfig) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTlsChoice() == nil {
@@ -1456,6 +1685,29 @@ func (m *HTTPConfig) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetUseTls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_tls." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPConfig) GetTlsChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetTlsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetTlsChoice().(type) {
+	case *HTTPConfig_NoTls:
+		return nil, nil
+	case *HTTPConfig_UseTls:
+		drInfos, err := m.GetUseTls().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2161,6 +2413,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetReceiverDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReceiverDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
@@ -2182,6 +2441,37 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetWebhook().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "webhook." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetReceiverDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetReceiver() == nil {
+		return nil, nil
+	}
+	switch m.GetReceiver().(type) {
+	case *ReplaceSpecType_Slack:
+		return nil, nil
+	case *ReplaceSpecType_Pagerduty:
+		return nil, nil
+	case *ReplaceSpecType_Opsgenie:
+		return nil, nil
+	case *ReplaceSpecType_Email:
+		return nil, nil
+	case *ReplaceSpecType_Sms:
+		return nil, nil
+	case *ReplaceSpecType_Webhook:
+		drInfos, err := m.GetWebhook().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2628,6 +2918,13 @@ func (m *TLSConfig) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetServerValidationChoiceDRefInfo()
 }
+func (m *TLSConfig) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetServerValidationChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *TLSConfig) GetServerValidationChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -2641,6 +2938,29 @@ func (m *TLSConfig) GetServerValidationChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetUseServerVerification().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseServerVerification().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_server_verification." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *TLSConfig) GetServerValidationChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetServerValidationChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServerValidationChoice().(type) {
+	case *TLSConfig_VolterraTrustedCa:
+		return nil, nil
+	case *TLSConfig_UseServerVerification:
+		drInfos, err := m.GetUseServerVerification().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseServerVerification().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -2871,6 +3191,13 @@ func (m *UpstreamTlsValidationContext) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCaCertObjDRefInfo()
 }
+func (m *UpstreamTlsValidationContext) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCaCertObjDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *UpstreamTlsValidationContext) GetCaCertObjDRefInfo() ([]db.DRefInfo, error) {
@@ -2880,6 +3207,22 @@ func (m *UpstreamTlsValidationContext) GetCaCertObjDRefInfo() ([]db.DRefInfo, er
 	drInfos, err := m.GetCaCertObj().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCaCertObj().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ca_cert_obj." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *UpstreamTlsValidationContext) GetCaCertObjDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCaCertObj() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCaCertObj().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCaCertObj().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -2986,6 +3329,13 @@ func (m *WebhookConfig) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetHttpConfigDRefInfo()
 }
+func (m *WebhookConfig) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHttpConfigDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *WebhookConfig) GetHttpConfigDRefInfo() ([]db.DRefInfo, error) {
@@ -2995,6 +3345,22 @@ func (m *WebhookConfig) GetHttpConfigDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetHttpConfig().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetHttpConfig().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "http_config." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *WebhookConfig) GetHttpConfigDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetHttpConfig() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetHttpConfig().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetHttpConfig().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

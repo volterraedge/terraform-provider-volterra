@@ -35,12 +35,12 @@ resource "volterra_vs_pool" "example" {
       ratio = "ratio"
     }
 
-    // One of the arguments from this list "private public" must be set
+    // One of the arguments from this list "public" must be set
 
-    private {
-      // One of the arguments from this list "site virtual_ce_sites virtual_network" can be set
+    public {
+      // One of the arguments from this list "all_re regional_re" can be set
 
-      virtual_network {
+      all_re {
         // One of the arguments from this list "custom_ip dns" can be set
 
         dns {
@@ -49,11 +49,9 @@ resource "volterra_vs_pool" "example" {
           refresh_interval = "20"
         }
 
-        segment_network {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
+        // One of the arguments from this list "f5_global_network" can be set
+
+        f5_global_network = true
       }
     }
     name = "name"
@@ -137,9 +135,7 @@ List of members in this pool.
 
 `member_selection` - (Optional) x-displayName: "Pool Member Selection". See [Pool Members Member Selection ](#pool-members-member-selection) below for details.
 
-###### One of the arguments from this list "private, public" must be set
-
-`private` - (Optional) x-displayName: "Private". See [Member Type Choice Private ](#member-type-choice-private) below for details.
+###### One of the arguments from this list "public" must be set
 
 `public` - (Optional) x-displayName: "Public". See [Member Type Choice Public ](#member-type-choice-public) below for details.
 
@@ -187,24 +183,6 @@ x-displayName: "Reselect".
 
 `reselect_count` - (Optional) Specifies the number of times the system tries to contact a new pool member after a passive failure. A passive failure consists of a server-connect failure or a failure to receive a data response within a user-specified interval. The default is 0 (zero), which indicates no reselects. (`Int`).
 
-### Discovered Service Choice Cbip Service
-
-Specify origin server with Classic BIG-IP service name.
-
-`cbip_service_name` - (Required) Name of the discovered Classic BIG-IP virtual server to be used as origin. (`String`).
-
-### Discovered Service Choice Consul Service
-
-Specify origin server with Hashi Corp Consul service name and site information.
-
-`consul_service_name` - (Required) The format is servicename:cluster-id. (`String`).
-
-### Discovered Service Choice K8s Service
-
-Specify origin server with K8s service name and site information.
-
-`k8s_service_name` - (Optional) Both namespace and cluster-id are optional. (`String`).
-
 ### Health Monitor Availability Choice Health Monitor Availability All
 
 x-displayName: "All".
@@ -231,23 +209,9 @@ x-displayName: "Forced Offline".
 
 IP Address.
 
-###### One of the arguments from this list "ip, ip_v6" can be set
+###### One of the arguments from this list "ip" must be set
 
 `ip` - (Optional) V4 IP (`String`).
-
-`ip_v6` - (Optional) Optional common virtual V6 IP across all nodes to be used as automatic VIP. (`String`).
-
-### Member Type Choice Discovered
-
-Discovered.
-
-###### One of the arguments from this list "cbip_service, consul_service, k8s_service" can be set
-
-`cbip_service` - (Optional) Specify origin server with Classic BIG-IP service name. See [Discovered Service Choice Cbip Service ](#discovered-service-choice-cbip-service) below for details.
-
-`consul_service` - (Optional) Specify origin server with Hashi Corp Consul service name and site information. See [Discovered Service Choice Consul Service ](#discovered-service-choice-consul-service) below for details.
-
-`k8s_service` - (Optional) Specify origin server with K8s service name and site information. See [Discovered Service Choice K8s Service ](#discovered-service-choice-k8s-service) below for details.
 
 ### Member Type Choice Dns
 
@@ -256,18 +220,6 @@ DNS.
 `dns_name` - (Required) DNS Name (`String`).
 
 `refresh_interval` - (Optional) Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767 (`Int`).
-
-### Member Type Choice Private
-
-x-displayName: "Private".
-
-###### One of the arguments from this list "site, virtual_ce_sites, virtual_network" can be set
-
-`site` - (Optional) x-displayName: "Sites". See [Where Type Choice Site ](#where-type-choice-site) below for details.
-
-`virtual_ce_sites` - (Optional) x-displayName: "Virtual Sites". See [Where Type Choice Virtual Ce Sites ](#where-type-choice-virtual-ce-sites) below for details.
-
-`virtual_network` - (Optional) x-displayName: "Segment". See [Where Type Choice Virtual Network ](#where-type-choice-virtual-network) below for details.
 
 ### Member Type Choice Public
 
@@ -279,29 +231,9 @@ x-displayName: "Public".
 
 `regional_re` - (Optional) x-displayName: "Regional". See [Where Selection Choice Regional Re ](#where-selection-choice-regional-re) below for details.
 
-### Network Choice Site Local Inside Network
-
-x-displayName: "Site Local Inside (Local VRF)".
-
-### Network Choice Site Local Network
-
-x-displayName: "Site Local Outside (Local VRF)".
-
 ### Network Selection Choice F5 Global Network
 
 x-displayName: "F5 Global Network".
-
-### Network Selection Choice Network Option
-
-Select Network.
-
-###### One of the arguments from this list "segment_network, site_local_inside_network, site_local_network" can be set
-
-`segment_network` - (Optional) x-displayName: "Segment (Global VRF)". See [ref](#ref) below for details.
-
-`site_local_inside_network` - (Optional) x-displayName: "Site Local Inside (Local VRF)" (`Bool`).
-
-`site_local_network` - (Optional) x-displayName: "Site Local Outside (Local VRF)" (`Bool`).
 
 ### Pool Members Member Selection
 
@@ -388,60 +320,6 @@ x-displayName: "Regional".
 `f5_global_network` - (Optional) x-displayName: "F5 Global Network" (`Bool`).
 
 `regional_edge_site` - (Optional) Reference to site object. See [ref](#ref) below for details.
-
-### Where Type Choice Site
-
-x-displayName: "Sites".
-
-###### One of the arguments from this list "custom_ip, discovered, dns" can be set
-
-`custom_ip` - (Optional) IP Address. See [Member Type Choice Custom Ip ](#member-type-choice-custom-ip) below for details.
-
-`discovered` - (Optional) Discovered. See [Member Type Choice Discovered ](#member-type-choice-discovered) below for details.
-
-`dns` - (Optional) DNS. See [Member Type Choice Dns ](#member-type-choice-dns) below for details.
-
-###### One of the arguments from this list "f5_global_network, network_option" can be set
-
-`f5_global_network` - (Optional) x-displayName: "F5 Global Network" (`Bool`).
-
-`network_option` - (Optional) Select Network. See [Network Selection Choice Network Option ](#network-selection-choice-network-option) below for details.
-
-`site_name` - (Optional) x-example: "smsv2-site-name". See [ref](#ref) below for details.
-
-### Where Type Choice Virtual Ce Sites
-
-x-displayName: "Virtual Sites".
-
-###### One of the arguments from this list "custom_ip, discovered, dns" can be set
-
-`custom_ip` - (Optional) IP Address. See [Member Type Choice Custom Ip ](#member-type-choice-custom-ip) below for details.
-
-`discovered` - (Optional) Discovered. See [Member Type Choice Discovered ](#member-type-choice-discovered) below for details.
-
-`dns` - (Optional) DNS. See [Member Type Choice Dns ](#member-type-choice-dns) below for details.
-
-###### One of the arguments from this list "segment_network, site_local_inside_network, site_local_network" can be set
-
-`segment_network` - (Optional) x-displayName: "Segment (Global VRF)". See [ref](#ref) below for details.
-
-`site_local_inside_network` - (Optional) x-displayName: "Site Local Inside (Local VRF)" (`Bool`).
-
-`site_local_network` - (Optional) x-displayName: "Site Local Outside (Local VRF)" (`Bool`).
-
-`virtual_site_name` - (Optional) x-example: "shared/ce-site". See [ref](#ref) below for details.
-
-### Where Type Choice Virtual Network
-
-x-displayName: "Segment".
-
-###### One of the arguments from this list "custom_ip, dns" can be set
-
-`custom_ip` - (Optional) IP Address. See [Member Type Choice Custom Ip ](#member-type-choice-custom-ip) below for details.
-
-`dns` - (Optional) DNS. See [Member Type Choice Dns ](#member-type-choice-dns) below for details.
-
-`segment_network` - (Optional) x-displayName: "Segment". See [ref](#ref) below for details.
 
 Attribute Reference
 -------------------

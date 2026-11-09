@@ -266,6 +266,7 @@ func (v *ValidateEntitlementConfig) Validate(ctx context.Context, pm interface{}
 // Well-known symbol for default validator implementation
 var DefaultEntitlementConfigValidator = func() *ValidateEntitlementConfig {
 	v := &ValidateEntitlementConfig{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["entitlement_features"] = EntitlementFeatureDetailsValidator().Validate
 
 	return v
 }()
@@ -346,12 +347,215 @@ func (v *ValidateEntitlementFeatureDetails) Validate(ctx context.Context, pm int
 // Well-known symbol for default validator implementation
 var DefaultEntitlementFeatureDetailsValidator = func() *ValidateEntitlementFeatureDetails {
 	v := &ValidateEntitlementFeatureDetails{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["quota_mapping"] = QuotaMappingValidator().Validate
 
 	return v
 }()
 
 func EntitlementFeatureDetailsValidator() db.Validator {
 	return DefaultEntitlementFeatureDetailsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FixedValue) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FixedValue) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FixedValue) DeepCopy() *FixedValue {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FixedValue{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FixedValue) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FixedValue) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FixedValueValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFixedValue struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFixedValue) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateFixedValue) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FixedValue)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FixedValue got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["value"]; exists {
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFixedValueValidator = func() *ValidateFixedValue {
+	v := &ValidateFixedValue{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhValue := v.ValueValidationRuleHandler
+	rulesValue := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhValue(rulesValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FixedValue.value: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["value"] = vFn
+
+	return v
+}()
+
+func FixedValueValidator() db.Validator {
+	return DefaultFixedValueValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FloatMultiplier) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FloatMultiplier) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FloatMultiplier) DeepCopy() *FloatMultiplier {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FloatMultiplier{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FloatMultiplier) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FloatMultiplier) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FloatMultiplierValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFloatMultiplier struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFloatMultiplier) MultiplierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewFloatValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for multiplier")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateFloatMultiplier) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FloatMultiplier)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FloatMultiplier got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+	if fv, exists := v.FldValidators["multiplier"]; exists {
+		vOpts := append(opts, db.WithValidateField("multiplier"))
+		if err := fv(ctx, m.GetMultiplier(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFloatMultiplierValidator = func() *ValidateFloatMultiplier {
+	v := &ValidateFloatMultiplier{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMultiplier := v.MultiplierValidationRuleHandler
+	rulesMultiplier := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMultiplier(rulesMultiplier)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FloatMultiplier.multiplier: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["multiplier"] = vFn
+
+	return v
+}()
+
+func FloatMultiplierValidator() db.Validator {
+	return DefaultFloatMultiplierValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -414,12 +618,39 @@ func (v *ValidateFormula) Validate(ctx context.Context, pm interface{}, opts ...
 			return err
 		}
 	}
+
+	switch m.GetQuotaValueType().(type) {
+	case *Formula_FixedValue:
+		if fv, exists := v.FldValidators["quota_value_type.fixed_value"]; exists {
+			val := m.GetQuotaValueType().(*Formula_FixedValue).FixedValue
+			vOpts := append(opts,
+				db.WithValidateField("quota_value_type"),
+				db.WithValidateField("fixed_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Formula_FloatMultiplier:
+		if fv, exists := v.FldValidators["quota_value_type.float_multiplier"]; exists {
+			val := m.GetQuotaValueType().(*Formula_FloatMultiplier).FloatMultiplier
+			vOpts := append(opts,
+				db.WithValidateField("quota_value_type"),
+				db.WithValidateField("float_multiplier"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFormulaValidator = func() *ValidateFormula {
 	v := &ValidateFormula{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["quota_value_type.fixed_value"] = FixedValueValidator().Validate
+	v.FldValidators["quota_value_type.float_multiplier"] = FloatMultiplierValidator().Validate
 
 	return v
 }()
@@ -563,6 +794,29 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiGroupsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiGroupsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDependentServicesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDependentServicesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIncludedServicesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIncludedServicesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetSpecType) GetApiGroupsDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetApiGroups()
@@ -575,6 +829,34 @@ func (m *GetSpecType) GetApiGroupsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.api_groups[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "api_group.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "api_groups",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetApiGroupsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetApiGroups()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.api_groups[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "api_group.Object",
 			RefdUID:    ref.Uid,
@@ -630,6 +912,34 @@ func (m *GetSpecType) GetDependentServicesDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDependentServicesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetDependentServices()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.dependent_services[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "addon_service.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "dependent_services",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetDependentServicesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GetSpecType) GetDependentServicesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -661,6 +971,34 @@ func (m *GetSpecType) GetIncludedServicesDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GetSpecType.included_services[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "addon_service.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "included_services",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetSpecType) GetIncludedServicesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIncludedServices()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.included_services[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "addon_service.Object",
 			RefdUID:    ref.Uid,
@@ -955,6 +1293,12 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			return err
 		}
 	}
+	if fv, exists := v.FldValidators["type"]; exists {
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -1028,6 +1372,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["activation_type_choice.self_activation"] = SelfActivationTypeValidator().Validate
 	v.FldValidators["activation_type_choice.partially_managed_activation"] = PartiallyManagedActivationTypeValidator().Validate
 	v.FldValidators["activation_type_choice.managed_activation"] = FullyManagedActivationTypeValidator().Validate
+	v.FldValidators["entitlement_config"] = EntitlementConfigValidator().Validate
 
 	return v
 }()
@@ -1101,6 +1446,34 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiGroupsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetApiGroupsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetDependentServicesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetDependentServicesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetIncludedServicesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetIncludedServicesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GlobalSpecType) GetApiGroupsDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetApiGroups()
@@ -1113,6 +1486,34 @@ func (m *GlobalSpecType) GetApiGroupsDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.api_groups[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "api_group.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "api_groups",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetApiGroupsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetApiGroups()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.api_groups[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "api_group.Object",
 			RefdUID:    ref.Uid,
@@ -1168,6 +1569,34 @@ func (m *GlobalSpecType) GetDependentServicesDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDependentServicesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetDependentServices()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dependent_services[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "addon_service.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "dependent_services",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetDependentServicesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetDependentServicesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1211,6 +1640,34 @@ func (m *GlobalSpecType) GetIncludedServicesDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetIncludedServicesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetIncludedServices()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.included_services[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "addon_service.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "included_services",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
 
 // GetIncludedServicesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetIncludedServicesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
@@ -1242,6 +1699,34 @@ func (m *GlobalSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
 			return nil, fmt.Errorf("GlobalSpecType.policy[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "policy",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GlobalSpecType) GetPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	refs := m.GetPolicy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, 0)
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.policy[%d] has a nil value", i)
+		}
+		// since this is for overlay, we can skip refs without names, or refs which are already resolved and we're not generating
+		// a reference hash
+		if ref.Name == "" || (!generateHash && ref.Uid != "" && ref.Uid != db.ReferredIDUnknown) {
+			continue
+		}
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay()
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "service_policy.Object",
 			RefdUID:    ref.Uid,
@@ -1597,6 +2082,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 	}
+	if fv, exists := v.FldValidators["subscription_daemon"]; exists {
+		vOpts := append(opts, db.WithValidateField("subscription_daemon"))
+		if err := fv(ctx, m.GetSubscriptionDaemon(), vOpts...); err != nil {
+			return err
+		}
+	}
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		for idx, item := range m.GetTags() {
@@ -1609,6 +2100,12 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["tier"]; exists {
 		vOpts := append(opts, db.WithValidateField("tier"))
 		if err := fv(ctx, m.GetTier(), vOpts...); err != nil {
+			return err
+		}
+	}
+	if fv, exists := v.FldValidators["type"]; exists {
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
 	}
@@ -1697,6 +2194,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["activation_type_choice.partially_managed_activation"] = PartiallyManagedActivationTypeValidator().Validate
 	v.FldValidators["activation_type_choice.managed_activation"] = FullyManagedActivationTypeValidator().Validate
 	v.FldValidators["service_usage_type"] = ServiceUsageTypeValidator().Validate
+	v.FldValidators["entitlement_config"] = EntitlementConfigValidator().Validate
 
 	return v
 }()
@@ -1944,6 +2442,7 @@ func (v *ValidateQuotaMapping) Validate(ctx context.Context, pm interface{}, opt
 // Well-known symbol for default validator implementation
 var DefaultQuotaMappingValidator = func() *ValidateQuotaMapping {
 	v := &ValidateQuotaMapping{FldValidators: map[string]db.ValidatorFunc{}}
+	v.FldValidators["object_limits"] = FormulaValidator().Validate
 
 	return v
 }()
@@ -2371,6 +2870,47 @@ type ValidateUsageType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateUsageType) BasePackageTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for base_package_types")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for base_package_types")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated base_package_types")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items base_package_types")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateUsageType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*UsageType)
 	if !ok {
@@ -2383,6 +2923,12 @@ func (v *ValidateUsageType) Validate(ctx context.Context, pm interface{}, opts .
 	}
 	if m == nil {
 		return nil
+	}
+	if fv, exists := v.FldValidators["base_package_types"]; exists {
+		vOpts := append(opts, db.WithValidateField("base_package_types"))
+		if err := fv(ctx, m.GetBasePackageTypes(), vOpts...); err != nil {
+			return err
+		}
 	}
 	if fv, exists := v.FldValidators["name"]; exists {
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -2402,6 +2948,26 @@ func (v *ValidateUsageType) Validate(ctx context.Context, pm interface{}, opts .
 // Well-known symbol for default validator implementation
 var DefaultUsageTypeValidator = func() *ValidateUsageType {
 	v := &ValidateUsageType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhBasePackageTypes := v.BasePackageTypesValidationRuleHandler
+	rulesBasePackageTypes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhBasePackageTypes(rulesBasePackageTypes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UsageType.base_package_types: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["base_package_types"] = vFn
 
 	return v
 }()
@@ -2463,6 +3029,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.IncludedServices = f.GetIncludedServices()
 	m.Tags = f.GetTags()
 	m.Tier = f.GetTier()
+	m.Type = f.GetType()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -2488,6 +3055,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.IncludedServices = m1.IncludedServices
 	f.Tags = m1.Tags
 	f.Tier = m1.Tier
+	f.Type = m1.Type
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {

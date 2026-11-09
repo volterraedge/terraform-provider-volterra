@@ -1041,6 +1041,16 @@ func ResourceFleetInstanceResourceV1() *schema.Resource {
 																},
 															},
 
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
 															"vault_secret_info": {
 
 																Type:       schema.TypeList,
@@ -1203,6 +1213,16 @@ func ResourceFleetInstanceResourceV1() *schema.Resource {
 																			Required: true,
 																		},
 																	},
+																},
+															},
+
+															"none": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
 																},
 															},
 
@@ -1438,6 +1458,16 @@ func ResourceFleetInstanceResourceV1() *schema.Resource {
 																			},
 																		},
 
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
+																			},
+																		},
+
 																		"vault_secret_info": {
 
 																			Type:       schema.TypeList,
@@ -1633,6 +1663,16 @@ func ResourceFleetInstanceResourceV1() *schema.Resource {
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -2023,6 +2063,16 @@ func ResourceFleetInstanceResourceV1() *schema.Resource {
 																						},
 																					},
 
+																					"none": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
 																					"vault_secret_info": {
 
 																						Type:       schema.TypeList,
@@ -2174,6 +2224,16 @@ func ResourceFleetInstanceResourceV1() *schema.Resource {
 																									Required: true,
 																								},
 																							},
+																						},
+																					},
+
+																					"none": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
 																						},
 																					},
 
@@ -2346,6 +2406,16 @@ func ResourceFleetInstanceResourceV1() *schema.Resource {
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -2544,6 +2614,16 @@ func ResourceFleetInstanceResourceV1() *schema.Resource {
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -2970,6 +3050,16 @@ func ResourceFleetInstanceResourceV1() *schema.Resource {
 																									},
 																								},
 
+																								"none": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
+																									},
+																								},
+
 																								"vault_secret_info": {
 
 																									Type:       schema.TypeList,
@@ -3179,6 +3269,16 @@ func ResourceFleetInstanceResourceV1() *schema.Resource {
 																												Required: true,
 																											},
 																										},
+																									},
+																								},
+
+																								"none": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
 																									},
 																								},
 

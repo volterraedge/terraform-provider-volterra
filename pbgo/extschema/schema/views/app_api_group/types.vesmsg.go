@@ -71,8 +71,32 @@ func (m *ApiGroupScopeApiDefinition) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetApiDefinitionDRefInfo()
 }
+func (m *ApiGroupScopeApiDefinition) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApiDefinitionDRefInfoForOverlay(generateHash)
+}
 
 func (m *ApiGroupScopeApiDefinition) GetApiDefinitionDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetApiDefinition()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("api_definition.Object")
+	dri := db.DRefInfo{
+		RefdType:   "api_definition.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "api_definition",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ApiGroupScopeApiDefinition) GetApiDefinitionDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetApiDefinition()
 	if vref == nil {
 		return nil, nil
@@ -234,8 +258,32 @@ func (m *ApiGroupScopeBIGIPVirtualServer) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetBigipVirtualServerDRefInfo()
 }
+func (m *ApiGroupScopeBIGIPVirtualServer) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetBigipVirtualServerDRefInfoForOverlay(generateHash)
+}
 
 func (m *ApiGroupScopeBIGIPVirtualServer) GetBigipVirtualServerDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetBigipVirtualServer()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bigip_virtual_server.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bigip_virtual_server.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "bigip_virtual_server",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ApiGroupScopeBIGIPVirtualServer) GetBigipVirtualServerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetBigipVirtualServer()
 	if vref == nil {
 		return nil, nil
@@ -397,8 +445,32 @@ func (m *ApiGroupScopeCDNLoadbalancer) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCdnLoadbalancerDRefInfo()
 }
+func (m *ApiGroupScopeCDNLoadbalancer) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCdnLoadbalancerDRefInfoForOverlay(generateHash)
+}
 
 func (m *ApiGroupScopeCDNLoadbalancer) GetCdnLoadbalancerDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCdnLoadbalancer()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cdn_loadbalancer.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cdn_loadbalancer.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cdn_loadbalancer",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ApiGroupScopeCDNLoadbalancer) GetCdnLoadbalancerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCdnLoadbalancer()
 	if vref == nil {
 		return nil, nil
@@ -560,8 +632,32 @@ func (m *ApiGroupScopeHttpLoadbalancer) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetHttpLoadbalancerDRefInfo()
 }
+func (m *ApiGroupScopeHttpLoadbalancer) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHttpLoadbalancerDRefInfoForOverlay(generateHash)
+}
 
 func (m *ApiGroupScopeHttpLoadbalancer) GetHttpLoadbalancerDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetHttpLoadbalancer()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("http_loadbalancer.Object")
+	dri := db.DRefInfo{
+		RefdType:   "http_loadbalancer.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "http_loadbalancer",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *ApiGroupScopeHttpLoadbalancer) GetHttpLoadbalancerDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetHttpLoadbalancer()
 	if vref == nil {
 		return nil, nil
@@ -723,6 +819,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetScopeChoiceDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetScopeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -766,6 +869,59 @@ func (m *CreateSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetBigipVirtualServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bigip_virtual_server." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetScopeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetScopeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetScopeChoice().(type) {
+	case *CreateSpecType_Generic:
+		return nil, nil
+	case *CreateSpecType_HttpLoadbalancer:
+		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_ApiDefinition:
+		drInfos, err := m.GetApiDefinition().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_definition." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_CdnLoadbalancer:
+		drInfos, err := m.GetCdnLoadbalancer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCdnLoadbalancer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cdn_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_BigipVirtualServer:
+		drInfos, err := m.GetBigipVirtualServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1020,6 +1176,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetScopeChoiceDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetScopeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1063,6 +1226,59 @@ func (m *GetSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetBigipVirtualServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bigip_virtual_server." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetScopeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetScopeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetScopeChoice().(type) {
+	case *GetSpecType_Generic:
+		return nil, nil
+	case *GetSpecType_HttpLoadbalancer:
+		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_ApiDefinition:
+		drInfos, err := m.GetApiDefinition().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_definition." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_CdnLoadbalancer:
+		drInfos, err := m.GetCdnLoadbalancer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCdnLoadbalancer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cdn_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_BigipVirtualServer:
+		drInfos, err := m.GetBigipVirtualServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1334,6 +1550,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetScopeChoiceDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetScopeChoiceDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetViewInternalDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1388,7 +1622,77 @@ func (m *GlobalSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetScopeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetScopeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetScopeChoice().(type) {
+	case *GlobalSpecType_Generic:
+		return nil, nil
+	case *GlobalSpecType_HttpLoadbalancer:
+		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_ApiDefinition:
+		drInfos, err := m.GetApiDefinition().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_definition." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_CdnLoadbalancer:
+		drInfos, err := m.GetCdnLoadbalancer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCdnLoadbalancer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cdn_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_BigipVirtualServer:
+		drInfos, err := m.GetBigipVirtualServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bigip_virtual_server." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *GlobalSpecType) GetViewInternalDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetViewInternal()
 	if vref == nil {
 		return nil, nil
@@ -1689,6 +1993,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetScopeChoiceDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetScopeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -1732,6 +2043,59 @@ func (m *ReplaceSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetBigipVirtualServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bigip_virtual_server." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetScopeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetScopeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetScopeChoice().(type) {
+	case *ReplaceSpecType_Generic:
+		return nil, nil
+	case *ReplaceSpecType_HttpLoadbalancer:
+		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_ApiDefinition:
+		drInfos, err := m.GetApiDefinition().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_definition." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_CdnLoadbalancer:
+		drInfos, err := m.GetCdnLoadbalancer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCdnLoadbalancer().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cdn_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_BigipVirtualServer:
+		drInfos, err := m.GetBigipVirtualServer().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

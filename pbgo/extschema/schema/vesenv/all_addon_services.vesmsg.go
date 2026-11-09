@@ -639,6 +639,138 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *AddonServiceChoice_F5XcBotDefenseBasic:
+		if fv, exists := v.FldValidators["choice.f5xc_bot_defense_basic"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcBotDefenseBasic).F5XcBotDefenseBasic
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bot_defense_basic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcL7DdosStandard:
+		if fv, exists := v.FldValidators["choice.f5xc_l7_ddos_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcL7DdosStandard).F5XcL7DdosStandard
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_l7_ddos_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcBotPolicyContentScrapping:
+		if fv, exists := v.FldValidators["choice.f5xc_bot_policy_content_scrapping"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcBotPolicyContentScrapping).F5XcBotPolicyContentScrapping
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bot_policy_content_scrapping"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcBotInfraWeb:
+		if fv, exists := v.FldValidators["choice.f5xc_bot_infra_web"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcBotInfraWeb).F5XcBotInfraWeb
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bot_infra_web"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcBotInfraMobile:
+		if fv, exists := v.FldValidators["choice.f5xc_bot_infra_mobile"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcBotInfraMobile).F5XcBotInfraMobile
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bot_infra_mobile"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcBotProtectionStandard:
+		if fv, exists := v.FldValidators["choice.f5xc_bot_protection_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcBotProtectionStandard).F5XcBotProtectionStandard
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bot_protection_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcBotPolicyMitigation:
+		if fv, exists := v.FldValidators["choice.f5xc_bot_policy_mitigation"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcBotPolicyMitigation).F5XcBotPolicyMitigation
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bot_policy_mitigation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcEssentialsPkg:
+		if fv, exists := v.FldValidators["choice.f5xc_essentials_pkg"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcEssentialsPkg).F5XcEssentialsPkg
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_essentials_pkg"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcEnterprisePkg:
+		if fv, exists := v.FldValidators["choice.f5xc_enterprise_pkg"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcEnterprisePkg).F5XcEnterprisePkg
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_enterprise_pkg"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcAdspConsoleStandard:
+		if fv, exists := v.FldValidators["choice.f5xc_adsp_console_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcAdspConsoleStandard).F5XcAdspConsoleStandard
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_adsp_console_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcConsoleNoPackage:
+		if fv, exists := v.FldValidators["choice.f5xc_console_no_package"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcConsoleNoPackage).F5XcConsoleNoPackage
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_console_no_package"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcLegacyNoPackage:
+		if fv, exists := v.FldValidators["choice.f5xc_legacy_no_package"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcLegacyNoPackage).F5XcLegacyNoPackage
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_legacy_no_package"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *AddonServiceChoice_F5XcNone:
 		if fv, exists := v.FldValidators["choice.f5xc_none"]; exists {
 			val := m.GetChoice().(*AddonServiceChoice_F5XcNone).F5XcNone

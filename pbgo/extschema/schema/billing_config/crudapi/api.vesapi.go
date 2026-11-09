@@ -2596,11 +2596,47 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "addon_serviceFixedValue": {
+            "type": "object",
+            "description": "x-displayName: \"Fixed Value\"\nFixedValue keeps quota constant irrespective of ordered quantity.",
+            "title": "FixedValue",
+            "properties": {
+                "value": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Value\"\nx-required\nFixed quota value.",
+                    "title": "value",
+                    "format": "int64"
+                }
+            }
+        },
+        "addon_serviceFloatMultiplier": {
+            "type": "object",
+            "description": "x-displayName: \"Float Multiplier\"\nordered value will be multiplied by this multiplier to derive the quota value.",
+            "title": "FloatMultiplier",
+            "properties": {
+                "multiplier": {
+                    "type": "number",
+                    "description": "x-displayName: \"Multiplier\"\nx-required\nMultiplier applied to the ordered quantity.",
+                    "title": "multiplier",
+                    "format": "float"
+                }
+            }
+        },
         "addon_serviceFormula": {
             "type": "object",
             "description": "x-displayName: \"Formula\"\nFormula holds the operator details for the entitlement feature",
             "title": "Formula",
             "properties": {
+                "fixed_value": {
+                    "description": "x-displayName: \"Fixed Value\"\nKeep the quota constant irrespective of the ordered quantity.",
+                    "title": "fixed_value",
+                    "$ref": "#/definitions/addon_serviceFixedValue"
+                },
+                "float_multiplier": {
+                    "description": "x-displayName: \"Float Multiplier\"\nDerive the quota by multiplying the ordered quantity by a factor.",
+                    "title": "float_multiplier",
+                    "$ref": "#/definitions/addon_serviceFloatMultiplier"
+                },
                 "operator": {
                     "description": "x-displayName: \"Operator\"\nOperator for the quota mapping",
                     "title": "Operator",
@@ -2849,6 +2885,14 @@ var APISwaggerJSON string = `{
             "description": "x-displayName: \"Usage Type\"\nUsageType object",
             "title": "UsageType",
             "properties": {
+                "base_package_types": {
+                    "type": "array",
+                    "description": "x-displayName: \"Base Package Types\"\nx-required\nx-example: [\"xc_essentials_package\", \"xc_enterprise_package\"]\nList of base package types associated with the usage type",
+                    "title": "Base Package Types",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "name": {
                     "type": "string",
                     "description": "x-displayName: \"Name\"\nx-example: \"Anycast Public Virtual IP\"\nName of the UsageType",

@@ -69,8 +69,39 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPolicerChoiceDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPolicerChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *CreateSpecType) GetPolicerChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPolicerChoice().(type) {
+	case *CreateSpecType_NoPolicer:
+		return nil, nil
+	case *CreateSpecType_Policer:
+		vref := m.GetPolicer()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("policer.Object")
+		dri := db.DRefInfo{
+			RefdType:   "policer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "policer",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *CreateSpecType) GetPolicerChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetPolicerChoice().(type) {
 	case *CreateSpecType_NoPolicer:
 		return nil, nil
@@ -508,8 +539,39 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPolicerChoiceDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPolicerChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetSpecType) GetPolicerChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPolicerChoice().(type) {
+	case *GetSpecType_NoPolicer:
+		return nil, nil
+	case *GetSpecType_Policer:
+		vref := m.GetPolicer()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("policer.Object")
+		dri := db.DRefInfo{
+			RefdType:   "policer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "policer",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GetSpecType) GetPolicerChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetPolicerChoice().(type) {
 	case *GetSpecType_NoPolicer:
 		return nil, nil
@@ -867,8 +929,39 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPolicerChoiceDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPolicerChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *GlobalSpecType) GetPolicerChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPolicerChoice().(type) {
+	case *GlobalSpecType_NoPolicer:
+		return nil, nil
+	case *GlobalSpecType_Policer:
+		vref := m.GetPolicer()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("policer.Object")
+		dri := db.DRefInfo{
+			RefdType:   "policer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "policer",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *GlobalSpecType) GetPolicerChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetPolicerChoice().(type) {
 	case *GlobalSpecType_NoPolicer:
 		return nil, nil
@@ -1226,8 +1319,39 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPolicerChoiceDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPolicerChoiceDRefInfoForOverlay(generateHash)
+}
 
 func (m *ReplaceSpecType) GetPolicerChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPolicerChoice().(type) {
+	case *ReplaceSpecType_NoPolicer:
+		return nil, nil
+	case *ReplaceSpecType_Policer:
+		vref := m.GetPolicer()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("policer.Object")
+		dri := db.DRefInfo{
+			RefdType:   "policer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "policer",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+	default:
+		return nil, nil
+	}
+}
+func (m *ReplaceSpecType) GetPolicerChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	switch m.GetPolicerChoice().(type) {
 	case *ReplaceSpecType_NoPolicer:
 		return nil, nil

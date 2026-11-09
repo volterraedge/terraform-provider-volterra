@@ -255,6 +255,13 @@ func (m *GetSuggestedAPIEndpointProtectionRuleRsp) GetDRefInfo() ([]db.DRefInfo,
 
 	return m.GetRuleDRefInfo()
 }
+func (m *GetSuggestedAPIEndpointProtectionRuleRsp) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRuleDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSuggestedAPIEndpointProtectionRuleRsp) GetRuleDRefInfo() ([]db.DRefInfo, error) {
@@ -264,6 +271,22 @@ func (m *GetSuggestedAPIEndpointProtectionRuleRsp) GetRuleDRefInfo() ([]db.DRefI
 	drInfos, err := m.GetRule().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRule().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "rule." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSuggestedAPIEndpointProtectionRuleRsp) GetRuleDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRule() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRule().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRule().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -852,6 +875,13 @@ func (m *GetSuggestedRateLimitRuleRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetRuleDRefInfo()
 }
+func (m *GetSuggestedRateLimitRuleRsp) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRuleDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSuggestedRateLimitRuleRsp) GetRuleDRefInfo() ([]db.DRefInfo, error) {
@@ -861,6 +891,22 @@ func (m *GetSuggestedRateLimitRuleRsp) GetRuleDRefInfo() ([]db.DRefInfo, error) 
 	drInfos, err := m.GetRule().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetRule().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "rule." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSuggestedRateLimitRuleRsp) GetRuleDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetRule() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetRule().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRule().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

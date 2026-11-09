@@ -22,79 +22,12 @@ resource "volterra_cloud_link" "example" {
 
   // One of the arguments from this list "aws azure gcp" must be set
 
-  aws {
-    aws_cred {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-
-    // One of the arguments from this list "byoc f5xc_managed" must be set
-
-    byoc {
-      connections {
-        auth_key {
-          // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-          blindfold_secret_info {
-            decryption_provider = "value"
-
-            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-            store_provider = "value"
-          }
-        }
-
-        bgp_asn = "64512"
-
-        connection_id = "dxcon-a2h48678"
-
-        coordinates {
-          latitude = "10.0"
-
-          longitude = "20.0"
-        }
-
-        enable_sitelink = true
-
-        // One of the arguments from this list "ipv4 ipv6" must be set
-
-        ipv4 {
-          aws_router_peer_address = "10.1.0.0/31"
-
-          router_peer_address = "10.1.0.0/31"
-        }
-        jumbo_mtu = true
-        metadata {
-          description = "Virtual Host for acmecorp website"
-
-          disable = true
-
-          name = "acmecorp-web"
-        }
-        region = "us-east-1"
-
-        // One of the arguments from this list "system_generated_name user_assigned_name" can be set
-
-        system_generated_name = true
-        tags = {
-          "key1" = "value1"
-        }
-        virtual_interface_type = "virtual_interface_type"
-        vlan = "700"
-      }
-    }
-
-    // One of the arguments from this list "auto custom_asn" must be set
-
-    auto = true
-  }
+  azure {}
 
   // One of the arguments from this list "disabled enabled" must be set
 
   disabled = true
 }
-
 ```
 
 Argument Reference
@@ -252,11 +185,13 @@ This string has a minimum length of 6 characters and and a maximum length of 80 
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -338,6 +273,10 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
+
 ### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
@@ -361,4 +300,4 @@ Secret is given as bootstrap secret in F5XC Security Sidecar.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured cloud_link.
+*   `id` - This is the id of the configured cloud_link.

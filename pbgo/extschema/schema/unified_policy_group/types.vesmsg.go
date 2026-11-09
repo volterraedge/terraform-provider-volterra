@@ -79,6 +79,24 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEastWestPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetEastWestPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInternetPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInternetPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
@@ -96,6 +114,22 @@ func (m *CreateSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetEastWestPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetEastWestPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetEastWestPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetEastWestPolicy().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "east_west_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInternetPolicy() == nil {
@@ -104,6 +138,22 @@ func (m *CreateSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetInternetPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInternetPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "internet_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetInternetPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInternetPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetInternetPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetInternetPolicy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -201,6 +251,13 @@ func (m *EastWestPolicyType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPoliciesDRefInfo()
 }
+func (m *EastWestPolicyType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPoliciesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *EastWestPolicyType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -210,6 +267,22 @@ func (m *EastWestPolicyType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetPolicies().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetPolicies().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "policies." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *EastWestPolicyType) GetPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPolicies() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetPolicies().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetPolicies().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -311,6 +384,24 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEastWestPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetEastWestPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInternetPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInternetPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
@@ -328,6 +419,22 @@ func (m *GetSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetEastWestPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetEastWestPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetEastWestPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetEastWestPolicy().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "east_west_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInternetPolicy() == nil {
@@ -336,6 +443,22 @@ func (m *GetSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetInternetPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInternetPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "internet_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetInternetPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInternetPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetInternetPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetInternetPolicy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -444,6 +567,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEastWestPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetEastWestPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInternetPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInternetPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
@@ -461,6 +602,22 @@ func (m *GlobalSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetEastWestPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetEastWestPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetEastWestPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetEastWestPolicy().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "east_west_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInternetPolicy() == nil {
@@ -469,6 +626,22 @@ func (m *GlobalSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetInternetPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInternetPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "internet_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetInternetPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInternetPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetInternetPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetInternetPolicy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -566,6 +739,13 @@ func (m *InternetPolicyType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetPoliciesDRefInfo()
 }
+func (m *InternetPolicyType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPoliciesDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *InternetPolicyType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
@@ -575,6 +755,22 @@ func (m *InternetPolicyType) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetPolicies().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetPolicies().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "policies." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *InternetPolicyType) GetPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetPolicies() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetPolicies().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetPolicies().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -676,6 +872,24 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEastWestPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetEastWestPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetInternetPolicyDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetInternetPolicyDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
@@ -693,6 +907,22 @@ func (m *ReplaceSpecType) GetEastWestPolicyDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetEastWestPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetEastWestPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetEastWestPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetEastWestPolicy().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "east_west_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInternetPolicy() == nil {
@@ -701,6 +931,22 @@ func (m *ReplaceSpecType) GetInternetPolicyDRefInfo() ([]db.DRefInfo, error) {
 	drInfos, err := m.GetInternetPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetInternetPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "internet_policy." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetInternetPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetInternetPolicy() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetInternetPolicy().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetInternetPolicy().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

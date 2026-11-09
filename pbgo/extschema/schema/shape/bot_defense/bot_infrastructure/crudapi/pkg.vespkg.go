@@ -27,6 +27,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API.Create"] = []string{
+		"spec.gc_spec.create_cloud_hosted.ip_addresses.#",
+		"spec.gc_spec.create_cloud_hosted.production",
+		"spec.gc_spec.create_cloud_hosted.testing",
 		"spec.gc_spec.egress.#",
 		"spec.gc_spec.host_names.#",
 		"spec.gc_spec.infra_host_name",
@@ -36,6 +39,9 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.ip_addresses.#",
 	}
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API.Create"] = []string{
+		"spec.gc_spec.create_cloud_hosted.ip_addresses.#",
+		"spec.gc_spec.create_cloud_hosted.production",
+		"spec.gc_spec.create_cloud_hosted.testing",
 		"spec.gc_spec.egress.#",
 		"spec.gc_spec.host_names.#",
 		"spec.gc_spec.infra_host_name",
@@ -45,6 +51,9 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.ip_addresses.#",
 	}
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API.Get"] = []string{
+		"spec.gc_spec.create_cloud_hosted.ip_addresses.#",
+		"spec.gc_spec.create_cloud_hosted.production",
+		"spec.gc_spec.create_cloud_hosted.testing",
 		"spec.gc_spec.egress.#",
 		"spec.gc_spec.host_names.#",
 		"spec.gc_spec.infra_host_name",
@@ -54,6 +63,9 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.ip_addresses.#",
 	}
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API.List"] = []string{
+		"items.#.spec.gc_spec.create_cloud_hosted.ip_addresses.#",
+		"items.#.spec.gc_spec.create_cloud_hosted.production",
+		"items.#.spec.gc_spec.create_cloud_hosted.testing",
 		"items.#.spec.gc_spec.egress.#",
 		"items.#.spec.gc_spec.host_names.#",
 		"items.#.spec.gc_spec.infra_host_name",
@@ -63,6 +75,9 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.ip_addresses.#",
 	}
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API.ListStream"] = []string{
+		"items.#.spec.gc_spec.create_cloud_hosted.ip_addresses.#",
+		"items.#.spec.gc_spec.create_cloud_hosted.production",
+		"items.#.spec.gc_spec.create_cloud_hosted.testing",
 		"items.#.spec.gc_spec.egress.#",
 		"items.#.spec.gc_spec.host_names.#",
 		"items.#.spec.gc_spec.infra_host_name",
@@ -72,6 +87,9 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.ip_addresses.#",
 	}
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.create_cloud_hosted.ip_addresses.#",
+		"spec.gc_spec.create_cloud_hosted.production",
+		"spec.gc_spec.create_cloud_hosted.testing",
 		"spec.gc_spec.egress.#",
 		"spec.gc_spec.host_names.#",
 		"spec.gc_spec.infra_host_name",
@@ -81,6 +99,9 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.ip_addresses.#",
 	}
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.create_cloud_hosted.ip_addresses.#",
+		"spec.gc_spec.create_cloud_hosted.production",
+		"spec.gc_spec.create_cloud_hosted.testing",
 		"spec.gc_spec.egress.#",
 		"spec.gc_spec.host_names.#",
 		"spec.gc_spec.infra_host_name",

@@ -22,9 +22,7 @@ resource "volterra_k8s_cluster_role" "example" {
 
   // One of the arguments from this list "k8s_cluster_role_selector policy_rule_list yaml" must be set
 
-  k8s_cluster_role_selector {
-    expressions = ["region in (us-west1, us-west2),tier in (staging)"]
-  }
+  yaml = "yaml"
 }
 
 ```

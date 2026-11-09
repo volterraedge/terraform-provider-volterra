@@ -446,6 +446,20 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 													},
 												},
 
+												"ebgp_multihop_disabled": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"ebgp_multihop_enabled": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"disable": {
 
 													Type:       schema.TypeBool,
@@ -717,6 +731,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																Type:       schema.TypeString,
 																Optional:   true,
+																Sensitive:  true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
@@ -1643,11 +1658,23 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																											},
 
 																											"url": {
+																												Sensitive: true,
 																												Type:       schema.TypeString,
 																												Required:   true,
 																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
+																									},
+																								},
+
+																								"none": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
 																									},
 																								},
 
@@ -4979,10 +5006,21 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -5144,10 +5182,21 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					},
 
 																					"url": {
+																						Sensitive: true,
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 																				},
+																			},
+																		},
+
+																		"none": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{},
 																			},
 																		},
 
@@ -5376,10 +5425,21 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																								},
 
 																								"url": {
+																									Sensitive: true,
 																									Type:     schema.TypeString,
 																									Required: true,
 																								},
 																							},
+																						},
+																					},
+
+																					"none": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
 																						},
 																					},
 
@@ -5574,10 +5634,21 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																								},
 
 																								"url": {
+																									Sensitive: true,
 																									Type:     schema.TypeString,
 																									Required: true,
 																								},
 																							},
+																						},
+																					},
+
+																					"none": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
 																						},
 																					},
 
@@ -5961,10 +6032,21 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																											},
 
 																											"url": {
+																												Sensitive: true,
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
+																									},
+																								},
+
+																								"none": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
 																									},
 																								},
 
@@ -6115,10 +6197,21 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																											},
 
 																											"url": {
+																												Sensitive: true,
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
+																									},
+																								},
+
+																								"none": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{},
 																									},
 																								},
 
@@ -6287,10 +6380,21 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																								},
 
 																								"url": {
+																									Sensitive: true,
 																									Type:     schema.TypeString,
 																									Required: true,
 																								},
 																							},
+																						},
+																					},
+
+																					"none": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
 																						},
 																					},
 
@@ -6485,10 +6589,21 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																								},
 
 																								"url": {
+																									Sensitive: true,
 																									Type:     schema.TypeString,
 																									Required: true,
 																								},
 																							},
+																						},
+																					},
+
+																					"none": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
 																						},
 																					},
 
@@ -6908,10 +7023,21 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																														},
 
 																														"url": {
+																															Sensitive: true,
 																															Type:     schema.TypeString,
 																															Required: true,
 																														},
 																													},
+																												},
+																											},
+
+																											"none": {
+
+																												Type:     schema.TypeList,
+																												MaxItems: 1,
+																												Optional: true,
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{},
 																												},
 																											},
 
@@ -7120,10 +7246,21 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																														},
 
 																														"url": {
+																															Sensitive: true,
 																															Type:     schema.TypeString,
 																															Required: true,
 																														},
 																													},
+																												},
+																											},
+
+																											"none": {
+
+																												Type:     schema.TypeList,
+																												MaxItems: 1,
+																												Optional: true,
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{},
 																												},
 																											},
 
@@ -8885,6 +9022,32 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 										}
 
+										ebgpMultihopChoiceTypeFound := false
+
+										if v, ok := peersMapStrToI["ebgp_multihop_disabled"]; ok && !isIntfNil(v) && !ebgpMultihopChoiceTypeFound {
+
+											ebgpMultihopChoiceTypeFound = true
+
+											if v.(bool) {
+												ebgpMultihopChoiceInt := &ves_io_schema_bgp.Peer_EbgpMultihopDisabled{}
+												ebgpMultihopChoiceInt.EbgpMultihopDisabled = &ves_io_schema.Empty{}
+												peers[i].EbgpMultihopChoice = ebgpMultihopChoiceInt
+											}
+
+										}
+
+										if v, ok := peersMapStrToI["ebgp_multihop_enabled"]; ok && !isIntfNil(v) && !ebgpMultihopChoiceTypeFound {
+
+											ebgpMultihopChoiceTypeFound = true
+
+											if v.(bool) {
+												ebgpMultihopChoiceInt := &ves_io_schema_bgp.Peer_EbgpMultihopEnabled{}
+												ebgpMultihopChoiceInt.EbgpMultihopEnabled = &ves_io_schema.Empty{}
+												peers[i].EbgpMultihopChoice = ebgpMultihopChoiceInt
+											}
+
+										}
+
 										enableChoiceTypeFound := false
 
 										if v, ok := peersMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
@@ -10596,6 +10759,15 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																								}
 																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																							secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
 
 																						}
 
@@ -15251,6 +15423,15 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																}
 
+																if v, ok := iscsiChapPasswordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	iscsiChapPassword.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := iscsiChapPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -15442,6 +15623,15 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																		}
 																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	password.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -15734,6 +15924,15 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																			}
 
+																			if v, ok := clientPrivateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+																			}
+
 																			if v, ok := clientPrivateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																				secretInfoOneofTypeFound = true
@@ -15988,6 +16187,15 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																					}
 																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				password.SecretInfoOneof = secretInfoOneofInt
 
 																			}
 
@@ -16459,6 +16667,15 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																						}
 
+																						if v, ok := chapInitiatorSecretMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																							secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																							chapInitiatorSecret.SecretInfoOneof = secretInfoOneofInt
+
+																						}
+
 																						if v, ok := chapInitiatorSecretMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																							secretInfoOneofTypeFound = true
@@ -16638,6 +16855,15 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																								}
 																							}
+
+																						}
+
+																						if v, ok := chapTargetInitiatorSecretMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																							secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																							chapTargetInitiatorSecret.SecretInfoOneof = secretInfoOneofInt
 
 																						}
 
@@ -16843,6 +17069,15 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																					}
 																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
 
 																			}
 
@@ -17100,6 +17335,15 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																					}
 																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				password.SecretInfoOneof = secretInfoOneofInt
 
 																			}
 
@@ -17603,6 +17847,15 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																									}
 
+																									if v, ok := apiTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																										secretInfoOneofTypeFound = true
+																										secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																										secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																										apiToken.SecretInfoOneof = secretInfoOneofInt
+
+																									}
+
 																									if v, ok := apiTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																										secretInfoOneofTypeFound = true
@@ -17859,6 +18112,15 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																											}
 																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																										secretInfoOneofTypeFound = true
+																										secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																										secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																										apiToken.SecretInfoOneof = secretInfoOneofInt
 
 																									}
 
@@ -20184,6 +20446,32 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 										}
 
+										ebgpMultihopChoiceTypeFound := false
+
+										if v, ok := peersMapStrToI["ebgp_multihop_disabled"]; ok && !isIntfNil(v) && !ebgpMultihopChoiceTypeFound {
+
+											ebgpMultihopChoiceTypeFound = true
+
+											if v.(bool) {
+												ebgpMultihopChoiceInt := &ves_io_schema_bgp.Peer_EbgpMultihopDisabled{}
+												ebgpMultihopChoiceInt.EbgpMultihopDisabled = &ves_io_schema.Empty{}
+												peers[i].EbgpMultihopChoice = ebgpMultihopChoiceInt
+											}
+
+										}
+
+										if v, ok := peersMapStrToI["ebgp_multihop_enabled"]; ok && !isIntfNil(v) && !ebgpMultihopChoiceTypeFound {
+
+											ebgpMultihopChoiceTypeFound = true
+
+											if v.(bool) {
+												ebgpMultihopChoiceInt := &ves_io_schema_bgp.Peer_EbgpMultihopEnabled{}
+												ebgpMultihopChoiceInt.EbgpMultihopEnabled = &ves_io_schema.Empty{}
+												peers[i].EbgpMultihopChoice = ebgpMultihopChoiceInt
+											}
+
+										}
+
 										enableChoiceTypeFound := false
 
 										if v, ok := peersMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
@@ -21889,6 +22177,15 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																								}
 																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																							secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
 
 																						}
 
@@ -26538,6 +26835,15 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																}
 
+																if v, ok := iscsiChapPasswordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	iscsiChapPassword.SecretInfoOneof = secretInfoOneofInt
+
+																}
+
 																if v, ok := iscsiChapPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																	secretInfoOneofTypeFound = true
@@ -26729,6 +27035,15 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																		}
 																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																	secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																	password.SecretInfoOneof = secretInfoOneofInt
 
 																}
 
@@ -27021,6 +27336,15 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																			}
 
+																			if v, ok := clientPrivateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+																			}
+
 																			if v, ok := clientPrivateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																				secretInfoOneofTypeFound = true
@@ -27275,6 +27599,15 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																					}
 																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				password.SecretInfoOneof = secretInfoOneofInt
 
 																			}
 
@@ -27746,6 +28079,15 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																						}
 
+																						if v, ok := chapInitiatorSecretMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																							secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																							chapInitiatorSecret.SecretInfoOneof = secretInfoOneofInt
+
+																						}
+
 																						if v, ok := chapInitiatorSecretMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																							secretInfoOneofTypeFound = true
@@ -27925,6 +28267,15 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																								}
 																							}
+
+																						}
+
+																						if v, ok := chapTargetInitiatorSecretMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																							secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																							chapTargetInitiatorSecret.SecretInfoOneof = secretInfoOneofInt
 
 																						}
 
@@ -28130,6 +28481,15 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																					}
 																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
 
 																			}
 
@@ -28387,6 +28747,15 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																					}
 																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																				secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																				password.SecretInfoOneof = secretInfoOneofInt
 
 																			}
 
@@ -28890,6 +29259,15 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																									}
 
+																									if v, ok := apiTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																										secretInfoOneofTypeFound = true
+																										secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																										secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																										apiToken.SecretInfoOneof = secretInfoOneofInt
+
+																									}
+
 																									if v, ok := apiTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 																										secretInfoOneofTypeFound = true
@@ -29146,6 +29524,15 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																											}
 																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["none"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																										secretInfoOneofTypeFound = true
+																										secretInfoOneofInt := &ves_io_schema.SecretType_None{}
+																										secretInfoOneofInt.None = &ves_io_schema.Empty{}
+																										apiToken.SecretInfoOneof = secretInfoOneofInt
 
 																									}
 

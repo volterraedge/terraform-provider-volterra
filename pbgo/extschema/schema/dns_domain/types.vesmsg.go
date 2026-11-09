@@ -69,8 +69,32 @@ func (m *AWSRoute53Type) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetCredsDRefInfo()
 }
+func (m *AWSRoute53Type) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCredsDRefInfoForOverlay(generateHash)
+}
 
 func (m *AWSRoute53Type) GetCredsDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetCreds()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_credentials.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_credentials.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "creds",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *AWSRoute53Type) GetCredsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetCreds()
 	if vref == nil {
 		return nil, nil
@@ -197,6 +221,13 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDomainChoiceDRefInfo()
 }
+func (m *CreateSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDomainChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -210,6 +241,31 @@ func (m *CreateSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "route53." + dri.DRField
+		}
+		return drInfos, err
+	case *CreateSpecType_VerificationOnly:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *CreateSpecType) GetDomainChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDomainChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDomainChoice().(type) {
+	case *CreateSpecType_VolterraManaged:
+		return nil, nil
+	case *CreateSpecType_Route53:
+		drInfos, err := m.GetRoute53().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -376,6 +432,13 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDomainChoiceDRefInfo()
 }
+func (m *GetSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDomainChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -389,6 +452,31 @@ func (m *GetSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "route53." + dri.DRField
+		}
+		return drInfos, err
+	case *GetSpecType_VerificationOnly:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetSpecType) GetDomainChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDomainChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDomainChoice().(type) {
+	case *GetSpecType_VolterraManaged:
+		return nil, nil
+	case *GetSpecType_Route53:
+		drInfos, err := m.GetRoute53().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -567,6 +655,13 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDomainChoiceDRefInfo()
 }
+func (m *GlobalSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDomainChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -580,6 +675,31 @@ func (m *GlobalSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "route53." + dri.DRField
+		}
+		return drInfos, err
+	case *GlobalSpecType_VerificationOnly:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GlobalSpecType) GetDomainChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDomainChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDomainChoice().(type) {
+	case *GlobalSpecType_VolterraManaged:
+		return nil, nil
+	case *GlobalSpecType_Route53:
+		drInfos, err := m.GetRoute53().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -752,6 +872,13 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetDomainChoiceDRefInfo()
 }
+func (m *ReplaceSpecType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDomainChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -765,6 +892,31 @@ func (m *ReplaceSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "route53." + dri.DRField
+		}
+		return drInfos, err
+	case *ReplaceSpecType_VerificationOnly:
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ReplaceSpecType) GetDomainChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetDomainChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDomainChoice().(type) {
+	case *ReplaceSpecType_VolterraManaged:
+		return nil, nil
+	case *ReplaceSpecType_Route53:
+		drInfos, err := m.GetRoute53().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]

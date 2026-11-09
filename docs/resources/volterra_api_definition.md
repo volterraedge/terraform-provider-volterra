@@ -22,7 +22,7 @@ resource "volterra_api_definition" "example" {
 
   // One of the arguments from this list "mixed_schema_origin strict_schema_origin" must be set
 
-  mixed_schema_origin = true
+  strict_schema_origin = true
 }
 
 ```

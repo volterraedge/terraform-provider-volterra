@@ -226,6 +226,13 @@ func (m *FindFilterSetsRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return nil, nil
 }
+func (m *FindFilterSetsRsp) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return nil, nil
+}
 
 type ValidateFindFilterSetsRsp struct {
 	FldValidators map[string]db.ValidatorFunc

@@ -936,6 +936,13 @@ func (m *BotDefenseAdvancedProtection) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetClientTypeChoiceDRefInfo()
 }
+func (m *BotDefenseAdvancedProtection) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetClientTypeChoiceDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *BotDefenseAdvancedProtection) GetClientTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -967,6 +974,47 @@ func (m *BotDefenseAdvancedProtection) GetClientTypeChoiceDRefInfo() ([]db.DRefI
 		drInfos, err := m.GetMobileOnly().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetMobileOnly().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "mobile_only." + dri.DRField
+		}
+		return drInfos, err
+	default:
+		return nil, nil
+	}
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *BotDefenseAdvancedProtection) GetClientTypeChoiceDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetClientTypeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetClientTypeChoice().(type) {
+	case *BotDefenseAdvancedProtection_BothWebAndMobile:
+		drInfos, err := m.GetBothWebAndMobile().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBothWebAndMobile().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "both_web_and_mobile." + dri.DRField
+		}
+		return drInfos, err
+	case *BotDefenseAdvancedProtection_WebOnly:
+		drInfos, err := m.GetWebOnly().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetWebOnly().GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "web_only." + dri.DRField
+		}
+		return drInfos, err
+	case *BotDefenseAdvancedProtection_MobileOnly:
+		drInfos, err := m.GetMobileOnly().GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetMobileOnly().GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range drInfos {
 			dri := &drInfos[i]
@@ -1138,8 +1186,43 @@ func (m *BotDefenseAdvancedType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *BotDefenseAdvancedType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetMobileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMobileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWebDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWebDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *BotDefenseAdvancedType) GetMobileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetMobile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bot_infrastructure.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bot_infrastructure.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "mobile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *BotDefenseAdvancedType) GetMobileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetMobile()
 	if vref == nil {
 		return nil, nil
@@ -1185,6 +1268,23 @@ func (m *BotDefenseAdvancedType) GetMobileDBEntries(ctx context.Context, d db.In
 }
 
 func (m *BotDefenseAdvancedType) GetWebDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetWeb()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bot_infrastructure.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bot_infrastructure.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "web",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *BotDefenseAdvancedType) GetWebDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetWeb()
 	if vref == nil {
 		return nil, nil
@@ -1413,6 +1513,269 @@ func BotDefenseAdvancedTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *BotDefenseBasicType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotDefenseBasicType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotDefenseBasicType) DeepCopy() *BotDefenseBasicType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotDefenseBasicType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotDefenseBasicType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotDefenseBasicType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotDefenseBasicTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *BotDefenseBasicType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPolicyDRefInfo()
+}
+func (m *BotDefenseBasicType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetPolicyDRefInfoForOverlay(generateHash)
+}
+
+func (m *BotDefenseBasicType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetPolicy()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bot_fullsite_policy.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bot_fullsite_policy.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "policy",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *BotDefenseBasicType) GetPolicyDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vref := m.GetPolicy()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bot_fullsite_policy.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bot_fullsite_policy.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "policy",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+
+// GetPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *BotDefenseBasicType) GetPolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "bot_fullsite_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: bot_fullsite_policy")
+	}
+	vref := m.GetPolicy()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "bot_fullsite_policy.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+	return entries, nil
+}
+
+type ValidateBotDefenseBasicType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotDefenseBasicType) JavaScriptChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for java_script_choice")
+	}
+	return validatorFn, nil
+}
+func (v *ValidateBotDefenseBasicType) PolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for policy")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBotDefenseBasicType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotDefenseBasicType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotDefenseBasicType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["java_script_choice"]; exists {
+		val := m.GetJavaScriptChoice()
+		vOpts := append(opts,
+			db.WithValidateField("java_script_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetJavaScriptChoice().(type) {
+	case *BotDefenseBasicType_DisableJsInsert:
+		if fv, exists := v.FldValidators["java_script_choice.disable_js_insert"]; exists {
+			val := m.GetJavaScriptChoice().(*BotDefenseBasicType_DisableJsInsert).DisableJsInsert
+			vOpts := append(opts,
+				db.WithValidateField("java_script_choice"),
+				db.WithValidateField("disable_js_insert"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotDefenseBasicType_JsInsertAllPages:
+		if fv, exists := v.FldValidators["java_script_choice.js_insert_all_pages"]; exists {
+			val := m.GetJavaScriptChoice().(*BotDefenseBasicType_JsInsertAllPages).JsInsertAllPages
+			vOpts := append(opts,
+				db.WithValidateField("java_script_choice"),
+				db.WithValidateField("js_insert_all_pages"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotDefenseBasicType_JsInsertAllPagesExcept:
+		if fv, exists := v.FldValidators["java_script_choice.js_insert_all_pages_except"]; exists {
+			val := m.GetJavaScriptChoice().(*BotDefenseBasicType_JsInsertAllPagesExcept).JsInsertAllPagesExcept
+			vOpts := append(opts,
+				db.WithValidateField("java_script_choice"),
+				db.WithValidateField("js_insert_all_pages_except"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotDefenseBasicType_JsInsertionRules:
+		if fv, exists := v.FldValidators["java_script_choice.js_insertion_rules"]; exists {
+			val := m.GetJavaScriptChoice().(*BotDefenseBasicType_JsInsertionRules).JsInsertionRules
+			vOpts := append(opts,
+				db.WithValidateField("java_script_choice"),
+				db.WithValidateField("js_insertion_rules"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	}
+	if fv, exists := v.FldValidators["policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("policy"))
+		if err := fv(ctx, m.GetPolicy(), vOpts...); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotDefenseBasicTypeValidator = func() *ValidateBotDefenseBasicType {
+	v := &ValidateBotDefenseBasicType{FldValidators: map[string]db.ValidatorFunc{}}
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+	vrhJavaScriptChoice := v.JavaScriptChoiceValidationRuleHandler
+	rulesJavaScriptChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhJavaScriptChoice(rulesJavaScriptChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotDefenseBasicType.java_script_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["java_script_choice"] = vFn
+
+	vrhPolicy := v.PolicyValidationRuleHandler
+	rulesPolicy := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPolicy(rulesPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotDefenseBasicType.policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["policy"] = vFn
+	v.FldValidators["java_script_choice.js_insert_all_pages_except"] = ShapeJavaScriptInsertAllWithExceptionsTypeValidator().Validate
+	v.FldValidators["java_script_choice.js_insertion_rules"] = ShapeJavaScriptInsertTypeValidator().Validate
+
+	return v
+}()
+
+func BotDefenseBasicTypeValidator() db.Validator {
+	return DefaultBotDefenseBasicTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *BothWebAndMobileType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1466,8 +1829,43 @@ func (m *BothWebAndMobileType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *BothWebAndMobileType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetMobileDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetMobileDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetWebDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetWebDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *BothWebAndMobileType) GetMobileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetMobile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bot_infrastructure.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bot_infrastructure.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "mobile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *BothWebAndMobileType) GetMobileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetMobile()
 	if vref == nil {
 		return nil, nil
@@ -1513,6 +1911,23 @@ func (m *BothWebAndMobileType) GetMobileDBEntries(ctx context.Context, d db.Inte
 }
 
 func (m *BothWebAndMobileType) GetWebDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetWeb()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bot_infrastructure.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bot_infrastructure.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "web",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *BothWebAndMobileType) GetWebDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetWeb()
 	if vref == nil {
 		return nil, nil
@@ -3399,8 +3814,32 @@ func (m *MobileOnlyType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetMobileDRefInfo()
 }
+func (m *MobileOnlyType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetMobileDRefInfoForOverlay(generateHash)
+}
 
 func (m *MobileOnlyType) GetMobileDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetMobile()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bot_infrastructure.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bot_infrastructure.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "mobile",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *MobileOnlyType) GetMobileDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetMobile()
 	if vref == nil {
 		return nil, nil
@@ -4516,8 +4955,32 @@ func (m *SensitiveDataPolicySettings) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetSensitiveDataPolicyRefDRefInfo()
 }
+func (m *SensitiveDataPolicySettings) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSensitiveDataPolicyRefDRefInfoForOverlay(generateHash)
+}
 
 func (m *SensitiveDataPolicySettings) GetSensitiveDataPolicyRefDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetSensitiveDataPolicyRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("sensitive_data_policy.Object")
+	dri := db.DRefInfo{
+		RefdType:   "sensitive_data_policy.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "sensitive_data_policy_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *SensitiveDataPolicySettings) GetSensitiveDataPolicyRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetSensitiveDataPolicyRef()
 	if vref == nil {
 		return nil, nil
@@ -6143,8 +6606,32 @@ func (m *WebOnlyType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetWebDRefInfo()
 }
+func (m *WebOnlyType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWebDRefInfoForOverlay(generateHash)
+}
 
 func (m *WebOnlyType) GetWebDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetWeb()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bot_infrastructure.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bot_infrastructure.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "web",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *WebOnlyType) GetWebDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetWeb()
 	if vref == nil {
 		return nil, nil

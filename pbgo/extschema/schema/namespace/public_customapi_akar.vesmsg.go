@@ -538,6 +538,29 @@ func (m *ApplicationInventoryResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *ApplicationInventoryResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCdnLoadbalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCdnLoadbalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHttpLoadbalancersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttpLoadbalancersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetVirtualServersDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServersDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *ApplicationInventoryResponse) GetCdnLoadbalancersDRefInfo() ([]db.DRefInfo, error) {
@@ -547,6 +570,22 @@ func (m *ApplicationInventoryResponse) GetCdnLoadbalancersDRefInfo() ([]db.DRefI
 	drInfos, err := m.GetCdnLoadbalancers().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetCdnLoadbalancers().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cdn_loadbalancers." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ApplicationInventoryResponse) GetCdnLoadbalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCdnLoadbalancers() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetCdnLoadbalancers().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCdnLoadbalancers().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -571,6 +610,22 @@ func (m *ApplicationInventoryResponse) GetHttpLoadbalancersDRefInfo() ([]db.DRef
 	return drInfos, err
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *ApplicationInventoryResponse) GetHttpLoadbalancersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetHttpLoadbalancers() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetHttpLoadbalancers().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetHttpLoadbalancers().GetDRefInfoForOverlay() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "http_loadbalancers." + dri.DRField
+	}
+	return drInfos, err
+}
+
 // GetDRefInfo for the field's type
 func (m *ApplicationInventoryResponse) GetVirtualServersDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetVirtualServers() == nil {
@@ -579,6 +634,22 @@ func (m *ApplicationInventoryResponse) GetVirtualServersDRefInfo() ([]db.DRefInf
 	drInfos, err := m.GetVirtualServers().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetVirtualServers().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "virtual_servers." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *ApplicationInventoryResponse) GetVirtualServersDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVirtualServers() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetVirtualServers().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServers().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -1108,6 +1179,24 @@ func (m *GetActiveAlertPoliciesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *GetActiveAlertPoliciesResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAlertPoliciesDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAlertPoliciesDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetAlertPoliciesStatusDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetAlertPoliciesStatusDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetAlertPolicies()
@@ -1122,6 +1211,30 @@ func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesDRefInfo() ([]db.DRefIn
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("alert_policy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "alert_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "alert_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetAlertPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetActiveAlertPoliciesResponse.alert_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("alert_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "alert_policy.Object",
 			RefdTenant: vref.Tenant,
@@ -1172,6 +1285,26 @@ func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesStatusDRefInfo() ([]db.
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAlertPoliciesStatus() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("alert_policies_status[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesStatusDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetAlertPoliciesStatus() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetAlertPoliciesStatus() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAlertPoliciesStatus() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -1351,6 +1484,13 @@ func (m *GetActiveNetworkPoliciesResponse) GetDRefInfo() ([]db.DRefInfo, error) 
 
 	return m.GetNetworkPoliciesDRefInfo()
 }
+func (m *GetActiveNetworkPoliciesResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkPoliciesDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetActiveNetworkPoliciesResponse) GetNetworkPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetNetworkPolicies()
@@ -1365,6 +1505,30 @@ func (m *GetActiveNetworkPoliciesResponse) GetNetworkPoliciesDRefInfo() ([]db.DR
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("network_policy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetActiveNetworkPoliciesResponse) GetNetworkPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetNetworkPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetActiveNetworkPoliciesResponse.network_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_policy.Object",
 			RefdTenant: vref.Tenant,
@@ -1564,6 +1728,13 @@ func (m *GetActiveServicePoliciesResponse) GetDRefInfo() ([]db.DRefInfo, error) 
 
 	return m.GetServicePoliciesDRefInfo()
 }
+func (m *GetActiveServicePoliciesResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetServicePoliciesDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetActiveServicePoliciesResponse) GetServicePoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetServicePolicies()
@@ -1578,6 +1749,30 @@ func (m *GetActiveServicePoliciesResponse) GetServicePoliciesDRefInfo() ([]db.DR
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("service_policy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "service_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetActiveServicePoliciesResponse) GetServicePoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetServicePolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetActiveServicePoliciesResponse.service_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "service_policy.Object",
 			RefdTenant: vref.Tenant,
@@ -1777,6 +1972,13 @@ func (m *GetFastACLsForInternetVIPsResponse) GetDRefInfo() ([]db.DRefInfo, error
 
 	return m.GetFastAclsDRefInfo()
 }
+func (m *GetFastACLsForInternetVIPsResponse) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetFastAclsDRefInfoForOverlay(generateHash)
+}
 
 func (m *GetFastACLsForInternetVIPsResponse) GetFastAclsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetFastAcls()
@@ -1791,6 +1993,30 @@ func (m *GetFastACLsForInternetVIPsResponse) GetFastAclsDRefInfo() ([]db.DRefInf
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("fast_acl.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "fast_acl.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "fast_acls",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *GetFastACLsForInternetVIPsResponse) GetFastAclsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetFastAcls()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetFastACLsForInternetVIPsResponse.fast_acls[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("fast_acl.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "fast_acl.Object",
 			RefdTenant: vref.Tenant,
@@ -2193,6 +2419,24 @@ func (m *HTTPLoadbalancerInventoryType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, nil
 }
+func (m *HTTPLoadbalancerInventoryType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCdnlbResultsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetCdnlbResultsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := m.GetHttplbResultsDRefInfoForOverlay(generateHash); err != nil {
+		return nil, errors.Wrap(err, "GetHttplbResultsDRefInfoForOverlay() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	return drInfos, nil
+}
 
 // GetDRefInfo for the field's type
 func (m *HTTPLoadbalancerInventoryType) GetCdnlbResultsDRefInfo() ([]db.DRefInfo, error) {
@@ -2214,6 +2458,26 @@ func (m *HTTPLoadbalancerInventoryType) GetCdnlbResultsDRefInfo() ([]db.DRefInfo
 	return drInfos, nil
 }
 
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPLoadbalancerInventoryType) GetCdnlbResultsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetCdnlbResults() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetCdnlbResults() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCdnlbResults() GetDRefInfoForOverlay() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("cdnlb_results[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *HTTPLoadbalancerInventoryType) GetHttplbResultsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetHttplbResults() == nil {
@@ -2224,6 +2488,26 @@ func (m *HTTPLoadbalancerInventoryType) GetHttplbResultsDRefInfo() ([]db.DRefInf
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttplbResults() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("httplb_results[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *HTTPLoadbalancerInventoryType) GetHttplbResultsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetHttplbResults() == nil {
+		return nil, nil
+	}
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetHttplbResults() {
+		driSet, err := e.GetDRefInfoForOverlay(generateHash)
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttplbResults() GetDRefInfoForOverlay() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
@@ -2413,6 +2697,13 @@ func (m *HTTPLoadbalancerResultType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetWafPolicyRefDRefInfo()
 }
+func (m *HTTPLoadbalancerResultType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWafPolicyRefDRefInfoForOverlay(generateHash)
+}
 
 func (m *HTTPLoadbalancerResultType) GetWafPolicyRefDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetWafPolicyRef()
@@ -2427,6 +2718,30 @@ func (m *HTTPLoadbalancerResultType) GetWafPolicyRefDRefInfo() ([]db.DRefInfo, e
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("app_firewall.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "waf_policy_ref",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *HTTPLoadbalancerResultType) GetWafPolicyRefDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetWafPolicyRef()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("HTTPLoadbalancerResultType.waf_policy_ref[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "app_firewall.Object",
 			RefdTenant: vref.Tenant,
@@ -3499,8 +3814,32 @@ func (m *OIDCOAuthDiscoveryReq) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetTrustedCaDRefInfo()
 }
+func (m *OIDCOAuthDiscoveryReq) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTrustedCaDRefInfoForOverlay(generateHash)
+}
 
 func (m *OIDCOAuthDiscoveryReq) GetTrustedCaDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetTrustedCa()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("trusted_ca_list.Object")
+	dri := db.DRefInfo{
+		RefdType:   "trusted_ca_list.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "trusted_ca",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *OIDCOAuthDiscoveryReq) GetTrustedCaDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetTrustedCa()
 	if vref == nil {
 		return nil, nil
@@ -3667,8 +4006,32 @@ func (m *OIDCOAuthDiscoveryResp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAutoJwtConfigNameDRefInfo()
 }
+func (m *OIDCOAuthDiscoveryResp) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAutoJwtConfigNameDRefInfoForOverlay(generateHash)
+}
 
 func (m *OIDCOAuthDiscoveryResp) GetAutoJwtConfigNameDRefInfo() ([]db.DRefInfo, error) {
+	vref := m.GetAutoJwtConfigName()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("oauth_jwt_config.Object")
+	dri := db.DRefInfo{
+		RefdType:   "oauth_jwt_config.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "auto_jwt_config_name",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+}
+func (m *OIDCOAuthDiscoveryResp) GetAutoJwtConfigNameDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
 	vref := m.GetAutoJwtConfigName()
 	if vref == nil {
 		return nil, nil
@@ -3825,6 +4188,13 @@ func (m *SetActiveAlertPoliciesRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetAlertPoliciesDRefInfo()
 }
+func (m *SetActiveAlertPoliciesRequest) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAlertPoliciesDRefInfoForOverlay(generateHash)
+}
 
 func (m *SetActiveAlertPoliciesRequest) GetAlertPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetAlertPolicies()
@@ -3839,6 +4209,30 @@ func (m *SetActiveAlertPoliciesRequest) GetAlertPoliciesDRefInfo() ([]db.DRefInf
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("alert_policy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "alert_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "alert_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *SetActiveAlertPoliciesRequest) GetAlertPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetAlertPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("SetActiveAlertPoliciesRequest.alert_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("alert_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "alert_policy.Object",
 			RefdTenant: vref.Tenant,
@@ -4099,6 +4493,13 @@ func (m *SetActiveNetworkPoliciesRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetNetworkPoliciesDRefInfo()
 }
+func (m *SetActiveNetworkPoliciesRequest) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkPoliciesDRefInfoForOverlay(generateHash)
+}
 
 func (m *SetActiveNetworkPoliciesRequest) GetNetworkPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetNetworkPolicies()
@@ -4113,6 +4514,30 @@ func (m *SetActiveNetworkPoliciesRequest) GetNetworkPoliciesDRefInfo() ([]db.DRe
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("network_policy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *SetActiveNetworkPoliciesRequest) GetNetworkPoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetNetworkPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("SetActiveNetworkPoliciesRequest.network_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "network_policy.Object",
 			RefdTenant: vref.Tenant,
@@ -4373,6 +4798,13 @@ func (m *SetActiveServicePoliciesRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetServicePoliciesDRefInfo()
 }
+func (m *SetActiveServicePoliciesRequest) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetServicePoliciesDRefInfoForOverlay(generateHash)
+}
 
 func (m *SetActiveServicePoliciesRequest) GetServicePoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetServicePolicies()
@@ -4387,6 +4819,30 @@ func (m *SetActiveServicePoliciesRequest) GetServicePoliciesDRefInfo() ([]db.DRe
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("service_policy.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "service_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *SetActiveServicePoliciesRequest) GetServicePoliciesDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetServicePolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("SetActiveServicePoliciesRequest.service_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "service_policy.Object",
 			RefdTenant: vref.Tenant,
@@ -4647,6 +5103,13 @@ func (m *SetFastACLsForInternetVIPsRequest) GetDRefInfo() ([]db.DRefInfo, error)
 
 	return m.GetFastAclsDRefInfo()
 }
+func (m *SetFastACLsForInternetVIPsRequest) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetFastAclsDRefInfoForOverlay(generateHash)
+}
 
 func (m *SetFastACLsForInternetVIPsRequest) GetFastAclsDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetFastAcls()
@@ -4661,6 +5124,30 @@ func (m *SetFastACLsForInternetVIPsRequest) GetFastAclsDRefInfo() ([]db.DRefInfo
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("fast_acl.Object")
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "fast_acl.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "fast_acls",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+}
+func (m *SetFastACLsForInternetVIPsRequest) GetFastAclsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	vrefs := m.GetFastAcls()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("SetFastACLsForInternetVIPsRequest.fast_acls[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("fast_acl.Object")
+		// resolve kind to type if needed at DBObject.DRefInfoForOverlay(generateHash)
 		drInfos = append(drInfos, db.DRefInfo{
 			RefdType:   "fast_acl.Object",
 			RefdTenant: vref.Tenant,
@@ -6188,6 +6675,13 @@ func (m *VirtualServerInventoryResultType) GetDRefInfo() ([]db.DRefInfo, error) 
 
 	return m.GetVirtualServerSpecsDRefInfo()
 }
+func (m *VirtualServerInventoryResultType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualServerSpecsDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *VirtualServerInventoryResultType) GetVirtualServerSpecsDRefInfo() ([]db.DRefInfo, error) {
@@ -6197,6 +6691,22 @@ func (m *VirtualServerInventoryResultType) GetVirtualServerSpecsDRefInfo() ([]db
 	drInfos, err := m.GetVirtualServerSpecs().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetVirtualServerSpecs().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "virtual_server_specs." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *VirtualServerInventoryResultType) GetVirtualServerSpecsDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetVirtualServerSpecs() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetVirtualServerSpecs().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetVirtualServerSpecs().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
@@ -6221,6 +6731,12 @@ func (v *ValidateVirtualServerInventoryResultType) Validate(ctx context.Context,
 	}
 	if m == nil {
 		return nil
+	}
+	if fv, exists := v.FldValidators["access_policy_count"]; exists {
+		vOpts := append(opts, db.WithValidateField("access_policy_count"))
+		if err := fv(ctx, m.GetAccessPolicyCount(), vOpts...); err != nil {
+			return err
+		}
 	}
 	if fv, exists := v.FldValidators["http_count"]; exists {
 		vOpts := append(opts, db.WithValidateField("http_count"))
@@ -6415,6 +6931,13 @@ func (m *VirtualServerSpecsInventoryType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return m.GetHttpDRefInfo()
 }
+func (m *VirtualServerSpecsInventoryType) GetDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHttpDRefInfoForOverlay(generateHash)
+}
 
 // GetDRefInfo for the field's type
 func (m *VirtualServerSpecsInventoryType) GetHttpDRefInfo() ([]db.DRefInfo, error) {
@@ -6424,6 +6947,22 @@ func (m *VirtualServerSpecsInventoryType) GetHttpDRefInfo() ([]db.DRefInfo, erro
 	drInfos, err := m.GetHttp().GetDRefInfo()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetHttp().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "http." + dri.DRField
+	}
+	return drInfos, err
+}
+
+// GetDRefInfoForOverlay for the field's type
+func (m *VirtualServerSpecsInventoryType) GetHttpDRefInfoForOverlay(generateHash bool) ([]db.DRefInfo, error) {
+	if m.GetHttp() == nil {
+		return nil, nil
+	}
+	drInfos, err := m.GetHttp().GetDRefInfoForOverlay(generateHash)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetHttp().GetDRefInfoForOverlay() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]

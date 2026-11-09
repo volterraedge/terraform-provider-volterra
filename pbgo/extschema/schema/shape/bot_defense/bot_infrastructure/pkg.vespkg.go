@@ -27,8 +27,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.ReplaceResponse"] = ReplaceResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.ApplyCertificateRegion"] = ApplyCertificateRegionValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.ApplyCertificateRequest"] = ApplyCertificateRequestValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.BotInfraDeploymentStatus"] = BotInfraDeploymentStatusValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.CertificateOperationRegion"] = CertificateOperationRegionValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.CertificateOperationResponse"] = CertificateOperationResponseValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomListBotInfrastructuresRequest"] = CustomListBotInfrastructuresRequestValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomListBotInfrastructuresResponse"] = CustomListBotInfrastructuresResponseValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomListBotInfrastructuresResponseItem"] = CustomListBotInfrastructuresResponseItemValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.DeployPoliciesRequest"] = DeployPoliciesRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.DeployPoliciesResponse"] = DeployPoliciesResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.DeployPolicyMetadata"] = DeployPolicyMetadataValidator()
@@ -38,8 +42,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.DeploymentHistoryResponse"] = DeploymentHistoryResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.DeploymentStatusRequest"] = DeploymentStatusRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.DeploymentStatusResponse"] = DeploymentStatusResponseValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.GetInfraDeploymentStatusRequest"] = GetInfraDeploymentStatusRequestValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.GetInfraDeploymentStatusResponse"] = GetInfraDeploymentStatusResponseValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.RollbackCertificateToDefaultRequest"] = RollbackCertificateToDefaultRequestValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.TIPackageMetadata"] = TIPackageMetadataValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.ActiveActiveRegion"] = ActiveActiveRegionValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.ActivePassiveRegion"] = ActivePassiveRegionValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.CreateSpecInfraCloudHosted"] = CreateSpecInfraCloudHostedValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.Device"] = DeviceValidator()
@@ -47,6 +55,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.EndpointPolicyMetadata"] = EndpointPolicyMetadataValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.HostNameList"] = HostNameListValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.IPAddressList"] = IPAddressListValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.IPInfo"] = IPInfoValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.InfraCloudHosted"] = InfraCloudHostedValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.InfraContainerizedHosted"] = InfraContainerizedHostedValidator()
@@ -55,9 +65,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.KubernetesCluster"] = KubernetesClusterValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.PolicyMetadata"] = PolicyMetadataValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.Production"] = ProductionValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.ProductionV2"] = ProductionV2Validator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.ReplaceSpecType"] = ReplaceSpecTypeValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.SingleActiveRegion"] = SingleActiveRegionValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.TIPackageInformation"] = TIPackageInformationValidator()
 	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.Testing"] = TestingValidator()
+	vr["ves.io.schema.shape.bot_defense.bot_infrastructure.TestingV2"] = TestingV2Validator()
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -72,6 +85,11 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.API.Create"] = []string{
+		"spec.create_cloud_hosted.ip_addresses.#",
+		"spec.create_cloud_hosted.production",
+		"spec.create_cloud_hosted.testing",
+	}
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.API.Create"] = []string{
 		"spec.egress.#",
 		"spec.host_names.#",
@@ -81,7 +99,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ingress.#",
 		"spec.ip_addresses.#",
 	}
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.API.Create"] = []string{
+		"spec.bot_endpoint_policy_metadata.type",
+		"spec.cloned_infra_name",
+	}
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.API.Get"] = []string{
+		"create_form.spec.create_cloud_hosted.ip_addresses.#",
+		"create_form.spec.create_cloud_hosted.production",
+		"create_form.spec.create_cloud_hosted.testing",
 		"spec.egress.#",
 		"spec.host_names.#",
 		"spec.infra_host_name",
@@ -103,6 +128,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.cloud_hosted.infra_region.#",
 		"spec.kubernetes.infra_sync_status",
 		"spec.kubernetes.last_updated_by",
+	}
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomAPI.CustomListBotInfrastructures"] = []string{
+		"items.#.get_spec.egress.#",
+		"items.#.get_spec.host_names.#",
+		"items.#.get_spec.infra_host_name",
+		"items.#.get_spec.infra_region.#",
+		"items.#.get_spec.infra_type",
+		"items.#.get_spec.ingress.#",
+		"items.#.get_spec.ip_addresses.#",
 	}
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomAPI.DeploymentStatusOverview"] = []string{
 		"deployment_data.#.region",

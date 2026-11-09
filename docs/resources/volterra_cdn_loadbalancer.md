@@ -22,17 +22,7 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "api_specification api_specification_on_cache_miss disable_api_definition" must be set
 
-  api_specification_on_cache_miss {
-    api_definition {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-
-    // One of the arguments from this list "validation_all_spec_endpoints validation_custom_list validation_disabled" must be set
-
-    validation_disabled = true
-  }
+  disable_api_definition = true
 
   // One of the arguments from this list "api_discovery_on_cache_miss disable_api_discovery enable_api_discovery" must be set
 
@@ -40,37 +30,7 @@ resource "volterra_cdn_loadbalancer" "example" {
     api_crawler {
       // One of the arguments from this list "api_crawler_config disable_api_crawler" must be set
 
-      api_crawler_config {
-        domains {
-          domain = "domain"
-
-          simple_login {
-            password {
-              blindfold_secret_info_internal {
-                decryption_provider = "value"
-
-                location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-                store_provider = "value"
-              }
-
-              secret_encoding_type = "secret_encoding_type"
-
-              // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-              blindfold_secret_info {
-                decryption_provider = "value"
-
-                location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-                store_provider = "value"
-              }
-            }
-
-            user = "user"
-          }
-        }
-      }
+      disable_api_crawler = true
     }
 
     api_discovery_from_code_scan {
@@ -114,10 +74,18 @@ resource "volterra_cdn_loadbalancer" "example" {
 
           // One of the arguments from this list "key_pattern key_value_pattern value_pattern" must be set
 
-          key_pattern {
-            // One of the arguments from this list "exact_value regex_value" must be set
+          key_value_pattern {
+            key_pattern {
+              // One of the arguments from this list "exact_value regex_value" must be set
 
-            exact_value = "x-volt-header"
+              exact_value = "x-volt-header"
+            }
+
+            value_pattern {
+              // One of the arguments from this list "exact_value regex_value" must be set
+
+              exact_value = "x-volt-header"
+            }
           }
 
           // One of the arguments from this list "all_request_sections all_response_sections all_sections custom_sections" must be set
@@ -142,106 +110,7 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "bot_defense bot_defense_advanced disable_bot_defense" must be set
 
-  bot_defense {
-    // One of the arguments from this list "disable_cors_support enable_cors_support" must be set
-
-    enable_cors_support = true
-
-    policy {
-      // One of the arguments from this list "disable_js_insert js_insert_all_pages js_insert_all_pages_except js_insertion_rules" must be set
-
-      disable_js_insert = true
-
-      javascript_mode = "javascript_mode"
-
-      js_download_path = "value"
-
-      // One of the arguments from this list "disable_mobile_sdk mobile_sdk_config" must be set
-
-      disable_mobile_sdk = true
-      protected_app_endpoints {
-        // One of the arguments from this list "mobile web web_mobile" must be set
-
-        web_mobile {
-          header {
-            // One of the arguments from this list "check_not_present check_present item" must be set
-
-            check_present = true
-
-            name = "Accept-Encoding"
-          }
-
-          headers {
-            // One of the arguments from this list "check_not_present check_present item" must be set
-
-            check_present = true
-
-            name = "Accept-Encoding"
-          }
-
-          mobile_identifier = "mobile_identifier"
-        }
-
-        // One of the arguments from this list "any_domain domain" can be set
-
-        any_domain = true
-
-        // One of the arguments from this list "flow_label undefined_flow_label" must be set
-
-        undefined_flow_label = true
-
-        // One of the arguments from this list "allow_good_bots mitigate_good_bots" must be set
-
-        allow_good_bots = true
-        headers {
-          invert_matcher = true
-
-          // One of the arguments from this list "check_not_present check_present item presence" must be set
-
-          presence = true
-          name = "Accept-Encoding"
-        }
-        http_methods = ["http_methods"]
-        metadata {
-          description = "Virtual Host for acmecorp website"
-
-          disable = true
-
-          name = "acmecorp-web"
-        }
-        mitigation {
-          // One of the arguments from this list "block flag none redirect" can be set
-
-          block {
-            body = "string://LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg=="
-
-            body_hash = "92959a96fd69146c5fe7cbde6e5720f2"
-
-            status = "status"
-          }
-        }
-        path {
-          // One of the arguments from this list "path prefix regex" must be set
-
-          regex = "regex"
-        }
-        protocol = "protocol"
-        query_params {
-          invert_matcher = true
-
-          key = "sourceid"
-
-          // One of the arguments from this list "check_not_present check_present item presence" must be set
-
-          presence = true
-        }
-      }
-    }
-
-    regional_endpoint = "regional_endpoint"
-
-    timeout = "300"
-  }
+  disable_bot_defense = true
 
   // One of the arguments from this list "client_side_defense disable_client_side_defense" must be set
 
@@ -254,12 +123,16 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "http https https_auto_cert" must be set
 
-  http {
-    dns_volterra_managed = true
+  https_auto_cert {
+    add_hsts = true
 
-    // One of the arguments from this list "port port_ranges" must be set
+    http_redirect = true
 
-    port = "80"
+    tls_config {
+      // One of the arguments from this list "tls_11_plus tls_12_plus" must be set
+
+      tls_12_plus = true
+    }
   }
   origin_pool {
     follow_origin_redirect = true
@@ -311,9 +184,12 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "app_firewall app_firewall_on_cache_miss disable_waf" must be set
 
-  disable_waf = true
+  app_firewall_on_cache_miss {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
-
 ```
 
 Argument Reference
@@ -1631,7 +1507,7 @@ This category defines rules per URL or API group. If request matches any of thes
 
 `any_url` - (Optional) Any URL (`Bool`).
 
-`api_endpoint` - (Optional) The endpoint (path) of the request.. See [Destination Type Api Endpoint ](#destination-type-api-endpoint) below for details.
+`api_endpoint` - (Required) The endpoint (path) of the request.. See [Destination Type Api Endpoint ](#destination-type-api-endpoint) below for details.
 
 `api_groups` - (Optional) Validation will be performed for the endpoints mentioned in the API Groups. See [Destination Type Api Groups ](#destination-type-api-groups) below for details.
 
@@ -2357,6 +2233,8 @@ Enter the username and password to assign credentials for the selected domain to
 
 `ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
 
+`serve_stale` - (Optional) Serve a stale cached object during origin unreachability while asynchronously revalidating it with the origin server, when the requested object is already in cache. (`Bool`).
+
 ### Eligible For Cache Scheme Hostname Request Uri
 
 .
@@ -2366,6 +2244,8 @@ Enter the username and password to assign credentials for the selected domain to
 `cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
 
 `ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
+
+`serve_stale` - (Optional) Serve a stale cached object during origin unreachability while asynchronously revalidating it with the origin server, when the requested object is already in cache. (`Bool`).
 
 ### Eligible For Cache Scheme Hostname Uri
 
@@ -2377,6 +2257,8 @@ Enter the username and password to assign credentials for the selected domain to
 
 `ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
 
+`serve_stale` - (Optional) Serve a stale cached object during origin unreachability while asynchronously revalidating it with the origin server, when the requested object is already in cache. (`Bool`).
+
 ### Eligible For Cache Scheme Hostname Uri Query
 
 .
@@ -2386,6 +2268,8 @@ Enter the username and password to assign credentials for the selected domain to
 `cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
 
 `ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
+
+`serve_stale` - (Optional) Serve a stale cached object during origin unreachability while asynchronously revalidating it with the origin server, when the requested object is already in cache. (`Bool`).
 
 ### Eligible For Cache Scheme Proxy Host Request Uri
 
@@ -2397,6 +2281,8 @@ Enter the username and password to assign credentials for the selected domain to
 
 `ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
 
+`serve_stale` - (Optional) Serve a stale cached object during origin unreachability while asynchronously revalidating it with the origin server, when the requested object is already in cache. (`Bool`).
+
 ### Eligible For Cache Scheme Proxy Host Uri
 
 .
@@ -2406,6 +2292,8 @@ Enter the username and password to assign credentials for the selected domain to
 `cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
 
 `ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
+
+`serve_stale` - (Optional) Serve a stale cached object during origin unreachability while asynchronously revalidating it with the origin server, when the requested object is already in cache. (`Bool`).
 
 ### Enable Api Discovery Api Crawler
 
@@ -2663,7 +2551,7 @@ GraphQL configuration..
 
 `max_total_length` - (Required) Specify maximum length in bytes for the GraphQL query. (`Int`).
 
-`max_value_length` - (Optional) Specify maximum value length in bytes for the GraphQL query. (`Int`).(Deprecated)
+`max_value_length` - (Required) Specify maximum value length in bytes for the GraphQL query. (`Int`).(Deprecated)
 
 `policy_name` - (Optional) Sets the BD Policy to use (`String`).(Deprecated)
 
@@ -3013,11 +2901,13 @@ Backup JWT Key - If specified is also checked in addition to the primary secret 
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -3031,11 +2921,13 @@ Secret Key for JWT.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -3569,7 +3461,7 @@ List of original servers.
 
 `public_name` - (Optional) Specify origin server with public DNS name. See [Choice Public Name ](#choice-public-name) below for details.
 
-`port` - (Optional) Enter a custom port only if your origin server uses a non-default port. Leave the value as 0 to automatically use 443 (TLS) or 80 (non-TLS). (`Int`).
+`port` - (Optional) Port the workload can be reached on (`Int`).
 
 ### Origin Pool Public Name
 
@@ -4209,6 +4101,10 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
+
 ### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
@@ -4543,11 +4439,13 @@ Enter the password to assign credentials for the selected domain to crawl.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -4757,11 +4655,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -5199,11 +5099,13 @@ Secret Value of the HTTP header..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
@@ -5448,4 +5350,4 @@ X-Forwarded-Client-Cert header will be added with the configured fields.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured cdn_loadbalancer.
+*   `id` - This is the id of the configured cdn_loadbalancer.

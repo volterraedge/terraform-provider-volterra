@@ -22,26 +22,10 @@ resource "volterra_workload" "example" {
 
   // One of the arguments from this list "job service simple_service stateful_service" must be set
 
-  service {
-    advertise_options {
-      // One of the arguments from this list "advertise_custom advertise_in_cluster advertise_on_public do_not_advertise" must be set
+  simple_service {
+    // One of the arguments from this list "do_not_advertise service_port simple_advertise" must be set
 
-      advertise_in_cluster {
-        // One of the arguments from this list "multi_ports port" must be set
-
-        port {
-          info {
-            port = "80"
-
-            protocol = "protocol"
-
-            // One of the arguments from this list "same_as_port target_port" must be set
-
-            same_as_port = true
-          }
-        }
-      }
-    }
+    do_not_advertise = true
 
     configuration {
       parameters {
@@ -65,7 +49,7 @@ resource "volterra_workload" "example" {
       }
     }
 
-    containers {
+    container {
       args = ["value"]
 
       command = ["value"]
@@ -80,11 +64,7 @@ resource "volterra_workload" "example" {
 
         // One of the arguments from this list "container_registry public" must be set
 
-        container_registry {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
+        public = true
       }
       init_container = true
       liveness_check {
@@ -102,7 +82,7 @@ resource "volterra_workload" "example" {
           port {
             // One of the arguments from this list "name num" must be set
 
-            num = "num"
+            name = "name"
           }
         }
 
@@ -120,20 +100,8 @@ resource "volterra_workload" "example" {
       readiness_check {
         // One of the arguments from this list "exec_health_check http_health_check tcp_health_check" must be set
 
-        http_health_check {
-          headers = {
-            "key1" = "value1"
-          }
-
-          host_header = "one.volterra.com"
-
-          path = "/"
-
-          port {
-            // One of the arguments from this list "name num" must be set
-
-            num = "num"
-          }
+        exec_health_check {
+          command = ["value"]
         }
 
         healthy_threshold = "2"
@@ -151,7 +119,7 @@ resource "volterra_workload" "example" {
     deploy_options {
       // One of the arguments from this list "all_res default_virtual_sites deploy_ce_sites deploy_ce_virtual_sites deploy_re_sites deploy_re_virtual_sites" must be set
 
-      deploy_re_virtual_sites {
+      deploy_ce_virtual_sites {
         virtual_site {
           name      = "test1"
           namespace = "staging"
@@ -163,7 +131,30 @@ resource "volterra_workload" "example" {
     family {
       // One of the arguments from this list "dual_v4_preferred dual_v6_preferred v4 v6" must be set
 
-      v6 = true
+      dual_v4_preferred = true
+    }
+
+    persistent_volumes {
+      name = "value"
+
+      persistent_volume {
+        mount {
+          mode = "mode"
+
+          mount_path = "value"
+
+          sub_path = "value"
+        }
+
+        storage {
+          access_mode = "access_mode"
+
+          // One of the arguments from this list "class_name default" must be set
+
+          default = true
+          storage_size = "100"
+        }
+      }
     }
 
     // One of the arguments from this list "num_replicas scale_to_zero" must be set
@@ -172,7 +163,7 @@ resource "volterra_workload" "example" {
     volumes {
       name = "volume-0"
 
-      // One of the arguments from this list "empty_dir host_path persistent_volume" must be set
+      // One of the arguments from this list "empty_dir host_path" must be set
 
       empty_dir {
         mount {
@@ -188,7 +179,6 @@ resource "volterra_workload" "example" {
     }
   }
 }
-
 ```
 
 Argument Reference
@@ -1042,7 +1032,7 @@ User is responsible for managing DNS to this Load Balancer..
 
 `append_server_name` - (Optional) If header value is already present, it is not overwritten and passed as-is. (`String`).
 
-`default_header` - (Optional) Response header name is “server” and value is “volt-adc” (`Bool`).
+`default_header` - (Optional) Response header name is "server" and value is "volt-adc" (`Bool`).
 
 `pass_through` - (Optional) Pass existing server header as is. If server header is absent, a new header is not appended. (`Bool`).
 
@@ -1098,7 +1088,7 @@ DNS records will be managed by Volterra..
 
 `append_server_name` - (Optional) If header value is already present, it is not overwritten and passed as-is. (`String`).
 
-`default_header` - (Optional) Response header name is “server” and value is “volt-adc” (`Bool`).
+`default_header` - (Optional) Response header name is "server" and value is "volt-adc" (`Bool`).
 
 `pass_through` - (Optional) Pass existing server header as is. If server header is absent, a new header is not appended. (`Bool`).
 
@@ -1426,6 +1416,10 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Secret Info Oneof None
+
+No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key..
+
 ### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
@@ -1448,7 +1442,7 @@ Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 ### Server Header Choice Default Header
 
-Response header name is “server” and value is “volt-adc”.
+Response header name is "server" and value is "volt-adc".
 
 ### Server Header Choice Pass Through
 
@@ -1738,11 +1732,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, none, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`none` - (Optional) No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.. See [Secret Info Oneof None ](#secret-info-oneof-none) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 

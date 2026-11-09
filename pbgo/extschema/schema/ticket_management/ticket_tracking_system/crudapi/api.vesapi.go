@@ -2813,6 +2813,11 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaEmpty": {
+            "type": "object",
+            "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
+            "title": "Empty"
+        },
         "schemaInitializerType": {
             "type": "object",
             "description": "Initializer is information about an initializer that has not yet completed.",
@@ -3005,6 +3010,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType"
+                },
+                "none": {
+                    "description": "x-displayName: \"None\"\nNo private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.",
+                    "title": "None",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "secret_encoding_type": {
                     "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\nthis will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\nNote - Do NOT set this field for Clear Secret with string:/// scheme.\ne.g. if a secret is base64 encoded and then put into vault.",

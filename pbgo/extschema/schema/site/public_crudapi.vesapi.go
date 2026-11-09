@@ -1793,12 +1793,12 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "description": " Status of the condition\n \"Success\" Validation has succeeded. Requested operation was successful.\n \"Failed\"  Validation or operation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s.\n \"Down\" Configuration is operationally down. e.g. down interface.\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs.\n \"InProgress\" Operation is in progress.\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]\n",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\",\\\"InProgress\\\"]"
                     }
                 },
                 "type": {
@@ -2149,20 +2149,26 @@ var APISwaggerJSON string = `{
             "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
             "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"none\"]",
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info none]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info none]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType",
                     "x-displayname": "Clear Secret"
+                },
+                "none": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info]\n No private key will be stored or used. Choose this only when you need a public certificate for verification (e.g., validating SAML/JWT signatures). Not suitable for TLS or any use case that requires presenting a certificate, those will fail without a private key.",
+                    "title": "None",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
                 }
             }
         },
@@ -5784,7 +5790,7 @@ var APISwaggerJSON string = `{
             "description": "Most recently observed status of site object",
             "title": "Site Status Object",
             "x-displayname": "Status",
-            "x-ves-displayorder": "1,3,5,13,6,7,8,12,9,10,11,14,15,16,17,18,19,20,21,22,24,26,27",
+            "x-ves-displayorder": "1,3,5,13,6,7,8,12,9,10,11,14,15,16,17,18,19,20,21,22,24,26,27,28",
             "x-ves-proto-message": "ves.io.schema.site.StatusObject",
             "properties": {
                 "certified_hardware": {
@@ -5944,6 +5950,12 @@ var APISwaggerJSON string = `{
                     "title": "Software Status",
                     "$ref": "#/definitions/siteVolterraSoftwareStatus",
                     "x-displayname": "Software Status"
+                },
+                "waf_signatures_status": {
+                    "description": " WAF signatures status provides information about the update status of the signatures in the site.",
+                    "title": "WAF Signatures Status",
+                    "$ref": "#/definitions/siteWAFSignaturesStatus",
+                    "x-displayname": "WAF Signatures Status"
                 }
             }
         },
@@ -6556,6 +6568,72 @@ var APISwaggerJSON string = `{
                     "title": "software version expiry date",
                     "x-displayname": "Software Version Expiry Date",
                     "x-ves-example": "2024-12-13"
+                }
+            }
+        },
+        "siteWAFSignaturesDeploymentMode": {
+            "type": "string",
+            "description": "Mode used to update and deploy WAF signatures on the site.\n\nWAF signatures are updated and deployed only when the user starts an update.\nThe site updates and deploys WAF signatures automatically when a new version is available.",
+            "title": "WAF Signatures Deployment Mode",
+            "enum": [
+                "MANUAL",
+                "AUTOMATIC"
+            ],
+            "default": "MANUAL",
+            "x-displayname": "Deployment Mode",
+            "x-ves-proto-enum": "ves.io.schema.site.WAFSignaturesDeploymentMode"
+        },
+        "siteWAFSignaturesDeploymentState": {
+            "type": "string",
+            "description": "State of the WAF signatures deployment reported by the site.\n\nThe site has not reported the WAF signatures deployment state.\nThe site successfully deployed the configured WAF signatures version.\nThe site failed to deploy the configured WAF signatures version.\nThe site is deploying the configured WAF signatures version.",
+            "title": "WAF Signatures Deployment State",
+            "enum": [
+                "UNKNOWN",
+                "SUCCESS",
+                "FAILURE",
+                "IN_PROGRESS"
+            ],
+            "default": "UNKNOWN",
+            "x-displayname": "Deployment State",
+            "x-ves-proto-enum": "ves.io.schema.site.WAFSignaturesDeploymentState"
+        },
+        "siteWAFSignaturesStatus": {
+            "type": "object",
+            "description": "Shows the configured update mode and version, and the deployment status reported by the site.",
+            "title": "WAF Signatures Status",
+            "x-displayname": "WAF Signatures Status",
+            "x-ves-proto-message": "ves.io.schema.site.WAFSignaturesStatus",
+            "properties": {
+                "available_version": {
+                    "type": "string",
+                    "description": " The WAF signatures version configured for the site.",
+                    "title": "available_version",
+                    "x-displayname": "Configured Version"
+                },
+                "deployed_version": {
+                    "type": "string",
+                    "description": " The WAF signatures version that the site reports as deployed.",
+                    "title": "deployed_version",
+                    "x-displayname": "Deployed Version"
+                },
+                "deployment_mode": {
+                    "description": " Shows whether WAF signatures are updated manually or automatically on the site.",
+                    "title": "deployment_mode",
+                    "$ref": "#/definitions/siteWAFSignaturesDeploymentMode",
+                    "x-displayname": "Configured Update Mode"
+                },
+                "deployment_state": {
+                    "description": " The current WAF signatures deployment state reported by the site.",
+                    "title": "deployment_state",
+                    "$ref": "#/definitions/siteWAFSignaturesDeploymentState",
+                    "x-displayname": "Deployment State"
+                },
+                "modification_timestamp": {
+                    "type": "string",
+                    "description": " The site last reported its WAF signatures status at this date and time.",
+                    "title": "modification_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Last Status Update"
                 }
             }
         },

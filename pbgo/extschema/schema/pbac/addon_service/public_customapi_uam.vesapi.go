@@ -1186,7 +1186,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "schemaAddonServiceAccess": {
             "type": "string",
-            "description": "x-displayName: \"Addon Service Access\"\nState of access into service\n\n - AS_AC_NONE: x-displayName: \"None\"\ndefault state\nThis can mean that addon service is not subscribed or is in pending subscription.\n - AS_AC_ALLOWED: x-displayName: \"Allow\"\naccess is allowed\n - AS_AC_PBAC_DENY: x-displayName: \"PBAC Deny\"\nAddon service is not allowed as part of current plan\n - AS_AC_PBAC_DENY_UPGRADE_PLAN: x-displayName: \"PBAC Deny - Upgrade plan\"\nAddon service is not allowed as part of current plan. To enable it, user is requested to uprade the plan\n - AS_AC_PBAC_DENY_CONTACT_SALES: x-displayName: \"PBAC Deny - Contact Sales\"\nAddon service is not allowed as part of current plan. To enable or to find out more, user is requested to contact sales\n - AS_AC_PBAC_DENY_AS_AC_EOL: x-displayName: \"PBAC Deny - End of Life\"\nAddon service is not allowed as part of current plan as it is discontinued. User is requested to contact sales discuss alternatives\n - AS_AC_UNAVAILABLE: x-displayName: \"Unavailable\"\nAddon service is not available as part of current plan",
+            "description": "x-displayName: \"Addon Service Access\"\nState of access into service\n\n - AS_AC_NONE: x-displayName: \"None\"\ndefault state\nThis can mean that addon service is not subscribed or is in pending subscription.\n - AS_AC_ALLOWED: x-displayName: \"Allow\"\naccess is allowed\n - AS_AC_PBAC_DENY: x-displayName: \"PBAC Deny\"\nAddon service is not allowed as part of current plan\n - AS_AC_PBAC_DENY_UPGRADE_PLAN: x-displayName: \"PBAC Deny - Upgrade plan\"\nAddon service is not allowed as part of current plan. To enable it, user is requested to uprade the plan\n - AS_AC_PBAC_DENY_CONTACT_SALES: x-displayName: \"PBAC Deny - Contact Sales\"\nAddon service is not allowed as part of current plan. To enable or to find out more, user is requested to contact sales\n - AS_AC_PBAC_DENY_AS_AC_EOL: x-displayName: \"PBAC Deny - End of Life\"\nAddon service is not allowed as part of current plan as it is discontinued. User is requested to contact sales discuss alternatives\n - AS_AC_UNAVAILABLE: x-displayName: \"Unavailable\"\nAddon service is not available as part of current plan\n - AS_AC_REQUEST_SERVICE: x-displayName: \"Request service\"\nAddon service activation is requested through the support ticket process",
             "title": "AddonServiceAccess",
             "enum": [
                 "AS_AC_NONE",
@@ -1195,19 +1195,21 @@ var CustomAPISwaggerJSON string = `{
                 "AS_AC_PBAC_DENY_UPGRADE_PLAN",
                 "AS_AC_PBAC_DENY_CONTACT_SALES",
                 "AS_AC_PBAC_DENY_AS_AC_EOL",
-                "AS_AC_UNAVAILABLE"
+                "AS_AC_UNAVAILABLE",
+                "AS_AC_REQUEST_SERVICE"
             ],
             "default": "AS_AC_NONE"
         },
         "schemaAddonServiceState": {
             "type": "string",
-            "description": "State of a service\n\ndefault state\ninitiated subscription request and is pending to activate (requested).\nsuccessfully subscribed\nservice subscription request ended up in error state.",
+            "description": "State of a service\n\ndefault state\ninitiated subscription request and is pending to activate (requested).\nsuccessfully subscribed\nservice subscription request ended up in error state.\nThe subscription request has been initiated and is awaiting activation.\nThis state is added by the Eywa service when requesting the component service to configure the addon service.",
             "title": "AddonServiceState",
             "enum": [
                 "AS_NONE",
                 "AS_PENDING",
                 "AS_SUBSCRIBED",
-                "AS_ERROR"
+                "AS_ERROR",
+                "AS_CONFIGURING"
             ],
             "default": "AS_NONE",
             "x-displayname": "Addon Service State",
