@@ -9,9 +9,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 	"time"
 
+	"github.com/gogo/protobuf/proto"
 	"github.com/gogo/protobuf/types"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/codec"
@@ -23,8 +23,8 @@ import (
 const (
 	apiCredRPCFQN      = "ves.io.schema.api_credential.CustomAPI"
 	apiCredURI         = "/public/namespaces/system/api_credentials"
-	getAPICredURI      = "/public/namespaces/system/api_credentials/%s"
-	deleteAPICredURI   = "/public/namespaces/system/revoke/api_credentials"
+	getAPICredURI      = "/public/namespaces/%s/api_credentials/%s"
+	deleteAPICredURI   = "/public/namespaces/%s/revoke/api_credentials"
 	activateAPICredURI = "/public/namespaces/system/activate/api_credentials"
 	renewAPICredURI    = "/public/namespaces/system/renew/api_credentials"
 )
@@ -236,21 +236,11 @@ func convertTimestampToString(timestamp *types.Timestamp) (string, error) {
 }
 
 func resourceVolterraAPICredentialRead(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*APIClient)
+	client := meta.(credentialCustomAPIClient)
 
-	apiCredReq := &ves_io_schema_api_credential.GetRequest{
-		Name:      d.Id(),
-		Namespace: svcfw.SystemNSVal,
-	}
-
-	yamlReq, err := codec.ToYAML(apiCredReq)
+	_, err := getAPICredential(client, d)
 	if err != nil {
-		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
-	}
-
-	_, err = client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(getAPICredURI, d.Id()), fmt.Sprintf("%s.%s", apiCredRPCFQN, "Get"), yamlReq)
-	if err != nil {
-		if strings.Contains(err.Error(), "status code 404") {
+		if isCredentialNotFoundError(err) {
 			log.Printf("[INFO] API Credential %s no longer exists", d.Id())
 			d.SetId("")
 			return nil
@@ -259,6 +249,42 @@ func resourceVolterraAPICredentialRead(d *schema.ResourceData, meta interface{})
 	}
 
 	return nil
+}
+
+func apiCredentialReadNamespaces(d *schema.ResourceData) []string {
+	if credentialType, ok := d.GetOk("api_credential_type"); ok && credentialType.(string) == "KUBE_CONFIG" {
+		if namespace, ok := d.GetOk("virtual_k8s_namespace"); ok && namespace.(string) != "" && namespace.(string) != svcfw.SystemNSVal {
+			return []string{namespace.(string), svcfw.SystemNSVal}
+		}
+	}
+
+	return []string{svcfw.SystemNSVal}
+}
+
+func getAPICredential(client credentialCustomAPIClient, d *schema.ResourceData) (proto.Message, error) {
+	var lastErr error
+	for _, namespace := range apiCredentialReadNamespaces(d) {
+		apiCredReq := &ves_io_schema_api_credential.GetRequest{
+			Name:      d.Id(),
+			Namespace: namespace,
+		}
+
+		yamlReq, err := codec.ToYAML(apiCredReq)
+		if err != nil {
+			return nil, fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
+		}
+
+		rsp, err := client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(getAPICredURI, namespace, d.Id()), fmt.Sprintf("%s.%s", apiCredRPCFQN, "Get"), yamlReq)
+		if err == nil {
+			return rsp, nil
+		}
+		if !isCredentialNotFoundError(err) {
+			return nil, err
+		}
+		lastErr = err
+	}
+
+	return nil, lastErr
 }
 
 func resourceVolterraAPICredentialUpdate(d *schema.ResourceData, meta interface{}) error {
@@ -298,9 +324,9 @@ func resourceVolterraAPICredentialUpdate(d *schema.ResourceData, meta interface{
 	if err != nil {
 		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
 	}
-	rsp, err := client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(getAPICredURI, d.Id()), fmt.Sprintf("%s.%s", apiCredRPCFQN, "Get"), yamlReq)
+	rsp, err := getAPICredential(client, d)
 	if err != nil {
-		if strings.Contains(err.Error(), "status code 404") {
+		if isCredentialNotFoundError(err) {
 			log.Printf("[INFO] API Credential %s no longer exists", d.Id())
 			d.SetId("")
 			return nil
@@ -348,9 +374,9 @@ func resourceVolterraAPICredentialUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
-	rsp, err = client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(getAPICredURI, d.Id()), fmt.Sprintf("%s.%s", apiCredRPCFQN, "Get"), yamlReq)
+	rsp, err = getAPICredential(client, d)
 	if err != nil {
-		if strings.Contains(err.Error(), "status code 404") {
+		if isCredentialNotFoundError(err) {
 			log.Printf("[INFO] API Credential %s no longer exists", d.Id())
 			d.SetId("")
 			return nil
@@ -370,23 +396,32 @@ func resourceVolterraAPICredentialUpdate(d *schema.ResourceData, meta interface{
 }
 
 func resourceVolterraAPICredentialDelete(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*APIClient)
-	apiCredReq := &ves_io_schema_api_credential.GetRequest{
-		Name:      d.Id(),
-		Namespace: svcfw.SystemNSVal,
-	}
+	client := meta.(credentialCustomAPIClient)
 	log.Printf("[DEBUG] Deleting/Revoking Volterra API credential obj %+v ", d.Id())
-	yamlReq, err := codec.ToYAML(apiCredReq)
-	if err != nil {
-		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
-	}
-	_, err = client.CustomAPI(context.Background(), http.MethodPost, deleteAPICredURI, fmt.Sprintf("%s.%s", apiCredRPCFQN, "Revoke"), yamlReq)
-	if err != nil {
-		if strings.Contains(err.Error(), "status code 404") {
-			log.Printf("[INFO] API Credential %s no longer exists", d.Id())
-			d.SetId("")
+	var lastErr error
+	for _, namespace := range apiCredentialReadNamespaces(d) {
+		apiCredReq := &ves_io_schema_api_credential.GetRequest{
+			Name:      d.Id(),
+			Namespace: namespace,
+		}
+		yamlReq, err := codec.ToYAML(apiCredReq)
+		if err != nil {
+			return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
+		}
+		_, err = client.CustomAPI(context.Background(), http.MethodPost, fmt.Sprintf(deleteAPICredURI, namespace), fmt.Sprintf("%s.%s", apiCredRPCFQN, "Revoke"), yamlReq)
+		if err == nil {
 			return nil
 		}
+		if !isCredentialNotFoundError(err) {
+			return err
+		}
+		lastErr = err
 	}
-	return err
+
+	if isCredentialNotFoundError(lastErr) {
+		log.Printf("[INFO] API Credential %s no longer exists", d.Id())
+		d.SetId("")
+		return nil
+	}
+	return lastErr
 }

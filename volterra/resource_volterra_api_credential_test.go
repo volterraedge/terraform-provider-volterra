@@ -4,13 +4,73 @@ package volterra
 import (
 	"fmt"
 	"os"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/gogo/protobuf/proto"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"gopkg.volterra.us/stdlib/svcfw"
 	ves_io_schema_api_credential "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
 )
+
+func TestAPICredentialReadNamespaces(t *testing.T) {
+	tests := []struct {
+		name     string
+		config   map[string]interface{}
+		expected []string
+	}{
+		{
+			name: "kubeconfig uses vk8s namespace with system fallback",
+			config: map[string]interface{}{
+				"api_credential_type":   "KUBE_CONFIG",
+				"virtual_k8s_namespace": "app-ns",
+			},
+			expected: []string{"app-ns", svcfw.SystemNSVal},
+		},
+		{
+			name: "api token remains system scoped",
+			config: map[string]interface{}{
+				"api_credential_type":   "API_TOKEN",
+				"virtual_k8s_namespace": "app-ns",
+			},
+			expected: []string{svcfw.SystemNSVal},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			data := schema.TestResourceDataRaw(t, resourceVolterraAPICredential().Schema, test.config)
+			if actual := apiCredentialReadNamespaces(data); !reflect.DeepEqual(actual, test.expected) {
+				t.Fatalf("expected namespaces %v, got %v", test.expected, actual)
+			}
+		})
+	}
+}
+
+func TestAPICredentialReadClearsStateForBackendNotFound(t *testing.T) {
+	data := schema.TestResourceDataRaw(t, resourceVolterraAPICredential().Schema, map[string]interface{}{
+		"api_credential_type":   "KUBE_CONFIG",
+		"virtual_k8s_namespace": "app-ns",
+	})
+	data.SetId("credential-1")
+	client := &fakeCredentialAPIClient{
+		errors: map[string]error{
+			"/public/namespaces/app-ns/api_credentials/credential-1": fmt.Errorf("object not found"),
+			"/public/namespaces/system/api_credentials/credential-1": fmt.Errorf("object not found"),
+		},
+		responses: map[string]proto.Message{},
+	}
+
+	if err := resourceVolterraAPICredentialRead(data, client); err != nil {
+		t.Fatalf("read returned an error: %v", err)
+	}
+	if data.Id() != "" {
+		t.Fatalf("expected missing credential to be removed from state, got ID %q", data.Id())
+	}
+}
 
 func TestAccAPICredentialBasic(t *testing.T) {
 	name := generateResourceName()
