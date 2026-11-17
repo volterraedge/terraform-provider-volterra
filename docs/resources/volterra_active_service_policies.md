@@ -30,7 +30,6 @@ resource "volterra_service_policy" "allow_all" {
 		action = "ALLOW"
 		waf_action {
 			none = true
-			waf_in_monitoring_mode = false
 			waf_skip_processing    = false
 		}
 	}

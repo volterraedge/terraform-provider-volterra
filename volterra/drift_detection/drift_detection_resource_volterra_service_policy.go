@@ -248,7 +248,6 @@ func FlattenWafAction(f *ves_io_schema_policy.WafAction) interface{} {
 		val := map[string]interface{}{
 			"app_firewall_detection_control": FlattenSPAppFirewallDetectionControl(f.GetAppFirewallDetectionControl()),
 			"none":                           isEmpty(f.GetNone()),
-			"waf_in_monitoring_mode":         isEmpty(f.GetWafInMonitoringMode()),
 			"waf_skip_processing":            isEmpty(f.GetWafSkipProcessing()),
 		}
 		rslt = append(rslt, val)

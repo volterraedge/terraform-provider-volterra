@@ -650,8 +650,6 @@ App Firewall action to be enforced if the input request matches the rule..
 
 `none` - (Optional) Perform normal App Firewall processing for this request (bool).
 
-`waf_in_monitoring_mode` - (Optional) App Firewall will run in monitoring mode without blocking the request (bool).
-
 `waf_skip_processing` - (Optional) Skip all App Firewall processing for this request (bool).
 
 `app_firewall_detection_control` - (Optional) Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.. See [Waf Advanced Configuration App Firewall Detection Control ](#waf-advanced-configuration-app-firewall-detection-control) below for details.
