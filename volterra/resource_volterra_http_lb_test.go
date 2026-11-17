@@ -297,7 +297,6 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		        challenge_action = "DEFAULT_CHALLENGE"
 		        waf_action {
 		        none = true
-				waf_in_monitoring_mode = false
                 waf_skip_processing    = false
 		        }
 		      }
